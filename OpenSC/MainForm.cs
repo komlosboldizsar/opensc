@@ -16,5 +16,10 @@ namespace OpenSC
         {
             InitializeComponent();
         }
+
+        private void clockUpdateTimer_Tick(object sender, EventArgs e)
+        {
+            statusStripClock.Text = DateTime.Now.ToString("yyyy. MM. dd. HH:mm:ss");
+        }
     }
 }
