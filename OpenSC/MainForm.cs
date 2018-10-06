@@ -15,6 +15,9 @@ namespace OpenSC
         public MainForm()
         {
             InitializeComponent();
+            var w = new ChildWindowBase();
+            w.MdiParent = this;
+            w.Show();
         }
 
         private void clockUpdateTimer_Tick(object sender, EventArgs e)
