@@ -77,6 +77,14 @@
     <Compile Include="RouterInputOutputControl.Designer.cs">
       <DependentUpon>RouterInputOutputControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Timer.cs" />
+    <Compile Include="TimerMode.cs" />
+    <Compile Include="TimerWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TimerWindow.Designer.cs">
+      <DependentUpon>TimerWindow.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="ChildWindowBase.resx">
       <DependentUpon>ChildWindowBase.cs</DependentUpon>
     </EmbeddedResource>
@@ -94,12 +102,16 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="RouterControlForm.resx">
       <DependentUpon>RouterControlForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RouterInputOutputControl.resx">
       <DependentUpon>RouterInputOutputControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TimerWindow.resx">
+      <DependentUpon>TimerWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -113,6 +125,54 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\solid_black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\solid_blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\solid_green.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\solid_orange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\solid_purple.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\solid_red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\solid_yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\timer_backward.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\timer_clock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\timer_forward.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\timer_backward_inactive.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\timer_clock_inactive.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\timer_forward_inactive.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\timer_paused.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\timer_running.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\timer_stopped.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
