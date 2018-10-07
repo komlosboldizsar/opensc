@@ -27,6 +27,13 @@ namespace OpenSC.GUI
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            var t = new Model.Timers.Timer();
+            t.Mode = Model.Timers.TimerMode.Backwards;
+            t.Start();
+            var w = new Timers.TimerWindow(t);
+            w.ShowAsChild();
+            var w2 = new Timers.TimerWindow(t);
+            w2.ShowAsChild();
         }
     }
 }
