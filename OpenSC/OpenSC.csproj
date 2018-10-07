@@ -45,7 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <Compile Include="ChildWindowBase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,8 +57,6 @@
     <Compile Include="ChildWindowWithTitle.Designer.cs">
       <DependentUpon>ChildWindowWithTitle.cs</DependentUpon>
     </Compile>
-=======
->>>>>>> parent of 0b4bd80... Add window base form
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,7 +65,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<<<<<<< HEAD
     <Compile Include="RouterControlForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,8 +91,6 @@
     <EmbeddedResource Include="ChildWindowWithTitle.resx">
       <DependentUpon>ChildWindowWithTitle.cs</DependentUpon>
     </EmbeddedResource>
-=======
->>>>>>> parent of 0b4bd80... Add window base form
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
