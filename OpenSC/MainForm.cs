@@ -8,21 +8,25 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace OpenSC
+namespace OpenSC.GUI
 {
     public partial class MainForm : Form
     {
+
+        public static MainForm Instance { get; } = new MainForm();
+
         public MainForm()
         {
             InitializeComponent();
-            var w = new ChildWindowBase();
-            w.MdiParent = this;
-            w.Show();
         }
 
         private void clockUpdateTimer_Tick(object sender, EventArgs e)
         {
             statusStripClock.Text = DateTime.Now.ToString("yyyy. MM. dd. HH:mm:ss");
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
         }
     }
 }

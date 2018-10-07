@@ -1,4 +1,4 @@
-﻿namespace OpenSC
+﻿namespace OpenSC.GUI
 {
     partial class MainForm
     {
@@ -30,15 +30,15 @@
         {
             this.components = new System.ComponentModel.Container();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStripClock = new System.Windows.Forms.ToolStripStatusLabel();
-            this.statusStripEmptySpace = new System.Windows.Forms.ToolStripStatusLabel();
-            this.clockUpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.statusStripEmptySpace = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStripClock = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStripVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.clockUpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -50,9 +50,23 @@
             this.fileToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(982, 28);
+            this.menuStrip.Size = new System.Drawing.Size(1482, 28);
             this.menuStrip.TabIndex = 1;
             this.menuStrip.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(108, 26);
+            this.exitToolStripMenuItem.Text = "Exit";
             // 
             // statusStrip
             // 
@@ -63,43 +77,23 @@
             this.statusStripVersion,
             this.toolStripStatusLabel2,
             this.toolStripStatusLabel1});
-            this.statusStrip.Location = new System.Drawing.Point(0, 528);
+            this.statusStrip.Location = new System.Drawing.Point(0, 728);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(982, 25);
+            this.statusStrip.Size = new System.Drawing.Size(1482, 25);
             this.statusStrip.TabIndex = 2;
             this.statusStrip.Text = "statusStrip1";
             // 
-            // fileToolStripMenuItem
+            // statusStripEmptySpace
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.exitToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
-            this.fileToolStripMenuItem.Text = "File";
+            this.statusStripEmptySpace.Name = "statusStripEmptySpace";
+            this.statusStripEmptySpace.Size = new System.Drawing.Size(1207, 20);
+            this.statusStripEmptySpace.Spring = true;
             // 
             // statusStripClock
             // 
             this.statusStripClock.Name = "statusStripClock";
             this.statusStripClock.Size = new System.Drawing.Size(140, 20);
             this.statusStripClock.Text = "1970.01.01. 12:00:00";
-            // 
-            // statusStripEmptySpace
-            // 
-            this.statusStripEmptySpace.Name = "statusStripEmptySpace";
-            this.statusStripEmptySpace.Size = new System.Drawing.Size(703, 20);
-            this.statusStripEmptySpace.Spring = true;
-            // 
-            // clockUpdateTimer
-            // 
-            this.clockUpdateTimer.Enabled = true;
-            this.clockUpdateTimer.Interval = 500;
-            this.clockUpdateTimer.Tick += new System.EventHandler(this.clockUpdateTimer_Tick);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
-            this.exitToolStripMenuItem.Text = "Exit";
             // 
             // statusStripVersion
             // 
@@ -119,17 +113,24 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(25, 20);
             this.toolStripStatusLabel1.Text = "    ";
             // 
+            // clockUpdateTimer
+            // 
+            this.clockUpdateTimer.Enabled = true;
+            this.clockUpdateTimer.Interval = 500;
+            this.clockUpdateTimer.Tick += new System.EventHandler(this.clockUpdateTimer_Tick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(982, 553);
+            this.ClientSize = new System.Drawing.Size(1482, 753);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.menuStrip);
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip;
             this.Name = "MainForm";
             this.Text = "OpenSC";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);

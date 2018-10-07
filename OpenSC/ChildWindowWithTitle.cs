@@ -10,18 +10,19 @@ using System.Windows.Forms;
 
 namespace OpenSC.GUI
 {
-    public partial class ChildWindowBase : Form
+    public partial class ChildWindowWithTitle : ChildWindowBase
     {
-        public ChildWindowBase()
+
+        protected string HeaderText
         {
-            InitializeComponent();
-            
+            get { return headerText.Text; }
+            set { headerText.Text = value; }
         }
 
-        public void ShowAsChild()
+        public ChildWindowWithTitle()
         {
-            MdiParent = MainForm.Instance;
-            Show();
+            InitializeComponent();
         }
+
     }
 }
