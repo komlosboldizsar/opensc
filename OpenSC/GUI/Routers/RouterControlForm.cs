@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace OpenSC.GUI
+namespace OpenSC.GUI.Routers
 {
     public partial class RouterControlForm : ChildWindowWithTitle
     {

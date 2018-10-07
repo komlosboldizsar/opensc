@@ -1,4 +1,4 @@
-﻿namespace OpenSC.GUI
+﻿namespace OpenSC.GUI.Routers
 {
     partial class RouterControlForm
     {

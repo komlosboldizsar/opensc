@@ -1,4 +1,4 @@
-﻿namespace OpenSC
+﻿namespace OpenSC.GUI.Routers
 {
     partial class RouterInputOutputControl
     {
