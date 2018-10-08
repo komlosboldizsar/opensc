@@ -32,7 +32,7 @@ namespace OpenSC.GUI
             t.Start();
             var w = new Timers.TimerWindow(t);
             w.ShowAsChild();
-            var w2 = new Timers.TimerWindow(t);
+            var w2 = new Timers.TimerEditWindow(t);
             w2.ShowAsChild();
         }
     }

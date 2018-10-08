@@ -14,6 +14,9 @@ namespace OpenSC.GUI.Timers
     public partial class TimerEditWindow : ChildWindowWithTitle
     {
 
+        private const string TITLE_NEW = "New timer";
+        private const string TITLE_EDIT = "Edit timer: (#{0}) {1}";
+
         private const string HEADER_TEXT_NEW = "New timer";
         private const string HEADER_TEXT_EDIT = "Edit timer";
 
@@ -30,11 +33,13 @@ namespace OpenSC.GUI.Timers
                 this.timer = new Model.Timers.Timer();
                 addingNew = true;
                 HeaderText = HEADER_TEXT_NEW;
+                Text = string.Format(TITLE_NEW, 0, "");
             }
             else
             {
                 this.timer = timer;
                 HeaderText = HEADER_TEXT_EDIT;
+                Text = string.Format(TITLE_EDIT, timer.ID, timer.Title);
             }
 
         }
@@ -79,7 +84,10 @@ namespace OpenSC.GUI.Timers
                 TimerDatabase.Instance.Add(timer);
                 addingNew = false;
                 HeaderText = HEADER_TEXT_EDIT;
+                
             }
+
+            Text = string.Format(TITLE_EDIT, timer.ID, timer.Title);
 
             return true;
 
