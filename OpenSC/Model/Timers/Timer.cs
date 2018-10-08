@@ -46,11 +46,18 @@ namespace OpenSC.Model.Timers
             get { return id; }
             set
             {
+                if (!ValidateId(value))
+                    throw new ArgumentException();
                 int oldValue = id;
                 IdChanging?.Invoke(this, oldValue, value);
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
             }
+        }
+
+        public bool ValidateId(int id)
+        {
+            return true;
         }
 
         public event TimerTitleChangingDelegate TitleChanging;
@@ -62,11 +69,18 @@ namespace OpenSC.Model.Timers
             get { return title; }
             set
             {
+                if (!ValidateTitle(value))
+                    throw new ArgumentException();
                 string oldTitle = title;
                 TitleChanging?.Invoke(this, oldTitle, value);
                 title = value;
                 TitleChanged?.Invoke(this, oldTitle, value);
             }
+        }
+
+        public bool ValidateTitle(string title)
+        {
+            return true;
         }
 
         public event TimerSecondsChangingDelegate SecondsChanging;
@@ -77,6 +91,8 @@ namespace OpenSC.Model.Timers
         {
             get { return seconds; }
             set {
+                if (value < 0)
+                    throw new ArgumentException();
                 int oldValue = seconds;
                 SecondsChanging?.Invoke(this, oldValue, value);
                 seconds = value;
@@ -99,6 +115,8 @@ namespace OpenSC.Model.Timers
             get { return countdownSeconds; }
             set
             {
+                if (value < 0)
+                    throw new ArgumentException();
                 int oldValue = countdownSeconds;
                 CountdownSecondsChanging?.Invoke(this, oldValue, value);
                 countdownSeconds = value;
