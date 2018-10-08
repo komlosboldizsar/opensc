@@ -57,6 +57,7 @@
     <Compile Include="GUI\ChildWindowWithTitle.Designer.cs">
       <DependentUpon>ChildWindowWithTitle.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\GeneralComponents\DataGridViewImageButtonCell.cs" />
     <Compile Include="GUI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
