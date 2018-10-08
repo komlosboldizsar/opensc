@@ -91,5 +91,14 @@ namespace OpenSC.Model.Timers
 
         }
 
+        public bool IsIdValidForTimer(int id, Timer timer)
+        {
+            if (!timers.TryGetValue(id, out Timer foundTimer))
+                return true;
+            if (foundTimer == timer)
+                return true;
+            return false;
+        }
+
     }
 }

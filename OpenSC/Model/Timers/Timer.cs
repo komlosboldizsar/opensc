@@ -46,8 +46,7 @@ namespace OpenSC.Model.Timers
             get { return id; }
             set
             {
-                if (!ValidateId(value))
-                    throw new ArgumentException();
+                ValidateId(value);
                 int oldValue = id;
                 IdChanging?.Invoke(this, oldValue, value);
                 id = value;
@@ -55,9 +54,12 @@ namespace OpenSC.Model.Timers
             }
         }
 
-        public bool ValidateId(int id)
+        public void ValidateId(int id)
         {
-            return true;
+            if (id <= 0)
+                throw new ArgumentException();
+            if (!TimerDatabase.Instance.IsIdValidForTimer(id, this))
+                throw new ArgumentException();
         }
 
         public event TimerTitleChangingDelegate TitleChanging;
@@ -69,8 +71,7 @@ namespace OpenSC.Model.Timers
             get { return title; }
             set
             {
-                if (!ValidateTitle(value))
-                    throw new ArgumentException();
+                ValidateTitle(value);
                 string oldTitle = title;
                 TitleChanging?.Invoke(this, oldTitle, value);
                 title = value;
@@ -78,9 +79,12 @@ namespace OpenSC.Model.Timers
             }
         }
 
-        public bool ValidateTitle(string title)
+        public void ValidateTitle(string title)
         {
-            return true;
+            if (title == null)
+                throw new ArgumentNullException();
+            if (title == string.Empty)
+                throw new ArgumentException();
         }
 
         public event TimerSecondsChangingDelegate SecondsChanging;
@@ -115,13 +119,18 @@ namespace OpenSC.Model.Timers
             get { return countdownSeconds; }
             set
             {
-                if (value < 0)
-                    throw new ArgumentException();
+                
                 int oldValue = countdownSeconds;
                 CountdownSecondsChanging?.Invoke(this, oldValue, value);
                 countdownSeconds = value;
                 CountdownSecondsChanged?.Invoke(this, oldValue, value);
             }
+        }
+
+        public void ValidateCountdownSeconds(int value)
+        {
+            if (value < 0)
+                throw new ArgumentException();
         }
 
         public event TimerRunningStateChangingDelegate RunningStateChanging;
