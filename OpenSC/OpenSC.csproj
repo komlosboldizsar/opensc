@@ -198,5 +198,26 @@
   <ItemGroup>
     <Folder Include="Model\Routers\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_timer_backward.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_timer_forward.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_timer_paused.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_timer_reset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_timer_running.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_timer_stopped.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_timer_clock.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
