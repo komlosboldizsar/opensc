@@ -65,56 +65,41 @@ namespace OpenSC.GUI.Timers
             private DataGridViewTextBoxCell startValueCell;
             private DataGridViewButtonCell editButtonCell;
             private DataGridViewButtonCell deleteButtonCell;
-            private DataGridViewImageButtonCell startButtonCell;
-            private DataGridViewImageButtonCell stopButtonCell;
-            private DataGridViewImageButtonCell resetButtonCell;
+            private DataGridViewButtonCell startButtonCell;
+            private DataGridViewButtonCell stopButtonCell;
+            private DataGridViewButtonCell resetButtonCell;
             private DataGridViewButtonCell openTimerWindowButtonCell;
 
             public TimerListTableRow(Timer timer)
             {
                 this.timer = timer;
                 addCells();
+                loadData();
                 subscribeTimerEvents();
             }
 
             private void addCells()
             {
-                idCell = new DataGridViewTextBoxCell()
-                {
-                    Value = string.Format("#{0}", timer.ID)
-                };
+                idCell = new DataGridViewTextBoxCell();
                 this.Cells.Add(idCell);
 
-                titleCell = new DataGridViewTextBoxCell()
-                {
-                    Value = timer.Title
-                };
+                titleCell = new DataGridViewTextBoxCell();
                 this.Cells.Add(titleCell);
 
                 modeImageCell = new DataGridViewImageCell()
                 {
-                    Value = convertModeToImage(timer.Mode),
                     ImageLayout = DataGridViewImageCellLayout.Zoom
                 };
                 modeImageCell.Style.Padding = new Padding(2);
                 this.Cells.Add(modeImageCell);
 
-                modeLabelCell = new DataGridViewTextBoxCell()
-                {
-                    Value = convertModeToLabel(timer.Mode)
-                };
+                modeLabelCell = new DataGridViewTextBoxCell();
                 this.Cells.Add(modeLabelCell);
 
-                currentValueCell = new DataGridViewTextBoxCell()
-                {
-                    Value = timer.TimeSpan.ToString(@"hh\:mm\:ss")
-                };
+                currentValueCell = new DataGridViewTextBoxCell();
                 this.Cells.Add(currentValueCell);
 
-                startValueCell = new DataGridViewTextBoxCell()
-                {
-                    Value = (timer.Mode == TimerMode.Backwards) ? TimeSpan.FromSeconds(timer.CountdownSeconds).ToString(@"hh\:mm\:ss") : ""
-                };
+                startValueCell = new DataGridViewTextBoxCell();
                 this.Cells.Add(startValueCell);
 
                 editButtonCell = new DataGridViewButtonCell()
@@ -158,11 +143,41 @@ namespace OpenSC.GUI.Timers
 
             }
 
+            private void loadData()
+            {
+                updateTimerSettings();
+                updateTimerCurrentValue();
+                updateButtonsEnableState();
+            }
+
+            private void updateTimerSettings()
+            {
+                idCell.Value = string.Format("#{0}", timer.ID);
+                titleCell.Value = timer.Title;
+                modeLabelCell.Value = convertModeToLabel(timer.Mode);
+                modeImageCell.Value = convertModeToImage(timer.Mode);
+                startValueCell.Value = (timer.Mode == TimerMode.Backwards) ? TimeSpan.FromSeconds(timer.CountdownSeconds).ToString(@"hh\:mm\:ss") : "";
+            }
+
+            private void updateTimerCurrentValue()
+            {
+                currentValueCell.Value = timer.TimeSpan.ToString(@"hh\:mm\:ss");
+            }
+
+            private void updateButtonsEnableState()
+            {
+                // TODO
+            }
+
             private void subscribeTimerEvents()
             {
                 timer.TitleChanged += timerTitleChangedHandler;
                 timer.IdChanged += timerIdChangedHandler;
                 timer.SecondsChanged += timerSecondsChangedHandler;
+                timer.RunningStateChanged += timerRunningStateChanged;
+                timer.CountdownSecondsChanged += timerCountdownSecondsChanged;
+                timer.ModeChanged += timerModeChanged;
+                timer.OperationsChanged += timerOperationsChanged;
             }
 
             public void HandleCellClick(object sender, DataGridViewCellEventArgs e)
@@ -192,21 +207,49 @@ namespace OpenSC.GUI.Timers
             {
                 if (timer != this.timer)
                     return;
-                currentValueCell.Value = timer.TimeSpan.ToString(@"hh\:mm\:ss");
+                updateTimerCurrentValue();
             }
 
             private void timerIdChangedHandler(Timer timer, int oldValue, int newValue)
             {
                 if (timer != this.timer)
                     return;
-                idCell.Value = string.Format("#{0}", timer.ID);
+                updateTimerSettings();
             }
 
             private void timerTitleChangedHandler(Timer timer, string oldTitle, string newTitle)
             {
                 if (timer != this.timer)
                     return;
-                titleCell.Value = timer.Title;
+                updateTimerSettings();
+            }
+
+            private void timerOperationsChanged(Timer timer)
+            {
+                if (timer != this.timer)
+                    return;
+                updateButtonsEnableState();
+            }
+
+            private void timerModeChanged(Timer timer, TimerMode oldMode, TimerMode newMode)
+            {
+                if (timer != this.timer)
+                    return;
+                updateTimerSettings();
+            }
+
+            private void timerCountdownSecondsChanged(Timer timer, int oldValue, int newValue)
+            {
+                if (timer != this.timer)
+                    return;
+                updateTimerSettings();
+            }
+
+            private void timerRunningStateChanged(Timer timer, bool oldState, bool newState)
+            {
+                if (timer != this.timer)
+                    return;
+                // TODO
             }
 
             private string convertModeToLabel(TimerMode mode)
