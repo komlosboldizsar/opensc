@@ -35,7 +35,7 @@ namespace OpenSC.Model.UMDs
         public event UmdTextChanging CurrentTextChanging;
         public event UmdTextChanged CurrentTextChanged;
 
-        private string currentText = "fasz";
+        private string currentText;
 
         public string CurrentText
         {
@@ -50,7 +50,7 @@ namespace OpenSC.Model.UMDs
             }
         }
 
-        private string dynamicText = "DYNAMIC";
+        private string dynamicText;
         
         private string DynamicText
         {
@@ -66,7 +66,7 @@ namespace OpenSC.Model.UMDs
         public event UmdTextChanging StaticTextChanging;
         public event UmdTextChanged StaticTextChanged;
 
-        private string staticText = "STATIC";
+        private string staticText;
 
         public string StaticText
         {
@@ -76,6 +76,8 @@ namespace OpenSC.Model.UMDs
                 string oldValue = staticText;
                 StaticTextChanging?.Invoke(this, oldValue, value);
                 staticText = value;
+                if (useStaticText)
+                    CurrentText = value;
                 StaticTextChanged?.Invoke(this, oldValue, value);
             }
         }
