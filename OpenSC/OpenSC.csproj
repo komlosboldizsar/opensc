@@ -223,5 +223,11 @@
   <ItemGroup>
     <None Include="Resources\empty_transparent.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\32_tile_horizontally.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\32_tile_vertically.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

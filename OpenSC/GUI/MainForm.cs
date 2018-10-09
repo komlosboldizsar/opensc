@@ -88,5 +88,28 @@ namespace OpenSC.GUI
             ((sender as ToolStripMenuItem)?.Tag as ChildWindowBase)?.Focus();
         }
 
+        private void arrangeWindowsMenuItemClickHandler(object sender, EventArgs e)
+        {
+
+            if(sender == tileWindowsHorizontallyMenuItem)
+            {
+                LayoutMdi(MdiLayout.TileHorizontal);
+                return;
+            }
+
+            if(sender == tileWindowsVerticallyMenuItem)
+            {
+                LayoutMdi(MdiLayout.TileVertical);
+                return;
+            }
+
+            if(sender == cascadeWindowsMenuItem)
+            {
+                LayoutMdi(MdiLayout.Cascade);
+                return;
+            }
+
+        }
+
     }
 }
