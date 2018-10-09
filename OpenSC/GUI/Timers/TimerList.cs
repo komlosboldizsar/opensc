@@ -65,9 +65,9 @@ namespace OpenSC.GUI.Timers
             private DataGridViewTextBoxCell startValueCell;
             private DataGridViewButtonCell editButtonCell;
             private DataGridViewButtonCell deleteButtonCell;
-            private DataGridViewButtonCell startButtonCell;
-            private DataGridViewButtonCell stopButtonCell;
-            private DataGridViewButtonCell resetButtonCell;
+            private DataGridViewImageButtonCell startButtonCell;
+            private DataGridViewImageButtonCell stopButtonCell;
+            private DataGridViewImageButtonCell resetButtonCell;
             private DataGridViewButtonCell openTimerWindowButtonCell;
 
             public TimerListTableRow(Timer timer)
