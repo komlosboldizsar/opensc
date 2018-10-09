@@ -180,6 +180,10 @@ namespace OpenSC.GUI.UMDs
                 // Delete
                 if (e.ColumnIndex == deleteButtonCell.ColumnIndex)
                 {
+                    string msgBoxText = string.Format("Do you really want to delete this UMD?\n(#{0}) {1}", umd.ID, umd.Name);
+                    var confirm = MessageBox.Show(msgBoxText, "Delete confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (confirm == DialogResult.Yes)
+                        UmdDatabase.Instance.Remove(umd);
                 }
 
             }
