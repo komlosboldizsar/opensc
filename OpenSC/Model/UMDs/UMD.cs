@@ -141,12 +141,19 @@ namespace OpenSC.Model.UMDs
             get { return name; }
             set
             {
+                ValidateName(value);
                 string oldValue = name;
                 NameChanging?.Invoke(this, oldValue, value);
                 name = value;
                 NameChanged?.Invoke(this, oldValue, value);
             }
 
+        }
+
+        public void ValidateName(string name)
+        {
+            if(string.IsNullOrEmpty(name))
+                throw new ArgumentException();
         }
     }
 }

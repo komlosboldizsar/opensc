@@ -67,7 +67,7 @@ namespace OpenSC.GUI.UMDs
             try
             {
                 umd.ValidateId((int)idNumericField.Value);
-                //umd.ValidateName(nameTextBox.Text);
+                umd.ValidateName(nameTextBox.Text);
             }
             catch (Exception e)
             {
