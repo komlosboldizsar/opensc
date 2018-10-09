@@ -33,6 +33,9 @@ namespace OpenSC.Model.Timers
     public delegate void TimerResetingDelegate(Timer timer);
     public delegate void TimerResetedDelegate(Timer timer);
 
+    public delegate void TimerOperationsChangingDelegate(Timer timer);
+    public delegate void TimerOperationsChangedDelegate(Timer timer);
+
     public class Timer
     {
 
@@ -159,6 +162,7 @@ namespace OpenSC.Model.Timers
                     Starting?.Invoke(this);
                 else
                     Stopping?.Invoke(this);
+                OperationsChanging?.Invoke(this);
 
                 running = value;
 
@@ -167,8 +171,27 @@ namespace OpenSC.Model.Timers
                     Started?.Invoke(this);
                 else
                     Stopped?.Invoke(this);
+                OperationsChanged?.Invoke(this);
 
             }
+        }
+
+        public event TimerOperationsChangingDelegate OperationsChanging;
+        public event TimerOperationsChangedDelegate OperationsChanged;
+
+        public bool CanStart
+        {
+            get => (mode != TimerMode.Clock) && !Running;
+        }
+
+        public bool CanStop
+        {
+            get => (mode != TimerMode.Clock) && Running;
+        }
+
+        public bool CanReset
+        {
+            get => mode != TimerMode.Clock;
         }
 
         public event TimerModeChangingDelegate ModeChanging;
@@ -183,8 +206,10 @@ namespace OpenSC.Model.Timers
             {
                 TimerMode oldValue = mode;
                 ModeChanging?.Invoke(this, oldValue, value);
+                OperationsChanging?.Invoke(this);
                 mode = value;
                 ModeChanged?.Invoke(this, oldValue, value);
+                OperationsChanged?.Invoke(this);
             }
         }
 
