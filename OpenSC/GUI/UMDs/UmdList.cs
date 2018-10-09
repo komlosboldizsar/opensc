@@ -10,6 +10,9 @@ namespace OpenSC.GUI.UMDs
 {
     public partial class UmdList : ChildWindowWithTitle
     {
+
+        private const int MAX_TALLIES = 4;
+
         public UmdList()
         {
             InitializeComponent();
@@ -49,6 +52,10 @@ namespace OpenSC.GUI.UMDs
 
             private DataGridViewTextBoxCell idCell;
             private DataGridViewTextBoxCell nameCell;
+            private DataGridViewTextBoxCell staticTextCell;
+            private DataGridViewCheckBoxCell useStaticTextCell;
+            private DataGridViewTextBoxCell currentTextCell;
+            private DataGridViewTextBoxCell[] tallyCells = new DataGridViewTextBoxCell[MAX_TALLIES];
             private DataGridViewButtonCell editButtonCell;
             private DataGridViewButtonCell deleteButtonCell;
 
@@ -68,6 +75,27 @@ namespace OpenSC.GUI.UMDs
                 nameCell = new DataGridViewTextBoxCell();
                 this.Cells.Add(nameCell);
 
+                staticTextCell = new DataGridViewTextBoxCell();
+                this.Cells.Add(staticTextCell);
+
+                useStaticTextCell = new DataGridViewCheckBoxCell()
+                {
+                    FalseValue = false,
+                    TrueValue = true,
+                    Value = false
+                };
+                this.Cells.Add(useStaticTextCell);
+
+                currentTextCell = new DataGridViewTextBoxCell();
+                this.Cells.Add(currentTextCell);
+
+                for (int i = 0; i < MAX_TALLIES; i++)
+                {
+                    tallyCells[i] = new DataGridViewTextBoxCell();
+                    tallyCells[i].Style.BackColor = Color.LightGray;
+                    this.Cells.Add(tallyCells[i]);
+                }
+
                 editButtonCell = new DataGridViewButtonCell()
                 {
                     Value = "Edit"
@@ -85,6 +113,11 @@ namespace OpenSC.GUI.UMDs
             private void loadData()
             {
                 updateUmdSettings();
+                for(int i = 0; i < MAX_TALLIES; i++)
+                    updateTally(i);
+                updateCurrentText();
+                updateStaticText();
+                updateUseStaticText();
             }
 
             private void updateUmdSettings()
@@ -93,22 +126,58 @@ namespace OpenSC.GUI.UMDs
                 nameCell.Value = umd.Name;
             }
 
+            private void updateTally(int index)
+            {
+                if(umd.Type.TallyCount > index)
+                tallyCells[index].Style.BackColor = umd.TallyStates[index] ? umd.TallyColors[index] : Color.White;
+            }
+
+            private void updateCurrentText()
+            {
+                currentTextCell.Value = umd.CurrentText;
+            }
+
+            private void updateStaticText()
+            {
+                staticTextCell.Value = umd.StaticText;
+            }
+
+            private void updateUseStaticText()
+            {
+                useStaticTextCell.Value = umd.UseStaticText;
+            }
+
             private void subscribeUmdEvents()
             {
                 umd.NameChanged += umdNameChangedHandler;
                 umd.IdChanged += umdIdChangedHandler;
+                umd.TallyChanged += umdTallyChangedHandler;
+                umd.StaticTextChanged += umdStaticTextChangedHandler;
+                umd.CurrentTextChanged += umdCurrentTextChangedHandler;
+                umd.UseStaticTextChanged += umdUseStaticTextChangedHandler;
             }
 
             public void HandleCellClick(object sender, DataGridViewCellEventArgs e)
             {
 
-                // Edit
-                /*if(e.ColumnIndex == editButtonCell.ColumnIndex)
+                // Static checkbox
+                if (e.ColumnIndex == useStaticTextCell.ColumnIndex)
                 {
-                    var editWindow = new TimerEditWindow(timer);
+                    umd.UseStaticText = !(bool)useStaticTextCell.Value;
+                }
+
+                // Edit
+                if (e.ColumnIndex == editButtonCell.ColumnIndex)
+                {
+                    /*var editWindow = new UmdEditWindow(timer);
                     editWindow.ShowAsChild();
-                    return;
-                }*/
+                    return;*/
+                }
+
+                // Delete
+                if (e.ColumnIndex == deleteButtonCell.ColumnIndex)
+                {
+                }
 
             }
 
@@ -126,6 +195,36 @@ namespace OpenSC.GUI.UMDs
                 updateUmdSettings();
             }
 
+            private void umdTallyChangedHandler(UMD umd, int index, bool oldState, bool newState)
+            {
+                if (umd != this.umd)
+                    return;
+                if (index >= MAX_TALLIES)
+                    return;
+                updateTally(index);
+            }
+
+            private void umdCurrentTextChangedHandler(UMD umd, string oldText, string newText)
+            {
+                if (umd != this.umd)
+                    return;
+                updateCurrentText();
+            }
+
+            private void umdStaticTextChangedHandler(UMD umd, string oldText, string newText)
+            {
+                if (umd != this.umd)
+                    return;
+                updateStaticText();
+            }
+
+            private void umdUseStaticTextChangedHandler(UMD umd, bool oldState, bool newState)
+            {
+                if (umd != this.umd)
+                    return;
+                updateUseStaticText();
+            }
+
         }
 
         private void umdListTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -136,5 +235,6 @@ namespace OpenSC.GUI.UMDs
             if (rowObject != null)
                 rowObject.HandleCellClick(sender, e);
         }
+
     }
 }
