@@ -35,7 +35,7 @@ namespace OpenSC.Model.UMDs.TSL31
 
         private string text;
 
-        public string Text
+        public override string Text
         {
             get { return text; }
             set
@@ -54,7 +54,7 @@ namespace OpenSC.Model.UMDs.TSL31
 
         private bool[] tallies = new bool[TSL31Type.TALLY_COUNT];
 
-        public void SetTally(int index, bool state)
+        public override void SetTally(int index, bool state)
         {
 
             if (index >= TSL31Type.TALLY_COUNT)
