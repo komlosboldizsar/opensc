@@ -219,5 +219,8 @@
   <ItemGroup>
     <None Include="Resources\16_timer_clock.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\empty_transparent.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

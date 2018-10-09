@@ -55,6 +55,7 @@ namespace OpenSC.GUI.Timers
 
         private static readonly Bitmap STATE_IMAGE_RUNNING = Properties.Resources._16_timer_running;
         private static readonly Bitmap STATE_IMAGE_STOPPED = Properties.Resources._16_timer_stopped;
+        private static readonly Bitmap STATE_IMAGE_NOTSHOWN = Properties.Resources.empty_transparent;
 
         private class TimerListTableRow: DataGridViewRow
         {
@@ -179,7 +180,10 @@ namespace OpenSC.GUI.Timers
 
             private void updateTimmerRunningState()
             {
-                runningStateCell.Value = timer.Running ? STATE_IMAGE_RUNNING : STATE_IMAGE_STOPPED;
+                if (timer.Mode == TimerMode.Clock)
+                    runningStateCell.Value = STATE_IMAGE_NOTSHOWN;
+                else
+                    runningStateCell.Value = timer.Running ? STATE_IMAGE_RUNNING : STATE_IMAGE_STOPPED;
             }
 
             private void updateButtonsEnableState()
@@ -282,6 +286,7 @@ namespace OpenSC.GUI.Timers
                 if (timer != this.timer)
                     return;
                 updateTimerSettings();
+                updateTimmerRunningState();
             }
 
             private void timerCountdownSecondsChanged(Timer timer, int oldValue, int newValue)
