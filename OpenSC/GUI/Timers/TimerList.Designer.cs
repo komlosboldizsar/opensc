@@ -58,14 +58,14 @@
             // 
             this.mainContainer.Controls.Add(this.timerListTable);
             this.mainContainer.Controls.Add(this.groupBox1);
-            this.mainContainer.Size = new System.Drawing.Size(1125, 444);
+            this.mainContainer.Size = new System.Drawing.Size(1232, 497);
             // 
             // groupBox1
             // 
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1125, 100);
+            this.groupBox1.Size = new System.Drawing.Size(1232, 100);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
@@ -94,7 +94,7 @@
             this.timerListTable.Name = "timerListTable";
             this.timerListTable.ReadOnly = true;
             this.timerListTable.RowTemplate.Height = 24;
-            this.timerListTable.Size = new System.Drawing.Size(1125, 344);
+            this.timerListTable.Size = new System.Drawing.Size(1232, 397);
             this.timerListTable.TabIndex = 2;
             this.timerListTable.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.timerListTable_CellContentClick);
             // 
@@ -183,7 +183,6 @@
             this.timerCurrentValueColumn.HeaderText = "Current value";
             this.timerCurrentValueColumn.Name = "timerCurrentValueColumn";
             this.timerCurrentValueColumn.ReadOnly = true;
-            this.timerCurrentValueColumn.Width = 120;
             // 
             // timerStartValueColumn
             // 
@@ -191,7 +190,6 @@
             this.timerStartValueColumn.HeaderText = "Start value";
             this.timerStartValueColumn.Name = "timerStartValueColumn";
             this.timerStartValueColumn.ReadOnly = true;
-            this.timerStartValueColumn.Width = 120;
             // 
             // timerEditButtonColumn
             // 
@@ -235,13 +233,13 @@
             this.openTimerWindowButtonColumn.HeaderText = "Open";
             this.openTimerWindowButtonColumn.Name = "openTimerWindowButtonColumn";
             this.openTimerWindowButtonColumn.ReadOnly = true;
-            this.openTimerWindowButtonColumn.Width = 80;
+            this.openTimerWindowButtonColumn.Width = 65;
             // 
             // TimerList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1125, 500);
+            this.ClientSize = new System.Drawing.Size(1232, 553);
             this.Name = "TimerList";
             this.Text = "List of timers";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TimerList_FormClosed);

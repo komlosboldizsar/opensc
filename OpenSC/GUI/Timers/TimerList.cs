@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Timers;
+﻿using OpenSC.GUI.GeneralComponents;
+using OpenSC.Model.Timers;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
