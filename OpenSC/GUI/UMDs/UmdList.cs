@@ -172,9 +172,9 @@ namespace OpenSC.GUI.UMDs
                 // Edit
                 if (e.ColumnIndex == editButtonCell.ColumnIndex)
                 {
-                    /*var editWindow = new UmdEditWindow(timer);
+                    var editWindow = new UmdEditWindow(umd);
                     editWindow.ShowAsChild();
-                    return;*/
+                    return;
                 }
 
                 // Delete
