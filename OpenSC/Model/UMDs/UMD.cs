@@ -10,6 +10,9 @@ namespace OpenSC.Model.UMDs
     public delegate void UmdIdChangingDelegate(UMD timer, int oldValue, int newValue);
     public delegate void UmdIdChangedDelegate(UMD timer, int oldValue, int newValue);
 
+    public delegate void UmdNameChangingDelegate(UMD timer, string oldName, string newName);
+    public delegate void UmdNameChangedDelegate(UMD timer, string oldName, string newValue);
+
     public delegate void UmdTextChanging(UMD umd, string oldText, string newText);
     public delegate void UmdTextChanged(UMD umd, string oldText, string newText);
 
@@ -28,10 +31,12 @@ namespace OpenSC.Model.UMDs
         public event UmdTallyChanging TallyChanging;
         public event UmdTallyChanged TallyChanged;
 
+        // ...
+
         public event UmdIdChangingDelegate IdChanging;
         public event UmdIdChangedDelegate IdChanged;
 
-        public int id = 0;
+        private int id = 0;
 
         public int ID
         {
@@ -54,5 +59,22 @@ namespace OpenSC.Model.UMDs
                 throw new ArgumentException();
         }
 
+        public event UmdNameChangingDelegate NameChanging;
+        public event UmdNameChangedDelegate NameChanged;
+
+        private string name;
+
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                string oldValue = name;
+                NameChanging?.Invoke(this, oldValue, value);
+                name = value;
+                NameChanged?.Invoke(this, oldValue, value);
+            }
+
+        }
     }
 }
