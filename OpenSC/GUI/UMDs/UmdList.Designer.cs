@@ -33,12 +33,6 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.umdListTable = new System.Windows.Forms.DataGridView();
-            this.dataGridViewButtonColumn1 = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.dataGridViewButtonColumn2 = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.dataGridViewButtonColumn3 = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.dataGridViewButtonColumn4 = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.dataGridViewButtonColumn5 = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.dataGridViewButtonColumn6 = new System.Windows.Forms.DataGridViewButtonColumn();
             this.umdIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.umdNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.umdStaticTextColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -48,6 +42,12 @@
             this.umdTally2Column = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.umdEditButtonColumn = new System.Windows.Forms.DataGridViewButtonColumn();
             this.umdDeleteButtonColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.dataGridViewButtonColumn1 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.dataGridViewButtonColumn2 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.dataGridViewButtonColumn3 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.dataGridViewButtonColumn4 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.dataGridViewButtonColumn5 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.dataGridViewButtonColumn6 = new System.Windows.Forms.DataGridViewButtonColumn();
             this.mainContainer.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.umdListTable)).BeginInit();
@@ -102,11 +102,73 @@
             this.umdListTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.umdListTable.Location = new System.Drawing.Point(0, 100);
             this.umdListTable.Name = "umdListTable";
-            this.umdListTable.ReadOnly = true;
             this.umdListTable.RowTemplate.Height = 24;
             this.umdListTable.Size = new System.Drawing.Size(1232, 397);
             this.umdListTable.TabIndex = 2;
             this.umdListTable.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.umdListTable_CellContentClick);
+            this.umdListTable.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.umdListTable_CellEndEdit);
+            // 
+            // umdIdColumn
+            // 
+            this.umdIdColumn.HeaderText = "ID";
+            this.umdIdColumn.Name = "umdIdColumn";
+            this.umdIdColumn.Width = 50;
+            // 
+            // umdNameColumn
+            // 
+            this.umdNameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.umdNameColumn.DefaultCellStyle = dataGridViewCellStyle1;
+            this.umdNameColumn.DividerWidth = 3;
+            this.umdNameColumn.HeaderText = "Name";
+            this.umdNameColumn.Name = "umdNameColumn";
+            // 
+            // umdStaticTextColumn
+            // 
+            this.umdStaticTextColumn.HeaderText = "Static text";
+            this.umdStaticTextColumn.Name = "umdStaticTextColumn";
+            this.umdStaticTextColumn.Width = 200;
+            // 
+            // umdUseStaticTextColumn
+            // 
+            this.umdUseStaticTextColumn.HeaderText = "Static";
+            this.umdUseStaticTextColumn.Name = "umdUseStaticTextColumn";
+            this.umdUseStaticTextColumn.Width = 50;
+            // 
+            // umdCurrentTextColumn
+            // 
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.umdCurrentTextColumn.DefaultCellStyle = dataGridViewCellStyle2;
+            this.umdCurrentTextColumn.DividerWidth = 3;
+            this.umdCurrentTextColumn.HeaderText = "Current text";
+            this.umdCurrentTextColumn.Name = "umdCurrentTextColumn";
+            this.umdCurrentTextColumn.Width = 200;
+            // 
+            // umdTally1Coulmn
+            // 
+            this.umdTally1Coulmn.HeaderText = "T1";
+            this.umdTally1Coulmn.Name = "umdTally1Coulmn";
+            this.umdTally1Coulmn.Width = 30;
+            // 
+            // umdTally2Column
+            // 
+            this.umdTally2Column.DividerWidth = 3;
+            this.umdTally2Column.HeaderText = "T2";
+            this.umdTally2Column.Name = "umdTally2Column";
+            this.umdTally2Column.Width = 33;
+            // 
+            // umdEditButtonColumn
+            // 
+            this.umdEditButtonColumn.HeaderText = "Edit";
+            this.umdEditButtonColumn.Name = "umdEditButtonColumn";
+            this.umdEditButtonColumn.Width = 70;
+            // 
+            // umdDeleteButtonColumn
+            // 
+            this.umdDeleteButtonColumn.DividerWidth = 3;
+            this.umdDeleteButtonColumn.HeaderText = "Delete";
+            this.umdDeleteButtonColumn.Name = "umdDeleteButtonColumn";
+            this.umdDeleteButtonColumn.Width = 70;
             // 
             // dataGridViewButtonColumn1
             // 
@@ -150,77 +212,6 @@
             this.dataGridViewButtonColumn6.HeaderText = "Open";
             this.dataGridViewButtonColumn6.Name = "dataGridViewButtonColumn6";
             this.dataGridViewButtonColumn6.ReadOnly = true;
-            // 
-            // umdIdColumn
-            // 
-            this.umdIdColumn.HeaderText = "ID";
-            this.umdIdColumn.Name = "umdIdColumn";
-            this.umdIdColumn.ReadOnly = true;
-            this.umdIdColumn.Width = 50;
-            // 
-            // umdNameColumn
-            // 
-            this.umdNameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.umdNameColumn.DefaultCellStyle = dataGridViewCellStyle1;
-            this.umdNameColumn.DividerWidth = 3;
-            this.umdNameColumn.HeaderText = "Name";
-            this.umdNameColumn.Name = "umdNameColumn";
-            this.umdNameColumn.ReadOnly = true;
-            // 
-            // umdStaticTextColumn
-            // 
-            this.umdStaticTextColumn.HeaderText = "Static text";
-            this.umdStaticTextColumn.Name = "umdStaticTextColumn";
-            this.umdStaticTextColumn.ReadOnly = true;
-            this.umdStaticTextColumn.Width = 200;
-            // 
-            // umdUseStaticTextColumn
-            // 
-            this.umdUseStaticTextColumn.HeaderText = "Static";
-            this.umdUseStaticTextColumn.Name = "umdUseStaticTextColumn";
-            this.umdUseStaticTextColumn.ReadOnly = true;
-            this.umdUseStaticTextColumn.Width = 50;
-            // 
-            // umdCurrentTextColumn
-            // 
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.umdCurrentTextColumn.DefaultCellStyle = dataGridViewCellStyle2;
-            this.umdCurrentTextColumn.DividerWidth = 3;
-            this.umdCurrentTextColumn.HeaderText = "Current text";
-            this.umdCurrentTextColumn.Name = "umdCurrentTextColumn";
-            this.umdCurrentTextColumn.ReadOnly = true;
-            this.umdCurrentTextColumn.Width = 200;
-            // 
-            // umdTally1Coulmn
-            // 
-            this.umdTally1Coulmn.HeaderText = "T1";
-            this.umdTally1Coulmn.Name = "umdTally1Coulmn";
-            this.umdTally1Coulmn.ReadOnly = true;
-            this.umdTally1Coulmn.Width = 30;
-            // 
-            // umdTally2Column
-            // 
-            this.umdTally2Column.DividerWidth = 3;
-            this.umdTally2Column.HeaderText = "T2";
-            this.umdTally2Column.Name = "umdTally2Column";
-            this.umdTally2Column.ReadOnly = true;
-            this.umdTally2Column.Width = 33;
-            // 
-            // umdEditButtonColumn
-            // 
-            this.umdEditButtonColumn.HeaderText = "Edit";
-            this.umdEditButtonColumn.Name = "umdEditButtonColumn";
-            this.umdEditButtonColumn.ReadOnly = true;
-            this.umdEditButtonColumn.Width = 70;
-            // 
-            // umdDeleteButtonColumn
-            // 
-            this.umdDeleteButtonColumn.DividerWidth = 3;
-            this.umdDeleteButtonColumn.HeaderText = "Delete";
-            this.umdDeleteButtonColumn.Name = "umdDeleteButtonColumn";
-            this.umdDeleteButtonColumn.ReadOnly = true;
-            this.umdDeleteButtonColumn.Width = 70;
             // 
             // UmdList
             // 

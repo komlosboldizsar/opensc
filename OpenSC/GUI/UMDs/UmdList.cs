@@ -11,7 +11,7 @@ namespace OpenSC.GUI.UMDs
     public partial class UmdList : ChildWindowWithTitle
     {
 
-        private const int MAX_TALLIES = 4;
+        private const int MAX_TALLIES = 2;
 
         public UmdList()
         {
@@ -75,7 +75,10 @@ namespace OpenSC.GUI.UMDs
                 nameCell = new DataGridViewTextBoxCell();
                 this.Cells.Add(nameCell);
 
-                staticTextCell = new DataGridViewTextBoxCell();
+                staticTextCell = new DataGridViewTextBoxCell()
+                {
+                    ReadOnly = false
+                };
                 this.Cells.Add(staticTextCell);
 
                 useStaticTextCell = new DataGridViewCheckBoxCell()
@@ -181,6 +184,17 @@ namespace OpenSC.GUI.UMDs
 
             }
 
+            public void HandleCellEndEdit(object sender, DataGridViewCellEventArgs e)
+            {
+
+                // Static text
+                if (e.ColumnIndex == staticTextCell.ColumnIndex)
+                {
+                    umd.StaticText = (string)staticTextCell.Value;
+                }
+
+            }
+
             private void umdIdChangedHandler(UMD umd, int oldValue, int newValue)
             {
                 if (umd != this.umd)
@@ -234,6 +248,15 @@ namespace OpenSC.GUI.UMDs
             UmdListTableRow rowObject = umdListTable.Rows[e.RowIndex] as UmdListTableRow;
             if (rowObject != null)
                 rowObject.HandleCellClick(sender, e);
+        }
+
+        private void umdListTable_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (sender != umdListTable)
+                return;
+            UmdListTableRow rowObject = umdListTable.Rows[e.RowIndex] as UmdListTableRow;
+            if (rowObject != null)
+                rowObject.HandleCellEndEdit(sender, e);
         }
 
     }
