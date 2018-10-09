@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.WorkspaceManager;
+﻿using OpenSC.GUI.UMDs;
+using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model.Timers;
 using OpenSC.Model.UMDs;
 using System;
@@ -121,5 +122,10 @@ namespace OpenSC.GUI
 
         }
 
+        private void listToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var window = new UmdList();
+            window.ShowAsChild();
+        }
     }
 }

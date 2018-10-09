@@ -33,6 +33,10 @@
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.tileWindowsHorizontallyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tileWindowsVerticallyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cascadeWindowsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusStripEmptySpace = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStripClock = new System.Windows.Forms.ToolStripStatusLabel();
@@ -40,10 +44,8 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.clockUpdateTimer = new System.Windows.Forms.Timer(this.components);
-            this.tileWindowsVerticallyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cascadeWindowsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tileWindowsHorizontallyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uMDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -53,6 +55,7 @@
             this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileMenu,
+            this.uMDToolStripMenuItem,
             this.windowsMenu});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
@@ -84,6 +87,34 @@
             this.windowsMenu.Name = "windowsMenu";
             this.windowsMenu.Size = new System.Drawing.Size(82, 24);
             this.windowsMenu.Text = "Windows";
+            // 
+            // tileWindowsHorizontallyMenuItem
+            // 
+            this.tileWindowsHorizontallyMenuItem.Image = global::OpenSC.Properties.Resources._32_tile_horizontally;
+            this.tileWindowsHorizontallyMenuItem.Name = "tileWindowsHorizontallyMenuItem";
+            this.tileWindowsHorizontallyMenuItem.Size = new System.Drawing.Size(252, 26);
+            this.tileWindowsHorizontallyMenuItem.Text = "Tile windows horizontally";
+            this.tileWindowsHorizontallyMenuItem.Click += new System.EventHandler(this.arrangeWindowsMenuItemClickHandler);
+            // 
+            // tileWindowsVerticallyMenuItem
+            // 
+            this.tileWindowsVerticallyMenuItem.Image = global::OpenSC.Properties.Resources._32_tile_vertically;
+            this.tileWindowsVerticallyMenuItem.Name = "tileWindowsVerticallyMenuItem";
+            this.tileWindowsVerticallyMenuItem.Size = new System.Drawing.Size(252, 26);
+            this.tileWindowsVerticallyMenuItem.Text = "Tile windows vertically";
+            this.tileWindowsVerticallyMenuItem.Click += new System.EventHandler(this.arrangeWindowsMenuItemClickHandler);
+            // 
+            // cascadeWindowsMenuItem
+            // 
+            this.cascadeWindowsMenuItem.Name = "cascadeWindowsMenuItem";
+            this.cascadeWindowsMenuItem.Size = new System.Drawing.Size(252, 26);
+            this.cascadeWindowsMenuItem.Text = "Cascade windows";
+            this.cascadeWindowsMenuItem.Click += new System.EventHandler(this.arrangeWindowsMenuItemClickHandler);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(249, 6);
             // 
             // statusStrip
             // 
@@ -136,33 +167,20 @@
             this.clockUpdateTimer.Interval = 500;
             this.clockUpdateTimer.Tick += new System.EventHandler(this.clockUpdateTimer_Tick);
             // 
-            // tileWindowsVerticallyMenuItem
+            // uMDToolStripMenuItem
             // 
-            this.tileWindowsVerticallyMenuItem.Image = global::OpenSC.Properties.Resources._32_tile_vertically;
-            this.tileWindowsVerticallyMenuItem.Name = "tileWindowsVerticallyMenuItem";
-            this.tileWindowsVerticallyMenuItem.Size = new System.Drawing.Size(252, 26);
-            this.tileWindowsVerticallyMenuItem.Text = "Tile windows vertically";
-            this.tileWindowsVerticallyMenuItem.Click += new System.EventHandler(this.arrangeWindowsMenuItemClickHandler);
+            this.uMDToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.listToolStripMenuItem});
+            this.uMDToolStripMenuItem.Name = "uMDToolStripMenuItem";
+            this.uMDToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
+            this.uMDToolStripMenuItem.Text = "UMD";
             // 
-            // cascadeWindowsMenuItem
+            // listToolStripMenuItem
             // 
-            this.cascadeWindowsMenuItem.Name = "cascadeWindowsMenuItem";
-            this.cascadeWindowsMenuItem.Size = new System.Drawing.Size(252, 26);
-            this.cascadeWindowsMenuItem.Text = "Cascade windows";
-            this.cascadeWindowsMenuItem.Click += new System.EventHandler(this.arrangeWindowsMenuItemClickHandler);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(249, 6);
-            // 
-            // tileWindowsHorizontallyMenuItem
-            // 
-            this.tileWindowsHorizontallyMenuItem.Image = global::OpenSC.Properties.Resources._32_tile_horizontally;
-            this.tileWindowsHorizontallyMenuItem.Name = "tileWindowsHorizontallyMenuItem";
-            this.tileWindowsHorizontallyMenuItem.Size = new System.Drawing.Size(252, 26);
-            this.tileWindowsHorizontallyMenuItem.Text = "Tile windows horizontally";
-            this.tileWindowsHorizontallyMenuItem.Click += new System.EventHandler(this.arrangeWindowsMenuItemClickHandler);
+            this.listToolStripMenuItem.Name = "listToolStripMenuItem";
+            this.listToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.listToolStripMenuItem.Text = "List";
+            this.listToolStripMenuItem.Click += new System.EventHandler(this.listToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -202,6 +220,8 @@
         private System.Windows.Forms.ToolStripMenuItem tileWindowsVerticallyMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cascadeWindowsMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem uMDToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem listToolStripMenuItem;
     }
 }
 
