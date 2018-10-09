@@ -37,6 +37,8 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Name = "ChildWindowBase";
             this.Text = "ChildWindowsBase";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ChildWindowBase_FormClosed);
+            this.Load += new System.EventHandler(this.ChildWindowBase_Load);
             this.ResumeLayout(false);
 
         }

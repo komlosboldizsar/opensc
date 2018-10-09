@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Timers;
+﻿using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model.Timers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -29,6 +30,11 @@ namespace OpenSC.GUI
         private void MainForm_Load(object sender, EventArgs e)
         {
 
+            //
+            WindowManager.Instance.ChildWindowOpened += childWindowOpenedHandler;
+            WindowManager.Instance.ChildWindowClosed += childWindowClosedHandler;
+            //
+
             var t1 = new Model.Timers.Timer();
             t1.ID = 4;
             t1.Mode = Model.Timers.TimerMode.Forwards;
@@ -54,5 +60,33 @@ namespace OpenSC.GUI
             var w3 = new Timers.TimerList();
             w3.ShowAsChild();
         }
+
+        private void childWindowOpenedHandler(ChildWindowBase window)
+        {
+            ToolStripMenuItem newMenuItem = new ToolStripMenuItem()
+            {
+                Text = window.Text,
+                Tag = window
+            };
+            newMenuItem.Click += windowsMenuItemClickHandler;
+            windowsMenu.DropDownItems.Add(newMenuItem);
+        }
+
+        private void childWindowClosedHandler(ChildWindowBase window)
+        {
+            ToolStripItemCollection items = windowsMenu.DropDownItems;
+            int elementCount = items.Count;
+            for (int i = elementCount - 1; i >= 0; i--)
+            {
+                if (items[i].Tag == window)
+                    items.RemoveAt(i);
+            }
+        }
+
+        private void windowsMenuItemClickHandler(object sender, EventArgs e)
+        {
+            ((sender as ToolStripMenuItem)?.Tag as ChildWindowBase)?.Focus();
+        }
+
     }
 }

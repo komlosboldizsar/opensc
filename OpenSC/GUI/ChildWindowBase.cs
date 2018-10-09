@@ -15,7 +15,6 @@ namespace OpenSC.GUI
         public ChildWindowBase()
         {
             InitializeComponent();
-            
         }
 
         public void ShowAsChild()
@@ -23,5 +22,16 @@ namespace OpenSC.GUI
             MdiParent = MainForm.Instance;
             Show();
         }
+
+        private void ChildWindowBase_Load(object sender, EventArgs e)
+        {
+            WorkspaceManager.WindowManager.Instance.NotifyChildWindowOpened(this);
+        }
+
+        private void ChildWindowBase_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            WorkspaceManager.WindowManager.Instance.NotifyChildWindowClosed(this);
+        }
+
     }
 }
