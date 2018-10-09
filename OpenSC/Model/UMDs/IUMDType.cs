@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.UMDs
 {
-    interface IUMDType
+    public interface IUMDType
     {
         string Name { get; }
         int TallyCount { get; }

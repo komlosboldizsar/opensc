@@ -15,7 +15,7 @@ namespace OpenSC.Model.UMDs.TSL31
 
         public int TallyCount => TALLY_COUNT;
 
-        public const int TALLY_COUNT = 2;
+        public const int TALLY_COUNT = 1;
 
     }
 }

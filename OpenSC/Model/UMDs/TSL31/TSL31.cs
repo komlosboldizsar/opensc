@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,8 @@ namespace OpenSC.Model.UMDs.TSL31
 {
     class TSL31 : UMD
     {
+
+        public override IUMDType Type => new TSL31Type();
 
         private TSL31Port port;
 
@@ -49,10 +52,20 @@ namespace OpenSC.Model.UMDs.TSL31
             }
         }
 
+        public override Color[] TallyColors
+        {
+            get { return new Color[] { Color.Red, Color.Green }; }
+        }
+
         public event UmdTallyChanging TallyChanging;
         public event UmdTallyChanged TallyChanged;
 
-        private bool[] tallies = new bool[TSL31Type.TALLY_COUNT];
+        private bool[] tallies = new bool[TSL31Type.TALLY_COUNT] { true };
+
+        public override bool[] TallyStates
+        {
+            get { return tallies; }
+        }
 
         public override void SetTally(int index, bool state)
         {
