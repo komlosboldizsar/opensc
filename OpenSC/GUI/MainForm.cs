@@ -1,5 +1,6 @@
 ﻿using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model.Timers;
+using OpenSC.Model.UMDs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -53,12 +54,21 @@ namespace OpenSC.GUI
             t3.Start();
             TimerDatabase.Instance.Add(t3);
 
-            var w = new Timers.TimerWindow(t1);
-            w.ShowAsChild();
-            var w2 = new Timers.TimerEditWindow(t1);
-            w2.ShowAsChild();
+            var u1 = new Model.UMDs.TSL31.TSL31();
+            u1.ID = 13;
+            u1.Name = "VST MON 1";
+            UmdDatabase.Instance.Add(u1);
+
+            var u2 = new Model.UMDs.TSL31.TSL31();
+            u2.ID = 27;
+            u2.Name = "HTE Clock";
+            UmdDatabase.Instance.Add(u2);
+
             var w3 = new Timers.TimerList();
             w3.ShowAsChild();
+            var w4 = new UMDs.UmdList();
+            w4.ShowAsChild();
+
         }
 
         private void childWindowOpenedHandler(ChildWindowBase window)
