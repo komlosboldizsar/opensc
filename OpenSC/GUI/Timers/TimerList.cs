@@ -52,6 +52,9 @@ namespace OpenSC.GUI.Timers
         private static readonly Bitmap BUTTON_IMAGE_STOP = Properties.Resources.timer_stopped;
         private static readonly Bitmap BUTTON_IMAGE_RESET = Properties.Resources.timer_paused;
 
+        private static readonly Bitmap STATE_IMAGE_RUNNING = Properties.Resources.timer_running;
+        private static readonly Bitmap STATE_IMAGE_STOPPED = Properties.Resources.timer_stopped;
+
         private class TimerListTableRow: DataGridViewRow
         {
 
@@ -61,6 +64,7 @@ namespace OpenSC.GUI.Timers
             private DataGridViewTextBoxCell titleCell;
             private DataGridViewImageCell modeImageCell;
             private DataGridViewTextBoxCell modeLabelCell;
+            private DataGridViewImageCell runningStateCell;
             private DataGridViewTextBoxCell currentValueCell;
             private DataGridViewTextBoxCell startValueCell;
             private DataGridViewButtonCell editButtonCell;
@@ -95,6 +99,13 @@ namespace OpenSC.GUI.Timers
 
                 modeLabelCell = new DataGridViewTextBoxCell();
                 this.Cells.Add(modeLabelCell);
+
+                runningStateCell = new DataGridViewImageCell()
+                {
+                    ImageLayout = DataGridViewImageCellLayout.Zoom
+                };
+                runningStateCell.Style.Padding = new Padding(2);
+                this.Cells.Add(runningStateCell);
 
                 currentValueCell = new DataGridViewTextBoxCell();
                 this.Cells.Add(currentValueCell);
@@ -147,6 +158,7 @@ namespace OpenSC.GUI.Timers
             {
                 updateTimerSettings();
                 updateTimerCurrentValue();
+                updateTimmerRunningState();
                 updateButtonsEnableState();
             }
 
@@ -162,6 +174,11 @@ namespace OpenSC.GUI.Timers
             private void updateTimerCurrentValue()
             {
                 currentValueCell.Value = timer.TimeSpan.ToString(@"hh\:mm\:ss");
+            }
+
+            private void updateTimmerRunningState()
+            {
+                runningStateCell.Value = timer.Running ? STATE_IMAGE_RUNNING : STATE_IMAGE_STOPPED;
             }
 
             private void updateButtonsEnableState()
@@ -277,7 +294,7 @@ namespace OpenSC.GUI.Timers
             {
                 if (timer != this.timer)
                     return;
-                // TODO
+                updateTimmerRunningState();
             }
 
             private string convertModeToLabel(TimerMode mode)
