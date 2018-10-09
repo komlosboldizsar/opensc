@@ -23,35 +23,37 @@ namespace OpenSC.GUI.GeneralComponents
             return cell;
         }
 
+        private const float CELL_OWN_PADDING = 2;
+
         protected override void Paint(Graphics graphics, Rectangle clipBounds, Rectangle cellBounds, int rowIndex, DataGridViewElementStates elementState, object value, object formattedValue, string errorText, DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle advancedBorderStyle, DataGridViewPaintParts paintParts)
         {
             base.Paint(graphics, clipBounds, cellBounds, rowIndex, elementState, value, formattedValue, errorText, cellStyle, advancedBorderStyle, paintParts);
             if (Image != null)
             {
 
-                int left = cellBounds.Left + ImagePadding.Left;
-                int top = cellBounds.Top + ImagePadding.Top;
+                float left = cellBounds.Left + ImagePadding.Left + CELL_OWN_PADDING;
+                float top = cellBounds.Top + ImagePadding.Top + CELL_OWN_PADDING;
 
-                int maxWidth = cellBounds.Width - ImagePadding.Left - ImagePadding.Right;
-                int maxHeight = cellBounds.Height - ImagePadding.Top - ImagePadding.Bottom;
+                float canvasWidth = cellBounds.Width - 2 * CELL_OWN_PADDING - ImagePadding.Left - ImagePadding.Right;
+                float canvasHeight = cellBounds.Height - 2 * CELL_OWN_PADDING - ImagePadding.Top - ImagePadding.Bottom;
 
-                int drawWidth = maxWidth;
-                int drawHeight = maxHeight;
+                float drawWidth = canvasWidth;
+                float drawHeight = canvasHeight;
 
-                float originalAR = Image.Width / (float)Image.Height;
-                float spaceAR = maxWidth / (float)maxHeight;
+                float imageAR = Image.Width / Image.Height;
+                float canvasAR = canvasWidth / canvasHeight;
 
-                if (spaceAR > originalAR)
+                if (imageAR > canvasAR) // Image is wider than the canvas
                 {
-                    drawWidth = (int)((originalAR / spaceAR) * maxWidth);
-                    left += (maxWidth - drawWidth) / 2;
+                    drawHeight = Image.Height * (canvasWidth /Image.Width);
+                    top += (canvasHeight - drawHeight) / 2;
                 }
                 else
                 {
-                    drawHeight = (int)((originalAR / spaceAR) * maxHeight);
-                    top += (maxHeight - drawHeight) / 2;
+                    drawWidth = (Image.Width * (canvasHeight / Image.Height));
+                    left += (canvasWidth - drawWidth) / 2;
                 }
-
+               
                 graphics.DrawImage(Image, left, top, drawWidth, drawHeight);
 
             }
