@@ -15,7 +15,16 @@ namespace OpenSC.GUI.GeneralComponents
         public bool Enabled
         {
             get { return enabledValue; }
-            set { enabledValue = value; }
+            set
+            {
+                enabledValue = value;
+                update();
+            }
+        }
+
+        private void update()
+        {
+            this.DataGridView?.InvalidateCell(this);
         }
 
         // Override the Clone method so that the Enabled property is copied.
