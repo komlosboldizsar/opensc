@@ -79,6 +79,13 @@
     </Compile>
     <Compile Include="GUI\WorkspaceManager\WindowManager.cs" />
     <Compile Include="Model\Timers\TimerDatabase.cs" />
+    <Compile Include="Model\UMDs\Datagram.cs" />
+    <Compile Include="Model\UMDs\IPort.cs" />
+    <Compile Include="Model\UMDs\TSL31\TSL31.cs" />
+    <Compile Include="Model\UMDs\TSL31\TSL31Type.cs" />
+    <Compile Include="Model\UMDs\TSL31\TSL31Port.cs" />
+    <Compile Include="Model\UMDs\UMD.cs" />
+    <Compile Include="Model\UMDs\IUMDType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GUI\Routers\RouterControlForm.cs">
