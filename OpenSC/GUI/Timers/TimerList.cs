@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Timers;
+﻿using OpenSC.GUI.GeneralComponents;
+using OpenSC.Model.Timers;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -40,20 +41,21 @@ namespace OpenSC.GUI.Timers
             }
         }
 
-        private static readonly Bitmap MODE_IMAGE_FORWARDS = Properties.Resources.timer_forward;
-        private static readonly Bitmap MODE_IMAGE_BACKWARDS = Properties.Resources.timer_backward;
-        private static readonly Bitmap MODE_IMAGE_CLOCK = Properties.Resources.timer_clock;
+        private static readonly Bitmap MODE_IMAGE_FORWARDS = Properties.Resources._16_timer_forward;
+        private static readonly Bitmap MODE_IMAGE_BACKWARDS = Properties.Resources._16_timer_backward;
+        private static readonly Bitmap MODE_IMAGE_CLOCK = Properties.Resources._16_timer_clock;
 
         private static readonly string MODE_LABEL_FORWARDS = "stopper";
         private static readonly string MODE_LABEL_BACKWARDS = "countdown";
         private static readonly string MODE_LABEL_CLOCK = "clock";
 
-        private static readonly Bitmap BUTTON_IMAGE_START = Properties.Resources.timer_running;
-        private static readonly Bitmap BUTTON_IMAGE_STOP = Properties.Resources.timer_stopped;
-        private static readonly Bitmap BUTTON_IMAGE_RESET = Properties.Resources.timer_paused;
+        private static readonly Bitmap BUTTON_IMAGE_START = Properties.Resources._16_timer_running;
+        private static readonly Bitmap BUTTON_IMAGE_STOP = Properties.Resources._16_timer_stopped;
+        private static readonly Bitmap BUTTON_IMAGE_RESET = Properties.Resources._16_timer_reset;
 
-        private static readonly Bitmap STATE_IMAGE_RUNNING = Properties.Resources.timer_running;
-        private static readonly Bitmap STATE_IMAGE_STOPPED = Properties.Resources.timer_stopped;
+        private static readonly Bitmap STATE_IMAGE_RUNNING = Properties.Resources._16_timer_running;
+        private static readonly Bitmap STATE_IMAGE_STOPPED = Properties.Resources._16_timer_stopped;
+        private static readonly Bitmap STATE_IMAGE_NOTSHOWN = Properties.Resources.empty_transparent;
 
         private class TimerListTableRow: DataGridViewRow
         {
@@ -178,7 +180,10 @@ namespace OpenSC.GUI.Timers
 
             private void updateTimmerRunningState()
             {
-                runningStateCell.Value = timer.Running ? STATE_IMAGE_RUNNING : STATE_IMAGE_STOPPED;
+                if (timer.Mode == TimerMode.Clock)
+                    runningStateCell.Value = STATE_IMAGE_NOTSHOWN;
+                else
+                    runningStateCell.Value = timer.Running ? STATE_IMAGE_RUNNING : STATE_IMAGE_STOPPED;
             }
 
             private void updateButtonsEnableState()
@@ -281,6 +286,7 @@ namespace OpenSC.GUI.Timers
                 if (timer != this.timer)
                     return;
                 updateTimerSettings();
+                updateTimmerRunningState();
             }
 
             private void timerCountdownSecondsChanged(Timer timer, int oldValue, int newValue)

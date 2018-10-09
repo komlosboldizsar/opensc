@@ -208,6 +208,14 @@ namespace OpenSC.Model.Timers
                 ModeChanging?.Invoke(this, oldValue, value);
                 OperationsChanging?.Invoke(this);
                 mode = value;
+                if (oldValue != value)
+                {
+                    Running = false;
+                    if (value == TimerMode.Backwards)
+                        Seconds = CountdownSeconds;
+                    else if (value == TimerMode.Forwards)
+                        Seconds = 0;
+                }
                 ModeChanged?.Invoke(this, oldValue, value);
                 OperationsChanged?.Invoke(this);
             }
