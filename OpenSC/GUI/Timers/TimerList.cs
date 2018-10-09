@@ -52,6 +52,9 @@ namespace OpenSC.GUI.Timers
         private static readonly Bitmap BUTTON_IMAGE_STOP = Properties.Resources.timer_stopped;
         private static readonly Bitmap BUTTON_IMAGE_RESET = Properties.Resources.timer_paused;
 
+        private static readonly Bitmap STATE_IMAGE_RUNNING = Properties.Resources.timer_running;
+        private static readonly Bitmap STATE_IMAGE_STOPPED = Properties.Resources.timer_stopped;
+
         private class TimerListTableRow: DataGridViewRow
         {
 
@@ -61,13 +64,14 @@ namespace OpenSC.GUI.Timers
             private DataGridViewTextBoxCell titleCell;
             private DataGridViewImageCell modeImageCell;
             private DataGridViewTextBoxCell modeLabelCell;
+            private DataGridViewImageCell runningStateCell;
             private DataGridViewTextBoxCell currentValueCell;
             private DataGridViewTextBoxCell startValueCell;
             private DataGridViewButtonCell editButtonCell;
             private DataGridViewButtonCell deleteButtonCell;
-            private DataGridViewButtonCell startButtonCell;
-            private DataGridViewButtonCell stopButtonCell;
-            private DataGridViewButtonCell resetButtonCell;
+            private DataGridViewImageButtonCell startButtonCell;
+            private DataGridViewImageButtonCell stopButtonCell;
+            private DataGridViewImageButtonCell resetButtonCell;
             private DataGridViewButtonCell openTimerWindowButtonCell;
 
             public TimerListTableRow(Timer timer)
@@ -95,6 +99,13 @@ namespace OpenSC.GUI.Timers
 
                 modeLabelCell = new DataGridViewTextBoxCell();
                 this.Cells.Add(modeLabelCell);
+
+                runningStateCell = new DataGridViewImageCell()
+                {
+                    ImageLayout = DataGridViewImageCellLayout.Zoom
+                };
+                runningStateCell.Style.Padding = new Padding(2);
+                this.Cells.Add(runningStateCell);
 
                 currentValueCell = new DataGridViewTextBoxCell();
                 this.Cells.Add(currentValueCell);
@@ -147,6 +158,7 @@ namespace OpenSC.GUI.Timers
             {
                 updateTimerSettings();
                 updateTimerCurrentValue();
+                updateTimmerRunningState();
                 updateButtonsEnableState();
             }
 
@@ -164,9 +176,16 @@ namespace OpenSC.GUI.Timers
                 currentValueCell.Value = timer.TimeSpan.ToString(@"hh\:mm\:ss");
             }
 
+            private void updateTimmerRunningState()
+            {
+                runningStateCell.Value = timer.Running ? STATE_IMAGE_RUNNING : STATE_IMAGE_STOPPED;
+            }
+
             private void updateButtonsEnableState()
             {
-                // TODO
+                startButtonCell.Enabled = timer.CanStart;
+                stopButtonCell.Enabled = timer.CanStop;
+                resetButtonCell.Enabled = timer.CanReset;
             }
 
             private void subscribeTimerEvents()
@@ -182,25 +201,51 @@ namespace OpenSC.GUI.Timers
 
             public void HandleCellClick(object sender, DataGridViewCellEventArgs e)
             {
-                switch (e.ColumnIndex)
+
+                // Edit
+                if(e.ColumnIndex == editButtonCell.ColumnIndex)
                 {
-                    case 6: // Edit
-                        var editWindow = new TimerEditWindow(timer);
-                        editWindow.ShowAsChild();
-                        break;
-                    case 7: // Delete
-                        break;
-                    case 8: // Start
-                        break;
-                    case 9: // Stop
-                        break;
-                    case 10: // Reset
-                        break;
-                    case 11: // Open
-                        var timerWindow = new TimerWindow(timer);
-                        timerWindow.ShowAsChild();
-                        break;
+                    var editWindow = new TimerEditWindow(timer);
+                    editWindow.ShowAsChild();
+                    return;
                 }
+
+                // Delete
+                if(e.ColumnIndex == deleteButtonCell.ColumnIndex)
+                {
+                    TimerDatabase.Instance.Remove(timer);
+                    return;
+                }
+
+                // Start
+                if (e.ColumnIndex == startButtonCell.ColumnIndex)
+                {
+                    timer.Start();
+                    return;
+                }
+
+                // Stop
+                if (e.ColumnIndex == stopButtonCell.ColumnIndex)
+                {
+                    timer.Stop();
+                    return;
+                }
+
+                // Reset
+                if (e.ColumnIndex == resetButtonCell.ColumnIndex)
+                {
+                    timer.Reset();
+                    return;
+                }
+
+                // Open
+                if (e.ColumnIndex == openTimerWindowButtonCell.ColumnIndex)
+                {
+                    var timerWindow = new TimerWindow(timer);
+                    timerWindow.ShowAsChild();
+                    return;
+                }
+
             }
 
             private void timerSecondsChangedHandler(Timer timer, int oldValue, int newValue)
@@ -249,7 +294,7 @@ namespace OpenSC.GUI.Timers
             {
                 if (timer != this.timer)
                     return;
-                // TODO
+                updateTimmerRunningState();
             }
 
             private string convertModeToLabel(TimerMode mode)

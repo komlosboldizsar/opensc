@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.timerListTable = new System.Windows.Forms.DataGridView();
             this.dataGridViewButtonColumn1 = new System.Windows.Forms.DataGridViewButtonColumn();
@@ -41,6 +41,7 @@
             this.timerTitleColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.timerModeImageColumn = new System.Windows.Forms.DataGridViewImageColumn();
             this.timerModeLabelColimn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.timerRunningStateColumn = new System.Windows.Forms.DataGridViewImageColumn();
             this.timerCurrentValueColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.timerStartValueColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.timerEditButtonColumn = new System.Windows.Forms.DataGridViewButtonColumn();
@@ -79,6 +80,7 @@
             this.timerTitleColumn,
             this.timerModeImageColumn,
             this.timerModeLabelColimn,
+            this.timerRunningStateColumn,
             this.timerCurrentValueColumn,
             this.timerStartValueColumn,
             this.timerEditButtonColumn,
@@ -149,8 +151,8 @@
             // timerTitleColumn
             // 
             this.timerTitleColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.timerTitleColumn.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.timerTitleColumn.DefaultCellStyle = dataGridViewCellStyle1;
             this.timerTitleColumn.DividerWidth = 3;
             this.timerTitleColumn.HeaderText = "Title";
             this.timerTitleColumn.Name = "timerTitleColumn";
@@ -168,6 +170,13 @@
             this.timerModeLabelColimn.HeaderText = "Mode";
             this.timerModeLabelColimn.Name = "timerModeLabelColimn";
             this.timerModeLabelColimn.ReadOnly = true;
+            // 
+            // timerRunningStateColumn
+            // 
+            this.timerRunningStateColumn.HeaderText = "";
+            this.timerRunningStateColumn.Name = "timerRunningStateColumn";
+            this.timerRunningStateColumn.ReadOnly = true;
+            this.timerRunningStateColumn.Width = 30;
             // 
             // timerCurrentValueColumn
             // 
@@ -257,6 +266,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn timerTitleColumn;
         private System.Windows.Forms.DataGridViewImageColumn timerModeImageColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn timerModeLabelColimn;
+        private System.Windows.Forms.DataGridViewImageColumn timerRunningStateColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn timerCurrentValueColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn timerStartValueColumn;
         private System.Windows.Forms.DataGridViewButtonColumn timerEditButtonColumn;
