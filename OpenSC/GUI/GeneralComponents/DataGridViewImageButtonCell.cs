@@ -7,13 +7,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace OpenSC.GUI
+namespace OpenSC.GUI.GeneralComponents
 {
-    class DataGridViewImageButtonCell: DataGridViewButtonCell
+    class DataGridViewImageButtonCell: DataGridViewDisableButtonCell
     {
 
         public Image Image { get; set; }
         public Padding ImagePadding { get; set; }
+
+        public override object Clone()
+        {
+            DataGridViewImageButtonCell cell = (DataGridViewImageButtonCell)base.Clone();
+            cell.Image = this.Image;
+            cell.ImagePadding = this.ImagePadding;
+            return cell;
+        }
 
         protected override void Paint(Graphics graphics, Rectangle clipBounds, Rectangle cellBounds, int rowIndex, DataGridViewElementStates elementState, object value, object formattedValue, string errorText, DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle advancedBorderStyle, DataGridViewPaintParts paintParts)
         {
