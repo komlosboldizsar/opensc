@@ -57,8 +57,8 @@ namespace OpenSC.Model.UMDs.TSL31
             get { return new Color[] { Color.Red, Color.Green }; }
         }
 
-        public event UmdTallyChanging TallyChanging;
-        public event UmdTallyChanged TallyChanged;
+        public override event UmdTallyChanging TallyChanging;
+        public override event UmdTallyChanged TallyChanged;
 
         private bool[] tallies = new bool[TSL31Type.TALLY_COUNT] { true };
 
@@ -76,10 +76,10 @@ namespace OpenSC.Model.UMDs.TSL31
             bool oldState = tallies[index];
             if (oldState != state)
             {
-                TallyChanging(this, index, oldState, state);
+                TallyChanging?.Invoke(this, index, oldState, state);
                 tallies[index] = state;
                 update();
-                TallyChanging(this, index, oldState, state);
+                TallyChanging?.Invoke(this, index, oldState, state);
             }
             
         }
