@@ -26,7 +26,7 @@ namespace OpenSC.Model
             if (nameAttribute == null)
                 return;
             string name = nameAttribute.Name;
-            if (!databases.ContainsKey(name))
+            if (databases.ContainsKey(name))
                 throw new Exception();
 
             databases.Add(name, instance);
