@@ -163,6 +163,8 @@ namespace OpenSC.Model
 
             XElement xmlElement = new XElement("item");
 
+            xmlElement.SetAttributeValue("id", item.ID);
+
             // Get fields
             foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
             {
