@@ -1,4 +1,5 @@
-﻿using OpenSC.Modules;
+﻿using OpenSC.Model;
+using OpenSC.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,8 +29,16 @@ namespace OpenSC
             ModuleManager.Init();
             ProgramStarted?.Invoke();
 
+            InitDatabases();
+
             Application.Run(GUI.MainForm.Instance);
 
+        }
+
+        static void InitDatabases()
+        {
+            ModuleManager.RegisterDatabases();
+            MasterDatabase.Instance.LoadEverything();
         }
 
     }

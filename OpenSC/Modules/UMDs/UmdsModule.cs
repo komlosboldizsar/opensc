@@ -1,13 +1,16 @@
-﻿using System;
+﻿using OpenSC.Model;
+using OpenSC.Model.UMDs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSC.Modules.Routers
+namespace OpenSC.Modules.UMDs
 {
-    class RoutersModule : IModule
+    class UmdsModule : IModule
     {
+
         public void MainWindowOpened()
         {
         }
@@ -18,6 +21,7 @@ namespace OpenSC.Modules.Routers
 
         public void RegisterDatabases()
         {
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(UmdDatabase));
         }
 
     }

@@ -38,23 +38,10 @@ namespace OpenSC.GUI
             WindowManager.Instance.ChildWindowClosed += childWindowClosedHandler;
             //
 
-            var u1 = new Model.UMDs.TSL31.TSL31();
-            u1.ID = 13;
-            u1.Name = "VST MON 1";
-            UmdDatabase.Instance.Add(u1);
-
-            var u2 = new Model.UMDs.TSL31.TSL31();
-            u2.ID = 27;
-            u2.Name = "HTE Clock";
-            UmdDatabase.Instance.Add(u2);
-
             var w3 = new Timers.TimerList();
             w3.ShowAsChild();
             var w4 = new UMDs.UmdList();
             w4.ShowAsChild();
-
-            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(TimerDatabase));
-            TimerDatabase.Instance.Load();
         
         }
 

@@ -13,6 +13,7 @@ namespace OpenSC.Modules
         private static IModule[] registeredModules = new IModule[]
         {
             new Timers.TimersModule(),
+            new UMDs.UmdsModule(),
             new Routers.RoutersModule()
         };
 
@@ -28,6 +29,12 @@ namespace OpenSC.Modules
             MainForm.Instance.Load += mainWindowOpenedHandler;
         }
         #endregion
+
+        public static void RegisterDatabases()
+        {
+            foreach (IModule module in registeredModules)
+                module.RegisterDatabases();
+        }
 
         #region Event handlers
         private static void programStartedHandler()

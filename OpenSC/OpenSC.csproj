@@ -118,6 +118,7 @@
     <Compile Include="Modules\ModuleManager.cs" />
     <Compile Include="Modules\Routers\RoutersModule.cs" />
     <Compile Include="Modules\Timers\TimersModule.cs" />
+    <Compile Include="Modules\UMDs\UmdsModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GUI\Routers\RouterControlForm.cs">
