@@ -167,30 +167,11 @@ namespace OpenSC.Model
 
             // Get fields
             foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
-            {
-                PersistAsAttribute persistAsAttribute = fieldInfo.GetCustomAttribute<PersistAsAttribute>();
-                if (persistAsAttribute != null)
-                {
-                    string persistAsName = persistAsAttribute.TagName;
-                    var fieldValue = fieldInfo.GetValue(item);
-                    xmlElement.Add(new XElement(persistAsName, fieldValue));
-                }
-            }
+                storeValueOfFieldOrProperty(fieldInfo, ref item, ref xmlElement);
 
             // Get properties
             foreach (PropertyInfo propertyInfo in storedType.GetProperties(memberLookupBindingFlags))
-            {
-                if (propertyInfo.CanRead && propertyInfo.CanWrite)
-                {
-                    PersistAsAttribute persistAsAttribute = propertyInfo.GetCustomAttribute<PersistAsAttribute>();
-                    if (persistAsAttribute != null)
-                    {
-                        string persistAsName = persistAsAttribute.TagName;
-                        var fieldValue = propertyInfo.GetValue(item);
-                        xmlElement.Add(new XElement(persistAsName, fieldValue));
-                    }
-                }
-            }
+                storeValueOfFieldOrProperty(propertyInfo, ref item, ref xmlElement);
 
             return xmlElement;
 
@@ -224,61 +205,76 @@ namespace OpenSC.Model
 
             // Set fields
             foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
-            {
-                PersistAsAttribute persistAsAttribute = fieldInfo.GetCustomAttribute<PersistAsAttribute>();
-                if (persistAsAttribute != null)
-                {
-                    string persistAsName = persistAsAttribute.TagName;
-                    if (persistedValues.TryGetValue(persistAsName, out object value))
-                    {
-                        if (fieldInfo.FieldType.IsEnum)
-                        {
-                            value = Enum.Parse(fieldInfo.FieldType, value?.ToString());
-                        }
-                        else
-                        {
-                            try
-                            {
-                                value = Convert.ChangeType(value, fieldInfo.FieldType);
-                            }
-                            catch { }
-                        }
-                        fieldInfo.SetValue(item, value);
-                    }
-                }
-            }
+                restoreValueForFieldOrProperty(fieldInfo, persistedValues, ref item);
 
             // Set properties
             foreach (PropertyInfo propertyInfo in storedType.GetProperties(memberLookupBindingFlags))
-            {
-                if (propertyInfo.CanRead && propertyInfo.CanWrite)
-                {
-                    PersistAsAttribute persistAsAttribute = propertyInfo.GetCustomAttribute<PersistAsAttribute>();
-                    if (persistAsAttribute != null)
-                    {
-                        string persistAsName = persistAsAttribute.TagName;
-                        if (persistedValues.TryGetValue(persistAsName, out object value))
-                        {
-                            if (propertyInfo.PropertyType.IsEnum)
-                            {
-                                value = Enum.Parse(propertyInfo.PropertyType, value?.ToString());
-                            }
-                            else
-                            {
-                                try
-                                {
-                                    value = Convert.ChangeType(value, propertyInfo.PropertyType);
-                                }
-                                catch { }
-                            }
-                            propertyInfo.SetValue(item, value);
-                        }
-                    }
-                }
-            }
+                restoreValueForFieldOrProperty(propertyInfo, persistedValues, ref item);
 
             return item;
 
+        }
+
+        private void storeValueOfFieldOrProperty(MemberInfo memberInfo, ref T item, ref XElement xmlElement)
+        {
+
+            FieldInfo fieldInfo = memberInfo as FieldInfo;
+            PropertyInfo propertyInfo = memberInfo as PropertyInfo;
+
+            if ((fieldInfo == null) && (propertyInfo == null))
+                return;
+
+            PersistAsAttribute persistAsAttribute = memberInfo.GetCustomAttribute<PersistAsAttribute>();
+            if (persistAsAttribute == null)
+                return;
+
+            if ((propertyInfo != null) && !(propertyInfo.CanRead && propertyInfo.CanWrite))
+                return;
+
+            object fieldValue = (fieldInfo != null) ? fieldInfo.GetValue(item) : propertyInfo.GetValue(item);
+            xmlElement.Add(new XElement(persistAsAttribute.TagName, fieldValue));
+
+        }
+
+        private void restoreValueForFieldOrProperty(MemberInfo memberInfo, Dictionary<string, object> persistedValues, ref T item)
+        {
+
+            FieldInfo fieldInfo = memberInfo as FieldInfo;
+            PropertyInfo propertyInfo = memberInfo as PropertyInfo;
+
+            if ((fieldInfo == null) && (propertyInfo == null))
+                return;
+
+            PersistAsAttribute persistAsAttribute = memberInfo.GetCustomAttribute<PersistAsAttribute>();
+            if (persistAsAttribute == null)
+                return;
+
+            if ((propertyInfo != null) && !(propertyInfo.CanRead && propertyInfo.CanWrite))
+                return;
+
+            if (!persistedValues.TryGetValue(persistAsAttribute.TagName, out object value))
+                return;
+
+            Type type = (fieldInfo != null) ? fieldInfo.FieldType : propertyInfo.PropertyType;
+
+            if (type.IsEnum)
+            {
+                value = Enum.Parse(type, value?.ToString());
+            }
+            else
+            {
+                try
+                {
+                    value = Convert.ChangeType(value, type);
+                }
+                catch { }
+            }
+
+            if (fieldInfo != null)
+                fieldInfo.SetValue(item, value);
+            else
+                propertyInfo.SetValue(item, value);
+ 
         }
 
     }
