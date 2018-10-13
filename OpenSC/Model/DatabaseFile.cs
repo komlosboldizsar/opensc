@@ -10,8 +10,6 @@ namespace OpenSC.Model
     class DatabaseFile: IDisposable
     {
 
-        private string fileName;
-
         private DatabaseFileMode mode;
 
         public FileStream Stream { get; private set; }
