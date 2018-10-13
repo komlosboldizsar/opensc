@@ -220,7 +220,7 @@ namespace OpenSC.Model
             Dictionary<string, object> persistedValues = new Dictionary<string, object>();
             foreach (XmlNode node in xmlElement.ChildNodes)
                 if (node.NodeType == XmlNodeType.Element)
-                    persistedValues.Add(node.LocalName, node.Value);
+                    persistedValues.Add(node.LocalName, node.InnerText);
 
             // Set fields
             foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
@@ -230,7 +230,21 @@ namespace OpenSC.Model
                 {
                     string persistAsName = persistAsAttribute.TagName;
                     if (persistedValues.TryGetValue(persistAsName, out object value))
+                    {
+                        if (fieldInfo.FieldType.IsEnum)
+                        {
+                            value = Enum.Parse(fieldInfo.FieldType, value?.ToString());
+                        }
+                        else
+                        {
+                            try
+                            {
+                                value = Convert.ChangeType(value, fieldInfo.FieldType);
+                            }
+                            catch { }
+                        }
                         fieldInfo.SetValue(item, value);
+                    }
                 }
             }
 
@@ -244,7 +258,21 @@ namespace OpenSC.Model
                     {
                         string persistAsName = persistAsAttribute.TagName;
                         if (persistedValues.TryGetValue(persistAsName, out object value))
+                        {
+                            if (propertyInfo.PropertyType.IsEnum)
+                            {
+                                value = Enum.Parse(propertyInfo.PropertyType, value?.ToString());
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    value = Convert.ChangeType(value, propertyInfo.PropertyType);
+                                }
+                                catch { }
+                            }
                             propertyInfo.SetValue(item, value);
+                        }
                     }
                 }
             }
