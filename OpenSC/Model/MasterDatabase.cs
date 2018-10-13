@@ -13,7 +13,7 @@ namespace OpenSC.Model
 
         private Dictionary<string, IDatabaseBase> databases = new Dictionary<string, IDatabaseBase>();
 
-        public void RegisterDatabase(Type databaseClass)
+        public void RegisterSingletonDatabase(Type databaseClass)
         {
 
             var instanceObj = databaseClass.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static).GetValue(null);
@@ -31,6 +31,15 @@ namespace OpenSC.Model
 
             databases.Add(name, instance);
          
+        }
+
+        public void RegisterSingletonDatabase(IDatabaseBase database, string key)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentException();
+            if (databases.ContainsKey(key))
+                throw new Exception();
+            databases.Add(key, database);
         }
 
         public DatabaseFile GetFileToWrite(IDatabaseBase database)
