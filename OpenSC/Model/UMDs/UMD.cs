@@ -23,7 +23,7 @@ namespace OpenSC.Model.UMDs
     public delegate void UmdTallyChanging(UMD umd, int index, bool oldState, bool newState);
     public delegate void UmdTallyChanged(UMD umd, int index, bool oldState, bool newState);
 
-    public abstract class UMD
+    public abstract class UMD: IModel
     {
 
         public abstract IUMDType Type { get; }
@@ -128,7 +128,7 @@ namespace OpenSC.Model.UMDs
         {
             if (id <= 0)
                 throw new ArgumentException();
-            if (!UmdDatabase.Instance.IsIdValidForUmd(id, this))
+            if (!UmdDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
 

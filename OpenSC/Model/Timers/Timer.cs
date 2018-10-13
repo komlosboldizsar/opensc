@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.Persistence;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,7 +37,7 @@ namespace OpenSC.Model.Timers
     public delegate void TimerOperationsChangingDelegate(Timer timer);
     public delegate void TimerOperationsChangedDelegate(Timer timer);
 
-    public class Timer
+    public class Timer: IModel
     {
 
         public event TimerIdChangingDelegate IdChanging;
@@ -61,13 +62,14 @@ namespace OpenSC.Model.Timers
         {
             if (id <= 0)
                 throw new ArgumentException();
-            if (!TimerDatabase.Instance.IsIdValidForTimer(id, this))
+            if (!TimerDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
 
         public event TimerTitleChangingDelegate TitleChanging;
         public event TimerTitleChangedDelegate TitleChanged;
 
+        [PersistAs("title")]
         private string title = "Test";
         public string Title
         {

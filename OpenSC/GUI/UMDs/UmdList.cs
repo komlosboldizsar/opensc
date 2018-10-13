@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.GeneralComponents;
+using OpenSC.Model;
 using OpenSC.Model.Timers;
 using OpenSC.Model.UMDs;
 using System;
@@ -22,15 +23,15 @@ namespace OpenSC.GUI.UMDs
         private void UmdList_Load(object sender, EventArgs e)
         {
             loadUMDs();
-            UmdDatabase.Instance.ElementsChanged += umdDatabaseElementsChangedHandler;
+            UmdDatabase.Instance.ChangedItems += umdDatabaseElementsChangedHandler;
         }
 
         private void UmdList_FormClosed(object sender, FormClosedEventArgs e)
         {
-            UmdDatabase.Instance.ElementsChanged -= umdDatabaseElementsChangedHandler;
+            UmdDatabase.Instance.ChangingItems -= umdDatabaseElementsChangedHandler;
         }
 
-        private void umdDatabaseElementsChangedHandler()
+        private void umdDatabaseElementsChangedHandler(DatabaseBase<UMD> database)
         {
             loadUMDs();
         }
@@ -38,7 +39,7 @@ namespace OpenSC.GUI.UMDs
         private void loadUMDs()
         {
             umdListTable.Rows.Clear();
-            foreach(UMD umd in UmdDatabase.Instance.UMDs)
+            foreach(UMD umd in UmdDatabase.Instance.ItemsAsList)
             {
                 var row = new UmdListTableRow(umd);
                 umdListTable.Rows.Add(row);

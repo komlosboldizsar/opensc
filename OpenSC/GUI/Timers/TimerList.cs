@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.GeneralComponents;
+using OpenSC.Model;
 using OpenSC.Model.Timers;
 using System;
 using System.Drawing;
@@ -18,15 +19,15 @@ namespace OpenSC.GUI.Timers
         private void TimerList_Load(object sender, EventArgs e)
         {
             loadTimers();
-            TimerDatabase.Instance.ElementsChanged += timerDatabaseElementsChangedHandler;
+            TimerDatabase.Instance.ChangedItems += timerDatabaseElementsChangedHandler;
         }
 
         private void TimerList_FormClosed(object sender, FormClosedEventArgs e)
         {
-            TimerDatabase.Instance.ElementsChanged -= timerDatabaseElementsChangedHandler;
+            TimerDatabase.Instance.ChangedItems -= timerDatabaseElementsChangedHandler;
         }
 
-        private void timerDatabaseElementsChangedHandler()
+        private void timerDatabaseElementsChangedHandler(DatabaseBase<Timer> database)
         {
             loadTimers();
         }
@@ -34,7 +35,7 @@ namespace OpenSC.GUI.Timers
         private void loadTimers()
         {
             timerListTable.Rows.Clear();
-            foreach(Timer timer in TimerDatabase.Instance.Timers)
+            foreach(Timer timer in TimerDatabase.Instance.ItemsAsList)
             {
                 var row = new TimerListTableRow(timer);
                 timerListTable.Rows.Add(row);

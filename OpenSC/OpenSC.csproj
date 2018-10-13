@@ -90,6 +90,11 @@
       <DependentUpon>UmdList.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\WorkspaceManager\WindowManager.cs" />
+    <Compile Include="Model\DatabaseBase.cs" />
+    <Compile Include="Model\IModel.cs" />
+    <Compile Include="Model\MasterDatabase.cs" />
+    <Compile Include="Model\Persistence\LookupInAttribute.cs" />
+    <Compile Include="Model\Persistence\PersistAsAttribute.cs" />
     <Compile Include="Model\Timers\TimerDatabase.cs" />
     <Compile Include="Model\UMDs\Datagram.cs" />
     <Compile Include="Model\UMDs\IPort.cs" />
