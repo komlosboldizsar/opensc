@@ -86,23 +86,23 @@ namespace OpenSC.Model.Persistence
         }
 
         private const BindingFlags memberLookupBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-        private static readonly Type storedType = typeof(T);
 
         private XElement serializeItem(T item)
         {
 
             XElement xmlElement = new XElement("item");
+            Type itemType = item.GetType();
 
             xmlElement.SetAttributeValue("id", item.ID);
             if (isPolymorph)
-                xmlElement.SetAttributeValue("type", typeNameConverter.ConvertTypeToString(item.GetType()));
+                xmlElement.SetAttributeValue("type", typeNameConverter.ConvertTypeToString(itemType));
 
             // Get fields
-            foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
+            foreach (FieldInfo fieldInfo in itemType.GetFields(memberLookupBindingFlags))
                 storeValueOfFieldOrProperty(fieldInfo, ref item, ref xmlElement);
 
             // Get properties
-            foreach (PropertyInfo propertyInfo in storedType.GetProperties(memberLookupBindingFlags))
+            foreach (PropertyInfo propertyInfo in itemType.GetProperties(memberLookupBindingFlags))
                 storeValueOfFieldOrProperty(propertyInfo, ref item, ref xmlElement);
 
             return xmlElement;
@@ -117,7 +117,7 @@ namespace OpenSC.Model.Persistence
             if (xmlElement.NodeType != XmlNodeType.Element)
                 return null;
 
-            Type type = storedType;
+            Type type = typeof(T);
             if(isPolymorph)
             {
                 string typeStr = xmlElement.Attributes["type"]?.Value;
@@ -150,11 +150,11 @@ namespace OpenSC.Model.Persistence
                     persistedValues.Add(node.LocalName, node.InnerText);
 
             // Set fields
-            foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
+            foreach (FieldInfo fieldInfo in type.GetFields(memberLookupBindingFlags))
                 restoreValueForFieldOrProperty(fieldInfo, persistedValues, ref item);
 
             // Set properties
-            foreach (PropertyInfo propertyInfo in storedType.GetProperties(memberLookupBindingFlags))
+            foreach (PropertyInfo propertyInfo in type.GetProperties(memberLookupBindingFlags))
                 restoreValueForFieldOrProperty(propertyInfo, persistedValues, ref item);
 
             return item;
@@ -233,7 +233,7 @@ namespace OpenSC.Model.Persistence
 
             foreach (T item in items.Values)
             {
-                foreach (FieldInfo foreignKeyField in storedType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic))
+                foreach (FieldInfo foreignKeyField in item.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic))
                 {
 
                     TempForeignKeyAttribute attr = foreignKeyField.GetCustomAttribute<TempForeignKeyAttribute>();
