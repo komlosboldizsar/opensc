@@ -33,9 +33,6 @@ namespace OpenSC.Model.UMDs.McCurdy
             }
         }
 
-        public event UmdTextChanging TextChanging;
-        public event UmdTextChanged TextChanged;
-
         public override Color[] TallyColors
         {
             get { return new Color[] { Color.Red, Color.Green }; }
@@ -63,7 +60,7 @@ namespace OpenSC.Model.UMDs.McCurdy
                 TallyChanging?.Invoke(this, index, oldState, state);
                 tallies[index] = state;
                 update();
-                TallyChanging?.Invoke(this, index, oldState, state);
+                TallyChanged?.Invoke(this, index, oldState, state);
             }
             
         }
