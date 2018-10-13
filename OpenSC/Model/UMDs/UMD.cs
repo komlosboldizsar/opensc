@@ -100,8 +100,8 @@ namespace OpenSC.Model.UMDs
             }
         }
 
-        public event UmdTallyChanging TallyChanging;
-        public event UmdTallyChanged TallyChanged;
+        public abstract event UmdTallyChanging TallyChanging;
+        public abstract event UmdTallyChanged TallyChanged;
 
         // ...
 
