@@ -187,7 +187,11 @@ namespace OpenSC.Model
 
             foreach (ConstructorInfo ctor in storedType.GetConstructors()) {
                 if (ctor.GetParameters().Length == 0)
-                    item = (T)ctor.Invoke(new object[] { });
+                    try
+                    {
+                        item = (T)ctor.Invoke(new object[] { });
+                    }
+                    catch { }
             }
 
             if (item == null)
@@ -232,6 +236,11 @@ namespace OpenSC.Model
                 return;
 
             object fieldValue = (fieldInfo != null) ? fieldInfo.GetValue(item) : propertyInfo.GetValue(item);
+
+            IModel fieldValueAsIModel = fieldValue as IModel;
+            if (fieldValueAsIModel != null)
+                fieldValue = fieldValueAsIModel.ID;
+
             xmlElement.Add(new XElement(persistAsAttribute.TagName, fieldValue));
 
         }
@@ -275,6 +284,34 @@ namespace OpenSC.Model
             else
                 propertyInfo.SetValue(item, value);
  
+        }
+
+        public void BuildRelationsByForeignKeys()
+        {
+
+            foreach (T item in items.Values)
+            {
+                foreach (FieldInfo foreignKeyField in storedType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic))
+                {
+
+                    TempForeignKeyAttribute attr = foreignKeyField.GetCustomAttribute<TempForeignKeyAttribute>();
+                    if (attr == null)
+                        continue;
+
+                    FieldInfo originalField = item.GetType().GetField(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                    if (originalField == null)
+                        continue;
+
+                    int? foreignKey = foreignKeyField.GetValue(item) as int?;
+                    if (foreignKey == null)
+                        continue;
+
+                    object foreignObject = MasterDatabase.Instance.GetItem(attr.DatabaseName, (int)foreignKey);
+                    originalField.SetValue(item, foreignObject);
+
+                }
+            }
+
         }
 
     }

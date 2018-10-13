@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model
 {
-    class IDatabaseBase
+    interface IDatabaseBase
     {
+        void Load();
+        void Save();
+        void BuildRelationsByForeignKeys();
     }
 }

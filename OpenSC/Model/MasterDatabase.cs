@@ -42,6 +42,20 @@ namespace OpenSC.Model
             databases.Add(key, database);
         }
 
+        public void LoadEverything()
+        {
+            foreach (var database in databases.Values)
+                database.Load();
+            foreach (var database in databases.Values)
+                database.BuildRelationsByForeignKeys();
+        }
+
+        public void SaveEverything()
+        {
+            foreach (var database in databases.Values)
+                database.Save();
+        }
+
         public DatabaseFile GetFileToWrite(IDatabaseBase database)
         {
             string key = getKeyForDatabase(database);
@@ -64,6 +78,11 @@ namespace OpenSC.Model
         public void DatabaseFileWritten(DatabaseFile file)
         {
 
+        }
+
+        public object GetItem(string databaseName, int id)
+        {
+            return null;
         }
 
     }
