@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.UMDs.McCurdy
 {
-    class McCurdyPort : IPort
+    class McCurdyPort : UmdPort
     {
 
         string comPortName;
@@ -31,13 +31,13 @@ namespace OpenSC.Model.UMDs.McCurdy
         private const int COMPORT_DATABITS = 8;
         private const StopBits COMPORT_STOPBITS = StopBits.One;
         
-        public void Init()
+        public override void Init()
         {
             serialPort = new SerialPort(comPortName, COMPORT_BAUDRATE, COMPORT_PARITY, COMPORT_DATABITS, COMPORT_STOPBITS);
             serialPort.Open();
         }
 
-        public void DeInit()
+        public override void DeInit()
         {
             serialPort?.Close();
             serialPort = null;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.Persistence;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,6 +7,7 @@ namespace OpenSC.Model.UMDs
 {
 
     [DatabaseName("umds")]
+    [PolymorphDatabase(typeof(UmdTypeNameConverter))]
     class UmdDatabase: DatabaseBase<UMD>
     {
 
