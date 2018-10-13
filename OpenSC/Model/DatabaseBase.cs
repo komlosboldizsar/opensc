@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model
 {
-    abstract class DatabaseBase<T> where T: class, IModel
+    abstract class DatabaseBase<T>: IDatabaseBase
+        where T: class, IModel
     {
 
         public delegate void AddingItemDelegate(DatabaseBase<T> database, T item);

@@ -14,6 +14,7 @@ namespace OpenSC.Model.UMDs
     public delegate void UmdDatabaseElementsChangingDelegate();
     public delegate void UmdDatabaseElementsChangedDelegate();
 
+    [DatabaseName("umds")]
     class UmdDatabase: DatabaseBase<UMD>
     {
 

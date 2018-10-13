@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Timers
 {
 
+    [DatabaseName("timers")]
     class TimerDatabase: DatabaseBase<Timer>
     {
 
