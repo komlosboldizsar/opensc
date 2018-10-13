@@ -16,7 +16,7 @@ namespace OpenSC.Model
         public void RegisterDatabase(Type databaseClass)
         {
 
-            var instanceObj = databaseClass.GetProperty("Instace", BindingFlags.Public | BindingFlags.Static).GetValue(null);
+            var instanceObj = databaseClass.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static).GetValue(null);
             var instance = instanceObj as IDatabaseBase;
             if (instance == null)
                 throw new Exception();
@@ -31,6 +31,19 @@ namespace OpenSC.Model
 
             databases.Add(name, instance);
          
+        }
+
+        public DatabaseFile GetFileToWrite(IDatabaseBase database)
+        {
+            if (!databases.ContainsValue(database))
+                throw new Exception();
+            string key = databases.FirstOrDefault(d => (d.Value == database)).Key;
+            return new DatabaseFile(key + ".db");
+        }
+
+        public void DatabaseFileWritten(DatabaseFile file)
+        {
+
         }
 
     }

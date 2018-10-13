@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="GUI\WorkspaceManager\WindowManager.cs" />
     <Compile Include="Model\DatabaseBase.cs" />
+    <Compile Include="Model\DatabaseFile.cs" />
     <Compile Include="Model\DatabaseNameAttribute.cs" />
     <Compile Include="Model\IDatabaseBase.cs" />
     <Compile Include="Model\IModel.cs" />

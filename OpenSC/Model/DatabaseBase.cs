@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace OpenSC.Model
@@ -101,12 +102,26 @@ namespace OpenSC.Model
             return false;
         }
 
+        private static readonly XmlWriterSettings settings = new XmlWriterSettings()
+        {
+            CloseOutput = false,
+            Indent = true,
+            IndentChars = "\t"
+        };
+
         public void Save()
         {
+            
             XElement rootElement = new XElement("root");
             foreach (T item in items.Values)
                 rootElement.Add(serializeItem(item));
-            Debug.WriteLine(rootElement.ToString());
+
+            using(DatabaseFile outputFile = MasterDatabase.Instance.GetFileToWrite(this))
+            using(XmlWriter writer = XmlWriter.Create(outputFile.Stream, settings))
+            {
+                rootElement.WriteTo(writer);
+            }
+
         }
 
         public void Load()
