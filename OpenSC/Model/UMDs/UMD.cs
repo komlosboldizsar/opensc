@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.Persistence;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -32,6 +33,16 @@ namespace OpenSC.Model.UMDs
         public abstract Color[] TallyColors { get; }
 
         protected abstract void update();
+
+        public void Restored()
+        {
+
+        }
+
+        public UMD()
+        {
+
+        }
 
         public event UmdTextChanging CurrentTextChanging;
         public event UmdTextChanged CurrentTextChanged;
@@ -67,6 +78,7 @@ namespace OpenSC.Model.UMDs
         public event UmdTextChanging StaticTextChanging;
         public event UmdTextChanged StaticTextChanged;
 
+        [PersistAs("static_text")]
         private string staticText;
 
         public string StaticText
@@ -86,6 +98,7 @@ namespace OpenSC.Model.UMDs
         public event UmdUseStaticTextChanging UseStaticTextChanging;
         public event UmdUseStaticTextChanged UseStaticTextChanged;
 
+        [PersistAs("use_static_text")]
         private bool useStaticText = false;
 
         public bool UseStaticText
@@ -135,6 +148,7 @@ namespace OpenSC.Model.UMDs
         public event UmdNameChangingDelegate NameChanging;
         public event UmdNameChangedDelegate NameChanged;
 
+        [PersistAs("name")]
         private string name;
 
         public string Name
@@ -156,5 +170,6 @@ namespace OpenSC.Model.UMDs
             if(string.IsNullOrEmpty(name))
                 throw new ArgumentException();
         }
+
     }
 }

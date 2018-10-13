@@ -40,6 +40,11 @@ namespace OpenSC.Model.Timers
     public class Timer: IModel
     {
 
+        public void Restored()
+        {
+
+        }
+
         public event TimerIdChangingDelegate IdChanging;
         public event TimerIdChangedDelegate IdChanged;
 
@@ -118,6 +123,7 @@ namespace OpenSC.Model.Timers
         public event TimerCountdownSecondsChangingDelegate CountdownSecondsChanging;
         public event TimerCountdownSecondsChangedDelegate CountdownSecondsChanged;
 
+        [PersistAs("countdown_seconds")]
         private int countdownSeconds = 5;
         public int CountdownSeconds
         {
@@ -199,8 +205,9 @@ namespace OpenSC.Model.Timers
         public event TimerModeChangingDelegate ModeChanging;
         public event TimerModeChangedDelegate ModeChanged;
 
+        [PersistAs("mode")]
         private TimerMode mode = TimerMode.Backwards;
-
+        
         public TimerMode Mode
         {
             get { return mode; }

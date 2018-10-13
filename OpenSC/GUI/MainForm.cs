@@ -1,5 +1,6 @@
 ﻿using OpenSC.GUI.UMDs;
 using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model;
 using OpenSC.Model.Timers;
 using OpenSC.Model.UMDs;
 using System;
@@ -37,24 +38,6 @@ namespace OpenSC.GUI
             WindowManager.Instance.ChildWindowClosed += childWindowClosedHandler;
             //
 
-            var t1 = new Model.Timers.Timer();
-            t1.ID = 4;
-            t1.Mode = Model.Timers.TimerMode.Forwards;
-            t1.Start();
-            TimerDatabase.Instance.Add(t1);
-
-            var t2 = new Model.Timers.Timer();
-            t2.ID = 7;
-            t2.Mode = Model.Timers.TimerMode.Backwards;
-            t2.Start();
-            TimerDatabase.Instance.Add(t2);
-
-            var t3 = new Model.Timers.Timer();
-            t3.ID = 8;
-            t3.Mode = Model.Timers.TimerMode.Clock;
-            t3.Start();
-            TimerDatabase.Instance.Add(t3);
-
             var u1 = new Model.UMDs.TSL31.TSL31();
             u1.ID = 13;
             u1.Name = "VST MON 1";
@@ -70,6 +53,9 @@ namespace OpenSC.GUI
             var w4 = new UMDs.UmdList();
             w4.ShowAsChild();
 
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(TimerDatabase));
+            TimerDatabase.Instance.Load();
+        
         }
 
         private void childWindowOpenedHandler(ChildWindowBase window)
