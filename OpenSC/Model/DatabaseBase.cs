@@ -1,8 +1,12 @@
-﻿using System;
+﻿using OpenSC.Model.Persistence;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace OpenSC.Model
 {
@@ -95,6 +99,58 @@ namespace OpenSC.Model
             if (foundItem == forItem)
                 return true;
             return false;
+        }
+
+        public void Save()
+        {
+            XElement rootElement = new XElement("root");
+            foreach (T item in items.Values)
+                rootElement.Add(serializeItem(item));
+            Debug.WriteLine(rootElement.ToString());
+        }
+
+        public void Load()
+        {
+
+        }
+
+        private const BindingFlags memberLookupBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        private static readonly Type storedType = typeof(T);
+
+        private XElement serializeItem(T item)
+        {
+
+            XElement xmlElement = new XElement("item");
+
+            // Get fields
+            foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
+            {
+                PersistAsAttribute persistAsAttribute = fieldInfo.GetCustomAttribute<PersistAsAttribute>();
+                if (persistAsAttribute != null)
+                {
+                    string persistAsName = persistAsAttribute.TagName;
+                    var fieldValue = fieldInfo.GetValue(item);
+                    xmlElement.Add(new XElement(persistAsName, fieldValue));
+                }
+            }
+
+            // Get properties
+            foreach (PropertyInfo propertyInfo in storedType.GetProperties(memberLookupBindingFlags))
+            {
+                if (propertyInfo.CanRead && propertyInfo.CanWrite)
+                {
+                    PersistAsAttribute persistAsAttribute = propertyInfo.GetCustomAttribute<PersistAsAttribute>();
+                    if (persistAsAttribute != null)
+                    {
+                        string persistAsName = persistAsAttribute.TagName;
+                        var fieldValue = propertyInfo.GetValue(item);
+                        xmlElement.Add(new XElement(persistAsName, fieldValue));
+                    }
+                }
+            }
+
+            return xmlElement;
+
         }
 
     }
