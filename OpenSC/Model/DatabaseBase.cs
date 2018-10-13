@@ -116,10 +116,10 @@ namespace OpenSC.Model
 
         public void Load()
         {
+            items.Clear();
             var loadedItems = persister.Load();
             if (loadedItems != null)
             {
-
                 ChangingItems?.Invoke(this);
                 items = loadedItems;
                 ChangedItems?.Invoke(this);

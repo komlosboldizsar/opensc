@@ -17,9 +17,21 @@ namespace OpenSC.Model.Persistence
 
         private IDatabaseBase database;
 
+        private bool isPolymorph = false;
+        private ITypeNameConverter typeNameConverter;
+
         public DatabasePersister(IDatabaseBase database)
         {
+
             this.database = database;
+
+            PolymorphDatabaseAttribute polymorphAttr = database.GetType().GetCustomAttribute<PolymorphDatabaseAttribute>();
+            if (polymorphAttr != null)
+            {
+                isPolymorph = true;
+                typeNameConverter = polymorphAttr.Converter;
+            }
+
         }
 
         private static readonly XmlWriterSettings xmlWriterSettings = new XmlWriterSettings()
@@ -82,6 +94,8 @@ namespace OpenSC.Model.Persistence
             XElement xmlElement = new XElement("item");
 
             xmlElement.SetAttributeValue("id", item.ID);
+            if (isPolymorph)
+                xmlElement.SetAttributeValue("type", typeNameConverter.ConvertTypeToString(item.GetType()));
 
             // Get fields
             foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
@@ -103,7 +117,16 @@ namespace OpenSC.Model.Persistence
             if (xmlElement.NodeType != XmlNodeType.Element)
                 return null;
 
-            foreach (ConstructorInfo ctor in storedType.GetConstructors())
+            Type type = storedType;
+            if(isPolymorph)
+            {
+                string typeStr = xmlElement.Attributes["type"]?.Value;
+                type = typeNameConverter.ConvertStringToType(typeStr);
+                if (type == null)
+                    return null;
+            }
+
+            foreach (ConstructorInfo ctor in type.GetConstructors())
             {
                 if (ctor.GetParameters().Length == 0)
                     try
