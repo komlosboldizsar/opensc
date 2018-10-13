@@ -8,6 +8,7 @@ namespace OpenSC.Model
 {
     interface IModel
     {
-        int ID { get; }
+        int ID { get; set; }
+        void Restored();
     }
 }

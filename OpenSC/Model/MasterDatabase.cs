@@ -44,10 +44,21 @@ namespace OpenSC.Model
 
         public DatabaseFile GetFileToWrite(IDatabaseBase database)
         {
+            string key = getKeyForDatabase(database);
+            return new DatabaseFile(key + ".db", DatabaseFile.DatabaseFileMode.Write);
+        }
+
+        public DatabaseFile GetFileToRead(IDatabaseBase database)
+        {
+            string key = getKeyForDatabase(database);
+            return new DatabaseFile(key + ".db", DatabaseFile.DatabaseFileMode.Read);
+        }
+
+        private string getKeyForDatabase(IDatabaseBase database)
+        {
             if (!databases.ContainsValue(database))
                 throw new Exception();
-            string key = databases.FirstOrDefault(d => (d.Value == database)).Key;
-            return new DatabaseFile(key + ".db");
+            return databases.FirstOrDefault(d => (d.Value == database)).Key;
         }
 
         public void DatabaseFileWritten(DatabaseFile file)

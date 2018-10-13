@@ -102,7 +102,7 @@ namespace OpenSC.Model
             return false;
         }
 
-        private static readonly XmlWriterSettings settings = new XmlWriterSettings()
+        private static readonly XmlWriterSettings xmlWriterSettings = new XmlWriterSettings()
         {
             CloseOutput = false,
             Indent = true,
@@ -117,7 +117,7 @@ namespace OpenSC.Model
                 rootElement.Add(serializeItem(item));
 
             using(DatabaseFile outputFile = MasterDatabase.Instance.GetFileToWrite(this))
-            using(XmlWriter writer = XmlWriter.Create(outputFile.Stream, settings))
+            using(XmlWriter writer = XmlWriter.Create(outputFile.Stream, xmlWriterSettings))
             {
                 rootElement.WriteTo(writer);
             }
@@ -126,6 +126,32 @@ namespace OpenSC.Model
 
         public void Load()
         {
+
+            ChangingItems?.Invoke(this);
+
+            items = new Dictionary<int, T>();
+
+            using (DatabaseFile inputFile = MasterDatabase.Instance.GetFileToRead(this))
+            {
+
+                XmlDocument doc = new XmlDocument();
+                doc.Load(inputFile.Stream);
+
+                XmlNode root = doc.DocumentElement;
+
+                if (root.LocalName != "root")
+                    return;
+
+                foreach(XmlNode node in root.ChildNodes)
+                {
+                    T item = deserializeItem(node);
+                    if (item != null)
+                        items.Add(item.ID, item);
+                }
+
+            }
+
+            ChangedItems?.Invoke(this);
 
         }
 
@@ -165,6 +191,63 @@ namespace OpenSC.Model
             }
 
             return xmlElement;
+
+        }
+
+        private T deserializeItem(XmlNode xmlElement)
+        {
+
+            T item = null;
+
+            if (xmlElement.NodeType != XmlNodeType.Element)
+                return null;
+
+            foreach (ConstructorInfo ctor in storedType.GetConstructors()) {
+                if (ctor.GetParameters().Length == 0)
+                    item = (T)ctor.Invoke(new object[] { });
+            }
+
+            if (item == null)
+                return null;
+
+            string idStr = xmlElement.Attributes["id"].Value;
+            if(!int.TryParse(idStr, out int id) || id <= 0)
+                return null;
+            item.ID = id;
+
+            Dictionary<string, object> persistedValues = new Dictionary<string, object>();
+            foreach (XmlNode node in xmlElement.ChildNodes)
+                if (node.NodeType == XmlNodeType.Element)
+                    persistedValues.Add(node.LocalName, node.Value);
+
+            // Set fields
+            foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
+            {
+                PersistAsAttribute persistAsAttribute = fieldInfo.GetCustomAttribute<PersistAsAttribute>();
+                if (persistAsAttribute != null)
+                {
+                    string persistAsName = persistAsAttribute.TagName;
+                    if (persistedValues.TryGetValue(persistAsName, out object value))
+                        fieldInfo.SetValue(item, value);
+                }
+            }
+
+            // Set properties
+            foreach (PropertyInfo propertyInfo in storedType.GetProperties(memberLookupBindingFlags))
+            {
+                if (propertyInfo.CanRead && propertyInfo.CanWrite)
+                {
+                    PersistAsAttribute persistAsAttribute = propertyInfo.GetCustomAttribute<PersistAsAttribute>();
+                    if (persistAsAttribute != null)
+                    {
+                        string persistAsName = persistAsAttribute.TagName;
+                        if (persistedValues.TryGetValue(persistAsName, out object value))
+                            propertyInfo.SetValue(item, value);
+                    }
+                }
+            }
+
+            return item;
 
         }
 
