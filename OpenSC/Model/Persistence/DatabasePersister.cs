@@ -86,6 +86,7 @@ namespace OpenSC.Model.Persistence
         }
 
         private const BindingFlags memberLookupBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        private static readonly Type storedType = typeof(T);
 
         private XElement serializeItem(T item)
         {
@@ -98,12 +99,20 @@ namespace OpenSC.Model.Persistence
                 xmlElement.SetAttributeValue("type", typeNameConverter.ConvertTypeToString(itemType));
 
             // Get fields
-            foreach (FieldInfo fieldInfo in itemType.GetFields(memberLookupBindingFlags))
+            foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
                 storeValueOfFieldOrProperty(fieldInfo, ref item, ref xmlElement);
 
+            if (isPolymorph)
+                foreach (FieldInfo fieldInfo in itemType.GetFields(memberLookupBindingFlags))
+                    storeValueOfFieldOrProperty(fieldInfo, ref item, ref xmlElement);
+
             // Get properties
-            foreach (PropertyInfo propertyInfo in itemType.GetProperties(memberLookupBindingFlags))
+            foreach (PropertyInfo propertyInfo in storedType.GetProperties(memberLookupBindingFlags))
                 storeValueOfFieldOrProperty(propertyInfo, ref item, ref xmlElement);
+
+            if (isPolymorph)
+                foreach (PropertyInfo propertyInfo in itemType.GetProperties(memberLookupBindingFlags))
+                    storeValueOfFieldOrProperty(propertyInfo, ref item, ref xmlElement);
 
             return xmlElement;
 
@@ -150,12 +159,20 @@ namespace OpenSC.Model.Persistence
                     persistedValues.Add(node.LocalName, node.InnerText);
 
             // Set fields
-            foreach (FieldInfo fieldInfo in type.GetFields(memberLookupBindingFlags))
+            foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
                 restoreValueForFieldOrProperty(fieldInfo, persistedValues, ref item);
 
+            if (isPolymorph)
+                foreach (FieldInfo fieldInfo in type.GetFields(memberLookupBindingFlags))
+                    restoreValueForFieldOrProperty(fieldInfo, persistedValues, ref item);
+
             // Set properties
-            foreach (PropertyInfo propertyInfo in type.GetProperties(memberLookupBindingFlags))
+            foreach (PropertyInfo propertyInfo in storedType.GetProperties(memberLookupBindingFlags))
                 restoreValueForFieldOrProperty(propertyInfo, persistedValues, ref item);
+
+            if (isPolymorph)
+                foreach (PropertyInfo propertyInfo in type.GetProperties(memberLookupBindingFlags))
+                    restoreValueForFieldOrProperty(propertyInfo, persistedValues, ref item);
 
             return item;
 
@@ -231,28 +248,42 @@ namespace OpenSC.Model.Persistence
         public void BuildRelationsByForeignKeys(ref Dictionary<int, T> items)
         {
 
+            FieldInfo[] baseFields = storedType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+
             foreach (T item in items.Values)
             {
-                foreach (FieldInfo foreignKeyField in item.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic))
+                foreach (FieldInfo foreignKeyField in baseFields)
+                    buildRelationForField(item, foreignKeyField, ref items);
+
+                if (isPolymorph)
                 {
-
-                    TempForeignKeyAttribute attr = foreignKeyField.GetCustomAttribute<TempForeignKeyAttribute>();
-                    if (attr == null)
-                        continue;
-
-                    FieldInfo originalField = item.GetType().GetField(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-                    if (originalField == null)
-                        continue;
-
-                    int? foreignKey = foreignKeyField.GetValue(item) as int?;
-                    if (foreignKey == null)
-                        continue;
-
-                    object foreignObject = MasterDatabase.Instance.GetItem(attr.DatabaseName, (int)foreignKey);
-                    originalField.SetValue(item, foreignObject);
-
+                    FieldInfo[] extendedFields = item.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+                    foreach (FieldInfo foreignKeyField in extendedFields)
+                        buildRelationForField(item, foreignKeyField, ref items);
                 }
             }
+
+        }
+
+        private void buildRelationForField(T item, FieldInfo foreignKeyField, ref Dictionary<int, T> items)
+        {
+
+            TempForeignKeyAttribute attr = foreignKeyField.GetCustomAttribute<TempForeignKeyAttribute>();
+            if (attr == null)
+                return;
+
+            FieldInfo originalField = storedType.GetField(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            if (isPolymorph && (originalField == null))
+                item.GetType().GetField(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            if (originalField == null)
+                return;
+
+            int? foreignKey = foreignKeyField.GetValue(item) as int?;
+            if (foreignKey == null)
+                return;
+
+            object foreignObject = MasterDatabase.Instance.GetItem(attr.DatabaseName, (int)foreignKey);
+            originalField.SetValue(item, foreignObject);
 
         }
 
