@@ -27,15 +27,16 @@ namespace OpenSC.Model.UMDs
     {
 
         public abstract IUMDType Type { get; }
-        public abstract string Text { get; set; }
         public abstract void SetTally(int index, bool state);
         public abstract bool[] TallyStates { get; }
         public abstract Color[] TallyColors { get; }
 
+        protected abstract void update();
+
         public event UmdTextChanging CurrentTextChanging;
         public event UmdTextChanged CurrentTextChanged;
 
-        private string currentText;
+        protected string currentText;
 
         public string CurrentText
         {
@@ -45,7 +46,7 @@ namespace OpenSC.Model.UMDs
                 string oldValue = currentText;
                 CurrentTextChanging?.Invoke(this, oldValue, value);
                 currentText = value;
-                // Send to UMD
+                update();
                 CurrentTextChanged?.Invoke(this, oldValue, value);
             }
         }

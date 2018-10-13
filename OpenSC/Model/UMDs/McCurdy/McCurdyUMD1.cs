@@ -36,22 +36,6 @@ namespace OpenSC.Model.UMDs.McCurdy
         public event UmdTextChanging TextChanging;
         public event UmdTextChanged TextChanged;
 
-        private string text;
-
-        public override string Text
-        {
-            get { return text; }
-            set
-            {
-                string oldValue = value;
-                string newValue = value.Substring(0, 16);
-                TextChanging?.Invoke(this, oldValue, newValue);
-                text = newValue;
-                update();
-                TextChanged?.Invoke(this, oldValue, newValue);
-            }
-        }
-
         public override Color[] TallyColors
         {
             get { return new Color[] { Color.Red, Color.Green }; }
@@ -84,13 +68,13 @@ namespace OpenSC.Model.UMDs.McCurdy
             
         }
 
-        private void update()
+        protected override void update()
         {
             if (port == null)
                 return;
             var d = new Datagram()
             {
-                Text = this.text,
+                Text = currentText,
                 ValidUntil = DateTime.Now + TimeSpan.FromSeconds(5),
                 Tallies = tallies
             };

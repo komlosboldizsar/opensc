@@ -82,14 +82,14 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         private string getStringForPacket(Packet p)
         {
-
-            return string.Format("%{0}D{1}%Z", p.Address, p.Data.Text);
+            string content = string.IsNullOrEmpty(p.Data.Text) ? " " : p.Data.Text;
+            return string.Format("%{0}D{1}%Z", p.Address, content);
 
         }
 
         private bool packetIsValid(Packet p)
         {
-            if (p.Data.ValidUntil > DateTime.Now)
+            if (p.Data.ValidUntil < DateTime.Now)
                 return false;
             if (p.Address <= 0 || p.Address > 255)
                 return false;

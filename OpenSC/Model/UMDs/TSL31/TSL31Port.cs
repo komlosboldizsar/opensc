@@ -110,7 +110,7 @@ namespace OpenSC.Model.UMDs.TSL31
 
         private bool packetIsValid(Packet p)
         {
-            if (p.Data.ValidUntil > DateTime.Now)
+            if (p.Data.ValidUntil < DateTime.Now)
                 return false;
             if (p.Address < 0 || p.Address > 126)
                 return false;
