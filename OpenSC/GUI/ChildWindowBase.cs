@@ -13,6 +13,7 @@ namespace OpenSC.GUI
 {
     public partial class ChildWindowBase : Form, IPersistableWindow
     {
+
         public ChildWindowBase()
         {
             InitializeComponent();
@@ -34,6 +35,9 @@ namespace OpenSC.GUI
             WorkspaceManager.WindowManager.Instance.NotifyChildWindowClosed(this);
         }
 
+        #region Persistence
+        public Point Position => new Point(Left, Top);
+
         public void Restore(Dictionary<string, object> keyValuePairs)
         {
             restoreBeforeOpen(keyValuePairs);
@@ -47,6 +51,7 @@ namespace OpenSC.GUI
 
         protected virtual void restoreBeforeOpen(Dictionary<string, object> keyValuePairs)
         { }
+        #endregion
 
     }
 }
