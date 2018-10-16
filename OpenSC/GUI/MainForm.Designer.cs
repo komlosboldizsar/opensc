@@ -32,6 +32,8 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uMDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.tileWindowsHorizontallyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tileWindowsVerticallyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,8 +46,6 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.clockUpdateTimer = new System.Windows.Forms.Timer(this.components);
-            this.uMDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.listToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -76,6 +76,21 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(108, 26);
             this.exitToolStripMenuItem.Text = "Exit";
+            // 
+            // uMDToolStripMenuItem
+            // 
+            this.uMDToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.listToolStripMenuItem});
+            this.uMDToolStripMenuItem.Name = "uMDToolStripMenuItem";
+            this.uMDToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
+            this.uMDToolStripMenuItem.Text = "UMD";
+            // 
+            // listToolStripMenuItem
+            // 
+            this.listToolStripMenuItem.Name = "listToolStripMenuItem";
+            this.listToolStripMenuItem.Size = new System.Drawing.Size(106, 26);
+            this.listToolStripMenuItem.Text = "List";
+            this.listToolStripMenuItem.Click += new System.EventHandler(this.listToolStripMenuItem_Click);
             // 
             // windowsMenu
             // 
@@ -167,21 +182,6 @@
             this.clockUpdateTimer.Interval = 500;
             this.clockUpdateTimer.Tick += new System.EventHandler(this.clockUpdateTimer_Tick);
             // 
-            // uMDToolStripMenuItem
-            // 
-            this.uMDToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.listToolStripMenuItem});
-            this.uMDToolStripMenuItem.Name = "uMDToolStripMenuItem";
-            this.uMDToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
-            this.uMDToolStripMenuItem.Text = "UMD";
-            // 
-            // listToolStripMenuItem
-            // 
-            this.listToolStripMenuItem.Name = "listToolStripMenuItem";
-            this.listToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
-            this.listToolStripMenuItem.Text = "List";
-            this.listToolStripMenuItem.Click += new System.EventHandler(this.listToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -193,6 +193,7 @@
             this.MainMenuStrip = this.menuStrip;
             this.Name = "MainForm";
             this.Text = "OpenSC";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();

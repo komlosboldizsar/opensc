@@ -100,5 +100,11 @@ namespace OpenSC.GUI
             var window = new UmdList();
             window.ShowAsChild();
         }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            MasterDatabase.Instance.SaveEverything();
+        }
+
     }
 }
