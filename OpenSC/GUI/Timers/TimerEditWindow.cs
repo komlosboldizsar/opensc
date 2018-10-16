@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Timers;
+﻿using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model.Timers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,6 +12,7 @@ using System.Windows.Forms;
 
 namespace OpenSC.GUI.Timers
 {
+    [WindowTypeName("timers.timereditwindow")]
     public partial class TimerEditWindow : ChildWindowWithTitle
     {
 
@@ -43,6 +45,9 @@ namespace OpenSC.GUI.Timers
             }
 
         }
+
+        public TimerEditWindow()
+        { }
 
         private void TimerEditWindow_Load(object sender, EventArgs e)
         {

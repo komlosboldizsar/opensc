@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.GUI.WorkspaceManager;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,6 +11,7 @@ using System.Windows.Forms;
 
 namespace OpenSC.GUI.Routers
 {
+    [WindowTypeName("routers.routercontrolform")]
     public partial class RouterControlForm : ChildWindowWithTitle
     {
 

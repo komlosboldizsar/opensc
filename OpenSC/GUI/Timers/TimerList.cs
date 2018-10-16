@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.GeneralComponents;
+using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.Timers;
 using System;
@@ -8,6 +9,7 @@ using Timer = OpenSC.Model.Timers.Timer;
 
 namespace OpenSC.GUI.Timers
 {
+    [WindowTypeName("timers.timerlist")]
     public partial class TimerList : ChildWindowWithTitle
     {
         public TimerList()

@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.GeneralComponents;
+using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.Timers;
 using OpenSC.Model.UMDs;
@@ -9,6 +10,7 @@ using Timer = OpenSC.Model.Timers.Timer;
 
 namespace OpenSC.GUI.UMDs
 {
+    [WindowTypeName("umds.umdlist")]
     public partial class UmdList : ChildWindowWithTitle
     {
 

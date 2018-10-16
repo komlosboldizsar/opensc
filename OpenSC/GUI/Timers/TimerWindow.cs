@@ -1,9 +1,11 @@
-﻿using System;
+﻿using OpenSC.GUI.WorkspaceManager;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace OpenSC.GUI.Timers
 {
+    [WindowTypeName("timers.timerwindow")]
     public partial class TimerWindow : ChildWindowBase
     {
 
