@@ -98,6 +98,18 @@ namespace OpenSC.Model
 
         }
 
+        public T GetTById(int id)
+        {
+            if (items.TryGetValue(id, out T value))
+                return value;
+            return null;            
+        }
+
+        public object GetById(int id)
+        {
+            return GetTById(id);
+        }
+
         public bool CanIdBeUsedForItem(int id, T forItem)
         {
             if (!items.TryGetValue(id, out T foundItem))
