@@ -25,7 +25,11 @@ namespace OpenSC.GUI.WorkspaceManager
 
             XElement rootElement = new XElement("workspace");
             foreach (IPersistableWindow window in windows)
-                rootElement.Add(serializeWindow(window));
+            {
+                XElement windowElement = serializeWindow(window);
+                if(windowElement != null)
+                    rootElement.Add(windowElement);
+            }
 
             using (FileStream stream = new FileStream("workspace.xml", FileMode.Create))
             using (XmlWriter writer = XmlWriter.Create(stream, xmlWriterSettings))
@@ -40,6 +44,12 @@ namespace OpenSC.GUI.WorkspaceManager
 
             XElement xmlElement = new XElement("window");
             Type windowType = window.GetType();
+
+            string windowTypeName = WindowTypeRegister.GetTypeNameForWindow(window);
+            if (windowTypeName == null)
+                return null;
+
+            xmlElement.SetAttributeValue("type", windowTypeName);
 
             Point pos = window.Position;
             xmlElement.SetAttributeValue("x", pos.X);
