@@ -11,5 +11,6 @@ namespace OpenSC.Modules
         void ProgramStarted();
         void MainWindowOpened();
         void RegisterDatabases();
+        void RegisterWindowTypes();
     }
 }
