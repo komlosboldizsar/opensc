@@ -30,6 +30,12 @@ namespace OpenSC.Model.UMDs.TSL31
             packetSchedulerThread.Start();
         }
 
+        public TSL31Port()
+        {
+            packetSchedulerThread = new Thread(packetSchedulerThreadMethod);
+            packetSchedulerThread.Start();
+        }
+
         private const int COMPORT_BAUDRATE = 38400;
         private const Parity COMPORT_PARITY = Parity.Even;
         private const int COMPORT_DATABITS = 8;

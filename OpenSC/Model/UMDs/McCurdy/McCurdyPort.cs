@@ -30,6 +30,12 @@ namespace OpenSC.Model.UMDs.McCurdy
             packetSchedulerThread.Start();
         }
 
+        public McCurdyPort()
+        {
+            packetSchedulerThread = new Thread(packetSchedulerThreadMethod);
+            packetSchedulerThread.Start();
+        }
+
         private const int COMPORT_BAUDRATE = 9600;
         private const Parity COMPORT_PARITY = Parity.None;
         private const int COMPORT_DATABITS = 8;
