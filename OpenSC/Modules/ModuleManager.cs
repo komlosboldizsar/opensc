@@ -36,6 +36,12 @@ namespace OpenSC.Modules
                 module.RegisterDatabases();
         }
 
+        public static void RegisterWindowTypes()
+        {
+            foreach (IModule module in registeredModules)
+                module.RegisterWindowTypes();
+        }
+
         #region Event handlers
         private static void programStartedHandler()
         {

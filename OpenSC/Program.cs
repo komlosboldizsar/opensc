@@ -39,6 +39,7 @@ namespace OpenSC
 
         private static void InitWorkspaceManager()
         {
+            ModuleManager.RegisterWindowTypes();
             WindowManager.Instance.Init();
         }
 
