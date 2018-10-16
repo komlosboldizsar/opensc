@@ -30,7 +30,6 @@ namespace OpenSC.Modules.UMDs
         public void RegisterWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType(typeof(UmdList));
-            WindowTypeRegister.RegisterWindowType(typeof(UmdEditWindow));
         }
 
     }
