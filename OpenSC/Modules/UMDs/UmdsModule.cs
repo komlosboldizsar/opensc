@@ -22,6 +22,7 @@ namespace OpenSC.Modules.UMDs
         public void RegisterDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(UmdDatabase));
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(UmdPortDatabase));
         }
 
     }
