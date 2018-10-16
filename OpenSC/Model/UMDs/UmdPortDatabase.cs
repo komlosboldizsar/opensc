@@ -7,6 +7,7 @@ namespace OpenSC.Model.UMDs
 {
 
     [DatabaseName("umd_ports")]
+    [PolymorphDatabase(typeof(UmdPortTypeNameConverter))]
     class UmdPortDatabase: DatabaseBase<UmdPort>
     {
 
