@@ -7,26 +7,16 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.UMDs
 {
-    class UmdPortTypeNameConverter : ITypeNameConverter
+    class UmdPortTypeNameConverter : TypeNameConverterBase
     {
 
-        public Type ConvertStringToType(string typeLabel)
+        private Dictionary<string, Type> KNOWN_TYPES = new Dictionary<string, Type>()
         {
-            if (typeLabel == "tsl31")
-                return typeof(TSL31.TSL31Port);
-            if (typeLabel == "mccurdy")
-                return typeof(McCurdy.McCurdyPort);
-            return null;
-        }
+            { "mccurdy", typeof(McCurdy.McCurdyPort) },
+            { "tsl31", typeof(TSL31.TSL31Port) },
+        };
 
-        public string ConvertTypeToString(Type type)
-        {
-            if (type == typeof(TSL31.TSL31Port))
-                return "tsl31";
-            if (type == typeof(McCurdy.McCurdyPort))
-                return "mccurdy";
-            return "";
-        }
+        protected override Dictionary<string, Type> knownTypes => KNOWN_TYPES;
 
     }
 }

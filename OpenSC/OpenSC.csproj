@@ -105,7 +105,8 @@
     <Compile Include="Model\Persistence\PersistAsAttribute.cs" />
     <Compile Include="Model\Persistence\PolymorphDatabaseAttribute.cs" />
     <Compile Include="Model\Persistence\TempForeignKeyAttribute.cs" />
-    <Compile Include="Model\Persistence\TypeNameConverter.cs" />
+    <Compile Include="Model\Persistence\ITypeNameConverter.cs" />
+    <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
     <Compile Include="Model\Timers\TimerDatabase.cs" />
     <Compile Include="Model\UMDs\Datagram.cs" />
     <Compile Include="Model\UMDs\McCurdy\ColumnCount.cs" />
