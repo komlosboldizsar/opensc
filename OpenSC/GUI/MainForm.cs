@@ -37,11 +37,6 @@ namespace OpenSC.GUI
             WindowManager.Instance.ChildWindowOpened += childWindowOpenedHandler;
             WindowManager.Instance.ChildWindowClosed += childWindowClosedHandler;
             //
-
-            var w3 = new Timers.TimerList();
-            w3.ShowAsChild();
-            var w4 = new UMDs.UmdList();
-            w4.ShowAsChild();
         
         }
 
