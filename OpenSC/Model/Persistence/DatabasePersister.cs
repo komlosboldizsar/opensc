@@ -187,11 +187,11 @@ namespace OpenSC.Model.Persistence
             if ((fieldInfo == null) && (propertyInfo == null))
                 return;
 
-            PersistAsAttribute persistAsAttribute = memberInfo.GetCustomAttribute<PersistAsAttribute>();
-            if (persistAsAttribute == null)
+            if ((propertyInfo != null) && !(propertyInfo.CanRead && propertyInfo.CanWrite))
                 return;
 
-            if ((propertyInfo != null) && !(propertyInfo.CanRead && propertyInfo.CanWrite))
+            string xmlTagName = getXmlTagNameForMember(memberInfo, item, Workflow.Save);
+            if (xmlTagName == null)
                 return;
 
             object fieldValue = (fieldInfo != null) ? fieldInfo.GetValue(item) : propertyInfo.GetValue(item);
@@ -200,7 +200,7 @@ namespace OpenSC.Model.Persistence
             if (fieldValueAsIModel != null)
                 fieldValue = fieldValueAsIModel.ID;
 
-            xmlElement.Add(new XElement(persistAsAttribute.TagName, fieldValue));
+            xmlElement.Add(new XElement(xmlTagName, fieldValue));
 
         }
 
@@ -213,14 +213,14 @@ namespace OpenSC.Model.Persistence
             if ((fieldInfo == null) && (propertyInfo == null))
                 return;
 
-            PersistAsAttribute persistAsAttribute = memberInfo.GetCustomAttribute<PersistAsAttribute>();
-            if (persistAsAttribute == null)
-                return;
-
             if ((propertyInfo != null) && !(propertyInfo.CanRead && propertyInfo.CanWrite))
                 return;
 
-            if (!persistedValues.TryGetValue(persistAsAttribute.TagName, out object value))
+            string xmlTagName = getXmlTagNameForMember(memberInfo, item, Workflow.Load);
+            if (xmlTagName == null)
+                return;
+
+            if (!persistedValues.TryGetValue(xmlTagName, out object value))
                 return;
 
             Type type = (fieldInfo != null) ? fieldInfo.FieldType : propertyInfo.PropertyType;
@@ -278,7 +278,7 @@ namespace OpenSC.Model.Persistence
 
             FieldInfo originalField = storedType.GetField(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             if (isPolymorph && (originalField == null))
-                item.GetType().GetField(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                originalField = item.GetType().GetField(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             if (originalField == null)
                 return;
 
@@ -289,6 +289,36 @@ namespace OpenSC.Model.Persistence
             object foreignObject = MasterDatabase.Instance.GetItem(attr.DatabaseName, (int)foreignKey);
             originalField.SetValue(item, foreignObject);
 
+        }
+
+        private string getXmlTagNameForMember(MemberInfo memberInfo, T item, Workflow workflow)
+        {
+
+            PersistAsAttribute persistAsAttribute = memberInfo.GetCustomAttribute<PersistAsAttribute>();
+            if (persistAsAttribute != null)
+                return persistAsAttribute.TagName;
+
+            if (workflow == Workflow.Save)
+                return null;
+
+            TempForeignKeyAttribute tempForeignKeyAttribute = memberInfo.GetCustomAttribute<TempForeignKeyAttribute>();
+            if (tempForeignKeyAttribute == null)
+                return null;
+
+            MemberInfo[] originalMemberInfo = storedType.GetMember(tempForeignKeyAttribute.OriginalFieldName, memberLookupBindingFlags);
+            if (isPolymorph && ((originalMemberInfo == null) || (originalMemberInfo.Length == 0)))
+                originalMemberInfo = item.GetType().GetMember(tempForeignKeyAttribute.OriginalFieldName, memberLookupBindingFlags);
+            if (originalMemberInfo.Length == 0)
+                return null;
+
+            return originalMemberInfo[0].GetCustomAttribute<PersistAsAttribute>()?.TagName;
+
+        }
+
+        private enum Workflow
+        {
+            Load,
+            Save
         }
 
     }
