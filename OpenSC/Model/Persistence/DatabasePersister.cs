@@ -238,10 +238,14 @@ namespace OpenSC.Model.Persistence
                 catch { }
             }
 
-            if (fieldInfo != null)
-                fieldInfo.SetValue(item, value);
-            else
-                propertyInfo.SetValue(item, value);
+            try
+            {
+                if (fieldInfo != null)
+                    fieldInfo.SetValue(item, value);
+                else
+                    propertyInfo.SetValue(item, value);
+            }
+            catch { }
 
         }
 
