@@ -82,7 +82,9 @@ namespace OpenSC.Model
 
         public object GetItem(string databaseName, int id)
         {
-            return null;
+            if (!databases.TryGetValue(databaseName, out IDatabaseBase database))
+                return null;
+            return database.GetById(id);
         }
 
     }
