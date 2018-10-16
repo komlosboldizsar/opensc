@@ -64,7 +64,7 @@ namespace OpenSC.Model.UMDs
 
         private string dynamicText;
         
-        private string DynamicText
+        protected string DynamicText
         {
             get { return dynamicText; }
             set
