@@ -37,14 +37,22 @@ namespace OpenSC.Model.UMDs.McCurdy
         
         public override void Init()
         {
-            serialPort = new SerialPort(comPortName, COMPORT_BAUDRATE, COMPORT_PARITY, COMPORT_DATABITS, COMPORT_STOPBITS);
-            serialPort.Open();
+            try
+            {
+                serialPort = new SerialPort(comPortName, COMPORT_BAUDRATE, COMPORT_PARITY, COMPORT_DATABITS, COMPORT_STOPBITS);
+                serialPort.Open();
+            }
+            catch { }
         }
 
         public override void DeInit()
         {
-            serialPort?.Close();
-            serialPort = null;
+            try
+            {
+                serialPort?.Close();
+                serialPort = null;
+            }
+            catch { }
         }
         
         public override void Restored()
