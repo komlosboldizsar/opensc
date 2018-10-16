@@ -16,6 +16,9 @@ namespace OpenSC.Model.UMDs.McCurdy
         [PersistAs("port")]
         private McCurdyPort port;
 
+        [TempForeignKey("umd_ports", nameof(port))]
+        private int _portId;
+
         public McCurdyPort Port
         {
             get { return port; }

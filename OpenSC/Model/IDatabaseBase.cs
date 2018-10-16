@@ -11,5 +11,7 @@ namespace OpenSC.Model
         void Load();
         void Save();
         void BuildRelationsByForeignKeys();
+        object GetById(int id);
+        void NotifyItemsRestored();
     }
 }

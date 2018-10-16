@@ -48,6 +48,8 @@ namespace OpenSC.Model
                 database.Load();
             foreach (var database in databases.Values)
                 database.BuildRelationsByForeignKeys();
+            foreach (var database in databases.Values)
+                database.NotifyItemsRestored();
         }
 
         public void SaveEverything()
@@ -82,7 +84,9 @@ namespace OpenSC.Model
 
         public object GetItem(string databaseName, int id)
         {
-            return null;
+            if (!databases.TryGetValue(databaseName, out IDatabaseBase database))
+                return null;
+            return database.GetById(id);
         }
 
     }
