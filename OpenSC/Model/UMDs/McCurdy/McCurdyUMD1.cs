@@ -13,6 +13,7 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         public override IUMDType Type => new McCurdyUMD1Type();
 
+        [PersistAs("port")]
         private McCurdyPort port;
 
         public McCurdyPort Port
