@@ -9,116 +9,33 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.UMDs.TSL31
 {
-    class TSL31Port : UmdPort
+    class TSL31Port : UmdSerialPort
     {
 
-        [PersistAs("port_name")]
-        string comPortName;
+        public TSL31Port() :
+             base()
+        { }
 
-        SerialPort serialPort;
+        public TSL31Port(string comPortName) :
+            base(comPortName)
+        { }
 
-        List<Packet> packetFifo = new List<Packet>();
-        ManualResetEvent packetFifoNotEmpty = new ManualResetEvent(false);
-
-        Thread packetSchedulerThread;
-
-        public TSL31Port(string comPortName)
-        {
-            this.comPortName = comPortName;
-            Init();
-            packetSchedulerThread = new Thread(packetSchedulerThreadMethod);
-            packetSchedulerThread.Start();
-        }
-
-        public TSL31Port()
-        {
-            packetSchedulerThread = new Thread(packetSchedulerThreadMethod);
-            packetSchedulerThread.Start();
-        }
-
-        private const int COMPORT_BAUDRATE = 38400;
-        private const Parity COMPORT_PARITY = Parity.Even;
-        private const int COMPORT_DATABITS = 8;
-        private const StopBits COMPORT_STOPBITS = StopBits.One;
-        
-        public override void Init()
-        {
-            try
-            {
-                serialPort = new SerialPort(comPortName, COMPORT_BAUDRATE, COMPORT_PARITY, COMPORT_DATABITS, COMPORT_STOPBITS);
-                serialPort.Open();
-            }
-            catch { }
-        }
-
-        public override void DeInit()
-        {
-            try
-            {
-                serialPort?.Close();
-                serialPort = null;
-            }
-            catch { }
-        }
-
-        public override void Restored()
-        {
-            Init();
-        }
-
-        public void SendData(int port, Datagram datagram)
-        {
-            if ((serialPort == null) || !serialPort.IsOpen)
-                return;
-            lock (packetFifo) {
-                Packet p = new Packet()
-                {
-                    Data = datagram,
-                    Address = port
-                };
-                packetFifo.Add(p);
-                packetFifoNotEmpty.Set();
-            }
-        }
-
-        private void packetSchedulerThreadMethod()
-        {
-            while(true)
-            {
-                packetFifoNotEmpty.WaitOne();
-                lock(packetFifo)
-                {
-                    while(packetFifo.Count > 0)
-                    {
-                        Packet p = packetFifo[0];
-                        packetFifo.RemoveAt(0);
-                        if(packetIsValid(p))
-                        {
-                            byte[] b = getByteStreamForPacket(p);
-                            serialPort.Write(b, 0, 18);
-                        }
-                    }
-                    packetFifoNotEmpty.Reset();
-                }
-            }
-        }
-
-        private byte[] getByteStreamForPacket(Packet p)
+        protected override byte[] getBytesForPacket(Packet packet)
         {
 
             byte[] data = new byte[18];
 
-            data[0] = (byte)(p.Address + 0x80);
+            data[0] = (byte)(packet.Address + 0x80);
 
             data[1] = 0x00;
 
-            bool[] tallies = p.Data.Tallies;
+            bool[] tallies = packet.Data.Tallies;
             if (tallies.Length >= 1 && tallies[0])
                 data[1] &= 0x01;
             if (tallies.Length >= 2 && tallies[1])
                 data[1] &= 0x02;
 
-            string text = p.Data.Text;
+            string text = packet.Data.Text;
             int len = text.Length;
             if (len > 16)
                 len = 16;
@@ -131,19 +48,13 @@ namespace OpenSC.Model.UMDs.TSL31
 
         }
 
-        private bool packetIsValid(Packet p)
+        protected override bool packetIsValid(Packet packet)
         {
-            if (p.Data.ValidUntil < DateTime.Now)
+            if (packet.Data.ValidUntil < DateTime.Now)
                 return false;
-            if (p.Address < 0 || p.Address > 126)
+            if (packet.Address < 0 || packet.Address > 126)
                 return false;
             return true;
-        }
-
-        private struct Packet
-        {
-            public int Address;
-            public Datagram Data;
         }
 
     }

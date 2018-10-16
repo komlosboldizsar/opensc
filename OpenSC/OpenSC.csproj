@@ -123,6 +123,7 @@
     <Compile Include="Model\UMDs\UMD.cs" />
     <Compile Include="Model\UMDs\IUMDType.cs" />
     <Compile Include="Model\UMDs\UmdPortTypeNameConverter.cs" />
+    <Compile Include="Model\UMDs\UmdSerialPort.cs" />
     <Compile Include="Model\UMDs\UmdTypeNameConverter.cs" />
     <Compile Include="Modules\IModule.cs" />
     <Compile Include="Modules\ModuleManager.cs" />
