@@ -42,7 +42,7 @@ namespace OpenSC.Model.UMDs
         public abstract void Init();
         public abstract void DeInit();
 
-        public void Restored()
+        public virtual void Restored()
         {
         }
 

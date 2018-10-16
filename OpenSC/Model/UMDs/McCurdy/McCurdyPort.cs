@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.Persistence;
+using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
@@ -11,7 +12,9 @@ namespace OpenSC.Model.UMDs.McCurdy
     class McCurdyPort : UmdPort
     {
 
+        [PersistAs("port_name")]
         string comPortName;
+
         SerialPort serialPort;
 
         List<Packet> packetFifo = new List<Packet>();
@@ -22,6 +25,7 @@ namespace OpenSC.Model.UMDs.McCurdy
         public McCurdyPort(string comPortName)
         {
             this.comPortName = comPortName;
+            Init();
             packetSchedulerThread = new Thread(packetSchedulerThreadMethod);
             packetSchedulerThread.Start();
         }
@@ -41,6 +45,11 @@ namespace OpenSC.Model.UMDs.McCurdy
         {
             serialPort?.Close();
             serialPort = null;
+        }
+        
+        public override void Restored()
+        {
+            Init();
         }
 
         public void SendData(int port, Datagram datagram)
