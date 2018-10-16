@@ -9,7 +9,7 @@ namespace OpenSC.GUI.WorkspaceManager
 {
     interface IPersistableWindow
     {
-        void RestoreData(Dictionary<string, object> keyValuePairs);
+        void RestoreData(Point position, Size size, Dictionary<string, object> keyValuePairs);
         void RestoreWindow();
         Dictionary<string, object> GetKeyValuePairs();
         Size Size { get; }

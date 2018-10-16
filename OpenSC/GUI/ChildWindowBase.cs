@@ -40,14 +40,30 @@ namespace OpenSC.GUI
         #region Persistence
         public Point Position => new Point(Left, Top);
 
-        public void RestoreData(Dictionary<string, object> keyValuePairs)
+        private Point? restoredPosition = null;
+        private Size? restoredSize = null;
+
+        public void RestoreData(Point position, Size size, Dictionary<string, object> keyValuePairs)
         {
+            restoredPosition = position;
+            restoredSize = size;
             restoreBeforeOpen(keyValuePairs);
         }
 
         public void RestoreWindow()
         {
+
+            if (restoredSize.HasValue)
+                Size = restoredSize.Value;
+
             ShowAsChild();
+
+            if (restoredPosition.HasValue)
+            {
+                Left = restoredPosition.Value.X;
+                Top = restoredPosition.Value.Y;
+            }
+
         }
 
         public virtual Dictionary<string, object> GetKeyValuePairs()

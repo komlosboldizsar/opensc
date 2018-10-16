@@ -165,7 +165,7 @@ namespace OpenSC.GUI.WorkspaceManager
                 if (window == null)
                     return null;
 
-                window.RestoreData(keyValuePairs);
+                window.RestoreData(position, size, keyValuePairs);
 
                 return window;
 
