@@ -43,5 +43,12 @@ namespace OpenSC.GUI.WorkspaceManager
             }
         }
 
+        public static Type GetTypeForTypeName(string typeName)
+        {
+            if (!registeredTypes.TryGetValue(typeName, out Type foundType))
+                return null;
+            return foundType;
+        }
+
     }
 }

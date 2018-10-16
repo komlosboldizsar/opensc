@@ -23,11 +23,18 @@ namespace OpenSC.GUI.WorkspaceManager
         public event ChildWindowClosedDelegate ChildWindowClosed;
         public event ChildWindowListChangedDelegate ChildWindowListChanged;
 
+        private bool restoringPersistedWindows = false;
         private bool mainFormClosing = false;
 
         public void Init()
         {
+            MainForm.Instance.Load += mainFormOpenedHandler; ;
             MainForm.Instance.FormClosing += mainFormClosingHandler;
+        }
+
+        private void mainFormOpenedHandler(object sender, EventArgs e)
+        {
+            restorePersistedWindows();
         }
 
         private void mainFormClosingHandler(object sender, System.Windows.Forms.FormClosingEventArgs e)
@@ -75,7 +82,19 @@ namespace OpenSC.GUI.WorkspaceManager
 
         private void persistWindows()
         {
-            WindowPersister.SaveWindows(persistableChildWindows);
+            if(!restoringPersistedWindows)
+                WindowPersister.SaveWindows(persistableChildWindows);
+        }
+
+        private void restorePersistedWindows()
+        {
+            restoringPersistedWindows = true;
+            List<IPersistableWindow> windows = WindowPersister.LoadWindows();
+            if(windows != null)
+                foreach (IPersistableWindow window in windows)
+                    window.RestoreWindow();
+            restoringPersistedWindows = false;
+            persistWindows();
         }
 
         private void persistableWindowSizePositionChangeHandler(object sender, EventArgs e)
