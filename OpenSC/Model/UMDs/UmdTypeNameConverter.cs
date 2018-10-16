@@ -7,26 +7,16 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.UMDs
 {
-    class UmdTypeNameConverter : ITypeNameConverter
+    class UmdTypeNameConverter : TypeNameConverterBase
     {
 
-        public Type ConvertStringToType(string typeLabel)
+        private Dictionary<string, Type> KNOWN_TYPES = new Dictionary<string, Type>()
         {
-            if (typeLabel == "tsl31")
-                return typeof(TSL31.TSL31);
-            if (typeLabel == "mccurdy")
-                return typeof(McCurdy.McCurdyUMD1);
-            return null;
-        }
+            { "mccurdy", typeof(McCurdy.McCurdyUMD1) },
+            { "tsl31", typeof(TSL31.TSL31) },
+        };
 
-        public string ConvertTypeToString(Type type)
-        {
-            if (type == typeof(TSL31.TSL31))
-                return "tsl31";
-            if (type == typeof(McCurdy.McCurdyUMD1))
-                return "mccurdy";
-            return "";
-        }
+        protected override Dictionary<string, Type> knownTypes => KNOWN_TYPES;
 
     }
 }
