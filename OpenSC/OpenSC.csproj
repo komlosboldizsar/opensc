@@ -89,6 +89,7 @@
     <Compile Include="GUI\UMDs\UmdList.Designer.cs">
       <DependentUpon>UmdList.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\WorkspaceManager\IPersistableWindow.cs" />
     <Compile Include="GUI\WorkspaceManager\WindowManager.cs" />
     <Compile Include="Model\DatabaseBase.cs" />
     <Compile Include="Model\DatabaseFile.cs" />

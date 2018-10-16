@@ -24,17 +24,44 @@ namespace OpenSC.GUI.WorkspaceManager
 
         internal void NotifyChildWindowOpened(ChildWindowBase window)
         {
+
             if (!childWindows.Contains(window))
                 childWindows.Add(window);
             ChildWindowOpened?.Invoke(window);
             ChildWindowListChanged?.Invoke();
+
+            if (window is IPersistableWindow)
+            {
+                persistWindows();
+                window.Resize += persistableWindowSizePositionChangeHandler;
+                window.Move += persistableWindowSizePositionChangeHandler;
+            }
+
         }
 
         internal void NotifyChildWindowClosed(ChildWindowBase window)
         {
+
             childWindows.Remove(window);
             ChildWindowClosed?.Invoke(window);
             ChildWindowListChanged?.Invoke();
+
+            if (window is IPersistableWindow)
+            {
+                window.Resize -= persistableWindowSizePositionChangeHandler;
+                window.Move -= persistableWindowSizePositionChangeHandler;
+                persistWindows();
+            }
+
+        }
+
+        private void persistWindows()
+        {
+        }
+
+        private void persistableWindowSizePositionChangeHandler(object sender, EventArgs e)
+        {
+            persistWindows();
         }
 
     }

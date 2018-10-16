@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.GUI.WorkspaceManager;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,7 +11,7 @@ using System.Windows.Forms;
 
 namespace OpenSC.GUI
 {
-    public partial class ChildWindowBase : Form
+    public partial class ChildWindowBase : Form, IPersistableWindow
     {
         public ChildWindowBase()
         {
@@ -32,6 +33,20 @@ namespace OpenSC.GUI
         {
             WorkspaceManager.WindowManager.Instance.NotifyChildWindowClosed(this);
         }
+
+        public void Restore(Dictionary<string, object> keyValuePairs)
+        {
+            restoreBeforeOpen(keyValuePairs);
+            ShowAsChild();
+        }
+
+        public virtual Dictionary<string, object> GetKeyValuePairs()
+        {
+            return new Dictionary<string, object>();
+        }
+
+        protected virtual void restoreBeforeOpen(Dictionary<string, object> keyValuePairs)
+        { }
 
     }
 }
