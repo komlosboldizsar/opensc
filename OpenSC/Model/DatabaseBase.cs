@@ -143,5 +143,11 @@ namespace OpenSC.Model
             persister.BuildRelationsByForeignKeys(ref items);
         }
 
+        public void NotifyItemsRestored()
+        {
+            foreach (T item in items.Values)
+                item.Restored();
+        }
+
     }
 }
