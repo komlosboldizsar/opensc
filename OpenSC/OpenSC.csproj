@@ -57,6 +57,12 @@
     <Compile Include="GUI\ChildWindowWithTitle.Designer.cs">
       <DependentUpon>ChildWindowWithTitle.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\ChildWindowWithTitleAndTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ChildWindowWithTitleAndTable.Designer.cs">
+      <DependentUpon>ChildWindowWithTitleAndTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\GeneralComponents\DataGridViewDisableButtonCell.cs" />
     <Compile Include="GUI\GeneralComponents\DataGridViewImageButtonCell.cs" />
     <Compile Include="GUI\MainForm.cs">
@@ -157,6 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ChildWindowWithTitle.resx">
       <DependentUpon>ChildWindowWithTitle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ChildWindowWithTitleAndTable.resx">
+      <DependentUpon>ChildWindowWithTitleAndTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.timerListTable = new System.Windows.Forms.DataGridView();
             this.dataGridViewButtonColumn1 = new System.Windows.Forms.DataGridViewButtonColumn();
             this.dataGridViewButtonColumn2 = new System.Windows.Forms.DataGridViewButtonColumn();
             this.dataGridViewButtonColumn3 = new System.Windows.Forms.DataGridViewButtonColumn();
@@ -51,31 +49,19 @@
             this.resetButtonColumn = new System.Windows.Forms.DataGridViewButtonColumn();
             this.openTimerWindowButtonColumn = new System.Windows.Forms.DataGridViewButtonColumn();
             this.mainContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.timerListTable)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.table)).BeginInit();
             this.SuspendLayout();
             // 
             // mainContainer
             // 
-            this.mainContainer.Controls.Add(this.timerListTable);
-            this.mainContainer.Controls.Add(this.groupBox1);
             this.mainContainer.Size = new System.Drawing.Size(1232, 497);
             // 
-            // groupBox1
+            // table
             // 
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1232, 100);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
-            // 
-            // timerListTable
-            // 
-            this.timerListTable.AllowUserToAddRows = false;
-            this.timerListTable.AllowUserToDeleteRows = false;
-            this.timerListTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.timerListTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.table.AllowUserToAddRows = false;
+            this.table.AllowUserToDeleteRows = false;
+            this.table.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.table.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.timerIdColumn,
             this.timerTitleColumn,
             this.timerModeImageColumn,
@@ -89,14 +75,7 @@
             this.stopButtonColumn,
             this.resetButtonColumn,
             this.openTimerWindowButtonColumn});
-            this.timerListTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.timerListTable.Location = new System.Drawing.Point(0, 100);
-            this.timerListTable.Name = "timerListTable";
-            this.timerListTable.ReadOnly = true;
-            this.timerListTable.RowTemplate.Height = 24;
-            this.timerListTable.Size = new System.Drawing.Size(1232, 397);
-            this.timerListTable.TabIndex = 2;
-            this.timerListTable.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.timerListTable_CellContentClick);
+            this.table.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.table_CellContentClick);
             // 
             // dataGridViewButtonColumn1
             // 
@@ -245,15 +224,13 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TimerList_FormClosed);
             this.Load += new System.EventHandler(this.TimerList_Load);
             this.mainContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.timerListTable)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.table)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.DataGridView timerListTable;
         private System.Windows.Forms.DataGridViewButtonColumn dataGridViewButtonColumn1;
         private System.Windows.Forms.DataGridViewButtonColumn dataGridViewButtonColumn2;
         private System.Windows.Forms.DataGridViewButtonColumn dataGridViewButtonColumn3;

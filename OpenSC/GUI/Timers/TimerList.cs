@@ -10,7 +10,7 @@ using Timer = OpenSC.Model.Timers.Timer;
 namespace OpenSC.GUI.Timers
 {
     [WindowTypeName("timers.timerlist")]
-    public partial class TimerList : ChildWindowWithTitle
+    public partial class TimerList : ChildWindowWithTitleAndTable
     {
         public TimerList()
         {
@@ -36,11 +36,11 @@ namespace OpenSC.GUI.Timers
 
         private void loadTimers()
         {
-            timerListTable.Rows.Clear();
+            table.Rows.Clear();
             foreach(Timer timer in TimerDatabase.Instance.ItemsAsList)
             {
                 var row = new TimerListTableRow(timer);
-                timerListTable.Rows.Add(row);
+                table.Rows.Add(row);
             }
         }
 
@@ -337,11 +337,11 @@ namespace OpenSC.GUI.Timers
 
         }
 
-        private void timerListTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void table_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (sender != timerListTable)
+            if (sender != table)
                 return;
-            TimerListTableRow rowObject = timerListTable.Rows[e.RowIndex] as TimerListTableRow;
+            TimerListTableRow rowObject = table.Rows[e.RowIndex] as TimerListTableRow;
             if (rowObject != null)
                 rowObject.HandleCellClick(sender, e);
         }
