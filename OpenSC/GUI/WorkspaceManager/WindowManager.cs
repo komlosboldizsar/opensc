@@ -17,10 +17,23 @@ namespace OpenSC.GUI.WorkspaceManager
         public static WindowManager Instance { get; } = new WindowManager();
 
         private List<ChildWindowBase> childWindows = new List<ChildWindowBase>();
+        private List<IPersistableWindow> persistableChildWindows = new List<IPersistableWindow>();
 
         public event ChildWindowOpenedDelegate ChildWindowOpened;
         public event ChildWindowClosedDelegate ChildWindowClosed;
         public event ChildWindowListChangedDelegate ChildWindowListChanged;
+
+        private bool mainFormClosing = false;
+
+        public void Init()
+        {
+            MainForm.Instance.FormClosing += mainFormClosingHandler;
+        }
+
+        private void mainFormClosingHandler(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        {
+            mainFormClosing = true;
+        }
 
         internal void NotifyChildWindowOpened(ChildWindowBase window)
         {
@@ -32,6 +45,7 @@ namespace OpenSC.GUI.WorkspaceManager
 
             if (window is IPersistableWindow)
             {
+                persistableChildWindows.Add(window);
                 persistWindows();
                 window.Resize += persistableWindowSizePositionChangeHandler;
                 window.Move += persistableWindowSizePositionChangeHandler;
@@ -46,8 +60,12 @@ namespace OpenSC.GUI.WorkspaceManager
             ChildWindowClosed?.Invoke(window);
             ChildWindowListChanged?.Invoke();
 
+            if (mainFormClosing)
+                return;
+
             if (window is IPersistableWindow)
             {
+                persistableChildWindows.Remove(window);
                 window.Resize -= persistableWindowSizePositionChangeHandler;
                 window.Move -= persistableWindowSizePositionChangeHandler;
                 persistWindows();
@@ -57,6 +75,7 @@ namespace OpenSC.GUI.WorkspaceManager
 
         private void persistWindows()
         {
+            WindowPersister.SaveWindows(persistableChildWindows);
         }
 
         private void persistableWindowSizePositionChangeHandler(object sender, EventArgs e)

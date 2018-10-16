@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="GUI\WorkspaceManager\IPersistableWindow.cs" />
     <Compile Include="GUI\WorkspaceManager\WindowManager.cs" />
+    <Compile Include="GUI\WorkspaceManager\WindowPersister.cs" />
     <Compile Include="Model\DatabaseBase.cs" />
     <Compile Include="Model\DatabaseFile.cs" />
     <Compile Include="Model\DatabaseNameAttribute.cs" />

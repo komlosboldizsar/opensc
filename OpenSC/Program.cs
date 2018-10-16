@@ -1,4 +1,5 @@
-﻿using OpenSC.Model;
+﻿using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model;
 using OpenSC.Modules;
 using System;
 using System.Collections.Generic;
@@ -30,9 +31,15 @@ namespace OpenSC
             ProgramStarted?.Invoke();
 
             InitDatabases();
+            InitWorkspaceManager();
 
             Application.Run(GUI.MainForm.Instance);
 
+        }
+
+        private static void InitWorkspaceManager()
+        {
+            WindowManager.Instance.Init();
         }
 
         static void InitDatabases()
