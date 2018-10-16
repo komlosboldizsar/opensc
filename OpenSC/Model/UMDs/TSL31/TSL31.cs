@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.Persistence;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace OpenSC.Model.UMDs.TSL31
 
         public override IUMDType Type => new TSL31Type();
 
+        [PersistAs("port")]
         private TSL31Port port;
 
         public TSL31Port Port
