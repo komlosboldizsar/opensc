@@ -29,6 +29,10 @@ namespace OpenSC.GUI.UMDs
 
             CustomDataGridViewColumnDescriptorBuilder<UMD> builder;
 
+            // Custom cell styles
+            DataGridViewCellStyle monospaceTextCellStyle = table.DefaultCellStyle.Clone();
+            monospaceTextCellStyle.Font = new Font(FontFamily.GenericMonospace, 9);
+
             // Column: ID
             builder = GetColumnDescriptorBuilderForTable();
             builder.Type(DataGridViewColumnType.TextBox);
@@ -73,7 +77,7 @@ namespace OpenSC.GUI.UMDs
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Current text");
             builder.Width(200);
-            builder.CellStyle(BOLD_TEXT_CELL_STYLE);
+            builder.CellStyle(monospaceTextCellStyle);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.CurrentText; });
             builder.AddChangeEvent(nameof(UMD.CurrentTextChangedPCN));
             builder.BuildAndAdd();

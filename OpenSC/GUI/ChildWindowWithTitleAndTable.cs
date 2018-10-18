@@ -28,9 +28,7 @@ namespace OpenSC.GUI
             get
             {
                 DataGridViewCellStyle boldTextCellStyle = table.DefaultCellStyle.Clone();
-                Font defaultCellFont = table.DefaultCellStyle.Font;
-                var boldFont = new Font(defaultCellFont, FontStyle.Bold);
-                boldTextCellStyle.Font = new Font(defaultCellFont, FontStyle.Bold);
+                boldTextCellStyle.Font = new Font(table.DefaultCellStyle.Font, FontStyle.Bold);
                 return boldTextCellStyle;
             }
         }
