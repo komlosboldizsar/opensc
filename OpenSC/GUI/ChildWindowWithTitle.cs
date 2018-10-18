@@ -20,6 +20,13 @@ namespace OpenSC.GUI
             set { headerText.Text = value; }
         }
 
+        [Category("Header"), Description("Color of header bar.")]
+        public Color HeaderColor
+        {
+            get { return headerPanel.BackColor; }
+            set { headerPanel.BackColor = value; }
+        }
+
         public ChildWindowWithTitle()
         {
             InitializeComponent();
