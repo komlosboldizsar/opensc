@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,6 +32,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         public string[] ChangeEvents { get; private set; }
 
+        public string ButtonText { get; private set; }
+
+        public Image ButtonImage { get; set; }
+
+        public Padding ButtonImagePadding { get; set; }
+
         public CustomDataGridViewColumnDescriptor(
                 DataGridViewColumnType type,
                 string header,
@@ -39,7 +46,10 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 CellUpdaterMethodDelegate updaterMethod,
                 CellContentClickHandlerMethodDelegate contentClickHandlerMethod,
                 CellEndEditHandlerMethodDelegate endEditHandlerMethod,
-                string[] changeEvents)
+                string[] changeEvents,
+                string buttonText,
+                Image buttonImage,
+                Padding buttonImagePadding)
         {
             Type = type;
             Header = header;
@@ -49,6 +59,9 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             ContentClickHandlerMethod = contentClickHandlerMethod;
             EndEditHandlerMethod = endEditHandlerMethod;
             ChangeEvents = changeEvents;
+            ButtonText = buttonText;
+            ButtonImage = buttonImage;
+            ButtonImagePadding = buttonImagePadding;
         }
 
     }

@@ -1,9 +1,11 @@
 ﻿using OpenSC.Model;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace OpenSC.GUI.GeneralComponents.Tables
 {
@@ -27,6 +29,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private List<string> changeEvents = new List<string>();
 
+        private string buttonText;
+
+        private Image buttonImage;
+
+        private Padding buttonImagePadding;
+
         public CustomDataGridViewColumnDescriptorBuilder()
         { }
 
@@ -45,7 +53,10 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 updaterMethod,
                 contentClickHandlerMethod,
                 endEditHandlerMethod,
-                changeEvents.ToArray());
+                changeEvents.ToArray(),
+                buttonText,
+                buttonImage,
+                buttonImagePadding);
         }
 
         public CustomDataGridViewColumnDescriptor<T> BuildAndAdd(CustomDataGridView<T> table) {
@@ -99,6 +110,24 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public CustomDataGridViewColumnDescriptorBuilder<T> AddChangeEvent(string eventName)
         {
             changeEvents.Add(eventName);
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> ButtonText(string buttonText)
+        {
+            this.buttonText = buttonText;
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> ButtonImage(Image buttonImage)
+        {
+            this.buttonImage = buttonImage;
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> ButtonImagePadding(Padding buttonImagePadding)
+        {
+            this.buttonImagePadding = buttonImagePadding;
             return this;
         }
 

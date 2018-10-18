@@ -60,6 +60,13 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 typedCell.TrueValue = true;
             }
 
+            if(columnDescriptor.Type == DataGridViewColumnType.ImageButton)
+            {
+                DataGridViewImageButtonCell typedCell = (DataGridViewImageButtonCell)cell;
+                typedCell.Image = columnDescriptor.ButtonImage;
+                typedCell.ImagePadding = columnDescriptor.ButtonImagePadding;
+            }
+
             return cell;
 
         }
