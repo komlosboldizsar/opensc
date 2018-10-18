@@ -89,7 +89,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         {
             columnDescriptors.Add(columnDescriptor);
             DataGridViewColumn column = getColumnByType(columnDescriptor.Type);
-            column.Width = columnDescriptor.Width;
+            column.Width = columnDescriptor.Width + columnDescriptor.DividerWidth;
+            column.DividerWidth = columnDescriptor.DividerWidth;
             column.DefaultCellStyle = columnDescriptor.CellStyle;
             Columns.Add(column);
         }

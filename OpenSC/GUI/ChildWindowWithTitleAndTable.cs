@@ -13,10 +13,13 @@ namespace OpenSC.GUI
 {
     public partial class ChildWindowWithTitleAndTable<T> : ChildWindowWithTitle
     {
+
         public ChildWindowWithTitleAndTable()
         {
             InitializeComponent();
         }
+
+        protected const int DEFAULT_DIVIDER_WIDTH = 3;
 
         protected static CustomDataGridViewColumnDescriptorBuilder<T> GetColumnDescriptorBuilder()
         {
