@@ -22,5 +22,11 @@ namespace OpenSC.GUI
         {
             return new CustomDataGridViewColumnDescriptorBuilder<T>();
         }
+
+        protected CustomDataGridViewColumnDescriptorBuilder<T> GetColumnDescriptorBuilderForTable()
+        {
+            return new CustomDataGridViewColumnDescriptorBuilder<T>(table);
+        }
+
     }
 }

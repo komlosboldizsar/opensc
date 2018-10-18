@@ -13,6 +13,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         where T: class, IModel
     {
 
+        private CustomDataGridView<T> table;
+
         private DataGridViewColumnType type;
 
         private string header;
@@ -43,6 +45,11 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             this.type = type;
         }
 
+        public CustomDataGridViewColumnDescriptorBuilder(CustomDataGridView<T> table)
+        {
+            this.table = table;
+        }
+
         public CustomDataGridViewColumnDescriptor<T> Build()
         {
             return new CustomDataGridViewColumnDescriptor<T>(
@@ -63,6 +70,13 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             var columnDescriptor = Build();
             table.AddColumn(columnDescriptor);
             return columnDescriptor;
+        }
+
+        public CustomDataGridViewColumnDescriptor<T> BuildAndAdd()
+        {
+            if (table == null)
+                throw new Exception();
+            return BuildAndAdd(table);
         }
 
         public CustomDataGridViewColumnDescriptorBuilder<T> Type(DataGridViewColumnType type)
