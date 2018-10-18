@@ -168,7 +168,7 @@ namespace OpenSC.GUI.Timers
             builder.AddChangeEvent(nameof(Timer.RunningStateChangedPCN));
             builder.BuildAndAdd();
 
-            // Column: open timer window buton
+            // Column: open timer window button
             builder = GetColumnDescriptorBuilderForTable();
             builder.Type(DataGridViewColumnType.Button);
             builder.Header("Open window");
@@ -180,7 +180,7 @@ namespace OpenSC.GUI.Timers
             });
             builder.BuildAndAdd();
 
-            // Bind
+            // Bind database
             table.BoundDatabase = TimerDatabase.Instance;
 
         }
