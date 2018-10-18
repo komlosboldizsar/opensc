@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model
 {
-    interface IModel
+    public interface IModel
     {
         int ID { get; set; }
         void Restored();

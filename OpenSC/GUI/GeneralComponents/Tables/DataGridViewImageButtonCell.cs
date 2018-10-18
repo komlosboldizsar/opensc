@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace OpenSC.GUI.GeneralComponents
+namespace OpenSC.GUI.GeneralComponents.Tables
 {
     class DataGridViewImageButtonCell: DataGridViewDisableButtonCell
     {

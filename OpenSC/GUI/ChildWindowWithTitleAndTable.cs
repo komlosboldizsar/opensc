@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.GUI.GeneralComponents.Tables;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,11 +11,16 @@ using System.Windows.Forms;
 
 namespace OpenSC.GUI
 {
-    public partial class ChildWindowWithTitleAndTable : ChildWindowWithTitle
+    public partial class ChildWindowWithTitleAndTable<T> : ChildWindowWithTitle
     {
         public ChildWindowWithTitleAndTable()
         {
             InitializeComponent();
+        }
+
+        protected static CustomDataGridViewColumnDescriptorBuilder<T> GetColumnDescriptorBuilder()
+        {
+            return new CustomDataGridViewColumnDescriptorBuilder<T>();
         }
     }
 }

@@ -63,8 +63,15 @@
     <Compile Include="GUI\ChildWindowWithTitleAndTable.Designer.cs">
       <DependentUpon>ChildWindowWithTitleAndTable.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\GeneralComponents\DataGridViewDisableButtonCell.cs" />
-    <Compile Include="GUI\GeneralComponents\DataGridViewImageButtonCell.cs" />
+    <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridViewColumnDescriptor.cs" />
+    <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridViewRow.cs" />
+    <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridViewColumnDescriptorBuilder.cs" />
+    <Compile Include="GUI\GeneralComponents\Tables\DataGridViewColumnType.cs" />
+    <Compile Include="GUI\GeneralComponents\Tables\DataGridViewDisableButtonCell.cs" />
+    <Compile Include="GUI\GeneralComponents\Tables\DataGridViewImageButtonCell.cs" />
     <Compile Include="GUI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

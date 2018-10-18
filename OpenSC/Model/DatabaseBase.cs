@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace OpenSC.Model
 {
-    abstract class DatabaseBase<T>: IDatabaseBase
+    public abstract class DatabaseBase<T>: IDatabaseBase
         where T: class, IModel
     {
 

@@ -1,0 +1,111 @@
+﻿using OpenSC.Model;
+using System;
+using System.Reflection;
+using System.Windows.Forms;
+
+namespace OpenSC.GUI.GeneralComponents.Tables
+{
+    public class CustomDataGridViewRow<T>: DataGridViewRow
+        where T : class, IModel
+    {
+
+        CustomDataGridView<T> table;
+
+        T item;
+
+        private static readonly Type storedType = typeof(T);
+
+        private static readonly EventInfo[] typeEventInfos = storedType.GetEvents();
+
+        private static EventInfo getEventInfoByName(string name)
+        {
+            foreach (EventInfo eventInfo in typeEventInfos)
+                if (eventInfo.Name == name)
+                    return eventInfo;
+            return null;
+        }
+
+        public CustomDataGridViewRow(CustomDataGridView<T> table, T item)
+        {
+            if ((table == null) || (item == null))
+                throw new ArgumentNullException();
+            this.table = table;
+            this.item = item;
+            createCells();
+        }
+
+        private delegate void CellUpdaterDelegate();
+
+        private void createCells()
+        {
+            foreach (CustomDataGridViewColumnDescriptor<T> columnDescriptor in table.ColumnDescriptors)
+            {
+
+                // Create and initialize cell
+                DataGridViewCell cell = getCellByType(columnDescriptor.Type);
+                columnDescriptor.InitializerMethod?.Invoke(item, cell);
+                columnDescriptor.UpdaterMethod?.Invoke(item, cell);
+                Cells.Add(cell);
+
+                // Subscribe events
+                CellUpdaterDelegate cellUpdaterDelegate = new CellUpdaterDelegate(() => updateCell(cell.ColumnIndex));
+                foreach (string eventName in columnDescriptor.ChangeEvents)
+                {
+                    try
+                    {
+                        getEventInfoByName(eventName)?.AddEventHandler(item, cellUpdaterDelegate);
+                    }
+                    catch { }
+                }
+
+            }
+        }
+
+        private void updateCell(int columnIndex)
+        {
+            getColumnDescriptor(columnIndex).UpdaterMethod?.Invoke(item, Cells[columnIndex]);
+        }
+
+        private static DataGridViewCell getCellByType(DataGridViewColumnType type)
+        {
+            switch (type)
+            {
+                case DataGridViewColumnType.TextBox:
+                    return new DataGridViewTextBoxCell();
+                case DataGridViewColumnType.CheckBox:
+                    return new DataGridViewCheckBoxCell();
+                case DataGridViewColumnType.Image:
+                    return new DataGridViewImageCell();
+                case DataGridViewColumnType.Button:
+                    return new DataGridViewButtonCell();
+                case DataGridViewColumnType.ComboBox:
+                    return new DataGridViewComboBoxCell();
+                case DataGridViewColumnType.Link:
+                    return new DataGridViewLinkCell();
+                case DataGridViewColumnType.DisableButton:
+                    return new DataGridViewDisableButtonCell();
+                case DataGridViewColumnType.ImageButton:
+                    return new DataGridViewImageButtonCell();
+            }
+            return null;
+        }
+
+        public void HandleContentClick(DataGridViewCellEventArgs eventArgs)
+        {
+            int ci = eventArgs.ColumnIndex;
+            getColumnDescriptor(ci).ContentClickHandlerMethod?.Invoke(item, Cells[ci], eventArgs);
+        }
+
+        public void HandleEndEdit(DataGridViewCellEventArgs eventArgs)
+        {
+            int ci = eventArgs.ColumnIndex;
+            getColumnDescriptor(ci).EndEditHandlerMethod?.Invoke(item, Cells[ci], eventArgs);
+        }
+
+        private CustomDataGridViewColumnDescriptor<T> getColumnDescriptor(int columnIndex)
+        {
+            return table.ColumnDescriptors[columnIndex];
+        }
+
+    }
+}

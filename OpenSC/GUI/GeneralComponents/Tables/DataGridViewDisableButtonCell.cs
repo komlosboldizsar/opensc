@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 
-namespace OpenSC.GUI.GeneralComponents
+namespace OpenSC.GUI.GeneralComponents.Tables
 {
 
     // source: https://docs.microsoft.com/en-us/dotnet/framework/winforms/controls/disable-buttons-in-a-button-column-in-the-datagrid

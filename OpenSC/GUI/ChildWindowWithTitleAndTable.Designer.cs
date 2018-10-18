@@ -1,6 +1,10 @@
-﻿namespace OpenSC.GUI
+﻿using OpenSC.GUI.GeneralComponents.Tables;
+using OpenSC.Model;
+
+namespace OpenSC.GUI
 {
-    partial class ChildWindowWithTitleAndTable
+    partial class ChildWindowWithTitleAndTable<T>
+        where T: class, IModel
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +33,7 @@
         private void InitializeComponent()
         {
             this.topContainer = new System.Windows.Forms.Panel();
-            this.table = new System.Windows.Forms.DataGridView();
+            this.table = new CustomDataGridView<T>();
             this.mainContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.table)).BeginInit();
             this.SuspendLayout();
@@ -74,6 +78,6 @@
         #endregion
 
         protected System.Windows.Forms.Panel topContainer;
-        protected System.Windows.Forms.DataGridView table;
+        protected CustomDataGridView<T> table;
     }
 }
