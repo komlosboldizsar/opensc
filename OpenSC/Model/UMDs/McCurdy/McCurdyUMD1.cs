@@ -46,6 +46,8 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         public override event UmdTallyChanging TallyChanging;
         public override event UmdTallyChanged TallyChanged;
+        public override event ParameterlessChangeNotifierDelegate TallyChangingPCN;
+        public override event ParameterlessChangeNotifierDelegate TallyChangedPCN;
 
         private bool[] tallies = new bool[McCurdyUMD1Type.TALLY_COUNT] { };
 
@@ -64,9 +66,11 @@ namespace OpenSC.Model.UMDs.McCurdy
             if (oldState != state)
             {
                 TallyChanging?.Invoke(this, index, oldState, state);
+                TallyChangingPCN?.Invoke();
                 tallies[index] = state;
                 update();
                 TallyChanged?.Invoke(this, index, oldState, state);
+                TallyChangedPCN?.Invoke();
             }
             
         }

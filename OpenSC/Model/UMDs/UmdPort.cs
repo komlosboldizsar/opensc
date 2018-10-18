@@ -13,6 +13,11 @@ namespace OpenSC.Model.UMDs
     abstract public class UmdPort: IModel
     {
 
+        public event UmdPortIdChangingDelegate IdChanging;
+        public event UmdPortIdChangedDelegate IdChanged;
+        public event ParameterlessChangeNotifierDelegate IdChangingPCN;
+        public event ParameterlessChangeNotifierDelegate IdChangedPCN;
+
         private int id = 0;
 
         public int ID
@@ -23,13 +28,12 @@ namespace OpenSC.Model.UMDs
                 ValidateId(value);
                 int oldValue = id;
                 IdChanging?.Invoke(this, oldValue, value);
+                IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
+                IdChangedPCN?.Invoke();
             }
         }
-
-        public event UmdPortIdChangingDelegate IdChanging;
-        public event UmdPortIdChangedDelegate IdChanged;
 
         public void ValidateId(int id)
         {

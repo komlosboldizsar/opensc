@@ -47,6 +47,8 @@ namespace OpenSC.Model.Timers
 
         public event TimerIdChangingDelegate IdChanging;
         public event TimerIdChangedDelegate IdChanged;
+        public event ParameterlessChangeNotifierDelegate IdChangingPCN;
+        public event ParameterlessChangeNotifierDelegate IdChangedPCN;
 
         public int id = 0;
 
@@ -58,8 +60,10 @@ namespace OpenSC.Model.Timers
                 ValidateId(value);
                 int oldValue = id;
                 IdChanging?.Invoke(this, oldValue, value);
+                IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
+                IdChangedPCN?.Invoke();
             }
         }
 
@@ -73,6 +77,8 @@ namespace OpenSC.Model.Timers
 
         public event TimerTitleChangingDelegate TitleChanging;
         public event TimerTitleChangedDelegate TitleChanged;
+        public event ParameterlessChangeNotifierDelegate TitleChangingPCN;
+        public event ParameterlessChangeNotifierDelegate TitleChangedPCN;
 
         [PersistAs("title")]
         private string title = "Test";
@@ -84,8 +90,10 @@ namespace OpenSC.Model.Timers
                 ValidateTitle(value);
                 string oldTitle = title;
                 TitleChanging?.Invoke(this, oldTitle, value);
+                TitleChangingPCN?.Invoke();
                 title = value;
                 TitleChanged?.Invoke(this, oldTitle, value);
+                TitleChangedPCN?.Invoke();
             }
         }
 
@@ -99,6 +107,8 @@ namespace OpenSC.Model.Timers
 
         public event TimerSecondsChangingDelegate SecondsChanging;
         public event TimerSecondsChangedDelegate SecondsChanged;
+        public event ParameterlessChangeNotifierDelegate SecondsChangingPCN;
+        public event ParameterlessChangeNotifierDelegate SecondsChangedPCN;
 
         private int seconds = 0;
         public int Seconds
@@ -109,8 +119,10 @@ namespace OpenSC.Model.Timers
                     throw new ArgumentException();
                 int oldValue = seconds;
                 SecondsChanging?.Invoke(this, oldValue, value);
+                SecondsChangingPCN?.Invoke();
                 seconds = value;
                 SecondsChanged?.Invoke(this, oldValue, value);
+                SecondsChangedPCN?.Invoke();
             }
         }
 
@@ -122,6 +134,8 @@ namespace OpenSC.Model.Timers
 
         public event TimerCountdownSecondsChangingDelegate CountdownSecondsChanging;
         public event TimerCountdownSecondsChangedDelegate CountdownSecondsChanged;
+        public event ParameterlessChangeNotifierDelegate CountdownSecondsChangingPCN;
+        public event ParameterlessChangeNotifierDelegate CountdownSecondsChangedPCN;
 
         [PersistAs("countdown_seconds")]
         private int countdownSeconds = 5;
@@ -133,8 +147,10 @@ namespace OpenSC.Model.Timers
                 
                 int oldValue = countdownSeconds;
                 CountdownSecondsChanging?.Invoke(this, oldValue, value);
+                CountdownSecondsChangingPCN?.Invoke();
                 countdownSeconds = value;
                 CountdownSecondsChanged?.Invoke(this, oldValue, value);
+                CountdownSecondsChangedPCN?.Invoke();
             }
         }
 
@@ -146,15 +162,23 @@ namespace OpenSC.Model.Timers
 
         public event TimerRunningStateChangingDelegate RunningStateChanging;
         public event TimerRunningStateChangedDelegate RunningStateChanged;
+        public event ParameterlessChangeNotifierDelegate RunningStateChangingPCN;
+        public event ParameterlessChangeNotifierDelegate RunningStateChangedPCN;
 
         public event TimerStartingDelegate Starting;
         public event TimerStartedDelegate Started;
+        public event ParameterlessChangeNotifierDelegate StartingPCN;
+        public event ParameterlessChangeNotifierDelegate StartedPCN;
 
         public event TimerStoppingDelegate Stopping;
         public event TimerStoppedDelegate Stopped;
+        public event ParameterlessChangeNotifierDelegate StoppingPCN;
+        public event ParameterlessChangeNotifierDelegate StoppedPCN;
 
         public event TimerResetingDelegate Reseting;
         public event TimerResetedDelegate Reseted;
+        public event ParameterlessChangeNotifierDelegate ResetingPCN;
+        public event ParameterlessChangeNotifierDelegate ResetedPCN;
 
         private bool running = false;
         public bool Running
@@ -166,26 +190,44 @@ namespace OpenSC.Model.Timers
                 bool oldValue = running;
 
                 RunningStateChanging?.Invoke(this, oldValue, value);
+                RunningStateChangingPCN?.Invoke();
                 if (value == true)
+                {
                     Starting?.Invoke(this);
+                    StartingPCN?.Invoke();
+                }
                 else
+                {
                     Stopping?.Invoke(this);
+                    StoppingPCN?.Invoke();
+                }
                 OperationsChanging?.Invoke(this);
+                OperationsChangingPCN?.Invoke();
 
                 running = value;
 
                 RunningStateChanged?.Invoke(this, oldValue, value);
+                RunningStateChangedPCN?.Invoke();
                 if (value == true)
+                {
                     Started?.Invoke(this);
+                    StartedPCN?.Invoke();
+                }
                 else
+                {
                     Stopped?.Invoke(this);
+                    StoppedPCN?.Invoke();
+                }
                 OperationsChanged?.Invoke(this);
+                OperationsChangedPCN?.Invoke();
 
             }
         }
 
         public event TimerOperationsChangingDelegate OperationsChanging;
         public event TimerOperationsChangedDelegate OperationsChanged;
+        public event ParameterlessChangeNotifierDelegate OperationsChangingPCN;
+        public event ParameterlessChangeNotifierDelegate OperationsChangedPCN;
 
         public bool CanStart
         {
@@ -204,6 +246,8 @@ namespace OpenSC.Model.Timers
 
         public event TimerModeChangingDelegate ModeChanging;
         public event TimerModeChangedDelegate ModeChanged;
+        public event ParameterlessChangeNotifierDelegate ModeChangingPCN;
+        public event ParameterlessChangeNotifierDelegate ModeChangedPCN;
 
         [PersistAs("mode")]
         private TimerMode mode = TimerMode.Backwards;
@@ -215,7 +259,9 @@ namespace OpenSC.Model.Timers
             {
                 TimerMode oldValue = mode;
                 ModeChanging?.Invoke(this, oldValue, value);
+                ModeChangingPCN?.Invoke();
                 OperationsChanging?.Invoke(this);
+                OperationsChangingPCN?.Invoke();
                 mode = value;
                 if (oldValue != value)
                 {
@@ -226,12 +272,15 @@ namespace OpenSC.Model.Timers
                         Seconds = 0;
                 }
                 ModeChanged?.Invoke(this, oldValue, value);
+                ModeChangedPCN?.Invoke();
                 OperationsChanged?.Invoke(this);
+                OperationsChangedPCN?.Invoke();
             }
         }
 
         public delegate void BackwardsTimerReachedZeroDelegate(Timer sender);
         public event BackwardsTimerReachedZeroDelegate ReachedZero;
+        public event ParameterlessChangeNotifierDelegate ReachedZeroPCN;
 
         private System.Timers.Timer innerTimer;
 
@@ -264,6 +313,7 @@ namespace OpenSC.Model.Timers
                     {
                         firstReachedZeroEvent = false;
                         ReachedZero?.Invoke(this);
+                        ReachedZeroPCN?.Invoke();
                     }
                     break;
                 case TimerMode.Clock:
@@ -287,6 +337,7 @@ namespace OpenSC.Model.Timers
         public void Reset()
         {
             Reseting?.Invoke(this);
+            ResetingPCN?.Invoke();
             switch (mode)
             {
                 case TimerMode.Forwards:
@@ -301,6 +352,7 @@ namespace OpenSC.Model.Timers
             }
             firstReachedZeroEvent = true;
             Reseted?.Invoke(this);
+            ResetedPCN?.Invoke();
             resetInnerTimer();
         }
 

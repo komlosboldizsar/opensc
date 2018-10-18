@@ -42,6 +42,8 @@ namespace OpenSC.Model.UMDs.TSL31
 
         public override event UmdTallyChanging TallyChanging;
         public override event UmdTallyChanged TallyChanged;
+        public override event ParameterlessChangeNotifierDelegate TallyChangingPCN;
+        public override event ParameterlessChangeNotifierDelegate TallyChangedPCN;
 
         private bool[] tallies = new bool[TSL31Type.TALLY_COUNT] { true };
 
@@ -60,9 +62,11 @@ namespace OpenSC.Model.UMDs.TSL31
             if (oldState != state)
             {
                 TallyChanging?.Invoke(this, index, oldState, state);
+                TallyChangingPCN?.Invoke();
                 tallies[index] = state;
                 update();
                 TallyChanged?.Invoke(this, index, oldState, state);
+                TallyChangedPCN?.Invoke();
             }
             
         }
