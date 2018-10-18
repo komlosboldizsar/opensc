@@ -31,6 +31,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private List<string> changeEvents = new List<string>();
 
+        private bool textEditable;
+
         private string buttonText;
 
         private Image buttonImage;
@@ -61,6 +63,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 contentClickHandlerMethod,
                 endEditHandlerMethod,
                 changeEvents.ToArray(),
+                textEditable,
                 buttonText,
                 buttonImage,
                 buttonImagePadding);
@@ -124,6 +127,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public CustomDataGridViewColumnDescriptorBuilder<T> AddChangeEvent(string eventName)
         {
             changeEvents.Add(eventName);
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> TextEditable(bool textEditable)
+        {
+            this.textEditable = textEditable;
             return this;
         }
 

@@ -72,6 +72,11 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 cell.Value = columnDescriptor.ButtonText;
             }
 
+            if(columnDescriptor.Type == DataGridViewColumnType.TextBox)
+            {
+                cell.ReadOnly = !columnDescriptor.TextEditable;
+            }
+
             return cell;
 
         }

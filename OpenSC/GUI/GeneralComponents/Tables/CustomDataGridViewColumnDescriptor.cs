@@ -32,6 +32,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         public string[] ChangeEvents { get; private set; }
 
+        public bool TextEditable { get; private set; }
+
         public string ButtonText { get; private set; }
 
         public Image ButtonImage { get; set; }
@@ -47,6 +49,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 CellContentClickHandlerMethodDelegate contentClickHandlerMethod,
                 CellEndEditHandlerMethodDelegate endEditHandlerMethod,
                 string[] changeEvents,
+                bool textEditable,
                 string buttonText,
                 Image buttonImage,
                 Padding buttonImagePadding)
@@ -59,6 +62,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             ContentClickHandlerMethod = contentClickHandlerMethod;
             EndEditHandlerMethod = endEditHandlerMethod;
             ChangeEvents = changeEvents;
+            TextEditable = textEditable;
             ButtonText = buttonText;
             ButtonImage = buttonImage;
             ButtonImagePadding = buttonImagePadding;
