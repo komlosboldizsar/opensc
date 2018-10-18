@@ -30,15 +30,22 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         public CustomDataGridView()
         {
-            CellContentClick += cellContentClickHandler;
-            CellEndEdit += cellEndEditHandler;
+            init();
         }
 
         public CustomDataGridView(DatabaseBase<T> boundDatabase)
         {
             BoundDatabase = boundDatabase;
+            init();
+        }
+
+        private void init()
+        {
             CellContentClick += cellContentClickHandler;
             CellEndEdit += cellEndEditHandler;
+            AllowUserToAddRows = false;
+            AllowUserToDeleteRows = false;
+            AllowUserToOrderColumns = false;
         }
 
         private void cellEndEditHandler(object sender, DataGridViewCellEventArgs e)
