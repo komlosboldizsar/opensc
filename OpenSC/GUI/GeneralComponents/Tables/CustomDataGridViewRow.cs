@@ -57,6 +57,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 typedCell.TrueValue = true;
             }
 
+            if(columnDescriptor.Type == DataGridViewColumnType.Image)
+            {
+                DataGridViewImageCell typedCell = (DataGridViewImageCell)cell;
+                typedCell.ImageLayout = DataGridViewImageCellLayout.Zoom;
+            }
+
             if (columnDescriptor.Type == DataGridViewColumnType.ImageButton)
             {
                 DataGridViewImageButtonCell typedCell = (DataGridViewImageButtonCell)cell;
@@ -64,14 +70,14 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 typedCell.ImagePadding = columnDescriptor.ButtonImagePadding;
             }
 
-            if ((columnDescriptor.Type == DataGridViewColumnType.Button) || (columnDescriptor.Type == DataGridViewColumnType.DisableButton))
+            if (columnDescriptor.Type == DataGridViewColumnType.Button)
             {
                 cell.Value = columnDescriptor.ButtonText;
             }
 
             Cells.Add(cell);
 
-                        if (columnDescriptor.Type == DataGridViewColumnType.TextBox)
+            if (columnDescriptor.Type == DataGridViewColumnType.TextBox)
             {
                 cell.ReadOnly = !columnDescriptor.TextEditable;
             }
