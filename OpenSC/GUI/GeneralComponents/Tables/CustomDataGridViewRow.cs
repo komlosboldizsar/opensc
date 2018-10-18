@@ -66,6 +66,11 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 typedCell.Image = columnDescriptor.ButtonImage;
                 typedCell.ImagePadding = columnDescriptor.ButtonImagePadding;
             }
+            
+            if((columnDescriptor.Type == DataGridViewColumnType.Button) || (columnDescriptor.Type == DataGridViewColumnType.DisableButton))
+            {
+                cell.Value = columnDescriptor.ButtonText;
+            }
 
             return cell;
 
