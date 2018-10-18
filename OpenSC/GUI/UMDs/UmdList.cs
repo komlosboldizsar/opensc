@@ -12,7 +12,7 @@ using Timer = OpenSC.Model.Timers.Timer;
 namespace OpenSC.GUI.UMDs
 {
     [WindowTypeName("umds.umdlist")]
-    public partial class UmdList : ChildWindowWithTitleAndTable<UMD>
+    public partial class UmdList : ChildWindowWithTable
     {
 
         private const int MAX_TALLIES = 2;
@@ -24,8 +24,12 @@ namespace OpenSC.GUI.UMDs
             initializeTable();
         }
 
+        private CustomDataGridView<UMD> table;
+
         private void initializeTable()
         {
+
+            table = CreateTable<UMD>();
 
             CustomDataGridViewColumnDescriptorBuilder<UMD> builder;
 
@@ -34,7 +38,7 @@ namespace OpenSC.GUI.UMDs
             monospaceTextCellStyle.Font = new Font(FontFamily.GenericMonospace, 9);
 
             // Column: ID
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<UMD>();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("ID");
             builder.Width(50);
@@ -43,18 +47,18 @@ namespace OpenSC.GUI.UMDs
             builder.BuildAndAdd();
 
             // Column: name
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<UMD>();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Name");
             builder.Width(200);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
-            builder.CellStyle(BOLD_TEXT_CELL_STYLE);
+            //builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.Name; });
             builder.AddChangeEvent(nameof(UMD.NameChangedPCN));
             builder.BuildAndAdd();
 
             // Column: static text
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<UMD>();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Static text");
             builder.Width(200);
@@ -63,7 +67,7 @@ namespace OpenSC.GUI.UMDs
             builder.BuildAndAdd();
 
             // Column: use static text
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<UMD>();
             builder.Type(DataGridViewColumnType.CheckBox);
             builder.Header("Static");
             builder.Width(50);
@@ -73,7 +77,7 @@ namespace OpenSC.GUI.UMDs
             builder.BuildAndAdd();
 
             // Column: current text
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<UMD>();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Current text");
             builder.Width(200);
@@ -85,7 +89,7 @@ namespace OpenSC.GUI.UMDs
             // Columns: tallies
             for(int i = 0; i < MAX_TALLIES; i++)
             {
-                builder = GetColumnDescriptorBuilderForTable();
+                builder = GetColumnDescriptorBuilderForTable<UMD>();
                 builder.Type(DataGridViewColumnType.TextBox);
                 builder.Header(string.Format("T{0}", i+1));
                 builder.Width(30);
@@ -99,7 +103,7 @@ namespace OpenSC.GUI.UMDs
             }
 
             // Column: edit button
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<UMD>();
             builder.Type(DataGridViewColumnType.Button);
             builder.Header("Edit");
             builder.Width(70);
@@ -112,7 +116,7 @@ namespace OpenSC.GUI.UMDs
             builder.BuildAndAdd();
 
             // Column: delete button
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<UMD>();
             builder.Type(DataGridViewColumnType.Button);
             builder.Header("Delete");
             builder.Width(70);

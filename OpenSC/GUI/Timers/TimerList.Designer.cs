@@ -28,26 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.mainContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.table)).BeginInit();
-            this.SuspendLayout();
-            // 
-            // mainContainer
-            // 
-            this.mainContainer.Size = new System.Drawing.Size(1400, 497);
-            // 
-            // TimerList
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 553);
-            this.Name = "TimerList";
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Text = "List of timers";
-            this.mainContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.table)).EndInit();
-            this.ResumeLayout(false);
-
         }
 
         #endregion

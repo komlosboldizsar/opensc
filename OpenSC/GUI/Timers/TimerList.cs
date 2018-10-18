@@ -11,7 +11,7 @@ using Timer = OpenSC.Model.Timers.Timer;
 namespace OpenSC.GUI.Timers
 {
     [WindowTypeName("timers.timerlist")]
-    public partial class TimerList : ChildWindowWithTitleAndTable<Timer>
+    public partial class TimerList : ChildWindowWithTable
     {
         public TimerList()
         {
@@ -20,13 +20,17 @@ namespace OpenSC.GUI.Timers
             initializeTable();
         }
 
+        private CustomDataGridView<Timer> table;
+
         private void initializeTable()
         {
+
+            table = CreateTable<Timer>();
 
             CustomDataGridViewColumnDescriptorBuilder<Timer> builder;
 
             // Column: ID
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<Timer>();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("ID");
             builder.Width(30);
@@ -35,7 +39,7 @@ namespace OpenSC.GUI.Timers
             builder.BuildAndAdd();
 
             // Column: title
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<Timer>();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Title");
             builder.Width(150);
@@ -45,7 +49,7 @@ namespace OpenSC.GUI.Timers
             builder.BuildAndAdd();
 
             // Column: mode image
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<Timer>();
             builder.Type(DataGridViewColumnType.Image);
             builder.Header("");
             builder.Width(30);
@@ -55,7 +59,7 @@ namespace OpenSC.GUI.Timers
             builder.BuildAndAdd();
 
             // Column: mode label
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<Timer>();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Mode");
             builder.Width(100);
@@ -65,7 +69,7 @@ namespace OpenSC.GUI.Timers
             builder.BuildAndAdd();
 
             // Column: running state
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<Timer>();
             builder.Type(DataGridViewColumnType.Image);
             builder.Header("");
             builder.Width(30);
@@ -80,7 +84,7 @@ namespace OpenSC.GUI.Timers
             builder.BuildAndAdd();
 
             // Column: current value
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<Timer>();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Current value");
             builder.Width(100);
@@ -90,7 +94,7 @@ namespace OpenSC.GUI.Timers
             builder.BuildAndAdd();
 
             // Column: start value
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<Timer>();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Start value");
             builder.Width(100);
@@ -102,7 +106,7 @@ namespace OpenSC.GUI.Timers
             builder.BuildAndAdd();
 
             // Column: edit button
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<Timer>();
             builder.Type(DataGridViewColumnType.Button);
             builder.Header("Edit");
             builder.Width(70);
@@ -114,7 +118,7 @@ namespace OpenSC.GUI.Timers
             builder.BuildAndAdd();
 
             // Column: delete button
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<Timer>();
             builder.Type(DataGridViewColumnType.Button);
             builder.Header("Delete");
             builder.Width(70);
@@ -129,7 +133,7 @@ namespace OpenSC.GUI.Timers
             builder.BuildAndAdd();
 
             // Column: start button
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<Timer>();
             builder.Type(DataGridViewColumnType.ImageButton);
             builder.Header("");
             builder.Width(40);
@@ -142,7 +146,7 @@ namespace OpenSC.GUI.Timers
             builder.BuildAndAdd();
 
             // Column: stop button
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<Timer>();
             builder.Type(DataGridViewColumnType.ImageButton);
             builder.Header("");
             builder.Width(40);
@@ -155,7 +159,7 @@ namespace OpenSC.GUI.Timers
             builder.BuildAndAdd();
 
             // Column: reset button
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<Timer>();
             builder.Type(DataGridViewColumnType.ImageButton);
             builder.Header("");
             builder.Width(40);
@@ -169,7 +173,7 @@ namespace OpenSC.GUI.Timers
             builder.BuildAndAdd();
 
             // Column: open timer window button
-            builder = GetColumnDescriptorBuilderForTable();
+            builder = GetColumnDescriptorBuilderForTable<Timer>();
             builder.Type(DataGridViewColumnType.Button);
             builder.Header("Open window");
             builder.Width(100);
