@@ -13,7 +13,8 @@ namespace OpenSC.GUI
     public partial class ChildWindowWithTitle : ChildWindowBase
     {
 
-        protected string HeaderText
+        [Category("Header"), Description("Text in header bar.")]
+        public string HeaderText
         {
             get { return headerText.Text; }
             set { headerText.Text = value; }
