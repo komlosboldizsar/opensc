@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.GeneralComponents;
+using OpenSC.GUI.GeneralComponents.Tables;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.Timers;
@@ -11,7 +12,7 @@ using Timer = OpenSC.Model.Timers.Timer;
 namespace OpenSC.GUI.UMDs
 {
     [WindowTypeName("umds.umdlist")]
-    public partial class UmdList : ChildWindowWithTitle
+    public partial class UmdList : ChildWindowWithTitleAndTable<UMD>
     {
 
         private const int MAX_TALLIES = 2;
@@ -20,250 +21,107 @@ namespace OpenSC.GUI.UMDs
         {
             InitializeComponent();
             HeaderText = "List of UMDs";
+            initializeTable();
         }
 
-        private void UmdList_Load(object sender, EventArgs e)
-        {
-            loadUMDs();
-            UmdDatabase.Instance.ChangedItems += umdDatabaseElementsChangedHandler;
-        }
-
-        private void UmdList_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            UmdDatabase.Instance.ChangingItems -= umdDatabaseElementsChangedHandler;
-        }
-
-        private void umdDatabaseElementsChangedHandler(DatabaseBase<UMD> database)
-        {
-            loadUMDs();
-        }
-
-        private void loadUMDs()
-        {
-            umdListTable.Rows.Clear();
-            foreach(UMD umd in UmdDatabase.Instance.ItemsAsList)
-            {
-                var row = new UmdListTableRow(umd);
-                umdListTable.Rows.Add(row);
-            }
-        }
-
-        private class UmdListTableRow : DataGridViewRow
+        private void initializeTable()
         {
 
-            private UMD umd;
+            CustomDataGridViewColumnDescriptorBuilder<UMD> builder;
 
-            private DataGridViewTextBoxCell idCell;
-            private DataGridViewTextBoxCell nameCell;
-            private DataGridViewTextBoxCell staticTextCell;
-            private DataGridViewCheckBoxCell useStaticTextCell;
-            private DataGridViewTextBoxCell currentTextCell;
-            private DataGridViewTextBoxCell[] tallyCells = new DataGridViewTextBoxCell[MAX_TALLIES];
-            private DataGridViewButtonCell editButtonCell;
-            private DataGridViewButtonCell deleteButtonCell;
-
-            public UmdListTableRow(UMD umd)
+            Font defaultCellFont = table.DefaultCellStyle.Font;
+            var boldFont = new Font(defaultCellFont, FontStyle.Bold);
+            var boldTextCellStyle = new DataGridViewCellStyle()
             {
-                this.umd = umd;
-                addCells();
-                loadData();
-                subscribeUmdEvents();
+                Font = boldFont
+            };
+
+            builder = GetColumnDescriptorBuilderForTable();
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.Header("ID");
+            builder.Width(50);
+            builder.UpdaterMethod((umd, cell) => { cell.Value = string.Format("#{0}", umd.ID); });
+            builder.AddChangeEvent(nameof(UMD.IdChangedPCN));
+            builder.BuildAndAdd();
+
+            builder = GetColumnDescriptorBuilderForTable();
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.Header("Name");
+            builder.Width(200);
+            builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
+            builder.CellStyle(boldTextCellStyle);
+            builder.UpdaterMethod((umd, cell) => { cell.Value = umd.Name; });
+            builder.AddChangeEvent(nameof(UMD.NameChangedPCN));
+            builder.BuildAndAdd();
+
+            builder = GetColumnDescriptorBuilderForTable();
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.Header("Static text");
+            builder.Width(200);
+            builder.UpdaterMethod((umd, cell) => { cell.Value = umd.StaticText; });
+            builder.AddChangeEvent(nameof(UMD.StaticTextChangedPCN));
+            builder.BuildAndAdd();
+
+            builder = GetColumnDescriptorBuilderForTable();
+            builder.Type(DataGridViewColumnType.CheckBox);
+            builder.Header("Static");
+            builder.Width(50);
+            builder.UpdaterMethod((umd, cell) => { cell.Value = umd.UseStaticText; });
+            builder.CellContentClickHandlerMethod((umd, cell, e) => { umd.UseStaticText = !(bool)cell.Value; });
+            builder.AddChangeEvent(nameof(UMD.UseStaticTextChangedPCN));
+            builder.BuildAndAdd();
+
+            builder = GetColumnDescriptorBuilderForTable();
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.Header("Current text");
+            builder.Width(200);
+            builder.CellStyle(boldTextCellStyle);
+            builder.UpdaterMethod((umd, cell) => { cell.Value = umd.CurrentText; });
+            builder.AddChangeEvent(nameof(UMD.CurrentTextChangedPCN));
+            builder.BuildAndAdd();
+
+            for(int i = 0; i < MAX_TALLIES; i++)
+            {
+                builder = GetColumnDescriptorBuilderForTable();
+                builder.Type(DataGridViewColumnType.TextBox);
+                builder.Header(string.Format("T{0}", i+1));
+                builder.Width(30);
+                builder.UpdaterMethod((umd, cell) => {
+                    cell.Style.BackColor = ((umd.Type.TallyCount > i) && umd.TallyStates[i]) ? umd.TallyColors[i] : Color.LightGray;
+                });
+                if(i == MAX_TALLIES - 1)
+                    builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
+                builder.AddChangeEvent(nameof(UMD.TallyChangedPCN));
+                builder.BuildAndAdd();
             }
 
-            private void addCells()
-            {
-                idCell = new DataGridViewTextBoxCell();
-                this.Cells.Add(idCell);
-
-                nameCell = new DataGridViewTextBoxCell();
-                this.Cells.Add(nameCell);
-
-                staticTextCell = new DataGridViewTextBoxCell()
-                {
-                    ReadOnly = false
-                };
-                this.Cells.Add(staticTextCell);
-
-                useStaticTextCell = new DataGridViewCheckBoxCell()
-                {
-                    FalseValue = false,
-                    TrueValue = true,
-                    Value = false
-                };
-                this.Cells.Add(useStaticTextCell);
-
-                currentTextCell = new DataGridViewTextBoxCell();
-                this.Cells.Add(currentTextCell);
-
-                for (int i = 0; i < MAX_TALLIES; i++)
-                {
-                    tallyCells[i] = new DataGridViewTextBoxCell();
-                    tallyCells[i].Style.BackColor = Color.LightGray;
-                    this.Cells.Add(tallyCells[i]);
-                }
-
-                editButtonCell = new DataGridViewButtonCell()
-                {
-                    Value = "Edit"
-                };
-                this.Cells.Add(editButtonCell);
-
-                deleteButtonCell = new DataGridViewButtonCell()
-                {
-                    Value = "Delete"
-                };
-                this.Cells.Add(deleteButtonCell);
-
-            }
-
-            private void loadData()
-            {
-                updateUmdSettings();
-                for(int i = 0; i < MAX_TALLIES; i++)
-                    updateTally(i);
-                updateCurrentText();
-                updateStaticText();
-                updateUseStaticText();
-            }
-
-            private void updateUmdSettings()
-            {
-                idCell.Value = string.Format("#{0}", umd.ID);
-                nameCell.Value = umd.Name;
-            }
-
-            private void updateTally(int index)
-            {
-                if(umd.Type.TallyCount > index)
-                tallyCells[index].Style.BackColor = umd.TallyStates[index] ? umd.TallyColors[index] : Color.White;
-            }
-
-            private void updateCurrentText()
-            {
-                currentTextCell.Value = umd.CurrentText;
-            }
-
-            private void updateStaticText()
-            {
-                staticTextCell.Value = umd.StaticText;
-            }
-
-            private void updateUseStaticText()
-            {
-                useStaticTextCell.Value = umd.UseStaticText;
-            }
-
-            private void subscribeUmdEvents()
-            {
-                umd.NameChanged += umdNameChangedHandler;
-                umd.IdChanged += umdIdChangedHandler;
-                umd.TallyChanged += umdTallyChangedHandler;
-                umd.StaticTextChanged += umdStaticTextChangedHandler;
-                umd.CurrentTextChanged += umdCurrentTextChangedHandler;
-                umd.UseStaticTextChanged += umdUseStaticTextChangedHandler;
-            }
-
-            public void HandleCellClick(object sender, DataGridViewCellEventArgs e)
-            {
-
-                // Static checkbox
-                if (e.ColumnIndex == useStaticTextCell.ColumnIndex)
-                {
-                    umd.UseStaticText = !(bool)useStaticTextCell.Value;
-                }
-
-                // Edit
-                if (e.ColumnIndex == editButtonCell.ColumnIndex)
-                {
-                    var editWindow = new UmdEditWindow(umd);
-                    editWindow.ShowAsChild();
-                    return;
-                }
-
-                // Delete
-                if (e.ColumnIndex == deleteButtonCell.ColumnIndex)
-                {
-                    string msgBoxText = string.Format("Do you really want to delete this UMD?\n(#{0}) {1}", umd.ID, umd.Name);
-                    var confirm = MessageBox.Show(msgBoxText, "Delete confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (confirm == DialogResult.Yes)
-                        UmdDatabase.Instance.Remove(umd);
-                }
-
-            }
-
-            public void HandleCellEndEdit(object sender, DataGridViewCellEventArgs e)
-            {
-
-                // Static text
-                if (e.ColumnIndex == staticTextCell.ColumnIndex)
-                {
-                    umd.StaticText = (string)staticTextCell.Value;
-                }
-
-            }
-
-            private void umdIdChangedHandler(UMD umd, int oldValue, int newValue)
-            {
-                if (umd != this.umd)
-                    return;
-                updateUmdSettings();
-            }
-
-            private void umdNameChangedHandler(UMD umd, string oldName, string newName)
-            {
-                if (umd != this.umd)
-                    return;
-                updateUmdSettings();
-            }
-
-            private void umdTallyChangedHandler(UMD umd, int index, bool oldState, bool newState)
-            {
-                if (umd != this.umd)
-                    return;
-                if (index >= MAX_TALLIES)
-                    return;
-                updateTally(index);
-            }
-
-            private void umdCurrentTextChangedHandler(UMD umd, string oldText, string newText)
-            {
-                if (umd != this.umd)
-                    return;
-                updateCurrentText();
-            }
-
-            private void umdStaticTextChangedHandler(UMD umd, string oldText, string newText)
-            {
-                if (umd != this.umd)
-                    return;
-                updateStaticText();
-            }
-
-            private void umdUseStaticTextChangedHandler(UMD umd, bool oldState, bool newState)
-            {
-                if (umd != this.umd)
-                    return;
-                updateUseStaticText();
-            }
-
-        }
-
-        private void umdListTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (sender != umdListTable)
+            builder = GetColumnDescriptorBuilderForTable();
+            builder.Type(DataGridViewColumnType.Button);
+            builder.Header("Edit");
+            builder.Width(70);
+            builder.ButtonText("Edit");
+            builder.CellContentClickHandlerMethod((umd, cell, e) => {
+                var editWindow = new UmdEditWindow(umd);
+                editWindow.ShowAsChild();
                 return;
-            UmdListTableRow rowObject = umdListTable.Rows[e.RowIndex] as UmdListTableRow;
-            if (rowObject != null)
-                rowObject.HandleCellClick(sender, e);
-        }
+            });
+            builder.BuildAndAdd();
 
-        private void umdListTable_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            if (sender != umdListTable)
-                return;
-            UmdListTableRow rowObject = umdListTable.Rows[e.RowIndex] as UmdListTableRow;
-            if (rowObject != null)
-                rowObject.HandleCellEndEdit(sender, e);
+            builder = GetColumnDescriptorBuilderForTable();
+            builder.Type(DataGridViewColumnType.Button);
+            builder.Header("Delete");
+            builder.Width(70);
+            builder.ButtonText("Delete");
+            builder.CellContentClickHandlerMethod((umd, cell, e) => {
+                string msgBoxText = string.Format("Do you really want to delete this UMD?\n(#{0}) {1}", umd.ID, umd.Name);
+                var confirm = MessageBox.Show(msgBoxText, "Delete confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (confirm == DialogResult.Yes)
+                    UmdDatabase.Instance.Remove(umd);
+            });
+            builder.BuildAndAdd();
+
+            table.BoundDatabase = UmdDatabase.Instance;
+
         }
 
     }

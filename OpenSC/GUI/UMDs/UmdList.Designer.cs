@@ -105,8 +105,6 @@
             this.umdListTable.RowTemplate.Height = 24;
             this.umdListTable.Size = new System.Drawing.Size(1232, 397);
             this.umdListTable.TabIndex = 2;
-            this.umdListTable.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.umdListTable_CellContentClick);
-            this.umdListTable.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.umdListTable_CellEndEdit);
             // 
             // umdIdColumn
             // 
@@ -220,8 +218,6 @@
             this.ClientSize = new System.Drawing.Size(1232, 553);
             this.Name = "UmdList";
             this.Text = "List of UMDs";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.UmdList_FormClosed);
-            this.Load += new System.EventHandler(this.UmdList_Load);
             this.mainContainer.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.umdListTable)).EndInit();
