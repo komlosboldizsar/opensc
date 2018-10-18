@@ -34,8 +34,6 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             createCells();
         }
 
-        private delegate void CellUpdaterDelegate();
-
         private void createCells()
         {
             foreach (CustomDataGridViewColumnDescriptor<T> columnDescriptor in table.ColumnDescriptors)
@@ -51,28 +49,29 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             DataGridViewCell cell = getCellByType(columnDescriptor.Type);
             columnDescriptor.InitializerMethod?.Invoke(item, cell);
             columnDescriptor.UpdaterMethod?.Invoke(item, cell);
-            Cells.Add(cell);
 
-            if(columnDescriptor.Type == DataGridViewColumnType.CheckBox)
+            if (columnDescriptor.Type == DataGridViewColumnType.CheckBox)
             {
                 DataGridViewCheckBoxCell typedCell = (DataGridViewCheckBoxCell)cell;
                 typedCell.FalseValue = false;
                 typedCell.TrueValue = true;
             }
 
-            if(columnDescriptor.Type == DataGridViewColumnType.ImageButton)
+            if (columnDescriptor.Type == DataGridViewColumnType.ImageButton)
             {
                 DataGridViewImageButtonCell typedCell = (DataGridViewImageButtonCell)cell;
                 typedCell.Image = columnDescriptor.ButtonImage;
                 typedCell.ImagePadding = columnDescriptor.ButtonImagePadding;
             }
-            
-            if((columnDescriptor.Type == DataGridViewColumnType.Button) || (columnDescriptor.Type == DataGridViewColumnType.DisableButton))
+
+            if ((columnDescriptor.Type == DataGridViewColumnType.Button) || (columnDescriptor.Type == DataGridViewColumnType.DisableButton))
             {
                 cell.Value = columnDescriptor.ButtonText;
             }
 
-            if(columnDescriptor.Type == DataGridViewColumnType.TextBox)
+            Cells.Add(cell);
+
+                        if (columnDescriptor.Type == DataGridViewColumnType.TextBox)
             {
                 cell.ReadOnly = !columnDescriptor.TextEditable;
             }
@@ -83,9 +82,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private void subscribeEventsForCell(DataGridViewCell cell, CustomDataGridViewColumnDescriptor<T> columnDescriptor)
         {
-            CellUpdaterDelegate cellUpdaterDelegate = new CellUpdaterDelegate(() => updateCell(cell.ColumnIndex));
-            foreach (string eventName in columnDescriptor.ChangeEvents)
-            {
+            ParameterlessChangeNotifierDelegate cellUpdaterDelegate = new ParameterlessChangeNotifierDelegate(() => updateCell(cell.ColumnIndex));
+            foreach (string eventName in columnDescriptor.ChangeEvents) {
                 try
                 {
                     getEventInfoByName(eventName)?.AddEventHandler(item, cellUpdaterDelegate);

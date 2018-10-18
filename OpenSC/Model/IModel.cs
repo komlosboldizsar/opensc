@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model
 {
+    public delegate void ParameterlessChangeNotifierDelegate();
     public interface IModel
     {
         int ID { get; set; }
