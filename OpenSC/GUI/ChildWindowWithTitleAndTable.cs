@@ -21,6 +21,29 @@ namespace OpenSC.GUI
 
         protected const int DEFAULT_DIVIDER_WIDTH = 3;
 
+        protected readonly Padding DEFAULT_IMAGE_BUTTON_PADDING = new Padding(2);
+
+        protected DataGridViewCellStyle BOLD_TEXT_CELL_STYLE
+        {
+            get
+            {
+                DataGridViewCellStyle boldTextCellStyle = table.DefaultCellStyle.Clone();
+                Font defaultCellFont = table.DefaultCellStyle.Font;
+                var boldFont = new Font(defaultCellFont, FontStyle.Bold);
+                boldTextCellStyle.Font = new Font(defaultCellFont, FontStyle.Bold);
+                return boldTextCellStyle;
+            }
+        }
+
+        protected DataGridViewCellStyle TWO_PIXELS_PADDING_CELL_STYLE {
+            get
+            {
+                DataGridViewCellStyle twoPixelsPaddingCellStyle = table.DefaultCellStyle.Clone();
+                twoPixelsPaddingCellStyle.Padding = new Padding(2);
+                return twoPixelsPaddingCellStyle;
+            }
+        }
+
         protected static CustomDataGridViewColumnDescriptorBuilder<T> GetColumnDescriptorBuilder()
         {
             return new CustomDataGridViewColumnDescriptorBuilder<T>();

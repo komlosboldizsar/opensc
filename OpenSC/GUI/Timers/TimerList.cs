@@ -25,17 +25,6 @@ namespace OpenSC.GUI.Timers
 
             CustomDataGridViewColumnDescriptorBuilder<Timer> builder;
 
-            // Custom cell styles
-            DataGridViewCellStyle boldTextCellStyle = table.DefaultCellStyle.Clone();
-            Font defaultCellFont = table.DefaultCellStyle.Font;
-            var boldFont = new Font(defaultCellFont, FontStyle.Bold);
-            boldTextCellStyle.Font = new Font(defaultCellFont, FontStyle.Bold);
-
-            DataGridViewCellStyle twoPixelsPaddingCellStyle = table.DefaultCellStyle.Clone();
-            twoPixelsPaddingCellStyle.Padding = new Padding(2);
-
-            Padding BUTTON_IMAGE_PADDING = new Padding(2);
-
             // Column: ID
             builder = GetColumnDescriptorBuilderForTable();
             builder.Type(DataGridViewColumnType.TextBox);
@@ -50,7 +39,7 @@ namespace OpenSC.GUI.Timers
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Title");
             builder.Width(200);
-            builder.CellStyle(boldTextCellStyle);
+            builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((timer, cell) => { cell.Value = timer.Title; });
             builder.AddChangeEvent(nameof(Timer.TitleChangedPCN));
             builder.BuildAndAdd();
@@ -60,7 +49,7 @@ namespace OpenSC.GUI.Timers
             builder.Type(DataGridViewColumnType.Image);
             builder.Header("");
             builder.Width(50);
-            builder.CellStyle(twoPixelsPaddingCellStyle);
+            builder.CellStyle(TWO_PIXELS_PADDING_CELL_STYLE);
             builder.UpdaterMethod((timer, cell) => { cell.Value = convertModeToImage(timer.Mode); });
             builder.AddChangeEvent(nameof(Timer.ModeChangedPCN));
             builder.BuildAndAdd();
@@ -80,7 +69,7 @@ namespace OpenSC.GUI.Timers
             builder.Type(DataGridViewColumnType.Image);
             builder.Header("");
             builder.Width(50);
-            builder.CellStyle(twoPixelsPaddingCellStyle);
+            builder.CellStyle(TWO_PIXELS_PADDING_CELL_STYLE);
             builder.UpdaterMethod((timer, cell) => {
                 if (timer.Mode == TimerMode.Clock)
                     cell.Value = STATE_IMAGE_NOTSHOWN;
@@ -95,7 +84,7 @@ namespace OpenSC.GUI.Timers
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Current value");
             builder.Width(200);
-            builder.CellStyle(boldTextCellStyle);
+            builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((timer, cell) => { cell.Value = timer.TimeSpan.ToString(@"hh\:mm\:ss"); });
             builder.AddChangeEvent(nameof(Timer.SecondsChangedPCN));
             builder.BuildAndAdd();
@@ -145,7 +134,7 @@ namespace OpenSC.GUI.Timers
             builder.Header("");
             builder.Width(70);
             builder.ButtonImage(BUTTON_IMAGE_START);
-            builder.ButtonImagePadding(BUTTON_IMAGE_PADDING);
+            builder.ButtonImagePadding(DEFAULT_IMAGE_BUTTON_PADDING);
             builder.UpdaterMethod((timer, cell) => { ((DataGridViewDisableButtonCell)cell).Enabled = timer.CanStart; });
             builder.CellContentClickHandlerMethod((timer, cell, e) => { timer.Start(); });
             builder.AddChangeEvent(nameof(Timer.ModeChangedPCN));
@@ -158,7 +147,7 @@ namespace OpenSC.GUI.Timers
             builder.Header("");
             builder.Width(70);
             builder.ButtonImage(BUTTON_IMAGE_STOP);
-            builder.ButtonImagePadding(BUTTON_IMAGE_PADDING);
+            builder.ButtonImagePadding(DEFAULT_IMAGE_BUTTON_PADDING);
             builder.UpdaterMethod((timer, cell) => { ((DataGridViewDisableButtonCell)cell).Enabled = timer.CanStop; });
             builder.CellContentClickHandlerMethod((timer, cell, e) => { timer.Stop(); });
             builder.AddChangeEvent(nameof(Timer.ModeChangedPCN));
@@ -172,7 +161,7 @@ namespace OpenSC.GUI.Timers
             builder.Width(70);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.ButtonImage(BUTTON_IMAGE_RESET);
-            builder.ButtonImagePadding(BUTTON_IMAGE_PADDING);
+            builder.ButtonImagePadding(DEFAULT_IMAGE_BUTTON_PADDING);
             builder.UpdaterMethod((timer, cell) => { ((DataGridViewDisableButtonCell)cell).Enabled = timer.CanReset; });
             builder.CellContentClickHandlerMethod((timer, cell, e) => { timer.Reset(); });
             builder.AddChangeEvent(nameof(Timer.ModeChangedPCN));

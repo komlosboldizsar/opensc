@@ -29,13 +29,6 @@ namespace OpenSC.GUI.UMDs
 
             CustomDataGridViewColumnDescriptorBuilder<UMD> builder;
 
-            Font defaultCellFont = table.DefaultCellStyle.Font;
-            var boldFont = new Font(defaultCellFont, FontStyle.Bold);
-            var boldTextCellStyle = new DataGridViewCellStyle()
-            {
-                Font = boldFont
-            };
-
             builder = GetColumnDescriptorBuilderForTable();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("ID");
@@ -49,7 +42,7 @@ namespace OpenSC.GUI.UMDs
             builder.Header("Name");
             builder.Width(200);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
-            builder.CellStyle(boldTextCellStyle);
+            builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.Name; });
             builder.AddChangeEvent(nameof(UMD.NameChangedPCN));
             builder.BuildAndAdd();
@@ -75,7 +68,7 @@ namespace OpenSC.GUI.UMDs
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Current text");
             builder.Width(200);
-            builder.CellStyle(boldTextCellStyle);
+            builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.CurrentText; });
             builder.AddChangeEvent(nameof(UMD.CurrentTextChangedPCN));
             builder.BuildAndAdd();
