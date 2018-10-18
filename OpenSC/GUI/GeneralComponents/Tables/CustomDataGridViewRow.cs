@@ -40,24 +40,40 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         {
             foreach (CustomDataGridViewColumnDescriptor<T> columnDescriptor in table.ColumnDescriptors)
             {
+                DataGridViewCell cell = createAndInitCell(columnDescriptor);
+                subscribeEventsForCell(cell, columnDescriptor);
+            }
+        }
 
-                // Create and initialize cell
-                DataGridViewCell cell = getCellByType(columnDescriptor.Type);
-                columnDescriptor.InitializerMethod?.Invoke(item, cell);
-                columnDescriptor.UpdaterMethod?.Invoke(item, cell);
-                Cells.Add(cell);
+        private DataGridViewCell createAndInitCell(CustomDataGridViewColumnDescriptor<T> columnDescriptor)
+        {
 
-                // Subscribe events
-                CellUpdaterDelegate cellUpdaterDelegate = new CellUpdaterDelegate(() => updateCell(cell.ColumnIndex));
-                foreach (string eventName in columnDescriptor.ChangeEvents)
+            DataGridViewCell cell = getCellByType(columnDescriptor.Type);
+            columnDescriptor.InitializerMethod?.Invoke(item, cell);
+            columnDescriptor.UpdaterMethod?.Invoke(item, cell);
+            Cells.Add(cell);
+
+            if(columnDescriptor.Type == DataGridViewColumnType.CheckBox)
+            {
+                DataGridViewCheckBoxCell typedCell = (DataGridViewCheckBoxCell)cell;
+                typedCell.FalseValue = false;
+                typedCell.TrueValue = true;
+            }
+
+            return cell;
+
+        }
+
+        private void subscribeEventsForCell(DataGridViewCell cell, CustomDataGridViewColumnDescriptor<T> columnDescriptor)
+        {
+            CellUpdaterDelegate cellUpdaterDelegate = new CellUpdaterDelegate(() => updateCell(cell.ColumnIndex));
+            foreach (string eventName in columnDescriptor.ChangeEvents)
+            {
+                try
                 {
-                    try
-                    {
-                        getEventInfoByName(eventName)?.AddEventHandler(item, cellUpdaterDelegate);
-                    }
-                    catch { }
+                    getEventInfoByName(eventName)?.AddEventHandler(item, cellUpdaterDelegate);
                 }
-
+                catch { }
             }
         }
 
