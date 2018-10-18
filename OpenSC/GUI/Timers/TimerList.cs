@@ -29,7 +29,7 @@ namespace OpenSC.GUI.Timers
             builder = GetColumnDescriptorBuilderForTable();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("ID");
-            builder.Width(50);
+            builder.Width(30);
             builder.UpdaterMethod((timer, cell) => { cell.Value = string.Format("#{0}", timer.ID); });
             builder.AddChangeEvent(nameof(Timer.IdChangedPCN));
             builder.BuildAndAdd();
@@ -38,7 +38,7 @@ namespace OpenSC.GUI.Timers
             builder = GetColumnDescriptorBuilderForTable();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Title");
-            builder.Width(200);
+            builder.Width(150);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((timer, cell) => { cell.Value = timer.Title; });
             builder.AddChangeEvent(nameof(Timer.TitleChangedPCN));
@@ -48,7 +48,7 @@ namespace OpenSC.GUI.Timers
             builder = GetColumnDescriptorBuilderForTable();
             builder.Type(DataGridViewColumnType.Image);
             builder.Header("");
-            builder.Width(50);
+            builder.Width(30);
             builder.CellStyle(TWO_PIXELS_PADDING_CELL_STYLE);
             builder.UpdaterMethod((timer, cell) => { cell.Value = convertModeToImage(timer.Mode); });
             builder.AddChangeEvent(nameof(Timer.ModeChangedPCN));
@@ -58,7 +58,7 @@ namespace OpenSC.GUI.Timers
             builder = GetColumnDescriptorBuilderForTable();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Mode");
-            builder.Width(200);
+            builder.Width(100);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((timer, cell) => { cell.Value = convertModeToLabel(timer.Mode); });
             builder.AddChangeEvent(nameof(Timer.ModeChangedPCN));
@@ -68,7 +68,7 @@ namespace OpenSC.GUI.Timers
             builder = GetColumnDescriptorBuilderForTable();
             builder.Type(DataGridViewColumnType.Image);
             builder.Header("");
-            builder.Width(50);
+            builder.Width(30);
             builder.CellStyle(TWO_PIXELS_PADDING_CELL_STYLE);
             builder.UpdaterMethod((timer, cell) => {
                 if (timer.Mode == TimerMode.Clock)
@@ -83,7 +83,7 @@ namespace OpenSC.GUI.Timers
             builder = GetColumnDescriptorBuilderForTable();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Current value");
-            builder.Width(200);
+            builder.Width(100);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((timer, cell) => { cell.Value = timer.TimeSpan.ToString(@"hh\:mm\:ss"); });
             builder.AddChangeEvent(nameof(Timer.SecondsChangedPCN));
@@ -93,7 +93,7 @@ namespace OpenSC.GUI.Timers
             builder = GetColumnDescriptorBuilderForTable();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Start value");
-            builder.Width(200);
+            builder.Width(100);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((timer, cell) => {
                 cell.Value = (timer.Mode == TimerMode.Backwards) ? TimeSpan.FromSeconds(timer.CountdownSeconds).ToString(@"hh\:mm\:ss") : "";
@@ -113,7 +113,7 @@ namespace OpenSC.GUI.Timers
             });
             builder.BuildAndAdd();
 
-            // Column: delete buton
+            // Column: delete button
             builder = GetColumnDescriptorBuilderForTable();
             builder.Type(DataGridViewColumnType.Button);
             builder.Header("Delete");
@@ -128,11 +128,11 @@ namespace OpenSC.GUI.Timers
             });
             builder.BuildAndAdd();
 
-            // Column: start buton
+            // Column: start button
             builder = GetColumnDescriptorBuilderForTable();
             builder.Type(DataGridViewColumnType.ImageButton);
             builder.Header("");
-            builder.Width(70);
+            builder.Width(40);
             builder.ButtonImage(BUTTON_IMAGE_START);
             builder.ButtonImagePadding(DEFAULT_IMAGE_BUTTON_PADDING);
             builder.UpdaterMethod((timer, cell) => { ((DataGridViewDisableButtonCell)cell).Enabled = timer.CanStart; });
@@ -141,11 +141,11 @@ namespace OpenSC.GUI.Timers
             builder.AddChangeEvent(nameof(Timer.RunningStateChangedPCN));
             builder.BuildAndAdd();
 
-            // Column: stop buton
+            // Column: stop button
             builder = GetColumnDescriptorBuilderForTable();
             builder.Type(DataGridViewColumnType.ImageButton);
             builder.Header("");
-            builder.Width(70);
+            builder.Width(40);
             builder.ButtonImage(BUTTON_IMAGE_STOP);
             builder.ButtonImagePadding(DEFAULT_IMAGE_BUTTON_PADDING);
             builder.UpdaterMethod((timer, cell) => { ((DataGridViewDisableButtonCell)cell).Enabled = timer.CanStop; });
@@ -154,11 +154,11 @@ namespace OpenSC.GUI.Timers
             builder.AddChangeEvent(nameof(Timer.RunningStateChangedPCN));
             builder.BuildAndAdd();
 
-            // Column: reset buton
+            // Column: reset button
             builder = GetColumnDescriptorBuilderForTable();
             builder.Type(DataGridViewColumnType.ImageButton);
             builder.Header("");
-            builder.Width(70);
+            builder.Width(40);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.ButtonImage(BUTTON_IMAGE_RESET);
             builder.ButtonImagePadding(DEFAULT_IMAGE_BUTTON_PADDING);
