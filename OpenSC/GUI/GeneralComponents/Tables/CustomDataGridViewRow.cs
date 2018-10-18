@@ -61,6 +61,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             {
                 DataGridViewImageCell typedCell = (DataGridViewImageCell)cell;
                 typedCell.ImageLayout = DataGridViewImageCellLayout.Zoom;
+                typedCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
             }
 
             if (columnDescriptor.Type == DataGridViewColumnType.ImageButton)
