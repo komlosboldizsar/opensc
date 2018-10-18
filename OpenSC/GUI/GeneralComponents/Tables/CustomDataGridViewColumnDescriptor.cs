@@ -18,6 +18,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         public int Width { get; private set; }
 
+        public DataGridViewCellStyle CellStyle { get; private set; }
+
         public delegate void CellInitializerMethodDelegate(T item, DataGridViewCell cell);
         public CellInitializerMethodDelegate InitializerMethod;
 
@@ -44,6 +46,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 DataGridViewColumnType type,
                 string header,
                 int width,
+                DataGridViewCellStyle cellStyle,
                 CellInitializerMethodDelegate initializerMethod,
                 CellUpdaterMethodDelegate updaterMethod,
                 CellContentClickHandlerMethodDelegate contentClickHandlerMethod,
@@ -57,6 +60,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             Type = type;
             Header = header;
             Width = width;
+            CellStyle = cellStyle;
             InitializerMethod = initializerMethod;
             UpdaterMethod = updaterMethod;
             ContentClickHandlerMethod = contentClickHandlerMethod;

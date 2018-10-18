@@ -21,6 +21,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private int width;
 
+        private DataGridViewCellStyle cellStyle;
+
         private CustomDataGridViewColumnDescriptor<T>.CellInitializerMethodDelegate initializerMethod;
 
         private CustomDataGridViewColumnDescriptor<T>.CellUpdaterMethodDelegate updaterMethod;
@@ -58,6 +60,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 type,
                 header,
                 width,
+                cellStyle,
                 initializerMethod,
                 updaterMethod,
                 contentClickHandlerMethod,
@@ -97,6 +100,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public CustomDataGridViewColumnDescriptorBuilder<T> Width(int width)
         {
             this.width = width;
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> CellStyle(DataGridViewCellStyle cellStyle)
+        {
+            this.cellStyle = cellStyle;
             return this;
         }
 
