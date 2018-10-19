@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.GUI.WorkspaceManager.ValueConverters;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -25,6 +26,7 @@ namespace OpenSC.GUI.WorkspaceManager
 
         private const string ATTRIBUTE_ATTRIBUTE_KEY = "key";
         private const string ATTRIBUTE_ATTRIBUTE_VALUE = "value";
+        private const string ATTRIBUTE_ATTRIBUTE_TYPE = "type";
 
         private static readonly XmlWriterSettings xmlWriterSettings = new XmlWriterSettings()
         {
@@ -105,7 +107,10 @@ namespace OpenSC.GUI.WorkspaceManager
             {
                 XElement attributeElement = new XElement(ATTRIBUTE_TAG);
                 attributeElement.SetAttributeValue(ATTRIBUTE_ATTRIBUTE_KEY, pair.Key);
-                attributeElement.SetAttributeValue(ATTRIBUTE_ATTRIBUTE_VALUE, pair.Value);
+                ValueConverter.SerializedData serialized = ValueConverter.Serialize(pair.Value);
+                attributeElement.SetAttributeValue(ATTRIBUTE_ATTRIBUTE_VALUE, serialized.Value);
+                if(serialized.TypeName != string.Empty)
+                    attributeElement.SetAttributeValue(ATTRIBUTE_ATTRIBUTE_TYPE, serialized.TypeName);
                 xmlElement.Add(attributeElement);
             }
 
@@ -143,8 +148,14 @@ namespace OpenSC.GUI.WorkspaceManager
                     {
                         string key = attributeNode.Attributes[ATTRIBUTE_ATTRIBUTE_KEY].Value;
                         string value = attributeNode.Attributes[ATTRIBUTE_ATTRIBUTE_VALUE].Value;
+                        string type = attributeNode.Attributes[ATTRIBUTE_ATTRIBUTE_TYPE]?.Value;
                         if (!string.IsNullOrWhiteSpace(key))
-                            keyValuePairs.Add(key, value);
+                        {
+                            object deserializedValue = value;
+                            if (!string.IsNullOrEmpty(type))
+                                deserializedValue = ValueConverter.Deserialize(value, type);
+                            keyValuePairs.Add(key, deserializedValue);
+                        }
                     }
                 }
 
