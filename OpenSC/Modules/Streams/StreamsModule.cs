@@ -28,6 +28,7 @@ namespace OpenSC.Modules.Streams
 
         public void RegisterWindowTypes()
         {
+            WindowTypeRegister.RegisterWindowType(typeof(StreamList));
         }
 
     }

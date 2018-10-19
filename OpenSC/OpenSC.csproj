@@ -84,6 +84,12 @@
     <Compile Include="GUI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Streams\StreamList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Streams\StreamList.Designer.cs">
+      <DependentUpon>StreamList.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Timers\TimerEditWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -196,6 +202,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Streams\StreamList.resx">
+      <DependentUpon>StreamList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Timers\TimerEditWindow.resx">
       <DependentUpon>TimerEditWindow.cs</DependentUpon>
@@ -321,6 +330,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\32_tile_vertically.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_stream_ended.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_stream_not_running.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_stream_not_started.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_stream_running.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_stream_unknown.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
