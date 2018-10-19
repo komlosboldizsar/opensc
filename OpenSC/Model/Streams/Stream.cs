@@ -118,7 +118,7 @@ namespace OpenSC.Model.Streams
                 int? oldCount = viewerCount;
                 ViewerCountChanging?.Invoke(this, oldCount, value);
                 ViewerCountChangingPCN?.Invoke();
-                oldCount = value;
+                viewerCount = value;
                 ViewerCountChanged?.Invoke(this, oldCount, value);
                 ViewerCountChangedPCN?.Invoke();
             }
