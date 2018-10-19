@@ -109,6 +109,12 @@
       <DependentUpon>UmdList.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\WorkspaceManager\IPersistableWindow.cs" />
+    <Compile Include="GUI\WorkspaceManager\ValueConverters\BoolConverter.cs" />
+    <Compile Include="GUI\WorkspaceManager\ValueConverters\ColorConverter.cs" />
+    <Compile Include="GUI\WorkspaceManager\ValueConverters\IntConverter.cs" />
+    <Compile Include="GUI\WorkspaceManager\ValueConverters\IValueConverter.cs" />
+    <Compile Include="GUI\WorkspaceManager\ValueConverters\ConverterTypeAttribute.cs" />
+    <Compile Include="GUI\WorkspaceManager\ValueConverters\ValueConverter.cs" />
     <Compile Include="GUI\WorkspaceManager\WindowManager.cs" />
     <Compile Include="GUI\WorkspaceManager\WindowPersister.cs" />
     <Compile Include="GUI\WorkspaceManager\WindowTypeNameAttribute.cs" />

@@ -10,7 +10,11 @@ namespace OpenSC.GUI.WorkspaceManager.ValueConverters
     {
 
         private static IValueConverter[] convertersToRegister = new IValueConverter[]
-        { };
+        {
+            new ColorConverter(),
+            new IntConverter(),
+            new BoolConverter()
+        };
 
         private static Dictionary<string, IValueConverter> registeredConvertersByName = null;
 
