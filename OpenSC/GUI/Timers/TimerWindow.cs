@@ -1,5 +1,7 @@
 ﻿using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model.Timers;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -11,10 +13,25 @@ namespace OpenSC.GUI.Timers
 
         private Model.Timers.Timer timer;
 
-        public TimerWindow(Model.Timers.Timer timer = null)
+        public TimerWindow()
         {
+            initWindow();
+        }
 
+        public TimerWindow(Model.Timers.Timer timer)
+        {
+            initWindow();
+            initTimer(timer);
+        }
+
+        private void initWindow()
+        {
             InitializeComponent();
+            blinkingTimer.Elapsed += blinkEvent;
+        }
+
+        private void initTimer(Model.Timers.Timer timer)
+        {
 
             this.timer = timer;
             timer.SecondsChanged += timerSecondsChangedHandler;
@@ -31,8 +48,6 @@ namespace OpenSC.GUI.Timers
             updateButtons();
             updateModeImages();
             updateRunningStateImage();
-
-            blinkingTimer.Elapsed += blinkEvent;
 
         }
 
@@ -248,13 +263,13 @@ namespace OpenSC.GUI.Timers
                 return;
 
             Color color = (Color)(new ColorConverter()).ConvertFromString(colorCode);
-            timeLabel.ForeColor = color;
+            TimeLabelColor = color;
         }
 
         private void buttonsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             buttonsContextItem.Checked = !buttonsContextItem.Checked;
-            buttonsPanel.Visible = buttonsContextItem.Checked;
+            ButtonsVisible = buttonsContextItem.Checked;
         }
 
         private void showAllSegmentsContextItem_Click(object sender, EventArgs e)
@@ -281,7 +296,69 @@ namespace OpenSC.GUI.Timers
         private void blinkWhenExpiredContextItem_Click(object sender, EventArgs e)
         {
             blinkWhenExpiredContextItem.Checked = !blinkWhenExpiredContextItem.Checked;
-            blinkingEnabled = blinkWhenExpiredContextItem.Checked;
+            BlinkingEnabled = blinkWhenExpiredContextItem.Checked;
         }
+
+        #region Persistable attributes
+        private bool ButtonsVisible
+        {
+            get { return buttonsPanel.Visible; }
+            set
+            {
+                buttonsPanel.Visible = value;
+                RequestRepersist();
+            }
+        }
+
+        private Color TimeLabelColor
+        {
+            get { return timeLabel.ForeColor; }
+            set
+            {
+                timeLabel.ForeColor = value;
+                RequestRepersist();
+            }
+        }
+
+        private bool BlinkingEnabled
+        {
+            get { return blinkingEnabled; }
+            set
+            {
+                blinkingEnabled = value;
+                RequestRepersist();
+            }
+        }
+        #endregion
+
+        #region Persistence
+        private const string PERSISTENCE_KEY_TIMER_ID = "timer_id";
+        private const string PERSISTENCE_KEY_BLINKING_ENABLED = "blinking_enabled";
+        private const string PERSISTENCE_KEY_TIME_LABEL_COLOR = "time_label_color";
+        private const string PERSISTENCE_KEY_BUTTONS_VISIBLE = "buttons_visible";
+
+        protected override void restoreBeforeOpen(Dictionary<string, object> keyValuePairs)
+        {
+
+            base.restoreBeforeOpen(keyValuePairs);
+
+            initTimer(TimerDatabase.Instance.GetTById((int)keyValuePairs[PERSISTENCE_KEY_TIMER_ID]));
+            ButtonsVisible = (bool)keyValuePairs[PERSISTENCE_KEY_BUTTONS_VISIBLE];
+            TimeLabelColor = (Color)keyValuePairs[PERSISTENCE_KEY_TIME_LABEL_COLOR];
+            BlinkingEnabled = (bool)keyValuePairs[PERSISTENCE_KEY_BLINKING_ENABLED];
+
+        }
+
+        public override Dictionary<string, object> GetKeyValuePairs()
+        {
+            var dict = base.GetKeyValuePairs();
+            dict.Add(PERSISTENCE_KEY_TIMER_ID, timer?.ID);
+            dict.Add(PERSISTENCE_KEY_BLINKING_ENABLED, BlinkingEnabled);
+            dict.Add(PERSISTENCE_KEY_TIME_LABEL_COLOR, TimeLabelColor);
+            dict.Add(PERSISTENCE_KEY_BUTTONS_VISIBLE, ButtonsVisible);
+            return dict;
+        }
+        #endregion
+
     }
 }
