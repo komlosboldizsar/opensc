@@ -43,11 +43,15 @@ namespace OpenSC.GUI
         private Point? restoredPosition = null;
         private Size? restoredSize = null;
 
+        bool restoring = false;
+
         public void RestoreData(Point position, Size size, Dictionary<string, object> keyValuePairs)
         {
+            restoring = true;
             restoredPosition = position;
             restoredSize = size;
             restoreBeforeOpen(keyValuePairs);
+            restoring = false;
         }
 
         public void RestoreWindow()
@@ -73,6 +77,12 @@ namespace OpenSC.GUI
 
         protected virtual void restoreBeforeOpen(Dictionary<string, object> keyValuePairs)
         { }
+
+        protected void RequestRepersist()
+        {
+            if(!restoring)
+                WindowManager.Instance.ChildWindowRequestsRepersist();
+        }
         #endregion
 
     }

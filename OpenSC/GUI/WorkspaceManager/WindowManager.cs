@@ -80,6 +80,11 @@ namespace OpenSC.GUI.WorkspaceManager
 
         }
 
+        public void ChildWindowRequestsRepersist()
+        {
+            persistWindows();
+        }
+
         private void persistWindows()
         {
             if(!restoringPersistedWindows)
