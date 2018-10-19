@@ -1,4 +1,6 @@
-﻿using System;
+﻿using OpenSC.Model;
+using OpenSC.Model.Streams;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +21,7 @@ namespace OpenSC.Modules.Streams
 
         public void RegisterDatabases()
         {
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(StreamDatabase));
         }
 
         public void RegisterWindowTypes()

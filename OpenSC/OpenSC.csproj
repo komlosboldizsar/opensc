@@ -132,6 +132,10 @@
     <Compile Include="Model\Persistence\TempForeignKeyAttribute.cs" />
     <Compile Include="Model\Persistence\ITypeNameConverter.cs" />
     <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
+    <Compile Include="Model\Streams\Stream.cs" />
+    <Compile Include="Model\Streams\StreamDatabase.cs" />
+    <Compile Include="Model\Streams\StreamState.cs" />
+    <Compile Include="Model\Streams\StreamTypeNameConverter.cs" />
     <Compile Include="Model\Timers\TimerDatabase.cs" />
     <Compile Include="Model\UMDs\Datagram.cs" />
     <Compile Include="Model\UMDs\McCurdy\ColumnCount.cs" />
