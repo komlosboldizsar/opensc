@@ -19,10 +19,8 @@ namespace OpenSC.Model.Streams
     public abstract class Stream: IModel
     {
 
-        public void Restored()
-        {
-            throw new NotImplementedException();
-        }
+        public virtual void Restored()
+        { }
 
         public event StreamIdChangingDelegate IdChanging;
         public event StreamIdChangedDelegate IdChanged;
