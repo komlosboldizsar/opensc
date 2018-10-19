@@ -36,7 +36,9 @@ namespace OpenSC.Model.UMDs
 
         private void createAndStartPacketSchedulerThread()
         {
-            packetSchedulerThread = new Thread(packetSchedulerThreadMethod);
+            packetSchedulerThread = new Thread(packetSchedulerThreadMethod) {
+                IsBackground = true
+            };
             packetSchedulerThread.Start();
         }
 
