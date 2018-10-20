@@ -191,21 +191,17 @@ namespace OpenSC.GUI.Timers
 
         }
 
-        private static readonly EnumToStringConverter<TimerMode> modeLabelConverter = new EnumToStringConverter<TimerMode>(
-            new Dictionary<TimerMode, string>() {
-                { TimerMode.Forwards, "stopper" },
-                { TimerMode.Backwards, "countdown" },
-                { TimerMode.Clock, "clock" },
-            }
-        );
+        private static readonly EnumToStringConverter<TimerMode> modeLabelConverter = new EnumToStringConverter<TimerMode>() {
+            { TimerMode.Forwards, "stopper" },
+            { TimerMode.Backwards, "countdown" },
+            { TimerMode.Clock, "clock" },
+        };
 
-        private static readonly EnumToBitmapConverter<TimerMode> modeImageConverter = new EnumToBitmapConverter<TimerMode>(
-            new Dictionary<TimerMode, Bitmap>() {
-                { TimerMode.Forwards, Properties.Resources._16_timer_forward },
-                { TimerMode.Backwards, Properties.Resources._16_timer_backward },
-                { TimerMode.Clock, Properties.Resources._16_timer_clock },
-            }
-        );
+        private static readonly EnumToBitmapConverter<TimerMode> modeImageConverter = new EnumToBitmapConverter<TimerMode>() {
+            { TimerMode.Forwards, Properties.Resources._16_timer_forward },
+            { TimerMode.Backwards, Properties.Resources._16_timer_backward },
+            { TimerMode.Clock, Properties.Resources._16_timer_clock },
+        };
 
         private static readonly Bitmap BUTTON_IMAGE_START = Properties.Resources._16_timer_running;
         private static readonly Bitmap BUTTON_IMAGE_STOP = Properties.Resources._16_timer_stopped;

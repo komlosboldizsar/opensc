@@ -115,25 +115,21 @@ namespace OpenSC.GUI.Streams
 
         }
 
-        private static readonly EnumToStringConverter<StreamState> stateLabelConverter = new EnumToStringConverter<StreamState>(
-            new Dictionary<StreamState, string>() {
-                { StreamState.Unknown, "unknown" },
-                { StreamState.NotRunning, "not running" },
-                { StreamState.NotStarted, "not started" },
-                { StreamState.Running, "running" },
-                { StreamState.Ended, "ended" },
-            }
-        );
+        private static readonly EnumToStringConverter<StreamState> stateLabelConverter = new EnumToStringConverter<StreamState>() {
+            { StreamState.Unknown, "unknown" },
+            { StreamState.NotRunning, "not running" },
+            { StreamState.NotStarted, "not started" },
+            { StreamState.Running, "running" },
+            { StreamState.Ended, "ended" },
+        };
 
-        private static readonly EnumToBitmapConverter<StreamState> stateImageConverter = new EnumToBitmapConverter<StreamState>(
-            new Dictionary<StreamState, Bitmap>() {
-                { StreamState.Unknown, Properties.Resources._16_stream_unknown },
-                { StreamState.NotRunning, Properties.Resources._16_stream_not_running },
-                { StreamState.NotStarted, Properties.Resources._16_stream_not_started },
-                { StreamState.Running, Properties.Resources._16_stream_running },
-                { StreamState.Ended, Properties.Resources._16_stream_ended },
-            }
-        );
+        private static readonly EnumToBitmapConverter<StreamState> stateImageConverter = new EnumToBitmapConverter<StreamState>() {
+            { StreamState.Unknown, Properties.Resources._16_stream_unknown },
+            { StreamState.NotRunning, Properties.Resources._16_stream_not_running },
+            { StreamState.NotStarted, Properties.Resources._16_stream_not_started },
+            { StreamState.Running, Properties.Resources._16_stream_running },
+            { StreamState.Ended, Properties.Resources._16_stream_ended },
+        };
 
     }
 
