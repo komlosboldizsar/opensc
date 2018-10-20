@@ -1,5 +1,6 @@
 ﻿using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
+using OpenSC.Model.Settings;
 using OpenSC.Modules;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,11 @@ namespace OpenSC
 
             InitDatabases();
             InitWorkspaceManager();
+
+            // TODO: init somewhere else :)
             ModuleManager.RegisterMenus();
+            ModuleManager.RegisterSettings();
+            SettingsManager.Instance.LoadSettings();
 
             Application.Run(GUI.MainForm.Instance);
 

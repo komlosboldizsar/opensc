@@ -13,5 +13,6 @@ namespace OpenSC.Modules
         void RegisterDatabases();
         void RegisterWindowTypes();
         void RegisterMenus();
+        void RegisterSettings();
     }
 }

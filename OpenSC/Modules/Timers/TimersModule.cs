@@ -39,5 +39,11 @@ namespace OpenSC.Modules.Timers
             var timersMenu = MenuManager.Instance.TopMenu["Timers"]["Timer list"];
             timersMenu.ClickHandler = (menu, tag) => new TimerList().ShowAsChild();
         }
+
+        public void RegisterSettings()
+        {
+
+        }
+
     }
 }

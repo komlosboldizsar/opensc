@@ -50,6 +50,12 @@ namespace OpenSC.Modules
                 module.RegisterMenus();
         }
 
+        public static void RegisterSettings()
+        {
+            foreach (IModule module in registeredModules)
+                module.RegisterSettings();
+        }
+
         #region Event handlers
         private static void programStartedHandler()
         {

@@ -36,5 +36,11 @@ namespace OpenSC.Modules.VTRs
             var vtrsMenu = MenuManager.Instance.TopMenu["VTR"]["VTR list"];
             vtrsMenu.ClickHandler = (menu, tag) => new VtrList().ShowAsChild();
         }
+
+        public void RegisterSettings()
+        {
+
+        }
+
     }
 }

@@ -38,5 +38,11 @@ namespace OpenSC.Modules.UMDs
             var umdsMenu = MenuManager.Instance.TopMenu["UMD"]["UMD list"];
             umdsMenu.ClickHandler = (menu, tag) => new UmdList().ShowAsChild();
         }
+
+        public void RegisterSettings()
+        {
+
+        }
+
     }
 }

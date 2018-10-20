@@ -31,5 +31,11 @@ namespace OpenSC.Modules.Routers
         {
 
         }
+
+        public void RegisterSettings()
+        {
+
+        }
+
     }
 }

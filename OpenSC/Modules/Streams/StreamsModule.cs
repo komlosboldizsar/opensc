@@ -2,6 +2,7 @@
 using OpenSC.GUI.Streams;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
+using OpenSC.Model.Settings;
 using OpenSC.Model.Streams;
 using System;
 using System.Collections.Generic;
@@ -37,5 +38,11 @@ namespace OpenSC.Modules.Streams
             var streamsMenu = MenuManager.Instance.TopMenu["Streams"]["Stream list"];
             streamsMenu.ClickHandler = (menu, tag) => new StreamList().ShowAsChild();
         }
+
+        public void RegisterSettings()
+        {
+            SettingsManager.Instance.RegisterSetting(YoutubeStream.ApiKeySetting);
+        }
+
     }
 }
