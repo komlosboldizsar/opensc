@@ -119,7 +119,7 @@ namespace OpenSC.Model.VTRs
         public event ParameterlessChangeNotifierDelegate StateChangingPCN;
         public event ParameterlessChangeNotifierDelegate StateChangedPCN;
 
-        private VtrState state;
+        private VtrState state = VtrState.Stopped;
 
         public VtrState State
         {
