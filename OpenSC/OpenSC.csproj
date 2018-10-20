@@ -123,6 +123,12 @@
     <Compile Include="GUI\Settings\SettingsWindow.Designer.cs">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Settings\StringSettingEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Settings\StringSettingEditor.Designer.cs">
+      <DependentUpon>StringSettingEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Streams\StreamList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -268,6 +274,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Settings\SettingsWindow.resx">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Settings\StringSettingEditor.resx">
+      <DependentUpon>StringSettingEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Streams\StreamList.resx">
       <DependentUpon>StreamList.cs</DependentUpon>
@@ -436,6 +445,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\16_vtr_recording.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_tick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_reset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_tick1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_reset1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_tick2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

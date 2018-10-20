@@ -81,7 +81,7 @@ namespace OpenSC.Model.Streams
 
         private void doHttpRequest()
         {
-            string url = string.Format(API_URL, videoId, ApiKeySetting.Value);
+            /*string url = string.Format(API_URL, videoId, ApiKeySetting.Value);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.ContentType = "application/json; charset=utf-8";
             HttpWebResponse response = request.GetResponse() as HttpWebResponse;
@@ -89,7 +89,7 @@ namespace OpenSC.Model.Streams
             {
                 StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
                 processResponse(reader.ReadToEnd());
-            }
+            }*/
         }
 
         private void processResponse(string responseBody)

@@ -63,6 +63,16 @@ namespace OpenSC.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _16_reset {
+            get {
+                object obj = ResourceManager.GetObject("_16_reset", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap _16_stream_ended {
             get {
                 object obj = ResourceManager.GetObject("_16_stream_ended", resourceCulture);
@@ -106,6 +116,16 @@ namespace OpenSC.Properties {
         internal static System.Drawing.Bitmap _16_stream_unknown {
             get {
                 object obj = ResourceManager.GetObject("_16_stream_unknown", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _16_tick {
+            get {
+                object obj = ResourceManager.GetObject("_16_tick", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
