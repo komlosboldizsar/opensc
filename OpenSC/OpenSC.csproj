@@ -146,6 +146,7 @@
     <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
     <Compile Include="Model\VTRs\Vtr.cs" />
     <Compile Include="Model\VTRs\VtrDatabase.cs" />
+    <Compile Include="Model\VTRs\VtrState.cs" />
     <Compile Include="Model\VTRs\VtrTypeNameConverter.cs" />
     <Compile Include="Model\Streams\Stream.cs" />
     <Compile Include="Model\Streams\StreamDatabase.cs" />
