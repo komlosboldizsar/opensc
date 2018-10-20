@@ -35,6 +35,7 @@ namespace OpenSC.GUI
         {
             WindowManager.Instance.ChildWindowOpened += childWindowOpenedHandler;
             WindowManager.Instance.ChildWindowClosed += childWindowClosedHandler;
+            menuStrip.DynamicChildrenInsertPosition = 1;
             menuStrip.AssociatedMenuItem = MenuManager.Instance.TopMenu;
         }
 

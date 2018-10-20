@@ -27,6 +27,19 @@ namespace OpenSC.GUI.GeneralComponents.Menus
             }
         }
 
+        private int dynamicChildrenInsertPosition;
+
+        public int DynamicChildrenInsertPosition
+        {
+            get { return dynamicChildrenInsertPosition; }
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException();
+                dynamicChildrenInsertPosition = value;
+            }
+        }
+
         public CustomMenuStrip()
         {
             subscribeModelEvents();
@@ -61,13 +74,17 @@ namespace OpenSC.GUI.GeneralComponents.Menus
             for (int i = Items.Count - 1; i >= 0; i--)
                 if (Items[i] is CustomToolStripMenuItem)
                     Items.RemoveAt(i);
+            dynamicChildren = 0;
         }
+
+        int dynamicChildren = 0;
 
         private void addChild(MenuItem associatedMenuItem)
         {
             // UNSAFE: separators?
             System.Windows.Forms.ToolStripItem myChild = new CustomToolStripMenuItem(associatedMenuItem);
-            Items.Add(myChild);
+            Items.Insert(dynamicChildrenInsertPosition + dynamicChildren, myChild);
+            dynamicChildren++;
         }
 
         private void removeChild(MenuItem associatedMenuItem)
