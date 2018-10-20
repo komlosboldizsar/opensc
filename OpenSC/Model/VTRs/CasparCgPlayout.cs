@@ -129,7 +129,7 @@ namespace OpenSC.Model.VTRs
         {
             stoppedStateDetectorThread = new Thread(stoppedStateDetectorThreadMethod)
             {
-                IsBackground = false
+                IsBackground = true
             };
             stoppedStateDetectorThread.Start();
         }
