@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.Settings;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,7 +16,11 @@ namespace OpenSC.Model.Streams
     class YoutubeStream: Stream
     {
 
-        private const string API_KEY = "AIzaSyBVmiM8BPfbxGhupr-kWSIKNZ1PkOmgK2M";
+        public static readonly Setting<string> ApiKeySetting = new Setting<string>(
+            "streams.youtubestream.apikey",
+            "YouTube API key",
+            "Get this from Google Developer Console!"
+        );
 
         private const string API_URL = "https://www.googleapis.com/youtube/v3/videos?id={0}&part=liveStreamingDetails&key={1}";
 
@@ -75,7 +80,7 @@ namespace OpenSC.Model.Streams
 
         private void doHttpRequest()
         {
-            string url = string.Format(API_URL, videoId, API_KEY);
+            string url = string.Format(API_URL, videoId, ApiKeySetting.Value);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.ContentType = "application/json; charset=utf-8";
             HttpWebResponse response = request.GetResponse() as HttpWebResponse;
