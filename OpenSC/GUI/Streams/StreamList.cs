@@ -1,11 +1,13 @@
 ﻿using OpenSC.GUI.GeneralComponents;
 using OpenSC.GUI.GeneralComponents.Tables;
+using OpenSC.GUI.Helpers.Converters;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.Streams;
 using OpenSC.Model.Timers;
 using OpenSC.Model.UMDs;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -58,7 +60,7 @@ namespace OpenSC.GUI.Streams
             builder.Header("");
             builder.Width(30);
             builder.CellStyle(TWO_PIXELS_PADDING_CELL_STYLE);
-            builder.UpdaterMethod((stream, cell) => { cell.Value = convertModeToImage(stream.State); });
+            builder.UpdaterMethod((stream, cell) => { cell.Value = stateImageConverter.Convert(stream.State); });
             builder.AddChangeEvent(nameof(Stream.StateChangedPCN));
             builder.BuildAndAdd();
 
@@ -68,7 +70,7 @@ namespace OpenSC.GUI.Streams
             builder.Header("State");
             builder.Width(100);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
-            builder.UpdaterMethod((stream, cell) => { cell.Value = convertModeToLabel(stream.State); });
+            builder.UpdaterMethod((stream, cell) => { cell.Value = stateLabelConverter.Convert(stream.State); });
             builder.AddChangeEvent(nameof(Stream.StateChangedPCN));
             builder.BuildAndAdd();
 
@@ -113,53 +115,25 @@ namespace OpenSC.GUI.Streams
 
         }
 
-        private static readonly string STATE_LABEL_UNKNOWN = "unknown";
-        private static readonly string STATE_LABEL_NOT_RUNNING = "not running";
-        private static readonly string STATE_LABEL_NOT_STARTED = "not started";
-        private static readonly string STATE_LABEL_RUNNING = "running";
-        private static readonly string STATE_LABEL_ENDED = "ended";
-
-        private string convertModeToLabel(StreamState state)
-        {
-            switch (state)
-            {
-                case StreamState.Unknown:
-                    return STATE_LABEL_UNKNOWN;
-                case StreamState.NotRunning:
-                    return STATE_LABEL_NOT_RUNNING;
-                case StreamState.NotStarted:
-                    return STATE_LABEL_NOT_STARTED;
-                case StreamState.Running:
-                    return STATE_LABEL_RUNNING;
-                case StreamState.Ended:
-                    return STATE_LABEL_ENDED;
+        private static readonly EnumToStringConverter<StreamState> stateLabelConverter = new EnumToStringConverter<StreamState>(
+            new Dictionary<StreamState, string>() {
+                { StreamState.Unknown, "unknown" },
+                { StreamState.NotRunning, "not running" },
+                { StreamState.NotStarted, "not started" },
+                { StreamState.Running, "running" },
+                { StreamState.Ended, "ended" },
             }
-            return string.Empty;
-        }
+        );
 
-        private static readonly Bitmap STATE_IMAGE_UNKNOWN = Properties.Resources._16_stream_unknown;
-        private static readonly Bitmap STATE_IMAGE_NOT_RUNNING = Properties.Resources._16_stream_not_running;
-        private static readonly Bitmap STATE_IMAGE_NOT_STARTED = Properties.Resources._16_stream_not_started;
-        private static readonly Bitmap STATE_IMAGE_RUNNING = Properties.Resources._16_stream_running;
-        private static readonly Bitmap STATE_IMAGE_ENDED = Properties.Resources._16_stream_ended;
-
-        private Bitmap convertModeToImage(StreamState state)
-        {
-            switch (state)
-            {
-                case StreamState.Unknown:
-                    return STATE_IMAGE_UNKNOWN;
-                case StreamState.NotRunning:
-                    return STATE_IMAGE_NOT_RUNNING;
-                case StreamState.NotStarted:
-                    return STATE_IMAGE_NOT_STARTED;
-                case StreamState.Running:
-                    return STATE_IMAGE_RUNNING;
-                case StreamState.Ended:
-                    return STATE_IMAGE_ENDED;
+        private static readonly EnumToBitmapConverter<StreamState> stateImageConverter = new EnumToBitmapConverter<StreamState>(
+            new Dictionary<StreamState, Bitmap>() {
+                { StreamState.Unknown, Properties.Resources._16_stream_unknown },
+                { StreamState.NotRunning, Properties.Resources._16_stream_not_running },
+                { StreamState.NotStarted, Properties.Resources._16_stream_not_started },
+                { StreamState.Running, Properties.Resources._16_stream_running },
+                { StreamState.Ended, Properties.Resources._16_stream_ended },
             }
-            return null;
-        }
+        );
 
     }
 

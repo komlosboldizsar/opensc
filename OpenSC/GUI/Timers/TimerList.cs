@@ -1,9 +1,11 @@
 ﻿using OpenSC.GUI.GeneralComponents;
 using OpenSC.GUI.GeneralComponents.Tables;
+using OpenSC.GUI.Helpers.Converters;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.Timers;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Timer = OpenSC.Model.Timers.Timer;
@@ -54,7 +56,7 @@ namespace OpenSC.GUI.Timers
             builder.Header("");
             builder.Width(30);
             builder.CellStyle(TWO_PIXELS_PADDING_CELL_STYLE);
-            builder.UpdaterMethod((timer, cell) => { cell.Value = convertModeToImage(timer.Mode); });
+            builder.UpdaterMethod((timer, cell) => { cell.Value = modeImageConverter.Convert(timer.Mode); });
             builder.AddChangeEvent(nameof(Timer.ModeChangedPCN));
             builder.BuildAndAdd();
 
@@ -64,7 +66,7 @@ namespace OpenSC.GUI.Timers
             builder.Header("Mode");
             builder.Width(100);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
-            builder.UpdaterMethod((timer, cell) => { cell.Value = convertModeToLabel(timer.Mode); });
+            builder.UpdaterMethod((timer, cell) => { cell.Value = modeLabelConverter.Convert(timer.Mode); });
             builder.AddChangeEvent(nameof(Timer.ModeChangedPCN));
             builder.BuildAndAdd();
 
@@ -189,41 +191,21 @@ namespace OpenSC.GUI.Timers
 
         }
 
-        private static readonly string MODE_LABEL_FORWARDS = "stopper";
-        private static readonly string MODE_LABEL_BACKWARDS = "countdown";
-        private static readonly string MODE_LABEL_CLOCK = "clock";
-
-        private string convertModeToLabel(TimerMode mode)
-        {
-            switch (mode)
-            {
-                case TimerMode.Forwards:
-                    return MODE_LABEL_FORWARDS;
-                case TimerMode.Backwards:
-                    return MODE_LABEL_BACKWARDS;
-                case TimerMode.Clock:
-                    return MODE_LABEL_CLOCK;
+        private static readonly EnumToStringConverter<TimerMode> modeLabelConverter = new EnumToStringConverter<TimerMode>(
+            new Dictionary<TimerMode, string>() {
+                { TimerMode.Forwards, "stopper" },
+                { TimerMode.Backwards, "countdown" },
+                { TimerMode.Clock, "clock" },
             }
-            return string.Empty;
-        }
+        );
 
-        private static readonly Bitmap MODE_IMAGE_FORWARDS = Properties.Resources._16_timer_forward;
-        private static readonly Bitmap MODE_IMAGE_BACKWARDS = Properties.Resources._16_timer_backward;
-        private static readonly Bitmap MODE_IMAGE_CLOCK = Properties.Resources._16_timer_clock;
-
-        private Bitmap convertModeToImage(TimerMode mode)
-        {
-            switch (mode)
-            {
-                case TimerMode.Forwards:
-                    return MODE_IMAGE_FORWARDS;
-                case TimerMode.Backwards:
-                    return MODE_IMAGE_BACKWARDS;
-                case TimerMode.Clock:
-                    return MODE_IMAGE_CLOCK;
+        private static readonly EnumToBitmapConverter<TimerMode> modeImageConverter = new EnumToBitmapConverter<TimerMode>(
+            new Dictionary<TimerMode, Bitmap>() {
+                { TimerMode.Forwards, Properties.Resources._16_timer_forward },
+                { TimerMode.Backwards, Properties.Resources._16_timer_backward },
+                { TimerMode.Clock, Properties.Resources._16_timer_clock },
             }
-            return null;
-        }
+        );
 
         private static readonly Bitmap BUTTON_IMAGE_START = Properties.Resources._16_timer_running;
         private static readonly Bitmap BUTTON_IMAGE_STOP = Properties.Resources._16_timer_stopped;
