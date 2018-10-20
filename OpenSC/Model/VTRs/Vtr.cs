@@ -4,20 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSC.Model.Playouts
+namespace OpenSC.Model.VTRs
 {
 
-    public delegate void PlayoutIdChangingDelegate(Playout playout, int oldValue, int newValue);
-    public delegate void PlayoutIdChangedDelegate(Playout playout, int oldValue, int newValue);
+    public delegate void VtrIdChangingDelegate(Vtr vtr, int oldValue, int newValue);
+    public delegate void VtrIdChangedDelegate(Vtr vtr, int oldValue, int newValue);
 
-    public class Playout: IModel
+    public class Vtr: IModel
     {
 
         public virtual void Restored()
         { }
 
-        public event PlayoutIdChangingDelegate IdChanging;
-        public event PlayoutIdChangedDelegate IdChanged;
+        public event VtrIdChangingDelegate IdChanging;
+        public event VtrIdChangedDelegate IdChanged;
         public event ParameterlessChangeNotifierDelegate IdChangingPCN;
         public event ParameterlessChangeNotifierDelegate IdChangedPCN;
 
@@ -42,7 +42,7 @@ namespace OpenSC.Model.Playouts
         {
             if (id <= 0)
                 throw new ArgumentException();
-            if (!PlayoutDatabase.Instance.CanIdBeUsedForItem(id, this))
+            if (!VtrDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
 

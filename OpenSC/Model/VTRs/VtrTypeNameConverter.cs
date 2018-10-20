@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSC.Model.Playouts
+namespace OpenSC.Model.VTRs
 {
 
-    class PlayoutTypeNameConverter : TypeNameConverterBase
+    class VtrTypeNameConverter : TypeNameConverterBase
     {
 
         private Dictionary<string, Type> KNOWN_TYPES = new Dictionary<string, Type>()
