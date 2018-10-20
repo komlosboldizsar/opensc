@@ -144,6 +144,9 @@
     <Compile Include="Model\Persistence\TempForeignKeyAttribute.cs" />
     <Compile Include="Model\Persistence\ITypeNameConverter.cs" />
     <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
+    <Compile Include="Model\Playouts\Playout.cs" />
+    <Compile Include="Model\Playouts\PlayoutDatabase.cs" />
+    <Compile Include="Model\Playouts\PlayoutTypeNameConverter.cs" />
     <Compile Include="Model\Streams\Stream.cs" />
     <Compile Include="Model\Streams\StreamDatabase.cs" />
     <Compile Include="Model\Streams\StreamState.cs" />
