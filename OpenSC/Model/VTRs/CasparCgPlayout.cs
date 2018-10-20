@@ -51,7 +51,7 @@ namespace OpenSC.Model.VTRs
                 if (watchedLayer == value)
                     return;
                 unsubscribeFromChannelLayer(this);
-                watchedChannel = value;
+                watchedLayer = value;
                 subscribeToChannelLayer(this);
             }
         }
@@ -64,24 +64,26 @@ namespace OpenSC.Model.VTRs
 
         private void processOscMessage(OscMessage message, string subaddress)
         {
-            switch(subaddress)
+            try
             {
-                case "file/path":
-                    Title = message.Data[0].ToString();
-                    break;
-                case "file/time":
-                    if (!int.TryParse(message.Data[0].ToString(), out int tElapsed))
-                        tElapsed = 0;
-                    if (!int.TryParse(message.Data[1].ToString(), out int tFull))
-                        tFull = 0;
-                    SecondsElapsed = tElapsed;
-                    SecondsFull = tFull;
-                    SecondsRemaining = tFull - tElapsed;
-                    break;
-                case "paused":
-                    State = (message.Data[0].ToString() == "True") ? VtrState.Paused : VtrState.Playing;
-                    break;
+                switch (subaddress)
+                {
+                    case "file/path":
+                        Title = message.Data[0].ToString();
+                        break;
+                    case "file/time":
+                        int tElapsed = Convert.ToInt32(message.Data[0]);
+                        int tFull = Convert.ToInt32(message.Data[1]);
+                        SecondsElapsed = tElapsed;
+                        SecondsFull = tFull;
+                        SecondsRemaining = tFull - tElapsed;
+                        break;
+                    case "paused":
+                        State = (message.Data[0].ToString() == "True") ? VtrState.Paused : VtrState.Playing;
+                        break;
+                }
             }
+            catch { }
         }
 
         #region Common OSC listener
