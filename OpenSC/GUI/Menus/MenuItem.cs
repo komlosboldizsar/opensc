@@ -118,7 +118,7 @@ namespace OpenSC.GUI.Menus
         public MenuItem AddChild(string id, string text, Bitmap image, object tag, MenuClickHandler clickHandler)
         {
             MenuItem child = new MenuItem(text, image, tag, clickHandler);
-            
+            addChild(id, child);
             return child;
         }
 
