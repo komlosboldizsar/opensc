@@ -15,23 +15,23 @@ namespace OpenSC.GUI.Settings
     public partial class SettingEditorBase : UserControl, ISettingEditorControl
     {
 
-        private ISetting setting;
+        protected ISetting setting { get; private set; }
 
         public SettingEditorBase()
         {
             InitializeComponent();
         }
 
-        public SettingEditorBase(ISetting setting = null)
+        public SettingEditorBase(ISetting setting)
         {
             if (setting == null)
                 return;
             InitializeComponent();
             this.setting = setting;
-            showSettingData();
+            showSettingMetadata();
         }
 
-        private void showSettingData()
+        private void showSettingMetadata()
         {
             settingTitleLabel.Text = setting.HumanReadableTitle;
             settingDescriptionLabel.Text = setting.HumanReadableDescription;

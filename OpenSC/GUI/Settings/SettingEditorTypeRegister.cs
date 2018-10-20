@@ -10,6 +10,7 @@ namespace OpenSC.GUI.Settings
 
         private static ISettingEditorControl[] knownEditors = new ISettingEditorControl[]
         {
+            new StringSettingEditor()
         };
 
         private static Dictionary<Type, ISettingEditorControl> registeredEditors = null;
