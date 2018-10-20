@@ -15,7 +15,8 @@ namespace OpenSC.Modules
             new Timers.TimersModule(),
             new UMDs.UmdsModule(),
             new Routers.RoutersModule(),
-            new Streams.StreamsModule()
+            new Streams.StreamsModule(),
+            new Playouts.PlayoutsModule()
         };
 
         #region Own initialization
