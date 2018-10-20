@@ -126,6 +126,12 @@
     <Compile Include="GUI\UMDs\UmdList.Designer.cs">
       <DependentUpon>UmdList.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\VTRs\VtrList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\VTRs\VtrList.Designer.cs">
+      <DependentUpon>VtrList.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\WorkspaceManager\IPersistableWindow.cs" />
     <Compile Include="GUI\WorkspaceManager\ValueConverters\BoolConverter.cs" />
     <Compile Include="GUI\WorkspaceManager\ValueConverters\ColorConverter.cs" />
@@ -236,6 +242,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\UMDs\UmdList.resx">
       <DependentUpon>UmdList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\VTRs\VtrList.resx">
+      <DependentUpon>VtrList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -365,6 +374,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\16_stream_unknown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_vtr_fastforwarding.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_vtr_paused.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_vtr_playing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_vtr_rewinding.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_vtr_stopped.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-record-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16_vtr_recording.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

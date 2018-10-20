@@ -1,4 +1,6 @@
-﻿using OpenSC.Model;
+﻿using OpenSC.GUI.VTRs;
+using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model;
 using OpenSC.Model.VTRs;
 using System;
 using System.Collections.Generic;
@@ -25,6 +27,7 @@ namespace OpenSC.Modules.VTRs
 
         public void RegisterWindowTypes()
         {
+            WindowTypeRegister.RegisterWindowType(typeof(VtrList));
         }
     }
 }
