@@ -14,6 +14,9 @@ namespace OpenSC.Model.VTRs
     public delegate void VtrNameChangingDelegate(Vtr vtr, string oldName, string newName);
     public delegate void VtrNameChangedDelegate(Vtr vtr, string oldName, string newName);
 
+    public delegate void VtrTitleChangingDelegate(Vtr vtr, string oldTitle, string newTitle);
+    public delegate void VtrTitleChangedDelegate(Vtr vtr, string oldTitle, string newTitle);
+
     public delegate void VtrStateChangingDelegate(Vtr vtr, VtrState oldState, VtrState newState);
     public delegate void VtrStateChangedDelegate(Vtr vtr, VtrState oldState, VtrState newState);
 
@@ -86,6 +89,30 @@ namespace OpenSC.Model.VTRs
                 NameChangedPCN?.Invoke();
             }
         }
+
+        public event VtrTitleChangingDelegate TitleChanging;
+        public event VtrTitleChangedDelegate TitleChanged;
+        public event ParameterlessChangeNotifierDelegate TitleChangingPCN;
+        public event ParameterlessChangeNotifierDelegate TitleChangedPCN;
+
+        private string title;
+
+        public string Title
+        {
+            get { return title; }
+            protected set
+            {
+                if (value == title)
+                    return;
+                string oldTitle = title;
+                TitleChanging?.Invoke(this, oldTitle, value);
+                TitleChangingPCN?.Invoke();
+                title = value;
+                TitleChanged?.Invoke(this, oldTitle, value);
+                TitleChangedPCN?.Invoke();
+            }
+        }
+
 
         public event VtrStateChangingDelegate StateChanging;
         public event VtrStateChangedDelegate StateChanged;
