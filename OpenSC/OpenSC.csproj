@@ -78,6 +78,9 @@
     <Compile Include="GUI\ChildWindowWithTitleTwoParts.Designer.cs">
       <DependentUpon>ChildWindowWithTitleTwoParts.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\GeneralComponents\GrowLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\GeneralComponents\Menus\CustomMenuStrip.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -106,6 +109,12 @@
     <Compile Include="GUI\Menus\MenuManager.cs" />
     <Compile Include="GUI\Menus\SeparatorMenuItem.cs" />
     <Compile Include="GUI\Settings\ISettingEditorControl.cs" />
+    <Compile Include="GUI\Settings\SettingEditorBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Settings\SettingEditorBase.Designer.cs">
+      <DependentUpon>SettingEditorBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Settings\SettingEditorControlTypeAttribute.cs" />
     <Compile Include="GUI\Settings\SettingEditorTypeRegister.cs" />
     <Compile Include="GUI\Settings\SettingsWindow.cs">
@@ -253,6 +262,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Settings\SettingEditorBase.resx">
+      <DependentUpon>SettingEditorBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Settings\SettingsWindow.resx">
       <DependentUpon>SettingsWindow.cs</DependentUpon>

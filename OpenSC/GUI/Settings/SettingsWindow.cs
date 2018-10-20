@@ -28,7 +28,10 @@ namespace OpenSC.GUI.Settings
                 ISettingEditorControl editorControl = SettingEditorTypeRegister.GetEditorForSetting(setting);
                 Control editorControlCasted = editorControl as Control;
                 if (editorControlCasted != null)
+                {
+                    editorControlCasted.Dock = DockStyle.Top;
                     getPageForCategory(setting.Category).Controls.Add(editorControlCasted);
+                }
             }
         }
 
@@ -39,8 +42,8 @@ namespace OpenSC.GUI.Settings
             if(!tabPagesForCategories.TryGetValue(category, out TabPage page))
             {
                 page = new TabPage(category);
-                page.AutoScroll = true;
                 tabControl.TabPages.Add(page);
+                tabPagesForCategories.Add(category, page);
             }
             return page;
         }
