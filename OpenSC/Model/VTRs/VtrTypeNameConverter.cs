@@ -13,6 +13,7 @@ namespace OpenSC.Model.VTRs
 
         private Dictionary<string, Type> KNOWN_TYPES = new Dictionary<string, Type>()
         {
+            { "casparcg", typeof(CasparCgPlayout) }
         };
 
         protected override Dictionary<string, Type> knownTypes => KNOWN_TYPES;

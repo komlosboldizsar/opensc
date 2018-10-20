@@ -32,6 +32,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Bespoke.Common, Version=5.0.0.0, Culture=neutral, PublicKeyToken=843a094264521388, processorArchitecture=x86">
+      <HintPath>..\packages\Bespoke-OSC-Library.1.0.0\lib\Bespoke.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Bespoke.Common.Osc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=843a094264521388, processorArchitecture=x86">
+      <HintPath>..\packages\Bespoke-OSC-Library.1.0.0\lib\Bespoke.Common.Osc.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -144,6 +150,7 @@
     <Compile Include="Model\Persistence\TempForeignKeyAttribute.cs" />
     <Compile Include="Model\Persistence\ITypeNameConverter.cs" />
     <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
+    <Compile Include="Model\VTRs\CasparCgPlayout.cs" />
     <Compile Include="Model\VTRs\Vtr.cs" />
     <Compile Include="Model\VTRs\VtrDatabase.cs" />
     <Compile Include="Model\VTRs\VtrState.cs" />
