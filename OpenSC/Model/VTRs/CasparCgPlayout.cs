@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OpenSC.Model.VTRs
@@ -59,31 +60,78 @@ namespace OpenSC.Model.VTRs
         public override void Restored()
         {
             base.Restored();
+            createAndStartStoppedStateDetectorThread();
             subscribeToChannelLayer(this);
         }
+
+        private object stateUpdatingLock = new object();
 
         private void processOscMessage(OscMessage message, string subaddress)
         {
             try
             {
-                switch (subaddress)
+                lock (stateUpdatingLock)
                 {
-                    case "file/path":
-                        Title = message.Data[0].ToString();
-                        break;
-                    case "file/time":
-                        int tElapsed = Convert.ToInt32(message.Data[0]);
-                        int tFull = Convert.ToInt32(message.Data[1]);
-                        SecondsElapsed = tElapsed;
-                        SecondsFull = tFull;
-                        SecondsRemaining = tFull - tElapsed;
-                        break;
-                    case "paused":
-                        State = (message.Data[0].ToString() == "True") ? VtrState.Paused : VtrState.Playing;
-                        break;
+                    switch (subaddress)
+                    {
+                        case "file/path":
+                            Title = message.Data[0].ToString();
+                            break;
+                        case "file/time":
+                            float elapsedTime = (float)message.Data[0];
+                            int tElapsed = Convert.ToInt32(elapsedTime);
+                            int tFull = Convert.ToInt32(message.Data[1]);
+                            if ((lastElapsedTime != -1) && (elapsedTime != lastElapsedTime))
+                            {
+                                lastElapsedTimeUpdate = DateTime.Now;
+                                State = VtrState.Playing;
+                            }
+                            SecondsElapsed = tElapsed;
+                            SecondsFull = tFull;
+                            SecondsRemaining = tFull - tElapsed;
+                            lastElapsedTime = elapsedTime;
+                            break;
+                        case "paused":
+                            isPaused = (message.Data[0].ToString() == "True");
+                            if (isPaused)
+                                State = VtrState.Paused;
+                            break;
+                    }
                 }
             }
             catch { }
+        }
+
+        private bool isPaused = false;
+        private float lastElapsedTime = -1;
+        private DateTime lastElapsedTimeUpdate = DateTime.Now;
+
+        private Thread stoppedStateDetectorThread;
+        private const int STOPPED_STATE_DIFFERENCE_MILLISECONDS = 1000;
+
+        private void stoppedStateDetectorThreadMethod()
+        {
+            while (true)
+            {
+                lock (stateUpdatingLock)
+                {
+                    if (isPaused)
+                        continue;
+                    TimeSpan diff = DateTime.Now - lastElapsedTimeUpdate;
+                    if (diff.TotalMilliseconds > STOPPED_STATE_DIFFERENCE_MILLISECONDS)
+                        State = VtrState.Stopped;
+                }
+                Thread.Sleep(STOPPED_STATE_DIFFERENCE_MILLISECONDS);
+            }
+        }
+
+        private void createAndStartStoppedStateDetectorThread()
+        {
+            stoppedStateDetectorThread = new Thread(stoppedStateDetectorThreadMethod)
+            {
+                IsBackground = false
+            };
+            stoppedStateDetectorThread.Start();
         }
 
         #region Common OSC listener
