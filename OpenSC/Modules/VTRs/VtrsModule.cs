@@ -1,4 +1,6 @@
-﻿using System;
+﻿using OpenSC.Model;
+using OpenSC.Model.VTRs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +20,7 @@ namespace OpenSC.Modules.VTRs
 
         public void RegisterDatabases()
         {
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(VtrDatabase));
         }
 
         public void RegisterWindowTypes()
