@@ -32,5 +32,10 @@ namespace OpenSC.Modules.UMDs
             WindowTypeRegister.RegisterWindowType(typeof(UmdList));
         }
 
+        public void RegisterSettings()
+        {
+
+        }
+
     }
 }

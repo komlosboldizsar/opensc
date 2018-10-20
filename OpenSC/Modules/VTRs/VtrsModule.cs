@@ -29,5 +29,11 @@ namespace OpenSC.Modules.VTRs
         {
             WindowTypeRegister.RegisterWindowType(typeof(VtrList));
         }
+
+        public void RegisterSettings()
+        {
+
+        }
+
     }
 }

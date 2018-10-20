@@ -33,5 +33,10 @@ namespace OpenSC.Modules.Timers
             WindowTypeRegister.RegisterWindowType(typeof(TimerWindow));
         }
 
+        public void RegisterSettings()
+        {
+
+        }
+
     }
 }

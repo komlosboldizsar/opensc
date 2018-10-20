@@ -1,6 +1,7 @@
 ﻿using OpenSC.GUI.Streams;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
+using OpenSC.Model.Settings;
 using OpenSC.Model.Streams;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,11 @@ namespace OpenSC.Modules.Streams
         public void RegisterWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType(typeof(StreamList));
+        }
+
+        public void RegisterSettings()
+        {
+            SettingsManager.Instance.RegisterSetting(YoutubeStream.ApiKeySetting);
         }
 
     }
