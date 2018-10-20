@@ -12,7 +12,9 @@ namespace OpenSC.Model.Streams
     {
 
         private Dictionary<string, Type> KNOWN_TYPES = new Dictionary<string, Type>()
-        { };
+        {
+            { "youtube", typeof(YoutubeStream) }
+        };
 
         protected override Dictionary<string, Type> knownTypes => KNOWN_TYPES;
 

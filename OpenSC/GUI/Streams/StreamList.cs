@@ -79,8 +79,9 @@ namespace OpenSC.GUI.Streams
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Viewer count");
             builder.Width(100);
+            builder.CellStyle(TWO_PIXELS_PADDING_CELL_STYLE);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
-            builder.UpdaterMethod((stream, cell) => { cell.Value = (stream.ViewerCount != null) ? stream.ViewerCount.ToString() : string.Empty; });
+            builder.UpdaterMethod((stream, cell) => { cell.Value = (stream.State == StreamState.Running) ? stream.ViewerCount.ToString() : string.Empty; });
             builder.AddChangeEvent(nameof(Stream.ViewerCountChangedPCN));
             builder.BuildAndAdd();
 

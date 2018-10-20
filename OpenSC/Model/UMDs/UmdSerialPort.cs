@@ -26,13 +26,19 @@ namespace OpenSC.Model.UMDs
         {
             this.comPortName = comPortName;
             Init();
-            packetSchedulerThread = new Thread(packetSchedulerThreadMethod);
-            packetSchedulerThread.Start();
+            createAndStartPacketSchedulerThread();
         }
 
         public UmdSerialPort()
         {
-            packetSchedulerThread = new Thread(packetSchedulerThreadMethod);
+            createAndStartPacketSchedulerThread();
+        }
+
+        private void createAndStartPacketSchedulerThread()
+        {
+            packetSchedulerThread = new Thread(packetSchedulerThreadMethod) {
+                IsBackground = true
+            };
             packetSchedulerThread.Start();
         }
 
