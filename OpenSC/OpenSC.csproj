@@ -105,6 +105,15 @@
     <Compile Include="GUI\Menus\MenuItem.cs" />
     <Compile Include="GUI\Menus\MenuManager.cs" />
     <Compile Include="GUI\Menus\SeparatorMenuItem.cs" />
+    <Compile Include="GUI\Settings\ISettingEditorControl.cs" />
+    <Compile Include="GUI\Settings\SettingEditorControlTypeAttribute.cs" />
+    <Compile Include="GUI\Settings\SettingEditorTypeRegister.cs" />
+    <Compile Include="GUI\Settings\SettingsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Settings\SettingsWindow.Designer.cs">
+      <DependentUpon>SettingsWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Streams\StreamList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -244,6 +253,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Settings\SettingsWindow.resx">
+      <DependentUpon>SettingsWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Streams\StreamList.resx">
       <DependentUpon>StreamList.cs</DependentUpon>

@@ -17,6 +17,11 @@ namespace OpenSC.Model.Settings
 
         private Dictionary<string, ISetting> registeredSettings = new Dictionary<string, ISetting>();
 
+        public IReadOnlyList<ISetting> RegisteredSettings
+        {
+            get => registeredSettings.Values.ToList();
+        }
+
         public void RegisterSetting(ISetting setting)
         {
             if (registeredSettings.ContainsKey(setting.Key))
