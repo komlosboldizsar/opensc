@@ -78,6 +78,7 @@
     <Compile Include="GUI\GeneralComponents\Tables\DataGridViewColumnType.cs" />
     <Compile Include="GUI\GeneralComponents\Tables\DataGridViewDisableButtonCell.cs" />
     <Compile Include="GUI\GeneralComponents\Tables\DataGridViewImageButtonCell.cs" />
+    <Compile Include="GUI\Helpers\Converters\EnumConverter.cs" />
     <Compile Include="GUI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
