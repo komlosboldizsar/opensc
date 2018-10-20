@@ -18,6 +18,7 @@ namespace OpenSC.Model.Streams
 
         public static readonly Setting<string> ApiKeySetting = new Setting<string>(
             "streams.youtubestream.apikey",
+            "Streams",
             "YouTube API key",
             "Get this from Google Developer Console!"
         );

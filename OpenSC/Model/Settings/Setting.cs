@@ -10,15 +10,18 @@ namespace OpenSC.Model.Settings
     class Setting<T>: ISetting
     {
 
-        public Setting(string key, string humanReadableTitle, string humanReadableDescription, T defaultValue = default(T))
+        public Setting(string key, string category, string humanReadableTitle, string humanReadableDescription, T defaultValue = default(T))
         {
             Key = key;
+            Category = category;
             HumanReadableTitle = humanReadableTitle;
             HumanReadableDescription = humanReadableDescription;
             value = defaultValue;
         }
 
         public string Key { get; private set; }
+
+        public string Category { get; private set; }
 
         public string HumanReadableTitle { get; private set; }
 
