@@ -32,6 +32,7 @@ namespace OpenSC
 
             InitDatabases();
             InitWorkspaceManager();
+            ModuleManager.RegisterMenus();
 
             Application.Run(GUI.MainForm.Instance);
 

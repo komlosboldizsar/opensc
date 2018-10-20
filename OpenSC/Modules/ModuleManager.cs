@@ -44,6 +44,12 @@ namespace OpenSC.Modules
                 module.RegisterWindowTypes();
         }
 
+        public static void RegisterMenus()
+        {
+            foreach (IModule module in registeredModules)
+                module.RegisterMenus();
+        }
+
         #region Event handlers
         private static void programStartedHandler()
         {

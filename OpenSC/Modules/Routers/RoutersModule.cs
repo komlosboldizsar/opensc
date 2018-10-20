@@ -27,5 +27,9 @@ namespace OpenSC.Modules.Routers
             WindowTypeRegister.RegisterWindowType(typeof(RouterControlForm));
         }
 
+        public void RegisterMenus()
+        {
+
+        }
     }
 }

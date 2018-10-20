@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.VTRs;
+﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.VTRs;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.VTRs;
@@ -28,6 +29,12 @@ namespace OpenSC.Modules.VTRs
         public void RegisterWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType(typeof(VtrList));
+        }
+
+        public void RegisterMenus()
+        {
+            var vtrsMenu = MenuManager.Instance.TopMenu["VTR"]["VTR list"];
+            vtrsMenu.ClickHandler = (menu, tag) => new VtrList().ShowAsChild();
         }
     }
 }

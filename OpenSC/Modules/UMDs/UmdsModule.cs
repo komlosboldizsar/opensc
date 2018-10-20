@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.UMDs;
+﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.UMDs;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.UMDs;
@@ -32,5 +33,10 @@ namespace OpenSC.Modules.UMDs
             WindowTypeRegister.RegisterWindowType(typeof(UmdList));
         }
 
+        public void RegisterMenus()
+        {
+            var umdsMenu = MenuManager.Instance.TopMenu["UMD"]["UMD list"];
+            umdsMenu.ClickHandler = (menu, tag) => new UmdList().ShowAsChild();
+        }
     }
 }

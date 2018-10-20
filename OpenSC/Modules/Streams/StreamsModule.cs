@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.Streams;
+﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.Streams;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.Streams;
@@ -31,5 +32,10 @@ namespace OpenSC.Modules.Streams
             WindowTypeRegister.RegisterWindowType(typeof(StreamList));
         }
 
+        public void RegisterMenus()
+        {
+            var streamsMenu = MenuManager.Instance.TopMenu["Streams"]["Stream list"];
+            streamsMenu.ClickHandler = (menu, tag) => new StreamList().ShowAsChild();
+        }
     }
 }
