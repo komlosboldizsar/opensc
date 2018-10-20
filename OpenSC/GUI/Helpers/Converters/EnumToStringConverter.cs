@@ -8,7 +8,7 @@ namespace OpenSC.GUI.Helpers.Converters
 {
     class EnumToStringConverter<TEnum> : EnumConverter<TEnum, string>
     {
-        public EnumToStringConverter(Dictionary<TEnum, string> convertedValues) : base(convertedValues)
+        public EnumToStringConverter(Dictionary<TEnum, string> convertedValues = null) : base(convertedValues)
         {
         }
     }
