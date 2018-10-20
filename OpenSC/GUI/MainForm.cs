@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.Settings;
 using OpenSC.GUI.UMDs;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
@@ -100,5 +101,9 @@ namespace OpenSC.GUI
             MasterDatabase.Instance.SaveEverything();
         }
 
+        private void globalSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SettingsWindow.Instance.ShowAsChild();
+        }
     }
 }

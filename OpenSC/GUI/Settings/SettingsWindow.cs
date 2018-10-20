@@ -14,7 +14,9 @@ namespace OpenSC.GUI.Settings
     public partial class SettingsWindow : ChildWindowWithTitle
     {
 
-        public SettingsWindow()
+        public static SettingsWindow Instance { get; } = new SettingsWindow();
+
+        private SettingsWindow()
         {
             InitializeComponent();
             tabControl.TabPages.Clear();

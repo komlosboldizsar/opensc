@@ -31,7 +31,7 @@ namespace OpenSC.GUI
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.menuStrip = new CustomMenuStrip();
+            this.menuStrip = new OpenSC.GUI.GeneralComponents.Menus.CustomMenuStrip();
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,16 +46,21 @@ namespace OpenSC.GUI
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.clockUpdateTimer = new System.Windows.Forms.Timer(this.components);
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.globalSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip
             // 
+            this.menuStrip.AssociatedMenuItem = null;
+            this.menuStrip.DynamicChildrenInsertPosition = 0;
             this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileMenu,
-            this.windowsMenu});
+            this.windowsMenu,
+            this.settingsToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(1482, 28);
@@ -73,7 +78,7 @@ namespace OpenSC.GUI
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(108, 26);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // windowsMenu
@@ -166,6 +171,21 @@ namespace OpenSC.GUI
             this.clockUpdateTimer.Interval = 500;
             this.clockUpdateTimer.Tick += new System.EventHandler(this.clockUpdateTimer_Tick);
             // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.globalSettingsToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(74, 24);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // globalSettingsToolStripMenuItem
+            // 
+            this.globalSettingsToolStripMenuItem.Name = "globalSettingsToolStripMenuItem";
+            this.globalSettingsToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.globalSettingsToolStripMenuItem.Text = "Global settings";
+            this.globalSettingsToolStripMenuItem.Click += new System.EventHandler(this.globalSettingsToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -205,6 +225,8 @@ namespace OpenSC.GUI
         private System.Windows.Forms.ToolStripMenuItem tileWindowsVerticallyMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cascadeWindowsMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem globalSettingsToolStripMenuItem;
     }
 }
 
