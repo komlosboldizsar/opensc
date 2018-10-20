@@ -160,6 +160,11 @@ namespace OpenSC.Model.VTRs
             }
         }
 
+        public TimeSpan TimeFull
+        {
+            get { return TimeSpan.FromSeconds(secondsFull); }
+        }
+
         public event VtrSecondsElapsedChangingDelegate SecondsElapsedChanging;
         public event VtrSecondsElapsedChangedDelegate SecondsElapsedChanged;
         public event ParameterlessChangeNotifierDelegate SecondsElapsedChangingPCN;
@@ -183,6 +188,11 @@ namespace OpenSC.Model.VTRs
             }
         }
 
+        public TimeSpan TimeElapsed
+        {
+            get { return TimeSpan.FromSeconds(secondsElapsed); }
+        }
+
         public event VtrSecondsRemainingChangingDelegate SecondsRemainingChanging;
         public event VtrSecondsRemainingChangedDelegate SecondsRemainingChanged;
         public event ParameterlessChangeNotifierDelegate SecondsRemainingChangingPCN;
@@ -204,6 +214,11 @@ namespace OpenSC.Model.VTRs
                 SecondsRemainingChanged?.Invoke(this, oldValue, value);
                 SecondsRemainingChangedPCN?.Invoke();
             }
+        }
+
+        public TimeSpan TimeRemaining
+        {
+            get { return TimeSpan.FromSeconds(secondsRemaining); }
         }
 
     }
