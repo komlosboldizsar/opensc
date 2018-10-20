@@ -32,12 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bespoke.Common, Version=5.0.0.0, Culture=neutral, PublicKeyToken=843a094264521388, processorArchitecture=x86">
-      <HintPath>..\packages\Bespoke-OSC-Library.1.0.0\lib\Bespoke.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Bespoke.Common.Osc, Version=0.0.0.0, Culture=neutral, PublicKeyToken=843a094264521388, processorArchitecture=x86">
-      <HintPath>..\packages\Bespoke-OSC-Library.1.0.0\lib\Bespoke.Common.Osc.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -460,6 +454,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\16_tick2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bespoke.Common.Osc\Bespoke.Common.Osc.csproj">
+      <Project>{35d30dcb-74d1-40a2-9d22-40e1394ffc09}</Project>
+      <Name>Bespoke.Common.Osc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bespoke.Common\Bespoke.Common.csproj">
+      <Project>{f8a1578f-bebe-4bbe-ab11-a0496bdb746a}</Project>
+      <Name>Bespoke.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
