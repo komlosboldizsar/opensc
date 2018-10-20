@@ -78,6 +78,12 @@
     <Compile Include="GUI\ChildWindowWithTitleTwoParts.Designer.cs">
       <DependentUpon>ChildWindowWithTitleTwoParts.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\GeneralComponents\Menus\CustomMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\GeneralComponents\Menus\CustomToolStripMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -96,6 +102,9 @@
     <Compile Include="GUI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Menus\MenuItem.cs" />
+    <Compile Include="GUI\Menus\MenuManager.cs" />
+    <Compile Include="GUI\Menus\SeparatorMenuItem.cs" />
     <Compile Include="GUI\Streams\StreamList.cs">
       <SubType>Form</SubType>
     </Compile>

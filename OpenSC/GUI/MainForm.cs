@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.UMDs;
+﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.UMDs;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.Timers;
@@ -32,12 +33,9 @@ namespace OpenSC.GUI
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-
-            //
             WindowManager.Instance.ChildWindowOpened += childWindowOpenedHandler;
             WindowManager.Instance.ChildWindowClosed += childWindowClosedHandler;
-            //
-        
+            menuStrip.AssociatedMenuItem = MenuManager.Instance.TopMenu;
         }
 
         private void childWindowOpenedHandler(ChildWindowBase window)

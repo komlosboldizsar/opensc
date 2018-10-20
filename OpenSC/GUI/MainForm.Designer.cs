@@ -1,4 +1,6 @@
-﻿namespace OpenSC.GUI
+﻿using OpenSC.GUI.GeneralComponents.Menus;
+
+namespace OpenSC.GUI
 {
     partial class MainForm
     {
@@ -29,11 +31,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.menuStrip = new System.Windows.Forms.MenuStrip();
+            this.menuStrip = new CustomMenuStrip();
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.uMDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.listToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.tileWindowsHorizontallyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tileWindowsVerticallyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,7 +55,6 @@
             this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileMenu,
-            this.uMDToolStripMenuItem,
             this.windowsMenu});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
@@ -74,23 +73,8 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(108, 26);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.exitToolStripMenuItem.Text = "Exit";
-            // 
-            // uMDToolStripMenuItem
-            // 
-            this.uMDToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.listToolStripMenuItem});
-            this.uMDToolStripMenuItem.Name = "uMDToolStripMenuItem";
-            this.uMDToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
-            this.uMDToolStripMenuItem.Text = "UMD";
-            // 
-            // listToolStripMenuItem
-            // 
-            this.listToolStripMenuItem.Name = "listToolStripMenuItem";
-            this.listToolStripMenuItem.Size = new System.Drawing.Size(106, 26);
-            this.listToolStripMenuItem.Text = "List";
-            this.listToolStripMenuItem.Click += new System.EventHandler(this.listToolStripMenuItem_Click);
             // 
             // windowsMenu
             // 
@@ -206,7 +190,7 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip menuStrip;
+        private CustomMenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileMenu;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel statusStripEmptySpace;
@@ -221,8 +205,6 @@
         private System.Windows.Forms.ToolStripMenuItem tileWindowsVerticallyMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cascadeWindowsMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem uMDToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem listToolStripMenuItem;
     }
 }
 
