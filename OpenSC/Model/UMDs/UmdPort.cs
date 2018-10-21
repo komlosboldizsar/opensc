@@ -10,6 +10,9 @@ namespace OpenSC.Model.UMDs
     public delegate void UmdPortIdChangingDelegate(UmdPort port, int oldValue, int newValue);
     public delegate void UmdPortIdChangedDelegate(UmdPort port, int oldValue, int newValue);
 
+    public delegate void UmdPortNameChangingDelegate(UmdPort port, string oldName, string newName);
+    public delegate void UmdPortNameChangedDelegate(UmdPort port, string oldName, string newName);
+
     abstract public class UmdPort: IModel
     {
 
@@ -40,6 +43,35 @@ namespace OpenSC.Model.UMDs
             if (id <= 0)
                 throw new ArgumentException();
             if (!UmdPortDatabase.Instance.CanIdBeUsedForItem(id, this))
+                throw new ArgumentException();
+        }
+
+        public event UmdPortNameChangingDelegate NameChanging;
+        public event UmdPortNameChangedDelegate NameChanged;
+        public event ParameterlessChangeNotifierDelegate NameChangingPCN;
+        public event ParameterlessChangeNotifierDelegate NameChangedPCN;
+
+        private string name;
+
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                if (value == name)
+                    return;
+                string oldName = name;
+                NameChanging?.Invoke(this, oldName, value);
+                NameChangingPCN?.Invoke();
+                name = value;
+                NameChanged?.Invoke(this, oldName, value);
+                NameChangedPCN?.Invoke();
+            }
+        }
+
+        public void ValidateName(string name)
+        {
+            if (!string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
         }
 
