@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Streams
 {
+    [TypeLabel("YouTube stream")]
+    [TypeCode("youtube")]
     class YoutubeStream: Stream
     {
 

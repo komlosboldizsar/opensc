@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.UMDs.McCurdy
 {
+    [TypeLabel("McCurdy UMD-1")]
+    [TypeCode("mccurdy")]
     class McCurdyUMD1 : UMD
     {
 

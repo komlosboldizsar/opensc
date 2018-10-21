@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.VTRs
 {
-
+    [TypeLabel("CasparCG playout")]
+    [TypeCode("casparcg")]
     public class CasparCgPlayout: Vtr
     {
 

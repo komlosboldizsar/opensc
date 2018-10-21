@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.UMDs.McCurdy
 {
+    [TypeLabel("McCurdy port")]
+    [TypeCode("mccurdy")]
     class McCurdyPort : UmdSerialPort
     {
         public McCurdyPort():

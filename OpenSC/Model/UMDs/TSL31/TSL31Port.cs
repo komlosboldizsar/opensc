@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.UMDs.TSL31
 {
+    [TypeLabel("TSL 3.1 port")]
+    [TypeCode("tsl31")]
     class TSL31Port : UmdSerialPort
     {
 

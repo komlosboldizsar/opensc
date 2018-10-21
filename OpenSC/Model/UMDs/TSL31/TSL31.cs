@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.UMDs.TSL31
 {
+    [TypeLabel("TSL 3.1")]
+    [TypeCode("tsl31")]
     class TSL31 : UMD
     {
 
