@@ -131,6 +131,7 @@
     <Compile Include="GUI\Streams\StreamList.Designer.cs">
       <DependentUpon>StreamList.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Streams\StreamEditorFormTypeRegister.cs" />
     <Compile Include="GUI\Timers\TimerEditWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -149,12 +150,15 @@
     <Compile Include="GUI\UMDs\UmdEditWindow.Designer.cs">
       <DependentUpon>UmdEditWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\UMDs\UmdPortEditorFormTypeRegister.cs" />
+    <Compile Include="GUI\UMDs\UmdEditorFormTypeRegister.cs" />
     <Compile Include="GUI\UMDs\UmdList.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\UMDs\UmdList.Designer.cs">
       <DependentUpon>UmdList.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\VTRs\VtrEditorFormTypeRegister.cs" />
     <Compile Include="GUI\VTRs\VtrList.cs">
       <SubType>Form</SubType>
     </Compile>
