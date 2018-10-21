@@ -117,8 +117,8 @@ namespace OpenSC.GUI.VTRs
             builder.Width(70);
             builder.ButtonText("Edit");
             builder.CellContentClickHandlerMethod((vtr, cell, e) => {
-                /*var editWindow = new //...
-                editWindow.ShowAsChild();*/
+                var editWindow = VtrEditorFormTypeRegister.Instance.GetFormForModel(vtr) as ChildWindowBase;
+                editWindow?.ShowAsChild();
             });
             builder.BuildAndAdd();
 
