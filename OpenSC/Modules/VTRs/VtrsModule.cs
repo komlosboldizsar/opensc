@@ -21,6 +21,11 @@ namespace OpenSC.Modules.VTRs
         {
         }
 
+        public void RegisterModelTypes()
+        {
+
+        }
+
         public void RegisterDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(VtrDatabase));

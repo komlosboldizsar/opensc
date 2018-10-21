@@ -22,6 +22,11 @@ namespace OpenSC.Modules.Timers
         {
         }
 
+        public void RegisterModelTypes()
+        {
+
+        }
+
         public void RegisterDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(TimerDatabase));

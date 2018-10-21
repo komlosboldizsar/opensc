@@ -31,6 +31,9 @@ namespace OpenSC
             ModuleManager.Init();
             ProgramStarted?.Invoke();
 
+            // TODO: init somewhere else :)
+            ModuleManager.RegisterModelTypes();
+
             InitDatabases();
             InitWorkspaceManager();
 

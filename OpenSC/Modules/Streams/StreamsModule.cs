@@ -23,6 +23,11 @@ namespace OpenSC.Modules.Streams
         {
         }
 
+        public void RegisterModelTypes()
+        {
+
+        }
+
         public void RegisterDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(StreamDatabase));

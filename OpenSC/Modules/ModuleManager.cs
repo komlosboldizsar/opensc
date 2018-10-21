@@ -32,6 +32,12 @@ namespace OpenSC.Modules
         }
         #endregion
 
+        public static void RegisterModelTypes()
+        {
+            foreach (IModule module in registeredModules)
+                module.RegisterModelTypes();
+        }
+
         public static void RegisterDatabases()
         {
             foreach (IModule module in registeredModules)

@@ -18,6 +18,11 @@ namespace OpenSC.Modules.Routers
         {
         }
 
+        public void RegisterModelTypes()
+        {
+
+        }
+
         public void RegisterDatabases()
         {
         }
