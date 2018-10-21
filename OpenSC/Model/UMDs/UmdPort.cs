@@ -76,7 +76,7 @@ namespace OpenSC.Model.UMDs
 
         public void ValidateName(string name)
         {
-            if (!string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
         }
 
