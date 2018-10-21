@@ -176,6 +176,7 @@
     <Compile Include="GUI\WorkspaceManager\WindowPersister.cs" />
     <Compile Include="GUI\WorkspaceManager\WindowTypeNameAttribute.cs" />
     <Compile Include="GUI\WorkspaceManager\WindowTypeRegister.cs" />
+    <Compile Include="Model\AttributeHelpers.cs" />
     <Compile Include="Model\DatabaseBase.cs" />
     <Compile Include="Model\DatabaseFile.cs" />
     <Compile Include="Model\DatabaseNameAttribute.cs" />
@@ -197,6 +198,8 @@
     <Compile Include="Model\Settings\Setting.cs" />
     <Compile Include="Model\Settings\SettingsManager.cs" />
     <Compile Include="Model\Settings\Converters\SettingValueConverterAttribute.cs" />
+    <Compile Include="Model\TypeCodeAttribute.cs" />
+    <Compile Include="Model\TypeLabelAttribute.cs" />
     <Compile Include="Model\VTRs\CasparCgPlayout.cs" />
     <Compile Include="Model\VTRs\Vtr.cs" />
     <Compile Include="Model\VTRs\VtrDatabase.cs" />
