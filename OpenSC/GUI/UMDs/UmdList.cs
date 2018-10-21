@@ -22,6 +22,7 @@ namespace OpenSC.GUI.UMDs
             InitializeComponent();
             HeaderText = "List of UMDs";
             initializeTable();
+            loadAddableUmdTypes();
         }
 
         private CustomDataGridView<UMD> table;
@@ -87,16 +88,16 @@ namespace OpenSC.GUI.UMDs
             builder.BuildAndAdd();
 
             // Columns: tallies
-            for(int i = 0; i < MAX_TALLIES; i++)
+            for (int i = 0; i < MAX_TALLIES; i++)
             {
                 builder = GetColumnDescriptorBuilderForTable<UMD>();
                 builder.Type(DataGridViewColumnType.TextBox);
-                builder.Header(string.Format("T{0}", i+1));
+                builder.Header(string.Format("T{0}", i + 1));
                 builder.Width(30);
                 builder.UpdaterMethod((umd, cell) => {
                     cell.Style.BackColor = ((umd.Type.TallyCount > i) && umd.TallyStates[i]) ? umd.TallyColors[i] : Color.LightGray;
                 });
-                if(i == MAX_TALLIES - 1)
+                if (i == MAX_TALLIES - 1)
                     builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
                 builder.AddChangeEvent(nameof(UMD.TallyChangedPCN));
                 builder.BuildAndAdd();
@@ -132,6 +133,28 @@ namespace OpenSC.GUI.UMDs
             // Bind database
             table.BoundDatabase = UmdDatabase.Instance;
 
+        }
+
+        private void loadAddableUmdTypes()
+        {
+            foreach (Type type in UmdEditorFormTypeRegister.Instance.RegisteredTypes)
+            {
+                string label = type.GetTypeLabel();
+                ToolStripMenuItem contextMenuItem = new ToolStripMenuItem(label)
+                {
+                    Tag = type
+                };
+                contextMenuItem.Click += addUmdMenuItemClick;
+                addableUmdTypesMenu.Items.Add(contextMenuItem);
+            }
+        }
+
+        private static void addUmdMenuItemClick(object sender, EventArgs e)
+        {
+            ToolStripMenuItem typedSender = sender as ToolStripMenuItem;
+            Type newUmdType = typedSender?.Tag as Type;
+            IModelEditorForm<UMD> editorForm = UmdEditorFormTypeRegister.Instance.GetFormForType(newUmdType);
+            (editorForm as ChildWindowBase)?.ShowAsChild();
         }
 
     }
