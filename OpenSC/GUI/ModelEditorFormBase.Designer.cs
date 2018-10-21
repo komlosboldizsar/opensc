@@ -109,6 +109,7 @@
             this.customElementsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.customElementsPanel.Location = new System.Drawing.Point(0, 0);
             this.customElementsPanel.Name = "customElementsPanel";
+            this.customElementsPanel.Padding = new System.Windows.Forms.Padding(10, 10, 10, 0);
             this.customElementsPanel.Size = new System.Drawing.Size(518, 268);
             this.customElementsPanel.TabIndex = 9;
             // 
