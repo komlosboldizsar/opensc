@@ -20,6 +20,7 @@ namespace OpenSC.GUI.VTRs
             InitializeComponent();
             HeaderText = "List of VTRs";
             initializeTable();
+            loadAddableVtrTypes();
         }
 
         private CustomDataGridView<Vtr> table;
@@ -158,6 +159,28 @@ namespace OpenSC.GUI.VTRs
             { VtrState.FastForwarding, Properties.Resources._16_vtr_fastforwarding },
             { VtrState.Recording, Properties.Resources._16_vtr_recording },
         };
+
+        private void loadAddableVtrTypes()
+        {
+            foreach (Type type in VtrEditorFormTypeRegister.Instance.RegisteredTypes)
+            {
+                string label = type.GetTypeLabel();
+                ToolStripMenuItem contextMenuItem = new ToolStripMenuItem(label)
+                {
+                    Tag = type
+                };
+                contextMenuItem.Click += addVtrMenuItemClick;
+                addableVtrTypesMenu.Items.Add(contextMenuItem);
+            }
+        }
+
+        private static void addVtrMenuItemClick(object sender, EventArgs e)
+        {
+            ToolStripMenuItem typedSender = sender as ToolStripMenuItem;
+            Type newVtrType = typedSender?.Tag as Type;
+            IModelEditorForm<Vtr> editorForm = VtrEditorFormTypeRegister.Instance.GetFormForType(newVtrType);
+            (editorForm as ChildWindowBase)?.ShowAsChild();
+        }
 
     }
 
