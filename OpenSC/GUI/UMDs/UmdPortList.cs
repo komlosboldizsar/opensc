@@ -51,7 +51,7 @@ namespace OpenSC.GUI.UMDs
             builder.AddChangeEvent(nameof(UmdPort.NameChangedPCN));
             builder.BuildAndAdd();
 
-            // Column: initialized state
+            // Column: state (is initialized?)
             builder = GetColumnDescriptorBuilderForTable<UmdPort>();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("State");
@@ -61,18 +61,6 @@ namespace OpenSC.GUI.UMDs
                 cell.Value = port.Initialized ? "initialized" : "not initialized";
             });
             builder.AddChangeEvent(nameof(UmdPort.InitializedChangedPCN));
-            builder.BuildAndAdd();
-
-            // Column: edit button
-            builder = GetColumnDescriptorBuilderForTable<UmdPort>();
-            builder.Type(DataGridViewColumnType.Button);
-            builder.Header("Edit");
-            builder.Width(70);
-            builder.ButtonText("Edit");
-            builder.CellContentClickHandlerMethod((port, cell, e) => {
-                var editWindow = UmdPortEditorFormTypeRegister.Instance.GetFormForModel(port) as ChildWindowBase;
-                editWindow?.ShowAsChild();
-            });
             builder.BuildAndAdd();
 
             // Column: initialize button
@@ -92,6 +80,18 @@ namespace OpenSC.GUI.UMDs
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.ButtonText("Deinitialize");
             builder.CellContentClickHandlerMethod((port, cell, e) => port.DeInit());
+            builder.BuildAndAdd();
+
+            // Column: edit button
+            builder = GetColumnDescriptorBuilderForTable<UmdPort>();
+            builder.Type(DataGridViewColumnType.Button);
+            builder.Header("Edit");
+            builder.Width(70);
+            builder.ButtonText("Edit");
+            builder.CellContentClickHandlerMethod((port, cell, e) => {
+                var editWindow = UmdPortEditorFormTypeRegister.Instance.GetFormForModel(port) as ChildWindowBase;
+                editWindow?.ShowAsChild();
+            });
             builder.BuildAndAdd();
 
             // Column: delete button

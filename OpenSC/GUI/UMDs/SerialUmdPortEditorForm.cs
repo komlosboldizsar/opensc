@@ -37,7 +37,7 @@ namespace OpenSC.GUI.UMDs
             UmdSerialPort umdSerialPort = port as UmdSerialPort;
             if (umdSerialPort == null)
                 return;
-            umdSerialPort.ComPortName = ((SerialPortDropDownItem)portNameDropDown.SelectedValue).PortName;
+            umdSerialPort.ComPortName = ((SerialPortDropDownItem)portNameDropDown.SelectedItem).PortName;
         }
 
         protected override void validateFields()

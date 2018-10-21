@@ -97,7 +97,7 @@
             this.portNameDropDown.FormattingEnabled = true;
             this.portNameDropDown.Location = new System.Drawing.Point(70, 3);
             this.portNameDropDown.Name = "portNameDropDown";
-            this.portNameDropDown.Size = new System.Drawing.Size(121, 24);
+            this.portNameDropDown.Size = new System.Drawing.Size(179, 24);
             this.portNameDropDown.TabIndex = 1;
             // 
             // portNameLabel
