@@ -17,6 +17,11 @@ namespace OpenSC.GUI
 
         private Dictionary<Type, IModelEditorForm<TModelBase>> registeredTypes = new Dictionary<Type, IModelEditorForm<TModelBase>>();
 
+        private IReadOnlyList<Type> RegisteredTypes
+        {
+            get { return registeredTypes.Keys.ToList(); }
+        }
+
         public void RegisterFormType<TModel, TForm>()
             where TModel: TModelBase
             where TForm: IModelEditorForm<TModelBase>, new()
