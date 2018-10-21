@@ -72,18 +72,6 @@
     <Compile Include="GUI\ChildWindowWithTitleTwoParts.Designer.cs">
       <DependentUpon>ChildWindowWithTitleTwoParts.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\GeneralComponents\EditorForms\EditorGroup.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GUI\GeneralComponents\EditorForms\EditorGroup.Designer.cs">
-      <DependentUpon>EditorGroup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\GeneralComponents\EditorForms\EditorLabel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GUI\GeneralComponents\EditorForms\EditorLabel.Designer.cs">
-      <DependentUpon>EditorLabel.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\ModelEditorFormTypeRegister.cs" />
     <Compile Include="GUI\GeneralComponents\GrowLabel.cs">
       <SubType>Component</SubType>
@@ -298,12 +286,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ChildWindowWithTitleTwoParts.resx">
       <DependentUpon>ChildWindowWithTitleTwoParts.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\GeneralComponents\EditorForms\EditorGroup.resx">
-      <DependentUpon>EditorGroup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\GeneralComponents\EditorForms\EditorLabel.resx">
-      <DependentUpon>EditorLabel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
