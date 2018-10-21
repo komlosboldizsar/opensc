@@ -13,7 +13,7 @@ namespace OpenSC.GUI.Streams
         private const string HEADER_TEXT_NEW = "New stream";
         private const string HEADER_TEXT_EDIT = "Edit stream";
 
-        private Stream stream;
+        protected Stream stream;
 
         private bool addingNew = false;
 
@@ -28,6 +28,11 @@ namespace OpenSC.GUI.Streams
             }
         }
 
+        public StreamEditorFormBase()
+        {
+            InitializeComponent();
+        }
+
         public StreamEditorFormBase(Stream stream)
         {
             InitializeComponent();
@@ -38,6 +43,8 @@ namespace OpenSC.GUI.Streams
 
         protected override void loadData()
         {
+            if (stream == null)
+                return;
             idNumericField.Value = stream.ID;
             nameTextBox.Text = stream.Name;
         }
@@ -67,13 +74,16 @@ namespace OpenSC.GUI.Streams
 
         protected virtual void validateFields()
         {
-            validateFields();
+            if (stream == null)
+                return;
             stream.ValidateId((int)idNumericField.Value);
             stream.ValidateName(nameTextBox.Text);
         }
 
         protected virtual void writeFields()
         {
+            if (stream == null)
+                return;
             stream.ID = (int)idNumericField.Value;
             stream.Name = nameTextBox.Text;
         }
