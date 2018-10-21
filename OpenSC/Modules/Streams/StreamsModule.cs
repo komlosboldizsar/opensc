@@ -2,6 +2,7 @@
 using OpenSC.GUI.Menus;
 using OpenSC.GUI.Streams;
 using OpenSC.GUI.UMDs;
+using OpenSC.GUI.VTRs;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.Settings;
