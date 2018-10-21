@@ -1,5 +1,7 @@
-﻿using OpenSC.GUI.Menus;
+﻿using OpenSC.GUI;
+using OpenSC.GUI.Menus;
 using OpenSC.GUI.Streams;
+using OpenSC.GUI.UMDs;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.Settings;
@@ -25,7 +27,7 @@ namespace OpenSC.Modules.Streams
 
         public void RegisterModelTypes()
         {
-
+            //RegisterStreamType<YoutubeStream, /**/>("youtube");
         }
 
         public void RegisterDatabases()
@@ -47,6 +49,14 @@ namespace OpenSC.Modules.Streams
         public void RegisterSettings()
         {
             SettingsManager.Instance.RegisterSetting(YoutubeStream.ApiKeySetting);
+        }
+
+        public void RegisterStreamType<TStream, TStreamEditorForm>(string typeCode)
+            where TStream : Stream
+            where TStreamEditorForm : IModelEditorForm<Stream>, new()
+        {
+            StreamTypeNameConverter.AddKnownType(typeCode, typeof(TStream));
+            StreamEditorFormTypeRegister.Instance.RegisterFormType<TStream, TStreamEditorForm>();
         }
 
     }

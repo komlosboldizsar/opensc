@@ -1,4 +1,6 @@
-﻿using OpenSC.GUI.Menus;
+﻿using OpenSC.GUI;
+using OpenSC.GUI.Menus;
+using OpenSC.GUI.UMDs;
 using OpenSC.GUI.VTRs;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
@@ -23,7 +25,7 @@ namespace OpenSC.Modules.VTRs
 
         public void RegisterModelTypes()
         {
-
+            //RegisterVtrType<CasparCgPlayout, /**/>("casparcg");
         }
 
         public void RegisterDatabases()
@@ -45,6 +47,14 @@ namespace OpenSC.Modules.VTRs
         public void RegisterSettings()
         {
 
+        }
+
+        public void RegisterVtrType<TVtr, TVtrEditorForm>(string typeCode)
+            where TVtr : Vtr
+            where TVtrEditorForm : IModelEditorForm<Vtr>, new()
+        {
+            VtrTypeNameConverter.AddKnownType(typeCode, typeof(TVtr));
+            VtrEditorFormTypeRegister.Instance.RegisterFormType<TVtr, TVtrEditorForm>();
         }
 
     }

@@ -1,8 +1,11 @@
-﻿using OpenSC.GUI.Menus;
+﻿using OpenSC.GUI;
+using OpenSC.GUI.Menus;
 using OpenSC.GUI.UMDs;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.UMDs;
+using OpenSC.Model.UMDs.McCurdy;
+using OpenSC.Model.UMDs.TSL31;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +27,10 @@ namespace OpenSC.Modules.UMDs
 
         public void RegisterModelTypes()
         {
-
+            //RegisterUmdType<McCurdyUMD1, /**/>("mccurdy");
+            //RegisterUmdType<TSL31, /**/>("tsl31");
+            //RegisterUmdPortType<McCurdyPort, /**/>("mccurdy");
+            //RegisterUmdPortType<TSL31Port, /**/>("tsl31");
         }
 
         public void RegisterDatabases()
@@ -47,6 +53,22 @@ namespace OpenSC.Modules.UMDs
         public void RegisterSettings()
         {
 
+        }
+
+        public void RegisterUmdType<TUmd, TUmdEditorForm>(string typeCode)
+            where TUmd: UMD
+            where TUmdEditorForm: IModelEditorForm<UMD>, new()
+        {
+            UmdTypeNameConverter.AddKnownType(typeCode, typeof(TUmd));
+            UmdEditorFormTypeRegister.Instance.RegisterFormType<TUmd, TUmdEditorForm>();
+        }
+
+        public void RegisterUmdPortType<TUmdPort, TUmdPortEditorForm>(string typeCode)
+            where TUmdPort : UmdPort
+            where TUmdPortEditorForm : IModelEditorForm<UmdPort>, new()
+        {
+            UmdPortTypeNameConverter.AddKnownType(typeCode, typeof(TUmdPort));
+            UmdPortEditorFormTypeRegister.Instance.RegisterFormType<TUmdPort, TUmdPortEditorForm>();
         }
 
     }
