@@ -183,6 +183,12 @@
     <Compile Include="GUI\UMDs\UmdEditorFormBase.Designer.cs">
       <DependentUpon>UmdEditorFormBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\UMDs\UmdPortList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\UMDs\UmdPortList.Designer.cs">
+      <DependentUpon>UmdPortList.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\UMDs\UmdPortEditorFormTypeRegister.cs" />
     <Compile Include="GUI\UMDs\UmdEditorFormTypeRegister.cs" />
     <Compile Include="GUI\UMDs\UmdList.cs">
@@ -334,6 +340,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\UMDs\UmdEditorFormBase.resx">
       <DependentUpon>UmdEditorFormBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\UMDs\UmdPortList.resx">
+      <DependentUpon>UmdPortList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\UMDs\UmdList.resx">
       <DependentUpon>UmdList.cs</DependentUpon>

@@ -42,12 +42,15 @@ namespace OpenSC.Modules.UMDs
         public void RegisterWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType(typeof(UmdList));
+            WindowTypeRegister.RegisterWindowType(typeof(UmdPortList));
         }
 
         public void RegisterMenus()
         {
             var umdsMenu = MenuManager.Instance.TopMenu["UMD"]["UMD list"];
             umdsMenu.ClickHandler = (menu, tag) => new UmdList().ShowAsChild();
+            var umdPortsMenu = MenuManager.Instance.TopMenu["UMD"]["UMD port list"];
+            umdPortsMenu.ClickHandler = (menu, tag) => new UmdPortList().ShowAsChild();
         }
 
         public void RegisterSettings()
