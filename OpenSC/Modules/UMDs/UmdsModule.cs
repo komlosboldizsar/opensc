@@ -27,8 +27,8 @@ namespace OpenSC.Modules.UMDs
 
         public void RegisterModelTypes()
         {
-            //RegisterUmdType<McCurdyUMD1, /**/>();
-            //RegisterUmdType<TSL31, /**/>();
+            RegisterUmdType<McCurdyUMD1, McCurdyUmd1EditorForm>();
+            RegisterUmdType<TSL31, Tsl31UmdEditorForm>();
             //RegisterUmdPortType<McCurdyPort, /**/>();
             //RegisterUmdPortType<TSL31Port, /**/>();
         }
