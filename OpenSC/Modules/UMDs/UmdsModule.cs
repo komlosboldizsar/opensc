@@ -27,10 +27,10 @@ namespace OpenSC.Modules.UMDs
 
         public void RegisterModelTypes()
         {
-            //RegisterUmdType<McCurdyUMD1, /**/>("mccurdy");
-            //RegisterUmdType<TSL31, /**/>("tsl31");
-            //RegisterUmdPortType<McCurdyPort, /**/>("mccurdy");
-            //RegisterUmdPortType<TSL31Port, /**/>("tsl31");
+            //RegisterUmdType<McCurdyUMD1, /**/>();
+            //RegisterUmdType<TSL31, /**/>();
+            //RegisterUmdPortType<McCurdyPort, /**/>();
+            //RegisterUmdPortType<TSL31Port, /**/>();
         }
 
         public void RegisterDatabases()
