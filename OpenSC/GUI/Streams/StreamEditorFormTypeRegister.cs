@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSC.GUI.VTRs
+namespace OpenSC.GUI.Streams
 {
     class StreamEditorFormTypeRegister: ModelEditorFormTypeRegister<Stream>
     {
