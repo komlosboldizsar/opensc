@@ -165,6 +165,18 @@
     <Compile Include="GUI\ModelEditorFormBase.Designer.cs">
       <DependentUpon>ModelEditorFormBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\UMDs\Tsl31UmdPortEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\UMDs\Tsl31UmdPortEditorForm.Designer.cs">
+      <DependentUpon>Tsl31UmdPortEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\UMDs\McCurdyUmdPortEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\UMDs\McCurdyUmdPortEditorForm.Designer.cs">
+      <DependentUpon>McCurdyUmdPortEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\UMDs\SerialUmdPortEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
