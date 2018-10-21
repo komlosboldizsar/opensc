@@ -81,6 +81,9 @@
     <Compile Include="GUI\GeneralComponents\Menus\CustomToolStripMenuItem.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GUI\GeneralComponents\SplitButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
