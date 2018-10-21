@@ -13,6 +13,9 @@ namespace OpenSC.Model.UMDs
     public delegate void UmdPortNameChangingDelegate(UmdPort port, string oldName, string newName);
     public delegate void UmdPortNameChangedDelegate(UmdPort port, string oldName, string newName);
 
+    public delegate void UmdPortInitializedChangingDelegate(UmdPort port, bool oldState, bool newState);
+    public delegate void UmdPortInitializedChangedDelegate(UmdPort port, bool oldState, bool newState);
+
     abstract public class UmdPort: IModel
     {
 
@@ -73,6 +76,30 @@ namespace OpenSC.Model.UMDs
         {
             if (!string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
+        }
+
+
+        public event UmdPortInitializedChangingDelegate InitializedChanging;
+        public event UmdPortInitializedChangedDelegate InitializedChanged;
+        public event ParameterlessChangeNotifierDelegate InitializedChangingPCN;
+        public event ParameterlessChangeNotifierDelegate InitializedChangedPCN;
+
+        private bool initialized;
+
+        public bool Initialized
+        {
+            get { return initialized; }
+            protected set
+            {
+                if (value == initialized)
+                    return;
+                bool oldState = initialized;
+                InitializedChanging?.Invoke(this, oldState, value);
+                InitializedChangingPCN?.Invoke();
+                initialized = value;
+                InitializedChanged?.Invoke(this, oldState, value);
+                InitializedChangedPCN?.Invoke();
+            }
         }
 
         public abstract void Init();

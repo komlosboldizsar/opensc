@@ -53,6 +53,7 @@ namespace OpenSC.Model.UMDs
             {
                 serialPort = new SerialPort(comPortName, COMPORT_BAUDRATE, COMPORT_PARITY, COMPORT_DATABITS, COMPORT_STOPBITS);
                 serialPort.Open();
+                Initialized = true;
             }
             catch { }
         }
@@ -63,6 +64,7 @@ namespace OpenSC.Model.UMDs
             {
                 serialPort?.Close();
                 serialPort = null;
+                Initialized = false;
             }
             catch { }
         }
