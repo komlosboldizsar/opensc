@@ -72,6 +72,7 @@
     <Compile Include="GUI\ChildWindowWithTitleTwoParts.Designer.cs">
       <DependentUpon>ChildWindowWithTitleTwoParts.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\ModelEditorFormTypeRegister.cs" />
     <Compile Include="GUI\GeneralComponents\GrowLabel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -93,6 +94,7 @@
     <Compile Include="GUI\Helpers\Converters\EnumConverter.cs" />
     <Compile Include="GUI\Helpers\Converters\EnumToBitmapConverter.cs" />
     <Compile Include="GUI\Helpers\Converters\EnumToStringConverter.cs" />
+    <Compile Include="GUI\IModelEditorForm.cs" />
     <Compile Include="GUI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
