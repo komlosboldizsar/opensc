@@ -23,6 +23,7 @@ namespace OpenSC.GUI.Streams
             InitializeComponent();
             HeaderText = "List of streams";
             initializeTable();
+            loadAddableStreamTypes();
         }
 
         private CustomDataGridView<Stream> table;
@@ -131,6 +132,28 @@ namespace OpenSC.GUI.Streams
             { StreamState.Running, Properties.Resources._16_stream_running },
             { StreamState.Ended, Properties.Resources._16_stream_ended },
         };
+
+        private void loadAddableStreamTypes()
+        {
+            foreach(Type type in StreamEditorFormTypeRegister.Instance.RegisteredTypes)
+            {
+                string label = type.GetTypeLabel();
+                ToolStripMenuItem contextMenuItem = new ToolStripMenuItem(label)
+                {
+                    Tag = type
+                };
+                contextMenuItem.Click += addStreamMenuItemClick;
+                addableStreamTypesMenu.Items.Add(contextMenuItem);
+            }
+        }
+
+        private static void addStreamMenuItemClick(object sender, EventArgs e)
+        {
+            ToolStripMenuItem typedSender = sender as ToolStripMenuItem;
+            Type newStreamType = typedSender?.Tag as Type;
+            IModelEditorForm<Stream> editorForm = StreamEditorFormTypeRegister.Instance.GetFormForType(newStreamType);
+            (editorForm as ChildWindowBase)?.ShowAsChild();
+        }
 
     }
 
