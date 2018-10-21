@@ -179,6 +179,12 @@
     <Compile Include="GUI\UMDs\UmdList.Designer.cs">
       <DependentUpon>UmdList.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\VTRs\CasparCgPlayoutEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\VTRs\CasparCgPlayoutEditorForm.Designer.cs">
+      <DependentUpon>CasparCgPlayoutEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\VTRs\VtrEditorFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -331,6 +337,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\UMDs\UmdList.resx">
       <DependentUpon>UmdList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\VTRs\CasparCgPlayoutEditorForm.resx">
+      <DependentUpon>CasparCgPlayoutEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\VTRs\VtrEditorFormBase.resx">
       <DependentUpon>VtrEditorFormBase.cs</DependentUpon>
