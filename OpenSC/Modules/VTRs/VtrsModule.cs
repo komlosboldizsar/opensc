@@ -25,7 +25,7 @@ namespace OpenSC.Modules.VTRs
 
         public void RegisterModelTypes()
         {
-            //RegisterVtrType<CasparCgPlayout, /**/>();
+            RegisterVtrType<CasparCgPlayout, CasparCgPlayoutEditorForm>();
         }
 
         public void RegisterDatabases()
