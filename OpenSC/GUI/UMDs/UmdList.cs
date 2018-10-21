@@ -110,9 +110,8 @@ namespace OpenSC.GUI.UMDs
             builder.Width(70);
             builder.ButtonText("Edit");
             builder.CellContentClickHandlerMethod((umd, cell, e) => {
-                var editWindow = new UmdEditWindow(umd);
+                var editWindow = UmdEditorFormTypeRegister.Instance.GetFormForModel(umd) as ChildWindowBase;
                 editWindow.ShowAsChild();
-                return;
             });
             builder.BuildAndAdd();
 
