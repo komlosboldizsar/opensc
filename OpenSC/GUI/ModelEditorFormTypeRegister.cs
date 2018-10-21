@@ -17,7 +17,7 @@ namespace OpenSC.GUI
 
         private Dictionary<Type, IModelEditorForm<TModelBase>> registeredTypes = new Dictionary<Type, IModelEditorForm<TModelBase>>();
 
-        private IReadOnlyList<Type> RegisteredTypes
+        public IReadOnlyList<Type> RegisteredTypes
         {
             get { return registeredTypes.Keys.ToList(); }
         }
