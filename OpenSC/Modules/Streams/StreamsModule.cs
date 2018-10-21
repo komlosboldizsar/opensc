@@ -28,7 +28,7 @@ namespace OpenSC.Modules.Streams
 
         public void RegisterModelTypes()
         {
-            //RegisterStreamType<YoutubeStream, /**/>("youtube");
+            RegisterStreamType<YoutubeStream, YoutubeStreamEditorForm>("youtube");
         }
 
         public void RegisterDatabases()

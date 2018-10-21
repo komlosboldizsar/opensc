@@ -141,6 +141,12 @@
       <DependentUpon>StreamList.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Streams\StreamEditorFormTypeRegister.cs" />
+    <Compile Include="GUI\Streams\YoutubeStreamEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Streams\YoutubeStreamEditorForm.Designer.cs">
+      <DependentUpon>YoutubeStreamEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Timers\TimerEditWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -298,6 +304,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Streams\StreamList.resx">
       <DependentUpon>StreamList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Streams\YoutubeStreamEditorForm.resx">
+      <DependentUpon>YoutubeStreamEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Timers\TimerEditWindow.resx">
       <DependentUpon>TimerEditWindow.cs</DependentUpon>
