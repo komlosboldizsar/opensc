@@ -15,6 +15,18 @@ namespace OpenSC.Model.UMDs
         [PersistAs("port_name")]
         protected string comPortName;
 
+        public string ComPortName
+        {
+            get { return comPortName; }
+            set
+            {
+                if ((serialPort != null) && (serialPort.IsOpen))
+                    DeInit();
+                comPortName = value;
+                Init();
+            }
+        }
+
         private SerialPort serialPort;
 
         private List<Packet> packetFifo = new List<Packet>();
@@ -22,15 +34,15 @@ namespace OpenSC.Model.UMDs
 
         private Thread packetSchedulerThread;
 
+        public UmdSerialPort()
+        {
+            createAndStartPacketSchedulerThread();
+        }
+
         public UmdSerialPort(string comPortName)
         {
             this.comPortName = comPortName;
             Init();
-            createAndStartPacketSchedulerThread();
-        }
-
-        public UmdSerialPort()
-        {
             createAndStartPacketSchedulerThread();
         }
 
@@ -49,6 +61,8 @@ namespace OpenSC.Model.UMDs
 
         public override void Init()
         {
+            if (string.IsNullOrEmpty(comPortName))
+                return;
             try
             {
                 serialPort = new SerialPort(comPortName, COMPORT_BAUDRATE, COMPORT_PARITY, COMPORT_DATABITS, COMPORT_STOPBITS);
