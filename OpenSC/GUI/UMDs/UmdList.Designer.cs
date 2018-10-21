@@ -61,6 +61,7 @@
             // 
             // addUmdButton
             // 
+            this.addUmdButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.addUmdButton.Location = new System.Drawing.Point(650, 13);
             this.addUmdButton.Menu = this.addableUmdTypesMenu;
             this.addUmdButton.Name = "addUmdButton";
