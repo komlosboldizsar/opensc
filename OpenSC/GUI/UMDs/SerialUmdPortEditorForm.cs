@@ -11,10 +11,13 @@ namespace OpenSC.GUI.UMDs
         public SerialUmdPortEditorForm() : base()
         {
             InitializeComponent();
+            loadAvailableSerialPorts();
         }
 
         public SerialUmdPortEditorForm(UmdPort port) : base(port)
         {
+            InitializeComponent();
+            loadAvailableSerialPorts();
             if ((port != null) && !(port is UmdSerialPort))
                 throw new ArgumentException();
         }
