@@ -62,6 +62,6 @@
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox;
+        public System.Windows.Forms.GroupBox groupBox;
     }
 }
