@@ -165,6 +165,12 @@
     <Compile Include="GUI\ModelEditorFormBase.Designer.cs">
       <DependentUpon>ModelEditorFormBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\UMDs\McCurdyUmd1EditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\UMDs\McCurdyUmd1EditorForm.Designer.cs">
+      <DependentUpon>McCurdyUmd1EditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\UMDs\UmdEditorFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
