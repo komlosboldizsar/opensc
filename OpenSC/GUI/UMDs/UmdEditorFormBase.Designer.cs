@@ -332,9 +332,9 @@
         private System.Windows.Forms.TextBox staticTextTextBox;
         private System.Windows.Forms.Label useStaticTextLabel;
         private System.Windows.Forms.CheckBox useStaticTextCheckBox;
-        private System.Windows.Forms.TabControl mainTabControl;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage dynamicDataTabPage;
-        private System.Windows.Forms.TabPage talliesTabPage;
+        protected System.Windows.Forms.TabControl mainTabControl;
+        protected System.Windows.Forms.TabPage tabPage1;
+        protected System.Windows.Forms.TabPage dynamicDataTabPage;
+        protected System.Windows.Forms.TabPage talliesTabPage;
     }
 }
