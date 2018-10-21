@@ -31,8 +31,8 @@
             this.serialPortDataPanel = new System.Windows.Forms.Panel();
             this.serialPortDataGroupBox = new System.Windows.Forms.GroupBox();
             this.serialPortDataTable = new System.Windows.Forms.TableLayoutPanel();
-            this.portNameLabel = new System.Windows.Forms.Label();
             this.portNameDropDown = new System.Windows.Forms.ComboBox();
+            this.portNameLabel = new System.Windows.Forms.Label();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.serialPortDataPanel.SuspendLayout();
@@ -73,7 +73,7 @@
             this.serialPortDataGroupBox.Size = new System.Drawing.Size(496, 51);
             this.serialPortDataGroupBox.TabIndex = 0;
             this.serialPortDataGroupBox.TabStop = false;
-            this.serialPortDataGroupBox.Text = "groupBox1";
+            this.serialPortDataGroupBox.Text = "Serial port";
             // 
             // serialPortDataTable
             // 
@@ -92,6 +92,14 @@
             this.serialPortDataTable.Size = new System.Drawing.Size(490, 30);
             this.serialPortDataTable.TabIndex = 0;
             // 
+            // portNameDropDown
+            // 
+            this.portNameDropDown.FormattingEnabled = true;
+            this.portNameDropDown.Location = new System.Drawing.Point(70, 3);
+            this.portNameDropDown.Name = "portNameDropDown";
+            this.portNameDropDown.Size = new System.Drawing.Size(121, 24);
+            this.portNameDropDown.TabIndex = 1;
+            // 
             // portNameLabel
             // 
             this.portNameLabel.AutoSize = true;
@@ -103,14 +111,6 @@
             this.portNameLabel.TabIndex = 0;
             this.portNameLabel.Text = "Name:";
             this.portNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // portNameDropDown
-            // 
-            this.portNameDropDown.FormattingEnabled = true;
-            this.portNameDropDown.Location = new System.Drawing.Point(70, 3);
-            this.portNameDropDown.Name = "portNameDropDown";
-            this.portNameDropDown.Size = new System.Drawing.Size(121, 24);
-            this.portNameDropDown.TabIndex = 1;
             // 
             // SerialUmdPortEditorForm
             // 
