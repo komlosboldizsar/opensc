@@ -55,18 +55,26 @@ namespace OpenSC.Modules.UMDs
 
         }
 
-        public void RegisterUmdType<TUmd, TUmdEditorForm>(string typeCode)
+        public void RegisterUmdType<TUmd, TUmdEditorForm>()
             where TUmd: UMD
             where TUmdEditorForm: IModelEditorForm<UMD>, new()
         {
+            Type umdType = typeof(TUmd);
+            string typeCode = umdType.GetTypeCode();
+            if (string.IsNullOrEmpty(typeCode))
+                throw new Exception();
             UmdTypeNameConverter.AddKnownType(typeCode, typeof(TUmd));
             UmdEditorFormTypeRegister.Instance.RegisterFormType<TUmd, TUmdEditorForm>();
         }
 
-        public void RegisterUmdPortType<TUmdPort, TUmdPortEditorForm>(string typeCode)
+        public void RegisterUmdPortType<TUmdPort, TUmdPortEditorForm>()
             where TUmdPort : UmdPort
             where TUmdPortEditorForm : IModelEditorForm<UmdPort>, new()
         {
+            Type umdPortType = typeof(TUmdPort);
+            string typeCode = umdPortType.GetTypeCode();
+            if (string.IsNullOrEmpty(typeCode))
+                throw new Exception();
             UmdPortTypeNameConverter.AddKnownType(typeCode, typeof(TUmdPort));
             UmdPortEditorFormTypeRegister.Instance.RegisterFormType<TUmdPort, TUmdPortEditorForm>();
         }

@@ -49,10 +49,14 @@ namespace OpenSC.Modules.VTRs
 
         }
 
-        public void RegisterVtrType<TVtr, TVtrEditorForm>(string typeCode)
+        public void RegisterVtrType<TVtr, TVtrEditorForm>()
             where TVtr : Vtr
             where TVtrEditorForm : IModelEditorForm<Vtr>, new()
         {
+            Type vtrType = typeof(TVtr);
+            string typeCode = vtrType.GetTypeCode();
+            if (string.IsNullOrEmpty(typeCode))
+                throw new Exception();
             VtrTypeNameConverter.AddKnownType(typeCode, typeof(TVtr));
             VtrEditorFormTypeRegister.Instance.RegisterFormType<TVtr, TVtrEditorForm>();
         }

@@ -52,10 +52,14 @@ namespace OpenSC.Modules.Streams
             SettingsManager.Instance.RegisterSetting(YoutubeStream.ApiKeySetting);
         }
 
-        public void RegisterStreamType<TStream, TStreamEditorForm>(string typeCode)
+        public void RegisterStreamType<TStream, TStreamEditorForm>()
             where TStream : Stream
             where TStreamEditorForm : IModelEditorForm<Stream>, new()
         {
+            Type streamType = typeof(TStream);
+            string typeCode = streamType.GetTypeCode();
+            if (string.IsNullOrEmpty(typeCode))
+                throw new Exception();
             StreamTypeNameConverter.AddKnownType(typeCode, typeof(TStream));
             StreamEditorFormTypeRegister.Instance.RegisterFormType<TStream, TStreamEditorForm>();
         }
