@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.Persistence;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -54,6 +55,7 @@ namespace OpenSC.Model.UMDs
         public event ParameterlessChangeNotifierDelegate NameChangingPCN;
         public event ParameterlessChangeNotifierDelegate NameChangedPCN;
 
+        [PersistAs("name")]
         private string name;
 
         public string Name
