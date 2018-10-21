@@ -177,6 +177,12 @@
     <Compile Include="GUI\UMDs\McCurdyUmd1EditorForm.Designer.cs">
       <DependentUpon>McCurdyUmd1EditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\UMDs\UmdPortEditorFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\UMDs\UmdPortEditorFormBase.Designer.cs">
+      <DependentUpon>UmdPortEditorFormBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\UMDs\UmdEditorFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -337,6 +343,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ModelEditorFormBase.resx">
       <DependentUpon>ModelEditorFormBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\UMDs\UmdPortEditorFormBase.resx">
+      <DependentUpon>UmdPortEditorFormBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\UMDs\UmdEditorFormBase.resx">
       <DependentUpon>UmdEditorFormBase.cs</DependentUpon>
