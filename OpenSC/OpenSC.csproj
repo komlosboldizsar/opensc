@@ -128,6 +128,12 @@
     <Compile Include="GUI\Settings\StringSettingEditor.Designer.cs">
       <DependentUpon>StringSettingEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Streams\StreamEditorFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Streams\StreamEditorFormBase.Designer.cs">
+      <DependentUpon>StreamEditorFormBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Streams\StreamList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +141,12 @@
       <DependentUpon>StreamList.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Streams\StreamEditorFormTypeRegister.cs" />
+    <Compile Include="GUI\Streams\YoutubeStreamEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Streams\YoutubeStreamEditorForm.Designer.cs">
+      <DependentUpon>YoutubeStreamEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Timers\TimerEditWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -146,6 +158,12 @@
     </Compile>
     <Compile Include="GUI\Timers\TimerList.Designer.cs">
       <DependentUpon>TimerList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ModelEditorFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ModelEditorFormBase.Designer.cs">
+      <DependentUpon>ModelEditorFormBase.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\UMDs\UmdEditWindow.cs">
       <SubType>Form</SubType>
@@ -284,14 +302,23 @@
     <EmbeddedResource Include="GUI\Settings\StringSettingEditor.resx">
       <DependentUpon>StringSettingEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Streams\StreamEditorFormBase.resx">
+      <DependentUpon>StreamEditorFormBase.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Streams\StreamList.resx">
       <DependentUpon>StreamList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Streams\YoutubeStreamEditorForm.resx">
+      <DependentUpon>YoutubeStreamEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Timers\TimerEditWindow.resx">
       <DependentUpon>TimerEditWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Timers\TimerList.resx">
       <DependentUpon>TimerList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ModelEditorFormBase.resx">
+      <DependentUpon>ModelEditorFormBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\UMDs\UmdEditWindow.resx">
       <DependentUpon>UmdEditWindow.cs</DependentUpon>
