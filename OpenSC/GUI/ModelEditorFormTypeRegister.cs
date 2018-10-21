@@ -37,6 +37,13 @@ namespace OpenSC.GUI
             return foundForm.GetInstance(modelInstance);
         }
 
+        public IModelEditorForm<TModelBase> GetFormForType(Type type)
+        {
+            if (!registeredTypes.TryGetValue(type, out IModelEditorForm<TModelBase> foundForm))
+                return null;
+            return foundForm.GetInstance(default(TModelBase));
+        }
+
     }
 
 }
