@@ -1,6 +1,6 @@
 ﻿namespace OpenSC.GUI.UMDs
 {
-    partial class UmdEditWindow
+    partial class UmdEditorFormBase
     {
         /// <summary>
         /// Required designer variable.
@@ -42,26 +42,32 @@
             this.staticTextTextBox = new System.Windows.Forms.TextBox();
             this.useStaticTextLabel = new System.Windows.Forms.Label();
             this.useStaticTextCheckBox = new System.Windows.Forms.CheckBox();
-            this.saveAndCloseButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.saveButton = new System.Windows.Forms.Button();
+            this.mainTabControl = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.dynamicDataTabPage = new System.Windows.Forms.TabPage();
+            this.talliesTabPage = new System.Windows.Forms.TabPage();
+            this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.basicDataTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).BeginInit();
             this.basicDataGroupBox.SuspendLayout();
             this.operationGroupBox.SuspendLayout();
             this.modeTable.SuspendLayout();
+            this.mainTabControl.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // customElementsPanel
+            // 
+            this.customElementsPanel.Controls.Add(this.mainTabControl);
+            this.customElementsPanel.Location = new System.Drawing.Point(10, 10);
+            this.customElementsPanel.Padding = new System.Windows.Forms.Padding(0);
+            this.customElementsPanel.Size = new System.Drawing.Size(489, 289);
             // 
             // mainContainer
             // 
-            this.mainContainer.Controls.Add(this.saveButton);
-            this.mainContainer.Controls.Add(this.cancelButton);
-            this.mainContainer.Controls.Add(this.saveAndCloseButton);
-            this.mainContainer.Controls.Add(this.operationGroupBox);
-            this.mainContainer.Controls.Add(this.basicDataGroupBox);
             this.mainContainer.Padding = new System.Windows.Forms.Padding(10);
-            this.mainContainer.Size = new System.Drawing.Size(482, 337);
+            this.mainContainer.Size = new System.Drawing.Size(509, 378);
             // 
             // basicDataTable
             // 
@@ -80,7 +86,7 @@
             this.basicDataTable.RowCount = 2;
             this.basicDataTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.basicDataTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.basicDataTable.Size = new System.Drawing.Size(446, 56);
+            this.basicDataTable.Size = new System.Drawing.Size(459, 56);
             this.basicDataTable.TabIndex = 0;
             // 
             // idLabel
@@ -88,7 +94,7 @@
             this.idLabel.AutoSize = true;
             this.idLabel.Dock = System.Windows.Forms.DockStyle.Left;
             this.idLabel.Location = new System.Drawing.Point(3, 0);
-            this.idLabel.Margin = new System.Windows.Forms.Padding(3, 0, 20, 0);
+            this.idLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.idLabel.Name = "idLabel";
             this.idLabel.Size = new System.Drawing.Size(21, 28);
             this.idLabel.TabIndex = 0;
@@ -100,7 +106,7 @@
             this.nameLabel.AutoSize = true;
             this.nameLabel.Dock = System.Windows.Forms.DockStyle.Left;
             this.nameLabel.Location = new System.Drawing.Point(3, 28);
-            this.nameLabel.Margin = new System.Windows.Forms.Padding(3, 0, 20, 0);
+            this.nameLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(45, 28);
             this.nameLabel.TabIndex = 1;
@@ -109,7 +115,7 @@
             // 
             // idNumericField
             // 
-            this.idNumericField.Location = new System.Drawing.Point(71, 3);
+            this.idNumericField.Location = new System.Drawing.Point(66, 3);
             this.idNumericField.Name = "idNumericField";
             this.idNumericField.Size = new System.Drawing.Size(120, 22);
             this.idNumericField.TabIndex = 2;
@@ -117,9 +123,9 @@
             // nameTextBox
             // 
             this.nameTextBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.nameTextBox.Location = new System.Drawing.Point(71, 31);
+            this.nameTextBox.Location = new System.Drawing.Point(66, 31);
             this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(372, 22);
+            this.nameTextBox.Size = new System.Drawing.Size(390, 22);
             this.nameTextBox.TabIndex = 3;
             // 
             // basicDataGroupBox
@@ -128,14 +134,14 @@
             this.basicDataGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.basicDataGroupBox.Controls.Add(this.basicDataTable);
             this.basicDataGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.basicDataGroupBox.Location = new System.Drawing.Point(10, 10);
+            this.basicDataGroupBox.Location = new System.Drawing.Point(3, 3);
             this.basicDataGroupBox.Margin = new System.Windows.Forms.Padding(10);
             this.basicDataGroupBox.Name = "basicDataGroupBox";
             this.basicDataGroupBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 8);
-            this.basicDataGroupBox.Size = new System.Drawing.Size(462, 83);
+            this.basicDataGroupBox.Size = new System.Drawing.Size(475, 83);
             this.basicDataGroupBox.TabIndex = 1;
             this.basicDataGroupBox.TabStop = false;
-            this.basicDataGroupBox.Text = "Basic data";
+            this.basicDataGroupBox.Text = "Base data";
             // 
             // operationGroupBox
             // 
@@ -143,11 +149,11 @@
             this.operationGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.operationGroupBox.Controls.Add(this.modeTable);
             this.operationGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.operationGroupBox.Location = new System.Drawing.Point(10, 93);
+            this.operationGroupBox.Location = new System.Drawing.Point(3, 86);
             this.operationGroupBox.Margin = new System.Windows.Forms.Padding(10);
             this.operationGroupBox.Name = "operationGroupBox";
             this.operationGroupBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 8);
-            this.operationGroupBox.Size = new System.Drawing.Size(462, 106);
+            this.operationGroupBox.Size = new System.Drawing.Size(475, 106);
             this.operationGroupBox.TabIndex = 2;
             this.operationGroupBox.TabStop = false;
             this.operationGroupBox.Text = "Content";
@@ -172,7 +178,8 @@
             this.modeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.modeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.modeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.modeTable.Size = new System.Drawing.Size(446, 79);
+            this.modeTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.modeTable.Size = new System.Drawing.Size(459, 79);
             this.modeTable.TabIndex = 0;
             // 
             // staticTextLabel
@@ -180,7 +187,7 @@
             this.staticTextLabel.AutoSize = true;
             this.staticTextLabel.Dock = System.Windows.Forms.DockStyle.Left;
             this.staticTextLabel.Location = new System.Drawing.Point(3, 28);
-            this.staticTextLabel.Margin = new System.Windows.Forms.Padding(3, 0, 20, 0);
+            this.staticTextLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.staticTextLabel.Name = "staticTextLabel";
             this.staticTextLabel.Size = new System.Drawing.Size(69, 28);
             this.staticTextLabel.TabIndex = 1;
@@ -192,7 +199,7 @@
             this.currentTextLabel.AutoSize = true;
             this.currentTextLabel.Dock = System.Windows.Forms.DockStyle.Left;
             this.currentTextLabel.Location = new System.Drawing.Point(3, 0);
-            this.currentTextLabel.Margin = new System.Windows.Forms.Padding(3, 0, 20, 0);
+            this.currentTextLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.currentTextLabel.Name = "currentTextLabel";
             this.currentTextLabel.Size = new System.Drawing.Size(81, 28);
             this.currentTextLabel.TabIndex = 4;
@@ -202,18 +209,19 @@
             // currentTextTextBox
             // 
             this.currentTextTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.currentTextTextBox.Location = new System.Drawing.Point(122, 3);
+            this.currentTextTextBox.Font = new System.Drawing.Font("Courier New", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.currentTextTextBox.Location = new System.Drawing.Point(117, 3);
             this.currentTextTextBox.Name = "currentTextTextBox";
             this.currentTextTextBox.ReadOnly = true;
-            this.currentTextTextBox.Size = new System.Drawing.Size(321, 22);
+            this.currentTextTextBox.Size = new System.Drawing.Size(339, 22);
             this.currentTextTextBox.TabIndex = 5;
             // 
             // staticTextTextBox
             // 
             this.staticTextTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.staticTextTextBox.Location = new System.Drawing.Point(122, 31);
+            this.staticTextTextBox.Location = new System.Drawing.Point(117, 31);
             this.staticTextTextBox.Name = "staticTextTextBox";
-            this.staticTextTextBox.Size = new System.Drawing.Size(321, 22);
+            this.staticTextTextBox.Size = new System.Drawing.Size(339, 22);
             this.staticTextTextBox.TabIndex = 6;
             // 
             // useStaticTextLabel
@@ -221,7 +229,7 @@
             this.useStaticTextLabel.AutoSize = true;
             this.useStaticTextLabel.Dock = System.Windows.Forms.DockStyle.Left;
             this.useStaticTextLabel.Location = new System.Drawing.Point(3, 56);
-            this.useStaticTextLabel.Margin = new System.Windows.Forms.Padding(3, 0, 20, 0);
+            this.useStaticTextLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.useStaticTextLabel.Name = "useStaticTextLabel";
             this.useStaticTextLabel.Size = new System.Drawing.Size(96, 23);
             this.useStaticTextLabel.TabIndex = 7;
@@ -231,58 +239,67 @@
             // useStaticTextCheckBox
             // 
             this.useStaticTextCheckBox.AutoSize = true;
-            this.useStaticTextCheckBox.Location = new System.Drawing.Point(122, 59);
+            this.useStaticTextCheckBox.Location = new System.Drawing.Point(117, 59);
             this.useStaticTextCheckBox.Name = "useStaticTextCheckBox";
             this.useStaticTextCheckBox.Size = new System.Drawing.Size(18, 17);
             this.useStaticTextCheckBox.TabIndex = 8;
             this.useStaticTextCheckBox.UseVisualStyleBackColor = true;
             // 
-            // saveAndCloseButton
+            // mainTabControl
             // 
-            this.saveAndCloseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveAndCloseButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.saveAndCloseButton.Location = new System.Drawing.Point(332, 289);
-            this.saveAndCloseButton.Name = "saveAndCloseButton";
-            this.saveAndCloseButton.Size = new System.Drawing.Size(137, 35);
-            this.saveAndCloseButton.TabIndex = 3;
-            this.saveAndCloseButton.Text = "Save and close";
-            this.saveAndCloseButton.UseVisualStyleBackColor = true;
-            this.saveAndCloseButton.Click += new System.EventHandler(this.saveAndCloseButton_Click);
+            this.mainTabControl.Controls.Add(this.tabPage1);
+            this.mainTabControl.Controls.Add(this.dynamicDataTabPage);
+            this.mainTabControl.Controls.Add(this.talliesTabPage);
+            this.mainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainTabControl.Location = new System.Drawing.Point(0, 0);
+            this.mainTabControl.Name = "mainTabControl";
+            this.mainTabControl.SelectedIndex = 0;
+            this.mainTabControl.Size = new System.Drawing.Size(489, 289);
+            this.mainTabControl.TabIndex = 3;
             // 
-            // cancelButton
+            // tabPage1
             // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.Location = new System.Drawing.Point(154, 288);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(83, 35);
-            this.cancelButton.TabIndex = 4;
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage1.Controls.Add(this.operationGroupBox);
+            this.tabPage1.Controls.Add(this.basicDataGroupBox);
+            this.tabPage1.Location = new System.Drawing.Point(4, 25);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(481, 260);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Base data";
             // 
-            // saveButton
+            // dynamicDataTabPage
             // 
-            this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveButton.Location = new System.Drawing.Point(243, 289);
-            this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(83, 35);
-            this.saveButton.TabIndex = 5;
-            this.saveButton.Text = "Save";
-            this.saveButton.UseVisualStyleBackColor = true;
-            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            this.dynamicDataTabPage.BackColor = System.Drawing.SystemColors.Control;
+            this.dynamicDataTabPage.Location = new System.Drawing.Point(4, 25);
+            this.dynamicDataTabPage.Name = "dynamicDataTabPage";
+            this.dynamicDataTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.dynamicDataTabPage.Size = new System.Drawing.Size(481, 260);
+            this.dynamicDataTabPage.TabIndex = 1;
+            this.dynamicDataTabPage.Text = "Dynamic text";
             // 
-            // UmdEditWindow
+            // talliesTabPage
+            // 
+            this.talliesTabPage.BackColor = System.Drawing.SystemColors.Control;
+            this.talliesTabPage.Location = new System.Drawing.Point(4, 25);
+            this.talliesTabPage.Name = "talliesTabPage";
+            this.talliesTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.talliesTabPage.Size = new System.Drawing.Size(481, 260);
+            this.talliesTabPage.TabIndex = 2;
+            this.talliesTabPage.Text = "Tallies";
+            // 
+            // UmdEditorFormBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(482, 393);
-            this.MaximizeBox = false;
+            this.ClientSize = new System.Drawing.Size(509, 434);
+            this.DeleteButtonVisible = true;
             this.MinimumSize = new System.Drawing.Size(500, 440);
-            this.Name = "UmdEditWindow";
+            this.Name = "UmdEditorFormBase";
             this.Text = "Edit UMD";
-            this.Load += new System.EventHandler(this.UmdEditWindow_Load);
+            this.customElementsPanel.ResumeLayout(false);
             this.mainContainer.ResumeLayout(false);
-            this.mainContainer.PerformLayout();
             this.basicDataTable.ResumeLayout(false);
             this.basicDataTable.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).EndInit();
@@ -292,6 +309,9 @@
             this.operationGroupBox.PerformLayout();
             this.modeTable.ResumeLayout(false);
             this.modeTable.PerformLayout();
+            this.mainTabControl.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -306,14 +326,15 @@
         private System.Windows.Forms.TextBox nameTextBox;
         private System.Windows.Forms.GroupBox operationGroupBox;
         private System.Windows.Forms.TableLayoutPanel modeTable;
-        private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.Button saveAndCloseButton;
-        private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Label staticTextLabel;
         private System.Windows.Forms.Label currentTextLabel;
         private System.Windows.Forms.TextBox currentTextTextBox;
         private System.Windows.Forms.TextBox staticTextTextBox;
         private System.Windows.Forms.Label useStaticTextLabel;
         private System.Windows.Forms.CheckBox useStaticTextCheckBox;
+        private System.Windows.Forms.TabControl mainTabControl;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage dynamicDataTabPage;
+        private System.Windows.Forms.TabPage talliesTabPage;
     }
 }
