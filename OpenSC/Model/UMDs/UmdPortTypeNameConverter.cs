@@ -10,11 +10,13 @@ namespace OpenSC.Model.UMDs
     class UmdPortTypeNameConverter : TypeNameConverterBase
     {
 
-        private Dictionary<string, Type> KNOWN_TYPES = new Dictionary<string, Type>()
+        private static Dictionary<string, Type> KNOWN_TYPES = new Dictionary<string, Type>()
+        { };
+
+        public static void AddKnownType(string typeCode, Type type)
         {
-            { "mccurdy", typeof(McCurdy.McCurdyPort) },
-            { "tsl31", typeof(TSL31.TSL31Port) },
-        };
+            KNOWN_TYPES.Add(typeCode, type);
+        }
 
         protected override Dictionary<string, Type> knownTypes => KNOWN_TYPES;
 

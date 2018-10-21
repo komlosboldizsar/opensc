@@ -11,10 +11,13 @@ namespace OpenSC.Model.Streams
     class StreamTypeNameConverter : TypeNameConverterBase
     {
 
-        private Dictionary<string, Type> KNOWN_TYPES = new Dictionary<string, Type>()
+        private static Dictionary<string, Type> KNOWN_TYPES = new Dictionary<string, Type>()
+        { };
+
+        public static void AddKnownType(string typeCode, Type type)
         {
-            { "youtube", typeof(YoutubeStream) }
-        };
+            KNOWN_TYPES.Add(typeCode, type);
+        }
 
         protected override Dictionary<string, Type> knownTypes => KNOWN_TYPES;
 

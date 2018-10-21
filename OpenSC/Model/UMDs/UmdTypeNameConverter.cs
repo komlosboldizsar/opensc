@@ -10,11 +10,13 @@ namespace OpenSC.Model.UMDs
     class UmdTypeNameConverter : TypeNameConverterBase
     {
 
-        private Dictionary<string, Type> KNOWN_TYPES = new Dictionary<string, Type>()
+        private static Dictionary<string, Type> KNOWN_TYPES = new Dictionary<string, Type>()
+        { };
+
+        public static void AddKnownType(string typeCode, Type type)
         {
-            { "mccurdy", typeof(McCurdy.McCurdyUMD1) },
-            { "tsl31", typeof(TSL31.TSL31) },
-        };
+            KNOWN_TYPES.Add(typeCode, type);
+        }
 
         protected override Dictionary<string, Type> knownTypes => KNOWN_TYPES;
 
