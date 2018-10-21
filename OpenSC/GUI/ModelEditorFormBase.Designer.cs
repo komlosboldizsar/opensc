@@ -32,23 +32,24 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
+            this.buttonsPanel = new System.Windows.Forms.Panel();
+            this.customElementsPanel = new System.Windows.Forms.Panel();
             this.mainContainer.SuspendLayout();
+            this.buttonsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainContainer
             // 
-            this.mainContainer.Controls.Add(this.deleteButton);
-            this.mainContainer.Controls.Add(this.saveButton);
-            this.mainContainer.Controls.Add(this.cancelButton);
-            this.mainContainer.Controls.Add(this.saveAndCloseButton);
-            this.mainContainer.Padding = new System.Windows.Forms.Padding(10);
-            this.mainContainer.Size = new System.Drawing.Size(482, 337);
+            this.mainContainer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.mainContainer.Controls.Add(this.customElementsPanel);
+            this.mainContainer.Controls.Add(this.buttonsPanel);
+            this.mainContainer.Size = new System.Drawing.Size(518, 337);
             // 
             // saveAndCloseButton
             // 
             this.saveAndCloseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.saveAndCloseButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.saveAndCloseButton.Location = new System.Drawing.Point(332, 289);
+            this.saveAndCloseButton.Location = new System.Drawing.Point(369, 22);
             this.saveAndCloseButton.Name = "saveAndCloseButton";
             this.saveAndCloseButton.Size = new System.Drawing.Size(137, 35);
             this.saveAndCloseButton.TabIndex = 3;
@@ -59,7 +60,7 @@
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.Location = new System.Drawing.Point(154, 288);
+            this.cancelButton.Location = new System.Drawing.Point(191, 22);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(83, 35);
             this.cancelButton.TabIndex = 4;
@@ -70,7 +71,7 @@
             // saveButton
             // 
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveButton.Location = new System.Drawing.Point(243, 289);
+            this.saveButton.Location = new System.Drawing.Point(280, 22);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(83, 35);
             this.saveButton.TabIndex = 5;
@@ -82,7 +83,7 @@
             // 
             this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.deleteButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.deleteButton.Location = new System.Drawing.Point(13, 288);
+            this.deleteButton.Location = new System.Drawing.Point(12, 22);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(83, 35);
             this.deleteButton.TabIndex = 6;
@@ -90,16 +91,39 @@
             this.deleteButton.UseVisualStyleBackColor = true;
             this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
             // 
+            // buttonsPanel
+            // 
+            this.buttonsPanel.Controls.Add(this.deleteButton);
+            this.buttonsPanel.Controls.Add(this.saveButton);
+            this.buttonsPanel.Controls.Add(this.cancelButton);
+            this.buttonsPanel.Controls.Add(this.saveAndCloseButton);
+            this.buttonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonsPanel.Location = new System.Drawing.Point(0, 268);
+            this.buttonsPanel.Name = "buttonsPanel";
+            this.buttonsPanel.Size = new System.Drawing.Size(518, 69);
+            this.buttonsPanel.TabIndex = 8;
+            // 
+            // customElementsPanel
+            // 
+            this.customElementsPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.customElementsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.customElementsPanel.Location = new System.Drawing.Point(0, 0);
+            this.customElementsPanel.Name = "customElementsPanel";
+            this.customElementsPanel.Size = new System.Drawing.Size(518, 268);
+            this.customElementsPanel.TabIndex = 9;
+            // 
             // ModelEditorFormBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(482, 393);
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ClientSize = new System.Drawing.Size(518, 393);
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(500, 440);
+            this.MinimumSize = new System.Drawing.Size(500, 200);
             this.Name = "ModelEditorFormBase";
             this.Text = "Edit something";
             this.mainContainer.ResumeLayout(false);
+            this.buttonsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -109,5 +133,7 @@
         private System.Windows.Forms.Button saveAndCloseButton;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button deleteButton;
+        protected System.Windows.Forms.Panel customElementsPanel;
+        private System.Windows.Forms.Panel buttonsPanel;
     }
 }
