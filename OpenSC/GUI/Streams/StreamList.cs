@@ -92,8 +92,8 @@ namespace OpenSC.GUI.Streams
             builder.Width(70);
             builder.ButtonText("Edit");
             builder.CellContentClickHandlerMethod((stream, cell, e) => {
-                /*var editWindow = new StreamEditWindow();
-                editWindow.ShowAsChild();*/
+                var editWindow = StreamEditorFormTypeRegister.Instance.GetFormForModel(stream) as ChildWindowBase;
+                editWindow?.ShowAsChild();
             });
             builder.BuildAndAdd();
 
