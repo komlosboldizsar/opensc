@@ -165,6 +165,12 @@
     <Compile Include="GUI\ModelEditorFormBase.Designer.cs">
       <DependentUpon>ModelEditorFormBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\UMDs\SerialUmdPortEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\UMDs\SerialUmdPortEditorForm.Designer.cs">
+      <DependentUpon>SerialUmdPortEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\UMDs\Tsl31UmdEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -343,6 +349,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ModelEditorFormBase.resx">
       <DependentUpon>ModelEditorFormBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\UMDs\SerialUmdPortEditorForm.resx">
+      <DependentUpon>SerialUmdPortEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\UMDs\UmdPortEditorFormBase.resx">
       <DependentUpon>UmdPortEditorFormBase.cs</DependentUpon>
