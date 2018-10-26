@@ -24,6 +24,9 @@ namespace OpenSC.Modules.UMDs
         public void ProgramStarted()
         {
         }
+        public void RegisterDynamicTextFunctions()
+        {
+        }
 
         public void RegisterModelTypes()
         {

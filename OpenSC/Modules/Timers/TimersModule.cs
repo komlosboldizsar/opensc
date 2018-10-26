@@ -22,6 +22,10 @@ namespace OpenSC.Modules.Timers
         {
         }
 
+        public void RegisterDynamicTextFunctions()
+        {
+        }
+
         public void RegisterModelTypes()
         {
 

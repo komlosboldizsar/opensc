@@ -32,6 +32,12 @@ namespace OpenSC.Modules
         }
         #endregion
 
+        public static void RegisterDynamicTextFunctions()
+        {
+            foreach (IModule module in registeredModules)
+                module.RegisterDynamicTextFunctions();
+        }
+
         public static void RegisterModelTypes()
         {
             foreach (IModule module in registeredModules)
