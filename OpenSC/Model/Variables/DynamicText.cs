@@ -145,6 +145,8 @@ namespace OpenSC.Model.Variables
         {
             DynamicTextSubstituteBuilder substituteBuilder = new DynamicTextSubstituteBuilder(formula);
             substitutes = substituteBuilder.Build();
+            foreach (var substitute in substitutes)
+                substitute.ValueChanged += dynamicTextFunctionSubstituteValueChangedHandler;
         }
 
         private void dynamicTextFunctionSubstituteValueChangedHandler(IDynamicTextFunctionSubstitute substitute)
