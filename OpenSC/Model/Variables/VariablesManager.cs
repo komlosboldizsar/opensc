@@ -37,11 +37,13 @@ namespace OpenSC.Model.Variables
         private static void registerWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType(typeof(DynamicTextList));
+            WindowTypeRegister.RegisterWindowType(typeof(DynamicTextEditorForm));
         }
 
         private static void registerMenus() {
             var variablesMenu = MenuManager.Instance.TopMenu["Variables"];
             var dynamicTextsMenu = variablesMenu["Dynamic texts"];
+            dynamicTextsMenu.ClickHandler = (menu, tag) => new DynamicTextList().ShowAsChild();
         }
 
     }
