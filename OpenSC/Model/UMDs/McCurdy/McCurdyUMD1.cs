@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.Persistence;
+using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -90,8 +91,46 @@ namespace OpenSC.Model.UMDs.McCurdy
             port.SendData(address, d);
         }
 
+        [PersistAs("dynamic_text_source")]
+        private DynamicText dynamicTextSource;
+
+        [TempForeignKey("dynamic_text_source", nameof(dynamicTextSource))]
+        private int _dynamicTextSource;
+
+        public DynamicText DynamicTextSource
+        {
+            get { return dynamicTextSource; }
+            set
+            {
+
+                if (dynamicTextSource == value)
+                    return;
+
+                if (dynamicTextSource != null)
+                    dynamicTextSource.CurrentTextChanged -= dynamicTextChangedHandler;
+
+                dynamicTextSource = value;
+
+                if (dynamicTextSource != null)
+                {
+                    dynamicTextSource.CurrentTextChanged += dynamicTextChangedHandler;
+                    DynamicText = dynamicTextSource.CurrentText;
+                }
+                else
+                {
+                    DynamicText = "";
+                }
+
+            }
+        }
+
+        private void dynamicTextChangedHandler(DynamicText text, string oldText, string newText)
+        {
+            DynamicText = newText;
+        }
+
         [PersistAs("column_count")]
-        private ColumnCount columnCount = ColumnCount.Three;
+        private ColumnCount columnCount = ColumnCount.One;
 
         public ColumnCount ColumnCount
         {
