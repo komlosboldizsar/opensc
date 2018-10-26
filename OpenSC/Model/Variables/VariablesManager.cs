@@ -1,4 +1,6 @@
 ﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.Variables;
+using OpenSC.GUI.WorkspaceManager;
 using System;
 
 namespace OpenSC.Model.Variables
@@ -34,6 +36,7 @@ namespace OpenSC.Model.Variables
 
         private static void registerWindowTypes()
         {
+            WindowTypeRegister.RegisterWindowType(typeof(DynamicTextList));
         }
 
         private static void registerMenus() {
