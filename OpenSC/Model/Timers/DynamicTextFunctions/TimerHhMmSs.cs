@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Timers.DynamicTextFunctions
 {
-    public class TimerTotalSeconds : IDynamicTextFunction
+    public class TimerHhMmSs : IDynamicTextFunction
     {
-        public string FunctionName => nameof(TimerTotalSeconds);
+        public string FunctionName => nameof(TimerHhMmSs);
 
-        public string Description => "Total elapsed/remaining seconds of a timer.";
+        public string Description => "HH:MM::SS format of elapsed/remaining time of a timer.";
 
         public int ParameterCount => 1;
 
@@ -40,12 +40,12 @@ namespace OpenSC.Model.Timers.DynamicTextFunctions
             {
                 this.timer = timer;
                 timer.SecondsChanged += timerSecondsChangedHandler;
-                CurrentValue = timer.Seconds.ToString();
+                CurrentValue = timer.TimeSpan.ToString(@"hh\:mm\:ss");
             }
 
             private void timerSecondsChangedHandler(Timer timer, int oldValue, int newValue)
             {
-                CurrentValue = newValue.ToString();
+                CurrentValue = timer.TimeSpan.ToString(@"hh\:mm\:ss");
             }
 
             private string currentValue;
