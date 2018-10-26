@@ -132,7 +132,8 @@ namespace OpenSC.Model.Variables
 
         private void buildSubstitutesFromFormula()
         {
-            // TODO: State machine here
+            DynamicTextSubstituteBuilder substituteBuilder = new DynamicTextSubstituteBuilder(formula);
+            substitutes = substituteBuilder.Build();
         }
 
         private void dynamicTextFunctionSubstituteValueChangedHandler(IDynamicTextFunctionSubstitute substitute)
