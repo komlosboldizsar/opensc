@@ -3,6 +3,8 @@ using OpenSC.GUI.Timers;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.Timers;
+using OpenSC.Model.Timers.DynamicTextFunctions;
+using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +26,9 @@ namespace OpenSC.Modules.Timers
 
         public void RegisterDynamicTextFunctions()
         {
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new TimerTotalSeconds());
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new TimerTotalMinutes());
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new TimerHhMmSs());
         }
 
         public void RegisterModelTypes()
