@@ -89,7 +89,7 @@ namespace OpenSC.GUI.Variables
 
         private void addDynamicTextButton_Click(object sender, EventArgs e)
         {
-            var editWindow = new DynamicTextEditorForm();
+            var editWindow = new DynamicTextEditorForm(null);
             editWindow.ShowAsChild();
         }
 
