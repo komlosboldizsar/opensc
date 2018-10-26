@@ -1,6 +1,7 @@
 ﻿using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.Settings;
+using OpenSC.Model.Variables;
 using OpenSC.Modules;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace OpenSC
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            VariablesManager.ProgramStarted();
             ModuleManager.Init();
             ProgramStarted?.Invoke();
 
