@@ -48,7 +48,7 @@ namespace OpenSC.GUI.Variables
             idNumericField.Value = dyntext.ID;
             labelTextBox.Text = dyntext.Label;
             formulaTextBox.Text = dyntext.Formula;
-            currentTextLabel.Text = dyntext.CurrentText;
+            currentTextTextBox.Text = dyntext.CurrentText;
         }
 
         protected sealed override bool saveData()
@@ -96,7 +96,7 @@ namespace OpenSC.GUI.Variables
         private void dynamicTextCurrentTextChangedHandler(DynamicText dyntext, string oldText, string newText)
         {
             if (dyntext == this.dyntext)
-                currentTextLabel.Text = newText;
+                currentTextTextBox.Text = newText;
         }
 
     }
