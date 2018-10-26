@@ -13,6 +13,8 @@ namespace OpenSC.Model.Variables
         int ParameterCount { get; }
 
         DynamicTextFunctionArgumentType[] ArgumentTypes { get; }
+
+        string[] ArgumentDescriptions { get; }
         
         IDynamicTextFunctionSubstitute GetSubstitute(object[] arguments);
 
