@@ -29,6 +29,7 @@ namespace OpenSC.Model.Variables
 
         private static void registerDatabases()
         {
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(DynamicTextDatabase));
         }
 
         private static void registerWindowTypes()
@@ -37,6 +38,7 @@ namespace OpenSC.Model.Variables
 
         private static void registerMenus() {
             var variablesMenu = MenuManager.Instance.TopMenu["Variables"];
+            var dynamicTextsMenu = variablesMenu["Dynamic texts"];
         }
 
     }

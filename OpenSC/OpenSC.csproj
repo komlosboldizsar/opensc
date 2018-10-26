@@ -275,6 +275,8 @@
     <Compile Include="Model\Settings\Converters\SettingValueConverterAttribute.cs" />
     <Compile Include="Model\TypeCodeAttribute.cs" />
     <Compile Include="Model\TypeLabelAttribute.cs" />
+    <Compile Include="Model\Variables\DynamicText.cs" />
+    <Compile Include="Model\Variables\DynamicTextDatabase.cs" />
     <Compile Include="Model\Variables\VariablesManager.cs" />
     <Compile Include="Model\VTRs\CasparCgPlayout.cs" />
     <Compile Include="Model\VTRs\Vtr.cs" />
