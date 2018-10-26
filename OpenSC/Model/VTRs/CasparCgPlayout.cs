@@ -18,7 +18,7 @@ namespace OpenSC.Model.VTRs
     {
 
         [PersistAs("listened_ip")]
-        private string listenedIP;
+        private string listenedIP = "127.0.0.1";
 
         public string ListenedIP
         {
@@ -27,7 +27,7 @@ namespace OpenSC.Model.VTRs
         }
 
         [PersistAs("watched_channel")]
-        private int watchedChannel;
+        private int watchedChannel = 1;
 
         public int WatchedChannel
         {
@@ -43,7 +43,7 @@ namespace OpenSC.Model.VTRs
         }
 
         [PersistAs("watched_layer")]
-        private int watchedLayer;
+        private int watchedLayer = 10;
 
         public int WatchedLayer
         {
