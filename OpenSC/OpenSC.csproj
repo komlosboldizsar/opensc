@@ -276,6 +276,7 @@
     <Compile Include="Model\TypeCodeAttribute.cs" />
     <Compile Include="Model\TypeLabelAttribute.cs" />
     <Compile Include="Model\Variables\DynamicText.cs" />
+    <Compile Include="Model\Variables\DynamicTextFunctionArgumentType.cs" />
     <Compile Include="Model\Variables\DynamicTextDatabase.cs" />
     <Compile Include="Model\Variables\DynamicTextFunctionRegister.cs" />
     <Compile Include="Model\Variables\IDynamicTextFunction.cs" />
