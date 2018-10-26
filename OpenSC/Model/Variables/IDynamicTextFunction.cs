@@ -8,6 +8,8 @@ namespace OpenSC.Model.Variables
 
         string FunctionName { get; }
 
+        string Description { get; }
+
         int ParameterCount { get; }
 
         DynamicTextFunctionArgumentType[] ArgumentTypes { get; }
