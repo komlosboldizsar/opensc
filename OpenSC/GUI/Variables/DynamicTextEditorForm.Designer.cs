@@ -179,9 +179,9 @@
             this.currentTextLabel.Location = new System.Drawing.Point(3, 28);
             this.currentTextLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.currentTextLabel.Name = "currentTextLabel";
-            this.currentTextLabel.Size = new System.Drawing.Size(93, 28);
+            this.currentTextLabel.Size = new System.Drawing.Size(81, 28);
             this.currentTextLabel.TabIndex = 1;
-            this.currentTextLabel.Text = "Current value";
+            this.currentTextLabel.Text = "Current text";
             this.currentTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // formulaLabel
@@ -200,18 +200,18 @@
             // 
             this.formulaTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.formulaTextBox.Font = new System.Drawing.Font("Courier New", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.formulaTextBox.Location = new System.Drawing.Point(114, 3);
+            this.formulaTextBox.Location = new System.Drawing.Point(102, 3);
             this.formulaTextBox.Name = "formulaTextBox";
-            this.formulaTextBox.Size = new System.Drawing.Size(356, 22);
+            this.formulaTextBox.Size = new System.Drawing.Size(368, 22);
             this.formulaTextBox.TabIndex = 5;
             // 
             // currentTextTextBox
             // 
             this.currentTextTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.currentTextTextBox.Location = new System.Drawing.Point(114, 31);
+            this.currentTextTextBox.Location = new System.Drawing.Point(102, 31);
             this.currentTextTextBox.Name = "currentTextTextBox";
             this.currentTextTextBox.ReadOnly = true;
-            this.currentTextTextBox.Size = new System.Drawing.Size(356, 22);
+            this.currentTextTextBox.Size = new System.Drawing.Size(368, 22);
             this.currentTextTextBox.TabIndex = 6;
             // 
             // DynamicTextEditorForm
