@@ -18,6 +18,10 @@ namespace OpenSC.Modules.Routers
         {
         }
 
+        public void RegisterDynamicTextFunctions()
+        {
+        }
+
         public void RegisterModelTypes()
         {
 

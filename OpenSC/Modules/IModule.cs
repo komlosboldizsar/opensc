@@ -10,6 +10,7 @@ namespace OpenSC.Modules
     {
         void ProgramStarted();
         void MainWindowOpened();
+        void RegisterDynamicTextFunctions();
         void RegisterModelTypes();
         void RegisterDatabases();
         void RegisterWindowTypes();

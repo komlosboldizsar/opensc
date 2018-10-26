@@ -23,6 +23,10 @@ namespace OpenSC.Modules.VTRs
         {
         }
 
+        public void RegisterDynamicTextFunctions()
+        {
+        }
+
         public void RegisterModelTypes()
         {
             RegisterVtrType<CasparCgPlayout, CasparCgPlayoutEditorForm>();

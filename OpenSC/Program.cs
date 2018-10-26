@@ -33,6 +33,8 @@ namespace OpenSC
             ModuleManager.Init();
             ProgramStarted?.Invoke();
 
+            ModuleManager.RegisterDynamicTextFunctions();
+
             // TODO: init somewhere else :)
             ModuleManager.RegisterModelTypes();
 
