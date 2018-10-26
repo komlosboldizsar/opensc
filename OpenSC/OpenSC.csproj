@@ -296,6 +296,7 @@
     <Compile Include="Model\Variables\IDynamicTextFunctionSubstitute.cs" />
     <Compile Include="Model\Variables\VariablesManager.cs" />
     <Compile Include="Model\VTRs\CasparCgPlayout.cs" />
+    <Compile Include="Model\VTRs\DynamicTextFunctions\VtrRemainingTimeHhMmSs.cs" />
     <Compile Include="Model\VTRs\Vtr.cs" />
     <Compile Include="Model\VTRs\VtrDatabase.cs" />
     <Compile Include="Model\VTRs\VtrState.cs" />
