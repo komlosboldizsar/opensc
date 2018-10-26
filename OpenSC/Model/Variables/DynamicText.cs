@@ -22,8 +22,7 @@ namespace OpenSC.Model.Variables
 
         public virtual void Restored()
         {
-            buildSubstitutesFromFormula();
-            totalUpdate();
+            formulaUpdated();
         }
 
         public event DynamicTextIdChangingDelegate IdChanging;
@@ -121,8 +120,20 @@ namespace OpenSC.Model.Variables
             set
             {
                 formula = value;
+                formulaUpdated();
+            }
+        }
+
+        private void formulaUpdated()
+        {
+            try
+            {
                 buildSubstitutesFromFormula();
                 totalUpdate();
+            }
+            catch (DynamicTextSubstituteBuilder.FormulaSyntaxErrorException ex)
+            {
+                CurrentText = string.Format("Syntax error in formula at character position {0}.", ex.Position);
             }
         }
 
