@@ -38,7 +38,9 @@ namespace OpenSC.Model.Timers.DynamicTextFunctions
 
             public Substitute(Timer timer)
             {
+                this.timer = timer;
                 timer.SecondsChanged += timerSecondsChangedHandler;
+                CurrentValue = timer.Seconds.ToString();
             }
 
             private void timerSecondsChangedHandler(Timer timer, int oldValue, int newValue)
