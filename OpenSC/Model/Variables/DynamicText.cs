@@ -71,7 +71,7 @@ namespace OpenSC.Model.Variables
             get { return label; }
             set
             {
-                ValidateLabel(label);
+                ValidateLabel(value);
                 if (value == label)
                     return;
                 string oldLabel = label;
