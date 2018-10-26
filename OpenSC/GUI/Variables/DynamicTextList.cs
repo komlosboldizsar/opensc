@@ -63,8 +63,8 @@ namespace OpenSC.GUI.Variables
             builder.Width(70);
             builder.ButtonText("Edit");
             builder.CellContentClickHandlerMethod((dyntext, cell, e) => {
-                /*var editWindow = VtrEditorFormTypeRegister.Instance.GetFormForModel(vtr) as ChildWindowBase;
-                editWindow?.ShowAsChild();*/
+                var editWindow = new DynamicTextEditorForm(dyntext);
+                editWindow.ShowAsChild();
             });
             builder.BuildAndAdd();
 
@@ -89,7 +89,8 @@ namespace OpenSC.GUI.Variables
 
         private void addDynamicTextButton_Click(object sender, EventArgs e)
         {
-            // TODO
+            var editWindow = new DynamicTextEditorForm();
+            editWindow.ShowAsChild();
         }
 
     }
