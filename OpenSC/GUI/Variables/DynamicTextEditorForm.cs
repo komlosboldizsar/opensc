@@ -95,6 +95,11 @@ namespace OpenSC.GUI.Variables
 
         private void dynamicTextCurrentTextChangedHandler(DynamicText dyntext, string oldText, string newText)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => dynamicTextCurrentTextChangedHandler(dyntext, oldText, newText)));
+                return;
+            }
             if (dyntext == this.dyntext)
                 currentTextTextBox.Text = newText;
         }
