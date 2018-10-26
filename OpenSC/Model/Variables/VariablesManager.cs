@@ -37,7 +37,6 @@ namespace OpenSC.Model.Variables
         private static void registerWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType(typeof(DynamicTextList));
-            WindowTypeRegister.RegisterWindowType(typeof(DynamicTextEditorForm));
         }
 
         private static void registerMenus() {
