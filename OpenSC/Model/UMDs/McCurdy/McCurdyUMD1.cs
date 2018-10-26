@@ -134,7 +134,7 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         public ColumnCount ColumnCount
         {
-            get { return ColumnCount; }
+            get { return columnCount; }
             set
             {
                 columnCount = value;
