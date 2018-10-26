@@ -227,6 +227,12 @@
     <Compile Include="GUI\Variables\DynamicTextList.Designer.cs">
       <DependentUpon>DynamicTextList.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Variables\DynamicTextEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Variables\DynamicTextEditorForm.Designer.cs">
+      <DependentUpon>DynamicTextEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\VTRs\CasparCgPlayoutEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -404,6 +410,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Variables\DynamicTextList.resx">
       <DependentUpon>DynamicTextList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Variables\DynamicTextEditorForm.resx">
+      <DependentUpon>DynamicTextEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\VTRs\CasparCgPlayoutEditorForm.resx">
       <DependentUpon>CasparCgPlayoutEditorForm.cs</DependentUpon>
