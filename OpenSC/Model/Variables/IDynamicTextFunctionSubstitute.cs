@@ -5,7 +5,7 @@ namespace OpenSC.Model.Variables
 
     public delegate void DynamicTextFunctionSubstituteValueChanged(IDynamicTextFunctionSubstitute substitute);
 
-    public class IDynamicTextFunctionSubstitute
+    public interface IDynamicTextFunctionSubstitute
     {
 
         string CurrentValue { get; }
