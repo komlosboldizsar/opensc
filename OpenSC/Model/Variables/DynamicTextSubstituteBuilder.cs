@@ -390,8 +390,7 @@ namespace OpenSC.Model.Variables
 
         private void syntaxError(string message = "")
         {
-            string exceptionMessage = string.Format("Syntax error at character {0}.{1}{2}", currentPosition, ((message != "") ? " " : ""), message);
-            throw new FormulaSyntaxErrorException(exceptionMessage);
+            throw new FormulaSyntaxErrorException(currentPosition, message);
         }
 
         private interface IArgument
@@ -493,13 +492,23 @@ namespace OpenSC.Model.Variables
         public class FormulaSyntaxErrorException : Exception
         {
 
+            public int Position { get; private set; } = -1;
+
             public FormulaSyntaxErrorException()
             { }
 
-            public FormulaSyntaxErrorException(string message) : base(message)
+            public FormulaSyntaxErrorException(string message) :
+                base(message)
             { }
 
-            public FormulaSyntaxErrorException(string message, Exception innerException) : base(message, innerException)
+            public FormulaSyntaxErrorException(int position, string message = "") :
+                base(string.Format("Syntax error at character {0}.{1}{2}", position, ((message != "") ? " " : ""), message))
+            {
+                Position = position;
+            }
+
+            public FormulaSyntaxErrorException(string message, Exception innerException) :
+                base(message, innerException)
             { }
 
         }
