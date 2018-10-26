@@ -122,6 +122,7 @@ namespace OpenSC.Model.Variables
             {
                 formula = value;
                 buildSubstitutesFromFormula();
+                totalUpdate();
             }
         }
 
