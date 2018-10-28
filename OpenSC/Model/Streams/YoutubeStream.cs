@@ -56,10 +56,7 @@ namespace OpenSC.Model.Streams
         }
 
         public override void Restored()
-        {
-            base.Restored();
-            createAndStartUpdaterThread();
-        }
+        { }
 
         private void createAndStartUpdaterThread()
         {
@@ -83,15 +80,22 @@ namespace OpenSC.Model.Streams
 
         private void doHttpRequest()
         {
-            /*string url = string.Format(API_URL, videoId, ApiKeySetting.Value);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.ContentType = "application/json; charset=utf-8";
-            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-            using (System.IO.Stream responseStream = response.GetResponseStream())
+            try
             {
-                StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                processResponse(reader.ReadToEnd());
-            }*/
+                string url = string.Format(API_URL, videoId, ApiKeySetting.Value);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                request.ContentType = "application/json; charset=utf-8";
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                using (System.IO.Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                    processResponse(reader.ReadToEnd());
+                }
+            }
+            catch
+            {
+                State = StreamState.Unknown;
+            }
         }
 
         private void processResponse(string responseBody)
