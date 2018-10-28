@@ -32,6 +32,12 @@ namespace OpenSC.Modules
         }
         #endregion
 
+        public static void RegisterDatabasePersisterSerializers()
+        {
+            foreach (IModule module in registeredModules)
+                module.RegisterDatabasePersisterSerializers();
+        }
+
         public static void RegisterModelTypes()
         {
             foreach (IModule module in registeredModules)

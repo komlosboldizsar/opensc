@@ -10,6 +10,7 @@ namespace OpenSC.Modules
     {
         void ProgramStarted();
         void MainWindowOpened();
+        void RegisterDatabasePersisterSerializers();
         void RegisterModelTypes();
         void RegisterDatabases();
         void RegisterWindowTypes();
