@@ -38,6 +38,11 @@ namespace OpenSC.Model.VTRs.DynamicTextFunctions
 
             public Substitute(Vtr vtr)
             {
+                if(vtr == null)
+                {
+                    CurrentValue = "??:??:??";
+                    return;
+                }
                 this.vtr = vtr;
                 vtr.SecondsRemainingChanged += vtrSecondsRemainingChangedHandler;
                 CurrentValue = vtr.TimeRemaining.ToString(@"hh\:mm\:ss");

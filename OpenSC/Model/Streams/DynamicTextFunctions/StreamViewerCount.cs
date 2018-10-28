@@ -38,6 +38,10 @@ namespace OpenSC.Model.Streams.DynamicTextFunctions
 
             public Substitute(Stream stream)
             {
+                if (stream == null) {
+                    CurrentValue = "?";
+                    return;
+                }
                 this.stream = stream;
                 stream.ViewerCountChanged += streamViewerCountChangedHandler;
                 CurrentValue = stream.ViewerCount.ToString();

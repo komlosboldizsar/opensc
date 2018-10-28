@@ -38,6 +38,11 @@ namespace OpenSC.Model.Timers.DynamicTextFunctions
 
             public Substitute(Timer timer)
             {
+                if (timer == null)
+                {
+                    CurrentValue = "??:??:??";
+                    return;
+                }
                 this.timer = timer;
                 timer.SecondsChanged += timerSecondsChangedHandler;
                 CurrentValue = timer.TimeSpan.ToString(@"hh\:mm\:ss");
