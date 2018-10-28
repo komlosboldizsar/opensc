@@ -31,6 +31,10 @@ namespace OpenSC.Modules.Timers
             DynamicTextFunctionRegister.Instance.RegisterFunction(new TimerHhMmSs());
         }
 
+        public void RegisterDatabasePersisterSerializers()
+        {
+        }
+
         public void RegisterModelTypes()
         {
 

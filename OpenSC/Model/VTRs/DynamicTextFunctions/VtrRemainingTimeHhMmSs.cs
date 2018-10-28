@@ -31,13 +31,18 @@ namespace OpenSC.Model.VTRs.DynamicTextFunctions
             return new Substitute(vtr);
         }
 
-        public class Substitute : IDynamicTextFunctionSubstitute
+        public class Substitute : DynamicTextFunctionSubstituteBase
         {
 
             private Vtr vtr;
 
             public Substitute(Vtr vtr)
             {
+                if(vtr == null)
+                {
+                    CurrentValue = "??:??:??";
+                    return;
+                }
                 this.vtr = vtr;
                 vtr.SecondsRemainingChanged += vtrSecondsRemainingChangedHandler;
                 CurrentValue = vtr.TimeRemaining.ToString(@"hh\:mm\:ss");
@@ -47,22 +52,6 @@ namespace OpenSC.Model.VTRs.DynamicTextFunctions
             {
                 CurrentValue = vtr.TimeRemaining.ToString(@"hh\:mm\:ss");
             }
-
-            private string currentValue;
-
-            public string CurrentValue
-            {
-                get { return currentValue; }
-                private set
-                {
-                    if (value == currentValue)
-                        return;
-                    currentValue = value;
-                    ValueChanged?.Invoke(this);
-                }
-            }
-
-            public event DynamicTextFunctionSubstituteValueChanged ValueChanged;
 
         }
 

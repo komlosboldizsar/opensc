@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.Persistence;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace OpenSC.Model.Timers
 {
 
     [DatabaseName("timers")]
+    [XmlTagNames("timers", "timer")]
     class TimerDatabase: DatabaseBase<Timer>
     {
 

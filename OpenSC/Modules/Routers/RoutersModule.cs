@@ -22,6 +22,10 @@ namespace OpenSC.Modules.Routers
         {
         }
 
+        public void RegisterDatabasePersisterSerializers()
+        {
+        }
+
         public void RegisterModelTypes()
         {
 

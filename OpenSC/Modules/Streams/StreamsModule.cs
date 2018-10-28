@@ -33,6 +33,10 @@ namespace OpenSC.Modules.Streams
             DynamicTextFunctionRegister.Instance.RegisterFunction(new StreamViewerCount());
         }
 
+        public void RegisterDatabasePersisterSerializers()
+        {
+        }
+
         public void RegisterModelTypes()
         {
             RegisterStreamType<YoutubeStream, YoutubeStreamEditorForm>();

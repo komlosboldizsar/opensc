@@ -9,6 +9,7 @@ namespace OpenSC.Model.VTRs
 {
     [DatabaseName("vtrs")]
     [PolymorphDatabase(typeof(VtrTypeNameConverter))]
+    [XmlTagNames("vtrs", "vtr")]
     public class VtrDatabase : DatabaseBase<Vtr>
     {
 

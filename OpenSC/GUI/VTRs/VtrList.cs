@@ -138,7 +138,7 @@ namespace OpenSC.GUI.VTRs
             builder.BuildAndAdd();
 
             // Bind database
-            table.BoundDatabase = VtrDatabase.Instance;
+            table.BoundCollection = VtrDatabase.Instance;
 
         }
 

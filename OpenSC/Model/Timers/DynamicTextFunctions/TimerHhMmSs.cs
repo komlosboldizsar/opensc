@@ -31,13 +31,18 @@ namespace OpenSC.Model.Timers.DynamicTextFunctions
             return new Substitute(timer);
         }
 
-        public class Substitute: IDynamicTextFunctionSubstitute
+        public class Substitute: DynamicTextFunctionSubstituteBase
         {
 
             private Timer timer;
 
             public Substitute(Timer timer)
             {
+                if (timer == null)
+                {
+                    CurrentValue = "??:??:??";
+                    return;
+                }
                 this.timer = timer;
                 timer.SecondsChanged += timerSecondsChangedHandler;
                 CurrentValue = timer.TimeSpan.ToString(@"hh\:mm\:ss");
@@ -47,23 +52,7 @@ namespace OpenSC.Model.Timers.DynamicTextFunctions
             {
                 CurrentValue = timer.TimeSpan.ToString(@"hh\:mm\:ss");
             }
-
-            private string currentValue;
-
-            public string CurrentValue
-            {
-                get { return currentValue; }
-                private set
-                {
-                    if (value == currentValue)
-                        return;
-                    currentValue = value;
-                    ValueChanged?.Invoke(this);
-                }
-            }
-
-            public event DynamicTextFunctionSubstituteValueChanged ValueChanged;
-
+            
         }
 
     }
