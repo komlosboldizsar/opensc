@@ -109,7 +109,7 @@ namespace OpenSC.GUI.UMDs
             builder.BuildAndAdd();
 
             // Bind database
-            table.BoundDatabase = UmdPortDatabase.Instance;
+            table.BoundCollection = UmdPortDatabase.Instance;
 
         }
 

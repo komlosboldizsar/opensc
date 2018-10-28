@@ -6,7 +6,6 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.GeneralComponents.Tables
 {
     public class CustomDataGridViewRow<T>: DataGridViewRow
-        where T : class, IModel
     {
 
         CustomDataGridView<T> table;
