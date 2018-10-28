@@ -1,6 +1,8 @@
-﻿using OpenSC.Model.Persistence;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -11,7 +13,7 @@ using System.Xml.Linq;
 
 namespace OpenSC.Model
 {
-    public abstract class DatabaseBase<T>: IDatabaseBase
+    public abstract class DatabaseBase<T>: IDatabaseBase, IObservableList
         where T: class, IModel
     {
 
@@ -20,18 +22,21 @@ namespace OpenSC.Model
 
         public event AddingItemDelegate AddingItem;
         public event AddedItemDelegate AddedItem;
+        public event ObservableListItemAddedDelegate ItemAdded;
 
         public delegate void RemovingItemDelegate(DatabaseBase<T> database, T item);
         public delegate void RemovedItemDelegate(DatabaseBase<T> database, T item);
 
         public event RemovingItemDelegate RemovingItem;
         public event RemovedItemDelegate RemovedItem;
+        public event ObservableListItemRemovedDelegate ItemRemoved;
 
         public delegate void ChangingItemsDelegate(DatabaseBase<T> database);
         public delegate void ChangedItemsDelegate(DatabaseBase<T> database);
 
         public event ChangingItemsDelegate ChangingItems;
         public event ChangedItemsDelegate ChangedItems;
+        public event ObservableListItemsChangedDelegate ItemsChanged;
 
         protected Dictionary<int, T> items = new Dictionary<int, T>();
 
@@ -73,6 +78,9 @@ namespace OpenSC.Model
             AddedItem?.Invoke(this, item);
             ChangedItems?.Invoke(this);
 
+            ItemAdded?.Invoke();
+            ItemsChanged?.Invoke();
+
         }
 
         public bool Remove(T item)
@@ -93,6 +101,9 @@ namespace OpenSC.Model
 
             RemovedItem?.Invoke(this, item);
             ChangedItems?.Invoke(this);
+
+            ItemRemoved?.Invoke();
+            ItemsChanged?.Invoke();
 
             return true;
 

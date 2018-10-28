@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.General;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model
 {
-    interface IDatabaseBase
+    interface IDatabaseBase: IObservableList
     {
         void Load();
         void Save();
