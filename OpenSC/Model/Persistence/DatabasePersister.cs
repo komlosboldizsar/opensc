@@ -20,6 +20,9 @@ namespace OpenSC.Model.Persistence
         private bool isPolymorph = false;
         private ITypeNameConverter typeNameConverter;
 
+        private string rootTag = "root";
+        private string itemTag = "item";
+
         public DatabasePersister(IDatabaseBase database)
         {
 
@@ -30,6 +33,13 @@ namespace OpenSC.Model.Persistence
             {
                 isPolymorph = true;
                 typeNameConverter = polymorphAttr.Converter;
+            }
+
+            XmlTagNamesAttribute tagNameAttr = database.GetType().GetCustomAttribute<XmlTagNamesAttribute>();
+            if(tagNameAttr != null)
+            {
+                rootTag = tagNameAttr.RootTag;
+                itemTag = tagNameAttr.ItemTag;
             }
 
         }
@@ -44,7 +54,7 @@ namespace OpenSC.Model.Persistence
         public void Save(Dictionary<int, T> items)
         {
 
-            XElement rootElement = new XElement("root");
+            XElement rootElement = new XElement(rootTag);
             foreach (T item in items.Values)
                 rootElement.Add(serializeItem(item));
 
@@ -71,7 +81,7 @@ namespace OpenSC.Model.Persistence
 
                     XmlNode root = doc.DocumentElement;
 
-                    if (root.LocalName != "root")
+                    if (root.LocalName != rootTag)
                         return null;
 
                     foreach (XmlNode node in root.ChildNodes)
@@ -95,7 +105,7 @@ namespace OpenSC.Model.Persistence
         private XElement serializeItem(T item)
         {
 
-            XElement xmlElement = new XElement("item");
+            XElement xmlElement = new XElement(itemTag);
             Type itemType = item.GetType();
 
             xmlElement.SetAttributeValue("id", item.ID);

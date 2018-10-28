@@ -265,6 +265,7 @@
     <Compile Include="Model\Persistence\TempForeignKeyAttribute.cs" />
     <Compile Include="Model\Persistence\ITypeNameConverter.cs" />
     <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
+    <Compile Include="Model\Persistence\XmlTagNamesAttribute.cs" />
     <Compile Include="Model\Settings\Converters\BoolConverter.cs" />
     <Compile Include="Model\Settings\Converters\ColorConverter.cs" />
     <Compile Include="Model\Settings\Converters\IntConverter.cs" />
