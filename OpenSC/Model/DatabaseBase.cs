@@ -141,6 +141,11 @@ namespace OpenSC.Model
             return false;
         }
 
+        public int NextValidId()
+        {
+            return items.Keys.Max() + 1;
+        }
+
         private DatabasePersister<T> persister;
 
         public void Save()
