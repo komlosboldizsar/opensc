@@ -45,7 +45,7 @@ namespace OpenSC.GUI.Variables
         {
             if (dyntext == null)
                 return;
-            idNumericField.Value = dyntext.ID;
+            idNumericField.Value = (addingNew ? DynamicTextDatabase.Instance.NextValidId() : dyntext.ID);
             labelTextBox.Text = dyntext.Label;
             formulaTextBox.Text = dyntext.Formula;
             currentTextTextBox.Text = dyntext.CurrentText;

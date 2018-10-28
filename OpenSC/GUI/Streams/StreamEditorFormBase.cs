@@ -45,7 +45,7 @@ namespace OpenSC.GUI.Streams
         {
             if (stream == null)
                 return;
-            idNumericField.Value = stream.ID;
+            idNumericField.Value = (addingNew ? StreamDatabase.Instance.NextValidId() : stream.ID);
             nameTextBox.Text = stream.Name;
         }
 

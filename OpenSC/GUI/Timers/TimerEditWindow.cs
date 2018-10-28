@@ -56,7 +56,7 @@ namespace OpenSC.GUI.Timers
 
         private void loadTimer()
         {
-            idNumericField.Value = timer.ID;
+            idNumericField.Value = (addingNew ? TimerDatabase.Instance.NextValidId() : timer.ID);
             titleTextBox.Text = timer.Title;
             modeForwardsRadio.Checked = (timer.Mode == Model.Timers.TimerMode.Forwards);
             modeBackwardsRadio.Checked = (timer.Mode == Model.Timers.TimerMode.Backwards);
