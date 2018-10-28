@@ -1,7 +1,10 @@
-﻿namespace OpenSC.Model.Variables
+﻿using OpenSC.Model.Persistence;
+
+namespace OpenSC.Model.Variables
 {
 
     [DatabaseName("dynamictexts")]
+    [XmlTagNames("dynamictexts", "dynamictext")]
     public class DynamicTextDatabase : DatabaseBase<DynamicText>
     {
 
