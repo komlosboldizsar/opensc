@@ -59,6 +59,7 @@
             // 
             // addTimerButton
             // 
+            this.addTimerButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.addTimerButton.Location = new System.Drawing.Point(650, 13);
             this.addTimerButton.Name = "addTimerButton";
             this.addTimerButton.Size = new System.Drawing.Size(137, 28);
