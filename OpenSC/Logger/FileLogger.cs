@@ -20,7 +20,7 @@ namespace OpenSC.Logger
                 timestampStr = DateTime.Now.ToString("-yyyyMMdd-HHmmss");
             filePath = string.Format("{0}{1}{2}{3}.log",
                 directoryPath,
-                Path.PathSeparator,
+                Path.DirectorySeparatorChar,
                 fileName,
                 timestampStr);
 
@@ -38,12 +38,16 @@ namespace OpenSC.Logger
                 message));
         }
 
+        private object syncRoot = new object();
+
         private void writeToFile(string str)
         {
-            using (FileStream fs = File.Open(filePath, FileMode.Open, FileAccess.Write, FileShare.None))
-            using(StreamWriter sw = new StreamWriter(fs))
+            lock (syncRoot)
             {
-                sw.WriteLine(str);
+                using (StreamWriter sw = new StreamWriter(filePath, true))
+                {
+                    sw.WriteLine(str);
+                }
             }
         }
 
