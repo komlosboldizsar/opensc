@@ -57,7 +57,14 @@
             this.column3DynamicDataPanel = new System.Windows.Forms.Panel();
             this.column3DynamicTextSourceDropDown = new System.Windows.Forms.ComboBox();
             this.column3AlignmentDropDown = new System.Windows.Forms.ComboBox();
+            this.connectionGroupBox = new System.Windows.Forms.GroupBox();
+            this.connectionTable = new System.Windows.Forms.TableLayoutPanel();
+            this.portLabel = new System.Windows.Forms.Label();
+            this.addressLabel = new System.Windows.Forms.Label();
+            this.portDropDown = new System.Windows.Forms.ComboBox();
+            this.addressNumericField = new System.Windows.Forms.NumericUpDown();
             this.mainTabControl.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.dynamicDataTabPage.SuspendLayout();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
@@ -72,6 +79,9 @@
             this.column1DynamicDataPanel.SuspendLayout();
             this.column2DynamicDataPanel.SuspendLayout();
             this.column3DynamicDataPanel.SuspendLayout();
+            this.connectionGroupBox.SuspendLayout();
+            this.connectionTable.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.addressNumericField)).BeginInit();
             this.SuspendLayout();
             // 
             // mainTabControl
@@ -80,7 +90,9 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.connectionGroupBox);
             this.tabPage1.Size = new System.Drawing.Size(767, 480);
+            this.tabPage1.Controls.SetChildIndex(this.connectionGroupBox, 0);
             // 
             // dynamicDataTabPage
             // 
@@ -466,6 +478,96 @@
             this.column3AlignmentDropDown.Size = new System.Drawing.Size(121, 24);
             this.column3AlignmentDropDown.TabIndex = 8;
             // 
+            // connectionGroupBox
+            // 
+            this.connectionGroupBox.AutoSize = true;
+            this.connectionGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.connectionGroupBox.Controls.Add(this.connectionTable);
+            this.connectionGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.connectionGroupBox.Location = new System.Drawing.Point(3, 192);
+            this.connectionGroupBox.Margin = new System.Windows.Forms.Padding(10);
+            this.connectionGroupBox.Name = "connectionGroupBox";
+            this.connectionGroupBox.Padding = new System.Windows.Forms.Padding(8, 8, 4, 8);
+            this.connectionGroupBox.Size = new System.Drawing.Size(761, 89);
+            this.connectionGroupBox.TabIndex = 3;
+            this.connectionGroupBox.TabStop = false;
+            this.connectionGroupBox.Text = "Connection";
+            // 
+            // connectionTable
+            // 
+            this.connectionTable.AutoSize = true;
+            this.connectionTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.connectionTable.ColumnCount = 2;
+            this.connectionTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.connectionTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.connectionTable.Controls.Add(this.portLabel, 0, 0);
+            this.connectionTable.Controls.Add(this.addressLabel, 0, 1);
+            this.connectionTable.Controls.Add(this.portDropDown, 1, 0);
+            this.connectionTable.Controls.Add(this.addressNumericField, 1, 1);
+            this.connectionTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.connectionTable.Location = new System.Drawing.Point(8, 23);
+            this.connectionTable.Name = "connectionTable";
+            this.connectionTable.RowCount = 2;
+            this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.connectionTable.Size = new System.Drawing.Size(749, 58);
+            this.connectionTable.TabIndex = 0;
+            // 
+            // portLabel
+            // 
+            this.portLabel.AutoSize = true;
+            this.portLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.portLabel.Location = new System.Drawing.Point(3, 0);
+            this.portLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.portLabel.Name = "portLabel";
+            this.portLabel.Size = new System.Drawing.Size(34, 30);
+            this.portLabel.TabIndex = 0;
+            this.portLabel.Text = "Port";
+            this.portLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // addressLabel
+            // 
+            this.addressLabel.AutoSize = true;
+            this.addressLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.addressLabel.Location = new System.Drawing.Point(3, 30);
+            this.addressLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.addressLabel.Name = "addressLabel";
+            this.addressLabel.Size = new System.Drawing.Size(60, 28);
+            this.addressLabel.TabIndex = 1;
+            this.addressLabel.Text = "Address";
+            this.addressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // portDropDown
+            // 
+            this.portDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.portDropDown.FormattingEnabled = true;
+            this.portDropDown.Location = new System.Drawing.Point(81, 3);
+            this.portDropDown.Name = "portDropDown";
+            this.portDropDown.Size = new System.Drawing.Size(212, 24);
+            this.portDropDown.TabIndex = 2;
+            // 
+            // addressNumericField
+            // 
+            this.addressNumericField.Location = new System.Drawing.Point(81, 33);
+            this.addressNumericField.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.addressNumericField.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.addressNumericField.Name = "addressNumericField";
+            this.addressNumericField.Size = new System.Drawing.Size(212, 22);
+            this.addressNumericField.TabIndex = 3;
+            this.addressNumericField.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // McCurdyUmd1EditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -475,6 +577,8 @@
             this.Name = "McCurdyUmd1EditorForm";
             this.Text = "McCurdyUmd1EditorForm";
             this.mainTabControl.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.dynamicDataTabPage.ResumeLayout(false);
             this.dynamicDataTabPage.PerformLayout();
             this.customElementsPanel.ResumeLayout(false);
@@ -495,6 +599,11 @@
             this.column1DynamicDataPanel.ResumeLayout(false);
             this.column2DynamicDataPanel.ResumeLayout(false);
             this.column3DynamicDataPanel.ResumeLayout(false);
+            this.connectionGroupBox.ResumeLayout(false);
+            this.connectionGroupBox.PerformLayout();
+            this.connectionTable.ResumeLayout(false);
+            this.connectionTable.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.addressNumericField)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -530,5 +639,11 @@
         private System.Windows.Forms.Panel column3DynamicDataPanel;
         private System.Windows.Forms.Panel column1DynamicDataPanel;
         private System.Windows.Forms.Panel column2DynamicDataPanel;
+        private System.Windows.Forms.GroupBox connectionGroupBox;
+        private System.Windows.Forms.TableLayoutPanel connectionTable;
+        private System.Windows.Forms.Label portLabel;
+        private System.Windows.Forms.Label addressLabel;
+        private System.Windows.Forms.ComboBox portDropDown;
+        private System.Windows.Forms.NumericUpDown addressNumericField;
     }
 }

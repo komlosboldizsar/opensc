@@ -27,6 +27,7 @@ namespace OpenSC.GUI.UMDs
                 throw new ArgumentException();
 
             fillControlArrays();
+            initPortDropDown();
             initDynamicTextSourceDropDowns();
             initDynamicTextAlignmentDropDowns();
 
@@ -55,6 +56,9 @@ namespace OpenSC.GUI.UMDs
             if (mcCurdyUmd == null)
                 return;
 
+            setPortDropDownSelectedItem(mcCurdyUmd.Port);
+            addressNumericField.Value = mcCurdyUmd.Address;
+
             columnCount = convertColumnCountEnumToInt(mcCurdyUmd.ColumnCount);
             useSeparatorBarCheckBox.Checked = mcCurdyUmd.UseSeparators;
 
@@ -78,6 +82,9 @@ namespace OpenSC.GUI.UMDs
             McCurdyUMD1 mcCurdyUmd = umd as McCurdyUMD1;
             if (mcCurdyUmd == null)
                 return;
+
+            mcCurdyUmd.Port = ((PortDropDownItem)portDropDown.SelectedItem).Port;
+            mcCurdyUmd.Address = (int)addressNumericField.Value;
 
             mcCurdyUmd.ColumnCount = convertIntToColumnCountEnum(columnCount);
             mcCurdyUmd.UseSeparators = useSeparatorBarCheckBox.Checked;
@@ -164,6 +171,26 @@ namespace OpenSC.GUI.UMDs
             return ColumnCount.One;
         }
 
+        private class PortDropDownItem
+        {
+
+            public string Label { get; private set; }
+
+            public McCurdyPort Port { get; private set; }
+
+            public PortDropDownItem(string label, McCurdyPort port)
+            {
+                Label = label;
+                Port = port;
+            }
+
+            public override string ToString()
+            {
+                return Label;
+            }
+
+        }
+
         private class DynamicTextSourceDropDownItem
         {
 
@@ -202,6 +229,28 @@ namespace OpenSC.GUI.UMDs
                 return Label;
             }
 
+        }
+
+        private void initPortDropDown()
+        {
+            List<PortDropDownItem> dropDownItems = new List<PortDropDownItem>();
+            dropDownItems.Add(new PortDropDownItem("(not connected)", null));
+            foreach (UmdPort port in UmdPortDatabase.Instance.ItemsAsList)
+                if(port is McCurdyPort)
+                    dropDownItems.Add(new PortDropDownItem(port.Name, port as McCurdyPort));
+            portDropDown.Items.AddRange(dropDownItems.ToArray());
+        }
+
+        private void setPortDropDownSelectedItem(UmdPort port)
+        {
+            for (int i = 0; i < portDropDown.Items.Count; i++)
+            {
+                if (((PortDropDownItem)portDropDown.Items[i]).Port == port)
+                {
+                    portDropDown.SelectedIndex = i;
+                    return;
+                }
+            }
         }
 
         private void initDynamicTextSourceDropDowns()
