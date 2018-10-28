@@ -31,7 +31,7 @@ namespace OpenSC.Model.Streams.DynamicTextFunctions
             return new Substitute(stream);
         }
 
-        public class Substitute : IDynamicTextFunctionSubstitute
+        public class Substitute : DynamicTextFunctionSubstituteBase
         {
 
             private Stream stream;
@@ -47,22 +47,6 @@ namespace OpenSC.Model.Streams.DynamicTextFunctions
             {
                 CurrentValue = newCount.ToString();
             }
-
-            private string currentValue;
-
-            public string CurrentValue
-            {
-                get { return currentValue; }
-                private set
-                {
-                    if (value == currentValue)
-                        return;
-                    currentValue = value;
-                    ValueChanged?.Invoke(this);
-                }
-            }
-
-            public event DynamicTextFunctionSubstituteValueChanged ValueChanged;
 
         }
 
