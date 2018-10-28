@@ -54,8 +54,7 @@ namespace OpenSC.GUI.WorkspaceManager
             {
                 persistableChildWindows.Add(window);
                 persistWindows();
-                window.Resize += persistableWindowSizePositionChangeHandler;
-                window.Move += persistableWindowSizePositionChangeHandler;
+                window.ResizeEnd += persistableWindowSizePositionChangeHandler;
             }
 
         }
@@ -73,8 +72,7 @@ namespace OpenSC.GUI.WorkspaceManager
             if (window is IPersistableWindow)
             {
                 persistableChildWindows.Remove(window);
-                window.Resize -= persistableWindowSizePositionChangeHandler;
-                window.Move -= persistableWindowSizePositionChangeHandler;
+                window.ResizeEnd -= persistableWindowSizePositionChangeHandler;
                 persistWindows();
             }
 
