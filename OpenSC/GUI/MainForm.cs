@@ -36,8 +36,22 @@ namespace OpenSC.GUI
         {
             WindowManager.Instance.ChildWindowOpened += childWindowOpenedHandler;
             WindowManager.Instance.ChildWindowClosed += childWindowClosedHandler;
+            WindowManager.Instance.ActiveWindowChanged += activeWindowChangedHandler;
+            MdiChildActivate += mdiChildActivateHandler;
+
             menuStrip.DynamicChildrenInsertPosition = 1;
             menuStrip.AssociatedMenuItem = MenuManager.Instance.TopMenu;
+        }
+
+        private void mdiChildActivateHandler(object sender, EventArgs e)
+        {
+            WindowManager.Instance.ActiveWindow = ActiveMdiChild;
+        }
+
+        private void activeWindowChangedHandler(Form window)
+        {
+            if (window != null)
+                ActivateMdiChild(window);
         }
 
         private void childWindowOpenedHandler(ChildWindowBase window)

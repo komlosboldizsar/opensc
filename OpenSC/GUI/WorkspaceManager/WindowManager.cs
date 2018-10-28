@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace OpenSC.GUI.WorkspaceManager
 {
@@ -18,7 +19,46 @@ namespace OpenSC.GUI.WorkspaceManager
 
         private List<ChildWindowBase> childWindows = new List<ChildWindowBase>();
         private List<IPersistableWindow> persistableChildWindows = new List<IPersistableWindow>();
-        int focusedWindowIndex = -1;
+
+        public delegate void ActiveChildWindowChangedDelegate(Form window);
+        public event ActiveChildWindowChangedDelegate ActiveWindowChanged;
+
+        private Form activeWindow;
+
+        public Form ActiveWindow
+        {
+            get { return activeWindow; }
+            set
+            {
+                if (restoringPersistedWindows)
+                    return;
+                if (activeWindow == value)
+                    return;
+                activeWindow = value;
+                persistWindows();
+                ActiveWindowChanged?.Invoke(activeWindow);
+            }
+        }
+
+        private int? ActiveWindowIndex
+        {
+            get
+            {
+                IPersistableWindow activeWindowCasted = activeWindow as IPersistableWindow;
+                if (!persistableChildWindows.Contains(activeWindowCasted))
+                    return null;
+                return persistableChildWindows.FindIndex(window => (window == activeWindowCasted));
+            }
+            set
+            {
+                if ((value == null) || (value < 0) || (value >= persistableChildWindows.Count))
+                {
+                    ActiveWindow = null;
+                    return;
+                }
+                ActiveWindow = persistableChildWindows[(int)value] as Form;
+            }
+        }
 
         public event ChildWindowOpenedDelegate ChildWindowOpened;
         public event ChildWindowClosedDelegate ChildWindowClosed;
@@ -56,7 +96,6 @@ namespace OpenSC.GUI.WorkspaceManager
                 persistableChildWindows.Add(window);
                 persistWindows();
                 window.ResizeEnd += persistableWindowSizePositionChangeHandler;
-                window.GotFocus += persistableWindowGotFocusHandler;
             }
 
         }
@@ -75,7 +114,6 @@ namespace OpenSC.GUI.WorkspaceManager
             {
                 persistableChildWindows.Remove(window);
                 window.ResizeEnd -= persistableWindowSizePositionChangeHandler;
-                window.GotFocus -= persistableWindowGotFocusHandler;
                 persistWindows();
             }
 
@@ -91,7 +129,7 @@ namespace OpenSC.GUI.WorkspaceManager
             if(!restoringPersistedWindows)
                 WindowPersister.SaveWindows(new WindowPersister.Workspace(){
                     Windows = persistableChildWindows,
-                    FocusedWindowIndex = focusedWindowIndex
+                    ActiveWindowIndex = ActiveWindowIndex
                 });
         }
 
@@ -102,21 +140,15 @@ namespace OpenSC.GUI.WorkspaceManager
             if (workspace != null) {
                 foreach (IPersistableWindow window in workspace.Windows)
                     window.RestoreWindow();
-                if ((workspace.FocusedWindowIndex != null) && (workspace.FocusedWindowIndex < persistableChildWindows.Count))
-                    persistableChildWindows[(int)workspace.FocusedWindowIndex].Focus();
             }
             restoringPersistedWindows = false;
+            if(workspace != null)
+                ActiveWindowIndex = workspace.ActiveWindowIndex;
             persistWindows();
         }
 
         private void persistableWindowSizePositionChangeHandler(object sender, EventArgs e)
         {
-            persistWindows();
-        }
-
-        private void persistableWindowGotFocusHandler(object sender, EventArgs e)
-        {
-            focusedWindowIndex = persistableChildWindows.FindIndex(w => w.Focused);
             persistWindows();
         }
 

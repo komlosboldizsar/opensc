@@ -18,7 +18,7 @@ namespace OpenSC.GUI.WorkspaceManager
         private const string WINDOW_TAG = "window";
         private const string ATTRIBUTE_TAG = "attribute";
 
-        private const string ROOT_ATTRIBUTE_FOCUSED = "focused";
+        private const string ROOT_ATTRIBUTE_ACTIVE = "active";
 
         private const string WINDOW_ATTRIBUTE_TYPE = "type";
         private const string WINDOW_ATTRIBUTE_WIDTH = "width";
@@ -41,7 +41,7 @@ namespace OpenSC.GUI.WorkspaceManager
         {
 
             XElement rootElement = new XElement(ROOT_TAG);
-            rootElement.SetAttributeValue(ROOT_ATTRIBUTE_FOCUSED, workspace.FocusedWindowIndex);
+            rootElement.SetAttributeValue(ROOT_ATTRIBUTE_ACTIVE, workspace.ActiveWindowIndex);
 
             foreach (IPersistableWindow window in workspace.Windows)
             {
@@ -72,7 +72,7 @@ namespace OpenSC.GUI.WorkspaceManager
                 if (root.LocalName != ROOT_TAG)
                     return null;
 
-                workspace.FocusedWindowIndex = int.TryParse(root.Attributes[ROOT_ATTRIBUTE_FOCUSED]?.ToString(), out int fwi) ? (int?)fwi : null;
+                workspace.ActiveWindowIndex = int.TryParse(root.Attributes[ROOT_ATTRIBUTE_ACTIVE]?.Value, out int fwi) ? (int?)fwi : null;
 
                 foreach (XmlNode node in root.ChildNodes)
                 {
@@ -199,7 +199,7 @@ namespace OpenSC.GUI.WorkspaceManager
         public class Workspace
         {
             public List<IPersistableWindow> Windows = new List<IPersistableWindow>();
-            public int? FocusedWindowIndex = null;
+            public int? ActiveWindowIndex = null;
         }
 
     }

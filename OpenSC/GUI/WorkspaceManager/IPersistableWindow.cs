@@ -14,7 +14,5 @@ namespace OpenSC.GUI.WorkspaceManager
         Dictionary<string, object> GetKeyValuePairs();
         Size Size { get; }
         Point Position { get; }
-        bool Focused { get; }
-        bool Focus();
     }
 }
