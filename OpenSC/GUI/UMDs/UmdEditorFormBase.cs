@@ -56,7 +56,7 @@ namespace OpenSC.GUI.UMDs
         {
             if (umd == null)
                 return;
-            idNumericField.Value = umd.ID;
+            idNumericField.Value = (addingNew ? UmdDatabase.Instance.NextValidId() : umd.ID);
             nameTextBox.Text = umd.Name;
             currentTextTextBox.Text = umd.CurrentText;
             staticTextTextBox.Text = umd.StaticText;

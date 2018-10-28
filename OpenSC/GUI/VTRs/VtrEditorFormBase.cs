@@ -45,7 +45,7 @@ namespace OpenSC.GUI.VTRs
         {
             if (vtr == null)
                 return;
-            idNumericField.Value = vtr.ID;
+            idNumericField.Value = (addingNew ? VtrDatabase.Instance.NextValidId() : vtr.ID);
             nameTextBox.Text = vtr.Name;
         }
 
