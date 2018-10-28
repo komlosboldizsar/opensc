@@ -29,6 +29,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private CustomDataGridViewColumnDescriptor<T>.CellUpdaterMethodDelegate updaterMethod;
 
+        private CustomDataGridViewColumnDescriptor<T>.CellDropDownPopulatorMethodDelegate dropDownPopulatorMethod;
+
         private CustomDataGridViewColumnDescriptor<T>.CellContentClickHandlerMethodDelegate contentClickHandlerMethod;
 
         private CustomDataGridViewColumnDescriptor<T>.CellEndEditHandlerMethodDelegate endEditHandlerMethod;
@@ -66,6 +68,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 cellStyle,
                 initializerMethod,
                 updaterMethod,
+                dropDownPopulatorMethod,
                 contentClickHandlerMethod,
                 endEditHandlerMethod,
                 changeEvents.ToArray(),
@@ -127,6 +130,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public CustomDataGridViewColumnDescriptorBuilder<T> UpdaterMethod(CustomDataGridViewColumnDescriptor<T>.CellUpdaterMethodDelegate updaterMethod)
         {
             this.updaterMethod = updaterMethod;
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> UpdaterMethod(CustomDataGridViewColumnDescriptor<T>.CellDropDownPopulatorMethodDelegate dropDownPopulatorMethod)
+        {
+            this.dropDownPopulatorMethod = dropDownPopulatorMethod;
             return this;
         }
 

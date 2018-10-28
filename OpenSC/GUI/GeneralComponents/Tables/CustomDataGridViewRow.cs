@@ -76,6 +76,13 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 cell.Value = columnDescriptor.ButtonText;
             }
 
+            if(columnDescriptor.Type == DataGridViewColumnType.ComboBox)
+            {
+                DataGridViewComboBoxCell typedCell = (DataGridViewComboBoxCell)cell;
+                typedCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.DropDownButton;
+                typedCell.Items.AddRange(columnDescriptor.DropDownPopulatorMethod?.Invoke(item, cell));
+            }
+
             Cells.Add(cell);
 
             if (columnDescriptor.Type == DataGridViewColumnType.TextBox)

@@ -28,6 +28,9 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public delegate void CellUpdaterMethodDelegate(T item, DataGridViewCell cell);
         public CellUpdaterMethodDelegate UpdaterMethod { get; private set; }
 
+        public delegate object[] CellDropDownPopulatorMethodDelegate(T item, DataGridViewCell cell);
+        public CellDropDownPopulatorMethodDelegate DropDownPopulatorMethod;
+
         public delegate void CellContentClickHandlerMethodDelegate(T item, DataGridViewCell cell, DataGridViewCellEventArgs eventArgs);
         public CellContentClickHandlerMethodDelegate ContentClickHandlerMethod { get; private set; }
 
@@ -52,6 +55,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 DataGridViewCellStyle cellStyle,
                 CellInitializerMethodDelegate initializerMethod,
                 CellUpdaterMethodDelegate updaterMethod,
+                CellDropDownPopulatorMethodDelegate dropDownPopulatorMethod,
                 CellContentClickHandlerMethodDelegate contentClickHandlerMethod,
                 CellEndEditHandlerMethodDelegate endEditHandlerMethod,
                 string[] changeEvents,
@@ -67,6 +71,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             CellStyle = cellStyle;
             InitializerMethod = initializerMethod;
             UpdaterMethod = updaterMethod;
+            DropDownPopulatorMethod = dropDownPopulatorMethod;
             ContentClickHandlerMethod = contentClickHandlerMethod;
             EndEditHandlerMethod = endEditHandlerMethod;
             ChangeEvents = changeEvents;
