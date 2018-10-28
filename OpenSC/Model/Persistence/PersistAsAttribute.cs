@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Persistence
 {
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+    [AttributeUsage((AttributeTargets.Field | AttributeTargets.Property), AllowMultiple = true)]
     class PersistAsAttribute: Attribute
     {
 
