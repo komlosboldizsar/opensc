@@ -305,12 +305,13 @@ namespace OpenSC.Model.Persistence
 
         }
 
-        private string getXmlTagNameForMember(MemberInfo memberInfo, T item, Workflow workflow)
+        private string getXmlTagNameForMember(MemberInfo memberInfo, T item, Workflow workflow, int dimension = 0)
         {
 
-            PersistAsAttribute persistAsAttribute = memberInfo.GetCustomAttribute<PersistAsAttribute>();
-            if (persistAsAttribute != null)
-                return persistAsAttribute.TagName;
+            IEnumerable<PersistAsAttribute> persistAsAttributes = memberInfo.GetCustomAttributes<PersistAsAttribute>();
+            foreach (PersistAsAttribute attr in persistAsAttributes)
+                if (attr.Dimension == dimension)
+                    return attr.TagName;
 
             if (workflow == Workflow.Save)
                 return null;

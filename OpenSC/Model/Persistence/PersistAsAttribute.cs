@@ -12,9 +12,12 @@ namespace OpenSC.Model.Persistence
 
         public string TagName { get; private set; }
 
-        public PersistAsAttribute(string TagName)
+        public int Dimension { get; private set; }
+
+        public PersistAsAttribute(string TagName, int Dimension = 0)
         {
             this.TagName = TagName;
+            this.Dimension = Dimension;
         }
 
     }
