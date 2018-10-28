@@ -83,7 +83,7 @@ namespace OpenSC.GUI.Variables
             builder.BuildAndAdd();
 
             // Bind database
-            table.BoundDatabase = DynamicTextDatabase.Instance;
+            table.BoundCollection = DynamicTextDatabase.Instance;
 
         }
 
