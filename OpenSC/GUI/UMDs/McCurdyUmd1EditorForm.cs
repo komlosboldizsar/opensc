@@ -300,7 +300,7 @@ namespace OpenSC.GUI.UMDs
         {
             int totalColumnWidth = 160;
             if (useSeparatorBarCheckBox.Checked)
-                totalColumnWidth -= 9 * (columnCount - 1);
+                totalColumnWidth -= 11 * (columnCount - 1);
             for (int i = 0; i < columnCount - 1; i++)
                 totalColumnWidth -= (int)columnWidthNumericFields[i].Value;
             if (totalColumnWidth < 0)

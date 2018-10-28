@@ -86,7 +86,6 @@
             // 
             this.dynamicDataTabPage.Controls.Add(this.dynamicSourcesGroupBox);
             this.dynamicDataTabPage.Controls.Add(this.layoutGroupBox);
-            this.dynamicDataTabPage.Size = new System.Drawing.Size(767, 480);
             // 
             // customElementsPanel
             // 
@@ -106,7 +105,7 @@
             this.layoutGroupBox.Margin = new System.Windows.Forms.Padding(10);
             this.layoutGroupBox.Name = "layoutGroupBox";
             this.layoutGroupBox.Padding = new System.Windows.Forms.Padding(8, 8, 4, 8);
-            this.layoutGroupBox.Size = new System.Drawing.Size(761, 211);
+            this.layoutGroupBox.Size = new System.Drawing.Size(475, 211);
             this.layoutGroupBox.TabIndex = 0;
             this.layoutGroupBox.TabStop = false;
             this.layoutGroupBox.Text = "Layout";
@@ -138,7 +137,7 @@
             this.layoutTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.layoutTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.layoutTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layoutTable.Size = new System.Drawing.Size(749, 180);
+            this.layoutTable.Size = new System.Drawing.Size(463, 180);
             this.layoutTable.TabIndex = 0;
             // 
             // columnCountLabel
@@ -198,7 +197,7 @@
             this.columnCountRadioButtonContainer.Dock = System.Windows.Forms.DockStyle.Top;
             this.columnCountRadioButtonContainer.Location = new System.Drawing.Point(150, 3);
             this.columnCountRadioButtonContainer.Name = "columnCountRadioButtonContainer";
-            this.columnCountRadioButtonContainer.Size = new System.Drawing.Size(596, 63);
+            this.columnCountRadioButtonContainer.Size = new System.Drawing.Size(310, 63);
             this.columnCountRadioButtonContainer.TabIndex = 5;
             // 
             // columnCountThreeRadioButton
@@ -207,7 +206,7 @@
             this.columnCountThreeRadioButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.columnCountThreeRadioButton.Location = new System.Drawing.Point(0, 42);
             this.columnCountThreeRadioButton.Name = "columnCountThreeRadioButton";
-            this.columnCountThreeRadioButton.Size = new System.Drawing.Size(596, 21);
+            this.columnCountThreeRadioButton.Size = new System.Drawing.Size(310, 21);
             this.columnCountThreeRadioButton.TabIndex = 2;
             this.columnCountThreeRadioButton.TabStop = true;
             this.columnCountThreeRadioButton.Tag = "3";
@@ -221,7 +220,7 @@
             this.columnCountTwoRadioButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.columnCountTwoRadioButton.Location = new System.Drawing.Point(0, 21);
             this.columnCountTwoRadioButton.Name = "columnCountTwoRadioButton";
-            this.columnCountTwoRadioButton.Size = new System.Drawing.Size(596, 21);
+            this.columnCountTwoRadioButton.Size = new System.Drawing.Size(310, 21);
             this.columnCountTwoRadioButton.TabIndex = 1;
             this.columnCountTwoRadioButton.TabStop = true;
             this.columnCountTwoRadioButton.Tag = "2";
@@ -235,7 +234,7 @@
             this.columnCountOneRadioButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.columnCountOneRadioButton.Location = new System.Drawing.Point(0, 0);
             this.columnCountOneRadioButton.Name = "columnCountOneRadioButton";
-            this.columnCountOneRadioButton.Size = new System.Drawing.Size(596, 21);
+            this.columnCountOneRadioButton.Size = new System.Drawing.Size(310, 21);
             this.columnCountOneRadioButton.TabIndex = 0;
             this.columnCountOneRadioButton.TabStop = true;
             this.columnCountOneRadioButton.Tag = "1";
@@ -316,7 +315,7 @@
             this.dynamicSourcesGroupBox.Margin = new System.Windows.Forms.Padding(10);
             this.dynamicSourcesGroupBox.Name = "dynamicSourcesGroupBox";
             this.dynamicSourcesGroupBox.Padding = new System.Windows.Forms.Padding(8, 8, 4, 8);
-            this.dynamicSourcesGroupBox.Size = new System.Drawing.Size(761, 140);
+            this.dynamicSourcesGroupBox.Size = new System.Drawing.Size(475, 140);
             this.dynamicSourcesGroupBox.TabIndex = 1;
             this.dynamicSourcesGroupBox.TabStop = false;
             this.dynamicSourcesGroupBox.Text = "Text sources";
@@ -341,7 +340,7 @@
             this.dynamicSourcesTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.dynamicSourcesTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.dynamicSourcesTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.dynamicSourcesTable.Size = new System.Drawing.Size(749, 109);
+            this.dynamicSourcesTable.Size = new System.Drawing.Size(463, 109);
             this.dynamicSourcesTable.TabIndex = 0;
             // 
             // column3DynamicTextLabel
@@ -388,7 +387,7 @@
             this.column1DynamicDataPanel.Controls.Add(this.column1AlignmentDropDown);
             this.column1DynamicDataPanel.Location = new System.Drawing.Point(96, 3);
             this.column1DynamicDataPanel.Name = "column1DynamicDataPanel";
-            this.column1DynamicDataPanel.Size = new System.Drawing.Size(407, 31);
+            this.column1DynamicDataPanel.Size = new System.Drawing.Size(364, 31);
             this.column1DynamicDataPanel.TabIndex = 3;
             // 
             // column1DynamicTextSourceDropDown
@@ -417,7 +416,7 @@
             this.column2DynamicDataPanel.Controls.Add(this.column2AlignmentDropDown);
             this.column2DynamicDataPanel.Location = new System.Drawing.Point(96, 40);
             this.column2DynamicDataPanel.Name = "column2DynamicDataPanel";
-            this.column2DynamicDataPanel.Size = new System.Drawing.Size(407, 30);
+            this.column2DynamicDataPanel.Size = new System.Drawing.Size(364, 30);
             this.column2DynamicDataPanel.TabIndex = 2;
             // 
             // column2DynamicTextSourceDropDown
@@ -446,7 +445,7 @@
             this.column3DynamicDataPanel.Controls.Add(this.column3AlignmentDropDown);
             this.column3DynamicDataPanel.Location = new System.Drawing.Point(96, 76);
             this.column3DynamicDataPanel.Name = "column3DynamicDataPanel";
-            this.column3DynamicDataPanel.Size = new System.Drawing.Size(407, 30);
+            this.column3DynamicDataPanel.Size = new System.Drawing.Size(364, 30);
             this.column3DynamicDataPanel.TabIndex = 11;
             // 
             // column3DynamicTextSourceDropDown
