@@ -238,8 +238,10 @@ namespace OpenSC.Model.UMDs.McCurdy
         {
 
             int freeColumns;
-            while ((freeColumns = columns - getWidthOfText(text)) < 0)
+            while (((freeColumns = columns - getWidthOfText(text)) < 0) && (text.Length > 0))
                 text = text.Remove(text.Length - 1);
+            if (freeColumns < 0)
+                freeColumns = 0;
 
             int spacesLeft, spacesRight;
             switch (alignment)
@@ -280,14 +282,13 @@ namespace OpenSC.Model.UMDs.McCurdy
                     break;
                 case ColumnCount.Two:
                     count = 2;
-                    width[0] = columnWidths[0] - (useSeparators ? SEPARATOR_WIDTH : 0);
-                    width[1] = DISPLAY_COLUMNS - columnWidths[0];
+                    width[0] = columnWidths[0];
                     break;
                 case ColumnCount.Three:
                     count = 3;
-                    width[0] = columnWidths[0] - (useSeparators ? SEPARATOR_WIDTH : 0);
-                    width[1] = DISPLAY_COLUMNS - columnWidths[0] - columnWidths[1];
-                    width[2] = columnWidths[1] - (useSeparators ? SEPARATOR_WIDTH: 0);
+                    width[0] = columnWidths[0];
+                    width[1] = columnWidths[1];
+                    width[2] = DISPLAY_COLUMNS - columnWidths[0] - columnWidths[1];
                     break;
             }
 

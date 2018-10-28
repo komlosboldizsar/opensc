@@ -399,6 +399,9 @@
     <EmbeddedResource Include="GUI\ModelEditorFormBase.resx">
       <DependentUpon>ModelEditorFormBase.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\UMDs\McCurdyUmd1EditorForm.resx">
+      <DependentUpon>McCurdyUmd1EditorForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\UMDs\SerialUmdPortEditorForm.resx">
       <DependentUpon>SerialUmdPortEditorForm.cs</DependentUpon>
     </EmbeddedResource>
