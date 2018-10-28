@@ -38,6 +38,12 @@ namespace OpenSC.Modules
                 module.RegisterDynamicTextFunctions();
         }
 
+        public static void RegisterDatabasePersisterSerializers()
+        {
+            foreach (IModule module in registeredModules)
+                module.RegisterDatabasePersisterSerializers();
+        }
+
         public static void RegisterModelTypes()
         {
             foreach (IModule module in registeredModules)

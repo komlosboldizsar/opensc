@@ -58,6 +58,7 @@ namespace OpenSC
 
         static void InitDatabases()
         {
+            ModuleManager.RegisterDatabasePersisterSerializers();
             ModuleManager.RegisterDatabases();
             MasterDatabase.Instance.LoadEverything();
         }

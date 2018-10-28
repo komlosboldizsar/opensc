@@ -9,6 +9,7 @@ namespace OpenSC.Model.Streams
 {
     [DatabaseName("streams")]
     [PolymorphDatabase(typeof(StreamTypeNameConverter))]
+    [XmlTagNames("streams", "stream")]
     public class StreamDatabase : DatabaseBase<Stream>
     {
 

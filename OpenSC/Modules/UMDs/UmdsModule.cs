@@ -27,6 +27,9 @@ namespace OpenSC.Modules.UMDs
         public void RegisterDynamicTextFunctions()
         {
         }
+        public void RegisterDatabasePersisterSerializers()
+        {
+        }
 
         public void RegisterModelTypes()
         {

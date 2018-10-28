@@ -30,6 +30,10 @@ namespace OpenSC.Modules.VTRs
             DynamicTextFunctionRegister.Instance.RegisterFunction(new VtrRemainingTimeHhMmSs());
         }
 
+        public void RegisterDatabasePersisterSerializers()
+        {
+        }
+
         public void RegisterModelTypes()
         {
             RegisterVtrType<CasparCgPlayout, CasparCgPlayoutEditorForm>();
