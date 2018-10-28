@@ -113,7 +113,7 @@ namespace OpenSC.GUI.Streams
             builder.BuildAndAdd();
 
             // Bind database
-            table.BoundDatabase = StreamDatabase.Instance;
+            table.BoundCollection = StreamDatabase.Instance;
 
         }
 

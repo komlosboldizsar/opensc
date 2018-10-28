@@ -10,7 +10,6 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.GeneralComponents.Tables
 {
     public class CustomDataGridViewColumnDescriptorBuilder<T>
-        where T: class, IModel
     {
 
         private CustomDataGridView<T> table;

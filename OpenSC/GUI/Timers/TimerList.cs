@@ -187,7 +187,7 @@ namespace OpenSC.GUI.Timers
             builder.BuildAndAdd();
 
             // Bind database
-            table.BoundDatabase = TimerDatabase.Instance;
+            table.BoundCollection = TimerDatabase.Instance;
 
         }
 

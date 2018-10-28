@@ -1,26 +1,26 @@
 ﻿using OpenSC.Model;
+using OpenSC.Model.General;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace OpenSC.GUI.GeneralComponents.Tables
 {
     public class CustomDataGridView<T>: DataGridView
-        where T: class, IModel
     {
 
-        private DatabaseBase<T> boundDatabase;
+        private IObservableList<T> boundCollection;
 
-        public DatabaseBase<T> BoundDatabase
+        public IObservableList<T> BoundCollection
         {
-            get { return boundDatabase; }
+            get { return boundCollection; }
             set
             {
-                if (boundDatabase != null)
-                    boundDatabase.ChangedItems -= itemsChangedHandler;
-                boundDatabase = value;
+                if (boundCollection != null)
+                    boundCollection.ItemsChanged -= itemsChangedHandler;
+                boundCollection = value;
                 loadItems();
-                if (boundDatabase != null)
-                    boundDatabase.ChangedItems += itemsChangedHandler;
+                if (boundCollection != null)
+                    boundCollection.ItemsChanged += itemsChangedHandler;
             }
         }
 
@@ -33,9 +33,9 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             init();
         }
 
-        public CustomDataGridView(DatabaseBase<T> boundDatabase)
+        public CustomDataGridView(IObservableList<T> boundCollection)
         {
-            BoundDatabase = boundDatabase;
+            BoundCollection = boundCollection;
             init();
         }
 
@@ -68,7 +68,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             catch { }
         }
 
-        private void itemsChangedHandler(DatabaseBase<T> database)
+        private void itemsChangedHandler()
         {
             loadItems();
         }
@@ -76,9 +76,9 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         private void loadItems()
         {
             Rows.Clear();
-            if (boundDatabase == null)
+            if (boundCollection == null)
                 return;
-            foreach (T item in boundDatabase.ItemsAsList)
+            foreach (T item in boundCollection)
             {
                 var row = new CustomDataGridViewRow<T>(this, item);
                 Rows.Add(row);
