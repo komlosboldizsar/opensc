@@ -108,7 +108,12 @@ namespace OpenSC.GUI.UMDs
 
         private void umdCurrentTextChangedHandler(UMD umd, string oldText, string newText)
         {
-            currentTextTextBox.Text = umd.CurrentText;
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => umdCurrentTextChangedHandler(umd, oldText, newText)));
+                return;
+            }
+            currentTextTextBox.Text = newText;
         }
 
     }
