@@ -61,25 +61,29 @@ namespace OpenSC.Model.Persistence
 
             var items = new Dictionary<int, T>();
 
-            using (DatabaseFile inputFile = MasterDatabase.Instance.GetFileToRead(database))
+            try
             {
-
-                XmlDocument doc = new XmlDocument();
-                doc.Load(inputFile.Stream);
-
-                XmlNode root = doc.DocumentElement;
-
-                if (root.LocalName != "root")
-                    return null;
-
-                foreach (XmlNode node in root.ChildNodes)
+                using (DatabaseFile inputFile = MasterDatabase.Instance.GetFileToRead(database))
                 {
-                    T item = deserializeItem(node);
-                    if (item != null)
-                        items.Add(item.ID, item);
-                }
 
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(inputFile.Stream);
+
+                    XmlNode root = doc.DocumentElement;
+
+                    if (root.LocalName != "root")
+                        return null;
+
+                    foreach (XmlNode node in root.ChildNodes)
+                    {
+                        T item = deserializeItem(node);
+                        if (item != null)
+                            items.Add(item.ID, item);
+                    }
+
+                }
             }
+            catch { }
 
             return items;
 
