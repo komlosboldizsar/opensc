@@ -321,15 +321,15 @@ namespace OpenSC.Model.Persistence
 
             if (memberType.IsArray)
             {
-
                 List<XmlElement> childElements = new List<XmlElement>();
                 foreach (XmlNode childNode in xmlElement.ChildNodes)
                     if (childNode.NodeType == XmlNodeType.Element)
                         childElements.Add((XmlElement)childNode);
-
                 return deserializeArray(memberType, childElements);
-
             }
+
+            if (memberType.IsEnum)
+                return Enum.Parse(memberType, xmlElement.InnerText);
 
             if (Type.GetTypeCode(memberType) == TypeCode.Object)
             {
