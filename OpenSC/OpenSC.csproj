@@ -256,6 +256,7 @@
     <Compile Include="Model\DatabaseFile.cs" />
     <Compile Include="Model\DatabaseNameAttribute.cs" />
     <Compile Include="Model\General\IObservableList.cs" />
+    <Compile Include="Model\General\IObservableListTyped.cs" />
     <Compile Include="Model\General\ObservableList.cs" />
     <Compile Include="Model\IDatabaseBase.cs" />
     <Compile Include="Model\IModel.cs" />

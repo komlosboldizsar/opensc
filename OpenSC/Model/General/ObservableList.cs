@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.General
 {
 
-    public class ObservableList<T> : List<T>, IObservableList
+    public class ObservableList<T> : List<T>, IObservableList<T>
     {
 
         public ObservableList()

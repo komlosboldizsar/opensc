@@ -16,6 +16,7 @@ namespace OpenSC.Model.General
         event ObservableListItemAddedDelegate ItemAdded;
         event ObservableListItemRemovedDelegate ItemRemoved;
         event ObservableListItemsChangedDelegate ItemsChanged;
+        int Count { get; }
     }
 
 }

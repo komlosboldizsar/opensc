@@ -13,7 +13,7 @@ using System.Xml.Linq;
 
 namespace OpenSC.Model
 {
-    public abstract class DatabaseBase<T>: IDatabaseBase, IObservableList
+    public abstract class DatabaseBase<T>: IDatabaseBase, IObservableList<T>
         where T: class, IModel
     {
 
@@ -48,6 +48,16 @@ namespace OpenSC.Model
         public IReadOnlyList<T> ItemsAsList
         {
             get => items.Values.ToList();
+        }
+
+        public int Count
+        {
+            get { return items.Count; }
+        }
+
+        public T this[int index]
+        {
+            get => GetTById(index);
         }
 
         public DatabaseBase()
