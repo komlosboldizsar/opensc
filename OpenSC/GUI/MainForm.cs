@@ -2,6 +2,7 @@
 using OpenSC.GUI.Settings;
 using OpenSC.GUI.UMDs;
 using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Logger;
 using OpenSC.Model;
 using OpenSC.Model.Timers;
 using OpenSC.Model.UMDs;
@@ -22,6 +23,8 @@ namespace OpenSC.GUI
 
         public static MainForm Instance { get; } = new MainForm();
 
+        private const string LOG_TAG = "MainForm";
+
         public MainForm()
         {
             InitializeComponent();
@@ -34,6 +37,9 @@ namespace OpenSC.GUI
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+
+            LogDispatcher.I(LOG_TAG, "Opened.");
+
             WindowManager.Instance.ChildWindowOpened += childWindowOpenedHandler;
             WindowManager.Instance.ChildWindowClosed += childWindowClosedHandler;
             WindowManager.Instance.ActiveWindowChanged += activeWindowChangedHandler;
@@ -41,6 +47,7 @@ namespace OpenSC.GUI
 
             menuStrip.DynamicChildrenInsertPosition = 1;
             menuStrip.AssociatedMenuItem = MenuManager.Instance.TopMenu;
+
         }
 
         private void mdiChildActivateHandler(object sender, EventArgs e)

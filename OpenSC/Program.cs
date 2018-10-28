@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Logger;
 using OpenSC.Model;
 using OpenSC.Model.Settings;
 using OpenSC.Model.Variables;
@@ -19,12 +20,18 @@ namespace OpenSC
 
         public static event ProgramStartedDelegate ProgramStarted;
 
+        private const string LOG_TAG = "ProgramEntry";
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
+
+            FileLogger logger = new FileLogger(Application.StartupPath, "opensc");
+
+            LogDispatcher.I(LOG_TAG, "Main() started, created file logger.");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -54,6 +61,7 @@ namespace OpenSC
         {
             ModuleManager.RegisterWindowTypes();
             WindowManager.Instance.Init();
+            LogDispatcher.I(LOG_TAG, "Workspace and window manager initialized.");
         }
 
         static void InitDatabases()
@@ -61,6 +69,7 @@ namespace OpenSC
             ModuleManager.RegisterDatabasePersisterSerializers();
             ModuleManager.RegisterDatabases();
             MasterDatabase.Instance.LoadEverything();
+            LogDispatcher.I(LOG_TAG, "Databases initialized and loaded.");
         }
 
     }
