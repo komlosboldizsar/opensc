@@ -91,42 +91,71 @@ namespace OpenSC.Model.UMDs.McCurdy
             port.SendData(address, d);
         }
 
-        [PersistAs("dynamic_text_source")]
-        private DynamicText dynamicTextSource;
-
-        [TempForeignKey("dynamic_text_source", nameof(dynamicTextSource))]
-        private int _dynamicTextSource;
-
-        public DynamicText DynamicTextSource
+        private void updateCurrentText()
         {
-            get { return dynamicTextSource; }
-            set
+            CurrentText = getFullDynamicText();
+        }
+
+        [PersistAs("dynamic_text_sources")]
+        private DynamicText[] dynamicTextSources = new DynamicText[] { null, null, null };
+
+        /*[TempForeignKey("dynamic_text_sources", nameof(dynamicTextSources))]
+        private int[] _dynamicTextSources = new int[] { 0, 0, 0 };*/
+
+        public void SetDynamicTextSource(int columnIndex, DynamicText dynamicTextSource)
+        {
+
+            if ((columnIndex < 0) || (columnIndex > 2))
+                throw new ArgumentOutOfRangeException();
+
+            if (dynamicTextSources[columnIndex] == dynamicTextSource)
+                return;
+
+            int subscribersLeft = 0;
+            for (int i = 0; i < 3; i++)
+                if ((dynamicTextSources[columnIndex] == dynamicTextSource) && (i != columnIndex))
+                    subscribersLeft++;
+
+            if ((dynamicTextSource != null) && (subscribersLeft == 0))
+                dynamicTextSource.CurrentTextChanged -= dynamicTextChangedHandler;
+
+            dynamicTextSources[columnIndex] = dynamicTextSource;
+
+            if (dynamicTextSource != null)
             {
-
-                if (dynamicTextSource == value)
-                    return;
-
-                if (dynamicTextSource != null)
-                    dynamicTextSource.CurrentTextChanged -= dynamicTextChangedHandler;
-
-                dynamicTextSource = value;
-
-                if (dynamicTextSource != null)
-                {
+                if(subscribersLeft == 0)
                     dynamicTextSource.CurrentTextChanged += dynamicTextChangedHandler;
-                    DynamicText = dynamicTextSource.CurrentText;
-                }
-                else
-                {
-                    DynamicText = "";
-                }
-
+                dynamicTexts[columnIndex] = dynamicTextSource.CurrentText;
             }
+            else
+            {
+                dynamicTexts[columnIndex] = "";
+            }
+
+            updateCurrentText();
+
+        }
+
+        public DynamicText GetDynamicTextSource(int columnIndex)
+        {
+            if ((columnIndex < 0) || (columnIndex > 2))
+                throw new ArgumentOutOfRangeException();
+            return dynamicTextSources[columnIndex];
         }
 
         private void dynamicTextChangedHandler(DynamicText text, string oldText, string newText)
         {
-            DynamicText = newText;
+            updateDynamicTexts(text, newText);
+        }
+
+        private string[] dynamicTexts = new string[] { "", "", "" };
+
+        private void updateDynamicTexts(DynamicText textSource, string newText)
+        {
+            for (int i = 0; i < 3; i++)
+                if (dynamicTextSources[i] == textSource)
+                    dynamicTexts[i] = newText;
+            updateCurrentText();
         }
 
         [PersistAs("column_count")]
@@ -138,19 +167,19 @@ namespace OpenSC.Model.UMDs.McCurdy
             set
             {
                 columnCount = value;
-                update();
+                updateCurrentText();
             }
         }
 
         [PersistAs("column_widths")]
-        private int[] columnWidths = new int[] { 70, 40 };
+        private int[] columnWidths = new int[] { 40, 40 };
 
         public int[] ColumnWidths {
             get { return columnWidths; }
             set
             {
                 columnWidths = value;
-                update();
+                updateCurrentText();
             }
         }
 
@@ -167,7 +196,7 @@ namespace OpenSC.Model.UMDs.McCurdy
             set
             {
                 textAlignment = value;
-                update();
+                updateCurrentText();
             }
         }
 
@@ -237,7 +266,7 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         private const int DISPLAY_COLUMNS = 160;
 
-        private string getFullText()
+        private string getFullDynamicText()
         {
 
             int[] width = new int[3];
@@ -265,7 +294,7 @@ namespace OpenSC.Model.UMDs.McCurdy
             string fullText = "";
             for (int i = 0; i < count; i++)
             {
-                fullText += alignAndTrimText("" /* TODO */, width[i], textAlignment[i]);
+                fullText += alignAndTrimText(dynamicTexts[i], width[i], textAlignment[i]);
                 if (useSeparators && (i < count - 1))
                     fullText += " " + SEPARATOR_CHAR + " ";
             }
