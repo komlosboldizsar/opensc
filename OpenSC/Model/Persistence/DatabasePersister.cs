@@ -335,5 +335,36 @@ namespace OpenSC.Model.Persistence
             Save
         }
 
+        #region Serializer
+        private static IValueXmlSerializer[] commonSerializers = new IValueXmlSerializer[]
+        { };
+
+        private static Dictionary<Type, IValueXmlSerializer> registeredSerializers = null;
+
+        private static Dictionary<Type, IValueXmlSerializer> Serializers
+        {
+            get
+            {
+                if(registeredSerializers == null)
+                    registeredSerializers = new Dictionary<Type, IValueXmlSerializer>();
+                foreach (IValueXmlSerializer serializer in commonSerializers)
+                    registeredSerializers.Add(serializer.Type, serializer);
+                return registeredSerializers;
+            }
+        }
+
+        public static void RegisterSerializer(IValueXmlSerializer serializer)
+        {
+            Serializers.Add(serializer.Type, serializer);
+        }
+
+        private static IValueXmlSerializer GetSerializerForType(Type type)
+        {
+            if (!Serializers.TryGetValue(type, out IValueXmlSerializer foundSerializer))
+                return null;
+            return foundSerializer;
+        }
+        #endregion
+
     }
 }
