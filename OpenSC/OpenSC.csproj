@@ -263,6 +263,7 @@
     <Compile Include="GUI\WorkspaceManager\WindowPersister.cs" />
     <Compile Include="GUI\WorkspaceManager\WindowTypeNameAttribute.cs" />
     <Compile Include="GUI\WorkspaceManager\WindowTypeRegister.cs" />
+    <Compile Include="Logger\FileLogger.cs" />
     <Compile Include="Logger\ILogReceiver.cs" />
     <Compile Include="Logger\LogDispatcher.cs" />
     <Compile Include="Logger\LogMessageType.cs" />
