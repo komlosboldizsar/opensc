@@ -107,6 +107,7 @@ namespace OpenSC.Model.Persistence
         private const BindingFlags memberLookupBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         private static readonly Type storedType = typeof(T);
 
+        #region Serialization
         private XElement serializeItem(T item)
         {
 
@@ -137,66 +138,6 @@ namespace OpenSC.Model.Persistence
 
         }
 
-        private T deserializeItem(XmlNode xmlElement)
-        {
-
-            T item = null;
-
-            if (xmlElement.NodeType != XmlNodeType.Element)
-                return null;
-
-            Type type = typeof(T);
-            if(isPolymorph)
-            {
-                string typeStr = xmlElement.Attributes[ATTRIBUTE_TYPE]?.Value;
-                type = typeNameConverter.ConvertStringToType(typeStr);
-                if (type == null)
-                    return null;
-            }
-
-            foreach (ConstructorInfo ctor in type.GetConstructors())
-            {
-                if (ctor.GetParameters().Length == 0)
-                    try
-                    {
-                        item = (T)ctor.Invoke(new object[] { });
-                    }
-                    catch { }
-            }
-
-            if (item == null)
-                return null;
-
-            string idStr = xmlElement.Attributes[ATTRIBUTE_ID].Value;
-            if (!int.TryParse(idStr, out int id) || id <= 0)
-                return null;
-            item.ID = id;
-
-            Dictionary<string, object> persistedValues = new Dictionary<string, object>();
-            foreach (XmlNode node in xmlElement.ChildNodes)
-                if (node.NodeType == XmlNodeType.Element)
-                    persistedValues.Add(node.LocalName, node.InnerText);
-
-            // Set fields
-            foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
-                restoreValueForFieldOrProperty(fieldInfo, persistedValues, ref item);
-
-            if (isPolymorph)
-                foreach (FieldInfo fieldInfo in type.GetFields(memberLookupBindingFlags))
-                    restoreValueForFieldOrProperty(fieldInfo, persistedValues, ref item);
-
-            // Set properties
-            foreach (PropertyInfo propertyInfo in storedType.GetProperties(memberLookupBindingFlags))
-                restoreValueForFieldOrProperty(propertyInfo, persistedValues, ref item);
-
-            if (isPolymorph)
-                foreach (PropertyInfo propertyInfo in type.GetProperties(memberLookupBindingFlags))
-                    restoreValueForFieldOrProperty(propertyInfo, persistedValues, ref item);
-
-            return item;
-
-        }
-
         private void storeValueOfFieldOrProperty(MemberInfo memberInfo, ref T item, ref XElement xmlElement)
         {
 
@@ -209,7 +150,10 @@ namespace OpenSC.Model.Persistence
             if ((propertyInfo != null) && !(propertyInfo.CanRead && propertyInfo.CanWrite))
                 return;
 
-            string xmlTagName = getXmlTagNameForMember(memberInfo, item, Workflow.Save);
+            if (isTemporaryForeignKeyField(memberInfo))
+                return;
+
+            string xmlTagName = getXmlTagNameForMember(memberInfo, item);
             if (xmlTagName == null)
                 return;
 
@@ -249,16 +193,6 @@ namespace OpenSC.Model.Persistence
                 return arrayElements;
             }
 
-            // https://stackoverflow.com/a/4963190
-            if (memberType.GetInterfaces().Any(iface => (iface == typeof(IList))) && (item is IList))
-            {
-                IList list = item as IList;
-                List<XElement> arrayElements = new List<XElement>();
-                foreach(var element in list)
-                    arrayElements.Add(serializeCollectionElement(memberInfo, element, arrayDimension));
-                return arrayElements;
-            }
-
             if (Type.GetTypeCode(memberType) == TypeCode.Object)
             {
                 IValueXmlSerializer serializer = GetSerializerForType(memberType);
@@ -273,14 +207,76 @@ namespace OpenSC.Model.Persistence
 
         private XElement serializeCollectionElement(MemberInfo memberInfo, object element, int arrayDimension)
         {
-            string tagName = getXmlTagNameForMember(memberInfo, element, Workflow.Save, arrayDimension + 1);
+            string tagName = getXmlTagNameForMember(memberInfo, element, arrayDimension + 1);
             if (tagName == null)
                 tagName = UNDEFINED_ARRAY_ITEM_TAG;
             object arrayElementValue = serializeValue(memberInfo, element, arrayDimension + 1);
             return new XElement(tagName, arrayElementValue);
         }
+        #endregion
 
-        private void restoreValueForFieldOrProperty(MemberInfo memberInfo, Dictionary<string, object> persistedValues, ref T item)
+        #region Deserialization
+        private T deserializeItem(XmlNode xmlElement)
+        {
+
+            T item = null;
+
+            if (xmlElement.NodeType != XmlNodeType.Element)
+                return null;
+
+            Type type = typeof(T);
+            if (isPolymorph)
+            {
+                string typeStr = xmlElement.Attributes[ATTRIBUTE_TYPE]?.Value;
+                type = typeNameConverter.ConvertStringToType(typeStr);
+                if (type == null)
+                    return null;
+            }
+
+            foreach (ConstructorInfo ctor in type.GetConstructors())
+            {
+                if (ctor.GetParameters().Length == 0)
+                    try
+                    {
+                        item = (T)ctor.Invoke(new object[] { });
+                    }
+                    catch { }
+            }
+
+            if (item == null)
+                return null;
+
+            string idStr = xmlElement.Attributes[ATTRIBUTE_ID].Value;
+            if (!int.TryParse(idStr, out int id) || id <= 0)
+                return null;
+            item.ID = id;
+
+            Dictionary<string, XmlElement> persistedValues = new Dictionary<string, XmlElement>();
+            foreach (XmlNode node in xmlElement.ChildNodes)
+                if (node.NodeType == XmlNodeType.Element)
+                    persistedValues[node.LocalName] = (XmlElement)node;
+
+            // Set fields
+            foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
+                restoreValueForFieldOrProperty(fieldInfo, persistedValues, ref item);
+
+            if (isPolymorph)
+                foreach (FieldInfo fieldInfo in type.GetFields(memberLookupBindingFlags))
+                    restoreValueForFieldOrProperty(fieldInfo, persistedValues, ref item);
+
+            // Set properties
+            foreach (PropertyInfo propertyInfo in storedType.GetProperties(memberLookupBindingFlags))
+                restoreValueForFieldOrProperty(propertyInfo, persistedValues, ref item);
+
+            if (isPolymorph)
+                foreach (PropertyInfo propertyInfo in type.GetProperties(memberLookupBindingFlags))
+                    restoreValueForFieldOrProperty(propertyInfo, persistedValues, ref item);
+
+            return item;
+
+        }
+
+        private void restoreValueForFieldOrProperty(MemberInfo memberInfo, Dictionary<string, XmlElement> persistedValues, ref T item)
         {
 
             FieldInfo fieldInfo = memberInfo as FieldInfo;
@@ -292,27 +288,19 @@ namespace OpenSC.Model.Persistence
             if ((propertyInfo != null) && !(propertyInfo.CanRead && propertyInfo.CanWrite))
                 return;
 
-            string xmlTagName = getXmlTagNameForMember(memberInfo, item, Workflow.Load);
+            if (isAssociationField(memberInfo))
+                return;
+
+            string xmlTagName = getXmlTagNameForMember(memberInfo, item);
             if (xmlTagName == null)
                 return;
 
-            if (!persistedValues.TryGetValue(xmlTagName, out object value))
+            if (!persistedValues.TryGetValue(xmlTagName, out XmlElement xmlElement))
                 return;
 
             Type type = (fieldInfo != null) ? fieldInfo.FieldType : propertyInfo.PropertyType;
 
-            if (type.IsEnum)
-            {
-                value = Enum.Parse(type, value?.ToString());
-            }
-            else
-            {
-                try
-                {
-                    value = Convert.ChangeType(value, type);
-                }
-                catch { }
-            }
+            object value = deserializeXmlElement(type, xmlElement);
 
             try
             {
@@ -324,6 +312,57 @@ namespace OpenSC.Model.Persistence
             catch { }
 
         }
+
+        private object deserializeXmlElement(Type memberType, XmlElement xmlElement)
+        {
+
+            if (xmlElement.IsEmpty)
+                return null;
+
+            if (memberType.IsArray)
+            {
+
+                List<XmlElement> childElements = new List<XmlElement>();
+                foreach (XmlNode childNode in xmlElement.ChildNodes)
+                    if (childNode.NodeType == XmlNodeType.Element)
+                        childElements.Add((XmlElement)childNode);
+
+                return deserializeArray(memberType, childElements);
+
+            }
+
+            if (Type.GetTypeCode(memberType) == TypeCode.Object)
+            {
+                IValueXmlSerializer serializer = GetSerializerForType(memberType);
+                if (serializer == null)
+                    return xmlElement.InnerText;
+                return serializer.DeserializeItem(xmlElement);
+            }
+
+            return Convert.ChangeType(xmlElement.InnerText, memberType);
+
+        }
+
+        private object deserializeArray(Type memberType, List<XmlElement> childElements)
+        {
+
+            int childElementCount = childElements.Count;
+
+            if (memberType == typeof(int[]))
+            {
+                int[] intArray = new int[childElementCount];
+                for (int i = 0; i < childElementCount; i++)
+                    intArray[i] = (int)deserializeXmlElement(typeof(int), childElements[i]);
+                return intArray;
+            }
+
+            object[] array = (object[])Activator.CreateInstance(memberType, new object[] { childElementCount });
+            for (int i = 0; i < childElementCount; i++)
+                array[i] = deserializeXmlElement(memberType.GetElementType(), childElements[i]);
+            return array;
+
+        }
+        #endregion
 
         public void BuildRelationsByForeignKeys(ref Dictionary<int, T> items)
         {
@@ -367,16 +406,13 @@ namespace OpenSC.Model.Persistence
 
         }
 
-        private string getXmlTagNameForMember(MemberInfo memberInfo, object item, Workflow workflow, int dimension = 0)
+        private string getXmlTagNameForMember(MemberInfo memberInfo, object item, int dimension = 0)
         {
 
             IEnumerable<PersistAsAttribute> persistAsAttributes = memberInfo.GetCustomAttributes<PersistAsAttribute>();
             foreach (PersistAsAttribute attr in persistAsAttributes)
                 if (attr.Dimension == dimension)
                     return attr.TagName;
-
-            if (workflow == Workflow.Save)
-                return null;
 
             TempForeignKeyAttribute tempForeignKeyAttribute = memberInfo.GetCustomAttribute<TempForeignKeyAttribute>();
             if (tempForeignKeyAttribute == null)
@@ -390,6 +426,26 @@ namespace OpenSC.Model.Persistence
 
             return originalMemberInfo[0].GetCustomAttribute<PersistAsAttribute>()?.TagName;
 
+        }
+
+        private bool isTemporaryForeignKeyField(MemberInfo memberInfo)
+        {
+            return (memberInfo.GetCustomAttributes<TempForeignKeyAttribute>().Count() > 0);
+        }
+
+        private bool isAssociationField(MemberInfo memberInfo)
+        {
+            FieldInfo fieldInfo = memberInfo as FieldInfo;
+            PropertyInfo propertyInfo = memberInfo as PropertyInfo;
+            Type type = (fieldInfo != null) ? fieldInfo.FieldType : propertyInfo.PropertyType;
+            return (getArrayBaseType(type).GetInterfaces().Any(iface => (iface == typeof(IModel))));
+        }
+
+        private Type getArrayBaseType(Type type)
+        {
+            if (type.IsArray)
+                return getArrayBaseType(type.GetElementType());
+            return type;
         }
 
         private enum Workflow
