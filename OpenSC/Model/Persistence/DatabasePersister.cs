@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model.Persistence;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -22,6 +23,10 @@ namespace OpenSC.Model.Persistence
 
         private string rootTag = "root";
         private string itemTag = "item";
+
+        private const string ATTRIBUTE_ID = "id";
+        private const string ATTRIBUTE_TYPE = "type";
+        private const string UNDEFINED_ARRAY_ITEM_TAG = "arrayitem";
 
         public DatabasePersister(IDatabaseBase database)
         {
@@ -108,9 +113,9 @@ namespace OpenSC.Model.Persistence
             XElement xmlElement = new XElement(itemTag);
             Type itemType = item.GetType();
 
-            xmlElement.SetAttributeValue("id", item.ID);
+            xmlElement.SetAttributeValue(ATTRIBUTE_ID, item.ID);
             if (isPolymorph)
-                xmlElement.SetAttributeValue("type", typeNameConverter.ConvertTypeToString(itemType));
+                xmlElement.SetAttributeValue(ATTRIBUTE_TYPE, typeNameConverter.ConvertTypeToString(itemType));
 
             // Get fields
             foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
@@ -143,7 +148,7 @@ namespace OpenSC.Model.Persistence
             Type type = typeof(T);
             if(isPolymorph)
             {
-                string typeStr = xmlElement.Attributes["type"]?.Value;
+                string typeStr = xmlElement.Attributes[ATTRIBUTE_TYPE]?.Value;
                 type = typeNameConverter.ConvertStringToType(typeStr);
                 if (type == null)
                     return null;
@@ -162,7 +167,7 @@ namespace OpenSC.Model.Persistence
             if (item == null)
                 return null;
 
-            string idStr = xmlElement.Attributes["id"].Value;
+            string idStr = xmlElement.Attributes[ATTRIBUTE_ID].Value;
             if (!int.TryParse(idStr, out int id) || id <= 0)
                 return null;
             item.ID = id;
@@ -209,13 +214,70 @@ namespace OpenSC.Model.Persistence
                 return;
 
             object fieldValue = (fieldInfo != null) ? fieldInfo.GetValue(item) : propertyInfo.GetValue(item);
+            object xmlElementInner = serializeValue(memberInfo, fieldValue);
+            xmlElement.Add(new XElement(xmlTagName, xmlElementInner));
 
-            IModel fieldValueAsIModel = fieldValue as IModel;
-            if (fieldValueAsIModel != null)
-                fieldValue = fieldValueAsIModel.ID;
+        }
 
-            xmlElement.Add(new XElement(xmlTagName, fieldValue));
+        private object serializeValue(MemberInfo memberInfo, object item, int arrayDimension = 0)
+        {
 
+            if (item == null)
+                return string.Empty;
+
+            IModel itemAsImodel = item as IModel;
+            if (itemAsImodel != null)
+                return itemAsImodel.ID;
+
+            Type memberType;
+            FieldInfo fieldInfo = memberInfo as FieldInfo;
+            PropertyInfo propertyInfo = memberInfo as PropertyInfo;
+
+            if (fieldInfo != null)
+                memberType = fieldInfo.FieldType;
+            else if (propertyInfo != null)
+                memberType = propertyInfo.PropertyType;
+            else
+                return string.Empty;
+
+            if (memberType.IsArray && (item is Array))
+            {
+                Array array = item as Array;
+                List<XElement> arrayElements = new List<XElement>();
+                foreach (var element in array)
+                    arrayElements.Add(serializeCollectionElement(memberInfo, element, arrayDimension));
+                return arrayElements;
+            }
+
+            // https://stackoverflow.com/a/4963190
+            if (memberType.GetInterfaces().Any(iface => (iface == typeof(IList))) && (item is IList))
+            {
+                IList list = item as IList;
+                List<XElement> arrayElements = new List<XElement>();
+                foreach(var element in list)
+                    arrayElements.Add(serializeCollectionElement(memberInfo, element, arrayDimension));
+                return arrayElements;
+            }
+
+            if (Type.GetTypeCode(memberType) == TypeCode.Object)
+            {
+                IValueXmlSerializer serializer = GetSerializerForType(memberType);
+                if (serializer == null)
+                    return item.ToString();
+                return serializer.SerializeItem(item);
+            }
+           
+            return item.ToString();
+
+        }
+
+        private XElement serializeCollectionElement(MemberInfo memberInfo, object element, int arrayDimension)
+        {
+            string tagName = getXmlTagNameForMember(memberInfo, element, Workflow.Save, arrayDimension + 1);
+            if (tagName == null)
+                tagName = UNDEFINED_ARRAY_ITEM_TAG;
+            object arrayElementValue = serializeValue(memberInfo, element, arrayDimension + 1);
+            return new XElement(tagName, arrayElementValue);
         }
 
         private void restoreValueForFieldOrProperty(MemberInfo memberInfo, Dictionary<string, object> persistedValues, ref T item)
@@ -305,7 +367,7 @@ namespace OpenSC.Model.Persistence
 
         }
 
-        private string getXmlTagNameForMember(MemberInfo memberInfo, T item, Workflow workflow, int dimension = 0)
+        private string getXmlTagNameForMember(MemberInfo memberInfo, object item, Workflow workflow, int dimension = 0)
         {
 
             IEnumerable<PersistAsAttribute> persistAsAttributes = memberInfo.GetCustomAttributes<PersistAsAttribute>();
