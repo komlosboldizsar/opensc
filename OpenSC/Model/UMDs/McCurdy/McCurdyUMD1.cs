@@ -29,7 +29,7 @@ namespace OpenSC.Model.UMDs.McCurdy
         }
 
         [PersistAs("address")]
-        private int address;
+        private int address = 1;
 
         public int Address
         {
