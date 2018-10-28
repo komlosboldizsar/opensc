@@ -18,6 +18,8 @@ namespace OpenSC.GUI.WorkspaceManager
         private const string WINDOW_TAG = "window";
         private const string ATTRIBUTE_TAG = "attribute";
 
+        private const string ROOT_ATTRIBUTE_FOCUSED = "focused";
+
         private const string WINDOW_ATTRIBUTE_TYPE = "type";
         private const string WINDOW_ATTRIBUTE_WIDTH = "width";
         private const string WINDOW_ATTRIBUTE_HEIGHT = "height";
@@ -35,14 +37,16 @@ namespace OpenSC.GUI.WorkspaceManager
             IndentChars = "\t"
         };
 
-        public static void SaveWindows(List<IPersistableWindow> windows)
+        public static void SaveWindows(Workspace workspace)
         {
 
             XElement rootElement = new XElement(ROOT_TAG);
-            foreach (IPersistableWindow window in windows)
+            rootElement.SetAttributeValue(ROOT_ATTRIBUTE_FOCUSED, workspace.FocusedWindowIndex);
+
+            foreach (IPersistableWindow window in workspace.Windows)
             {
                 XElement windowElement = serializeWindow(window);
-                if(windowElement != null)
+                if (windowElement != null)
                     rootElement.Add(windowElement);
             }
 
@@ -54,10 +58,10 @@ namespace OpenSC.GUI.WorkspaceManager
 
         }
 
-        public static List<IPersistableWindow> LoadWindows()
+        public static Workspace LoadWindows()
         {
 
-            List<IPersistableWindow> windows = new List<IPersistableWindow>();
+            Workspace workspace = new Workspace();
 
             try
             {
@@ -66,20 +70,24 @@ namespace OpenSC.GUI.WorkspaceManager
 
                 XmlNode root = doc.DocumentElement;
                 if (root.LocalName != ROOT_TAG)
-                    return windows;
+                    return null;
+
+                workspace.FocusedWindowIndex = int.TryParse(root.Attributes[ROOT_ATTRIBUTE_FOCUSED]?.ToString(), out int fwi) ? (int?)fwi : null;
 
                 foreach (XmlNode node in root.ChildNodes)
                 {
                     IPersistableWindow window = deserializeWindow(node);
                     if (window != null)
-                        windows.Add(window);
+                        workspace.Windows.Add(window);
                 }
 
             }
             catch
-            { }
+            {
+                return null;
+            }
 
-            return windows;
+            return workspace;
 
         }
 
@@ -103,13 +111,13 @@ namespace OpenSC.GUI.WorkspaceManager
             xmlElement.SetAttributeValue(WINDOW_ATTRIBUTE_WIDTH, size.Width);
             xmlElement.SetAttributeValue(WINDOW_ATTRIBUTE_HEIGHT, size.Height);
 
-            foreach(var pair in window.GetKeyValuePairs())
+            foreach (var pair in window.GetKeyValuePairs())
             {
                 XElement attributeElement = new XElement(ATTRIBUTE_TAG);
                 attributeElement.SetAttributeValue(ATTRIBUTE_ATTRIBUTE_KEY, pair.Key);
                 ValueConverter.SerializedData serialized = ValueConverter.Serialize(pair.Value);
                 attributeElement.SetAttributeValue(ATTRIBUTE_ATTRIBUTE_VALUE, serialized.Value);
-                if(serialized.TypeName != string.Empty)
+                if (serialized.TypeName != string.Empty)
                     attributeElement.SetAttributeValue(ATTRIBUTE_ATTRIBUTE_TYPE, serialized.TypeName);
                 xmlElement.Add(attributeElement);
             }
@@ -142,9 +150,9 @@ namespace OpenSC.GUI.WorkspaceManager
                 Size size = new Size(w, h);
 
                 Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-                foreach(XmlNode attributeNode in node.ChildNodes)
+                foreach (XmlNode attributeNode in node.ChildNodes)
                 {
-                    if(attributeNode.LocalName == ATTRIBUTE_TAG)
+                    if (attributeNode.LocalName == ATTRIBUTE_TAG)
                     {
                         string key = attributeNode.Attributes[ATTRIBUTE_ATTRIBUTE_KEY].Value;
                         string value = attributeNode.Attributes[ATTRIBUTE_ATTRIBUTE_VALUE].Value;
@@ -160,7 +168,7 @@ namespace OpenSC.GUI.WorkspaceManager
                 }
 
                 ConstructorInfo foundCtor = null;
-                foreach(var ctor in windowType.GetConstructors())
+                foreach (var ctor in windowType.GetConstructors())
                 {
                     if (ctor.GetParameters().Length == 0)
                     {
@@ -186,6 +194,12 @@ namespace OpenSC.GUI.WorkspaceManager
                 return null;
             }
 
+        }
+
+        public class Workspace
+        {
+            public List<IPersistableWindow> Windows = new List<IPersistableWindow>();
+            public int? FocusedWindowIndex = null;
         }
 
     }
