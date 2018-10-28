@@ -8,6 +8,6 @@ namespace OpenSC.Logger
 {
     public interface ILogReceiver
     {
-        void ReceiveLogMessage(LogMessageType messageType, string tag, string message);
+        void ReceiveLogMessage(LogMessageType messageType, DateTime timestamp, string tag, string message);
     }
 }
