@@ -364,6 +364,7 @@ namespace OpenSC.Model.Persistence
         }
         #endregion
 
+        #region Relations/associations
         public void BuildRelationsByForeignKeys(ref Dictionary<int, T> items)
         {
 
@@ -397,14 +398,53 @@ namespace OpenSC.Model.Persistence
             if (originalField == null)
                 return;
 
-            int? foreignKey = foreignKeyField.GetValue(item) as int?;
-            if (foreignKey == null)
+            object foreignKeys = foreignKeyField.GetValue(item);
+            if (foreignKeys == null)
                 return;
 
-            object foreignObject = MasterDatabase.Instance.GetItem(attr.DatabaseName, (int)foreignKey);
-            originalField.SetValue(item, foreignObject);
+            object foreignObjects = getAssociatedObjects(foreignKeyField.FieldType, originalField.FieldType, attr.DatabaseName, foreignKeys);
+            originalField.SetValue(item, foreignObjects);
 
         }
+
+        private object getAssociatedObjects(Type memberType, Type originalType, string databaseName, object foreignKeys)
+        {
+
+            if (memberType.IsArray && (memberType.GetElementType() != typeof(int)))
+            {
+                object[] foreignKeysArray = foreignKeys as object[];
+                if (foreignKeysArray == null)
+                    return null;
+                object[] associatedObjects = (object[])Activator.CreateInstance(originalType, new object[] { foreignKeysArray.Length });
+                for (int i = 0; i < foreignKeysArray.Length; i++)
+                    associatedObjects[i] = getAssociatedObjects(memberType.GetElementType(), originalType.GetElementType(), databaseName, foreignKeysArray[i]);
+                return Convert.ChangeType(associatedObjects, originalType);
+            }
+            else if(memberType.IsArray)
+            {
+                int[] foreignKeysArray = foreignKeys as int[];
+                if (foreignKeysArray == null)
+                    return null;
+                object[] associatedObjects = (object[])Activator.CreateInstance(originalType, new object[] { foreignKeysArray.Length });
+                for (int i = 0; i < foreignKeysArray.Length; i++)
+                {
+                    int? foreignKeyInt = foreignKeysArray[i] as int?;
+                    if(foreignKeyInt != null)
+                        associatedObjects[i] = MasterDatabase.Instance.GetItem(databaseName, (int)foreignKeyInt);
+                }
+                return associatedObjects;
+            }
+            else
+            {
+                int? foreignKeyInt = foreignKeys as int?;
+                if (foreignKeyInt == null)
+                    return null;
+                return MasterDatabase.Instance.GetItem(databaseName, (int)foreignKeyInt);
+            }
+
+        }
+
+        #endregion
 
         private string getXmlTagNameForMember(MemberInfo memberInfo, object item, int dimension = 0)
         {
