@@ -1,6 +1,7 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -168,6 +169,16 @@ namespace OpenSC.Model
         {
             foreach (T item in items.Values)
                 item.Restored();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return items.Values.GetEnumerator();
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return items.Values.GetEnumerator();
         }
 
     }

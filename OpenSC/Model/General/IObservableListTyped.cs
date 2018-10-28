@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.General
 {
 
-    public interface IObservableList<T> : IObservableList
+    public interface IObservableList<T> : IObservableList, IEnumerable<T>
     {
         T this[int index] { get; }
     }

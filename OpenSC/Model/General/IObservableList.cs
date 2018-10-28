@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace OpenSC.Model.General
     public delegate void ObservableListItemRemovedDelegate();
     public delegate void ObservableListItemsChangedDelegate();
 
-    public interface IObservableList
+    public interface IObservableList: IEnumerable
     {
         event ObservableListItemAddedDelegate ItemAdded;
         event ObservableListItemRemovedDelegate ItemRemoved;
