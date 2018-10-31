@@ -98,7 +98,7 @@ namespace OpenSC.GUI.Signals
         {
             categoryDropDown.CreateAdapterAsDataSource<SignalCategory>(
                 SignalDatabases.Categories.ItemsAsList,
-                category => string.Format("(#{0}) #1", category.ID, category.Name),
+                category => string.Format("(#{0}) {1}", category.ID, category.Name),
                 true,
                 "(not associated)");
         }
