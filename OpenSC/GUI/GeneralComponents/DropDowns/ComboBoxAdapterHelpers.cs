@@ -29,8 +29,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
             comboBox.SetAdapterAsDataSource(adapter);
         }
 
-        public static void SetAdapterAsDataSource<T>(this ComboBox comboBox, ComboBoxAdapter<T> adapter)
-            where T : class
+        public static void SetAdapterAsDataSource(this ComboBox comboBox, IComboBoxAdapter adapter)
         {
             comboBox.DataSource = adapter;
             comboBox.ValueMember = "Value";
