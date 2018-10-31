@@ -57,7 +57,10 @@ namespace OpenSC.GUI.Signals
             builder.Width(150);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
-            builder.UpdaterMethod((signal, cell) => { cell.Value = string.Format("(#{0}) {1}", signal.Category.ID, signal.Category.Name); });
+            builder.UpdaterMethod((signal, cell) => {
+                cell.Value = string.Format("(#{0}) {1}", signal.Category.ID, signal.Category.Name);
+                cell.Style.BackColor = signal.Category.Color;
+            });
             builder.AddChangeEvent(nameof(Signal.CategoryChangedPCN));
             builder.BuildAndAdd();
 

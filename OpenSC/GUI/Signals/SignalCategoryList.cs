@@ -50,6 +50,16 @@ namespace OpenSC.GUI.Signals
             builder.AddChangeEvent(nameof(SignalCategory.NameChangedPCN));
             builder.BuildAndAdd();
 
+            // Column: color
+            builder = GetColumnDescriptorBuilderForTable<SignalCategory>();
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.Header("");
+            builder.Width(30);
+            builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
+            builder.UpdaterMethod((category, cell) => { cell.Style.BackColor = category.Color; });
+            builder.AddChangeEvent(nameof(SignalCategory.ColorChangedPCN));
+            builder.BuildAndAdd();
+
             // Column: edit button
             builder = GetColumnDescriptorBuilderForTable<SignalCategory>();
             builder.Type(DataGridViewColumnType.Button);

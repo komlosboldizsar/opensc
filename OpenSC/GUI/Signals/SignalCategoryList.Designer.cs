@@ -38,16 +38,16 @@
             // topPanel
             // 
             this.topPanel.Controls.Add(this.topPanelInner);
-            this.topPanel.Size = new System.Drawing.Size(624, 54);
+            this.topPanel.Size = new System.Drawing.Size(736, 54);
             // 
             // bottomPanel
             // 
             this.bottomPanel.Location = new System.Drawing.Point(0, 54);
-            this.bottomPanel.Size = new System.Drawing.Size(624, 288);
+            this.bottomPanel.Size = new System.Drawing.Size(736, 307);
             // 
             // mainContainer
             // 
-            this.mainContainer.Size = new System.Drawing.Size(624, 342);
+            this.mainContainer.Size = new System.Drawing.Size(736, 361);
             // 
             // topPanelInner
             // 
@@ -58,13 +58,13 @@
             this.topPanelInner.Location = new System.Drawing.Point(0, 0);
             this.topPanelInner.Name = "topPanelInner";
             this.topPanelInner.Padding = new System.Windows.Forms.Padding(10);
-            this.topPanelInner.Size = new System.Drawing.Size(624, 54);
+            this.topPanelInner.Size = new System.Drawing.Size(736, 54);
             this.topPanelInner.TabIndex = 0;
             // 
             // addSignalCategoryButton
             // 
             this.addSignalCategoryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.addSignalCategoryButton.Location = new System.Drawing.Point(474, 13);
+            this.addSignalCategoryButton.Location = new System.Drawing.Point(586, 13);
             this.addSignalCategoryButton.Name = "addSignalCategoryButton";
             this.addSignalCategoryButton.Size = new System.Drawing.Size(137, 28);
             this.addSignalCategoryButton.TabIndex = 0;
@@ -76,7 +76,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(624, 398);
+            this.ClientSize = new System.Drawing.Size(736, 417);
             this.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.HeaderText = "List of signal categories";
             this.Name = "SignalCategoryList";
