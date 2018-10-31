@@ -1,5 +1,7 @@
-﻿using System;
+﻿using OpenSC.Model.Persistence;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +15,9 @@ namespace OpenSC.Model.Signals
 
     public delegate void SignalCategoryNameChangingDelegate(SignalCategory category, string oldName, string newName);
     public delegate void SignalCategoryNameChangedDelegate(SignalCategory category, string oldName, string newName);
+
+    public delegate void SignalCategoryColorChangingDelegate(SignalCategory category, Color oldColor, Color newColor);
+    public delegate void SignalCategoryColorChangedDelegate(SignalCategory category, Color oldColor, Color newColor);
 
     public class SignalCategory : IModel
     {
@@ -71,6 +76,30 @@ namespace OpenSC.Model.Signals
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
                 NameChangedPCN?.Invoke();
+            }
+        }
+
+        public event SignalCategoryColorChangingDelegate ColorChanging;
+        public event SignalCategoryColorChangedDelegate ColorChanged;
+        public event ParameterlessChangeNotifierDelegate ColorChangingPCN;
+        public event ParameterlessChangeNotifierDelegate ColorChangedPCN;
+
+        [PersistAs("color")]
+        private Color color;
+
+        public Color Color
+        {
+            get { return color; }
+            set
+            {
+                if (value == color)
+                    return;
+                Color oldColor = color;
+                ColorChanging?.Invoke(this, oldColor, value);
+                ColorChangingPCN?.Invoke();
+                color = value;
+                ColorChanged?.Invoke(this, oldColor, value);
+                ColorChangedPCN?.Invoke();
             }
         }
 
