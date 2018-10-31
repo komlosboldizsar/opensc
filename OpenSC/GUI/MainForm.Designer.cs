@@ -39,6 +39,8 @@ namespace OpenSC.GUI
             this.tileWindowsVerticallyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cascadeWindowsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.globalSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusStripEmptySpace = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStripClock = new System.Windows.Forms.ToolStripStatusLabel();
@@ -46,8 +48,6 @@ namespace OpenSC.GUI
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.clockUpdateTimer = new System.Windows.Forms.Timer(this.components);
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.globalSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -120,6 +120,21 @@ namespace OpenSC.GUI
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(249, 6);
             // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.globalSettingsToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(74, 24);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // globalSettingsToolStripMenuItem
+            // 
+            this.globalSettingsToolStripMenuItem.Name = "globalSettingsToolStripMenuItem";
+            this.globalSettingsToolStripMenuItem.Size = new System.Drawing.Size(183, 26);
+            this.globalSettingsToolStripMenuItem.Text = "Global settings";
+            this.globalSettingsToolStripMenuItem.Click += new System.EventHandler(this.globalSettingsToolStripMenuItem_Click);
+            // 
             // statusStrip
             // 
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -171,21 +186,6 @@ namespace OpenSC.GUI
             this.clockUpdateTimer.Interval = 500;
             this.clockUpdateTimer.Tick += new System.EventHandler(this.clockUpdateTimer_Tick);
             // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.globalSettingsToolStripMenuItem});
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(74, 24);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            // 
-            // globalSettingsToolStripMenuItem
-            // 
-            this.globalSettingsToolStripMenuItem.Name = "globalSettingsToolStripMenuItem";
-            this.globalSettingsToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
-            this.globalSettingsToolStripMenuItem.Text = "Global settings";
-            this.globalSettingsToolStripMenuItem.Click += new System.EventHandler(this.globalSettingsToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -197,6 +197,7 @@ namespace OpenSC.GUI
             this.MainMenuStrip = this.menuStrip;
             this.Name = "MainForm";
             this.Text = "OpenSC";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip.ResumeLayout(false);
