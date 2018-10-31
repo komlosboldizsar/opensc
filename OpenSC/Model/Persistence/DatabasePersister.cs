@@ -336,7 +336,7 @@ namespace OpenSC.Model.Persistence
                 IValueXmlSerializer serializer = GetSerializerForType(memberType);
                 if (serializer == null)
                     return xmlElement.InnerText;
-                return serializer.DeserializeItem(xmlElement);
+                return serializer.DeserializeItem(xmlElement.OfType<XmlElement>().FirstOrDefault());
             }
 
             return Convert.ChangeType(xmlElement.InnerText, memberType);
