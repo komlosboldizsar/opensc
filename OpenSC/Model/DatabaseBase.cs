@@ -143,6 +143,8 @@ namespace OpenSC.Model
 
         public int NextValidId()
         {
+            if (items.Count == 0)
+                return 1;
             return items.Keys.Max() + 1;
         }
 
