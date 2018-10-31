@@ -61,6 +61,7 @@ namespace OpenSC.Model.Signals
         public event ParameterlessChangeNotifierDelegate NameChangingPCN;
         public event ParameterlessChangeNotifierDelegate NameChangedPCN;
 
+        [PersistAs("name")]
         private string name;
 
         public string Name
