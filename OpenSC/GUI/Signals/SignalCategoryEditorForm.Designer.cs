@@ -148,7 +148,7 @@
             this.appearanceGroupBox.Margin = new System.Windows.Forms.Padding(10);
             this.appearanceGroupBox.Name = "appearanceGroupBox";
             this.appearanceGroupBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 8);
-            this.appearanceGroupBox.Size = new System.Drawing.Size(489, 65);
+            this.appearanceGroupBox.Size = new System.Drawing.Size(489, 67);
             this.appearanceGroupBox.TabIndex = 2;
             this.appearanceGroupBox.TabStop = false;
             this.appearanceGroupBox.Text = "Base data";
@@ -167,7 +167,7 @@
             this.appearanceTable.Name = "appearanceTable";
             this.appearanceTable.RowCount = 1;
             this.appearanceTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.appearanceTable.Size = new System.Drawing.Size(473, 38);
+            this.appearanceTable.Size = new System.Drawing.Size(473, 40);
             this.appearanceTable.TabIndex = 0;
             // 
             // colorLabel
@@ -177,7 +177,7 @@
             this.colorLabel.Location = new System.Drawing.Point(3, 0);
             this.colorLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.colorLabel.Name = "colorLabel";
-            this.colorLabel.Size = new System.Drawing.Size(41, 38);
+            this.colorLabel.Size = new System.Drawing.Size(41, 40);
             this.colorLabel.TabIndex = 0;
             this.colorLabel.Text = "Color";
             this.colorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -190,13 +190,13 @@
             this.colorContainerPanel.Controls.Add(this.setColorButton);
             this.colorContainerPanel.Location = new System.Drawing.Point(62, 3);
             this.colorContainerPanel.Name = "colorContainerPanel";
-            this.colorContainerPanel.Size = new System.Drawing.Size(145, 32);
+            this.colorContainerPanel.Size = new System.Drawing.Size(145, 34);
             this.colorContainerPanel.TabIndex = 1;
             // 
             // colorPanel
             // 
             this.colorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.colorPanel.Location = new System.Drawing.Point(4, 3);
+            this.colorPanel.Location = new System.Drawing.Point(4, 4);
             this.colorPanel.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
             this.colorPanel.Name = "colorPanel";
             this.colorPanel.Size = new System.Drawing.Size(50, 26);
@@ -206,7 +206,7 @@
             // 
             this.setColorButton.Location = new System.Drawing.Point(67, 3);
             this.setColorButton.Name = "setColorButton";
-            this.setColorButton.Size = new System.Drawing.Size(75, 26);
+            this.setColorButton.Size = new System.Drawing.Size(75, 28);
             this.setColorButton.TabIndex = 4;
             this.setColorButton.Text = "set";
             this.setColorButton.UseVisualStyleBackColor = true;
