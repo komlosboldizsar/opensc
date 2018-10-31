@@ -12,7 +12,7 @@ namespace OpenSC.Model.Signals
     {
 
         public static SignalCategoryDatabase Categories { get; } = SignalCategoryDatabase.Instance;
-        public static SignalDatabase Signals { get; } = new SignalDatabase();
+        public static SignalDatabase Signals { get; } = SignalDatabase.Instance;
 
         public const string DBNAME_CATEGORIES = "signal_categories";
         public const string DBNAME_SIGNALS = "signals";
