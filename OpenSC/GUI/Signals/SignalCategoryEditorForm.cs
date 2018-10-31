@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model.Signals;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace OpenSC.GUI.Signals
@@ -47,6 +48,7 @@ namespace OpenSC.GUI.Signals
                 return;
             idNumericField.Value = (addingNew ? SignalDatabases.Categories.NextValidId() : category.ID);
             nameTextBox.Text = category.Name;
+            colorProperty = category.Color;
         }
 
         protected sealed override bool saveData()
@@ -88,6 +90,26 @@ namespace OpenSC.GUI.Signals
                 return;
             category.ID = (int)idNumericField.Value;
             category.Name = nameTextBox.Text;
+            category.Color = colorProperty;
+        }
+
+        private Color _colorProperty;
+
+        private Color colorProperty
+        {
+            get { return _colorProperty; }
+            set
+            {
+                _colorProperty = value;
+                colorPanel.BackColor = value;
+                chooseColorDialog.Color = value;
+            }
+        }
+
+        private void setColorButton_Click(object sender, EventArgs e)
+        {
+            if (chooseColorDialog.ShowDialog() == DialogResult.OK)
+                colorProperty = chooseColorDialog.Color;
         }
 
     }
