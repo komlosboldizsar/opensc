@@ -281,6 +281,7 @@
     <Compile Include="Model\IDatabaseBase.cs" />
     <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\MasterDatabase.cs" />
+    <Compile Include="Model\Persistence\ColorXmlSerializer.cs" />
     <Compile Include="Model\Persistence\DatabasePersister.cs" />
     <Compile Include="Model\Persistence\IValueXmlSerializer.cs" />
     <Compile Include="Model\Persistence\LookupInAttribute.cs" />
