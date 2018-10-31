@@ -19,6 +19,11 @@ namespace OpenSC.GUI.WorkspaceManager
         private const string ATTRIBUTE_TAG = "attribute";
 
         private const string ROOT_ATTRIBUTE_ACTIVE = "active";
+        private const string ROOT_ATTRIBUTE_MAIN_WIDTH = "mwidth";
+        private const string ROOT_ATTRIBUTE_MAIN_HEIGHT = "mheight";
+        private const string ROOT_ATTRIBUTE_MAIN_LEFT = "mleft";
+        private const string ROOT_ATTRIBUTE_MAIN_TOP = "mtop";
+        private const string ROOT_ATTRIBUTE_MAIN_MAXIMIZED = "mmaximized";
 
         private const string WINDOW_ATTRIBUTE_TYPE = "type";
         private const string WINDOW_ATTRIBUTE_WIDTH = "width";
@@ -41,7 +46,14 @@ namespace OpenSC.GUI.WorkspaceManager
         {
 
             XElement rootElement = new XElement(ROOT_TAG);
+
             rootElement.SetAttributeValue(ROOT_ATTRIBUTE_ACTIVE, workspace.ActiveWindowIndex);
+
+            rootElement.SetAttributeValue(ROOT_ATTRIBUTE_MAIN_WIDTH, workspace.MainSize.Width);
+            rootElement.SetAttributeValue(ROOT_ATTRIBUTE_MAIN_HEIGHT, workspace.MainSize.Height);
+            rootElement.SetAttributeValue(ROOT_ATTRIBUTE_MAIN_LEFT, workspace.MainPosition.X);
+            rootElement.SetAttributeValue(ROOT_ATTRIBUTE_MAIN_TOP, workspace.MainPosition.Y);
+            rootElement.SetAttributeValue(ROOT_ATTRIBUTE_MAIN_MAXIMIZED, workspace.MainMaximized.ToString());
 
             foreach (IPersistableWindow window in workspace.Windows)
             {
@@ -73,6 +85,21 @@ namespace OpenSC.GUI.WorkspaceManager
                     return null;
 
                 workspace.ActiveWindowIndex = int.TryParse(root.Attributes[ROOT_ATTRIBUTE_ACTIVE]?.Value, out int fwi) ? (int?)fwi : null;
+
+                if (!int.TryParse(root.Attributes[ROOT_ATTRIBUTE_MAIN_LEFT]?.Value, out int x))
+                    x = 0;
+                if (!int.TryParse(root.Attributes[ROOT_ATTRIBUTE_MAIN_TOP]?.Value, out int y))
+                    y = 0;
+                workspace.MainPosition = new Point(x, y);
+
+                if (!int.TryParse(root.Attributes[ROOT_ATTRIBUTE_MAIN_WIDTH]?.Value, out int w))
+                    w = 1024;
+                if (!int.TryParse(root.Attributes[ROOT_ATTRIBUTE_MAIN_HEIGHT]?.Value, out int h))
+                    h = 768;
+                workspace.MainSize = new Size(w, h);
+
+                if (!bool.TryParse(root.Attributes[ROOT_ATTRIBUTE_MAIN_MAXIMIZED]?.Value, out workspace.MainMaximized))
+                    workspace.MainMaximized = true;
 
                 foreach (XmlNode node in root.ChildNodes)
                 {
@@ -200,6 +227,9 @@ namespace OpenSC.GUI.WorkspaceManager
         {
             public List<IPersistableWindow> Windows = new List<IPersistableWindow>();
             public int? ActiveWindowIndex = null;
+            public Size MainSize;
+            public Point MainPosition;
+            public bool MainMaximized;
         }
 
     }

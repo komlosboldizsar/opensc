@@ -45,10 +45,42 @@ namespace OpenSC.GUI
             WindowManager.Instance.ActiveWindowChanged += activeWindowChangedHandler;
             MdiChildActivate += mdiChildActivateHandler;
 
+            WindowManager.Instance.MainFormPositionChanged += mainFormPositionChangedHandler;
+            WindowManager.Instance.MainFormSizeChanged += mainFormSizeChangedHandler;
+            WindowManager.Instance.MainFormMaximizedChanged += mainFormMaximizedChangedHandler;
+
+            Resize += resizeEndHandler;
+
             menuStrip.DynamicChildrenInsertPosition = 1;
             menuStrip.AssociatedMenuItem = MenuManager.Instance.TopMenu;
 
         }
+
+        #region Size and position change event handlers
+        private void mainFormSizeChangedHandler(Size size)
+        {
+            Size = size;
+        }
+
+        private void mainFormPositionChangedHandler(Point position)
+        {
+            Left = position.X;
+            Top = position.Y;
+        }
+
+        private void mainFormMaximizedChangedHandler(bool isMaximized)
+        {
+            if (WindowState != FormWindowState.Minimized)
+                WindowState = isMaximized ? FormWindowState.Maximized : FormWindowState.Normal;
+        }
+
+        private void resizeEndHandler(object sender, EventArgs e)
+        {
+            WindowManager.Instance.MainFormPosition = new Point(Left, Top);
+            WindowManager.Instance.MainFormSize = Size;
+            WindowManager.Instance.MainFormMaximized = (WindowState == FormWindowState.Maximized);
+        }
+        #endregion
 
         private void mdiChildActivateHandler(object sender, EventArgs e)
         {

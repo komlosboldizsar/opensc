@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,15 @@ namespace OpenSC.GUI.WorkspaceManager
 
         public delegate void ActiveChildWindowChangedDelegate(Form window);
         public event ActiveChildWindowChangedDelegate ActiveWindowChanged;
+
+        public delegate void MainFormPositionChangedDelegate(Point position);
+        public event MainFormPositionChangedDelegate MainFormPositionChanged;
+
+        public delegate void MainFormSizeChangedDelegate(Size size);
+        public event MainFormSizeChangedDelegate MainFormSizeChanged;
+
+        public delegate void MainFormMaximizedChangedDelegate(bool isMaximized);
+        public event MainFormMaximizedChangedDelegate MainFormMaximizedChanged;
 
         private Form activeWindow;
 
@@ -60,6 +70,51 @@ namespace OpenSC.GUI.WorkspaceManager
             }
         }
 
+        private Point mainFormPosition;
+
+        public Point MainFormPosition
+        {
+            get => mainFormPosition;
+            set
+            {
+                if (value == mainFormPosition)
+                    return;
+                mainFormPosition = value;
+                persistWindows();
+                MainFormPositionChanged?.Invoke(value);
+            }
+        }
+
+        private Size mainFormSize;
+
+        public Size MainFormSize
+        {
+            get => mainFormSize;
+            set
+            {
+                if (value == mainFormSize)
+                    return;
+                mainFormSize = value;
+                persistWindows();
+                MainFormSizeChanged?.Invoke(value);
+            }
+        }
+
+        private bool mainFormMaximized;
+
+        public bool MainFormMaximized
+        {
+            get => mainFormMaximized;
+            set
+            {
+                if (value == mainFormMaximized)
+                    return;
+                mainFormMaximized = value;
+                persistWindows();
+                MainFormMaximizedChanged?.Invoke(value);
+            }
+        }
+
         public event ChildWindowOpenedDelegate ChildWindowOpened;
         public event ChildWindowClosedDelegate ChildWindowClosed;
         public event ChildWindowListChangedDelegate ChildWindowListChanged;
@@ -69,7 +124,7 @@ namespace OpenSC.GUI.WorkspaceManager
 
         public void Init()
         {
-            MainForm.Instance.Load += mainFormOpenedHandler; ;
+            MainForm.Instance.Load += mainFormOpenedHandler;
             MainForm.Instance.FormClosing += mainFormClosingHandler;
         }
 
@@ -129,7 +184,10 @@ namespace OpenSC.GUI.WorkspaceManager
             if(!restoringPersistedWindows)
                 WindowPersister.SaveWindows(new WindowPersister.Workspace(){
                     Windows = persistableChildWindows,
-                    ActiveWindowIndex = ActiveWindowIndex
+                    ActiveWindowIndex = ActiveWindowIndex,
+                    MainPosition = MainFormPosition,
+                    MainSize = MainFormSize,
+                    MainMaximized = MainFormMaximized
                 });
         }
 
@@ -141,9 +199,14 @@ namespace OpenSC.GUI.WorkspaceManager
                 foreach (IPersistableWindow window in workspace.Windows)
                     window.RestoreWindow();
             }
-            restoringPersistedWindows = false;
-            if(workspace != null)
+            if (workspace != null)
+            {
                 ActiveWindowIndex = workspace.ActiveWindowIndex;
+                MainFormSize = workspace.MainSize;
+                MainFormPosition = workspace.MainPosition;
+                MainFormMaximized = workspace.MainMaximized;
+            }
+            restoringPersistedWindows = false;
             persistWindows();
         }
 
