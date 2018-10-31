@@ -36,6 +36,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private List<string> changeEvents = new List<string>();
 
+        private CustomDataGridViewColumnDescriptor<T>.ExternalUpdateEventSubscriberMethodDelegate externalUpdateEventSubscriberMethod;
+
         private bool textEditable;
 
         private string buttonText;
@@ -71,6 +73,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 contentClickHandlerMethod,
                 endEditHandlerMethod,
                 changeEvents.ToArray(),
+                externalUpdateEventSubscriberMethod,
                 textEditable,
                 buttonText,
                 buttonImage,
@@ -153,6 +156,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public CustomDataGridViewColumnDescriptorBuilder<T> AddChangeEvent(string eventName)
         {
             changeEvents.Add(eventName);
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> ExternalUpdateEventSubscriberMethod(CustomDataGridViewColumnDescriptor<T>.ExternalUpdateEventSubscriberMethodDelegate externalUpdateEventSubscriberMethod)
+        {
+            this.externalUpdateEventSubscriberMethod = externalUpdateEventSubscriberMethod;
             return this;
         }
 

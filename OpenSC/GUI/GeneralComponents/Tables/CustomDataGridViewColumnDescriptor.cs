@@ -39,6 +39,9 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         public string[] ChangeEvents { get; private set; }
 
+        public delegate void ExternalUpdateEventSubscriberMethodDelegate(T item, Model.ParameterlessChangeNotifierDelegate handlerDelegate);
+        public ExternalUpdateEventSubscriberMethodDelegate ExternalUpdateEventSubscriberMethod { get; private set; }
+
         public bool TextEditable { get; private set; }
 
         public string ButtonText { get; private set; }
@@ -59,6 +62,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 CellContentClickHandlerMethodDelegate contentClickHandlerMethod,
                 CellEndEditHandlerMethodDelegate endEditHandlerMethod,
                 string[] changeEvents,
+                ExternalUpdateEventSubscriberMethodDelegate externalUpdateEventSubscriberMethod,
                 bool textEditable,
                 string buttonText,
                 Image buttonImage,
@@ -75,6 +79,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             ContentClickHandlerMethod = contentClickHandlerMethod;
             EndEditHandlerMethod = endEditHandlerMethod;
             ChangeEvents = changeEvents;
+            ExternalUpdateEventSubscriberMethod = externalUpdateEventSubscriberMethod;
             TextEditable = textEditable;
             ButtonText = buttonText;
             ButtonImage = buttonImage;

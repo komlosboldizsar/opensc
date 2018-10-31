@@ -103,6 +103,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 }
                 catch { }
             }
+            columnDescriptor.ExternalUpdateEventSubscriberMethod?.Invoke(item, cellUpdaterDelegate);
         }
 
         private void updateCell(int columnIndex)
