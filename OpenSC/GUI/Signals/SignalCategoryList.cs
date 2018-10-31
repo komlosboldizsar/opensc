@@ -57,8 +57,8 @@ namespace OpenSC.GUI.Signals
             builder.Width(70);
             builder.ButtonText("Edit");
             builder.CellContentClickHandlerMethod((category, cell, e) => {
-                //var editWindow = /*new TimerEditWindow(signal);*/
-                //editWindow.ShowAsChild();
+                var editWindow = new SignalCategoryEditorForm(category);
+                editWindow.ShowAsChild();
             });
             builder.BuildAndAdd();
 
@@ -70,7 +70,7 @@ namespace OpenSC.GUI.Signals
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.ButtonText("Delete");
             builder.CellContentClickHandlerMethod((category, cell, e) => {
-                string msgBoxText = string.Format("Do you really want to delete this signal?\n(#{0}) {1}", category.ID, category.Name);
+                string msgBoxText = string.Format("Do you really want to delete this signal category?\n(#{0}) {1}", category.ID, category.Name);
                 var confirm = MessageBox.Show(msgBoxText, "Delete confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (confirm == DialogResult.Yes)
                     SignalDatabases.Categories.Remove(category);
@@ -84,8 +84,8 @@ namespace OpenSC.GUI.Signals
 
         private void addSignalCategoryButton_Click(object sender, EventArgs e)
         {
-            //var editWindow = new /*TimerEditWindow*/(null);
-            //editWindow.ShowAsChild();
+            var editWindow = new SignalCategoryEditorForm(null);
+            editWindow.ShowAsChild();
         }
 
     }

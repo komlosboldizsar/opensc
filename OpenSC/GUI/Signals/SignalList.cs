@@ -57,8 +57,8 @@ namespace OpenSC.GUI.Signals
             builder.Width(70);
             builder.ButtonText("Edit");
             builder.CellContentClickHandlerMethod((signal, cell, e) => {
-                //var editWindow = /*new TimerEditWindow(signal);*/
-                //editWindow.ShowAsChild();
+                var editWindow = new SignalEditorForm(signal);
+                editWindow.ShowAsChild();
             });
             builder.BuildAndAdd();
 
@@ -84,8 +84,8 @@ namespace OpenSC.GUI.Signals
 
         private void addSignalButton_Click(object sender, EventArgs e)
         {
-            //var editWindow = new /*TimerEditWindow*/(null);
-            //editWindow.ShowAsChild();
+            var editWindow = new SignalEditorForm(null);
+            editWindow.ShowAsChild();
         }
     }
 
