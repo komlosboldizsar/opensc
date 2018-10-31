@@ -336,7 +336,7 @@ namespace OpenSC.Model.Persistence
                 IValueXmlSerializer serializer = GetSerializerForType(memberType);
                 if (serializer == null)
                     return xmlElement.InnerText;
-                return serializer.DeserializeItem(xmlElement);
+                return serializer.DeserializeItem(xmlElement.OfType<XmlElement>().FirstOrDefault());
             }
 
             return Convert.ChangeType(xmlElement.InnerText, memberType);
@@ -506,10 +506,12 @@ namespace OpenSC.Model.Persistence
         {
             get
             {
-                if(registeredSerializers == null)
+                if (registeredSerializers == null)
+                {
                     registeredSerializers = new Dictionary<Type, IValueXmlSerializer>();
-                foreach (IValueXmlSerializer serializer in commonSerializers)
-                    registeredSerializers.Add(serializer.Type, serializer);
+                    foreach (IValueXmlSerializer serializer in commonSerializers)
+                        registeredSerializers.Add(serializer.Type, serializer);
+                }
                 return registeredSerializers;
             }
         }
