@@ -60,6 +60,15 @@ namespace OpenSC.GUI.Signals
                 cell.Value = (signal.Category != null) ? string.Format("(#{0}) {1}", signal.Category.ID, signal.Category.Name) : "(not associated)";
                 cell.Style.BackColor = (signal.Category != null) ? signal.Category.Color : table.DefaultCellStyle.BackColor;
             });
+            builder.ExternalUpdateEventSubscriberMethod((signal, handler) =>
+            {
+                if(signal.Category != null)
+                {
+                    signal.Category.IdChangedPCN += handler;
+                    signal.Category.NameChangedPCN += handler;
+                    signal.Category.ColorChangedPCN += handler;
+                }
+            });
             builder.AddChangeEvent(nameof(Signal.CategoryChangedPCN));
             builder.BuildAndAdd();
 
