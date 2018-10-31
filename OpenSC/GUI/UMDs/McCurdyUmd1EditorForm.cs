@@ -1,8 +1,10 @@
-﻿using OpenSC.Model.UMDs;
+﻿using OpenSC.GUI.GeneralComponents.DropDowns;
+using OpenSC.Model.UMDs;
 using OpenSC.Model.UMDs.McCurdy;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace OpenSC.GUI.UMDs
@@ -27,9 +29,7 @@ namespace OpenSC.GUI.UMDs
                 throw new ArgumentException();
 
             fillControlArrays();
-            initPortDropDown();
-            initDynamicTextSourceDropDowns();
-            initDynamicTextAlignmentDropDowns();
+            initDropDowns();
 
         }
 
@@ -56,7 +56,7 @@ namespace OpenSC.GUI.UMDs
             if (mcCurdyUmd == null)
                 return;
 
-            setPortDropDownSelectedItem(mcCurdyUmd.Port);
+            portDropDown.SelectByValue(mcCurdyUmd.Port);
             addressNumericField.Value = mcCurdyUmd.Address;
 
             columnCount = convertColumnCountEnumToInt(mcCurdyUmd.ColumnCount);
@@ -64,8 +64,8 @@ namespace OpenSC.GUI.UMDs
 
             for (int i = 0; i < MAX_COLUMN_COUNT; i++)
             {
-                setDynamicTextSourceDropDownSelectedItem(i, mcCurdyUmd.GetDynamicTextSource(i));
-                setAlignmentDropDownSelectedItem(i, mcCurdyUmd.TextAlignment[i]);
+                columnDynamicTextSourceDropDowns[i].SelectByValue(mcCurdyUmd.GetDynamicTextSource(i));
+                columnAlignmentDropDowns[i].SelectByValue(mcCurdyUmd.TextAlignment[i]);
                 if(i < MAX_COLUMN_COUNT - 1)
                     columnWidthNumericFields[i].Value = mcCurdyUmd.ColumnWidths[i];
             }
@@ -83,7 +83,7 @@ namespace OpenSC.GUI.UMDs
             if (mcCurdyUmd == null)
                 return;
 
-            mcCurdyUmd.Port = ((PortDropDownItem)portDropDown.SelectedItem).Port;
+            mcCurdyUmd.Port = portDropDown.SelectedValue as McCurdyPort;
             mcCurdyUmd.Address = (int)addressNumericField.Value;
 
             mcCurdyUmd.ColumnCount = convertIntToColumnCountEnum(columnCount);
@@ -93,8 +93,8 @@ namespace OpenSC.GUI.UMDs
             int[] widths = new int[MAX_COLUMN_COUNT - 1];
             for (int i = 0; i < 3; i++)
             {
-                mcCurdyUmd.SetDynamicTextSource(i, ((DynamicTextSourceDropDownItem)columnDynamicTextSourceDropDowns[i].SelectedItem).DynamicText);
-                alignments[i] = ((DynamicTextAlignmentDropDownItem)columnAlignmentDropDowns[i].SelectedItem).Alignment;
+                mcCurdyUmd.SetDynamicTextSource(i, columnDynamicTextSourceDropDowns[i].SelectedValue as DynamicText);
+                alignments[i] = (TextAlignment)columnAlignmentDropDowns[i].SelectedValue;
                 if (i < MAX_COLUMN_COUNT - 1)
                     widths[i] = (int)columnWidthNumericFields[i].Value;
             }
@@ -171,139 +171,32 @@ namespace OpenSC.GUI.UMDs
             return ColumnCount.One;
         }
 
-        private class PortDropDownItem
+
+        private void initDropDowns()
         {
 
-            public string Label { get; private set; }
+            // Ports
+            List<UmdPort> ports = new List<UmdPort>();
+            ports.AddRange(UmdPortDatabase.Instance.ItemsAsList.OfType<McCurdyPort>());
+            portDropDown.CreateAdapterAsDataSource(ports, port => port.Name, true, "(not connected)");
 
-            public McCurdyPort Port { get; private set; }
-
-            public PortDropDownItem(string label, McCurdyPort port)
-            {
-                Label = label;
-                Port = port;
-            }
-
-            public override string ToString()
-            {
-                return Label;
-            }
-
-        }
-
-        private class DynamicTextSourceDropDownItem
-        {
-
-            public string Label { get; private set; }
-
-            public DynamicText DynamicText { get; private set; }
-
-            public DynamicTextSourceDropDownItem(string label, DynamicText dynamicText)
-            {
-                Label = label;
-                DynamicText = dynamicText;
-            }
-
-            public override string ToString()
-            {
-                return Label;
-            }
-
-        }
-
-        private class DynamicTextAlignmentDropDownItem
-        {
-
-            public string Label { get; private set; }
-
-            public TextAlignment Alignment { get; private set; }
-
-            public DynamicTextAlignmentDropDownItem(string label, TextAlignment alignment)
-            {
-                Label = label;
-                Alignment = alignment;
-            }
-
-            public override string ToString()
-            {
-                return Label;
-            }
-
-        }
-
-        private void initPortDropDown()
-        {
-            List<PortDropDownItem> dropDownItems = new List<PortDropDownItem>();
-            dropDownItems.Add(new PortDropDownItem("(not connected)", null));
-            foreach (UmdPort port in UmdPortDatabase.Instance.ItemsAsList)
-                if(port is McCurdyPort)
-                    dropDownItems.Add(new PortDropDownItem(port.Name, port as McCurdyPort));
-            portDropDown.Items.AddRange(dropDownItems.ToArray());
-        }
-
-        private void setPortDropDownSelectedItem(UmdPort port)
-        {
-            for (int i = 0; i < portDropDown.Items.Count; i++)
-            {
-                if (((PortDropDownItem)portDropDown.Items[i]).Port == port)
-                {
-                    portDropDown.SelectedIndex = i;
-                    return;
-                }
-            }
-        }
-
-        private void initDynamicTextSourceDropDowns()
-        {
-
-            List<DynamicTextSourceDropDownItem> dropDownItems = new List<DynamicTextSourceDropDownItem>();
-            dropDownItems.Add(new DynamicTextSourceDropDownItem("(not selected)", null));
-            foreach (DynamicText dynText in DynamicTextDatabase.Instance.ItemsAsList)
-                dropDownItems.Add(new DynamicTextSourceDropDownItem(dynText.Label, dynText));
-
-            DynamicTextSourceDropDownItem[] dropDownItemsArray = dropDownItems.ToArray();
-            for(int i = 0; i < MAX_COLUMN_COUNT; i++)
-                columnDynamicTextSourceDropDowns[i].Items.AddRange(dropDownItemsArray);
-
-        }
-
-        private void setDynamicTextSourceDropDownSelectedItem(int columnIndex, DynamicText selectedItem)
-        {
-            ComboBox dropDown = columnDynamicTextSourceDropDowns[columnIndex];
-            for (int i = 0; i < dropDown.Items.Count; i++)
-            {
-                if (((DynamicTextSourceDropDownItem)dropDown.Items[i]).DynamicText == selectedItem)
-                {
-                    dropDown.SelectedIndex = i;
-                    return;
-                }
-            }
-        }
-
-        private void initDynamicTextAlignmentDropDowns()
-        {
-
-            List<DynamicTextAlignmentDropDownItem> dropDownItems = new List<DynamicTextAlignmentDropDownItem>();
-            dropDownItems.Add(new DynamicTextAlignmentDropDownItem("left", TextAlignment.Left));
-            dropDownItems.Add(new DynamicTextAlignmentDropDownItem("center", TextAlignment.Center));
-            dropDownItems.Add(new DynamicTextAlignmentDropDownItem("right", TextAlignment.Right));
-
-            DynamicTextAlignmentDropDownItem[] dropDownItemsArray = dropDownItems.ToArray();
+            // Dynamic text sources
+            ComboBoxAdapter<DynamicText> dynamicTextAdapter = new ComboBoxAdapter<DynamicText>(DynamicTextDatabase.Instance.ItemsAsList, dt => dt.Label, true, "(empty)");
             for (int i = 0; i < MAX_COLUMN_COUNT; i++)
-                columnAlignmentDropDowns[i].Items.AddRange(dropDownItemsArray);
+                columnDynamicTextSourceDropDowns[i].SetAdapterAsDataSource(dynamicTextAdapter);
 
-        }
+            // Dynamic text alignments
+            Dictionary<TextAlignment, string> textAlignmentTranslations = new Dictionary<TextAlignment, string>()
+            {
+                { TextAlignment.Left, "left" },
+                { TextAlignment.Center, "center" },
+                { TextAlignment.Right, "right" }
+            };
+            IComboBoxAdapter textAlignmentsAdapter = new EnumComboBoxAdapter<TextAlignment>(textAlignmentTranslations);
 
-        private void setAlignmentDropDownSelectedItem(int columnIndex, TextAlignment alignment)
-        {
-            ComboBox dropDown = columnAlignmentDropDowns[columnIndex];
-            for (int i = 0; i < dropDown.Items.Count; i++) {
-                if (((DynamicTextAlignmentDropDownItem)dropDown.Items[i]).Alignment == alignment)
-                {
-                    dropDown.SelectedIndex = i;
-                    return;
-                }
-            }
+            for (int i = 0; i < MAX_COLUMN_COUNT; i++)
+                columnAlignmentDropDowns[i].SetAdapterAsDataSource(textAlignmentsAdapter);
+
         }
 
         private void fillControlArrays()

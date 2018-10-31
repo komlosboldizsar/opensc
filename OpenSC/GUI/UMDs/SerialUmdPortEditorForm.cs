@@ -1,5 +1,9 @@
-﻿using OpenSC.Model.UMDs;
+﻿using OpenSC.GUI.GeneralComponents.DropDowns;
+using OpenSC.Model.UMDs;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO.Ports;
 
 namespace OpenSC.GUI.UMDs
@@ -28,7 +32,7 @@ namespace OpenSC.GUI.UMDs
             UmdSerialPort umdSerialPort = port as UmdSerialPort;
             if (umdSerialPort == null)
                 return;
-            setSerialPortDropDown(umdSerialPort.ComPortName);
+            portNameDropDown.SelectByValue(umdSerialPort.ComPortName);
         }
 
         protected override void writeFields()
@@ -37,7 +41,7 @@ namespace OpenSC.GUI.UMDs
             UmdSerialPort umdSerialPort = port as UmdSerialPort;
             if (umdSerialPort == null)
                 return;
-            umdSerialPort.ComPortName = ((SerialPortDropDownItem)portNameDropDown.SelectedItem).PortName;
+            umdSerialPort.ComPortName = portNameDropDown.SelectedValue as string;
         }
 
         protected override void validateFields()
@@ -51,42 +55,8 @@ namespace OpenSC.GUI.UMDs
 
         private void loadAvailableSerialPorts()
         {
-            portNameDropDown.Items.Add(new SerialPortDropDownItem("(not connected)", null));
-            foreach (string portName in SerialPort.GetPortNames())
-                portNameDropDown.Items.Add(new SerialPortDropDownItem(portName, portName));
+            portNameDropDown.CreateAdapterAsDataSource<string>(SerialPort.GetPortNames(), pn => pn, true, "(not connected)");
         }
-
-        private void setSerialPortDropDown(string portName)
-        {
-            for (int i = 0; i < portNameDropDown.Items.Count; i++)
-            {
-                if (((SerialPortDropDownItem)portNameDropDown.Items[i]).PortName == portName)
-                {
-                    portNameDropDown.SelectedIndex = i;
-                    return;
-                }
-            }
-            portNameDropDown.SelectedIndex = 0;
-        }
-
-        private class SerialPortDropDownItem
-        {
-
-            public string Label;
-            public string PortName;
-
-            public SerialPortDropDownItem(string label, string portName)
-            {
-                Label = label;
-                PortName = portName;
-            }
-
-            public override string ToString()
-            {
-                return Label;
-            }
-
-        } 
 
     }
 
