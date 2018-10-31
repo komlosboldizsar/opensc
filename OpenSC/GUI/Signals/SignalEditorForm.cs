@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Signals;
+﻿using OpenSC.GUI.GeneralComponents.DropDowns;
+using OpenSC.Model.Signals;
 using System;
 using System.Windows.Forms;
 
@@ -37,6 +38,7 @@ namespace OpenSC.GUI.Signals
         public SignalEditorForm(Signal signal)
         {
             InitializeComponent();
+            initCategoryDropDown();
             AddingNew = (signal == null);
             this.signal = (signal != null) ? signal : new Signal();
         }
@@ -47,6 +49,7 @@ namespace OpenSC.GUI.Signals
                 return;
             idNumericField.Value = (addingNew ? SignalDatabases.Signals.NextValidId() : signal.ID);
             nameTextBox.Text = signal.Name;
+            categoryDropDown.SelectByValue(signal.Category);
         }
 
         protected sealed override bool saveData()
@@ -88,6 +91,16 @@ namespace OpenSC.GUI.Signals
                 return;
             signal.ID = (int)idNumericField.Value;
             signal.Name = nameTextBox.Text;
+            signal.Category = categoryDropDown.SelectedValue as SignalCategory;
+        }
+
+        private void initCategoryDropDown()
+        {
+            categoryDropDown.CreateAdapterAsDataSource<SignalCategory>(
+                SignalDatabases.Categories.ItemsAsList,
+                category => string.Format("(#{0}) #1", category.ID, category.Name),
+                true,
+                "(not associated)");
         }
 
     }
