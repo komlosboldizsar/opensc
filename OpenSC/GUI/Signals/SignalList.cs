@@ -68,6 +68,20 @@ namespace OpenSC.GUI.Signals
                     signal.Category.NameChangedPCN += handler;
                     signal.Category.ColorChangedPCN += handler;
                 }
+                signal.CategoryChanged += (_signal, oldCategory, newCategory) => {
+                    if(oldCategory != null)
+                    {
+                        oldCategory.IdChangedPCN -= handler;
+                        oldCategory.NameChangedPCN -= handler;
+                        oldCategory.ColorChangedPCN -= handler;
+                    }
+                    if(newCategory != null)
+                    {
+                        newCategory.IdChangedPCN += handler;
+                        newCategory.NameChangedPCN += handler;
+                        newCategory.ColorChangedPCN += handler;
+                    }
+                };
             });
             builder.AddChangeEvent(nameof(Signal.CategoryChangedPCN));
             builder.BuildAndAdd();
