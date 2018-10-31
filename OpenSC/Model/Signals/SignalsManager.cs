@@ -34,7 +34,8 @@ namespace OpenSC.Model.Signals
 
         private static void registerDatabases()
         {
-            //MasterDatabase.Instance.RegisterSingletonDatabase(typeof(/**/));
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(SignalDatabases.SignalCategoryDatabase));
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(SignalDatabases.SignalDatabase));
         }
 
         private static void registerWindowTypes()
