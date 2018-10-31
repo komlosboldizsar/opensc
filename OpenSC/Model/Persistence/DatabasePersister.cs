@@ -506,10 +506,12 @@ namespace OpenSC.Model.Persistence
         {
             get
             {
-                if(registeredSerializers == null)
+                if (registeredSerializers == null)
+                {
                     registeredSerializers = new Dictionary<Type, IValueXmlSerializer>();
-                foreach (IValueXmlSerializer serializer in commonSerializers)
-                    registeredSerializers.Add(serializer.Type, serializer);
+                    foreach (IValueXmlSerializer serializer in commonSerializers)
+                        registeredSerializers.Add(serializer.Type, serializer);
+                }
                 return registeredSerializers;
             }
         }
