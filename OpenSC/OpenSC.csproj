@@ -72,6 +72,9 @@
     <Compile Include="GUI\ChildWindowWithTitleTwoParts.Designer.cs">
       <DependentUpon>ChildWindowWithTitleTwoParts.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\GeneralComponents\DropDowns\ComboBoxAdapter.cs" />
+    <Compile Include="GUI\GeneralComponents\DropDowns\ComboBoxAdapterHelpers.cs" />
+    <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapter.cs" />
     <Compile Include="GUI\ModelEditorFormTypeRegister.cs" />
     <Compile Include="GUI\GeneralComponents\GrowLabel.cs">
       <SubType>Component</SubType>
