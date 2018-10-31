@@ -496,7 +496,9 @@ namespace OpenSC.Model.Persistence
 
         #region Serializer
         private static IValueXmlSerializer[] commonSerializers = new IValueXmlSerializer[]
-        { };
+        {
+            new ColorXmlSerializer()
+        };
 
         private static Dictionary<Type, IValueXmlSerializer> registeredSerializers = null;
 

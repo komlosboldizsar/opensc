@@ -2,6 +2,7 @@
 using OpenSC.Logger;
 using OpenSC.Model;
 using OpenSC.Model.Settings;
+using OpenSC.Model.Signals;
 using OpenSC.Model.Variables;
 using OpenSC.Modules;
 using System;
@@ -37,6 +38,7 @@ namespace OpenSC
             Application.SetCompatibleTextRenderingDefault(false);
 
             VariablesManager.ProgramStarted();
+            SignalsManager.ProgramStarted();
             ModuleManager.Init();
             ProgramStarted?.Invoke();
 
