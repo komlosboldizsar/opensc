@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.Signals;
 using OpenSC.GUI.WorkspaceManager;
 using System;
 using System.Collections.Generic;
@@ -40,14 +41,17 @@ namespace OpenSC.Model.Signals
 
         private static void registerWindowTypes()
         {
-            //WindowTypeRegister.RegisterWindowType(typeof(/**/));
+            WindowTypeRegister.RegisterWindowType(typeof(SignalList));
+            WindowTypeRegister.RegisterWindowType(typeof(SignalCategoryList));
         }
 
         private static void registerMenus()
         {
-            //var variablesMenu = MenuManager.Instance.TopMenu[/**/];
-            //var dynamicTextsMenu = variablesMenu[/**/];
-            //dynamicTextsMenu.ClickHandler = (menu, tag) => new /**/.ShowAsChild();
+            var signalsMenu = MenuManager.Instance.TopMenu["Signals"];
+            var signalsSubMenu = signalsMenu["Signals"];
+            signalsSubMenu.ClickHandler = (menu, tag) => new SignalList().ShowAsChild();
+            var categoriesSubMenu = signalsMenu["Categories"];
+            categoriesSubMenu.ClickHandler = (menu, tag) => new SignalCategoryList().ShowAsChild();
         }
 
     }
