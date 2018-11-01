@@ -37,16 +37,16 @@
             this.idNumericField = new System.Windows.Forms.NumericUpDown();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.baseDataTabPage = new System.Windows.Forms.TabPage();
-            this.outputsTabPage = new System.Windows.Forms.TabPage();
-            this.outputsTable = new System.Windows.Forms.DataGridView();
-            this.outputsButtonsPanel = new System.Windows.Forms.Panel();
-            this.addOutputButton = new System.Windows.Forms.Button();
             this.inputsTabPage = new System.Windows.Forms.TabPage();
+            this.inputsTableContainerPanel = new System.Windows.Forms.Panel();
             this.inputsTable = new System.Windows.Forms.DataGridView();
             this.inputsButtonsPanel = new System.Windows.Forms.Panel();
             this.addInputButton = new System.Windows.Forms.Button();
+            this.outputsTabPage = new System.Windows.Forms.TabPage();
             this.outputsTableContainerPanel = new System.Windows.Forms.Panel();
-            this.inputsTableContainerPanel = new System.Windows.Forms.Panel();
+            this.outputsTable = new System.Windows.Forms.DataGridView();
+            this.outputsButtonsPanel = new System.Windows.Forms.Panel();
+            this.addOutputButton = new System.Windows.Forms.Button();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.baseDataPanel.SuspendLayout();
@@ -55,14 +55,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).BeginInit();
             this.tabControl.SuspendLayout();
             this.baseDataTabPage.SuspendLayout();
-            this.outputsTabPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.outputsTable)).BeginInit();
-            this.outputsButtonsPanel.SuspendLayout();
             this.inputsTabPage.SuspendLayout();
+            this.inputsTableContainerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.inputsTable)).BeginInit();
             this.inputsButtonsPanel.SuspendLayout();
+            this.outputsTabPage.SuspendLayout();
             this.outputsTableContainerPanel.SuspendLayout();
-            this.inputsTableContainerPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.outputsTable)).BeginInit();
+            this.outputsButtonsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // customElementsPanel
@@ -182,51 +182,6 @@
             this.baseDataTabPage.TabIndex = 0;
             this.baseDataTabPage.Text = "Base data";
             // 
-            // outputsTabPage
-            // 
-            this.outputsTabPage.BackColor = System.Drawing.SystemColors.Control;
-            this.outputsTabPage.Controls.Add(this.outputsTableContainerPanel);
-            this.outputsTabPage.Controls.Add(this.outputsButtonsPanel);
-            this.outputsTabPage.Location = new System.Drawing.Point(4, 25);
-            this.outputsTabPage.Name = "outputsTabPage";
-            this.outputsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.outputsTabPage.Size = new System.Drawing.Size(454, 286);
-            this.outputsTabPage.TabIndex = 2;
-            this.outputsTabPage.Text = "Outputs";
-            // 
-            // outputsTable
-            // 
-            this.outputsTable.AllowUserToAddRows = false;
-            this.outputsTable.AllowUserToDeleteRows = false;
-            this.outputsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.outputsTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.outputsTable.Location = new System.Drawing.Point(0, 0);
-            this.outputsTable.Name = "outputsTable";
-            this.outputsTable.ReadOnly = true;
-            this.outputsTable.RowTemplate.Height = 24;
-            this.outputsTable.Size = new System.Drawing.Size(448, 236);
-            this.outputsTable.TabIndex = 0;
-            // 
-            // outputsButtonsPanel
-            // 
-            this.outputsButtonsPanel.Controls.Add(this.addOutputButton);
-            this.outputsButtonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.outputsButtonsPanel.Location = new System.Drawing.Point(3, 239);
-            this.outputsButtonsPanel.Name = "outputsButtonsPanel";
-            this.outputsButtonsPanel.Size = new System.Drawing.Size(448, 44);
-            this.outputsButtonsPanel.TabIndex = 1;
-            // 
-            // addOutputButton
-            // 
-            this.addOutputButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.addOutputButton.Location = new System.Drawing.Point(316, 12);
-            this.addOutputButton.Margin = new System.Windows.Forms.Padding(6);
-            this.addOutputButton.Name = "addOutputButton";
-            this.addOutputButton.Size = new System.Drawing.Size(126, 26);
-            this.addOutputButton.TabIndex = 0;
-            this.addOutputButton.Text = "Add output";
-            this.addOutputButton.UseVisualStyleBackColor = true;
-            // 
             // inputsTabPage
             // 
             this.inputsTabPage.BackColor = System.Drawing.SystemColors.Control;
@@ -238,6 +193,15 @@
             this.inputsTabPage.Size = new System.Drawing.Size(454, 286);
             this.inputsTabPage.TabIndex = 1;
             this.inputsTabPage.Text = "Inputs";
+            // 
+            // inputsTableContainerPanel
+            // 
+            this.inputsTableContainerPanel.Controls.Add(this.inputsTable);
+            this.inputsTableContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.inputsTableContainerPanel.Location = new System.Drawing.Point(3, 3);
+            this.inputsTableContainerPanel.Name = "inputsTableContainerPanel";
+            this.inputsTableContainerPanel.Size = new System.Drawing.Size(448, 236);
+            this.inputsTableContainerPanel.TabIndex = 2;
             // 
             // inputsTable
             // 
@@ -271,6 +235,19 @@
             this.addInputButton.TabIndex = 0;
             this.addInputButton.Text = "Add input";
             this.addInputButton.UseVisualStyleBackColor = true;
+            this.addInputButton.Click += new System.EventHandler(this.addInputButton_Click);
+            // 
+            // outputsTabPage
+            // 
+            this.outputsTabPage.BackColor = System.Drawing.SystemColors.Control;
+            this.outputsTabPage.Controls.Add(this.outputsTableContainerPanel);
+            this.outputsTabPage.Controls.Add(this.outputsButtonsPanel);
+            this.outputsTabPage.Location = new System.Drawing.Point(4, 25);
+            this.outputsTabPage.Name = "outputsTabPage";
+            this.outputsTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.outputsTabPage.Size = new System.Drawing.Size(454, 286);
+            this.outputsTabPage.TabIndex = 2;
+            this.outputsTabPage.Text = "Outputs";
             // 
             // outputsTableContainerPanel
             // 
@@ -281,14 +258,39 @@
             this.outputsTableContainerPanel.Size = new System.Drawing.Size(448, 236);
             this.outputsTableContainerPanel.TabIndex = 2;
             // 
-            // inputsTableContainerPanel
+            // outputsTable
             // 
-            this.inputsTableContainerPanel.Controls.Add(this.inputsTable);
-            this.inputsTableContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.inputsTableContainerPanel.Location = new System.Drawing.Point(3, 3);
-            this.inputsTableContainerPanel.Name = "inputsTableContainerPanel";
-            this.inputsTableContainerPanel.Size = new System.Drawing.Size(448, 236);
-            this.inputsTableContainerPanel.TabIndex = 2;
+            this.outputsTable.AllowUserToAddRows = false;
+            this.outputsTable.AllowUserToDeleteRows = false;
+            this.outputsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.outputsTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.outputsTable.Location = new System.Drawing.Point(0, 0);
+            this.outputsTable.Name = "outputsTable";
+            this.outputsTable.ReadOnly = true;
+            this.outputsTable.RowTemplate.Height = 24;
+            this.outputsTable.Size = new System.Drawing.Size(448, 236);
+            this.outputsTable.TabIndex = 0;
+            // 
+            // outputsButtonsPanel
+            // 
+            this.outputsButtonsPanel.Controls.Add(this.addOutputButton);
+            this.outputsButtonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.outputsButtonsPanel.Location = new System.Drawing.Point(3, 239);
+            this.outputsButtonsPanel.Name = "outputsButtonsPanel";
+            this.outputsButtonsPanel.Size = new System.Drawing.Size(448, 44);
+            this.outputsButtonsPanel.TabIndex = 1;
+            // 
+            // addOutputButton
+            // 
+            this.addOutputButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.addOutputButton.Location = new System.Drawing.Point(316, 12);
+            this.addOutputButton.Margin = new System.Windows.Forms.Padding(6);
+            this.addOutputButton.Name = "addOutputButton";
+            this.addOutputButton.Size = new System.Drawing.Size(126, 26);
+            this.addOutputButton.TabIndex = 0;
+            this.addOutputButton.Text = "Add output";
+            this.addOutputButton.UseVisualStyleBackColor = true;
+            this.addOutputButton.Click += new System.EventHandler(this.addOutputButton_Click);
             // 
             // RouterEditorFormBase
             // 
@@ -311,14 +313,14 @@
             this.tabControl.ResumeLayout(false);
             this.baseDataTabPage.ResumeLayout(false);
             this.baseDataTabPage.PerformLayout();
-            this.outputsTabPage.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.outputsTable)).EndInit();
-            this.outputsButtonsPanel.ResumeLayout(false);
             this.inputsTabPage.ResumeLayout(false);
+            this.inputsTableContainerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.inputsTable)).EndInit();
             this.inputsButtonsPanel.ResumeLayout(false);
+            this.outputsTabPage.ResumeLayout(false);
             this.outputsTableContainerPanel.ResumeLayout(false);
-            this.inputsTableContainerPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.outputsTable)).EndInit();
+            this.outputsButtonsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

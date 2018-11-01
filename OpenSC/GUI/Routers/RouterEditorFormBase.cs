@@ -200,6 +200,15 @@ namespace OpenSC.GUI.Routers
              return new CustomDataGridViewColumnDescriptorBuilder<T>(table);
         }
 
+        private void addInputButton_Click(object sender, EventArgs e)
+        {
+            router.AddInput();
+        }
+
+        private void addOutputButton_Click(object sender, EventArgs e)
+        {
+            router.AddOutput();
+        }
 
     }
 
