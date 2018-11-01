@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.topPanelInner = new System.Windows.Forms.Panel();
+            this.addRouterButton = new OpenSC.GUI.GeneralComponents.SplitButton();
             this.addableRouterTypesMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.addVtrButton = new OpenSC.GUI.GeneralComponents.SplitButton();
             this.topPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.topPanelInner.SuspendLayout();
@@ -51,7 +51,7 @@
             // 
             this.topPanelInner.AutoSize = true;
             this.topPanelInner.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.topPanelInner.Controls.Add(this.addVtrButton);
+            this.topPanelInner.Controls.Add(this.addRouterButton);
             this.topPanelInner.Dock = System.Windows.Forms.DockStyle.Fill;
             this.topPanelInner.Location = new System.Drawing.Point(0, 0);
             this.topPanelInner.Name = "topPanelInner";
@@ -59,30 +59,31 @@
             this.topPanelInner.Size = new System.Drawing.Size(800, 54);
             this.topPanelInner.TabIndex = 0;
             // 
-            // addableVtrTypesMenu
+            // addRouterButton
+            // 
+            this.addRouterButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.addRouterButton.Location = new System.Drawing.Point(650, 13);
+            this.addRouterButton.Menu = this.addableRouterTypesMenu;
+            this.addRouterButton.Name = "addRouterButton";
+            this.addRouterButton.Size = new System.Drawing.Size(137, 28);
+            this.addRouterButton.TabIndex = 0;
+            this.addRouterButton.Text = "Add router";
+            this.addRouterButton.UseVisualStyleBackColor = true;
+            // 
+            // addableRouterTypesMenu
             // 
             this.addableRouterTypesMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.addableRouterTypesMenu.Name = "addableVtrTypesMenu";
             this.addableRouterTypesMenu.Size = new System.Drawing.Size(61, 4);
             // 
-            // addVtrButton
-            // 
-            this.addVtrButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.addVtrButton.Location = new System.Drawing.Point(650, 13);
-            this.addVtrButton.Menu = this.addableRouterTypesMenu;
-            this.addVtrButton.Name = "addVtrButton";
-            this.addVtrButton.Size = new System.Drawing.Size(137, 28);
-            this.addVtrButton.TabIndex = 0;
-            this.addVtrButton.Text = "Add VTR";
-            this.addVtrButton.UseVisualStyleBackColor = true;
-            // 
-            // VtrList
+            // RouterList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Name = "VtrList";
-            this.Text = "List of VTRs";
+            this.HeaderText = "List of routers";
+            this.Name = "RouterList";
+            this.Text = "List of routers";
             this.Controls.SetChildIndex(this.mainContainer, 0);
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
@@ -96,7 +97,7 @@
         #endregion
 
         private System.Windows.Forms.Panel topPanelInner;
-        private GeneralComponents.SplitButton addVtrButton;
+        private GeneralComponents.SplitButton addRouterButton;
         private System.Windows.Forms.ContextMenuStrip addableRouterTypesMenu;
     }
 }
