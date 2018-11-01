@@ -321,7 +321,9 @@
     <Compile Include="Model\Routers\Router.cs" />
     <Compile Include="Model\Routers\RouterDatabase.cs" />
     <Compile Include="Model\Routers\RouterInput.cs" />
+    <Compile Include="Model\Routers\RouterInputXmlSerializer.cs" />
     <Compile Include="Model\Routers\RouterOutput.cs" />
+    <Compile Include="Model\Routers\RouterOutputXmlSerializer.cs" />
     <Compile Include="Model\Routers\RouterTypeNameConverter.cs" />
     <Compile Include="Model\Settings\Converters\BoolConverter.cs" />
     <Compile Include="Model\Settings\Converters\ColorConverter.cs" />

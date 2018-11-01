@@ -55,6 +55,15 @@ namespace OpenSC.Model.Routers
             private set { source = value; }
         }
 
+        // "Temp foreign key"
+        public string _sourceString;
+
+        public void RestoreSource()
+        {
+            if(_sourceString != null)
+                Source = RouterInputXmlSerializer.GetSourceByString(_sourceString);
+        }
+
         public string SourceName
         {
             get => source?.SourceName;

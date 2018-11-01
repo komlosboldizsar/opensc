@@ -3,6 +3,7 @@ using OpenSC.GUI.Menus;
 using OpenSC.GUI.Routers;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
+using OpenSC.Model.Persistence;
 using OpenSC.Model.Routers;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,8 @@ namespace OpenSC.Modules.Routers
 
         public void RegisterDatabasePersisterSerializers()
         {
+            DatabasePersister<Router>.RegisterSerializer(new RouterInputXmlSerializer());
+            DatabasePersister<Router>.RegisterSerializer(new RouterOutputXmlSerializer());
         }
 
         public void RegisterModelTypes()

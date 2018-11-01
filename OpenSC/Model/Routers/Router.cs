@@ -20,6 +20,7 @@ namespace OpenSC.Model.Routers
 
         public virtual void Restored()
         {
+            restoreInputSources();
             updateCrosspointRouterAssociations();
             updateAllCrosspoints();
         }
@@ -184,6 +185,12 @@ namespace OpenSC.Model.Routers
                 input.Router = this;
             foreach (RouterOutput output in outputs)
                 output.Router = this;
+        }
+
+        private void restoreInputSources()
+        {
+            foreach (RouterInput input in inputs)
+                input.RestoreSource();
         }
 
     }
