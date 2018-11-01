@@ -102,7 +102,8 @@ namespace OpenSC.Model.Routers
             get { return inputs.ToArray(); }
             set
             {
-                inputs.AddRange(value);
+                if(value != null)
+                    inputs.AddRange(value);
                 updateInputIndices();
             }
         }
@@ -142,7 +143,8 @@ namespace OpenSC.Model.Routers
             get { return outputs.ToArray(); }
             set
             {
-                outputs.AddRange(value);
+                if(value != null)
+                    outputs.AddRange(value);
                 updateOutputIndices();
             }
         }
