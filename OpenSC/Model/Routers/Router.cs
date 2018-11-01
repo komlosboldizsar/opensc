@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Persistence;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,14 @@ namespace OpenSC.Model.Routers
     public delegate void RouterNameChangingDelegate(Router router, string oldName, string newName);
     public delegate void RouterNameChangedDelegate(Router router, string oldName, string newName);
 
-    public class Router : IModel
+    public abstract class Router : IModel
     {
 
         public virtual void Restored()
-        { }
+        {
+            updateCrosspointRouterAssociations();
+            updateAllCrosspoints();
+        }
 
         public event RouterIdChangingDelegate IdChanging;
         public event RouterIdChangedDelegate IdChanged;
@@ -81,6 +85,105 @@ namespace OpenSC.Model.Routers
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
+        }
+
+        private ObservableList<RouterInput> inputs;
+
+        public ObservableList<RouterInput> Inputs
+        {
+            get { return inputs; }
+        }
+
+        [PersistAs("inputs")]
+        [PersistAs("input", 1)]
+        private RouterInput[] _inputs
+        {
+            get { return inputs.ToArray(); }
+            set
+            {
+                inputs.AddRange(value);
+                updateInputIndices();
+            }
+        }
+
+        public void AddInput()
+        {
+            int index = inputs.Count;
+            inputs.Add(new RouterInput() {
+                Index = index,
+                Name = string.Format("Input #{0}", index + 1)
+            });
+        }
+
+        public void RemoveInput(RouterInput input)
+        {
+            inputs.Remove(input);
+            updateInputIndices();
+        }
+
+        private void updateInputIndices()
+        {
+            for (int i = 0; i < inputs.Count; i++)
+                inputs[i].Index = i;
+        }
+
+        private ObservableList<RouterOutput> outputs;
+
+        public ObservableList<RouterOutput> Outputs
+        {
+            get { return outputs; }
+        }
+
+        [PersistAs("outputs")]
+        [PersistAs("output", 1)]
+        private RouterOutput[] _outputs
+        {
+            get { return outputs.ToArray(); }
+            set
+            {
+                outputs.AddRange(value);
+                updateOutputIndices();
+            }
+        }
+
+        public void AddOutput()
+        {
+            int index = outputs.Count;
+            outputs.Add(new RouterOutput()
+            {
+                Index = index,
+                Name = string.Format("Onuput #{0}", index + 1)
+            });
+        }
+
+        public void RemoveOutput(RouterOutput output)
+        {
+            outputs.Remove(output);
+            updateOutputIndices();
+        }
+
+        private void updateOutputIndices()
+        {
+            for (int i = 0; i < outputs.Count; i++)
+                outputs[i].Index = i;
+        }
+
+        public bool UpdateCrosspoint(RouterOutput output, RouterInput input)
+        {
+            if (!outputs.Contains(output))
+                return false;
+            return setCrosspoint(output, input);
+        }
+
+        protected abstract bool setCrosspoint(RouterOutput output, RouterInput input);
+        protected abstract void updateAllCrosspoints();
+
+        private void updateCrosspointRouterAssociations()
+        {
+            foreach (RouterInput input in inputs)
+                input.Router = this;
+            foreach (RouterOutput output in outputs)
+                output.Router = this;
         }
 
     }
