@@ -1,5 +1,9 @@
-﻿using OpenSC.GUI.Routers;
+﻿using OpenSC.GUI;
+using OpenSC.GUI.Menus;
+using OpenSC.GUI.Routers;
 using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model;
+using OpenSC.Model.Routers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +12,10 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Modules.Routers
 {
+
     class RoutersModule : IModule
     {
+
         public void MainWindowOpened()
         {
         }
@@ -28,11 +34,12 @@ namespace OpenSC.Modules.Routers
 
         public void RegisterModelTypes()
         {
-
+            //RegisterRouterType</**/, /**/EditorForm>();
         }
 
         public void RegisterDatabases()
         {
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(RouterDatabase));
         }
 
         public void RegisterWindowTypes()
@@ -42,7 +49,7 @@ namespace OpenSC.Modules.Routers
 
         public void RegisterMenus()
         {
-
+            var routersMenu = MenuManager.Instance.TopMenu["Routers"];
         }
 
         public void RegisterSettings()
@@ -50,5 +57,18 @@ namespace OpenSC.Modules.Routers
 
         }
 
+        public void RegisterRouterType<TRouter, TRouterEditorForm>()
+            where TRouter : Router
+            where TRouterEditorForm : IModelEditorForm<Router>, new()
+        {
+            Type routerType = typeof(TRouter);
+            string typeCode = routerType.GetTypeCode();
+            if (string.IsNullOrEmpty(typeCode))
+                throw new Exception();
+            RouterTypeNameConverter.AddKnownType(typeCode, typeof(TRouter));
+            RouterEditorFormTypeRegister.Instance.RegisterFormType<TRouter, TRouterEditorForm>();
+        }
+
     }
+
 }

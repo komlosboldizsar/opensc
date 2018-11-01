@@ -111,6 +111,7 @@
     <Compile Include="GUI\Menus\MenuItem.cs" />
     <Compile Include="GUI\Menus\MenuManager.cs" />
     <Compile Include="GUI\Menus\SeparatorMenuItem.cs" />
+    <Compile Include="GUI\Routers\RouterEditorFormTypeRegister.cs" />
     <Compile Include="GUI\Settings\ISettingEditorControl.cs" />
     <Compile Include="GUI\Settings\SettingEditorBase.cs">
       <SubType>UserControl</SubType>
@@ -315,6 +316,9 @@
     <Compile Include="Model\Persistence\ITypeNameConverter.cs" />
     <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
     <Compile Include="Model\Persistence\XmlTagNamesAttribute.cs" />
+    <Compile Include="Model\Routers\Router.cs" />
+    <Compile Include="Model\Routers\RouterDatabase.cs" />
+    <Compile Include="Model\Routers\RouterTypeNameConverter.cs" />
     <Compile Include="Model\Settings\Converters\BoolConverter.cs" />
     <Compile Include="Model\Settings\Converters\ColorConverter.cs" />
     <Compile Include="Model\Settings\Converters\IntConverter.cs" />
@@ -568,9 +572,7 @@
   <ItemGroup>
     <None Include="Resources\timer_stopped.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\Routers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\16_timer_backward.png" />
   </ItemGroup>
