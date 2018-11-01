@@ -111,6 +111,12 @@
     <Compile Include="GUI\Menus\MenuItem.cs" />
     <Compile Include="GUI\Menus\MenuManager.cs" />
     <Compile Include="GUI\Menus\SeparatorMenuItem.cs" />
+    <Compile Include="GUI\Routers\VirtualRouterEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\VirtualRouterEditorForm.Designer.cs">
+      <DependentUpon>VirtualRouterEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Routers\RouterEditorFormTypeRegister.cs" />
     <Compile Include="GUI\Routers\RouterList.cs">
       <SubType>Form</SubType>
@@ -437,6 +443,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\VirtualRouterEditorForm.resx">
+      <DependentUpon>VirtualRouterEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\RouterList.resx">
       <DependentUpon>RouterList.cs</DependentUpon>

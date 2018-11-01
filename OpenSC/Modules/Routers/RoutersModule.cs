@@ -38,7 +38,7 @@ namespace OpenSC.Modules.Routers
 
         public void RegisterModelTypes()
         {
-            //RegisterRouterType<VirtualRouter, /**/EditorForm>();
+            RegisterRouterType<VirtualRouter, VirtualRouterEditorForm>();
         }
 
         public void RegisterDatabases()
