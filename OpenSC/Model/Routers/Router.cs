@@ -175,7 +175,7 @@ namespace OpenSC.Model.Routers
             outputs.Add(new RouterOutput()
             {
                 Index = index,
-                Name = string.Format("Onuput #{0}", index + 1)
+                Name = string.Format("Output #{0}", index + 1)
             });
         }
 
