@@ -54,9 +54,21 @@ namespace OpenSC.Modules.Routers
 
         public void RegisterMenus()
         {
+
             var routersMenu = MenuManager.Instance.TopMenu["Routers"];
+
             var routersListMenu = routersMenu["Routers list"];
             routersListMenu.ClickHandler = (menu, tag) => new RouterList().ShowAsChild();
+
+            routersMenu.AddSeparator("sep1");
+
+            MenuItem.MenuClickHandler routerCrosspointsSubMenuClickHandler = (menu, tag) => new RouterControlForm((Router)tag).ShowAsChild();
+            foreach (Router router in RouterDatabase.Instance.ItemsAsList)
+            {
+                string menuId = string.Format("router-{0}", router.ID);
+                var routerCrosspointsSubMenu = routersMenu.AddChild(menuId, router.Name, null, router, routerCrosspointsSubMenuClickHandler);
+            }
+
         }
 
         public void RegisterSettings()
