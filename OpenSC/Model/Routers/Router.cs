@@ -111,6 +111,7 @@ namespace OpenSC.Model.Routers
             get { return inputs.ToArray(); }
             set
             {
+                inputs.Clear();
                 if(value != null)
                     inputs.AddRange(value);
                 updateInputIndices();
@@ -161,6 +162,7 @@ namespace OpenSC.Model.Routers
             get { return outputs.ToArray(); }
             set
             {
+                outputs.Clear();
                 if(value != null)
                     outputs.AddRange(value);
                 updateOutputIndices();
