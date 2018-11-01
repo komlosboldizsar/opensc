@@ -117,6 +117,19 @@ namespace OpenSC.GUI.Routers
             builder.Width(100);
             builder.UpdaterMethod((input, cell) => { cell.Value = input.Name; });
             builder.AddChangeEvent(nameof(RouterInput.NameChangedPCN));
+            builder.TextEditable(true);
+            builder.CellEndEditHandlerMethod((input, cell, eventargs) =>
+            {
+                try
+                {
+                    input.Name = cell.Value.ToString();
+                }
+                catch (ArgumentException e)
+                {
+                    MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    cell.Value = input.Name;
+                }
+            });
             builder.BuildAndAdd();
 
             // Column: delete button
@@ -162,6 +175,19 @@ namespace OpenSC.GUI.Routers
             builder.Width(100);
             builder.UpdaterMethod((output, cell) => { cell.Value = output.Name; });
             builder.AddChangeEvent(nameof(RouterOutput.NameChangedPCN));
+            builder.TextEditable(true);
+            builder.CellEndEditHandlerMethod((output, cell, eventargs) =>
+            {
+                try
+                {
+                    output.Name = cell.Value.ToString();
+                }
+                catch (ArgumentException e)
+                {
+                    MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    cell.Value = output.Name;
+                }
+            });
             builder.BuildAndAdd();
 
             // Column: delete button
