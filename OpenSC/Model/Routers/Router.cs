@@ -15,8 +15,17 @@ namespace OpenSC.Model.Routers
     public delegate void RouterNameChangingDelegate(Router router, string oldName, string newName);
     public delegate void RouterNameChangedDelegate(Router router, string oldName, string newName);
 
+    public delegate void RouterInputsChangedDelegate(Router router);
+    public delegate void RouterOutputsChangedDelegate(Router router);
+
     public abstract class Router : IModel
     {
+
+        public Router()
+        {
+            inputs.ItemsChanged += inputsChangedHandler;
+            outputs.ItemsChanged += outputsChangedHandler;
+        }
 
         public virtual void Restored()
         {
@@ -129,6 +138,15 @@ namespace OpenSC.Model.Routers
                 inputs[i].Index = i;
         }
 
+        private void inputsChangedHandler()
+        {
+            InputsChanged?.Invoke(this);
+            InputsChangedPCN?.Invoke();
+        }
+
+        public event RouterInputsChangedDelegate InputsChanged;
+        public event ParameterlessChangeNotifierDelegate InputsChangedPCN;
+
         private ObservableList<RouterOutput> outputs = new ObservableList<RouterOutput>();
 
         public ObservableList<RouterOutput> Outputs
@@ -170,6 +188,15 @@ namespace OpenSC.Model.Routers
             for (int i = 0; i < outputs.Count; i++)
                 outputs[i].Index = i;
         }
+
+        private void outputsChangedHandler()
+        {
+            OutputsChanged?.Invoke(this);
+            OutputsChangedPCN?.Invoke();
+        }
+
+        public event RouterOutputsChangedDelegate OutputsChanged;
+        public event ParameterlessChangeNotifierDelegate OutputsChangedPCN;
 
         public bool UpdateCrosspoint(RouterOutput output, RouterInput input)
         {
