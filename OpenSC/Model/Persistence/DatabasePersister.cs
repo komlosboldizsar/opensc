@@ -158,12 +158,14 @@ namespace OpenSC.Model.Persistence
                 return;
 
             object fieldValue = (fieldInfo != null) ? fieldInfo.GetValue(item) : propertyInfo.GetValue(item);
-            object xmlElementInner = serializeValue(memberInfo, fieldValue);
+            Type memberType = (fieldInfo != null) ? fieldInfo.FieldType : propertyInfo.PropertyType;
+
+            object xmlElementInner = serializeValue(memberInfo, memberType, fieldValue);
             xmlElement.Add(new XElement(xmlTagName, xmlElementInner));
 
         }
 
-        private object serializeValue(MemberInfo memberInfo, object item, int arrayDimension = 0)
+        private object serializeValue(MemberInfo memberInfo, Type memberType, object item, int arrayDimension = 0)
         {
 
             if (item == null)
@@ -173,23 +175,12 @@ namespace OpenSC.Model.Persistence
             if (itemAsImodel != null)
                 return itemAsImodel.ID;
 
-            Type memberType;
-            FieldInfo fieldInfo = memberInfo as FieldInfo;
-            PropertyInfo propertyInfo = memberInfo as PropertyInfo;
-
-            if (fieldInfo != null)
-                memberType = fieldInfo.FieldType;
-            else if (propertyInfo != null)
-                memberType = propertyInfo.PropertyType;
-            else
-                return string.Empty;
-
             if (memberType.IsArray && (item is Array))
             {
                 Array array = item as Array;
                 List<XElement> arrayElements = new List<XElement>();
                 foreach (var element in array)
-                    arrayElements.Add(serializeCollectionElement(memberInfo, element, arrayDimension));
+                    arrayElements.Add(serializeCollectionElement(memberInfo, memberType.GetElementType(), element, arrayDimension));
                 return arrayElements;
             }
 
@@ -205,12 +196,12 @@ namespace OpenSC.Model.Persistence
 
         }
 
-        private XElement serializeCollectionElement(MemberInfo memberInfo, object element, int arrayDimension)
+        private XElement serializeCollectionElement(MemberInfo memberInfo, Type memberType, object element, int arrayDimension)
         {
             string tagName = getXmlTagNameForMember(memberInfo, element, arrayDimension + 1);
             if (tagName == null)
                 tagName = UNDEFINED_ARRAY_ITEM_TAG;
-            object arrayElementValue = serializeValue(memberInfo, element, arrayDimension + 1);
+            object arrayElementValue = serializeValue(memberInfo, memberType, element, arrayDimension + 1);
             return new XElement(tagName, arrayElementValue);
         }
         #endregion
