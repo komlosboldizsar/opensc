@@ -55,6 +55,8 @@ namespace OpenSC.Modules.Routers
         public void RegisterMenus()
         {
             var routersMenu = MenuManager.Instance.TopMenu["Routers"];
+            var routersListMenu = routersMenu["Routers list"];
+            routersListMenu.ClickHandler = (menu, tag) => new RouterList().ShowAsChild();
         }
 
         public void RegisterSettings()
