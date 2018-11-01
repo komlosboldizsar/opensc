@@ -52,6 +52,25 @@ namespace OpenSC.GUI.Routers
             builder.AddChangeEvent(nameof(Router.NameChangedPCN));
             builder.BuildAndAdd();
 
+            // Column: inputs
+            builder = GetColumnDescriptorBuilderForTable<Router>();
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.Header("Inputs");
+            builder.Width(50);
+            builder.UpdaterMethod((router, cell) => { cell.Value = router.Inputs.Count; });
+            builder.AddChangeEvent(nameof(Router.InputsChangedPCN));
+            builder.BuildAndAdd();
+
+            // Column: inputs
+            builder = GetColumnDescriptorBuilderForTable<Router>();
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.Header("Outputs");
+            builder.Width(50);
+            builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
+            builder.UpdaterMethod((router, cell) => { cell.Value = router.Outputs.Count; });
+            builder.AddChangeEvent(nameof(Router.OutputsChangedPCN));
+            builder.BuildAndAdd();
+
             // Column: edit button
             builder = GetColumnDescriptorBuilderForTable<Router>();
             builder.Type(DataGridViewColumnType.Button);
