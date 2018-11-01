@@ -71,6 +71,17 @@ namespace OpenSC.GUI.Routers
             builder.AddChangeEvent(nameof(Router.OutputsChangedPCN));
             builder.BuildAndAdd();
 
+            // Column: crosspoints
+            builder = GetColumnDescriptorBuilderForTable<Router>();
+            builder.Type(DataGridViewColumnType.Button);
+            builder.Header("Crosspoints");
+            builder.Width(70);
+            builder.ButtonText("Crosspoints");
+            builder.CellContentClickHandlerMethod((router, cell, e) => {
+                new RouterControlForm(router).ShowAsChild();
+            });
+            builder.BuildAndAdd();
+
             // Column: edit button
             builder = GetColumnDescriptorBuilderForTable<Router>();
             builder.Type(DataGridViewColumnType.Button);

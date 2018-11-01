@@ -111,6 +111,30 @@
     <Compile Include="GUI\Menus\MenuItem.cs" />
     <Compile Include="GUI\Menus\MenuManager.cs" />
     <Compile Include="GUI\Menus\SeparatorMenuItem.cs" />
+    <Compile Include="GUI\Routers\RouterControlForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\RouterControlForm.Designer.cs">
+      <DependentUpon>RouterControlForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Routers\RouterOutputControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\RouterOutputControl.Designer.cs">
+      <DependentUpon>RouterOutputControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Routers\RouterInputControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\RouterInputControl.Designer.cs">
+      <DependentUpon>RouterInputControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Routers\RouterInputOutputControlBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\RouterInputOutputControlBase.Designer.cs">
+      <DependentUpon>RouterInputOutputControlBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Routers\VirtualRouterEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -409,18 +433,6 @@
     <Compile Include="Modules\UMDs\UmdsModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GUI\Routers\RouterControlForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterControlForm.Designer.cs">
-      <DependentUpon>RouterControlForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterInputOutputControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterInputOutputControl.Designer.cs">
-      <DependentUpon>RouterInputOutputControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Model\Timers\Timer.cs" />
     <Compile Include="Model\Timers\TimerMode.cs" />
     <Compile Include="GUI\Timers\TimerWindow.cs">
@@ -443,6 +455,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\RouterControlForm.resx">
+      <DependentUpon>RouterControlForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\RouterOutputControl.resx">
+      <DependentUpon>RouterOutputControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\RouterInputControl.resx">
+      <DependentUpon>RouterInputControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\RouterInputOutputControlBase.resx">
+      <DependentUpon>RouterInputOutputControlBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\VirtualRouterEditorForm.resx">
       <DependentUpon>VirtualRouterEditorForm.cs</DependentUpon>
@@ -535,12 +559,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="GUI\Routers\RouterControlForm.resx">
-      <DependentUpon>RouterControlForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\RouterInputOutputControl.resx">
-      <DependentUpon>RouterInputOutputControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Timers\TimerWindow.resx">
       <DependentUpon>TimerWindow.cs</DependentUpon>
     </EmbeddedResource>
