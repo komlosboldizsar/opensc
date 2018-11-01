@@ -88,7 +88,7 @@ namespace OpenSC.Model.Routers
                 throw new ArgumentException();
         }
 
-        private ObservableList<RouterInput> inputs;
+        private ObservableList<RouterInput> inputs = new ObservableList<RouterInput>();
 
         public ObservableList<RouterInput> Inputs
         {
@@ -128,7 +128,7 @@ namespace OpenSC.Model.Routers
                 inputs[i].Index = i;
         }
 
-        private ObservableList<RouterOutput> outputs;
+        private ObservableList<RouterOutput> outputs = new ObservableList<RouterOutput>();
 
         public ObservableList<RouterOutput> Outputs
         {
