@@ -48,6 +48,7 @@ namespace OpenSC.Modules.Routers
 
         public void RegisterWindowTypes()
         {
+            WindowTypeRegister.RegisterWindowType(typeof(RouterList));
             WindowTypeRegister.RegisterWindowType(typeof(RouterControlForm));
         }
 
