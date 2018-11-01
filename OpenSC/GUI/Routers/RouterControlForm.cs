@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model.Routers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,43 +12,172 @@ using System.Windows.Forms;
 
 namespace OpenSC.GUI.Routers
 {
-    [WindowTypeName("routers.routercontrolform")]
+
+    [WindowTypeName("routers.routercontrol")]
     public partial class RouterControlForm : ChildWindowWithTitle
     {
 
-        public RouterInputOutputControl activeInput;
-        public List<RouterInputOutputControl> activeOutputs = new List<RouterInputOutputControl>();
+        private Router _routerTempRef;
+
+        private Router _router;
+
+        private Router router
+        {
+            get { return _router; }
+            set
+            {
+
+                if (value == _router)
+                    return;
+
+                if (_router != null)
+                {
+                    _router.Inputs.ItemsChanged -= inputsChangedHandler;
+                    _router.Outputs.ItemsChanged -= outputsChangedHandler;
+                    Text = HeaderText = "Router crosspoints: ?";
+                }
+
+                _router = value;
+
+                if (_router != null)
+                {
+
+                    Text = HeaderText = string.Format("Router crosspoints: {0}", router.Name);
+                    _router.Inputs.ItemsChanged += inputsChangedHandler;
+                    _router.Outputs.ItemsChanged += outputsChangedHandler;
+                }
+
+                loadInputs();
+                loadOutputs();
+
+            }
+        }
 
         public RouterControlForm()
         {
             InitializeComponent();
         }
 
+        public RouterControlForm(Router router)
+        {
+            InitializeComponent();
+            this._routerTempRef = router;
+        }
+
         private void RouterControlForm_Load(object sender, EventArgs e)
         {
-            for (int i = 1; i < 7; i++) {
-                var ctrl = new RouterInputOutputControl();
-                ctrl.LabelText = string.Format("INPUT {0}", i);
-                ctrl.Clicked += inputClicked;
-                ctrl.Parent = inputsContainer;
+            router = _routerTempRef;
+        }      
+
+        private Dictionary<RouterInput, RouterInputControl> inputControls = new Dictionary<RouterInput, RouterInputControl>();
+
+        private void loadInputs()
+        {
+            flowLayoutPanel1.Controls.Clear();
+            inputControls.Clear();
+            if (router == null)
+                return;
+            foreach (RouterInput input in router.Inputs) {
+                RouterInputControl control = new RouterInputControl(input, this);
+                flowLayoutPanel1.Controls.Add(control);
+                inputControls.Add(input, control);
             }
         }
 
-        private void inputClicked(object sender, EventArgs e)
+        private void inputsChangedHandler()
         {
-            if(activeInput != null)
-                activeInput.IsActive = false;
-            var senderCtrl = (RouterInputOutputControl)sender;
-            if (senderCtrl != activeInput)
+            loadInputs();
+        }
+
+        public void InputClicked(RouterInputControl input)
+        {
+            SelectedInput = input.Input;
+        }
+
+        private RouterInput selectedInput = null;
+
+        private RouterInput SelectedInput
+        {
+            get { return selectedInput; }
+            set
             {
-                activeInput = senderCtrl;
-                activeInput.IsActive = true;
+                selectedInput = value;
+                foreach (RouterInputControl inputControl in inputControls.Values)
+                    inputControl.Selected = (inputControl.Input == value);
             }
+        }
+
+        private Dictionary<RouterOutput, RouterOutputControl> outputControls = new Dictionary<RouterOutput, RouterOutputControl>();
+
+        private void loadOutputs()
+        {
+            outputControls.Clear();
+            flowLayoutPanel2.Controls.Clear();
+            if (router == null)
+                return;
+            foreach (RouterOutput output in router.Outputs)
+            {
+                RouterOutputControl control = new RouterOutputControl(output, this);
+                flowLayoutPanel2.Controls.Add(control);
+                outputControls.Add(output, control);
+            }
+        }
+
+        private void outputsChangedHandler()
+        {
+            loadOutputs();
+        }
+
+        public void OutputClicked(RouterOutputControl output)
+        {
+            output.Selected = !output.Selected;
+            if (output.Selected)
+                selectedOutputs.Add(output.Output);
             else
-            {
-                activeInput = null;
-            }
+                selectedOutputs.RemoveAll(o => (o == output.Output));
+        }
+
+        private List<RouterOutput> selectedOutputs = new List<RouterOutput>();
+
+        private void selectNoOutput()
+        {
+            selectedOutputs.Clear();
+            foreach (RouterOutputControl control in outputControls.Values)
+                control.Selected = false;
+        }
+
+        #region Persistence
+        private const string PERSISTENCE_KEY_ROUTER_ID = "router_id";
+
+        protected override void restoreBeforeOpen(Dictionary<string, object> keyValuePairs)
+        {
+            base.restoreBeforeOpen(keyValuePairs);
+            _routerTempRef = RouterDatabase.Instance.GetTById((int)keyValuePairs[PERSISTENCE_KEY_ROUTER_ID]);
+        }
+
+        public override Dictionary<string, object> GetKeyValuePairs()
+        {
+            var dict = base.GetKeyValuePairs();
+            dict.Add(PERSISTENCE_KEY_ROUTER_ID, router?.ID);
+            return dict;
+        }
+        #endregion
+
+        private void takeButton_Click(object sender, EventArgs e)
+        {
+            take();
+        }
+
+        private void take()
+        {
+            if ((router == null) || (SelectedInput == null))
+                return;
+            foreach (RouterOutput output in selectedOutputs)
+                router.UpdateCrosspoint(output, SelectedInput);
+            SelectedInput = null;
+            selectNoOutput();
         }
 
     }
+
 }
