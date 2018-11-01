@@ -118,6 +118,12 @@
     <Compile Include="GUI\Routers\RouterList.Designer.cs">
       <DependentUpon>RouterList.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Routers\RouterEditorFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\RouterEditorFormBase.Designer.cs">
+      <DependentUpon>RouterEditorFormBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Settings\ISettingEditorControl.cs" />
     <Compile Include="GUI\Settings\SettingEditorBase.cs">
       <SubType>UserControl</SubType>
@@ -434,6 +440,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\RouterList.resx">
       <DependentUpon>RouterList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\RouterEditorFormBase.resx">
+      <DependentUpon>RouterEditorFormBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Settings\SettingEditorBase.resx">
       <DependentUpon>SettingEditorBase.cs</DependentUpon>
