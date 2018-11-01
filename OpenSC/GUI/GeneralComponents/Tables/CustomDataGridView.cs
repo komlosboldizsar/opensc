@@ -50,22 +50,14 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private void cellEndEditHandler(object sender, DataGridViewCellEventArgs e)
         {
-            try
-            {
-                CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
-                row.HandleEndEdit(e);
-            }
-            catch { }
+            CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
+            row?.HandleEndEdit(e);
         }
 
         private void cellContentClickHandler(object sender, DataGridViewCellEventArgs e)
         {
-            try
-            {
-                CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
-                row.HandleContentClick(e);
-            }
-            catch { }
+            CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
+            row?.HandleContentClick(e);
         }
 
         private void itemsChangedHandler()
