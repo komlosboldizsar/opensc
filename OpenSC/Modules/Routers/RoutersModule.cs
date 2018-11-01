@@ -5,6 +5,7 @@ using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.Routers;
+using OpenSC.Model.Routers.Virtual;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace OpenSC.Modules.Routers
 
         public void RegisterModelTypes()
         {
-            //RegisterRouterType</**/, /**/EditorForm>();
+            //RegisterRouterType<VirtualRouter, /**/EditorForm>();
         }
 
         public void RegisterDatabases()
