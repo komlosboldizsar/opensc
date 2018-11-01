@@ -22,7 +22,7 @@ namespace OpenSC.Model.Routers
             get { return name; }
             set
             {
-                if (string.IsNullOrWhiteSpace(name))
+                if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException();
                 if (value == name)
                     return;
