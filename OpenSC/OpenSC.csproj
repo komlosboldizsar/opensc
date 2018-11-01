@@ -111,6 +111,25 @@
     <Compile Include="GUI\Menus\MenuItem.cs" />
     <Compile Include="GUI\Menus\MenuManager.cs" />
     <Compile Include="GUI\Menus\SeparatorMenuItem.cs" />
+    <Compile Include="GUI\Routers\VirtualRouterEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\VirtualRouterEditorForm.Designer.cs">
+      <DependentUpon>VirtualRouterEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Routers\RouterEditorFormTypeRegister.cs" />
+    <Compile Include="GUI\Routers\RouterList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\RouterList.Designer.cs">
+      <DependentUpon>RouterList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Routers\RouterEditorFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\RouterEditorFormBase.Designer.cs">
+      <DependentUpon>RouterEditorFormBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Settings\ISettingEditorControl.cs" />
     <Compile Include="GUI\Settings\SettingEditorBase.cs">
       <SubType>UserControl</SubType>
@@ -315,6 +334,16 @@
     <Compile Include="Model\Persistence\ITypeNameConverter.cs" />
     <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
     <Compile Include="Model\Persistence\XmlTagNamesAttribute.cs" />
+    <Compile Include="Model\Routers\InputSourceSignal.cs" />
+    <Compile Include="Model\Routers\IRouterInputSource.cs" />
+    <Compile Include="Model\Routers\Router.cs" />
+    <Compile Include="Model\Routers\RouterDatabase.cs" />
+    <Compile Include="Model\Routers\RouterInput.cs" />
+    <Compile Include="Model\Routers\RouterInputXmlSerializer.cs" />
+    <Compile Include="Model\Routers\RouterOutput.cs" />
+    <Compile Include="Model\Routers\RouterOutputXmlSerializer.cs" />
+    <Compile Include="Model\Routers\RouterTypeNameConverter.cs" />
+    <Compile Include="Model\Routers\Virtual\VirtualRouter.cs" />
     <Compile Include="Model\Settings\Converters\BoolConverter.cs" />
     <Compile Include="Model\Settings\Converters\ColorConverter.cs" />
     <Compile Include="Model\Settings\Converters\IntConverter.cs" />
@@ -414,6 +443,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\VirtualRouterEditorForm.resx">
+      <DependentUpon>VirtualRouterEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\RouterList.resx">
+      <DependentUpon>RouterList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\RouterEditorFormBase.resx">
+      <DependentUpon>RouterEditorFormBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Settings\SettingEditorBase.resx">
       <DependentUpon>SettingEditorBase.cs</DependentUpon>
@@ -568,9 +606,7 @@
   <ItemGroup>
     <None Include="Resources\timer_stopped.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\Routers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\16_timer_backward.png" />
   </ItemGroup>

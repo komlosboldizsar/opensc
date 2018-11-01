@@ -1,5 +1,11 @@
-﻿using OpenSC.GUI.Routers;
+﻿using OpenSC.GUI;
+using OpenSC.GUI.Menus;
+using OpenSC.GUI.Routers;
 using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model;
+using OpenSC.Model.Persistence;
+using OpenSC.Model.Routers;
+using OpenSC.Model.Routers.Virtual;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +14,10 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Modules.Routers
 {
+
     class RoutersModule : IModule
     {
+
         public void MainWindowOpened()
         {
         }
@@ -24,25 +32,31 @@ namespace OpenSC.Modules.Routers
 
         public void RegisterDatabasePersisterSerializers()
         {
+            DatabasePersister<Router>.RegisterSerializer(new RouterInputXmlSerializer());
+            DatabasePersister<Router>.RegisterSerializer(new RouterOutputXmlSerializer());
         }
 
         public void RegisterModelTypes()
         {
-
+            RegisterRouterType<VirtualRouter, VirtualRouterEditorForm>();
         }
 
         public void RegisterDatabases()
         {
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(RouterDatabase));
         }
 
         public void RegisterWindowTypes()
         {
+            WindowTypeRegister.RegisterWindowType(typeof(RouterList));
             WindowTypeRegister.RegisterWindowType(typeof(RouterControlForm));
         }
 
         public void RegisterMenus()
         {
-
+            var routersMenu = MenuManager.Instance.TopMenu["Routers"];
+            var routersListMenu = routersMenu["Routers list"];
+            routersListMenu.ClickHandler = (menu, tag) => new RouterList().ShowAsChild();
         }
 
         public void RegisterSettings()
@@ -50,5 +64,18 @@ namespace OpenSC.Modules.Routers
 
         }
 
+        public void RegisterRouterType<TRouter, TRouterEditorForm>()
+            where TRouter : Router
+            where TRouterEditorForm : IModelEditorForm<Router>, new()
+        {
+            Type routerType = typeof(TRouter);
+            string typeCode = routerType.GetTypeCode();
+            if (string.IsNullOrEmpty(typeCode))
+                throw new Exception();
+            RouterTypeNameConverter.AddKnownType(typeCode, typeof(TRouter));
+            RouterEditorFormTypeRegister.Instance.RegisterFormType<TRouter, TRouterEditorForm>();
+        }
+
     }
+
 }
