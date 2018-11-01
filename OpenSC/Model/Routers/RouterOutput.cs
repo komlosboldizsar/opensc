@@ -56,7 +56,7 @@ namespace OpenSC.Model.Routers
                 unsubscribeCrosspointEvents();
                 crosspoint = value;
                 fireChangeEventsAtCrosspointChange();
-                RouterCrosspointChanged(this, value);
+                RouterCrosspointChanged?.Invoke(this, value);
                 subscribeCrosspointEvents();
             }
         }
