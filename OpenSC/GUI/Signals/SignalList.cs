@@ -86,6 +86,25 @@ namespace OpenSC.GUI.Signals
             builder.AddChangeEvent(nameof(Signal.CategoryChangedPCN));
             builder.BuildAndAdd();
 
+            // Column: red tally
+            builder = GetColumnDescriptorBuilderForTable<Signal>();
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.Header("TR");
+            builder.Width(50);
+            builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.RedTally ? Color.Red : Color.LightGray); });
+            builder.AddChangeEvent(nameof(Signal.RedTallyChangedPCN));
+            builder.BuildAndAdd();
+
+            // Column: green tally
+            builder = GetColumnDescriptorBuilderForTable<Signal>();
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.Header("TG");
+            builder.Width(50);
+            builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
+            builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.GreenTally ? Color.ForestGreen : Color.LightGray); });
+            builder.AddChangeEvent(nameof(Signal.GreenTallyChangedPCN));
+            builder.BuildAndAdd();
+
             // Column: edit button
             builder = GetColumnDescriptorBuilderForTable<Signal>();
             builder.Type(DataGridViewColumnType.Button);

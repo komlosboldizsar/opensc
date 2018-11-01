@@ -18,6 +18,9 @@ namespace OpenSC.Model.Signals
     public delegate void SignalCategoryChangingDelegate(Signal signal, SignalCategory oldCategory, SignalCategory newCategory);
     public delegate void SignalCategoryChangedDelegate(Signal signal, SignalCategory oldCategory, SignalCategory newCategory);
 
+    public delegate void SignalTallyChangingDelegate(Signal signal, bool oldState, bool newState);
+    public delegate void SignalTallyChangedDelegate(Signal signal, bool oldState, bool newState);
+
     public class Signal : IModel
     {
 
@@ -104,6 +107,52 @@ namespace OpenSC.Model.Signals
                 category = value;
                 CategoryChanged?.Invoke(this, oldCategory, value);
                 CategoryChangedPCN?.Invoke();
+            }
+        }
+
+        public event SignalTallyChangingDelegate RedTallyChanging;
+        public event SignalTallyChangedDelegate RedTallyChanged;
+        public event ParameterlessChangeNotifierDelegate RedTallyChangingPCN;
+        public event ParameterlessChangeNotifierDelegate RedTallyChangedPCN;
+
+        private bool redTally;
+
+        public bool RedTally
+        {
+            get { return redTally; }
+            private set
+            {
+                if (value == redTally)
+                    return;
+                bool oldState = redTally;
+                RedTallyChanging?.Invoke(this, oldState, value);
+                RedTallyChangingPCN?.Invoke();
+                redTally = value;
+                RedTallyChanged?.Invoke(this, oldState, value);
+                RedTallyChangedPCN?.Invoke();
+            }
+        }
+
+        public event SignalTallyChangingDelegate GreenTallyChanging;
+        public event SignalTallyChangedDelegate GreenTallyChanged;
+        public event ParameterlessChangeNotifierDelegate GreenTallyChangingPCN;
+        public event ParameterlessChangeNotifierDelegate GreenTallyChangedPCN;
+
+        private bool greenTally;
+
+        public bool GreenTally
+        {
+            get { return greenTally; }
+            private set
+            {
+                if (value == greenTally)
+                    return;
+                bool oldState = greenTally;
+                GreenTallyChanging?.Invoke(this, oldState, value);
+                GreenTallyChangingPCN?.Invoke();
+                greenTally = value;
+                GreenTallyChanged?.Invoke(this, oldState, value);
+                GreenTallyChangedPCN?.Invoke();
             }
         }
 
