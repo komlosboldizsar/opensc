@@ -20,9 +20,12 @@ namespace BMD.Videohub
             {
                 if (value == ipAddress)
                     return;
-                Disconnect();
+                bool wasConnected = connected;
+                if (wasConnected)
+                    Disconnect();
                 ipAddress = value;
-                Connect();
+                if (wasConnected)
+                    Connect();
             }
         }
 
@@ -102,7 +105,7 @@ namespace BMD.Videohub
 
         public void Disconnect()
         {
-            socketReceiver.Disconnect();
+            socketReceiver?.Disconnect();
         }
 
         public class NotConnectedException : Exception
