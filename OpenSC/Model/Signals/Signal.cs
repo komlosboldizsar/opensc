@@ -174,7 +174,7 @@ namespace OpenSC.Model.Signals
                 if (value == redTallySource)
                     return;
                 if (redTallySource != null)
-                    redTallySource.StateChanged -= null;
+                    redTallySource.StateChanged -= redTallyChangedHandler;
                 redTallySource = value;
                 _redTallySource = value?.Name;
                 if(redTallySource != null)
@@ -201,7 +201,7 @@ namespace OpenSC.Model.Signals
                 if (value == greenTallySource)
                     return;
                 if (greenTallySource != null)
-                    greenTallySource.StateChanged -= null;
+                    greenTallySource.StateChanged -= greenTallyChangedHandler;
                 greenTallySource = value;
                 _greenTallySource = value?.Name;
                 if (greenTallySource != null)
