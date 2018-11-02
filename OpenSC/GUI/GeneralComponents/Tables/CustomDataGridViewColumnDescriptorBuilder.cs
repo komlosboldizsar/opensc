@@ -135,7 +135,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             return this;
         }
 
-        public CustomDataGridViewColumnDescriptorBuilder<T> UpdaterMethod(CustomDataGridViewColumnDescriptor<T>.CellDropDownPopulatorMethodDelegate dropDownPopulatorMethod)
+        public CustomDataGridViewColumnDescriptorBuilder<T> DropDownPopulatorMethod(CustomDataGridViewColumnDescriptor<T>.CellDropDownPopulatorMethodDelegate dropDownPopulatorMethod)
         {
             this.dropDownPopulatorMethod = dropDownPopulatorMethod;
             return this;
