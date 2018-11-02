@@ -66,7 +66,8 @@ namespace OpenSC.Model.Variables
                 if (value == currentState)
                     return;
                 currentState = value;
-                StateChanged?.Invoke(this);
+                StateChanged?.Invoke(this, currentState);
+                StateChangedPCN?.Invoke();
             }
         }
 
