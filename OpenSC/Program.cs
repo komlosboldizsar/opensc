@@ -30,32 +30,32 @@ namespace OpenSC
         static void Main()
         {
 
-            FileLogger logger = new FileLogger(Application.StartupPath, "opensc");
+                FileLogger logger = new FileLogger(Application.StartupPath, "opensc");
 
-            LogDispatcher.I(LOG_TAG, "Main() started, created file logger.");
+                LogDispatcher.I(LOG_TAG, "Main() started, created file logger.");
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
 
-            VariablesManager.ProgramStarted();
-            SignalsManager.ProgramStarted();
-            ModuleManager.Init();
-            ProgramStarted?.Invoke();
+                VariablesManager.ProgramStarted();
+                SignalsManager.ProgramStarted();
+                ModuleManager.Init();
+                ProgramStarted?.Invoke();
 
-            ModuleManager.RegisterDynamicTextFunctions();
+                ModuleManager.RegisterDynamicTextFunctions();
 
-            // TODO: init somewhere else :)
-            ModuleManager.RegisterModelTypes();
+                // TODO: init somewhere else :)
+                ModuleManager.RegisterModelTypes();
 
-            InitDatabases();
-            InitWorkspaceManager();
+                InitDatabases();
+                InitWorkspaceManager();
 
-            // TODO: init somewhere else :)
-            ModuleManager.RegisterMenus();
-            ModuleManager.RegisterSettings();
-            SettingsManager.Instance.LoadSettings();
+                // TODO: init somewhere else :)
+                ModuleManager.RegisterMenus();
+                ModuleManager.RegisterSettings();
+                SettingsManager.Instance.LoadSettings();
 
-            Application.Run(GUI.MainForm.Instance);
+                Application.Run(GUI.MainForm.Instance);
 
         }
 

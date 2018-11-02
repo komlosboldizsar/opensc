@@ -21,7 +21,17 @@ namespace OpenSC.GUI
     public partial class MainForm : Form
     {
 
-        public static MainForm Instance { get; } = new MainForm();
+        private static MainForm instance = null;
+
+        public static MainForm Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new MainForm();
+                return instance;
+            }
+        }
 
         private const string LOG_TAG = "MainForm";
 
