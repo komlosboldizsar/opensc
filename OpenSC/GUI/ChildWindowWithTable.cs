@@ -21,7 +21,7 @@ namespace OpenSC.GUI
         }
 
         public CustomDataGridView<T> CreateTable<T>()
-            where T: class, IModel
+            where T: class
         {
             var customTable = new CustomDataGridView<T>();
             bottomPanel.Controls.Clear();
@@ -32,13 +32,13 @@ namespace OpenSC.GUI
         }
 
         protected static CustomDataGridViewColumnDescriptorBuilder<T> GetColumnDescriptorBuilder<T>()
-            where T: class, IModel
+            where T: class
         {
             return new CustomDataGridViewColumnDescriptorBuilder<T>();
         }
 
         protected CustomDataGridViewColumnDescriptorBuilder<T> GetColumnDescriptorBuilderForTable<T>()
-            where T : class, IModel
+            where T : class
         {
             return new CustomDataGridViewColumnDescriptorBuilder<T>((CustomDataGridView<T>)_table);
         }
