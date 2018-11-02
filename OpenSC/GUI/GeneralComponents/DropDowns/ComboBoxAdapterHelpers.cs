@@ -29,6 +29,11 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
             comboBox.SetAdapterAsDataSource(adapter);
         }
 
+        public static void GetAdapterFromFactoryAsDataSource(this ComboBox comboBox, IComboBoxAdapterFactory factory)
+        {
+            comboBox.SetAdapterAsDataSource(factory.GetOne());
+        }
+
         public static void SetAdapterAsDataSource(this ComboBox comboBox, IComboBoxAdapter adapter)
         {
             comboBox.DataSource = adapter;
