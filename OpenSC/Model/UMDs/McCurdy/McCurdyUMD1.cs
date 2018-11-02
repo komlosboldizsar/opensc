@@ -99,7 +99,7 @@ namespace OpenSC.Model.UMDs.McCurdy
         [PersistAs("dynamic_text_sources")]
         private DynamicText[] dynamicTextSources = new DynamicText[] { null, null, null };
 
-        [TempForeignKey("dynamic_text_sources", nameof(dynamicTextSources))]
+        [TempForeignKey("dynamictexts", nameof(dynamicTextSources))]
         private int[] _dynamicTextSources = new int[] { 0, 0, 0 };
 
         public void SetDynamicTextSource(int columnIndex, DynamicText dynamicTextSource)
@@ -301,6 +301,15 @@ namespace OpenSC.Model.UMDs.McCurdy
             }
             return fullText;
 
+        }
+
+        public override void Restored()
+        {
+            base.Restored();
+            DynamicText[] restoredDynamicTextSources = dynamicTextSources;
+            dynamicTextSources = new DynamicText[] { null, null, null };
+            for (int i = 0; i < 3; i++)
+                SetDynamicTextSource(i, restoredDynamicTextSources[i]);
         }
 
     }
