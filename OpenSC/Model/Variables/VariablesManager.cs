@@ -37,12 +37,15 @@ namespace OpenSC.Model.Variables
         private static void registerWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType(typeof(DynamicTextList));
+            WindowTypeRegister.RegisterWindowType(typeof(BooleanList));
         }
 
         private static void registerMenus() {
             var variablesMenu = MenuManager.Instance.TopMenu["Variables"];
             var dynamicTextsMenu = variablesMenu["Dynamic texts"];
             dynamicTextsMenu.ClickHandler = (menu, tag) => new DynamicTextList().ShowAsChild();
+            var booleansMenu = variablesMenu["Booleans"];
+            booleansMenu.ClickHandler = (menu, tag) => new BooleanList().ShowAsChild();
         }
 
     }
