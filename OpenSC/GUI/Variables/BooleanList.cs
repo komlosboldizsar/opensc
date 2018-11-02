@@ -36,6 +36,7 @@ namespace OpenSC.GUI.Variables
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.Width(50);
             builder.UpdaterMethod((boolean, cell) => { cell.Value = boolean.Name; });
+            builder.AddChangeEvent(nameof(IBoolean.NameChangedPCN));
             builder.BuildAndAdd();
 
             // Column: description

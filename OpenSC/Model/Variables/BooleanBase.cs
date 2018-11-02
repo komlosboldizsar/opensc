@@ -6,13 +6,30 @@ namespace OpenSC.Model.Variables
     public class BooleanBase : IBoolean
     {
 
-        public string Name { get => name; }
+        private string name;
 
-        private readonly string name;
+        public string Name
+        {
+            get => name;
+            set
+            {
+                if (!BooleanRegister.Instance.CanNameUsedForBoolean(this, value))
+                    return;
+                if (value == name)
+                    return;
+                name = value;
+                NameChanged?.Invoke(this, name);
+                NameChangedPCN?.Invoke();
+                BooleanRegister.Instance.BooleanNameChanged(this);
+            }
+        }
 
-        public Color Color { get => color; }
+        public event BooleanNameChangedDelegate NameChanged;
+        public event ParameterlessChangeNotifierDelegate NameChangedPCN;
 
         private readonly Color color;
+
+        public Color Color { get => color; }
 
         private string description;
 
@@ -29,7 +46,7 @@ namespace OpenSC.Model.Variables
             }
         }
 
-        public event DescriptionChangedDelegate DescriptionChanged;
+        public event BooleanDescriptionChangedDelegate DescriptionChanged;
         public event ParameterlessChangeNotifierDelegate DescriptionChangedPCN;
 
         public BooleanBase(string name, Color color, string description = "")
@@ -53,7 +70,7 @@ namespace OpenSC.Model.Variables
             }
         }
 
-        public event BooleanStateChanged StateChanged;
+        public event BooleanStateChangedDelegate StateChanged;
         public event ParameterlessChangeNotifierDelegate StateChangedPCN;
 
     }

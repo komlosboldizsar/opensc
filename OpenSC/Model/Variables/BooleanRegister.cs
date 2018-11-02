@@ -80,6 +80,24 @@ namespace OpenSC.Model.Variables
             ItemsChanged?.Invoke();
         }
 
+        public void BooleanNameChanged(IBoolean boolean)
+        {
+            if (!registeredBooleans.ContainsValue(boolean))
+                return;
+            if(!CanNameUsedForBoolean(boolean, boolean.Name))
+                throw new NameIsAlreadyUsedException(boolean.Name);
+            string previousRegisteredName = registeredBooleans.FirstOrDefault(kvp => (kvp.Value == boolean)).Key;
+            registeredBooleans.Remove(previousRegisteredName);
+            registeredBooleans.Add(boolean.Name, boolean);
+        }
+
+        public bool CanNameUsedForBoolean(IBoolean boolean, string name)
+        {
+            if (!registeredBooleans.TryGetValue(name, out IBoolean foundBoolean))
+                return true;
+            return (foundBoolean == boolean);
+        }
+
         public class NameIsAlreadyUsedException : Exception
         {
 

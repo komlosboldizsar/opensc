@@ -3,25 +3,29 @@
 namespace OpenSC.Model.Variables
 {
 
-    public delegate void BooleanStateChanged(IBoolean boolean);
+    public delegate void BooleanStateChangedDelegate(IBoolean boolean);
 
-    public delegate void DescriptionChangedDelegate(IBoolean boolean, string newDescription);
+    public delegate void BooleanNameChangedDelegate(IBoolean boolean, string newName);
+    public delegate void BooleanDescriptionChangedDelegate(IBoolean boolean, string newDescription);
 
     public interface IBoolean
     {
 
         string Name { get; }
 
+        event BooleanNameChangedDelegate NameChanged;
+        event ParameterlessChangeNotifierDelegate NameChangedPCN;
+
         Color Color { get; }
 
         string Description { get; set; }
 
-        event DescriptionChangedDelegate DescriptionChanged;
+        event BooleanDescriptionChangedDelegate DescriptionChanged;
         event ParameterlessChangeNotifierDelegate DescriptionChangedPCN;
 
         bool CurrentState { get; }
 
-        event BooleanStateChanged StateChanged;
+        event BooleanStateChangedDelegate StateChanged;
         event ParameterlessChangeNotifierDelegate StateChangedPCN;
 
     }
