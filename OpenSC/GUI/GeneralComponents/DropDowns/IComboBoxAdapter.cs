@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace OpenSC.GUI.GeneralComponents.DropDowns
 {
 
-    public interface IComboBoxAdapter : IListSource
+    public interface IComboBoxAdapter : IListSource, ICloneable
     {
         bool ContainsNull { get; }
     }

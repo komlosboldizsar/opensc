@@ -13,7 +13,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
         where T : class
     {
 
-        private IEnumerable boundCollection;
+        private IEnumerable<T> boundCollection;
         private List<ItemProxy> proxyList = new List<ItemProxy>();
 
         public delegate string ToStringFunctionDelegate(T item);
@@ -45,6 +45,11 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
                 proxyList.Add(new ItemProxy(null, nullLabel));
             foreach (T item in boundCollection)
                 proxyList.Add(new ItemProxy(item, toStringFunction(item)));
+        }
+
+        public object Clone()
+        {
+            return new ComboBoxAdapter<T>(boundCollection, toStringFunction, ContainsNull, nullLabel);
         }
 
         private class ItemProxy

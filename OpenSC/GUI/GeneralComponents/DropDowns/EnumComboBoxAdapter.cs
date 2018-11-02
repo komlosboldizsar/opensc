@@ -52,6 +52,11 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
             }
         }
 
+        public object Clone()
+        {
+            return new EnumComboBoxAdapter<T>(translations);
+        }
+
         private class ItemProxy
         {
 
