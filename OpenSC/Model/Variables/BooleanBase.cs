@@ -1,4 +1,6 @@
-﻿namespace OpenSC.Model.Variables
+﻿using System.Drawing;
+
+namespace OpenSC.Model.Variables
 {
 
     public class BooleanBase : IBoolean
@@ -6,11 +8,16 @@
 
         public string Name { get => name; }
 
-        public readonly string name;
+        private readonly string name;
 
-        public BooleanBase(string name)
+        public Color Color { get => color; }
+
+        private readonly Color color;
+
+        public BooleanBase(string name, Color color)
         {
             this.name = name;
+            this.color = color;
         }
 
         private bool currentState;
