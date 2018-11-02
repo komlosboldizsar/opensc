@@ -34,7 +34,7 @@ namespace OpenSC.Model.UMDs
 
         protected abstract void update();
 
-        public void Restored()
+        public virtual void Restored()
         { }
 
         public UMD()
