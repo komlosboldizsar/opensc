@@ -395,12 +395,15 @@
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerTotalSeconds.cs" />
     <Compile Include="Model\TypeCodeAttribute.cs" />
     <Compile Include="Model\TypeLabelAttribute.cs" />
+    <Compile Include="Model\Variables\BooleanBase.cs" />
+    <Compile Include="Model\Variables\BooleanRegister.cs" />
     <Compile Include="Model\Variables\DynamicText.cs" />
     <Compile Include="Model\Variables\DynamicTextFunctionArgumentType.cs" />
     <Compile Include="Model\Variables\DynamicTextDatabase.cs" />
     <Compile Include="Model\Variables\DynamicTextFunctionRegister.cs" />
     <Compile Include="Model\Variables\DynamicTextFunctionSubstituteBase.cs" />
     <Compile Include="Model\Variables\DynamicTextSubstituteBuilder.cs" />
+    <Compile Include="Model\Variables\IBoolean.cs" />
     <Compile Include="Model\Variables\IDynamicTextFunction.cs" />
     <Compile Include="Model\Variables\IDynamicTextFunctionSubstitute.cs" />
     <Compile Include="Model\Variables\VariablesManager.cs" />
