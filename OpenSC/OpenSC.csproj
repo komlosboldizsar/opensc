@@ -135,6 +135,12 @@
     <Compile Include="GUI\Routers\RouterInputOutputControlBase.Designer.cs">
       <DependentUpon>RouterInputOutputControlBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Routers\BmdVideohubEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\BmdVideohubEditorForm.Designer.cs">
+      <DependentUpon>BmdVideohubEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Routers\VirtualRouterEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -358,6 +364,7 @@
     <Compile Include="Model\Persistence\ITypeNameConverter.cs" />
     <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
     <Compile Include="Model\Persistence\XmlTagNamesAttribute.cs" />
+    <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohub.cs" />
     <Compile Include="Model\Routers\InputSourceSignal.cs" />
     <Compile Include="Model\Routers\IRouterInputSource.cs" />
     <Compile Include="Model\Routers\Router.cs" />
@@ -467,6 +474,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\RouterInputOutputControlBase.resx">
       <DependentUpon>RouterInputOutputControlBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\BmdVideohubEditorForm.resx">
+      <DependentUpon>BmdVideohubEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\VirtualRouterEditorForm.resx">
       <DependentUpon>VirtualRouterEditorForm.cs</DependentUpon>
