@@ -26,7 +26,8 @@ namespace BMD.Videohub
         {
             try
             {
-                socket.Disconnect(false);
+                if(socket.Connected)
+                    socket.Disconnect(false);
                 ConnectedStateChanged?.Invoke(socket.Connected);
                 socket.Dispose();
             }
@@ -72,6 +73,9 @@ namespace BMD.Videohub
 
             if (Connected)
                 throw new AlreadyConnectedException();
+
+            if (string.IsNullOrWhiteSpace(ipAddress))
+                return;
 
             try
             {
