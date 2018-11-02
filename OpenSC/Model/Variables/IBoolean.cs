@@ -1,4 +1,6 @@
-﻿namespace OpenSC.Model.Variables
+﻿using System.Drawing;
+
+namespace OpenSC.Model.Variables
 {
 
     public delegate void BooleanStateChanged(IBoolean boolean);
@@ -10,6 +12,8 @@
 
         string Name { get; }
 
+        Color Color { get; }
+
         string Description { get; set; }
 
         event DescriptionChangedDelegate DescriptionChanged;
@@ -18,6 +22,7 @@
         bool CurrentState { get; }
 
         event BooleanStateChanged StateChanged;
+        event ParameterlessChangeNotifierDelegate StateChangedPCN;
 
     }
 
