@@ -1,6 +1,8 @@
 ﻿using OpenSC.GUI.GeneralComponents.Tables;
 using OpenSC.Model.Routers;
+using OpenSC.Model.Signals;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 
@@ -132,6 +134,18 @@ namespace OpenSC.GUI.Routers
             });
             builder.BuildAndAdd();
 
+            // Column: source
+            CustomDataGridViewComboBoxItem<IRouterInputSource>[] sources = getAllSources();
+            builder = getColumnDescriptorBuilderForTable<RouterInput>(inputsTableCDGV);
+            builder.Type(DataGridViewColumnType.ComboBox);
+            builder.Header("Source");
+            builder.Width(300);
+            builder.InitializerMethod((input, cell) => { });
+            builder.UpdaterMethod((input, cell) => { cell.Value = input.Source; });
+            builder.CellEndEditHandlerMethod((input, cell, eventargs) => { input.Source = cell.Value as IRouterInputSource; });
+            builder.DropDownPopulatorMethod((input, cell) => sources);
+            builder.BuildAndAdd();
+
             // Column: delete button
             builder = getColumnDescriptorBuilderForTable<RouterInput>(inputsTableCDGV);
             builder.Type(DataGridViewColumnType.Button);
@@ -224,6 +238,48 @@ namespace OpenSC.GUI.Routers
             where T : class
         {
              return new CustomDataGridViewColumnDescriptorBuilder<T>(table);
+        }
+
+        private class SourceDropDownItem: CustomDataGridViewComboBoxItem<IRouterInputSource>
+        {
+            public SourceDropDownItem(IRouterInputSource value) : base(value)
+            { }
+
+            public override string ToString()
+            {
+
+                InputSourceSignal inputSourceSignal = Value as InputSourceSignal;
+                if(inputSourceSignal != null)
+                    return string.Format("Signal: (#{0}) {1}", inputSourceSignal.Signal.ID, inputSourceSignal.Signal.Name);
+
+                RouterOutput routerOutput = Value as RouterOutput;
+                if (routerOutput != null)
+                    return string.Format("Router: (#{0}) {1}, output: ({2}.) {3}",
+                        routerOutput.Router.ID, routerOutput.Router.Name,
+                        (routerOutput.Index + 1), routerOutput.Name);
+
+                return "unknown source type";
+
+            }
+
+        }
+
+        private CustomDataGridViewComboBoxItem<IRouterInputSource>[] getAllSources()
+        {
+
+            List<CustomDataGridViewComboBoxItem<IRouterInputSource>> sourceList = new List<CustomDataGridViewComboBoxItem<IRouterInputSource>>();
+
+            sourceList.Add(new CustomDataGridViewComboBoxItem<IRouterInputSource>.NullItem("(not connected)"));
+
+            foreach (Signal signal in SignalDatabases.Signals.ItemsAsList)
+                sourceList.Add(new SourceDropDownItem(new InputSourceSignal(signal)));
+
+            foreach (Router router in RouterDatabase.Instance.ItemsAsList)
+                foreach (RouterOutput output in router.Outputs)
+                    sourceList.Add(new SourceDropDownItem(output));
+
+            return sourceList.ToArray();
+
         }
 
         private void addInputButton_Click(object sender, EventArgs e)

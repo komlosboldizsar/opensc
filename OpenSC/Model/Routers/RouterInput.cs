@@ -10,6 +10,8 @@ namespace OpenSC.Model.Routers
     public delegate void RouterInputNameChanged(RouterInput input, string oldName, string newName);
     public delegate void RouterInputNameChangedPCN();
 
+    public delegate void RouterInputSourceChangedDelegate(RouterInput input, IRouterInputSource oldSource, IRouterInputSource newSource);
+
     public delegate void RouterInputSourceNameChanged(RouterInput input, string newName);
     public delegate void RouterInputTallyChanged(RouterInput input, bool newState);
 
@@ -52,8 +54,34 @@ namespace OpenSC.Model.Routers
         public IRouterInputSource Source
         {
             get { return source; }
-            private set { source = value; }
+            set
+            {
+
+                if (value == source)
+                    return;
+
+                if(source != null)
+                {
+                    source.SourceNameChanged -= sourceNameChangedHandler;
+                }
+
+                IRouterInputSource oldSource = source;
+                source = value;
+
+                RouterInputSourceChanged?.Invoke(this, oldSource, value);
+                RouterInputSourceChangedPCN?.Invoke();
+                SourceNameChanged?.Invoke(this, source?.SourceName);
+
+                if (source != null)
+                {
+                    source.SourceNameChanged += sourceNameChangedHandler; ;
+                }
+
+            }
         }
+
+        public event RouterInputSourceChangedDelegate RouterInputSourceChanged;
+        public event ParameterlessChangeNotifierDelegate RouterInputSourceChangedPCN;
 
         // "Temp foreign key"
         public string _sourceString;
@@ -70,6 +98,11 @@ namespace OpenSC.Model.Routers
         }
 
         public event RouterInputSourceNameChanged SourceNameChanged;
+
+        private void sourceNameChangedHandler(IRouterInputSource inputSource, string newName)
+        {
+            SourceNameChanged?.Invoke(this, newName);
+        }
 
         public bool RedTally =>
             (source != null) ? source.RedTally : false;

@@ -50,6 +50,14 @@ namespace OpenSC.Model.Routers
             GreenTallyChanged?.Invoke(this, newState);
         }
 
+        public override bool Equals(object obj)
+        {
+            InputSourceSignal objCasted = obj as InputSourceSignal;
+            if (objCasted == null)
+                return false;
+            return (objCasted.Signal == Signal);
+        }
+
     }
 
 }
