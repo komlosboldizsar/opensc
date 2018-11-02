@@ -35,6 +35,7 @@ namespace OpenSC.GUI.Routers
                 return;
 
             ipAddressTextbox.Text = bmdVideohub.IpAddress;
+            autoReconnectCheckbox.Checked = bmdVideohub.AutoReconnect;
 
             bmdVideohub.ConnectionStateChanged += connectionStateChangedHandler;
             connectButton.Enabled = !bmdVideohub.Connected;
@@ -51,6 +52,7 @@ namespace OpenSC.GUI.Routers
                 return;
 
             bmdVideohub.IpAddress = ipAddressTextbox.Text;
+            bmdVideohub.AutoReconnect = autoReconnectCheckbox.Checked;
 
         }
 

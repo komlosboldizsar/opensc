@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OpenSC.Model.Routers.BlackMagicDesign
@@ -13,6 +14,9 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
 
     public delegate void BmdVideohubConnectionStateChangingDelegate(BmdVideohub router, bool oldState, bool newState);
     public delegate void BmdVideohubConnectionStateChangedDelegate(BmdVideohub router, bool oldState, bool newState);
+
+    public delegate void BmdVideohubAutoReconnectChangingDelegate(BmdVideohub router, bool oldSetting, bool newSetting);
+    public delegate void BmdVideohubAutoReconnectChangedDelegate(BmdVideohub router, bool oldSetting, bool newSetting);
 
     [TypeLabel("BMD Videohub")]
     [TypeCode("bmd")]
@@ -28,6 +32,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         {
             base.Restored();
             initVideohub();
+            startAutoReconnectThread();
         }
 
         public void Connect()
@@ -93,6 +98,57 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
                 ConnectionStateChangedPCN?.Invoke();
             }
         }
+
+        #region Auto reconnect
+        public event BmdVideohubAutoReconnectChangingDelegate AutoReconnectChanging;
+        public event BmdVideohubAutoReconnectChangedDelegate AutoReconnectChanged;
+        public event ParameterlessChangeNotifierDelegate AutoReconnectChangingPCN;
+        public event ParameterlessChangeNotifierDelegate AutoReconnectChangedPCN;
+
+        [PersistAs("auto_reconnect")]
+        private bool autoReconnect;
+
+        public bool AutoReconnect
+        {
+            get { return autoReconnect; }
+            set
+            {
+                if (value == autoReconnect)
+                    return;
+                bool oldValue = autoReconnect;
+                AutoReconnectChanging?.Invoke(this, oldValue, value);
+                AutoReconnectChangingPCN?.Invoke();
+                autoReconnect = value;
+                AutoReconnectChanged?.Invoke(this, oldValue, value);
+                AutoReconnectChangedPCN?.Invoke();
+            }
+        }
+
+        private const int RECONNECT_TRY_INTERVAL = 10000;
+
+        private Thread autoReconnectThread = null;
+
+        private void startAutoReconnectThread()
+        {
+            autoReconnectThread = new Thread(autoReconnectThreadMethod)
+            {
+                IsBackground = true
+            };
+            autoReconnectThread.Start();
+        }
+
+        private void autoReconnectThreadMethod()
+        {
+            if (autoReconnect && !connected)
+                Connect();
+            while(autoReconnect && !connected)
+            {
+                Thread.Sleep(RECONNECT_TRY_INTERVAL);
+                if (autoReconnect && !connected)
+                    Connect();
+            }
+        }
+        #endregion
 
         private BMD.Videohub.BlackMagicVideohub videohub = null;
 

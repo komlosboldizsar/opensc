@@ -36,6 +36,8 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.disconnectButton = new System.Windows.Forms.Button();
             this.connectButton = new System.Windows.Forms.Button();
+            this.autoReconnectCheckbox = new System.Windows.Forms.CheckBox();
+            this.autoReconnectLabel = new System.Windows.Forms.Label();
             this.baseDataTabPage.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.connectionPanel.SuspendLayout();
@@ -67,7 +69,7 @@
             this.connectionPanel.Location = new System.Drawing.Point(3, 97);
             this.connectionPanel.Name = "connectionPanel";
             this.connectionPanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
-            this.connectionPanel.Size = new System.Drawing.Size(471, 98);
+            this.connectionPanel.Size = new System.Drawing.Size(471, 121);
             this.connectionPanel.TabIndex = 2;
             // 
             // connectionGroupBox
@@ -79,7 +81,7 @@
             this.connectionGroupBox.Location = new System.Drawing.Point(0, 0);
             this.connectionGroupBox.Name = "connectionGroupBox";
             this.connectionGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.connectionGroupBox.Size = new System.Drawing.Size(471, 91);
+            this.connectionGroupBox.Size = new System.Drawing.Size(471, 114);
             this.connectionGroupBox.TabIndex = 0;
             this.connectionGroupBox.TabStop = false;
             this.connectionGroupBox.Text = "Connection";
@@ -94,13 +96,16 @@
             this.connectionTable.Controls.Add(this.ipAddressLabel, 0, 0);
             this.connectionTable.Controls.Add(this.ipAddressTextbox, 1, 0);
             this.connectionTable.Controls.Add(this.panel1, 1, 1);
+            this.connectionTable.Controls.Add(this.autoReconnectCheckbox, 1, 2);
+            this.connectionTable.Controls.Add(this.autoReconnectLabel, 0, 2);
             this.connectionTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.connectionTable.Location = new System.Drawing.Point(8, 23);
             this.connectionTable.Name = "connectionTable";
-            this.connectionTable.RowCount = 2;
+            this.connectionTable.RowCount = 3;
             this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.connectionTable.Size = new System.Drawing.Size(455, 60);
+            this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.connectionTable.Size = new System.Drawing.Size(455, 83);
             this.connectionTable.TabIndex = 0;
             // 
             // ipAddressLabel
@@ -118,9 +123,9 @@
             // ipAddressTextbox
             // 
             this.ipAddressTextbox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ipAddressTextbox.Location = new System.Drawing.Point(100, 3);
+            this.ipAddressTextbox.Location = new System.Drawing.Point(129, 3);
             this.ipAddressTextbox.Name = "ipAddressTextbox";
-            this.ipAddressTextbox.Size = new System.Drawing.Size(352, 22);
+            this.ipAddressTextbox.Size = new System.Drawing.Size(323, 22);
             this.ipAddressTextbox.TabIndex = 1;
             // 
             // panel1
@@ -128,7 +133,7 @@
             this.panel1.AutoSize = true;
             this.panel1.Controls.Add(this.disconnectButton);
             this.panel1.Controls.Add(this.connectButton);
-            this.panel1.Location = new System.Drawing.Point(97, 28);
+            this.panel1.Location = new System.Drawing.Point(126, 28);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(206, 32);
@@ -153,6 +158,28 @@
             this.connectButton.Text = "Connect";
             this.connectButton.UseVisualStyleBackColor = true;
             this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
+            // 
+            // autoReconnectCheckbox
+            // 
+            this.autoReconnectCheckbox.AutoSize = true;
+            this.autoReconnectCheckbox.Dock = System.Windows.Forms.DockStyle.Left;
+            this.autoReconnectCheckbox.Location = new System.Drawing.Point(129, 63);
+            this.autoReconnectCheckbox.Name = "autoReconnectCheckbox";
+            this.autoReconnectCheckbox.Size = new System.Drawing.Size(18, 17);
+            this.autoReconnectCheckbox.TabIndex = 3;
+            this.autoReconnectCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // autoReconnectLabel
+            // 
+            this.autoReconnectLabel.AutoSize = true;
+            this.autoReconnectLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.autoReconnectLabel.Location = new System.Drawing.Point(3, 60);
+            this.autoReconnectLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.autoReconnectLabel.Name = "autoReconnectLabel";
+            this.autoReconnectLabel.Size = new System.Drawing.Size(108, 23);
+            this.autoReconnectLabel.TabIndex = 4;
+            this.autoReconnectLabel.Text = "Auto reconnect:";
+            this.autoReconnectLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // BmdVideohubEditorForm
             // 
@@ -186,5 +213,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button disconnectButton;
         private System.Windows.Forms.Button connectButton;
+        private System.Windows.Forms.CheckBox autoReconnectCheckbox;
+        private System.Windows.Forms.Label autoReconnectLabel;
     }
 }
