@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.Persistence;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,6 +45,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         public event ParameterlessChangeNotifierDelegate IpAddressChangingPCN;
         public event ParameterlessChangeNotifierDelegate IpAddressChangedPCN;
 
+        [PersistAs("ip_address")]
         private string ipAddress;
 
         public string IpAddress
