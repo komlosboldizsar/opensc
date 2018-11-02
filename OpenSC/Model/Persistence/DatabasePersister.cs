@@ -338,13 +338,14 @@ namespace OpenSC.Model.Persistence
         {
 
             int childElementCount = childElements.Count;
+            Type elementType = memberType.GetElementType();
 
-            if (memberType == typeof(int[]))
+            if (Type.GetTypeCode(elementType) != TypeCode.Object)
             {
-                int[] intArray = new int[childElementCount];
+                Array typedArray = Array.CreateInstance(elementType, childElementCount);
                 for (int i = 0; i < childElementCount; i++)
-                    intArray[i] = (int)deserializeXmlElement(typeof(int), childElements[i]);
-                return intArray;
+                    typedArray.SetValue(deserializeXmlElement(elementType, childElements[i]), i);
+                return typedArray;
             }
 
             object[] array = (object[])Activator.CreateInstance(memberType, new object[] { childElementCount });
