@@ -287,7 +287,7 @@ namespace BMD.Videohub
                         break;
                     case VHD_KEY_VIDEO_OUTPUTS:
                         if (int.TryParse(parts[1], out int outputCount))
-                            InputCount = outputCount;
+                            OutputCount = outputCount;
                         break;
                 }
             }
