@@ -97,7 +97,13 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         private void initVideohub()
         {
             videohub = new BMD.Videohub.BlackMagicVideohub(ipAddress);
+            videohub.ConnectionStateChanged += connectionStateChangedHandler;
             videohub.CrosspointChanged += crosspointChangedHandler;
+        }
+
+        private void connectionStateChangedHandler(bool state)
+        {
+            Connected = state;
         }
 
         private void crosspointChangedHandler(int output, int? input)
