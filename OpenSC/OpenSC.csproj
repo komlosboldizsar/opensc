@@ -366,6 +366,7 @@
     <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
     <Compile Include="Model\Persistence\XmlTagNamesAttribute.cs" />
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohub.cs" />
+    <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputSource.cs" />
     <Compile Include="Model\Routers\InputSourceSignal.cs" />
     <Compile Include="Model\Routers\IRouterInputSource.cs" />
     <Compile Include="Model\Routers\Router.cs" />

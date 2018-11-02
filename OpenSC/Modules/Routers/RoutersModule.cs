@@ -7,6 +7,8 @@ using OpenSC.Model.Persistence;
 using OpenSC.Model.Routers;
 using OpenSC.Model.Routers.BlackMagicDesign;
 using OpenSC.Model.Routers.Virtual;
+using OpenSC.Model.Variables;
+using OpenSC.Model.VTRs.DynamicTextFunctions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +31,7 @@ namespace OpenSC.Modules.Routers
 
         public void RegisterDynamicTextFunctions()
         {
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new RouterOutputSource());
         }
 
         public void RegisterDatabasePersisterSerializers()
