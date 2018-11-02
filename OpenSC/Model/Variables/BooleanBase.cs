@@ -14,10 +14,29 @@ namespace OpenSC.Model.Variables
 
         private readonly Color color;
 
-        public BooleanBase(string name, Color color)
+        private string description;
+
+        public string Description
+        {
+            get => description;
+            set
+            {
+                if (value == description)
+                    return;
+                description = value;
+                DescriptionChanged?.Invoke(this, description);
+                DescriptionChangedPCN?.Invoke();
+            }
+        }
+
+        public event DescriptionChangedDelegate DescriptionChanged;
+        public event ParameterlessChangeNotifierDelegate DescriptionChangedPCN;
+
+        public BooleanBase(string name, Color color, string description = "")
         {
             this.name = name;
             this.color = color;
+            this.description = description;
         }
 
         private bool currentState;
