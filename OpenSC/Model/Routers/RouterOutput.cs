@@ -119,16 +119,52 @@ namespace OpenSC.Model.Routers
 
         public string SourceName
         {
-            get => crosspoint?.SourceName;
+            get => GetSourceName();
+        }
+
+        public string GetSourceName(List<object> recursionChain = null)
+        {
+            if (crosspoint == null)
+                return null;
+            if (recursionChain == null)
+                recursionChain = new List<object>();
+            if (recursionChain.Contains(this))
+                return "(cyclic tieline)";
+            recursionChain.Add(this);
+            return crosspoint.GetSourceName(recursionChain);
         }
 
         public event RouterInputSourceSourceNameChanged SourceNameChanged;
 
         public bool RedTally =>
-            (crosspoint != null) ? crosspoint.RedTally : false;
+            GetRedTally();
 
         public bool GreenTally =>
-            (crosspoint != null) ? crosspoint.GreenTally : false;
+            GetGreenTally();
+
+        public bool GetRedTally(List<object> recursionChain = null)
+        {
+            if (crosspoint == null)
+                return false;
+            if (recursionChain == null)
+                recursionChain = new List<object>();
+            if (recursionChain.Contains(this))
+                return false;
+            recursionChain.Add(this);
+            return crosspoint.GetRedTally(recursionChain);
+        }
+
+        public bool GetGreenTally(List<object> recursionChain = null)
+        {
+            if (crosspoint == null)
+                return false;
+            if (recursionChain == null)
+                recursionChain = new List<object>();
+            if (recursionChain.Contains(this))
+                return false;
+            recursionChain.Add(this);
+            return crosspoint.GetGreenTally(recursionChain);
+        }
 
         public event RouterInputSourceTallyChanged RedTallyChanged;
         public event RouterInputSourceTallyChanged GreenTallyChanged;

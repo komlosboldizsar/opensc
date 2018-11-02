@@ -14,11 +14,14 @@ namespace OpenSC.Model.Routers
     {
 
         string SourceName { get; }
-
+        string GetSourceName(List<object> recursionChain);
         event RouterInputSourceSourceNameChanged SourceNameChanged;
 
         bool RedTally { get; }
         bool GreenTally { get; }
+
+        bool GetRedTally(List<object> recursionChain);
+        bool GetGreenTally(List<object> recursionChain);
 
         event RouterInputSourceTallyChanged RedTallyChanged;
         event RouterInputSourceTallyChanged GreenTallyChanged;

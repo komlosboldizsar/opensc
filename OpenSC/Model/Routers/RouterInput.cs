@@ -94,7 +94,19 @@ namespace OpenSC.Model.Routers
 
         public string SourceName
         {
-            get => source?.SourceName;
+            get => GetSourceName();
+        }
+
+        public string GetSourceName(List<object> recursionChain = null)
+        {
+            if (source == null)
+                return null;
+            if (recursionChain == null)
+                recursionChain = new List<object>();
+            if (recursionChain.Contains(this))
+                return "(cyclic tieline)";
+            recursionChain.Add(this);
+            return source.GetSourceName(recursionChain);
         }
 
         public event RouterInputSourceNameChanged SourceNameChanged;
@@ -109,6 +121,30 @@ namespace OpenSC.Model.Routers
 
         public bool GreenTally =>
             (source != null) ? source.GreenTally : false;
+
+        public bool GetRedTally(List<object> recursionChain = null)
+        {
+            if (source == null)
+                return false;
+            if (recursionChain == null)
+                recursionChain = new List<object>();
+            if (recursionChain.Contains(this))
+                return false;
+            recursionChain.Add(this);
+            return source.GetRedTally(recursionChain);
+        }
+
+        public bool GetGreenTally(List<object> recursionChain = null)
+        {
+            if (source == null)
+                return false;
+            if (recursionChain == null)
+                recursionChain = new List<object>();
+            if (recursionChain.Contains(this))
+                return false;
+            recursionChain.Add(this);
+            return source.GetGreenTally(recursionChain);
+        }
 
         public event RouterInputTallyChanged RedTallyChanged;
         public event RouterInputTallyChanged GreenTallyChanged;
