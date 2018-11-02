@@ -304,11 +304,22 @@ namespace OpenSC.Model.Persistence
 
         }
 
+        private static readonly Type[] PRIMITIVE_TYPES_NULL_IS_0 = new Type[]
+        {
+            typeof(int),
+            typeof(float),
+            typeof(double),
+            typeof(decimal)
+        };
+
         private object deserializeXmlElement(Type memberType, XmlElement xmlElement)
         {
 
-            if (xmlElement.IsEmpty)
-                return null;
+            if (memberType == typeof(string))
+                return xmlElement.InnerText;
+
+            if ((xmlElement.InnerText == string.Empty) && PRIMITIVE_TYPES_NULL_IS_0.Contains(memberType))
+                return 0;
 
             if (memberType.IsArray)
             {
