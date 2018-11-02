@@ -1,11 +1,7 @@
 ﻿using OpenSC.Model.Persistence;
 using OpenSC.Model.Variables;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenSC.Model.Signals
 {
@@ -29,6 +25,7 @@ namespace OpenSC.Model.Signals
         public virtual void Restored()
         {
             updateTallyBooleans();
+            restoreTallySources();
         }
 
         public event SignalIdChangingDelegate IdChanging;
@@ -115,6 +112,7 @@ namespace OpenSC.Model.Signals
             }
         }
 
+        #region Tallies
         public event SignalTallyChangingDelegate RedTallyChanging;
         public event SignalTallyChangedDelegate RedTallyChanged;
         public event ParameterlessChangeNotifierDelegate RedTallyChangingPCN;
@@ -160,7 +158,71 @@ namespace OpenSC.Model.Signals
                 GreenTallyChangedPCN?.Invoke();
             }
         }
+        #endregion
 
+        #region Tally sources
+        [PersistAs("red_tally_source")]
+        private string _redTallySource;
+
+        private IBoolean redTallySource;
+
+        public IBoolean RedTallySource
+        {
+            get => redTallySource;
+            set
+            {
+                if (value == redTallySource)
+                    return;
+                if (redTallySource != null)
+                    redTallySource.StateChanged -= null;
+                redTallySource = value;
+                _redTallySource = value?.Name;
+                if(redTallySource != null)
+                    redTallySource.StateChanged += redTallyChangedHandler;
+                RedTally = redTallySource.CurrentState;
+            }
+        }
+
+        private void redTallyChangedHandler(IBoolean boolean, bool newState)
+        {
+            RedTally = newState;
+        }
+
+        [PersistAs("green_tally_source")]
+        private string _greenTallySource;
+
+        private IBoolean greenTallySource;
+
+        public IBoolean GreenTallySource
+        {
+            get => greenTallySource;
+            set
+            {
+                if (value == greenTallySource)
+                    return;
+                if (greenTallySource != null)
+                    greenTallySource.StateChanged -= null;
+                greenTallySource = value;
+                _greenTallySource = value?.Name;
+                if (greenTallySource != null)
+                    greenTallySource.StateChanged += greenTallyChangedHandler;
+                GreenTally = greenTallySource.CurrentState;
+            }
+        }
+
+        private void greenTallyChangedHandler(IBoolean boolean, bool newState)
+        {
+            GreenTally = newState;
+        }
+
+        private void restoreTallySources()
+        {
+            RedTallySource = BooleanRegister.Instance[_redTallySource];
+            GreenTallySource = BooleanRegister.Instance[_greenTallySource];
+        }
+        #endregion
+
+        #region Tally booleans
         private IBoolean redTallyBoolean = null;
         private IBoolean greenTallyBoolean = null;
 
@@ -270,6 +332,7 @@ namespace OpenSC.Model.Signals
             }
 
         }
+        #endregion
 
     }
 
