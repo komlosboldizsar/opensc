@@ -181,9 +181,9 @@ namespace OpenSC.GUI.UMDs
             portDropDown.CreateAdapterAsDataSource(ports, port => port.Name, true, "(not connected)");
 
             // Dynamic text sources
-            ComboBoxAdapter<DynamicText> dynamicTextAdapter = new ComboBoxAdapter<DynamicText>(DynamicTextDatabase.Instance.ItemsAsList, dt => dt.Label, true, "(empty)");
+            IComboBoxAdapterFactory dynamicTextAdapterFactory = new ComboBoxAdapterFactory<DynamicText>(DynamicTextDatabase.Instance.ItemsAsList, dt => dt.Label, true, "(empty)");
             for (int i = 0; i < MAX_COLUMN_COUNT; i++)
-                columnDynamicTextSourceDropDowns[i].SetAdapterAsDataSource(dynamicTextAdapter);
+                columnDynamicTextSourceDropDowns[i].GetAdapterFromFactoryAsDataSource(dynamicTextAdapterFactory);
 
             // Dynamic text alignments
             Dictionary<TextAlignment, string> textAlignmentTranslations = new Dictionary<TextAlignment, string>()
@@ -192,10 +192,10 @@ namespace OpenSC.GUI.UMDs
                 { TextAlignment.Center, "center" },
                 { TextAlignment.Right, "right" }
             };
-            IComboBoxAdapter textAlignmentsAdapter = new EnumComboBoxAdapter<TextAlignment>(textAlignmentTranslations);
+            IComboBoxAdapterFactory textAlignmentsAdapterFactory = new EnumComboBoxAdapterFactory<TextAlignment>(textAlignmentTranslations);
 
             for (int i = 0; i < MAX_COLUMN_COUNT; i++)
-                columnAlignmentDropDowns[i].SetAdapterAsDataSource(textAlignmentsAdapter);
+                columnAlignmentDropDowns[i].GetAdapterFromFactoryAsDataSource(textAlignmentsAdapterFactory);
 
         }
 

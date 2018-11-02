@@ -111,13 +111,13 @@ namespace OpenSC.GUI.Signals
 
         private void initTallySourceDropDown()
         {
-            IComboBoxAdapter adapter = new ComboBoxAdapter<IBoolean>(
+            IComboBoxAdapterFactory adapterFactory = new ComboBoxAdapterFactory<IBoolean>(
                 BooleanRegister.Instance,
                 b => string.Format("{0}: {1}", b.Name, b.Description),
                 true,
                 "(not set)");
-            redTallySourceDropDown.SetAdapterAsDataSource(adapter);
-            greenTallySourceDropDown.SetAdapterAsDataSource(adapter);
+            redTallySourceDropDown.GetAdapterFromFactoryAsDataSource(adapterFactory);
+            greenTallySourceDropDown.GetAdapterFromFactoryAsDataSource(adapterFactory);
         }
 
     }
