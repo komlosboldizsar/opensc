@@ -45,6 +45,8 @@ namespace OpenSC.Model.Variables
         {
             get
             {
+                if (string.IsNullOrEmpty(id))
+                    return null;
                 if (!registeredBooleans.TryGetValue(id, out IBoolean foundBoolean))
                     return null;
                 return foundBoolean;
