@@ -1,6 +1,8 @@
 ﻿using OpenSC.Model.Persistence;
+using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +27,9 @@ namespace OpenSC.Model.Signals
     {
 
         public virtual void Restored()
-        { }
+        {
+            updateTallyBooleans();
+        }
 
         public event SignalIdChangingDelegate IdChanging;
         public event SignalIdChangedDelegate IdChanged;
@@ -46,6 +50,7 @@ namespace OpenSC.Model.Signals
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
                 IdChangedPCN?.Invoke();
+                createTallyBooleansAfterIdChange();
             }
         }
 
@@ -154,6 +159,116 @@ namespace OpenSC.Model.Signals
                 GreenTallyChanged?.Invoke(this, oldState, value);
                 GreenTallyChangedPCN?.Invoke();
             }
+        }
+
+        private IBoolean redTallyBoolean = null;
+        private IBoolean greenTallyBoolean = null;
+
+        private void createBooleans()
+        {
+            redTallyBoolean = new TallyBoolean(this, TallyBoolean.TallyColor.Red);
+            greenTallyBoolean = new TallyBoolean(this, TallyBoolean.TallyColor.Green);
+            BooleanRegister.Instance.RegisterBoolean(redTallyBoolean);
+            BooleanRegister.Instance.RegisterBoolean(greenTallyBoolean);
+        }
+
+        private void createTallyBooleansAfterIdChange()
+        {
+            if ((redTallyBoolean == null) || (greenTallyBoolean == null))
+                createBooleans();
+        }
+
+        private void updateTallyBooleans()
+        {
+            (redTallyBoolean as TallyBoolean)?.Update();
+            (greenTallyBoolean as TallyBoolean)?.Update();
+        }
+
+        private class TallyBoolean : BooleanBase
+        {
+
+            private Signal signal;
+
+            private TallyColor color;
+
+            public TallyBoolean(Signal signal, TallyColor color):
+                base(getName(signal, color), getColor(color), getDescription(signal, color))
+            {
+                this.signal = signal;
+                this.color = color;
+                signal.IdChanged += idChangedHandler;
+                signal.NameChanged += nameChangedHandler;
+                switch (color)
+                {
+                    case TallyColor.Red:
+                        CurrentState = signal.RedTally;
+                        signal.RedTallyChanged += tallyChangedHandler;
+                        break;
+                    case TallyColor.Green:
+                        CurrentState = signal.GreenTally;
+                        signal.GreenTallyChanged += tallyChangedHandler;
+                        break;
+                }
+            }
+
+            public void Update()
+            {
+                Name = getName(signal, color);
+                Description = getDescription(signal, color);
+            }
+
+            private void tallyChangedHandler(Signal signal, bool oldState, bool newState)
+            {
+                CurrentState = newState;
+            }
+
+            private void idChangedHandler(Signal signal, int oldValue, int newValue)
+            {
+                Name = getName(signal, color);
+                Description = getDescription(signal, color);
+            }
+
+            private void nameChangedHandler(Signal signal, string oldName, string newName)
+            {
+                Description = getDescription(signal, color);
+            }
+
+            private static string getName(Signal signal, TallyColor color)
+                =>  string.Format("signal.{0}.{1}tally", signal.ID, getColorString(color));
+
+            private static Color getColor(TallyColor color)
+            {
+                switch (color)
+                {
+                    case TallyColor.Red:
+                        return Color.Red;
+                    case TallyColor.Green:
+                        return Color.Green;
+                }
+                return Color.White;
+            }
+
+            private static string getDescription(Signal signal, TallyColor color)
+                => string.Format("Signal [(#{0}) {1}] has {2} tally.", signal.ID, signal.Name, getColorString(color));
+
+            private static string getColorString(TallyColor color)
+            {
+                switch (color)
+                {
+                    case TallyColor.Red:
+                        return "red";
+                    case TallyColor.Green:
+                        return "green";
+                }
+                return "unknown";
+            }
+
+            public enum TallyColor
+            {
+                Red,
+                Green
+            }
+
         }
 
     }
