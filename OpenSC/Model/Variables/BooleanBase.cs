@@ -54,6 +54,7 @@ namespace OpenSC.Model.Variables
         }
 
         public event BooleanStateChanged StateChanged;
+        public event ParameterlessChangeNotifierDelegate StateChangedPCN;
 
     }
 
