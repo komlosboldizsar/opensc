@@ -39,7 +39,7 @@ namespace OpenSC.Model.Variables
         }
         #endregion
 
-        private Dictionary<string, IBoolean> registeredBooleans;
+        private Dictionary<string, IBoolean> registeredBooleans = new Dictionary<string, IBoolean>();
 
         public IBoolean this[string id]
         {
