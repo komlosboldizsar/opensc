@@ -715,6 +715,10 @@
       <Project>{f8a1578f-bebe-4bbe-ab11-a0496bdb746a}</Project>
       <Name>Bespoke.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BMD.Videohub\BMD.Videohub.csproj">
+      <Project>{eadc56a4-b18d-4742-9855-c5142e90aa19}</Project>
+      <Name>BMD.Videohub</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
