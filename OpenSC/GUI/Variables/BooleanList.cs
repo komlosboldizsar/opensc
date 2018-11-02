@@ -29,12 +29,16 @@ namespace OpenSC.GUI.Variables
 
             CustomDataGridViewColumnDescriptorBuilder<IBoolean> builder;
 
+            // Custom styles
+            DataGridViewCellStyle stateColumnStyle = BOLD_TEXT_CELL_STYLE.Clone();
+            stateColumnStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
             // Column: name
             builder = GetColumnDescriptorBuilderForTable<IBoolean>();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Name");
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
-            builder.Width(120);
+            builder.Width(160);
             builder.UpdaterMethod((boolean, cell) => { cell.Value = boolean.Name; });
             builder.AddChangeEvent(nameof(IBoolean.NameChangedPCN));
             builder.BuildAndAdd();
@@ -52,6 +56,7 @@ namespace OpenSC.GUI.Variables
             builder = GetColumnDescriptorBuilderForTable<IBoolean>();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("State");
+            builder.CellStyle(stateColumnStyle);
             builder.Width(80);
             builder.UpdaterMethod((boolean, cell) => {
                 bool booleanCurrentState = boolean.CurrentState;
