@@ -94,8 +94,12 @@ namespace BMD.Videohub
                 if (value == connected)
                     return;
                 connected = value;
+                ConnectionStateChanged?.Invoke(connected);
             }
         }
+
+        public delegate void ConnectionStateChangedDelegate(bool state);
+        public event ConnectionStateChangedDelegate ConnectionStateChanged;
 
         public void Connect()
         {
