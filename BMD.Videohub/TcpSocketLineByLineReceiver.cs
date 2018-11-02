@@ -6,7 +6,7 @@ using System.Threading;
 namespace BMD.Videohub
 {
 
-    public class TcpSocketLineByLineReceiver : IDisposable
+    internal class TcpSocketLineByLineReceiver : IDisposable
     {
 
         private Socket socket = new Socket(SocketType.Stream, ProtocolType.Tcp);

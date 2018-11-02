@@ -3,7 +3,7 @@
 namespace BMD.Videohub
 {
 
-    public static class SocketHelpers
+    internal static class SocketHelpers
     {
 
         // https://stackoverflow.com/a/722265
