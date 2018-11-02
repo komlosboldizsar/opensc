@@ -140,29 +140,40 @@ namespace BMD.Videohub
         private void receiveCallback(IAsyncResult ar)
         {
 
-            int charsRead = socket.EndReceive(ar);
-            string receivedText = Encoding.ASCII.GetString(buffer, 0, charsRead);
-            bufferBuilder.Append(receivedText);
-            string totalText = bufferBuilder.ToString();
-            totalText = totalText.Replace("\r", "");
-            bufferBuilder.Clear();
-
-            string[] parts = totalText.Split('\n');
-            for (int i = 0; i < parts.Length; i++)
+            try
             {
-                if (i == parts.Length - 1)
+                int charsRead = socket.EndReceive(ar);
+                string receivedText = Encoding.ASCII.GetString(buffer, 0, charsRead);
+                bufferBuilder.Append(receivedText);
+                string totalText = bufferBuilder.ToString();
+                totalText = totalText.Replace("\r", "");
+                bufferBuilder.Clear();
+
+                string[] parts = totalText.Split('\n');
+                for (int i = 0; i < parts.Length; i++)
                 {
-                    if (parts[i] != string.Empty)
-                        bufferBuilder.Append(parts[i]);
-                }
-                else
-                {
-                    processReceivedLine(parts[i]);
+                    if (i == parts.Length - 1)
+                    {
+                        if (parts[i] != string.Empty)
+                            bufferBuilder.Append(parts[i]);
+                    }
+                    else
+                    {
+                        processReceivedLine(parts[i]);
+                    }
+
                 }
 
+                socketReceive();
             }
-
-            socketReceive();
+            catch (SocketException)
+            {
+                Connected = false;
+            }
+            catch (ObjectDisposedException)
+            {
+                Connected = false;
+            }
 
         }
 
