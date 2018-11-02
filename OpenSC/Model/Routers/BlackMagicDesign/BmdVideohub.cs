@@ -58,6 +58,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
                 IpAddressChanging?.Invoke(this, oldIpAddress, value);
                 IpAddressChangingPCN?.Invoke();
                 ipAddress = value;
+                videohub.IpAddress = value;
                 IpAddressChanged?.Invoke(this, oldIpAddress, value);
                 IpAddressChangedPCN?.Invoke();
             }
