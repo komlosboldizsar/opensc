@@ -63,6 +63,8 @@ namespace OpenSC.Model.Routers
                 if(source != null)
                 {
                     source.SourceNameChanged -= sourceNameChangedHandler;
+                    source.RedTallyChanged -= sourceRedTallyChangedHandler;
+                    source.GreenTallyChanged -= sourceGreenTallyChangedHandler;
                 }
 
                 IRouterInputSource oldSource = source;
@@ -70,11 +72,16 @@ namespace OpenSC.Model.Routers
 
                 RouterInputSourceChanged?.Invoke(this, oldSource, value);
                 RouterInputSourceChangedPCN?.Invoke();
+
                 SourceNameChanged?.Invoke(this, source?.SourceName);
+                RedTallyChanged?.Invoke(this, (source?.RedTally == true));
+                GreenTallyChanged?.Invoke(this, (source?.GreenTally == true));
 
                 if (source != null)
                 {
-                    source.SourceNameChanged += sourceNameChangedHandler; ;
+                    source.SourceNameChanged += sourceNameChangedHandler;
+                    source.RedTallyChanged += sourceRedTallyChangedHandler;
+                    source.GreenTallyChanged += sourceGreenTallyChangedHandler;
                 }
 
             }
@@ -148,6 +155,16 @@ namespace OpenSC.Model.Routers
 
         public event RouterInputTallyChanged RedTallyChanged;
         public event RouterInputTallyChanged GreenTallyChanged;
+
+        private void sourceRedTallyChangedHandler(IRouterInputSource inputSource, bool newState)
+        {
+            RedTallyChanged?.Invoke(this, newState);
+        }
+
+        private void sourceGreenTallyChangedHandler(IRouterInputSource inputSource, bool newState)
+        {
+            GreenTallyChanged?.Invoke(this, newState);
+        }
 
     }
 
