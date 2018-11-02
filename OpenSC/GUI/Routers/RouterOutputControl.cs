@@ -94,6 +94,13 @@ namespace OpenSC.GUI.Routers
 
         private void updateLabel()
         {
+
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => updateLabel()));
+                return;
+            }
+
             if(Output.Crosspoint == null)
             {
                 label.Text = "?";
@@ -102,6 +109,7 @@ namespace OpenSC.GUI.Routers
             label.Text = string.Format("{0}\r\n({1})",
                 Output.Crosspoint.Name,
                 ((Output.SourceName != null) ? Output.SourceName : "-"));
+
         }
 
     }
