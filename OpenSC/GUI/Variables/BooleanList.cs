@@ -34,7 +34,7 @@ namespace OpenSC.GUI.Variables
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Name");
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
-            builder.Width(50);
+            builder.Width(120);
             builder.UpdaterMethod((boolean, cell) => { cell.Value = boolean.Name; });
             builder.AddChangeEvent(nameof(IBoolean.NameChangedPCN));
             builder.BuildAndAdd();
@@ -43,7 +43,7 @@ namespace OpenSC.GUI.Variables
             builder = GetColumnDescriptorBuilderForTable<IBoolean>();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Description");
-            builder.Width(250);
+            builder.Width(350);
             builder.UpdaterMethod((boolean, cell) => { cell.Value = boolean.Description; });
             builder.AddChangeEvent(nameof(IBoolean.DescriptionChangedPCN));
             builder.BuildAndAdd();
@@ -52,7 +52,7 @@ namespace OpenSC.GUI.Variables
             builder = GetColumnDescriptorBuilderForTable<IBoolean>();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("State");
-            builder.Width(50);
+            builder.Width(80);
             builder.UpdaterMethod((boolean, cell) => {
                 bool booleanCurrentState = boolean.CurrentState;
                 cell.Value = booleanCurrentState ? "- on -" : "";
