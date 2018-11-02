@@ -79,6 +79,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             {
                 DataGridViewComboBoxCell typedCell = (DataGridViewComboBoxCell)cell;
                 typedCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.DropDownButton;
+                typedCell.ValueMember = "Value";
+                typedCell.DisplayMember = "Label";
                 typedCell.Items.AddRange(columnDescriptor.DropDownPopulatorMethod?.Invoke(item, cell));
             }
 

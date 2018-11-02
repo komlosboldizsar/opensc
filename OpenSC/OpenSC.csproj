@@ -76,6 +76,7 @@
     <Compile Include="GUI\GeneralComponents\DropDowns\ComboBoxAdapterHelpers.cs" />
     <Compile Include="GUI\GeneralComponents\DropDowns\EnumComboBoxAdapter.cs" />
     <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapter.cs" />
+    <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridViewComboBoxItem.cs" />
     <Compile Include="GUI\ModelEditorFormTypeRegister.cs" />
     <Compile Include="GUI\GeneralComponents\GrowLabel.cs">
       <SubType>Component</SubType>
