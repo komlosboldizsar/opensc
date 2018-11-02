@@ -67,7 +67,7 @@
             this.connectionPanel.Location = new System.Drawing.Point(3, 97);
             this.connectionPanel.Name = "connectionPanel";
             this.connectionPanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
-            this.connectionPanel.Size = new System.Drawing.Size(471, 104);
+            this.connectionPanel.Size = new System.Drawing.Size(471, 98);
             this.connectionPanel.TabIndex = 2;
             // 
             // connectionGroupBox
@@ -79,7 +79,7 @@
             this.connectionGroupBox.Location = new System.Drawing.Point(0, 0);
             this.connectionGroupBox.Name = "connectionGroupBox";
             this.connectionGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.connectionGroupBox.Size = new System.Drawing.Size(471, 97);
+            this.connectionGroupBox.Size = new System.Drawing.Size(471, 91);
             this.connectionGroupBox.TabIndex = 0;
             this.connectionGroupBox.TabStop = false;
             this.connectionGroupBox.Text = "Connection";
@@ -100,7 +100,7 @@
             this.connectionTable.RowCount = 2;
             this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.connectionTable.Size = new System.Drawing.Size(455, 66);
+            this.connectionTable.Size = new System.Drawing.Size(455, 60);
             this.connectionTable.TabIndex = 0;
             // 
             // ipAddressLabel
@@ -128,7 +128,8 @@
             this.panel1.AutoSize = true;
             this.panel1.Controls.Add(this.disconnectButton);
             this.panel1.Controls.Add(this.connectButton);
-            this.panel1.Location = new System.Drawing.Point(100, 31);
+            this.panel1.Location = new System.Drawing.Point(97, 28);
+            this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(206, 32);
             this.panel1.TabIndex = 2;
