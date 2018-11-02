@@ -65,7 +65,6 @@
             this.addDynamicTextButton.TabIndex = 1;
             this.addDynamicTextButton.Text = "Add dynamic text";
             this.addDynamicTextButton.UseVisualStyleBackColor = true;
-            this.addDynamicTextButton.Click += new System.EventHandler(this.addDynamicTextButton_Click);
             // 
             // DynamicTextList
             // 
