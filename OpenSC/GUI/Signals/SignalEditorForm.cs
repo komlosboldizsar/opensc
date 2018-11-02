@@ -1,5 +1,6 @@
 ﻿using OpenSC.GUI.GeneralComponents.DropDowns;
 using OpenSC.Model.Signals;
+using OpenSC.Model.Variables;
 using System;
 using System.Windows.Forms;
 
@@ -39,6 +40,7 @@ namespace OpenSC.GUI.Signals
         {
             InitializeComponent();
             initCategoryDropDown();
+            initTallySourceDropDown();
             AddingNew = (signal == null);
             this.signal = (signal != null) ? signal : new Signal();
         }
@@ -50,6 +52,8 @@ namespace OpenSC.GUI.Signals
             idNumericField.Value = (addingNew ? SignalDatabases.Signals.NextValidId() : signal.ID);
             nameTextBox.Text = signal.Name;
             categoryDropDown.SelectByValue(signal.Category);
+            redTallySourceDropDown.SelectByValue(signal.RedTallySource);
+            greenTallySourceDropDown.SelectByValue(signal.GreenTallySource);
         }
 
         protected sealed override bool saveData()
@@ -92,6 +96,8 @@ namespace OpenSC.GUI.Signals
             signal.ID = (int)idNumericField.Value;
             signal.Name = nameTextBox.Text;
             signal.Category = categoryDropDown.SelectedValue as SignalCategory;
+            signal.RedTallySource = redTallySourceDropDown.SelectedValue as IBoolean;
+            signal.GreenTallySource = greenTallySourceDropDown.SelectedValue as IBoolean;
         }
 
         private void initCategoryDropDown()
@@ -101,6 +107,17 @@ namespace OpenSC.GUI.Signals
                 category => string.Format("(#{0}) {1}", category.ID, category.Name),
                 true,
                 "(not associated)");
+        }
+
+        private void initTallySourceDropDown()
+        {
+            IComboBoxAdapter adapter = new ComboBoxAdapter<IBoolean>(
+                BooleanRegister.Instance,
+                b => string.Format("{0}: {1}", b.Name, b.Description),
+                true,
+                "(not set)");
+            redTallySourceDropDown.SetAdapterAsDataSource(adapter);
+            greenTallySourceDropDown.SetAdapterAsDataSource(adapter);
         }
 
     }
