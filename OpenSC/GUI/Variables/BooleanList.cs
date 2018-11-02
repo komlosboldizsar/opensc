@@ -57,7 +57,7 @@ namespace OpenSC.GUI.Variables
                 cell.Value = booleanCurrentState ? "- on -" : "";
                 cell.Style.BackColor = booleanCurrentState ? boolean.Color : OFF_COLOR;
             });
-            builder.AddChangeEvent(nameof(DynamicText.CurrentTextChangedPCN));
+            builder.AddChangeEvent(nameof(IBoolean.StateChangedPCN));
             builder.BuildAndAdd();
 
             // Bind database
