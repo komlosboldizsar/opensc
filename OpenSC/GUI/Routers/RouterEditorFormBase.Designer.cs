@@ -335,16 +335,16 @@
         private System.Windows.Forms.TextBox nameTextBox;
         private System.Windows.Forms.NumericUpDown idNumericField;
         private System.Windows.Forms.TabControl tabControl;
-        private System.Windows.Forms.TabPage baseDataTabPage;
         private System.Windows.Forms.TabPage inputsTabPage;
         private System.Windows.Forms.DataGridView inputsTable;
-        private System.Windows.Forms.Panel inputsButtonsPanel;
         private System.Windows.Forms.Button addInputButton;
         private System.Windows.Forms.TabPage outputsTabPage;
         private System.Windows.Forms.DataGridView outputsTable;
-        private System.Windows.Forms.Panel outputsButtonsPanel;
         private System.Windows.Forms.Button addOutputButton;
         private System.Windows.Forms.Panel outputsTableContainerPanel;
         private System.Windows.Forms.Panel inputsTableContainerPanel;
+        protected System.Windows.Forms.TabPage baseDataTabPage;
+        protected System.Windows.Forms.Panel inputsButtonsPanel;
+        protected System.Windows.Forms.Panel outputsButtonsPanel;
     }
 }
