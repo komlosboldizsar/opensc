@@ -19,6 +19,17 @@ namespace OpenSC.Model.Routers
     public class RouterOutput : IRouterInputSource
     {
 
+        public RouterOutput()
+        { }
+
+        public RouterOutput(string name, Router router, int index)
+        {
+            this.name = name;
+            this.Router = router;
+            this.Index = index;
+            createBooleans();
+        }
+
         public void Restored()
         {
             createBooleans();

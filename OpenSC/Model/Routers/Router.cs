@@ -122,11 +122,7 @@ namespace OpenSC.Model.Routers
         public void AddInput()
         {
             int index = inputs.Count;
-            inputs.Add(new RouterInput() {
-                Router = this,
-                Index = index,
-                Name = string.Format("Input #{0}", index + 1)
-            });
+            inputs.Add(new RouterInput(string.Format("Input #{0}", index + 1), this, index));
         }
 
         public void RemoveInput(RouterInput input)
@@ -174,12 +170,7 @@ namespace OpenSC.Model.Routers
         public void AddOutput()
         {
             int index = outputs.Count;
-            outputs.Add(new RouterOutput()
-            {
-                Router = this,
-                Index = index,
-                Name = string.Format("Output #{0}", index + 1)
-            });
+            outputs.Add(new RouterOutput(string.Format("Output #{0}", index + 1), this, index));
         }
 
         public void RemoveOutput(RouterOutput output)

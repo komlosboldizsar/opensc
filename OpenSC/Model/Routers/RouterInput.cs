@@ -18,6 +18,16 @@ namespace OpenSC.Model.Routers
     public class RouterInput
     {
 
+        public RouterInput()
+        { }
+
+        public RouterInput(string name, Router router, int index)
+        {
+            this.name = name;
+            this.Router = router;
+            this.Index = index;
+        }
+
         public void Restored()
         { }
 
