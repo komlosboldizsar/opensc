@@ -147,8 +147,9 @@ namespace OpenSC.GUI.UMDs
             ComboBox comboBox = new ComboBox();
             comboBox.Width = 280;
             comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox.CreateAdapterAsDataSource(BooleanRegister.Instance, b => string.Format("{0}: {1}", b.Name, b.Description), true, "(not set)");
             talliesTable.Controls.Add(comboBox, 1, index);
+
+            comboBox.CreateAdapterAsDataSource(BooleanRegister.Instance, b => string.Format("{0}: {1}", b.Name, b.Description), true, "(not set)");
 
             tallySourceDropDowns[index] = comboBox;
 
