@@ -1,5 +1,7 @@
-﻿using System;
+﻿using OpenSC.Model.Variables;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,10 +12,17 @@ namespace OpenSC.Model.Routers
     public delegate void RouterOutputNameChanged(RouterOutput output, string oldName, string newName);
     public delegate void RouterOutputNameChangedPCN();
 
+    public delegate void RouterOutputIndexChangedDelegate(RouterOutput output, int oldIndex, int newIndex);
+
     public delegate void RouterCrosspointChangedDelegate(RouterOutput output, RouterInput newInput);
 
     public class RouterOutput : IRouterInputSource
     {
+
+        public void Restored()
+        {
+            createBooleans();
+        }
 
         private string name;
 
@@ -43,8 +52,19 @@ namespace OpenSC.Model.Routers
         public int Index
         {
             get { return index; }
-            internal set { index = value; }
+            internal set
+            {
+                if (value == index)
+                    return;
+                int oldIndex = index;
+                index = value;
+                IndexChanged?.Invoke(this, oldIndex, value);
+                IndexChangedPCN?.Invoke();
+            }
         }
+
+        public event RouterOutputIndexChangedDelegate IndexChanged;
+        public event ParameterlessChangeNotifierDelegate IndexChangedPCN;
 
         private RouterInput crosspoint;
 
@@ -136,6 +156,7 @@ namespace OpenSC.Model.Routers
 
         public event RouterInputSourceSourceNameChanged SourceNameChanged;
 
+        #region Tallies
         public bool RedTally =>
             GetRedTally();
 
@@ -168,6 +189,122 @@ namespace OpenSC.Model.Routers
 
         public event RouterInputSourceTallyChanged RedTallyChanged;
         public event RouterInputSourceTallyChanged GreenTallyChanged;
+        #endregion
+
+        #region Tally booleans
+        private IBoolean redTallyBoolean = null;
+        private IBoolean greenTallyBoolean = null;
+
+        private void createBooleans()
+        {
+            redTallyBoolean = new TallyBoolean(this, TallyBoolean.TallyColor.Red);
+            greenTallyBoolean = new TallyBoolean(this, TallyBoolean.TallyColor.Green);
+            BooleanRegister.Instance.RegisterBoolean(redTallyBoolean);
+            BooleanRegister.Instance.RegisterBoolean(greenTallyBoolean);
+        }
+        
+        private class TallyBoolean : BooleanBase
+        {
+
+            private RouterOutput output;
+
+            private TallyColor color;
+
+            public TallyBoolean(RouterOutput output, TallyColor color) :
+                base(getName(output, color), getColor(color), getDescription(output, color))
+            {
+                this.output = output;
+                this.color = color;
+                output.IndexChanged += indexChangedHandler;
+                output.NameChanged += nameChangedHandler;
+                output.Router.IdChanged += routerIdChangedHandler;
+                output.Router.NameChanged += routerNameChangedHandler;
+                switch (color)
+                {
+                    case TallyColor.Red:
+                        CurrentState = output.RedTally;
+                        output.RedTallyChanged += tallyChangedHandler;
+                        break;
+                    case TallyColor.Green:
+                        CurrentState = output.GreenTally;
+                        output.GreenTallyChanged += tallyChangedHandler;
+                        break;
+                }
+            }
+
+            public void Update()
+            {
+                Name = getName(output, color);
+                Description = getDescription(output, color);
+            }
+
+            private void tallyChangedHandler(IRouterInputSource output, bool newState)
+            {
+                CurrentState = newState;
+            }
+
+            private void indexChangedHandler(RouterOutput output, int oldIndex, int newIndex)
+            {
+                Name = getName(output, color);
+                Description = getDescription(output, color);
+            }
+
+            private void nameChangedHandler(RouterOutput output, string oldName, string newName)
+            {
+                Description = getDescription(output, color);
+            }
+            private void routerIdChangedHandler(Router router, int oldValue, int newValue)
+            {
+                Name = getName(output, color);
+                Description = getDescription(output, color);
+            }
+
+            private void routerNameChangedHandler(Router router, string oldName, string newName)
+            {
+                Description = getDescription(output, color);
+            }
+
+            private static string getName(RouterOutput output, TallyColor color)
+                => string.Format("router.{0}.output.{1}.{2}tally", output.Router.ID, output.Index, getColorString(color));
+
+            private static Color getColor(TallyColor color)
+            {
+                switch (color)
+                {
+                    case TallyColor.Red:
+                        return Color.Red;
+                    case TallyColor.Green:
+                        return Color.Green;
+                }
+                return Color.White;
+            }
+
+            private static string getDescription(RouterOutput output, TallyColor color)
+                => string.Format("The signal switched to the [(#{2}) {3}] output of router [(#{0}) {1}] has {4} tally.",
+                    output.Router.ID, output.Router.Name,
+                    (output.Index + 1), output.Name,
+                    getColorString(color));
+
+            private static string getColorString(TallyColor color)
+            {
+                switch (color)
+                {
+                    case TallyColor.Red:
+                        return "red";
+                    case TallyColor.Green:
+                        return "green";
+                }
+                return "unknown";
+            }
+
+            public enum TallyColor
+            {
+                Red,
+                Green
+            }
+
+        }
+        #endregion
 
     }
 

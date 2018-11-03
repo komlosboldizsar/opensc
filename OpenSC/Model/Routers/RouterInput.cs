@@ -18,6 +18,9 @@ namespace OpenSC.Model.Routers
     public class RouterInput
     {
 
+        public void Restored()
+        { }
+
         private string name;
 
         public string Name
