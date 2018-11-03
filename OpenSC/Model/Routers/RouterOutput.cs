@@ -297,7 +297,7 @@ namespace OpenSC.Model.Routers
             }
 
             private static string getName(RouterOutput output, TallyColor color)
-                => string.Format("router.{0}.output.{1}.{2}tally", output.Router.ID, output.Index, getColorString(color));
+                => string.Format("router.{0}.output.{1}.{2}tally", output.Router.ID, (output.Index + 1), getColorString(color));
 
             private static Color getColor(TallyColor color)
             {
