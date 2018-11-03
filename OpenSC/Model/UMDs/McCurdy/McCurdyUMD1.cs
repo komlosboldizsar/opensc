@@ -58,11 +58,16 @@ namespace OpenSC.Model.UMDs.McCurdy
                 return;
             var d = new Datagram()
             {
-                Text = currentText,
+                Text = getTextToSend(),
                 ValidUntil = DateTime.Now + TimeSpan.FromSeconds(5),
                 Tallies = TallyStates
             };
             port.SendData(address, d);
+        }
+
+        protected virtual string getTextToSend()
+        {
+            return currentText;
         }
 
         private void updateCurrentText()
@@ -143,6 +148,11 @@ namespace OpenSC.Model.UMDs.McCurdy
                 columnCount = value;
                 updateCurrentText();
             }
+        }
+
+        public virtual int TotalWidth
+        {
+            get => 160;
         }
 
         [PersistAs("column_widths")]

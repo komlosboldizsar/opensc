@@ -246,6 +246,12 @@
     <Compile Include="GUI\ModelEditorFormBase.Designer.cs">
       <DependentUpon>ModelEditorFormBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\UMDs\McCurdyUmd1TEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\UMDs\McCurdyUmd1TEditorForm.Designer.cs">
+      <DependentUpon>McCurdyUmd1TEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\UMDs\Tsl31UmdPortEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -404,6 +410,8 @@
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerTotalSeconds.cs" />
     <Compile Include="Model\TypeCodeAttribute.cs" />
     <Compile Include="Model\TypeLabelAttribute.cs" />
+    <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1T.cs" />
+    <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1TType.cs" />
     <Compile Include="Model\Variables\BooleanBase.cs" />
     <Compile Include="Model\Variables\BooleanRegister.cs" />
     <Compile Include="Model\Variables\DynamicText.cs" />

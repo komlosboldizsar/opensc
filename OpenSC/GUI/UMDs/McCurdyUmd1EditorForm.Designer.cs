@@ -98,6 +98,7 @@
             // 
             this.dynamicDataTabPage.Controls.Add(this.dynamicSourcesGroupBox);
             this.dynamicDataTabPage.Controls.Add(this.layoutGroupBox);
+            this.dynamicDataTabPage.Size = new System.Drawing.Size(481, 260);
             // 
             // customElementsPanel
             // 

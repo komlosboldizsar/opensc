@@ -59,7 +59,7 @@ namespace OpenSC.GUI.UMDs
             useStaticTextCheckBox.Checked = umd.UseStaticText;
 
             createTallySourceSettingTab();
-            for (int i = 0; i < UMD.MAX_TALLIES; i++)
+            for (int i = 0; i < umd.Type.TallyCount; i++)
                 tallySourceDropDowns[i]?.SelectByValue(umd.GetTallySource(i));
 
         }
@@ -108,7 +108,7 @@ namespace OpenSC.GUI.UMDs
             umd.StaticText = staticTextTextBox.Text;
             umd.UseStaticText = useStaticTextCheckBox.Checked;
 
-            for (int i = 0; i < UMD.MAX_TALLIES; i++)
+            for (int i = 0; i < umd.Type.TallyCount; i++)
                 umd.SetTallySource(i, tallySourceDropDowns[i]?.SelectedValue as IBoolean);
 
         }

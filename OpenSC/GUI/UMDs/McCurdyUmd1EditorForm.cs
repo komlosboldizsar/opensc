@@ -33,7 +33,7 @@ namespace OpenSC.GUI.UMDs
 
         }
 
-        public IModelEditorForm<UMD> GetInstance(UMD modelInstance)
+        public virtual IModelEditorForm<UMD> GetInstance(UMD modelInstance)
         {
             return new McCurdyUmd1EditorForm(modelInstance);
         }
@@ -240,7 +240,7 @@ namespace OpenSC.GUI.UMDs
 
         private void updateColumnWidths()
         {
-            int totalColumnWidth = 160;
+            int totalColumnWidth = (umd as McCurdyUMD1).TotalWidth;
             if (useSeparatorBarCheckBox.Checked)
                 totalColumnWidth -= 11 * (columnCount - 1);
             for (int i = 0; i < columnCount - 1; i++)
