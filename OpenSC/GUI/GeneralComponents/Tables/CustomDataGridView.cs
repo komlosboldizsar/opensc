@@ -39,6 +39,17 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             init();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                if (boundCollection != null)
+                    boundCollection.ItemsChanged -= itemsChangedHandler;
+                boundCollection = null;
+            }
+        }
+
         private void init()
         {
             CellContentClick += cellContentClickHandler;
