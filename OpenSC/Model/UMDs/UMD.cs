@@ -34,7 +34,9 @@ namespace OpenSC.Model.UMDs
         protected abstract void update();
 
         public virtual void Restored()
-        { }
+        {
+            restoreTallySources();
+        }
 
         public UMD()
         { }
@@ -167,7 +169,7 @@ namespace OpenSC.Model.UMDs
         private void restoreTallySources()
         {
             string[] restoredTallySourceNames = _tallySources;
-            for (int i = 0; i < MAX_TALLIES; i++) {
+            for (int i = 0; i < Type.TallyCount; i++) {
                 string sourceName = restoredTallySourceNames[i];
                 IBoolean tallySource = BooleanRegister.Instance[sourceName];
                 SetTallySource(i, tallySource);
