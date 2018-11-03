@@ -58,6 +58,13 @@ namespace OpenSC.Model.Routers
 
         public Router Router { get; internal set; }
 
+        public void RemovedFromRouter(Router router)
+        {
+            if (router != Router)
+                return;
+            removeBooleans();
+        }
+
         private int index;
 
         public int Index
@@ -213,7 +220,21 @@ namespace OpenSC.Model.Routers
             BooleanRegister.Instance.RegisterBoolean(redTallyBoolean);
             BooleanRegister.Instance.RegisterBoolean(greenTallyBoolean);
         }
-        
+
+        private void removeBooleans()
+        {
+            if (redTallyBoolean != null)
+            {
+                BooleanRegister.Instance.UnregisterBoolean(redTallyBoolean);
+                redTallyBoolean = null;
+            }
+            if (greenTallyBoolean != null)
+            {
+                BooleanRegister.Instance.UnregisterBoolean(greenTallyBoolean);
+                greenTallyBoolean = null;
+            }
+        }
+
         private class TallyBoolean : BooleanBase
         {
 

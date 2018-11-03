@@ -128,6 +128,7 @@ namespace OpenSC.Model.Routers
         public void RemoveInput(RouterInput input)
         {
             inputs.Remove(input);
+            input.RemovedFromRouter(this);
             updateInputIndices();
         }
 
@@ -176,6 +177,7 @@ namespace OpenSC.Model.Routers
         public void RemoveOutput(RouterOutput output)
         {
             outputs.Remove(output);
+            output.RemovedFromRouter(this);
             updateOutputIndices();
         }
 

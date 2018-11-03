@@ -30,7 +30,7 @@ namespace OpenSC.Model.Routers
 
         public void Restored()
         { }
-
+        
         private string name;
 
         public string Name
@@ -53,6 +53,12 @@ namespace OpenSC.Model.Routers
         public event RouterInputNameChangedPCN NameChangedPCN;
 
         public Router Router { get; internal set; }
+
+        public void RemovedFromRouter(Router router)
+        {
+            if (router != Router)
+                return;
+        }
 
         private int index;
 
