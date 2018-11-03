@@ -41,36 +41,9 @@ namespace OpenSC.Model.UMDs.TSL31
         {
             get { return new Color[] { Color.Red, Color.Green }; }
         }
-
-        public override event UmdTallyChanging TallyChanging;
-        public override event UmdTallyChanged TallyChanged;
-        public override event ParameterlessChangeNotifierDelegate TallyChangingPCN;
-        public override event ParameterlessChangeNotifierDelegate TallyChangedPCN;
-
-        private bool[] tallies = new bool[TSL31Type.TALLY_COUNT] { true };
-
-        public override bool[] TallyStates
+        protected override void tallyChanged(int index, bool state)
         {
-            get { return tallies; }
-        }
-
-        public override void SetTally(int index, bool state)
-        {
-
-            if (index >= TSL31Type.TALLY_COUNT)
-                throw new ArgumentOutOfRangeException();
-
-            bool oldState = tallies[index];
-            if (oldState != state)
-            {
-                TallyChanging?.Invoke(this, index, oldState, state);
-                TallyChangingPCN?.Invoke();
-                tallies[index] = state;
-                update();
-                TallyChanged?.Invoke(this, index, oldState, state);
-                TallyChangedPCN?.Invoke();
-            }
-            
+            update();
         }
 
         protected override void update()
@@ -81,7 +54,7 @@ namespace OpenSC.Model.UMDs.TSL31
             {
                 Text = currentText,
                 ValidUntil = DateTime.Now + TimeSpan.FromSeconds(5),
-                Tallies = tallies
+                Tallies = TallyStates
             };
             port.SendData(address, d);
         }

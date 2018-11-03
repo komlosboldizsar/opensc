@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.Persistence;
+using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -28,8 +29,6 @@ namespace OpenSC.Model.UMDs
     {
 
         public abstract IUMDType Type { get; }
-        public abstract void SetTally(int index, bool state);
-        public abstract bool[] TallyStates { get; }
         public abstract Color[] TallyColors { get; }
 
         protected abstract void update();
@@ -124,12 +123,99 @@ namespace OpenSC.Model.UMDs
             }
         }
 
-        public abstract event UmdTallyChanging TallyChanging;
-        public abstract event UmdTallyChanged TallyChanged;
-        public abstract event ParameterlessChangeNotifierDelegate TallyChangingPCN;
-        public abstract event ParameterlessChangeNotifierDelegate TallyChangedPCN;
+        #region Tallies
+        public event UmdTallyChanging TallyChanging;
+        public event UmdTallyChanged TallyChanged;
+        public event ParameterlessChangeNotifierDelegate TallyChangingPCN;
+        public event ParameterlessChangeNotifierDelegate TallyChangedPCN;
 
-        // ...
+        private const int MAX_TALLIES = 8;
+
+        [PersistAs("tally_sources")]
+        private string[] _tallySources = new string[MAX_TALLIES];
+
+        private IBoolean[] tallySources = new IBoolean[MAX_TALLIES];
+
+        public void SetTallySource(int index, IBoolean source)
+        {
+            if ((index < 0) || (index >= MAX_TALLIES) || (index >= Type.TallyCount))
+                throw new ArgumentOutOfRangeException(nameof(index));
+            if (source == tallySources[index])
+                return;
+            if(tallySources[index] != null)
+                tallySources[index].StateChanged -= tallyStateChangedHandler;
+            tallySources[index] = source;
+            _tallySources[index] = source?.Name;
+            if (tallySources[index] != null)
+            {
+                tallySources[index].StateChanged += tallyStateChangedHandler;
+                updateTally(index, source.CurrentState);
+            }
+            else
+            {
+                updateTally(index, false);
+            }
+        }
+
+        public IBoolean GetTallySource(int index)
+        {
+            if ((index < 0) || (index >= MAX_TALLIES) || (index >= Type.TallyCount))
+                throw new ArgumentOutOfRangeException(nameof(index));
+            return tallySources[index];
+        }
+
+        private void restoreTallySources()
+        {
+            string[] restoredTallySourceNames = _tallySources;
+            for (int i = 0; i < MAX_TALLIES; i++) {
+                string sourceName = restoredTallySourceNames[i];
+                IBoolean tallySource = BooleanRegister.Instance[sourceName];
+                SetTallySource(i, tallySource);
+            }
+        }   
+
+        private void tallyStateChangedHandler(IBoolean boolean, bool newState)
+        {
+            for (int i = 0; i < MAX_TALLIES; i++)
+                if (tallySources[i] == boolean)
+                    updateTally(i, newState);
+        }
+
+        private bool[] tallyStates = new bool[MAX_TALLIES];
+
+        public bool[] TallyStates
+        {
+            get => tallyStates;
+        }
+
+        private void updateTally(int index, bool state)
+        {
+
+            if (tallyStates[index] == state)
+                return;
+
+            TallyChanging?.Invoke(this, index, !state, state);
+            TallyChangingPCN?.Invoke();
+
+            tallyStates[index] = state;
+            tallyChanged(index, state);
+
+            TallyChanged?.Invoke(this, index, !state, state);
+            TallyChangedPCN?.Invoke();
+
+        }
+
+        private bool GetTallyState(int index)
+        {
+            if ((index < 0) || (index >= MAX_TALLIES) || (index >= Type.TallyCount))
+                throw new ArgumentOutOfRangeException(nameof(index));
+            return tallyStates[index];
+        }
+
+        protected virtual void tallyChanged(int index, bool state)
+        { }
+        #endregion
+
 
         public event UmdIdChangingDelegate IdChanging;
         public event UmdIdChangedDelegate IdChanged;
