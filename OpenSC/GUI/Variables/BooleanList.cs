@@ -38,7 +38,7 @@ namespace OpenSC.GUI.Variables
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Name");
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
-            builder.Width(160);
+            builder.Width(220);
             builder.UpdaterMethod((boolean, cell) => { cell.Value = boolean.Name; });
             builder.AddChangeEvent(nameof(IBoolean.NameChangedPCN));
             builder.BuildAndAdd();
@@ -47,7 +47,7 @@ namespace OpenSC.GUI.Variables
             builder = GetColumnDescriptorBuilderForTable<IBoolean>();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Description");
-            builder.Width(350);
+            builder.Width(450);
             builder.UpdaterMethod((boolean, cell) => { cell.Value = boolean.Description; });
             builder.AddChangeEvent(nameof(IBoolean.DescriptionChangedPCN));
             builder.BuildAndAdd();

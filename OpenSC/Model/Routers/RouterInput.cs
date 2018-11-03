@@ -18,6 +18,19 @@ namespace OpenSC.Model.Routers
     public class RouterInput
     {
 
+        public RouterInput()
+        { }
+
+        public RouterInput(string name, Router router, int index)
+        {
+            this.name = name;
+            this.Router = router;
+            this.Index = index;
+        }
+
+        public void Restored()
+        { }
+        
         private string name;
 
         public string Name
@@ -40,6 +53,12 @@ namespace OpenSC.Model.Routers
         public event RouterInputNameChangedPCN NameChangedPCN;
 
         public Router Router { get; internal set; }
+
+        public void RemovedFromRouter(Router router)
+        {
+            if (router != Router)
+                return;
+        }
 
         private int index;
 

@@ -36,15 +36,15 @@
             // topPanel
             // 
             this.topPanel.Controls.Add(this.topPanelInner);
-            this.topPanel.Size = new System.Drawing.Size(891, 20);
+            this.topPanel.Size = new System.Drawing.Size(1238, 20);
             // 
             // bottomPanel
             // 
-            this.bottomPanel.Size = new System.Drawing.Size(891, 374);
+            this.bottomPanel.Size = new System.Drawing.Size(1238, 374);
             // 
             // mainContainer
             // 
-            this.mainContainer.Size = new System.Drawing.Size(891, 394);
+            this.mainContainer.Size = new System.Drawing.Size(1238, 394);
             // 
             // topPanelInner
             // 
@@ -54,14 +54,14 @@
             this.topPanelInner.Location = new System.Drawing.Point(0, 0);
             this.topPanelInner.Name = "topPanelInner";
             this.topPanelInner.Padding = new System.Windows.Forms.Padding(10);
-            this.topPanelInner.Size = new System.Drawing.Size(891, 20);
+            this.topPanelInner.Size = new System.Drawing.Size(1238, 20);
             this.topPanelInner.TabIndex = 0;
             // 
             // BooleanList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(891, 450);
+            this.ClientSize = new System.Drawing.Size(1238, 450);
             this.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.HeaderText = "List of booleans";
             this.Name = "BooleanList";

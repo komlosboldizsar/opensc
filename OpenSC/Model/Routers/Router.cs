@@ -31,6 +31,7 @@ namespace OpenSC.Model.Routers
         {
             restoreInputSources();
             updateCrosspointRouterAssociations();
+            notifyInputsOutputsRestored();
             updateAllCrosspoints();
         }
 
@@ -121,16 +122,13 @@ namespace OpenSC.Model.Routers
         public void AddInput()
         {
             int index = inputs.Count;
-            inputs.Add(new RouterInput() {
-                Router = this,
-                Index = index,
-                Name = string.Format("Input #{0}", index + 1)
-            });
+            inputs.Add(new RouterInput(string.Format("Input #{0}", index + 1), this, index));
         }
 
         public void RemoveInput(RouterInput input)
         {
             inputs.Remove(input);
+            input.RemovedFromRouter(this);
             updateInputIndices();
         }
 
@@ -173,17 +171,13 @@ namespace OpenSC.Model.Routers
         public void AddOutput()
         {
             int index = outputs.Count;
-            outputs.Add(new RouterOutput()
-            {
-                Router = this,
-                Index = index,
-                Name = string.Format("Output #{0}", index + 1)
-            });
+            outputs.Add(new RouterOutput(string.Format("Output #{0}", index + 1), this, index));
         }
 
         public void RemoveOutput(RouterOutput output)
         {
             outputs.Remove(output);
+            output.RemovedFromRouter(this);
             updateOutputIndices();
         }
 
@@ -224,6 +218,14 @@ namespace OpenSC.Model.Routers
         {
             foreach (RouterInput input in inputs)
                 input.RestoreSource();
+        }
+
+        private void notifyInputsOutputsRestored()
+        {
+            foreach (RouterInput input in inputs)
+                input.Restored();
+            foreach (RouterOutput output in outputs)
+                output.Restored();
         }
 
     }
