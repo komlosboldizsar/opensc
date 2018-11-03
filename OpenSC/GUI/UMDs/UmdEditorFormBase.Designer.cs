@@ -46,6 +46,10 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.dynamicDataTabPage = new System.Windows.Forms.TabPage();
             this.talliesTabPage = new System.Windows.Forms.TabPage();
+            this.talliesGroupBox = new System.Windows.Forms.GroupBox();
+            this.talliesTable = new System.Windows.Forms.TableLayoutPanel();
+            this.tallyExampleSourceLabel = new System.Windows.Forms.Label();
+            this.tallySourceExampleComboBox = new System.Windows.Forms.ComboBox();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.basicDataTable.SuspendLayout();
@@ -55,6 +59,9 @@
             this.modeTable.SuspendLayout();
             this.mainTabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.talliesTabPage.SuspendLayout();
+            this.talliesGroupBox.SuspendLayout();
+            this.talliesTable.SuspendLayout();
             this.SuspendLayout();
             // 
             // customElementsPanel
@@ -275,19 +282,74 @@
             this.dynamicDataTabPage.Location = new System.Drawing.Point(4, 25);
             this.dynamicDataTabPage.Name = "dynamicDataTabPage";
             this.dynamicDataTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.dynamicDataTabPage.Size = new System.Drawing.Size(481, 260);
+            this.dynamicDataTabPage.Size = new System.Drawing.Size(490, 219);
             this.dynamicDataTabPage.TabIndex = 1;
             this.dynamicDataTabPage.Text = "Dynamic text";
             // 
             // talliesTabPage
             // 
             this.talliesTabPage.BackColor = System.Drawing.SystemColors.Control;
+            this.talliesTabPage.Controls.Add(this.talliesGroupBox);
             this.talliesTabPage.Location = new System.Drawing.Point(4, 25);
             this.talliesTabPage.Name = "talliesTabPage";
             this.talliesTabPage.Padding = new System.Windows.Forms.Padding(3);
             this.talliesTabPage.Size = new System.Drawing.Size(481, 260);
             this.talliesTabPage.TabIndex = 2;
             this.talliesTabPage.Text = "Tallies";
+            // 
+            // talliesGroupBox
+            // 
+            this.talliesGroupBox.AutoSize = true;
+            this.talliesGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.talliesGroupBox.Controls.Add(this.talliesTable);
+            this.talliesGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.talliesGroupBox.Location = new System.Drawing.Point(3, 3);
+            this.talliesGroupBox.Margin = new System.Windows.Forms.Padding(10);
+            this.talliesGroupBox.Name = "talliesGroupBox";
+            this.talliesGroupBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 8);
+            this.talliesGroupBox.Size = new System.Drawing.Size(475, 57);
+            this.talliesGroupBox.TabIndex = 2;
+            this.talliesGroupBox.TabStop = false;
+            this.talliesGroupBox.Text = "Tally sources";
+            // 
+            // talliesTable
+            // 
+            this.talliesTable.AutoSize = true;
+            this.talliesTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.talliesTable.ColumnCount = 2;
+            this.talliesTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.talliesTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.talliesTable.Controls.Add(this.tallyExampleSourceLabel, 0, 0);
+            this.talliesTable.Controls.Add(this.tallySourceExampleComboBox, 1, 0);
+            this.talliesTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.talliesTable.Location = new System.Drawing.Point(8, 19);
+            this.talliesTable.Name = "talliesTable";
+            this.talliesTable.RowCount = 1;
+            this.talliesTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.talliesTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.talliesTable.Size = new System.Drawing.Size(459, 30);
+            this.talliesTable.TabIndex = 0;
+            // 
+            // tallyExampleSourceLabel
+            // 
+            this.tallyExampleSourceLabel.AutoSize = true;
+            this.tallyExampleSourceLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.tallyExampleSourceLabel.Location = new System.Drawing.Point(3, 0);
+            this.tallyExampleSourceLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.tallyExampleSourceLabel.Name = "tallyExampleSourceLabel";
+            this.tallyExampleSourceLabel.Size = new System.Drawing.Size(105, 30);
+            this.tallyExampleSourceLabel.TabIndex = 0;
+            this.tallyExampleSourceLabel.Text = "Tally #1 source";
+            this.tallyExampleSourceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tallySourceExampleComboBox
+            // 
+            this.tallySourceExampleComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.tallySourceExampleComboBox.FormattingEnabled = true;
+            this.tallySourceExampleComboBox.Location = new System.Drawing.Point(126, 3);
+            this.tallySourceExampleComboBox.Name = "tallySourceExampleComboBox";
+            this.tallySourceExampleComboBox.Size = new System.Drawing.Size(279, 24);
+            this.tallySourceExampleComboBox.TabIndex = 4;
             // 
             // UmdEditorFormBase
             // 
@@ -312,6 +374,12 @@
             this.mainTabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.talliesTabPage.ResumeLayout(false);
+            this.talliesTabPage.PerformLayout();
+            this.talliesGroupBox.ResumeLayout(false);
+            this.talliesGroupBox.PerformLayout();
+            this.talliesTable.ResumeLayout(false);
+            this.talliesTable.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -336,5 +404,9 @@
         protected System.Windows.Forms.TabPage tabPage1;
         protected System.Windows.Forms.TabPage dynamicDataTabPage;
         protected System.Windows.Forms.TabPage talliesTabPage;
+        private System.Windows.Forms.GroupBox talliesGroupBox;
+        private System.Windows.Forms.TableLayoutPanel talliesTable;
+        private System.Windows.Forms.Label tallyExampleSourceLabel;
+        private System.Windows.Forms.ComboBox tallySourceExampleComboBox;
     }
 }

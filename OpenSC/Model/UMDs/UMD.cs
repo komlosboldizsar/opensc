@@ -129,7 +129,7 @@ namespace OpenSC.Model.UMDs
         public event ParameterlessChangeNotifierDelegate TallyChangingPCN;
         public event ParameterlessChangeNotifierDelegate TallyChangedPCN;
 
-        private const int MAX_TALLIES = 8;
+        public const int MAX_TALLIES = 8;
 
         [PersistAs("tally_sources")]
         private string[] _tallySources = new string[MAX_TALLIES];
