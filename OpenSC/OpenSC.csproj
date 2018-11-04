@@ -697,17 +697,6 @@
     <None Include="Resources\timer_stopped.png" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="BMDSwitcherAPI">
-      <Guid>{8A92B919-156C-4D61-94EF-03F9BE4004B0}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\16_timer_backward.png" />
   </ItemGroup>
   <ItemGroup>
@@ -796,6 +785,10 @@
     <ProjectReference Include="..\Bespoke.Common\Bespoke.Common.csproj">
       <Project>{f8a1578f-bebe-4bbe-ab11-a0496bdb746a}</Project>
       <Name>Bespoke.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BMD.Switcher\BMD.Switcher.csproj">
+      <Project>{a9cee499-cf5c-419a-8cf0-66f20596b820}</Project>
+      <Name>BMD.Switcher</Name>
     </ProjectReference>
     <ProjectReference Include="..\BMD.Videohub\BMD.Videohub.csproj">
       <Project>{eadc56a4-b18d-4742-9855-c5142e90aa19}</Project>
