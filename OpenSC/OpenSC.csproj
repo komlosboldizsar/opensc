@@ -80,6 +80,12 @@
     <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapter.cs" />
     <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapterFactory.cs" />
     <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridViewComboBoxItem.cs" />
+    <Compile Include="GUI\Mixers\BmdMixerEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Mixers\BmdMixerEditorForm.Designer.cs">
+      <DependentUpon>BmdMixerEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Mixers\MixerEditorFormTypeRegister.cs" />
     <Compile Include="GUI\Mixers\MixerList.cs">
       <SubType>Form</SubType>
@@ -383,6 +389,7 @@
     <Compile Include="Model\IDatabaseBase.cs" />
     <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\MasterDatabase.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\BmdMixer.cs" />
     <Compile Include="Model\Mixers\Mixer.cs" />
     <Compile Include="Model\Mixers\MixerDatabase.cs" />
     <Compile Include="Model\Mixers\MixerTypeNameConverter.cs" />
@@ -505,6 +512,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Mixers\BmdMixerEditorForm.resx">
+      <DependentUpon>BmdMixerEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Mixers\MixerList.resx">
       <DependentUpon>MixerList.cs</DependentUpon>

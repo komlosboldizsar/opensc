@@ -7,6 +7,7 @@ using OpenSC.Model.Mixers;
 using OpenSC.Model.Variables;
 using System;
 using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model.Mixers.BlackMagicDesign;
 
 namespace OpenSC.Modules.Mixers
 {
@@ -34,7 +35,7 @@ namespace OpenSC.Modules.Mixers
 
         public void RegisterModelTypes()
         {
-            //RegisterMixerType</*?*/, /*?*/>();
+            RegisterMixerType<BmdMixer, BmdMixerEditorForm>();
         }
 
         public void RegisterDatabases()
