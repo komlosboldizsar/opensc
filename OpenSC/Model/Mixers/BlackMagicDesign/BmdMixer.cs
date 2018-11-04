@@ -40,7 +40,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         {
             try
             {
-                switcher.Connect();
+                switcher?.Connect();
             }
             catch (Switcher.CouldNotConnectException)
             {
@@ -56,7 +56,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         {
             try
             {
-                switcher.Disconnect();
+                switcher?.Disconnect();
             }
             catch (Switcher.NotConnectedException)
             {
