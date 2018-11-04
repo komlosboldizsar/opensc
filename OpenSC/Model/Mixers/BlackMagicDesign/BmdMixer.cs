@@ -19,7 +19,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
     public delegate void BmdMixerAutoReconnectChangingDelegate(BmdMixer mixer, bool oldSetting, bool newSetting);
     public delegate void BmdMixerAutoReconnectChangedDelegate(BmdMixer mixer, bool oldSetting, bool newSetting);
 
-    [TypeLabel("BMD Switched")]
+    [TypeLabel("BMD Switcher")]
     [TypeCode("bmd")]
     public class BmdMixer : Mixer
     {
@@ -69,8 +69,10 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         private void initSwitcher()
         {
             if (!string.IsNullOrEmpty(ipAddress))
+            {
                 switcher = new Switcher(ipAddress);
-            switcher.ConnectionStateChanged += switcherConnectionStateChanged;
+                switcher.ConnectionStateChanged += switcherConnectionStateChanged;
+            }
         }
 
         private void deinitSwitcher()
