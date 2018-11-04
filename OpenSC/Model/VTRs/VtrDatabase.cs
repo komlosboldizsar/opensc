@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.VTRs
 {
-    [DatabaseName("vtrs")]
+    [DatabaseName(VtrDatabase.DBNAME)]
     [PolymorphDatabase(typeof(VtrTypeNameConverter))]
     [XmlTagNames("vtrs", "vtr")]
     public class VtrDatabase : DatabaseBase<Vtr>
     {
 
         public static VtrDatabase Instance { get; } = new VtrDatabase();
+
+        public const string DBNAME = "vtrs";
 
     }
 }

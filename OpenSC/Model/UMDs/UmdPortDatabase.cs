@@ -6,13 +6,15 @@ using System.Linq;
 namespace OpenSC.Model.UMDs
 {
 
-    [DatabaseName("umd_ports")]
+    [DatabaseName(UmdPortDatabase.DBNAME)]
     [PolymorphDatabase(typeof(UmdPortTypeNameConverter))]
     [XmlTagNames("ports", "port")]
     class UmdPortDatabase: DatabaseBase<UmdPort>
     {
 
         public static UmdPortDatabase Instance { get; } = new UmdPortDatabase();
+
+        public const string DBNAME = "umd_ports";
 
     }
 

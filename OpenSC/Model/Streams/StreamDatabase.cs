@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Streams
 {
-    [DatabaseName("streams")]
+    [DatabaseName(StreamDatabase.DBNAME)]
     [PolymorphDatabase(typeof(StreamTypeNameConverter))]
     [XmlTagNames("streams", "stream")]
     public class StreamDatabase : DatabaseBase<Stream>
     {
 
         public static StreamDatabase Instance { get; } = new StreamDatabase();
+
+        public const string DBNAME = "streams";
 
     }
 }
