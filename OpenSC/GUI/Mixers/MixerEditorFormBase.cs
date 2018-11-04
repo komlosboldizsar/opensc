@@ -149,6 +149,7 @@ namespace OpenSC.GUI.Mixers
             builder.BuildAndAdd();
 
             // Column: source
+            CustomDataGridViewComboBoxItem<Signal>[] signals = getAllSignals();
             builder = getColumnDescriptorBuilderForTable<MixerInput>(inputsTableCDGV);
             builder.Type(DataGridViewColumnType.ComboBox);
             builder.Header("Source");
@@ -156,7 +157,7 @@ namespace OpenSC.GUI.Mixers
             builder.InitializerMethod((input, cell) => { });
             builder.UpdaterMethod((input, cell) => { cell.Value = input.Source; });
             builder.CellEndEditHandlerMethod((input, cell, eventargs) => { input.Source = cell.Value as Signal; });
-            builder.DropDownPopulatorMethod((input, cell) => SignalDatabases.Signals.ItemsAsList.ToArray());
+            builder.DropDownPopulatorMethod((input, cell) => signals);
             builder.BuildAndAdd();
 
             // Column: delete button
@@ -192,6 +193,15 @@ namespace OpenSC.GUI.Mixers
         private CustomDataGridViewColumnDescriptorBuilder<T> getColumnDescriptorBuilderForTable<T>(CustomDataGridView<T> table)
             where T : class
             => new CustomDataGridViewColumnDescriptorBuilder<T>(table);
+
+        private CustomDataGridViewComboBoxItem<Signal>[] getAllSignals()
+        {
+            List<CustomDataGridViewComboBoxItem<Signal>> signalList = new List<CustomDataGridViewComboBoxItem<Signal>>();
+            signalList.Add(new CustomDataGridViewComboBoxItem<Signal>.NullItem("(not connected)"));
+            foreach (Signal signal in SignalDatabases.Signals.ItemsAsList)
+                signalList.Add(new SourceDropDownItem(signal));
+            return signalList.ToArray();
+        }
 
         private class SourceDropDownItem: CustomDataGridViewComboBoxItem<Signal>
         {
