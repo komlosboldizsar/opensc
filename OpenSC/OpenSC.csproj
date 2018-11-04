@@ -87,6 +87,12 @@
     <Compile Include="GUI\Mixers\MixerList.Designer.cs">
       <DependentUpon>MixerList.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Mixers\MixerEditorFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Mixers\MixerEditorFormBase.Designer.cs">
+      <DependentUpon>MixerEditorFormBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ModelEditorFormTypeRegister.cs" />
     <Compile Include="GUI\GeneralComponents\GrowLabel.cs">
       <SubType>Component</SubType>
@@ -502,6 +508,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Mixers\MixerList.resx">
       <DependentUpon>MixerList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Mixers\MixerEditorFormBase.resx">
+      <DependentUpon>MixerEditorFormBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\RouterControlForm.resx">
       <DependentUpon>RouterControlForm.cs</DependentUpon>
