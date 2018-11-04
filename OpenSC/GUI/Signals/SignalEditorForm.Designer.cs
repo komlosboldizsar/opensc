@@ -38,12 +38,6 @@
             this.categoryTable = new System.Windows.Forms.TableLayoutPanel();
             this.categoryLabel = new System.Windows.Forms.Label();
             this.categoryDropDown = new System.Windows.Forms.ComboBox();
-            this.talliesGroupBox = new System.Windows.Forms.GroupBox();
-            this.talliesTable = new System.Windows.Forms.TableLayoutPanel();
-            this.greenTallySourceLabel = new System.Windows.Forms.Label();
-            this.redTallySourceLabel = new System.Windows.Forms.Label();
-            this.redTallySourceDropDown = new System.Windows.Forms.ComboBox();
-            this.greenTallySourceDropDown = new System.Windows.Forms.ComboBox();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.basicDataTable.SuspendLayout();
@@ -51,13 +45,10 @@
             this.basicDataGroupBox.SuspendLayout();
             this.categoryGroupBox.SuspendLayout();
             this.categoryTable.SuspendLayout();
-            this.talliesGroupBox.SuspendLayout();
-            this.talliesTable.SuspendLayout();
             this.SuspendLayout();
             // 
             // customElementsPanel
             // 
-            this.customElementsPanel.Controls.Add(this.talliesGroupBox);
             this.customElementsPanel.Controls.Add(this.categoryGroupBox);
             this.customElementsPanel.Controls.Add(this.basicDataGroupBox);
             this.customElementsPanel.Location = new System.Drawing.Point(10, 10);
@@ -197,84 +188,6 @@
             this.categoryDropDown.Size = new System.Drawing.Size(228, 24);
             this.categoryDropDown.TabIndex = 3;
             // 
-            // talliesGroupBox
-            // 
-            this.talliesGroupBox.AutoSize = true;
-            this.talliesGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.talliesGroupBox.Controls.Add(this.talliesTable);
-            this.talliesGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.talliesGroupBox.Location = new System.Drawing.Point(0, 140);
-            this.talliesGroupBox.Margin = new System.Windows.Forms.Padding(10);
-            this.talliesGroupBox.Name = "talliesGroupBox";
-            this.talliesGroupBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 8);
-            this.talliesGroupBox.Size = new System.Drawing.Size(489, 87);
-            this.talliesGroupBox.TabIndex = 3;
-            this.talliesGroupBox.TabStop = false;
-            this.talliesGroupBox.Text = "Tallies";
-            // 
-            // talliesTable
-            // 
-            this.talliesTable.AutoSize = true;
-            this.talliesTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.talliesTable.ColumnCount = 2;
-            this.talliesTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.talliesTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.talliesTable.Controls.Add(this.greenTallySourceLabel, 0, 1);
-            this.talliesTable.Controls.Add(this.redTallySourceLabel, 0, 0);
-            this.talliesTable.Controls.Add(this.redTallySourceDropDown, 1, 0);
-            this.talliesTable.Controls.Add(this.greenTallySourceDropDown, 1, 1);
-            this.talliesTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.talliesTable.Location = new System.Drawing.Point(8, 19);
-            this.talliesTable.Name = "talliesTable";
-            this.talliesTable.RowCount = 2;
-            this.talliesTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.talliesTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.talliesTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.talliesTable.Size = new System.Drawing.Size(473, 60);
-            this.talliesTable.TabIndex = 0;
-            // 
-            // greenTallySourceLabel
-            // 
-            this.greenTallySourceLabel.AutoSize = true;
-            this.greenTallySourceLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.greenTallySourceLabel.Location = new System.Drawing.Point(3, 30);
-            this.greenTallySourceLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.greenTallySourceLabel.Name = "greenTallySourceLabel";
-            this.greenTallySourceLabel.Size = new System.Drawing.Size(128, 30);
-            this.greenTallySourceLabel.TabIndex = 4;
-            this.greenTallySourceLabel.Text = "Green tally source:";
-            this.greenTallySourceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // redTallySourceLabel
-            // 
-            this.redTallySourceLabel.AutoSize = true;
-            this.redTallySourceLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.redTallySourceLabel.Location = new System.Drawing.Point(3, 0);
-            this.redTallySourceLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.redTallySourceLabel.Name = "redTallySourceLabel";
-            this.redTallySourceLabel.Size = new System.Drawing.Size(114, 30);
-            this.redTallySourceLabel.TabIndex = 0;
-            this.redTallySourceLabel.Text = "Red tally source:";
-            this.redTallySourceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // redTallySourceDropDown
-            // 
-            this.redTallySourceDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.redTallySourceDropDown.FormattingEnabled = true;
-            this.redTallySourceDropDown.Location = new System.Drawing.Point(149, 3);
-            this.redTallySourceDropDown.Name = "redTallySourceDropDown";
-            this.redTallySourceDropDown.Size = new System.Drawing.Size(228, 24);
-            this.redTallySourceDropDown.TabIndex = 3;
-            // 
-            // greenTallySourceDropDown
-            // 
-            this.greenTallySourceDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.greenTallySourceDropDown.FormattingEnabled = true;
-            this.greenTallySourceDropDown.Location = new System.Drawing.Point(149, 33);
-            this.greenTallySourceDropDown.Name = "greenTallySourceDropDown";
-            this.greenTallySourceDropDown.Size = new System.Drawing.Size(228, 24);
-            this.greenTallySourceDropDown.TabIndex = 5;
-            // 
             // SignalEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -298,10 +211,6 @@
             this.categoryGroupBox.PerformLayout();
             this.categoryTable.ResumeLayout(false);
             this.categoryTable.PerformLayout();
-            this.talliesGroupBox.ResumeLayout(false);
-            this.talliesGroupBox.PerformLayout();
-            this.talliesTable.ResumeLayout(false);
-            this.talliesTable.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -318,11 +227,5 @@
         private System.Windows.Forms.TableLayoutPanel categoryTable;
         private System.Windows.Forms.Label categoryLabel;
         private System.Windows.Forms.ComboBox categoryDropDown;
-        private System.Windows.Forms.GroupBox talliesGroupBox;
-        private System.Windows.Forms.TableLayoutPanel talliesTable;
-        private System.Windows.Forms.Label greenTallySourceLabel;
-        private System.Windows.Forms.Label redTallySourceLabel;
-        private System.Windows.Forms.ComboBox redTallySourceDropDown;
-        private System.Windows.Forms.ComboBox greenTallySourceDropDown;
     }
 }
