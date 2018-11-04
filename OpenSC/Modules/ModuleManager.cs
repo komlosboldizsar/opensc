@@ -16,7 +16,8 @@ namespace OpenSC.Modules
             new UMDs.UmdsModule(),
             new Routers.RoutersModule(),
             new Streams.StreamsModule(),
-            new VTRs.VtrsModule()
+            new VTRs.VtrsModule(),
+            new Mixers.MixersModule()
         };
 
         #region Own initialization

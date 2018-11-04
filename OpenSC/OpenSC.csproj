@@ -80,6 +80,7 @@
     <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapter.cs" />
     <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapterFactory.cs" />
     <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridViewComboBoxItem.cs" />
+    <Compile Include="GUI\Mixers\MixerEditorFormTypeRegister.cs" />
     <Compile Include="GUI\ModelEditorFormTypeRegister.cs" />
     <Compile Include="GUI\GeneralComponents\GrowLabel.cs">
       <SubType>Component</SubType>
@@ -370,6 +371,9 @@
     <Compile Include="Model\IDatabaseBase.cs" />
     <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\MasterDatabase.cs" />
+    <Compile Include="Model\Mixers\Mixer.cs" />
+    <Compile Include="Model\Mixers\MixerDatabase.cs" />
+    <Compile Include="Model\Mixers\MixerTypeNameConverter.cs" />
     <Compile Include="Model\Persistence\ColorXmlSerializer.cs" />
     <Compile Include="Model\Persistence\DatabasePersister.cs" />
     <Compile Include="Model\Persistence\IValueXmlSerializer.cs" />
@@ -454,6 +458,7 @@
     <Compile Include="Model\UMDs\UmdSerialPort.cs" />
     <Compile Include="Model\UMDs\UmdTypeNameConverter.cs" />
     <Compile Include="Modules\IModule.cs" />
+    <Compile Include="Modules\Mixers\MixersModule.cs" />
     <Compile Include="Modules\ModuleManager.cs" />
     <Compile Include="Modules\VTRs\VtrsModule.cs" />
     <Compile Include="Modules\Routers\RoutersModule.cs" />
