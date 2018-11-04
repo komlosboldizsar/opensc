@@ -68,11 +68,8 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
 
         private void initSwitcher()
         {
-            if (!string.IsNullOrEmpty(ipAddress))
-            {
-                switcher = new Switcher(ipAddress);
-                switcher.ConnectionStateChanged += switcherConnectionStateChanged;
-            }
+            switcher = new Switcher(ipAddress);
+            switcher.ConnectionStateChanged += switcherConnectionStateChanged;
         }
 
         private void deinitSwitcher()
@@ -109,8 +106,6 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
                 IpAddressChangingPCN?.Invoke();
 
                 ipAddress = value;
-                if (switcher == null)
-                    initSwitcher();
                 switcher.IpAddress = value;
 
                 IpAddressChanged?.Invoke(this, oldIpAddress, value);
