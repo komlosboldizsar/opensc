@@ -19,7 +19,7 @@ namespace OpenSC.Model.UMDs.McCurdy
         [PersistAs("port")]
         private McCurdyPort port;
 
-        [TempForeignKey("umd_ports", nameof(port))]
+        [TempForeignKey(UmdPortDatabase.DBNAME, nameof(port))]
         private int _portId;
 
         public McCurdyPort Port
@@ -78,7 +78,7 @@ namespace OpenSC.Model.UMDs.McCurdy
         [PersistAs("dynamic_text_sources")]
         private DynamicText[] dynamicTextSources = new DynamicText[] { null, null, null };
 
-        [TempForeignKey("dynamictexts", nameof(dynamicTextSources))]
+        [TempForeignKey(DynamicTextDatabase.DBNAME, nameof(dynamicTextSources))]
         private int[] _dynamicTextSources = new int[] { 0, 0, 0 };
 
         public void SetDynamicTextSource(int columnIndex, DynamicText dynamicTextSource)
