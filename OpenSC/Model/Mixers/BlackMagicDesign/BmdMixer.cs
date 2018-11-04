@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Persistence;
+﻿using BMD.Switcher;
+using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,19 +33,57 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         {
             base.Restored();
             initSwitcher();
-            startAutoReconnectThread();
+            Connect();
         }
 
         public void Connect()
         {
-            // TODO: USE BMD API
+            try
+            {
+                switcher.Connect();
+            }
+            catch (Switcher.CouldNotConnectException)
+            {
+                // TODO: Logging
+            }
+            catch(Switcher.AlreadyConnectedException)
+            {
+                // TODO: Logging
+            }
         }
 
         public void Disconnect()
         {
-            // TODO: USE BMD API
+            try
+            {
+                switcher.Disconnect();
+            }
+            catch (Switcher.NotConnectedException)
+            {
+                // TODO: Logging
+            }
         }
 
+        private Switcher switcher;
+
+        private void initSwitcher()
+        {
+            if (!string.IsNullOrEmpty(ipAddress))
+                switcher = new Switcher(ipAddress);
+            switcher.ConnectionStateChanged += switcherConnectionStateChanged;
+        }
+
+        private void deinitSwitcher()
+        {
+            switcher.ConnectionStateChanged -= switcherConnectionStateChanged;
+        }
+
+        private void switcherConnectionStateChanged(Switcher switcher, bool newState)
+        {
+            Connected = newState;
+        }
+
+        #region Property: IpAddress
         public event BmdMixerIpAddressChangingDelegate IpAddressChanging;
         public event BmdMixerIpAddressChangedDelegate IpAddressChanged;
         public event ParameterlessChangeNotifierDelegate IpAddressChangingPCN;
@@ -75,7 +114,9 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         {
             // ... throw new ArgumentException();
         }
+        #endregion
 
+        #region Property: ConnectionState
         public event BmdMixerConnectionStateChangingDelegate ConnectionStateChanging;
         public event BmdMixerConnectionStateChangedDelegate ConnectionStateChanged;
         public event ParameterlessChangeNotifierDelegate ConnectionStateChangingPCN;
@@ -88,18 +129,36 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             get { return connected; }
             set
             {
+
                 if (value == connected)
                     return;
                 bool oldState = connected;
+
                 ConnectionStateChanging?.Invoke(this, oldState, value);
                 ConnectionStateChangingPCN?.Invoke();
+
                 connected = value;
+
                 ConnectionStateChanged?.Invoke(this, oldState, value);
                 ConnectionStateChangedPCN?.Invoke();
+
+                if (value)
+                {
+                    getMixEffectBlockMonitor();
+                    getInputMonitors();
+                }
+                else
+                {
+                    disposeMixEffectBlockMonitor();
+                    disposeInputMonitors();
+                    deinitSwitcher();
+                }
+
             }
         }
+        #endregion
 
-        #region Auto reconnect
+        #region Property: AutoReconnect
         public event BmdMixerAutoReconnectChangingDelegate AutoReconnectChanging;
         public event BmdMixerAutoReconnectChangedDelegate AutoReconnectChanged;
         public event ParameterlessChangeNotifierDelegate AutoReconnectChangingPCN;
@@ -123,7 +182,9 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
                 AutoReconnectChangedPCN?.Invoke();
             }
         }
+        #endregion
 
+        #region Auto reconnect
         private const int RECONNECT_TRY_INTERVAL = 10000;
 
         private Thread autoReconnectThread = null;
@@ -150,10 +211,64 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         }
         #endregion
 
-        private void initSwitcher()
+        #region Input monitors
+        private List<InputMonitor> inputMonitors = new List<InputMonitor>();
+        
+        private void getInputMonitors()
         {
-            // TODO: USE BMD API
+            inputMonitors = switcher.GetInputMonitors();
+            foreach(InputMonitor inputMonitor in inputMonitors)
+            {
+                inputMonitor.IsProgramTalliedChanged += inputMonitorIsProgramTalliedChangedHandler;
+                inputMonitor.IsPreviewTalliedChanged += inputMonitorIsPreviewTalliedChangedHandler;
+            }
         }
+
+        private void disposeInputMonitors()
+        {
+            inputMonitors.ForEach(im => im?.Dispose());
+            inputMonitors.Clear();
+        }
+
+        private void inputMonitorIsProgramTalliedChangedHandler(BMDSwitcherAPI.IBMDSwitcherInput switcherInput, InputMonitor monitor, bool isTallied)
+        {
+            Inputs.FindAll(input => (input.Index == switcherInput.GetId())).ForEach(input => { input.RedTally = isTallied; });
+        }
+
+        private void inputMonitorIsPreviewTalliedChangedHandler(BMDSwitcherAPI.IBMDSwitcherInput switcherInput, InputMonitor monitor, bool isTallied)
+        {
+            Inputs.FindAll(input => (input.Index == switcherInput.GetId())).ForEach(input => { input.GreenTally = isTallied; });
+        }
+        #endregion
+
+        #region Mix/effect block monitors
+        private const int MONITORED_MIXEFFECT_BLOCK_INDEX = 0;
+
+        MixEffectBlockMonitor mixEffectBlockMonitor;
+
+        private void getMixEffectBlockMonitor()
+        {
+            mixEffectBlockMonitor = switcher.GetMixEffectBlockMonitor(MONITORED_MIXEFFECT_BLOCK_INDEX);
+            mixEffectBlockMonitor.ProgramInputChanged += mixEffectBlockMonitorProgramInputChangedHandler;
+            mixEffectBlockMonitor.PreviewInputChanged += mixEffectBlockMonitorPreviewInputChangedHandler;
+        }
+
+        private void disposeMixEffectBlockMonitor()
+        {
+            mixEffectBlockMonitor?.Dispose();
+            mixEffectBlockMonitor = null;
+        }
+
+        private void mixEffectBlockMonitorProgramInputChangedHandler(BMDSwitcherAPI.IBMDSwitcherMixEffectBlock meBlock, MixEffectBlockMonitor monitor, long inputIndex)
+        {
+            OnProgramInput = Inputs.First(input => input.Index == inputIndex);
+        }
+
+        private void mixEffectBlockMonitorPreviewInputChangedHandler(BMDSwitcherAPI.IBMDSwitcherMixEffectBlock meBlock, MixEffectBlockMonitor monitor, long inputIndex)
+        {
+            OnPreviewInput = Inputs.First(input => input.Index == inputIndex);
+        }
+        #endregion
 
     }
 
