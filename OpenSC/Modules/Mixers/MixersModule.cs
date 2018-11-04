@@ -6,6 +6,7 @@ using OpenSC.Model.Persistence;
 using OpenSC.Model.Mixers;
 using OpenSC.Model.Variables;
 using System;
+using OpenSC.GUI.WorkspaceManager;
 
 namespace OpenSC.Modules.Mixers
 {
@@ -43,7 +44,7 @@ namespace OpenSC.Modules.Mixers
 
         public void RegisterWindowTypes()
         {
-            //WindowTypeRegister.RegisterWindowType(typeof(MixersList));
+            WindowTypeRegister.RegisterWindowType(typeof(MixerList));
         }
 
         public void RegisterMenus()
@@ -51,8 +52,8 @@ namespace OpenSC.Modules.Mixers
 
             var mixersMenu = MenuManager.Instance.TopMenu["Mixers"];
 
-            /*var mixersListMenu = mixersMenu["Mixers list"];
-            mixersListMenu.ClickHandler = (menu, tag) => new MixerList().ShowAsChild();*/
+            var mixersListMenu = mixersMenu["Mixers list"];
+            mixersListMenu.ClickHandler = (menu, tag) => new MixerList().ShowAsChild();
 
         }
 
