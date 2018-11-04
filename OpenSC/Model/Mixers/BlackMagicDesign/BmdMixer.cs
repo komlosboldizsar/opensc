@@ -99,16 +99,23 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             get { return ipAddress; }
             set
             {
+
                 ValidateIpAddress(ipAddress);
                 if (value == ipAddress)
                     return;
                 string oldIpAddress = ipAddress;
+
                 IpAddressChanging?.Invoke(this, oldIpAddress, value);
                 IpAddressChangingPCN?.Invoke();
+
                 ipAddress = value;
-                // TODO: USE BMD API
+                if (switcher == null)
+                    initSwitcher();
+                switcher.IpAddress = value;
+
                 IpAddressChanged?.Invoke(this, oldIpAddress, value);
                 IpAddressChangedPCN?.Invoke();
+
             }
         }
 
