@@ -17,7 +17,7 @@ namespace OpenSC.Model.UMDs
     public delegate void UmdPortInitializedChangingDelegate(UmdPort port, bool oldState, bool newState);
     public delegate void UmdPortInitializedChangedDelegate(UmdPort port, bool oldState, bool newState);
 
-    abstract public class UmdPort: IModel
+    abstract public class UmdPort : ModelBase
     {
 
         public event UmdPortIdChangingDelegate IdChanging;
@@ -27,7 +27,7 @@ namespace OpenSC.Model.UMDs
 
         private int id = 0;
 
-        public int ID
+        public override int ID
         {
             get { return id; }
             set
@@ -107,9 +107,8 @@ namespace OpenSC.Model.UMDs
         public abstract void Init();
         public abstract void DeInit();
 
-        public virtual void Restored()
-        {
-        }
+        public override void Restored()
+        { }
 
     }
 }

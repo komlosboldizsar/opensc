@@ -17,10 +17,10 @@ namespace OpenSC.Model.Variables
     public delegate void DynamicTextCurrentTextChangingDelegate(DynamicText text, string oldText, string newText);
     public delegate void DynamicTextCurrentTextChangedDelegate(DynamicText text, string oldText, string newText);
 
-    public class DynamicText: IModel
+    public class DynamicText : ModelBase
     {
 
-        public virtual void Restored()
+        public override void Restored()
         {
             formulaUpdated();
         }
@@ -32,7 +32,7 @@ namespace OpenSC.Model.Variables
 
         public int id = 0;
 
-        public int ID
+        public override int ID
         {
             get { return id; }
             set

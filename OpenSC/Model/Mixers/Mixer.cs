@@ -25,13 +25,13 @@ namespace OpenSC.Model.Mixers
 
     public delegate void MixerInputsChangedDelegate(Mixer mixer);
 
-    public abstract class Mixer : IModel
+    public abstract class Mixer : ModelBase
     {
 
         public Mixer()
         { }
 
-        public virtual void Restored()
+        public override void Restored()
         {
             restoreInputSources();
         }
@@ -44,7 +44,7 @@ namespace OpenSC.Model.Mixers
 
         public int id = 0;
 
-        public int ID
+        public override int ID
         {
             get { return id; }
             set

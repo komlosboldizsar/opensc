@@ -19,10 +19,10 @@ namespace OpenSC.Model.Signals
     public delegate void SignalCategoryColorChangingDelegate(SignalCategory category, Color oldColor, Color newColor);
     public delegate void SignalCategoryColorChangedDelegate(SignalCategory category, Color oldColor, Color newColor);
 
-    public class SignalCategory : IModel
+    public class SignalCategory : ModelBase
     {
 
-        public virtual void Restored()
+        public override void Restored()
         { }
 
         public event SignalCategoryIdChangingDelegate IdChanging;
@@ -32,7 +32,7 @@ namespace OpenSC.Model.Signals
 
         public int id = 0;
 
-        public int ID
+        public override int ID
         {
             get { return id; }
             set

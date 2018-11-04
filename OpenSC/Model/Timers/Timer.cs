@@ -37,13 +37,11 @@ namespace OpenSC.Model.Timers
     public delegate void TimerOperationsChangingDelegate(Timer timer);
     public delegate void TimerOperationsChangedDelegate(Timer timer);
 
-    public class Timer: IModel
+    public class Timer : ModelBase
     {
 
-        public void Restored()
-        {
-
-        }
+        public override void Restored()
+        { }
 
         public event TimerIdChangingDelegate IdChanging;
         public event TimerIdChangedDelegate IdChanged;
@@ -52,7 +50,7 @@ namespace OpenSC.Model.Timers
 
         public int id = 0;
 
-        public int ID
+        public override int ID
         {
             get { return id; }
             set

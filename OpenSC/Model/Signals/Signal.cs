@@ -20,10 +20,10 @@ namespace OpenSC.Model.Signals
     public delegate void SignalTallyChangingDelegate(Signal signal, bool oldState, bool newState);
     public delegate void SignalTallyChangedDelegate(Signal signal, bool oldState, bool newState);
 
-    public class Signal : IModel
+    public class Signal : ModelBase
     {
 
-        public virtual void Restored()
+        public override void Restored()
         {
             updateTallyBooleans();
         }
@@ -35,7 +35,7 @@ namespace OpenSC.Model.Signals
 
         public int id = 0;
 
-        public int ID
+        public override int ID
         {
             get { return id; }
             set

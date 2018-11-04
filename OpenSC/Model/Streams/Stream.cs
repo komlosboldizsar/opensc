@@ -16,10 +16,10 @@ namespace OpenSC.Model.Streams
     public delegate void StreamViewerCountChangingDelegate(Stream stream, int? oldCount, int? newCount);
     public delegate void StreamViewerCountChangedDelegate(Stream stream, int? oldCount, int? newCount);
 
-    public abstract class Stream: IModel
+    public abstract class Stream: ModelBase
     {
 
-        public virtual void Restored()
+        public override void Restored()
         { }
 
         public event StreamIdChangingDelegate IdChanging;
@@ -29,7 +29,7 @@ namespace OpenSC.Model.Streams
 
         public int id = 0;
 
-        public int ID
+        public override int ID
         {
             get { return id; }
             set

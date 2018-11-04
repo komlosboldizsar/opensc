@@ -29,10 +29,10 @@ namespace OpenSC.Model.VTRs
     public delegate void VtrSecondsRemainingChangingDelegate(Vtr vtr, int oldValue, int newValue);
     public delegate void VtrSecondsRemainingChangedDelegate(Vtr vtr, int oldValue, int newValue);
 
-    public class Vtr: IModel
+    public class Vtr : ModelBase
     {
 
-        public virtual void Restored()
+        public override void Restored()
         { }
 
         public event VtrIdChangingDelegate IdChanging;
@@ -42,7 +42,7 @@ namespace OpenSC.Model.VTRs
 
         public int id = 0;
 
-        public int ID
+        public override int ID
         {
             get { return id; }
             set

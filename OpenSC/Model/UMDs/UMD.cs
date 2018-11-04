@@ -25,7 +25,7 @@ namespace OpenSC.Model.UMDs
     public delegate void UmdTallyChanging(UMD umd, int index, bool oldState, bool newState);
     public delegate void UmdTallyChanged(UMD umd, int index, bool oldState, bool newState);
 
-    public abstract class UMD: IModel
+    public abstract class UMD : ModelBase
     {
 
         public abstract IUMDType Type { get; }
@@ -33,7 +33,7 @@ namespace OpenSC.Model.UMDs
 
         protected abstract void update();
 
-        public virtual void Restored()
+        public override void Restored()
         {
             restoreTallySources();
         }
@@ -226,7 +226,7 @@ namespace OpenSC.Model.UMDs
 
         private int id = 0;
 
-        public int ID
+        public override int ID
         {
             get { return id; }
             set

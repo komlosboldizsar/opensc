@@ -11,5 +11,8 @@ namespace OpenSC.Model
     {
         int ID { get; set; }
         void Restored();
+        void Removed();
+        void StartUpdate();
+        void StopUpdate();
     }
 }

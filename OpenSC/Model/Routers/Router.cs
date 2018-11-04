@@ -18,7 +18,7 @@ namespace OpenSC.Model.Routers
     public delegate void RouterInputsChangedDelegate(Router router);
     public delegate void RouterOutputsChangedDelegate(Router router);
 
-    public abstract class Router : IModel
+    public abstract class Router : ModelBase
     {
 
         public Router()
@@ -27,7 +27,7 @@ namespace OpenSC.Model.Routers
             outputs.ItemsChanged += outputsChangedHandler;
         }
 
-        public virtual void Restored()
+        public override void Restored()
         {
             restoreInputSources();
             updateCrosspointRouterAssociations();
@@ -42,7 +42,7 @@ namespace OpenSC.Model.Routers
 
         public int id = 0;
 
-        public int ID
+        public override int ID
         {
             get { return id; }
             set
