@@ -59,11 +59,11 @@
             // customElementsPanel
             // 
             this.customElementsPanel.Controls.Add(this.tabControl);
-            this.customElementsPanel.Size = new System.Drawing.Size(832, 328);
+            this.customElementsPanel.Size = new System.Drawing.Size(832, 345);
             // 
             // mainContainer
             // 
-            this.mainContainer.Size = new System.Drawing.Size(832, 397);
+            this.mainContainer.Size = new System.Drawing.Size(832, 414);
             // 
             // baseDataPanel
             // 
@@ -158,7 +158,7 @@
             this.tabControl.Location = new System.Drawing.Point(10, 10);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(812, 318);
+            this.tabControl.Size = new System.Drawing.Size(812, 335);
             this.tabControl.TabIndex = 1;
             // 
             // baseDataTabPage
@@ -180,7 +180,7 @@
             this.inputsTabPage.Location = new System.Drawing.Point(4, 25);
             this.inputsTabPage.Name = "inputsTabPage";
             this.inputsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.inputsTabPage.Size = new System.Drawing.Size(804, 289);
+            this.inputsTabPage.Size = new System.Drawing.Size(804, 306);
             this.inputsTabPage.TabIndex = 1;
             this.inputsTabPage.Text = "Inputs";
             // 
@@ -190,7 +190,7 @@
             this.inputsTableContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inputsTableContainerPanel.Location = new System.Drawing.Point(3, 3);
             this.inputsTableContainerPanel.Name = "inputsTableContainerPanel";
-            this.inputsTableContainerPanel.Size = new System.Drawing.Size(798, 239);
+            this.inputsTableContainerPanel.Size = new System.Drawing.Size(798, 256);
             this.inputsTableContainerPanel.TabIndex = 2;
             // 
             // inputsTable
@@ -203,22 +203,21 @@
             this.inputsTable.Name = "inputsTable";
             this.inputsTable.ReadOnly = true;
             this.inputsTable.RowTemplate.Height = 24;
-            this.inputsTable.Size = new System.Drawing.Size(798, 239);
+            this.inputsTable.Size = new System.Drawing.Size(798, 256);
             this.inputsTable.TabIndex = 0;
             // 
             // inputsButtonsPanel
             // 
             this.inputsButtonsPanel.Controls.Add(this.addInputButton);
             this.inputsButtonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.inputsButtonsPanel.Location = new System.Drawing.Point(3, 242);
+            this.inputsButtonsPanel.Location = new System.Drawing.Point(3, 259);
             this.inputsButtonsPanel.Name = "inputsButtonsPanel";
             this.inputsButtonsPanel.Size = new System.Drawing.Size(798, 44);
             this.inputsButtonsPanel.TabIndex = 1;
             // 
             // addInputButton
             // 
-            this.addInputButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.addInputButton.Location = new System.Drawing.Point(666, 12);
+            this.addInputButton.Location = new System.Drawing.Point(6, 12);
             this.addInputButton.Margin = new System.Windows.Forms.Padding(6);
             this.addInputButton.Name = "addInputButton";
             this.addInputButton.Size = new System.Drawing.Size(126, 26);
@@ -231,12 +230,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(832, 453);
+            this.ClientSize = new System.Drawing.Size(832, 470);
             this.DeleteButtonVisible = true;
-            this.HeaderText = "Edit router";
+            this.HeaderText = "Edit mixer";
             this.MinimumSize = new System.Drawing.Size(850, 500);
             this.Name = "MixerEditorFormBase";
-            this.Text = "Edit router";
+            this.Text = "Edit mixer";
             this.customElementsPanel.ResumeLayout(false);
             this.mainContainer.ResumeLayout(false);
             this.baseDataPanel.ResumeLayout(false);
