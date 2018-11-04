@@ -15,7 +15,7 @@ namespace OpenSC.Model.Mixers
 
     public delegate void MixerInputTallyChangedDelegate(MixerInput input, bool newState);
 
-    public class MixerInput
+    public class MixerInput : ISignalTallySource
     {
 
         public MixerInput()
@@ -79,10 +79,8 @@ namespace OpenSC.Model.Mixers
                 if (value == source)
                     return;
 
-                if (source != null)
-                {
-                    // Remove tally from the old assigned signal
-                }
+                source?.IsTalliedFrom(this, SignalTallyType.Red, false);
+                source?.IsTalliedFrom(this, SignalTallyType.Green, false);
 
                 Signal oldSource = source;
                 source = value;
@@ -90,10 +88,8 @@ namespace OpenSC.Model.Mixers
                 SourceChanged?.Invoke(this, oldSource, value);
                 SourceChangedPCN?.Invoke();
 
-                if (source != null)
-                {
-                    // Set tally for the assigned signal
-                }
+                source?.IsTalliedFrom(this, SignalTallyType.Red, RedTally);
+                source?.IsTalliedFrom(this, SignalTallyType.Green, GreenTally);
 
             }
         }
@@ -127,9 +123,7 @@ namespace OpenSC.Model.Mixers
                 redTally = value;
                 RedTallyChanged?.Invoke(this, value);
                 RedTallyChangedPCN?.Invoke();
-                if (source != null) {
-                    // Source signal is tallied/not tallied from this input
-                }
+                source?.IsTalliedFrom(this, SignalTallyType.Red, value);
             }
         }
 
@@ -148,10 +142,7 @@ namespace OpenSC.Model.Mixers
                 greenTally = value;
                 GreenTallyChanged?.Invoke(this, value);
                 GreenTallyChangedPCN?.Invoke();
-                if (source != null)
-                {
-                    // Source signal is tallied/not tallied from this input
-                }
+                source?.IsTalliedFrom(this, SignalTallyType.Green, value);
             }
         }
 
