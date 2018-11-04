@@ -29,7 +29,7 @@ namespace OpenSC.Modules.Mixers
 
         public void RegisterDatabasePersisterSerializers()
         {
-            //DatabasePersister<Router>.RegisterSerializer(new MixerInputXmlSerializer());
+            DatabasePersister<Mixer>.RegisterSerializer(new MixerInputXmlSerializer());
         }
 
         public void RegisterModelTypes()
@@ -39,7 +39,7 @@ namespace OpenSC.Modules.Mixers
 
         public void RegisterDatabases()
         {
-            //MasterDatabase.Instance.RegisterSingletonDatabase(typeof(MixerDatabase));
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(MixerDatabase));
         }
 
         public void RegisterWindowTypes()
