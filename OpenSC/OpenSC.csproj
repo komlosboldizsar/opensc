@@ -383,6 +383,7 @@
     <Compile Include="Model\DatabaseBase.cs" />
     <Compile Include="Model\DatabaseFile.cs" />
     <Compile Include="Model\DatabaseNameAttribute.cs" />
+    <Compile Include="Model\General\INotifyPropertyChanged.cs" />
     <Compile Include="Model\General\IObservableList.cs" />
     <Compile Include="Model\General\IObservableListTyped.cs" />
     <Compile Include="Model\General\ObservableList.cs" />
