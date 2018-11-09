@@ -1,5 +1,6 @@
 ﻿using BMDSwitcherAPI;
 using System;
+using ThreadHelpers;
 
 namespace BMD.Switcher
 {
@@ -15,17 +16,23 @@ namespace BMD.Switcher
             MixEffectBlock.AddCallback(this);
         }
 
-        public void Notify(_BMDSwitcherMixEffectBlockEventType eventType)
+        public void PropertyChanged(_BMDSwitcherMixEffectBlockPropertyId propertyId)
         {
-            switch (eventType)
+            switch (propertyId)
             {
-                case _BMDSwitcherMixEffectBlockEventType.bmdSwitcherMixEffectBlockEventTypeProgramInputChanged:
-                    MixEffectBlock.GetProgramInput(out long programInput);
-                    ProgramInput = programInput;
+                case _BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput:
+                    InvokeHelper.Invoke(() =>
+                    {
+                        MixEffectBlock.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, out long programInput);
+                        ProgramInput = programInput;
+                    });
                     break;
-                case _BMDSwitcherMixEffectBlockEventType.bmdSwitcherMixEffectBlockEventTypePreviewInputChanged:
-                    MixEffectBlock.GetPreviewInput(out long previewInput);
-                    PreviewInput = previewInput;
+                case _BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput:
+                    InvokeHelper.Invoke(() =>
+                    {
+                        MixEffectBlock.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out long previewInput);
+                        PreviewInput = previewInput;
+                    });
                     break;
             }
         }

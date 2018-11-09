@@ -1,5 +1,6 @@
 ﻿using BMDSwitcherAPI;
 using System;
+using ThreadHelpers;
 
 namespace BMD.Switcher
 {
@@ -20,12 +21,18 @@ namespace BMD.Switcher
             switch (eventType)
             {
                 case _BMDSwitcherInputEventType.bmdSwitcherInputEventTypeIsProgramTalliedChanged:
-                    Input.IsProgramTallied(out int isProgramTallied);
-                    IsProgramTallied = (isProgramTallied != 0);
+                    InvokeHelper.Invoke(() =>
+                    {
+                        Input.IsProgramTallied(out int isProgramTallied);
+                        IsProgramTallied = (isProgramTallied != 0);
+                    });
                     break;
                 case _BMDSwitcherInputEventType.bmdSwitcherInputEventTypeIsPreviewTalliedChanged:
-                    Input.IsPreviewTallied(out int isPreviewTallied);
-                    IsProgramTallied = (isPreviewTallied != 0);
+                    InvokeHelper.Invoke(() =>
+                    {
+                        Input.IsPreviewTallied(out int isPreviewTallied);
+                        IsProgramTallied = (isPreviewTallied != 0);
+                    });
                     break;
             }
 
