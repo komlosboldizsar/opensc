@@ -37,8 +37,6 @@ namespace OpenSC.Model.Routers
 
         public event RouterIdChangingDelegate IdChanging;
         public event RouterIdChangedDelegate IdChanged;
-        public event ParameterlessChangeNotifierDelegate IdChangingPCN;
-        public event ParameterlessChangeNotifierDelegate IdChangedPCN;
 
         public int id = 0;
 
@@ -52,7 +50,6 @@ namespace OpenSC.Model.Routers
                     return;
                 int oldValue = id;
                 IdChanging?.Invoke(this, oldValue, value);
-                IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
@@ -69,8 +66,6 @@ namespace OpenSC.Model.Routers
 
         public event RouterNameChangingDelegate NameChanging;
         public event RouterNameChangedDelegate NameChanged;
-        public event ParameterlessChangeNotifierDelegate NameChangingPCN;
-        public event ParameterlessChangeNotifierDelegate NameChangedPCN;
 
         [PersistAs("name")]
         private string name;
@@ -85,7 +80,6 @@ namespace OpenSC.Model.Routers
                     return;
                 string oldName = name;
                 NameChanging?.Invoke(this, oldName, value);
-                NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
                 RaisePropertyChanged(nameof(Name));
@@ -145,7 +139,6 @@ namespace OpenSC.Model.Routers
         }
 
         public event RouterInputsChangedDelegate InputsChanged;
-        public event ParameterlessChangeNotifierDelegate InputsChangedPCN;
 
         private ObservableList<RouterOutput> outputs = new ObservableList<RouterOutput>();
 
@@ -194,7 +187,6 @@ namespace OpenSC.Model.Routers
         }
 
         public event RouterOutputsChangedDelegate OutputsChanged;
-        public event ParameterlessChangeNotifierDelegate OutputsChangedPCN;
 
         public bool UpdateCrosspoint(RouterOutput output, RouterInput input)
         {

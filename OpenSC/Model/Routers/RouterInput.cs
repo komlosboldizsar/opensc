@@ -9,7 +9,6 @@ namespace OpenSC.Model.Routers
 {
 
     public delegate void RouterInputNameChanged(RouterInput input, string oldName, string newName);
-    public delegate void RouterInputNameChangedPCN();
 
     public delegate void RouterInputSourceChangedDelegate(RouterInput input, IRouterInputSource oldSource, IRouterInputSource newSource);
 
@@ -51,7 +50,6 @@ namespace OpenSC.Model.Routers
         }
 
         public event RouterInputNameChanged NameChanged;
-        public event RouterInputNameChangedPCN NameChangedPCN;
 
         public Router Router { get; internal set; }
 
@@ -108,7 +106,6 @@ namespace OpenSC.Model.Routers
         }
 
         public event RouterInputSourceChangedDelegate RouterInputSourceChanged;
-        public event ParameterlessChangeNotifierDelegate RouterInputSourceChangedPCN;
 
         // "Temp foreign key"
         public string _sourceString;

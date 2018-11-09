@@ -22,8 +22,6 @@ namespace OpenSC.Model.UMDs
 
         public event UmdPortIdChangingDelegate IdChanging;
         public event UmdPortIdChangedDelegate IdChanged;
-        public event ParameterlessChangeNotifierDelegate IdChangingPCN;
-        public event ParameterlessChangeNotifierDelegate IdChangedPCN;
 
         private int id = 0;
 
@@ -35,7 +33,6 @@ namespace OpenSC.Model.UMDs
                 ValidateId(value);
                 int oldValue = id;
                 IdChanging?.Invoke(this, oldValue, value);
-                IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
@@ -52,8 +49,6 @@ namespace OpenSC.Model.UMDs
 
         public event UmdPortNameChangingDelegate NameChanging;
         public event UmdPortNameChangedDelegate NameChanged;
-        public event ParameterlessChangeNotifierDelegate NameChangingPCN;
-        public event ParameterlessChangeNotifierDelegate NameChangedPCN;
 
         [PersistAs("name")]
         private string name;
@@ -67,7 +62,6 @@ namespace OpenSC.Model.UMDs
                     return;
                 string oldName = name;
                 NameChanging?.Invoke(this, oldName, value);
-                NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
                 RaisePropertyChanged(nameof(Name));
@@ -83,8 +77,6 @@ namespace OpenSC.Model.UMDs
 
         public event UmdPortInitializedChangingDelegate InitializedChanging;
         public event UmdPortInitializedChangedDelegate InitializedChanged;
-        public event ParameterlessChangeNotifierDelegate InitializedChangingPCN;
-        public event ParameterlessChangeNotifierDelegate InitializedChangedPCN;
 
         private bool initialized;
 
@@ -97,7 +89,6 @@ namespace OpenSC.Model.UMDs
                     return;
                 bool oldState = initialized;
                 InitializedChanging?.Invoke(this, oldState, value);
-                InitializedChangingPCN?.Invoke();
                 initialized = value;
                 InitializedChanged?.Invoke(this, oldState, value);
                 RaisePropertyChanged(nameof(Initialized));

@@ -47,8 +47,6 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
 
         public event BmdVideohubIpAddressChangingDelegate IpAddressChanging;
         public event BmdVideohubIpAddressChangedDelegate IpAddressChanged;
-        public event ParameterlessChangeNotifierDelegate IpAddressChangingPCN;
-        public event ParameterlessChangeNotifierDelegate IpAddressChangedPCN;
 
         [PersistAs("ip_address")]
         private string ipAddress;
@@ -63,11 +61,10 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
                     return;
                 string oldIpAddress = ipAddress;
                 IpAddressChanging?.Invoke(this, oldIpAddress, value);
-                IpAddressChangingPCN?.Invoke();
                 ipAddress = value;
                 videohub.IpAddress = value;
                 IpAddressChanged?.Invoke(this, oldIpAddress, value);
-                IpAddressChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(IpAddress));
             }
         }
 
@@ -78,8 +75,6 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
 
         public event BmdVideohubConnectionStateChangingDelegate ConnectionStateChanging;
         public event BmdVideohubConnectionStateChangedDelegate ConnectionStateChanged;
-        public event ParameterlessChangeNotifierDelegate ConnectionStateChangingPCN;
-        public event ParameterlessChangeNotifierDelegate ConnectionStateChangedPCN;
 
         private bool connected;
 
@@ -92,18 +87,15 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
                     return;
                 bool oldState = connected;
                 ConnectionStateChanging?.Invoke(this, oldState, value);
-                ConnectionStateChangingPCN?.Invoke();
                 connected = value;
                 ConnectionStateChanged?.Invoke(this, oldState, value);
-                ConnectionStateChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Connected));
             }
         }
 
         #region Auto reconnect
         public event BmdVideohubAutoReconnectChangingDelegate AutoReconnectChanging;
         public event BmdVideohubAutoReconnectChangedDelegate AutoReconnectChanged;
-        public event ParameterlessChangeNotifierDelegate AutoReconnectChangingPCN;
-        public event ParameterlessChangeNotifierDelegate AutoReconnectChangedPCN;
 
         [PersistAs("auto_reconnect")]
         private bool autoReconnect;
@@ -117,10 +109,9 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
                     return;
                 bool oldValue = autoReconnect;
                 AutoReconnectChanging?.Invoke(this, oldValue, value);
-                AutoReconnectChangingPCN?.Invoke();
                 autoReconnect = value;
                 AutoReconnectChanged?.Invoke(this, oldValue, value);
-                AutoReconnectChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(AutoReconnect));
             }
         }
 

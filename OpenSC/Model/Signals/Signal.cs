@@ -30,8 +30,6 @@ namespace OpenSC.Model.Signals
 
         public event SignalIdChangingDelegate IdChanging;
         public event SignalIdChangedDelegate IdChanged;
-        public event ParameterlessChangeNotifierDelegate IdChangingPCN;
-        public event ParameterlessChangeNotifierDelegate IdChangedPCN;
 
         public int id = 0;
 
@@ -43,7 +41,6 @@ namespace OpenSC.Model.Signals
                 ValidateId(value);
                 int oldValue = id;
                 IdChanging?.Invoke(this, oldValue, value);
-                IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
@@ -62,8 +59,6 @@ namespace OpenSC.Model.Signals
 
         public event SignalNameChangingDelegate NameChanging;
         public event SignalNameChangedDelegate NameChanged;
-        public event ParameterlessChangeNotifierDelegate NameChangingPCN;
-        public event ParameterlessChangeNotifierDelegate NameChangedPCN;
 
         [PersistAs("name")]
         private string name;
@@ -77,7 +72,6 @@ namespace OpenSC.Model.Signals
                     return;
                 string oldName = name;
                 NameChanging?.Invoke(this, oldName, value);
-                NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
                 RaisePropertyChanged(nameof(Name));
@@ -87,8 +81,6 @@ namespace OpenSC.Model.Signals
 
         public event SignalCategoryChangingDelegate CategoryChanging;
         public event SignalCategoryChangedDelegate CategoryChanged;
-        public event ParameterlessChangeNotifierDelegate CategoryChangingPCN;
-        public event ParameterlessChangeNotifierDelegate CategoryChangedPCN;
 
         [PersistAs("category")]
         private SignalCategory category;
@@ -105,7 +97,6 @@ namespace OpenSC.Model.Signals
                     return;
                 SignalCategory oldCategory = category;
                 CategoryChanging?.Invoke(this, oldCategory, value);
-                CategoryChangingPCN?.Invoke();
                 category = value;
                 CategoryChanged?.Invoke(this, oldCategory, value);
                 RaisePropertyChanged(nameof(Category));
@@ -115,8 +106,6 @@ namespace OpenSC.Model.Signals
         #region Tallies
         public event SignalTallyChangingDelegate RedTallyChanging;
         public event SignalTallyChangedDelegate RedTallyChanged;
-        public event ParameterlessChangeNotifierDelegate RedTallyChangingPCN;
-        public event ParameterlessChangeNotifierDelegate RedTallyChangedPCN;
 
         private bool redTally;
 
@@ -129,7 +118,6 @@ namespace OpenSC.Model.Signals
                     return;
                 bool oldState = redTally;
                 RedTallyChanging?.Invoke(this, oldState, value);
-                RedTallyChangingPCN?.Invoke();
                 redTally = value;
                 RedTallyChanged?.Invoke(this, oldState, value);
                 RaisePropertyChanged(nameof(RedTally));
@@ -138,8 +126,6 @@ namespace OpenSC.Model.Signals
 
         public event SignalTallyChangingDelegate GreenTallyChanging;
         public event SignalTallyChangedDelegate GreenTallyChanged;
-        public event ParameterlessChangeNotifierDelegate GreenTallyChangingPCN;
-        public event ParameterlessChangeNotifierDelegate GreenTallyChangedPCN;
 
         private bool greenTally;
 
@@ -152,7 +138,6 @@ namespace OpenSC.Model.Signals
                     return;
                 bool oldState = greenTally;
                 GreenTallyChanging?.Invoke(this, oldState, value);
-                GreenTallyChangingPCN?.Invoke();
                 greenTally = value;
                 GreenTallyChanged?.Invoke(this, oldState, value);
                 RaisePropertyChanged(nameof(GreenTally));

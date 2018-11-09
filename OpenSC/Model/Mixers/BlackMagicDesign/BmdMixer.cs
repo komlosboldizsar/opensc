@@ -85,8 +85,6 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         #region Property: IpAddress
         public event BmdMixerIpAddressChangingDelegate IpAddressChanging;
         public event BmdMixerIpAddressChangedDelegate IpAddressChanged;
-        public event ParameterlessChangeNotifierDelegate IpAddressChangingPCN;
-        public event ParameterlessChangeNotifierDelegate IpAddressChangedPCN;
 
         [PersistAs("ip_address")]
         private string ipAddress;
@@ -103,7 +101,6 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
                 string oldIpAddress = ipAddress;
 
                 IpAddressChanging?.Invoke(this, oldIpAddress, value);
-                IpAddressChangingPCN?.Invoke();
 
                 ipAddress = value;
                 switcher.IpAddress = value;
@@ -123,8 +120,6 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         #region Property: ConnectionState
         public event BmdMixerConnectionStateChangingDelegate ConnectionStateChanging;
         public event BmdMixerConnectionStateChangedDelegate ConnectionStateChanged;
-        public event ParameterlessChangeNotifierDelegate ConnectionStateChangingPCN;
-        public event ParameterlessChangeNotifierDelegate ConnectionStateChangedPCN;
 
         private bool connected;
 
@@ -139,7 +134,6 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
                 bool oldState = connected;
 
                 ConnectionStateChanging?.Invoke(this, oldState, value);
-                ConnectionStateChangingPCN?.Invoke();
 
                 connected = value;
 
@@ -165,8 +159,6 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         #region Property: AutoReconnect
         public event BmdMixerAutoReconnectChangingDelegate AutoReconnectChanging;
         public event BmdMixerAutoReconnectChangedDelegate AutoReconnectChanged;
-        public event ParameterlessChangeNotifierDelegate AutoReconnectChangingPCN;
-        public event ParameterlessChangeNotifierDelegate AutoReconnectChangedPCN;
 
         [PersistAs("auto_reconnect")]
         private bool autoReconnect;
@@ -180,7 +172,6 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
                     return;
                 bool oldValue = autoReconnect;
                 AutoReconnectChanging?.Invoke(this, oldValue, value);
-                AutoReconnectChangingPCN?.Invoke();
                 autoReconnect = value;
                 AutoReconnectChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(AutoReconnect));

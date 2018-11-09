@@ -37,8 +37,6 @@ namespace OpenSC.Model.VTRs
 
         public event VtrIdChangingDelegate IdChanging;
         public event VtrIdChangedDelegate IdChanged;
-        public event ParameterlessChangeNotifierDelegate IdChangingPCN;
-        public event ParameterlessChangeNotifierDelegate IdChangedPCN;
 
         public int id = 0;
 
@@ -50,7 +48,6 @@ namespace OpenSC.Model.VTRs
                 ValidateId(value);
                 int oldValue = id;
                 IdChanging?.Invoke(this, oldValue, value);
-                IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
@@ -68,8 +65,6 @@ namespace OpenSC.Model.VTRs
 
         public event VtrNameChangingDelegate NameChanging;
         public event VtrNameChangedDelegate NameChanged;
-        public event ParameterlessChangeNotifierDelegate NameChangingPCN;
-        public event ParameterlessChangeNotifierDelegate NameChangedPCN;
 
         [PersistAs("name")]
         private string name;
@@ -83,7 +78,6 @@ namespace OpenSC.Model.VTRs
                     return;
                 string oldName = name;
                 NameChanging?.Invoke(this, oldName, value);
-                NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
                 RaisePropertyChanged(nameof(Name));
@@ -92,8 +86,6 @@ namespace OpenSC.Model.VTRs
 
         public event VtrTitleChangingDelegate TitleChanging;
         public event VtrTitleChangedDelegate TitleChanged;
-        public event ParameterlessChangeNotifierDelegate TitleChangingPCN;
-        public event ParameterlessChangeNotifierDelegate TitleChangedPCN;
 
         private string title;
 
@@ -106,7 +98,6 @@ namespace OpenSC.Model.VTRs
                     return;
                 string oldTitle = title;
                 TitleChanging?.Invoke(this, oldTitle, value);
-                TitleChangingPCN?.Invoke();
                 title = value;
                 TitleChanged?.Invoke(this, oldTitle, value);
                 RaisePropertyChanged(nameof(Title));
@@ -116,8 +107,6 @@ namespace OpenSC.Model.VTRs
 
         public event VtrStateChangingDelegate StateChanging;
         public event VtrStateChangedDelegate StateChanged;
-        public event ParameterlessChangeNotifierDelegate StateChangingPCN;
-        public event ParameterlessChangeNotifierDelegate StateChangedPCN;
 
         private VtrState state = VtrState.Stopped;
 
@@ -139,8 +128,6 @@ namespace OpenSC.Model.VTRs
 
         public event VtrSecondsFullChangingDelegate SecondsFullChanging;
         public event VtrSecondsFullChangedDelegate SecondsFullChanged;
-        public event ParameterlessChangeNotifierDelegate SecondsFullChangingPCN;
-        public event ParameterlessChangeNotifierDelegate SecondsFullChangedPCN;
 
         private int secondsFull;
 
@@ -153,7 +140,6 @@ namespace OpenSC.Model.VTRs
                     return;
                 int oldValue = secondsFull;
                 SecondsFullChanging?.Invoke(this, oldValue, value);
-                SecondsFullChangingPCN?.Invoke();
                 secondsFull = value;
                 SecondsFullChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(SecondsFull));
@@ -167,8 +153,6 @@ namespace OpenSC.Model.VTRs
 
         public event VtrSecondsElapsedChangingDelegate SecondsElapsedChanging;
         public event VtrSecondsElapsedChangedDelegate SecondsElapsedChanged;
-        public event ParameterlessChangeNotifierDelegate SecondsElapsedChangingPCN;
-        public event ParameterlessChangeNotifierDelegate SecondsElapsedChangedPCN;
 
         private int secondsElapsed;
 
@@ -181,7 +165,6 @@ namespace OpenSC.Model.VTRs
                     return;
                 int oldValue = secondsElapsed;
                 SecondsElapsedChanging?.Invoke(this, oldValue, value);
-                SecondsElapsedChangingPCN?.Invoke();
                 secondsElapsed = value;
                 SecondsElapsedChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(SecondsElapsed));
@@ -195,8 +178,6 @@ namespace OpenSC.Model.VTRs
 
         public event VtrSecondsRemainingChangingDelegate SecondsRemainingChanging;
         public event VtrSecondsRemainingChangedDelegate SecondsRemainingChanged;
-        public event ParameterlessChangeNotifierDelegate SecondsRemainingChangingPCN;
-        public event ParameterlessChangeNotifierDelegate SecondsRemainingChangedPCN;
 
         private int secondsRemaining;
 
@@ -209,7 +190,6 @@ namespace OpenSC.Model.VTRs
                     return;
                 int oldValue = secondsRemaining;
                 SecondsRemainingChanging?.Invoke(this, oldValue, value);
-                SecondsRemainingChangingPCN?.Invoke();
                 secondsRemaining = value;
                 SecondsRemainingChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(SecondsRemaining));

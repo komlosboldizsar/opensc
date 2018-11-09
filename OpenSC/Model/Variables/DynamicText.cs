@@ -27,8 +27,6 @@ namespace OpenSC.Model.Variables
 
         public event DynamicTextIdChangingDelegate IdChanging;
         public event DynamicTextIdChangedDelegate IdChanged;
-        public event ParameterlessChangeNotifierDelegate IdChangingPCN;
-        public event ParameterlessChangeNotifierDelegate IdChangedPCN;
 
         public int id = 0;
 
@@ -42,7 +40,6 @@ namespace OpenSC.Model.Variables
                     return;
                 int oldValue = id;
                 IdChanging?.Invoke(this, oldValue, value);
-                IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
@@ -59,8 +56,6 @@ namespace OpenSC.Model.Variables
 
         public event DynamicTextLabelChangingDelegate LabelChanging;
         public event DynamicTextLabelChangedDelegate LabelChanged;
-        public event ParameterlessChangeNotifierDelegate LabelChangingPCN;
-        public event ParameterlessChangeNotifierDelegate LabelChangedPCN;
 
         [PersistAs("label")]
         private string label;
@@ -75,7 +70,6 @@ namespace OpenSC.Model.Variables
                     return;
                 string oldLabel = label;
                 LabelChanging?.Invoke(this, oldLabel, value);
-                LabelChangingPCN?.Invoke();
                 label = value;
                 LabelChanged?.Invoke(this, oldLabel, value);
                 RaisePropertyChanged(nameof(Label));
@@ -90,8 +84,6 @@ namespace OpenSC.Model.Variables
 
         public event DynamicTextCurrentTextChangingDelegate CurrentTextChanging;
         public event DynamicTextCurrentTextChangedDelegate CurrentTextChanged;
-        public event ParameterlessChangeNotifierDelegate CurrentTextChangingPCN;
-        public event ParameterlessChangeNotifierDelegate CurrentTextChangedPCN;
 
         private string currentText;
 
@@ -104,7 +96,6 @@ namespace OpenSC.Model.Variables
                     return;
                 string oldValue = currentText;
                 CurrentTextChanging?.Invoke(this, oldValue, value);
-                CurrentTextChangingPCN?.Invoke();
                 currentText = value;
                 CurrentTextChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(CurrentText));

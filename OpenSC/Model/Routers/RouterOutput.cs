@@ -11,7 +11,6 @@ namespace OpenSC.Model.Routers
 {
 
     public delegate void RouterOutputNameChanged(RouterOutput output, string oldName, string newName);
-    public delegate void RouterOutputNameChangedPCN();
 
     public delegate void RouterOutputIndexChangedDelegate(RouterOutput output, int oldIndex, int newIndex);
 
@@ -55,7 +54,6 @@ namespace OpenSC.Model.Routers
         }
 
         public event RouterOutputNameChanged NameChanged;
-        public event RouterOutputNameChangedPCN NameChangedPCN;
 
         public Router Router { get; internal set; }
 
@@ -83,7 +81,6 @@ namespace OpenSC.Model.Routers
         }
 
         public event RouterOutputIndexChangedDelegate IndexChanged;
-        public event ParameterlessChangeNotifierDelegate IndexChangedPCN;
 
         private RouterInput crosspoint;
 

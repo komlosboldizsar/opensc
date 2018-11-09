@@ -14,19 +14,16 @@ namespace OpenSC.Model.Variables
         string Name { get; }
 
         event BooleanNameChangedDelegate NameChanged;
-        event ParameterlessChangeNotifierDelegate NameChangedPCN;
 
         Color Color { get; }
 
         string Description { get; set; }
 
         event BooleanDescriptionChangedDelegate DescriptionChanged;
-        event ParameterlessChangeNotifierDelegate DescriptionChangedPCN;
 
         bool CurrentState { get; }
 
         event BooleanStateChangedDelegate StateChanged;
-        event ParameterlessChangeNotifierDelegate StateChangedPCN;
 
     }
 

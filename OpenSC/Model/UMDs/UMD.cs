@@ -43,8 +43,6 @@ namespace OpenSC.Model.UMDs
 
         public event UmdTextChanging CurrentTextChanging;
         public event UmdTextChanged CurrentTextChanged;
-        public event ParameterlessChangeNotifierDelegate CurrentTextChangingPCN;
-        public event ParameterlessChangeNotifierDelegate CurrentTextChangedPCN;
 
         protected string currentText;
 
@@ -55,7 +53,6 @@ namespace OpenSC.Model.UMDs
             {
                 string oldValue = currentText;
                 CurrentTextChanging?.Invoke(this, oldValue, value);
-                CurrentTextChangingPCN?.Invoke();
                 currentText = value;
                 update();
                 CurrentTextChanged?.Invoke(this, oldValue, value);
@@ -78,8 +75,6 @@ namespace OpenSC.Model.UMDs
 
         public event UmdTextChanging StaticTextChanging;
         public event UmdTextChanged StaticTextChanged;
-        public event ParameterlessChangeNotifierDelegate StaticTextChangingPCN;
-        public event ParameterlessChangeNotifierDelegate StaticTextChangedPCN;
 
         [PersistAs("static_text")]
         private string staticText;
@@ -91,7 +86,6 @@ namespace OpenSC.Model.UMDs
             {
                 string oldValue = staticText;
                 StaticTextChanging?.Invoke(this, oldValue, value);
-                StaticTextChangingPCN?.Invoke();
                 staticText = value;
                 if (useStaticText)
                     CurrentText = value;
@@ -102,8 +96,6 @@ namespace OpenSC.Model.UMDs
 
         public event UmdUseStaticTextChanging UseStaticTextChanging;
         public event UmdUseStaticTextChanged UseStaticTextChanged;
-        public event ParameterlessChangeNotifierDelegate UseStaticTextChangingPCN;
-        public event ParameterlessChangeNotifierDelegate UseStaticTextChangedPCN;
 
         [PersistAs("use_static_text")]
         private bool useStaticText = false;
@@ -117,7 +109,6 @@ namespace OpenSC.Model.UMDs
                 if (oldValue == value)
                     return;
                 UseStaticTextChanging?.Invoke(this, oldValue, value);
-                UseStaticTextChangingPCN?.Invoke();
                 useStaticText = value;
                 CurrentText = useStaticText ? staticText : dynamicText;
                 UseStaticTextChanged?.Invoke(this, oldValue, value);
@@ -128,8 +119,6 @@ namespace OpenSC.Model.UMDs
         #region Tallies
         public event UmdTallyChanging TallyChanging;
         public event UmdTallyChanged TallyChanged;
-        public event ParameterlessChangeNotifierDelegate TallyChangingPCN;
-        public event ParameterlessChangeNotifierDelegate TallyChangedPCN;
 
         public const int MAX_TALLIES = 8;
 
@@ -197,7 +186,6 @@ namespace OpenSC.Model.UMDs
                 return;
 
             TallyChanging?.Invoke(this, index, !state, state);
-            TallyChangingPCN?.Invoke();
 
             tallyStates[index] = state;
             tallyChanged(index, state);
@@ -221,8 +209,6 @@ namespace OpenSC.Model.UMDs
 
         public event UmdIdChangingDelegate IdChanging;
         public event UmdIdChangedDelegate IdChanged;
-        public event ParameterlessChangeNotifierDelegate IdChangingPCN;
-        public event ParameterlessChangeNotifierDelegate IdChangedPCN;
 
         private int id = 0;
 
@@ -234,7 +220,6 @@ namespace OpenSC.Model.UMDs
                 ValidateId(value);
                 int oldValue = id;
                 IdChanging?.Invoke(this, oldValue, value);
-                IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
@@ -251,8 +236,6 @@ namespace OpenSC.Model.UMDs
 
         public event UmdNameChangingDelegate NameChanging;
         public event UmdNameChangedDelegate NameChanged;
-        public event ParameterlessChangeNotifierDelegate NameChangingPCN;
-        public event ParameterlessChangeNotifierDelegate NameChangedPCN;
 
         [PersistAs("name")]
         private string name;
@@ -265,7 +248,6 @@ namespace OpenSC.Model.UMDs
                 ValidateName(value);
                 string oldValue = name;
                 NameChanging?.Invoke(this, oldValue, value);
-                NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(Name));

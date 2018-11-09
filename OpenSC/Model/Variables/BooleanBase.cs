@@ -26,7 +26,6 @@ namespace OpenSC.Model.Variables
         }
 
         public event BooleanNameChangedDelegate NameChanged;
-        public event ParameterlessChangeNotifierDelegate NameChangedPCN;
 
         private readonly Color color;
 
@@ -48,7 +47,6 @@ namespace OpenSC.Model.Variables
         }
 
         public event BooleanDescriptionChangedDelegate DescriptionChanged;
-        public event ParameterlessChangeNotifierDelegate DescriptionChangedPCN;
 
         public BooleanBase(string name, Color color, string description = "")
         {
@@ -73,7 +71,6 @@ namespace OpenSC.Model.Variables
         }
 
         public event BooleanStateChangedDelegate StateChanged;
-        public event ParameterlessChangeNotifierDelegate StateChangedPCN;
 
         #region Implementation of INotifyPropertyChanged
         public event PropertyChangedDelegate PropertyChanged;

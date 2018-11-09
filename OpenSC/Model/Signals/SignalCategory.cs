@@ -27,8 +27,6 @@ namespace OpenSC.Model.Signals
 
         public event SignalCategoryIdChangingDelegate IdChanging;
         public event SignalCategoryIdChangedDelegate IdChanged;
-        public event ParameterlessChangeNotifierDelegate IdChangingPCN;
-        public event ParameterlessChangeNotifierDelegate IdChangedPCN;
 
         public int id = 0;
 
@@ -40,7 +38,6 @@ namespace OpenSC.Model.Signals
                 ValidateId(value);
                 int oldValue = id;
                 IdChanging?.Invoke(this, oldValue, value);
-                IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
@@ -58,8 +55,6 @@ namespace OpenSC.Model.Signals
 
         public event SignalCategoryNameChangingDelegate NameChanging;
         public event SignalCategoryNameChangedDelegate NameChanged;
-        public event ParameterlessChangeNotifierDelegate NameChangingPCN;
-        public event ParameterlessChangeNotifierDelegate NameChangedPCN;
 
         [PersistAs("name")]
         private string name;
@@ -73,7 +68,6 @@ namespace OpenSC.Model.Signals
                     return;
                 string oldName = name;
                 NameChanging?.Invoke(this, oldName, value);
-                NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
                 RaisePropertyChanged(nameof(Name));
@@ -82,8 +76,6 @@ namespace OpenSC.Model.Signals
 
         public event SignalCategoryColorChangingDelegate ColorChanging;
         public event SignalCategoryColorChangedDelegate ColorChanged;
-        public event ParameterlessChangeNotifierDelegate ColorChangingPCN;
-        public event ParameterlessChangeNotifierDelegate ColorChangedPCN;
 
         [PersistAs("color")]
         private Color color;
@@ -97,7 +89,6 @@ namespace OpenSC.Model.Signals
                     return;
                 Color oldColor = color;
                 ColorChanging?.Invoke(this, oldColor, value);
-                ColorChangingPCN?.Invoke();
                 color = value;
                 ColorChanged?.Invoke(this, oldColor, value);
                 RaisePropertyChanged(nameof(Color));

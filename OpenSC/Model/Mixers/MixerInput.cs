@@ -45,12 +45,10 @@ namespace OpenSC.Model.Mixers
                 string oldName = name;
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                NameChangedPCN?.Invoke();
             }
         }
 
         public event MixerInputNameChangedDelegate NameChanged;
-        public event ParameterlessChangeNotifierDelegate NameChangedPCN;
 
         public Mixer Mixer { get; internal set; }
 
@@ -86,7 +84,6 @@ namespace OpenSC.Model.Mixers
                 source = value;
 
                 SourceChanged?.Invoke(this, oldSource, value);
-                SourceChangedPCN?.Invoke();
 
                 source?.IsTalliedFrom(this, SignalTallyType.Red, RedTally);
                 source?.IsTalliedFrom(this, SignalTallyType.Green, GreenTally);
@@ -95,7 +92,6 @@ namespace OpenSC.Model.Mixers
         }
 
         public event MixerInputSourceChangedDelegate SourceChanged;
-        public event ParameterlessChangeNotifierDelegate SourceChangedPCN;
 
         // "Temp foreign key"
         public int _sourceSignalId;
@@ -122,13 +118,11 @@ namespace OpenSC.Model.Mixers
                     return;
                 redTally = value;
                 RedTallyChanged?.Invoke(this, value);
-                RedTallyChangedPCN?.Invoke();
                 source?.IsTalliedFrom(this, SignalTallyType.Red, value);
             }
         }
 
         public event MixerInputTallyChangedDelegate RedTallyChanged;
-        public event ParameterlessChangeNotifierDelegate RedTallyChangedPCN;
 
         private bool greenTally;
 
@@ -141,13 +135,11 @@ namespace OpenSC.Model.Mixers
                     return;
                 greenTally = value;
                 GreenTallyChanged?.Invoke(this, value);
-                GreenTallyChangedPCN?.Invoke();
                 source?.IsTalliedFrom(this, SignalTallyType.Green, value);
             }
         }
 
         public event MixerInputTallyChangedDelegate GreenTallyChanged;
-        public event ParameterlessChangeNotifierDelegate GreenTallyChangedPCN;
 
     }
 

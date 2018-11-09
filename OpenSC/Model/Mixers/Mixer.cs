@@ -39,8 +39,6 @@ namespace OpenSC.Model.Mixers
         #region Property: ID
         public event MixerIdChangingDelegate IdChanging;
         public event MixerIdChangedDelegate IdChanged;
-        public event ParameterlessChangeNotifierDelegate IdChangingPCN;
-        public event ParameterlessChangeNotifierDelegate IdChangedPCN;
 
         public int id = 0;
 
@@ -54,7 +52,6 @@ namespace OpenSC.Model.Mixers
                     return;
                 int oldValue = id;
                 IdChanging?.Invoke(this, oldValue, value);
-                IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
@@ -73,8 +70,6 @@ namespace OpenSC.Model.Mixers
         #region Property: Name
         public event MixerNameChangingDelegate NameChanging;
         public event MixerNameChangedDelegate NameChanged;
-        public event ParameterlessChangeNotifierDelegate NameChangingPCN;
-        public event ParameterlessChangeNotifierDelegate NameChangedPCN;
 
         [PersistAs("name")]
         private string name;
@@ -89,7 +84,6 @@ namespace OpenSC.Model.Mixers
                     return;
                 string oldName = name;
                 NameChanging?.Invoke(this, oldName, value);
-                NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
                 RaisePropertyChanged(nameof(Name));
@@ -106,11 +100,8 @@ namespace OpenSC.Model.Mixers
         #region Property: OnProgramInput, OnProgramInputName
         public event MixerOnProgramInputChangingDelegate OnProgramInputChanging;
         public event MixerOnProgramInputChangedDelegate OnProgramInputChanged;
-        public event ParameterlessChangeNotifierDelegate OnProgramInputChangingPCN;
-        public event ParameterlessChangeNotifierDelegate OnProgramInputChangedPCN;
 
         public event MixerOnProgramInputNameChangedDelegate OnProgramInputNameChanged;
-        public event ParameterlessChangeNotifierDelegate OnProgramInputNameChangedPCN;
 
         private MixerInput onProgramInput;
 
@@ -128,7 +119,6 @@ namespace OpenSC.Model.Mixers
                     onProgramInput.NameChanged -= onProgramInputNameChangedHandler;
 
                 OnProgramInputChanging?.Invoke(this, oldInput, value);
-                OnProgramInputChangingPCN?.Invoke();
 
                 onProgramInput = value;
 
@@ -152,18 +142,14 @@ namespace OpenSC.Model.Mixers
         private void onProgramInputNameChangedHandler(MixerInput input, string oldName, string newName)
         {
             OnProgramInputNameChanged?.Invoke(this, newName);
-            OnProgramInputNameChangedPCN?.Invoke();
         }
         #endregion
 
         #region Property: OnPreviewInput, OnPreviewInputName
         public event MixerOnPreviewInputChangingDelegate OnPreviewInputChanging;
         public event MixerOnPreviewInputChangedDelegate OnPreviewInputChanged;
-        public event ParameterlessChangeNotifierDelegate OnPreviewInputChangingPCN;
-        public event ParameterlessChangeNotifierDelegate OnPreviewInputChangedPCN;
 
         public event MixerOnPreviewInputNameChangedDelegate OnPreviewInputNameChanged;
-        public event ParameterlessChangeNotifierDelegate OnPreviewInputNameChangedPCN;
 
         private MixerInput onPreviewInput;
 
@@ -181,7 +167,6 @@ namespace OpenSC.Model.Mixers
                     onPreviewInput.NameChanged -= onPreviewInputNameChangedHandler;
 
                 OnPreviewInputChanging?.Invoke(this, oldInput, value);
-                OnPreviewInputChangingPCN?.Invoke();
 
                 onPreviewInput = value;
 
@@ -205,7 +190,6 @@ namespace OpenSC.Model.Mixers
         private void onPreviewInputNameChangedHandler(MixerInput input, string oldName, string newName)
         {
             OnPreviewInputNameChanged?.Invoke(this, newName);
-            OnPreviewInputNameChangedPCN?.Invoke();
         }
         #endregion
 
@@ -258,7 +242,6 @@ namespace OpenSC.Model.Mixers
         }
 
         public event MixerInputsChangedDelegate InputsChanged;
-        public event ParameterlessChangeNotifierDelegate InputsChangedPCN;
         #endregion
 
     }
