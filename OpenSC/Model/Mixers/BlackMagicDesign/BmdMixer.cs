@@ -109,7 +109,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
                 switcher.IpAddress = value;
 
                 IpAddressChanged?.Invoke(this, oldIpAddress, value);
-                IpAddressChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(IpAddress));
 
             }
         }
@@ -144,7 +144,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
                 connected = value;
 
                 ConnectionStateChanged?.Invoke(this, oldState, value);
-                ConnectionStateChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Connected));
 
                 if (value)
                 {
@@ -183,7 +183,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
                 AutoReconnectChangingPCN?.Invoke();
                 autoReconnect = value;
                 AutoReconnectChanged?.Invoke(this, oldValue, value);
-                AutoReconnectChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(AutoReconnect));
             }
         }
         #endregion

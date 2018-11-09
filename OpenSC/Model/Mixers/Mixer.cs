@@ -57,7 +57,7 @@ namespace OpenSC.Model.Mixers
                 IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
-                IdChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ID));
             }
         }
 
@@ -92,7 +92,7 @@ namespace OpenSC.Model.Mixers
                 NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                NameChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Name));
             }
         }
 
@@ -133,10 +133,10 @@ namespace OpenSC.Model.Mixers
                 onProgramInput = value;
 
                 OnProgramInputChanged?.Invoke(this, oldInput, value);
-                OnProgramInputChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(OnProgramInputName));
 
                 OnProgramInputNameChanged?.Invoke(this, onProgramInput?.Name);
-                OnProgramInputNameChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(OnProgramInput));
 
                 if (onProgramInput != null)
                     onProgramInput.NameChanged += onProgramInputNameChangedHandler;
@@ -186,10 +186,10 @@ namespace OpenSC.Model.Mixers
                 onPreviewInput = value;
 
                 OnPreviewInputChanged?.Invoke(this, oldInput, value);
-                OnPreviewInputChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(OnPreviewInputName));
 
                 OnPreviewInputNameChanged?.Invoke(this, onPreviewInput?.Name);
-                OnPreviewInputNameChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(OnPreviewInput));
 
                 if (onPreviewInput != null)
                     onPreviewInput.NameChanged += onPreviewInputNameChangedHandler;
@@ -249,7 +249,7 @@ namespace OpenSC.Model.Mixers
         private void inputsChangedHandler()
         {
             InputsChanged?.Invoke(this);
-            InputsChangedPCN?.Invoke();
+            RaisePropertyChanged(nameof(Inputs));
         }
         private void restoreInputSources()
         {

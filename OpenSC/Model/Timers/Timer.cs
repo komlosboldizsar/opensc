@@ -61,7 +61,7 @@ namespace OpenSC.Model.Timers
                 IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
-                IdChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ID));
             }
         }
 
@@ -91,7 +91,7 @@ namespace OpenSC.Model.Timers
                 TitleChangingPCN?.Invoke();
                 title = value;
                 TitleChanged?.Invoke(this, oldTitle, value);
-                TitleChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Title));
             }
         }
 
@@ -120,7 +120,7 @@ namespace OpenSC.Model.Timers
                 SecondsChangingPCN?.Invoke();
                 seconds = value;
                 SecondsChanged?.Invoke(this, oldValue, value);
-                SecondsChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Seconds));
             }
         }
 
@@ -148,7 +148,7 @@ namespace OpenSC.Model.Timers
                 CountdownSecondsChangingPCN?.Invoke();
                 countdownSeconds = value;
                 CountdownSecondsChanged?.Invoke(this, oldValue, value);
-                CountdownSecondsChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(CountdownSeconds));
             }
         }
 
@@ -205,7 +205,7 @@ namespace OpenSC.Model.Timers
                 running = value;
 
                 RunningStateChanged?.Invoke(this, oldValue, value);
-                RunningStateChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Running));
                 if (value == true)
                 {
                     Started?.Invoke(this);
@@ -257,7 +257,7 @@ namespace OpenSC.Model.Timers
             {
                 TimerMode oldValue = mode;
                 ModeChanging?.Invoke(this, oldValue, value);
-                ModeChangingPCN?.Invoke();
+                RaisePropertyChanged(nameof(Mode));
                 OperationsChanging?.Invoke(this);
                 OperationsChangingPCN?.Invoke();
                 mode = value;
@@ -270,7 +270,7 @@ namespace OpenSC.Model.Timers
                         Seconds = 0;
                 }
                 ModeChanged?.Invoke(this, oldValue, value);
-                ModeChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Mode));
                 OperationsChanged?.Invoke(this);
                 OperationsChangedPCN?.Invoke();
             }

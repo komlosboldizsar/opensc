@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.General;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace OpenSC.Model.Routers
     public delegate void RouterInputSourceNameChanged(RouterInput input, string newName);
     public delegate void RouterInputTallyChanged(RouterInput input, bool newState);
 
-    public class RouterInput
+    public class RouterInput : INotifyPropertyChanged
     {
 
         public RouterInput()
@@ -45,7 +46,7 @@ namespace OpenSC.Model.Routers
                 string oldName = name;
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                NameChangedPCN?.Invoke();
+                PropertyChanged?.Invoke(nameof(Name));
             }
         }
 
@@ -90,7 +91,7 @@ namespace OpenSC.Model.Routers
                 source = value;
 
                 RouterInputSourceChanged?.Invoke(this, oldSource, value);
-                RouterInputSourceChangedPCN?.Invoke();
+                PropertyChanged?.Invoke(nameof(Source));
 
                 SourceNameChanged?.Invoke(this, source?.SourceName);
                 RedTallyChanged?.Invoke(this, (source?.RedTally == true));
@@ -184,6 +185,10 @@ namespace OpenSC.Model.Routers
         {
             GreenTallyChanged?.Invoke(this, newState);
         }
+
+        #region Implementation of INotifyPropertyChanged
+        public event PropertyChangedDelegate PropertyChanged;
+        #endregion
 
     }
 

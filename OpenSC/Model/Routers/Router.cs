@@ -55,7 +55,7 @@ namespace OpenSC.Model.Routers
                 IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
-                IdChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ID));
             }
         }
 
@@ -88,7 +88,7 @@ namespace OpenSC.Model.Routers
                 NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                NameChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Name));
             }
         }
 
@@ -141,7 +141,7 @@ namespace OpenSC.Model.Routers
         private void inputsChangedHandler()
         {
             InputsChanged?.Invoke(this);
-            InputsChangedPCN?.Invoke();
+            RaisePropertyChanged(nameof(Inputs));
         }
 
         public event RouterInputsChangedDelegate InputsChanged;
@@ -190,7 +190,7 @@ namespace OpenSC.Model.Routers
         private void outputsChangedHandler()
         {
             OutputsChanged?.Invoke(this);
-            OutputsChangedPCN?.Invoke();
+            RaisePropertyChanged(nameof(Outputs));
         }
 
         public event RouterOutputsChangedDelegate OutputsChanged;

@@ -40,7 +40,7 @@ namespace OpenSC.Model.Streams
                 IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
-                IdChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ID));
             }
         }
 
@@ -71,7 +71,7 @@ namespace OpenSC.Model.Streams
                 NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                NameChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Name));
             }
         }
 
@@ -97,7 +97,7 @@ namespace OpenSC.Model.Streams
                 StateChangingPCN?.Invoke();
                 state = value;
                 StateChanged?.Invoke(this, oldState, value);
-                StateChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(State));
             }
         }
 
@@ -118,7 +118,7 @@ namespace OpenSC.Model.Streams
                 ViewerCountChangingPCN?.Invoke();
                 viewerCount = value;
                 ViewerCountChanged?.Invoke(this, oldCount, value);
-                ViewerCountChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ViewerCount));
             }
         }
 

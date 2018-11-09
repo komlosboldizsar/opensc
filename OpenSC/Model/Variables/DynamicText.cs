@@ -45,7 +45,7 @@ namespace OpenSC.Model.Variables
                 IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
-                IdChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ID));
             }
         }
 
@@ -78,7 +78,7 @@ namespace OpenSC.Model.Variables
                 LabelChangingPCN?.Invoke();
                 label = value;
                 LabelChanged?.Invoke(this, oldLabel, value);
-                LabelChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Label));
             }
         }
 
@@ -107,7 +107,7 @@ namespace OpenSC.Model.Variables
                 CurrentTextChangingPCN?.Invoke();
                 currentText = value;
                 CurrentTextChanged?.Invoke(this, oldValue, value);
-                CurrentTextChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(CurrentText));
             }
         }
 

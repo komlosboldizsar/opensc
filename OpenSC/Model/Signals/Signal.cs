@@ -46,7 +46,7 @@ namespace OpenSC.Model.Signals
                 IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
-                IdChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ID));
                 createTallyBooleansAfterIdChange();
             }
         }
@@ -80,7 +80,7 @@ namespace OpenSC.Model.Signals
                 NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                NameChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Name));
             }
         }
 
@@ -108,7 +108,7 @@ namespace OpenSC.Model.Signals
                 CategoryChangingPCN?.Invoke();
                 category = value;
                 CategoryChanged?.Invoke(this, oldCategory, value);
-                CategoryChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Category));
             }
         }
 
@@ -132,7 +132,7 @@ namespace OpenSC.Model.Signals
                 RedTallyChangingPCN?.Invoke();
                 redTally = value;
                 RedTallyChanged?.Invoke(this, oldState, value);
-                RedTallyChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(RedTally));
             }
         }
 
@@ -155,7 +155,7 @@ namespace OpenSC.Model.Signals
                 GreenTallyChangingPCN?.Invoke();
                 greenTally = value;
                 GreenTallyChanged?.Invoke(this, oldState, value);
-                GreenTallyChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(GreenTally));
             }
         }
         #endregion

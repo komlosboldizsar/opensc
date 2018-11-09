@@ -59,7 +59,7 @@ namespace OpenSC.Model.UMDs
                 currentText = value;
                 update();
                 CurrentTextChanged?.Invoke(this, oldValue, value);
-                CurrentTextChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(CurrentText));
             }
         }
 
@@ -96,7 +96,7 @@ namespace OpenSC.Model.UMDs
                 if (useStaticText)
                     CurrentText = value;
                 StaticTextChanged?.Invoke(this, oldValue, value);
-                StaticTextChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(StaticText));
             }
         }
 
@@ -121,7 +121,7 @@ namespace OpenSC.Model.UMDs
                 useStaticText = value;
                 CurrentText = useStaticText ? staticText : dynamicText;
                 UseStaticTextChanged?.Invoke(this, oldValue, value);
-                UseStaticTextChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(UseStaticText));
             }
         }
 
@@ -203,7 +203,7 @@ namespace OpenSC.Model.UMDs
             tallyChanged(index, state);
 
             TallyChanged?.Invoke(this, index, !state, state);
-            TallyChangedPCN?.Invoke();
+            RaisePropertyChanged(nameof(TallyStates));
 
         }
 
@@ -237,7 +237,7 @@ namespace OpenSC.Model.UMDs
                 IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
-                IdChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ID));
             }
         }
 
@@ -268,7 +268,7 @@ namespace OpenSC.Model.UMDs
                 NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldValue, value);
-                NameChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Name));
             }
 
         }

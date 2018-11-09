@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Variables;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -16,7 +17,7 @@ namespace OpenSC.Model.Routers
 
     public delegate void RouterCrosspointChangedDelegate(RouterOutput output, RouterInput newInput);
 
-    public class RouterOutput : IRouterInputSource
+    public class RouterOutput : IRouterInputSource, INotifyPropertyChanged
     {
 
         public RouterOutput()
@@ -49,7 +50,7 @@ namespace OpenSC.Model.Routers
                 string oldName = name;
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                NameChangedPCN?.Invoke();
+                PropertyChanged?.Invoke(nameof(Name));
             }
         }
 
@@ -77,7 +78,7 @@ namespace OpenSC.Model.Routers
                 int oldIndex = index;
                 index = value;
                 IndexChanged?.Invoke(this, oldIndex, value);
-                IndexChangedPCN?.Invoke();
+                PropertyChanged?.Invoke(nameof(Index));
             }
         }
 
@@ -336,6 +337,10 @@ namespace OpenSC.Model.Routers
             }
 
         }
+        #endregion
+
+        #region Implementation of INotifyPropertyChanged
+        public event PropertyChangedDelegate PropertyChanged;
         #endregion
 
     }

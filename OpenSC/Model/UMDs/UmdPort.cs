@@ -38,7 +38,7 @@ namespace OpenSC.Model.UMDs
                 IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
-                IdChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ID));
             }
         }
 
@@ -70,7 +70,7 @@ namespace OpenSC.Model.UMDs
                 NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                NameChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Name));
             }
         }
 
@@ -100,7 +100,7 @@ namespace OpenSC.Model.UMDs
                 InitializedChangingPCN?.Invoke();
                 initialized = value;
                 InitializedChanged?.Invoke(this, oldState, value);
-                InitializedChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Initialized));
             }
         }
 

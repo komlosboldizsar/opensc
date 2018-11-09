@@ -1,9 +1,10 @@
-﻿using System.Drawing;
+﻿using OpenSC.Model.General;
+using System.Drawing;
 
 namespace OpenSC.Model.Variables
 {
 
-    public class BooleanBase : IBoolean
+    public class BooleanBase : IBoolean, INotifyPropertyChanged
     {
 
         private string name;
@@ -19,7 +20,7 @@ namespace OpenSC.Model.Variables
                     return;
                 name = value;
                 NameChanged?.Invoke(this, name);
-                NameChangedPCN?.Invoke();
+                PropertyChanged?.Invoke(nameof(Name));
                 BooleanRegister.Instance.BooleanNameChanged(this);
             }
         }
@@ -42,7 +43,7 @@ namespace OpenSC.Model.Variables
                     return;
                 description = value;
                 DescriptionChanged?.Invoke(this, description);
-                DescriptionChangedPCN?.Invoke();
+                PropertyChanged?.Invoke(nameof(Description));
             }
         }
 
@@ -67,12 +68,16 @@ namespace OpenSC.Model.Variables
                     return;
                 currentState = value;
                 StateChanged?.Invoke(this, currentState);
-                StateChangedPCN?.Invoke();
+                PropertyChanged?.Invoke(nameof(CurrentState));
             }
         }
 
         public event BooleanStateChangedDelegate StateChanged;
         public event ParameterlessChangeNotifierDelegate StateChangedPCN;
+
+        #region Implementation of INotifyPropertyChanged
+        public event PropertyChangedDelegate PropertyChanged;
+        #endregion
 
     }
 

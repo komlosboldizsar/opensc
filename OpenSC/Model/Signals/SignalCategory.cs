@@ -43,7 +43,7 @@ namespace OpenSC.Model.Signals
                 IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
-                IdChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ID));
             }
         }
 
@@ -76,7 +76,7 @@ namespace OpenSC.Model.Signals
                 NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                NameChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Name));
             }
         }
 
@@ -100,7 +100,7 @@ namespace OpenSC.Model.Signals
                 ColorChangingPCN?.Invoke();
                 color = value;
                 ColorChanged?.Invoke(this, oldColor, value);
-                ColorChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Color));
             }
         }
 

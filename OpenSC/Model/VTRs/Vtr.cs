@@ -53,7 +53,7 @@ namespace OpenSC.Model.VTRs
                 IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
-                IdChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ID));
             }
         }
 
@@ -86,7 +86,7 @@ namespace OpenSC.Model.VTRs
                 NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                NameChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Name));
             }
         }
 
@@ -109,7 +109,7 @@ namespace OpenSC.Model.VTRs
                 TitleChangingPCN?.Invoke();
                 title = value;
                 TitleChanged?.Invoke(this, oldTitle, value);
-                TitleChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Title));
             }
         }
 
@@ -133,7 +133,7 @@ namespace OpenSC.Model.VTRs
                 StateChangingPCN?.Invoke();
                 state = value;
                 StateChanged?.Invoke(this, oldState, value);
-                StateChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(State));
             }
         }
 
@@ -156,7 +156,7 @@ namespace OpenSC.Model.VTRs
                 SecondsFullChangingPCN?.Invoke();
                 secondsFull = value;
                 SecondsFullChanged?.Invoke(this, oldValue, value);
-                SecondsFullChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(SecondsFull));
             }
         }
 
@@ -184,7 +184,7 @@ namespace OpenSC.Model.VTRs
                 SecondsElapsedChangingPCN?.Invoke();
                 secondsElapsed = value;
                 SecondsElapsedChanged?.Invoke(this, oldValue, value);
-                SecondsElapsedChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(SecondsElapsed));
             }
         }
 
@@ -212,7 +212,7 @@ namespace OpenSC.Model.VTRs
                 SecondsRemainingChangingPCN?.Invoke();
                 secondsRemaining = value;
                 SecondsRemainingChanged?.Invoke(this, oldValue, value);
-                SecondsRemainingChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(SecondsRemaining));
             }
         }
 
