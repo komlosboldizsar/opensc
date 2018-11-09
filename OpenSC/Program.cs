@@ -37,6 +37,8 @@ namespace OpenSC
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
+                ThreadHelpers.InvokeHelper.Init();
+
                 VariablesManager.ProgramStarted();
                 SignalsManager.ProgramStarted();
                 ModuleManager.Init();

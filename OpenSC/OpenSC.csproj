@@ -794,6 +794,10 @@
       <Project>{eadc56a4-b18d-4742-9855-c5142e90aa19}</Project>
       <Name>BMD.Videohub</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ThreadHelpers\ThreadHelpers.csproj">
+      <Project>{398de4a8-dfbf-4130-83ac-ef37da249587}</Project>
+      <Name>ThreadHelpers</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="BMDSwitcherAPI">
