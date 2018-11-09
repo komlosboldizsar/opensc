@@ -46,7 +46,7 @@ namespace OpenSC.GUI.Mixers
             builder.Header("ID");
             builder.Width(30);
             builder.UpdaterMethod((mixer, cell) => { cell.Value = string.Format("#{0}", mixer.ID); });
-            builder.AddChangeEvent(nameof(Mixer.IdChangedPCN));
+            builder.AddChangeEvent(nameof(Mixer.ID));
             builder.BuildAndAdd();
 
             // Column: name
@@ -57,7 +57,7 @@ namespace OpenSC.GUI.Mixers
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((mixer, cell) => { cell.Value = mixer.Name; });
-            builder.AddChangeEvent(nameof(Mixer.NameChangedPCN));
+            builder.AddChangeEvent(nameof(Mixer.Name));
             builder.BuildAndAdd();
 
             // Column: inputs
@@ -66,7 +66,7 @@ namespace OpenSC.GUI.Mixers
             builder.Header("Inputs");
             builder.Width(50);
             builder.UpdaterMethod((mixer, cell) => { cell.Value = mixer.Inputs.Count; });
-            builder.AddChangeEvent(nameof(Mixer.InputsChangedPCN));
+            builder.AddChangeEvent(nameof(Mixer.Inputs));
             builder.BuildAndAdd();
 
             // Column: program
@@ -76,7 +76,7 @@ namespace OpenSC.GUI.Mixers
             builder.Width(110);
             builder.CellStyle(onProgramColumnCellStyle);
             builder.UpdaterMethod((mixer, cell) => { cell.Value = (mixer.OnProgramInputName ?? "-"); });
-            builder.AddChangeEvent(nameof(Mixer.OnProgramInputNameChangedPCN));
+            builder.AddChangeEvent(nameof(Mixer.OnProgramInputName));
             builder.BuildAndAdd();
 
             // Column: program
@@ -87,7 +87,7 @@ namespace OpenSC.GUI.Mixers
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.CellStyle(onPreviewColumnCellStyle);
             builder.UpdaterMethod((mixer, cell) => { cell.Value = (mixer.OnPreviewInputName ?? "-"); });
-            builder.AddChangeEvent(nameof(Mixer.OnPreviewInputNameChangedPCN));
+            builder.AddChangeEvent(nameof(Mixer.OnPreviewInputName));
             builder.BuildAndAdd();
 
             // Column: edit button

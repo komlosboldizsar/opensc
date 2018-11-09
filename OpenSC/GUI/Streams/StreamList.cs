@@ -41,7 +41,7 @@ namespace OpenSC.GUI.Streams
             builder.Header("ID");
             builder.Width(50);
             builder.UpdaterMethod((stream, cell) => { cell.Value = string.Format("#{0}", stream.ID); });
-            builder.AddChangeEvent(nameof(Stream.IdChangedPCN));
+            builder.AddChangeEvent(nameof(Stream.ID));
             builder.BuildAndAdd();
 
             // Column: name
@@ -52,7 +52,7 @@ namespace OpenSC.GUI.Streams
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((stream, cell) => { cell.Value = stream.Name; });
-            builder.AddChangeEvent(nameof(Stream.NameChangedPCN));
+            builder.AddChangeEvent(nameof(Stream.Name));
             builder.BuildAndAdd();
 
             // Column: state image
@@ -62,7 +62,7 @@ namespace OpenSC.GUI.Streams
             builder.Width(30);
             builder.CellStyle(TWO_PIXELS_PADDING_CELL_STYLE);
             builder.UpdaterMethod((stream, cell) => { cell.Value = stateImageConverter.Convert(stream.State); });
-            builder.AddChangeEvent(nameof(Stream.StateChangedPCN));
+            builder.AddChangeEvent(nameof(Stream.State));
             builder.BuildAndAdd();
 
             // Column: state label
@@ -72,7 +72,7 @@ namespace OpenSC.GUI.Streams
             builder.Width(100);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((stream, cell) => { cell.Value = stateLabelConverter.Convert(stream.State); });
-            builder.AddChangeEvent(nameof(Stream.StateChangedPCN));
+            builder.AddChangeEvent(nameof(Stream.State));
             builder.BuildAndAdd();
 
             // Column: viewer count
@@ -83,7 +83,7 @@ namespace OpenSC.GUI.Streams
             builder.CellStyle(TWO_PIXELS_PADDING_CELL_STYLE);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((stream, cell) => { cell.Value = (stream.State == StreamState.Running) ? stream.ViewerCount.ToString() : string.Empty; });
-            builder.AddChangeEvent(nameof(Stream.ViewerCountChangedPCN));
+            builder.AddChangeEvent(nameof(Stream.ViewerCount));
             builder.BuildAndAdd();
 
             // Column: edit button

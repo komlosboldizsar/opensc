@@ -38,7 +38,7 @@ namespace OpenSC.GUI.VTRs
             builder.Header("ID");
             builder.Width(30);
             builder.UpdaterMethod((vtr, cell) => { cell.Value = string.Format("#{0}", vtr.ID); });
-            builder.AddChangeEvent(nameof(Vtr.IdChangedPCN));
+            builder.AddChangeEvent(nameof(Vtr.ID));
             builder.BuildAndAdd();
 
             // Column: name
@@ -49,7 +49,7 @@ namespace OpenSC.GUI.VTRs
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((vtr, cell) => { cell.Value = vtr.Name; });
-            builder.AddChangeEvent(nameof(Vtr.NameChangedPCN));
+            builder.AddChangeEvent(nameof(Vtr.Name));
             builder.BuildAndAdd();
 
             // Column: state image
@@ -59,7 +59,7 @@ namespace OpenSC.GUI.VTRs
             builder.Width(30);
             builder.CellStyle(TWO_PIXELS_PADDING_CELL_STYLE);
             builder.UpdaterMethod((vtr, cell) => { cell.Value = stateImageConverter.Convert(vtr.State); });
-            builder.AddChangeEvent(nameof(Vtr.StateChangedPCN));
+            builder.AddChangeEvent(nameof(Vtr.State));
             builder.BuildAndAdd();
 
             // Column: state label
@@ -69,7 +69,7 @@ namespace OpenSC.GUI.VTRs
             builder.Width(60);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((vtr, cell) => { cell.Value = stateLabelConverter.Convert(vtr.State); });
-            builder.AddChangeEvent(nameof(Vtr.StateChangedPCN));
+            builder.AddChangeEvent(nameof(Vtr.State));
             builder.BuildAndAdd();
 
             // Column: title
@@ -79,7 +79,7 @@ namespace OpenSC.GUI.VTRs
             builder.Width(200);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((vtr, cell) => { cell.Value = vtr.Title; });
-            builder.AddChangeEvent(nameof(Vtr.TitleChangedPCN));
+            builder.AddChangeEvent(nameof(Vtr.Title));
             builder.BuildAndAdd();
 
             // Column: time (full)
@@ -88,7 +88,7 @@ namespace OpenSC.GUI.VTRs
             builder.Header("Time (full)");
             builder.Width(100);
             builder.UpdaterMethod((vtr, cell) => { cell.Value = vtr.TimeFull.ToString(@"hh\:mm\:ss"); });
-            builder.AddChangeEvent(nameof(Vtr.SecondsFullChangedPCN));
+            builder.AddChangeEvent(nameof(Vtr.SecondsFull));
             builder.BuildAndAdd();
 
             // Column: time (elapsed)
@@ -97,7 +97,7 @@ namespace OpenSC.GUI.VTRs
             builder.Header("Time (elapsed)");
             builder.Width(100);
             builder.UpdaterMethod((vtr, cell) => { cell.Value = vtr.TimeElapsed.ToString(@"hh\:mm\:ss"); });
-            builder.AddChangeEvent(nameof(Vtr.SecondsElapsedChangedPCN));
+            builder.AddChangeEvent(nameof(Vtr.SecondsElapsed));
             builder.BuildAndAdd();
 
             // Column: time (remaining)
@@ -107,7 +107,7 @@ namespace OpenSC.GUI.VTRs
             builder.Width(100);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((vtr, cell) => { cell.Value = vtr.TimeRemaining.ToString(@"hh\:mm\:ss"); });
-            builder.AddChangeEvent(nameof(Vtr.SecondsRemainingChangedPCN));
+            builder.AddChangeEvent(nameof(Vtr.SecondsRemaining));
             builder.BuildAndAdd();
 
             // Column: edit button

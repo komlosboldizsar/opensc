@@ -38,7 +38,7 @@ namespace OpenSC.GUI.Routers
             builder.Header("ID");
             builder.Width(30);
             builder.UpdaterMethod((router, cell) => { cell.Value = string.Format("#{0}", router.ID); });
-            builder.AddChangeEvent(nameof(Router.IdChangedPCN));
+            builder.AddChangeEvent(nameof(Router.ID));
             builder.BuildAndAdd();
 
             // Column: name
@@ -49,7 +49,7 @@ namespace OpenSC.GUI.Routers
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((router, cell) => { cell.Value = router.Name; });
-            builder.AddChangeEvent(nameof(Router.NameChangedPCN));
+            builder.AddChangeEvent(nameof(Router.Name));
             builder.BuildAndAdd();
 
             // Column: inputs
@@ -58,7 +58,7 @@ namespace OpenSC.GUI.Routers
             builder.Header("Inputs");
             builder.Width(50);
             builder.UpdaterMethod((router, cell) => { cell.Value = router.Inputs.Count; });
-            builder.AddChangeEvent(nameof(Router.InputsChangedPCN));
+            builder.AddChangeEvent(nameof(Router.Inputs));
             builder.BuildAndAdd();
 
             // Column: inputs
@@ -68,7 +68,7 @@ namespace OpenSC.GUI.Routers
             builder.Width(50);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((router, cell) => { cell.Value = router.Outputs.Count; });
-            builder.AddChangeEvent(nameof(Router.OutputsChangedPCN));
+            builder.AddChangeEvent(nameof(Router.Outputs));
             builder.BuildAndAdd();
 
             // Column: crosspoints

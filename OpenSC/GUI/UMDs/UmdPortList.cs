@@ -37,7 +37,7 @@ namespace OpenSC.GUI.UMDs
             builder.Header("ID");
             builder.Width(50);
             builder.UpdaterMethod((port, cell) => { cell.Value = string.Format("#{0}", port.ID); });
-            builder.AddChangeEvent(nameof(UmdPort.IdChangedPCN));
+            builder.AddChangeEvent(nameof(UmdPort.ID));
             builder.BuildAndAdd();
 
             // Column: name
@@ -48,7 +48,7 @@ namespace OpenSC.GUI.UMDs
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((port, cell) => { cell.Value = port.Name; });
-            builder.AddChangeEvent(nameof(UmdPort.NameChangedPCN));
+            builder.AddChangeEvent(nameof(UmdPort.Name));
             builder.BuildAndAdd();
 
             // Column: state (is initialized?)
@@ -60,7 +60,7 @@ namespace OpenSC.GUI.UMDs
                 cell.Style.BackColor = port.Initialized ? Color.LightGreen : Color.LightPink;
                 cell.Value = port.Initialized ? "initialized" : "not initialized";
             });
-            builder.AddChangeEvent(nameof(UmdPort.InitializedChangedPCN));
+            builder.AddChangeEvent(nameof(UmdPort.Initialized));
             builder.BuildAndAdd();
 
             // Column: initialize button

@@ -109,7 +109,7 @@ namespace OpenSC.GUI.Routers
             builder.Header("#");
             builder.Width(30);
             builder.UpdaterMethod((input, cell) => { cell.Value = input.Index + 1; });
-            //builder.AddChangeEvent(nameof(RouterInput.IndexChangedPCN));
+            //builder.AddChangeEvent(nameof(RouterInput.Index));
             builder.BuildAndAdd();
 
             // Column: name
@@ -118,7 +118,7 @@ namespace OpenSC.GUI.Routers
             builder.Header("Name");
             builder.Width(100);
             builder.UpdaterMethod((input, cell) => { cell.Value = input.Name; });
-            builder.AddChangeEvent(nameof(RouterInput.NameChangedPCN));
+            builder.AddChangeEvent(nameof(RouterInput.Name));
             builder.TextEditable(true);
             builder.CellEndEditHandlerMethod((input, cell, eventargs) =>
             {
@@ -179,7 +179,7 @@ namespace OpenSC.GUI.Routers
             builder.Header("#");
             builder.Width(30);
             builder.UpdaterMethod((output, cell) => { cell.Value = output.Index + 1; });
-            //builder.AddChangeEvent(nameof(RouterOutput.IndexChangedPCN));
+            //builder.AddChangeEvent(nameof(RouterOutput.Index));
             builder.BuildAndAdd();
 
             // Column: name
@@ -188,7 +188,7 @@ namespace OpenSC.GUI.Routers
             builder.Header("Name");
             builder.Width(100);
             builder.UpdaterMethod((output, cell) => { cell.Value = output.Name; });
-            builder.AddChangeEvent(nameof(RouterOutput.NameChangedPCN));
+            builder.AddChangeEvent(nameof(RouterOutput.Name));
             builder.TextEditable(true);
             builder.CellEndEditHandlerMethod((output, cell, eventargs) =>
             {

@@ -37,7 +37,7 @@ namespace OpenSC.GUI.Signals
             builder.Header("ID");
             builder.Width(30);
             builder.UpdaterMethod((category, cell) => { cell.Value = string.Format("#{0}", category.ID); });
-            builder.AddChangeEvent(nameof(SignalCategory.IdChangedPCN));
+            builder.AddChangeEvent(nameof(SignalCategory.ID));
             builder.BuildAndAdd();
 
             // Column: name
@@ -47,7 +47,7 @@ namespace OpenSC.GUI.Signals
             builder.Width(150);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((category, cell) => { cell.Value = category.Name; });
-            builder.AddChangeEvent(nameof(SignalCategory.NameChangedPCN));
+            builder.AddChangeEvent(nameof(SignalCategory.Name));
             builder.BuildAndAdd();
 
             // Column: color
@@ -57,7 +57,7 @@ namespace OpenSC.GUI.Signals
             builder.Width(30);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((category, cell) => { cell.Style.BackColor = category.Color; });
-            builder.AddChangeEvent(nameof(SignalCategory.ColorChangedPCN));
+            builder.AddChangeEvent(nameof(SignalCategory.Color));
             builder.BuildAndAdd();
 
             // Column: edit button

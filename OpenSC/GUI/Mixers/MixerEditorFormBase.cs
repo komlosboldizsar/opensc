@@ -132,7 +132,7 @@ namespace OpenSC.GUI.Mixers
             builder.Header("Name");
             builder.Width(100);
             builder.UpdaterMethod((input, cell) => { cell.Value = input.Name; });
-            builder.AddChangeEvent(nameof(MixerInput.NameChangedPCN));
+            builder.AddChangeEvent(nameof(MixerInput.Name));
             builder.TextEditable(true);
             builder.CellEndEditHandlerMethod((input, cell, eventargs) =>
             {
