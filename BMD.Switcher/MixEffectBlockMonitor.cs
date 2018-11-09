@@ -1,5 +1,6 @@
 ﻿using BMDSwitcherAPI;
 using System;
+using ThreadHelpers;
 
 namespace BMD.Switcher
 {
@@ -20,12 +21,18 @@ namespace BMD.Switcher
             switch (propertyId)
             {
                 case _BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput:
-                    MixEffectBlock.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, out long programInput);
-                    ProgramInput = programInput;
+                    InvokeHelper.Invoke(() =>
+                    {
+                        MixEffectBlock.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, out long programInput);
+                        ProgramInput = programInput;
+                    });
                     break;
                 case _BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput:
-                    MixEffectBlock.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out long previewInput);
-                    PreviewInput = previewInput;
+                    InvokeHelper.Invoke(() =>
+                    {
+                        MixEffectBlock.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out long previewInput);
+                        PreviewInput = previewInput;
+                    });
                     break;
             }
         }
