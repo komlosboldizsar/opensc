@@ -10,12 +10,6 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public delegate void RouterOutputNameChanged(RouterOutput output, string oldName, string newName);
-
-    public delegate void RouterOutputIndexChangedDelegate(RouterOutput output, int oldIndex, int newIndex);
-
-    public delegate void RouterCrosspointChangedDelegate(RouterOutput output, RouterInput newInput);
-
     public class RouterOutput : IRouterInputSource, INotifyPropertyChanged
     {
 
@@ -53,7 +47,8 @@ namespace OpenSC.Model.Routers
             }
         }
 
-        public event RouterOutputNameChanged NameChanged;
+        public delegate void NameChangedDelegate(RouterOutput output, string oldName, string newName);
+        public event NameChangedDelegate NameChanged;
 
         public Router Router { get; internal set; }
 
@@ -80,7 +75,9 @@ namespace OpenSC.Model.Routers
             }
         }
 
-        public event RouterOutputIndexChangedDelegate IndexChanged;
+
+        public delegate void IndexChangedDelegate(RouterOutput output, int oldIndex, int newIndex);
+        public event IndexChangedDelegate IndexChanged;
 
         private RouterInput crosspoint;
 
@@ -92,12 +89,13 @@ namespace OpenSC.Model.Routers
                 unsubscribeCrosspointEvents();
                 crosspoint = value;
                 fireChangeEventsAtCrosspointChange();
-                RouterCrosspointChanged?.Invoke(this, value);
+                CrosspointChanged?.Invoke(this, value);
                 subscribeCrosspointEvents();
             }
         }
 
-        public event RouterCrosspointChangedDelegate RouterCrosspointChanged;
+        public delegate void CrosspointChangedDelegate(RouterOutput output, RouterInput newInput);
+        public event CrosspointChangedDelegate CrosspointChanged;
 
         private void subscribeCrosspointEvents()
         {

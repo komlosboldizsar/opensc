@@ -82,7 +82,7 @@ namespace OpenSC.GUI.Timers
                 else
                     cell.Value = timer.Running ? STATE_IMAGE_RUNNING : STATE_IMAGE_STOPPED;
             });
-            builder.AddChangeEvent(nameof(Timer.ModeChangedPCN));
+            builder.AddChangeEvent(nameof(Timer.Mode));
             builder.BuildAndAdd();
 
             // Column: current value

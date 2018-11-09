@@ -9,24 +9,14 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
 
-
-    public delegate void SignalCategoryIdChangingDelegate(SignalCategory category, int oldValue, int newValue);
-    public delegate void SignalCategoryIdChangedDelegate(SignalCategory category, int oldValue, int newValue);
-
-    public delegate void SignalCategoryNameChangingDelegate(SignalCategory category, string oldName, string newName);
-    public delegate void SignalCategoryNameChangedDelegate(SignalCategory category, string oldName, string newName);
-
-    public delegate void SignalCategoryColorChangingDelegate(SignalCategory category, Color oldColor, Color newColor);
-    public delegate void SignalCategoryColorChangedDelegate(SignalCategory category, Color oldColor, Color newColor);
-
     public class SignalCategory : ModelBase
     {
 
         public override void Restored()
         { }
 
-        public event SignalCategoryIdChangingDelegate IdChanging;
-        public event SignalCategoryIdChangedDelegate IdChanged;
+        public delegate void IdChangedDelegate(SignalCategory category, int oldValue, int newValue);
+        public event IdChangedDelegate IdChanged;
 
         public int id = 0;
 
@@ -37,7 +27,6 @@ namespace OpenSC.Model.Signals
             {
                 ValidateId(value);
                 int oldValue = id;
-                IdChanging?.Invoke(this, oldValue, value);
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
@@ -52,9 +41,8 @@ namespace OpenSC.Model.Signals
                 throw new ArgumentException();
         }
 
-
-        public event SignalCategoryNameChangingDelegate NameChanging;
-        public event SignalCategoryNameChangedDelegate NameChanged;
+        public delegate void NameChangedDelegate(SignalCategory category, string oldName, string newName);
+        public event NameChangedDelegate NameChanged;
 
         [PersistAs("name")]
         private string name;
@@ -67,15 +55,14 @@ namespace OpenSC.Model.Signals
                 if (value == name)
                     return;
                 string oldName = name;
-                NameChanging?.Invoke(this, oldName, value);
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
                 RaisePropertyChanged(nameof(Name));
             }
         }
 
-        public event SignalCategoryColorChangingDelegate ColorChanging;
-        public event SignalCategoryColorChangedDelegate ColorChanged;
+        public delegate void ColorChangedDelegate(SignalCategory category, Color oldColor, Color newColor);
+        public event ColorChangedDelegate ColorChanged;
 
         [PersistAs("color")]
         private Color color;
@@ -88,7 +75,6 @@ namespace OpenSC.Model.Signals
                 if (value == color)
                     return;
                 Color oldColor = color;
-                ColorChanging?.Invoke(this, oldColor, value);
                 color = value;
                 ColorChanged?.Invoke(this, oldColor, value);
                 RaisePropertyChanged(nameof(Color));

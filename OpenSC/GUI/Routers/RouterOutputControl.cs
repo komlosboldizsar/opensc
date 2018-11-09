@@ -53,7 +53,7 @@ namespace OpenSC.GUI.Routers
             if (Output != null)
             {
                 Output.SourceNameChanged += sourceNameChangedHandler;
-                Output.RouterCrosspointChanged += crosspointChangedHandler;
+                Output.CrosspointChanged += crosspointChangedHandler;
                 Output.NameChanged += nameChangedHandler;
             }
         }

@@ -7,19 +7,6 @@ using System.Drawing;
 namespace OpenSC.Model.Signals
 {
 
-
-    public delegate void SignalIdChangingDelegate(Signal signal, int oldValue, int newValue);
-    public delegate void SignalIdChangedDelegate(Signal signal, int oldValue, int newValue);
-
-    public delegate void SignalNameChangingDelegate(Signal signal, string oldName, string newName);
-    public delegate void SignalNameChangedDelegate(Signal signal, string oldName, string newName);
-
-    public delegate void SignalCategoryChangingDelegate(Signal signal, SignalCategory oldCategory, SignalCategory newCategory);
-    public delegate void SignalCategoryChangedDelegate(Signal signal, SignalCategory oldCategory, SignalCategory newCategory);
-
-    public delegate void SignalTallyChangingDelegate(Signal signal, bool oldState, bool newState);
-    public delegate void SignalTallyChangedDelegate(Signal signal, bool oldState, bool newState);
-
     public class Signal : ModelBase
     {
 
@@ -28,8 +15,9 @@ namespace OpenSC.Model.Signals
             updateTallyBooleans();
         }
 
-        public event SignalIdChangingDelegate IdChanging;
-        public event SignalIdChangedDelegate IdChanged;
+
+        public delegate void IdChangedDelegate(Signal signal, int oldValue, int newValue);
+        public event IdChangedDelegate IdChanged;
 
         public int id = 0;
 
@@ -40,7 +28,6 @@ namespace OpenSC.Model.Signals
             {
                 ValidateId(value);
                 int oldValue = id;
-                IdChanging?.Invoke(this, oldValue, value);
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
@@ -56,9 +43,8 @@ namespace OpenSC.Model.Signals
                 throw new ArgumentException();
         }
 
-
-        public event SignalNameChangingDelegate NameChanging;
-        public event SignalNameChangedDelegate NameChanged;
+        public delegate void NameChangedDelegate(Signal signal, string oldName, string newName);
+        public event NameChangedDelegate NameChanged;
 
         [PersistAs("name")]
         private string name;
@@ -71,7 +57,6 @@ namespace OpenSC.Model.Signals
                 if (value == name)
                     return;
                 string oldName = name;
-                NameChanging?.Invoke(this, oldName, value);
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
                 RaisePropertyChanged(nameof(Name));
@@ -79,8 +64,8 @@ namespace OpenSC.Model.Signals
         }
 
 
-        public event SignalCategoryChangingDelegate CategoryChanging;
-        public event SignalCategoryChangedDelegate CategoryChanged;
+        public delegate void CategoryChangedDelegate(Signal signal, SignalCategory oldCategory, SignalCategory newCategory);
+        public event CategoryChangedDelegate CategoryChanged;
 
         [PersistAs("category")]
         private SignalCategory category;
@@ -96,7 +81,6 @@ namespace OpenSC.Model.Signals
                 if (value == category)
                     return;
                 SignalCategory oldCategory = category;
-                CategoryChanging?.Invoke(this, oldCategory, value);
                 category = value;
                 CategoryChanged?.Invoke(this, oldCategory, value);
                 RaisePropertyChanged(nameof(Category));
@@ -104,8 +88,7 @@ namespace OpenSC.Model.Signals
         }
 
         #region Tallies
-        public event SignalTallyChangingDelegate RedTallyChanging;
-        public event SignalTallyChangedDelegate RedTallyChanged;
+        public event TallyChangedDelegate RedTallyChanged;
 
         private bool redTally;
 
@@ -117,15 +100,13 @@ namespace OpenSC.Model.Signals
                 if (value == redTally)
                     return;
                 bool oldState = redTally;
-                RedTallyChanging?.Invoke(this, oldState, value);
                 redTally = value;
                 RedTallyChanged?.Invoke(this, oldState, value);
                 RaisePropertyChanged(nameof(RedTally));
             }
         }
-
-        public event SignalTallyChangingDelegate GreenTallyChanging;
-        public event SignalTallyChangedDelegate GreenTallyChanged;
+        
+        public event TallyChangedDelegate GreenTallyChanged;
 
         private bool greenTally;
 
@@ -137,12 +118,13 @@ namespace OpenSC.Model.Signals
                 if (value == greenTally)
                     return;
                 bool oldState = greenTally;
-                GreenTallyChanging?.Invoke(this, oldState, value);
                 greenTally = value;
                 GreenTallyChanged?.Invoke(this, oldState, value);
                 RaisePropertyChanged(nameof(GreenTally));
             }
         }
+
+        public delegate void TallyChangedDelegate(Signal signal, bool oldState, bool newState);
         #endregion
 
         #region Tally sources

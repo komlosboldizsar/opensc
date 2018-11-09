@@ -8,13 +8,6 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public delegate void RouterInputNameChanged(RouterInput input, string oldName, string newName);
-
-    public delegate void RouterInputSourceChangedDelegate(RouterInput input, IRouterInputSource oldSource, IRouterInputSource newSource);
-
-    public delegate void RouterInputSourceNameChanged(RouterInput input, string newName);
-    public delegate void RouterInputTallyChanged(RouterInput input, bool newState);
-
     public class RouterInput : INotifyPropertyChanged
     {
 
@@ -49,7 +42,8 @@ namespace OpenSC.Model.Routers
             }
         }
 
-        public event RouterInputNameChanged NameChanged;
+        public delegate void NameChangedDelegate(RouterInput input, string oldName, string newName);
+        public event NameChangedDelegate NameChanged;
 
         public Router Router { get; internal set; }
 
@@ -88,7 +82,7 @@ namespace OpenSC.Model.Routers
                 IRouterInputSource oldSource = source;
                 source = value;
 
-                RouterInputSourceChanged?.Invoke(this, oldSource, value);
+                SourceChanged?.Invoke(this, oldSource, value);
                 PropertyChanged?.Invoke(nameof(Source));
 
                 SourceNameChanged?.Invoke(this, source?.SourceName);
@@ -105,7 +99,9 @@ namespace OpenSC.Model.Routers
             }
         }
 
-        public event RouterInputSourceChangedDelegate RouterInputSourceChanged;
+
+        public delegate void SourceChangedDelegate(RouterInput input, IRouterInputSource oldSource, IRouterInputSource newSource);
+        public event SourceChangedDelegate SourceChanged;
 
         // "Temp foreign key"
         public string _sourceString;
@@ -133,6 +129,7 @@ namespace OpenSC.Model.Routers
             return source.GetSourceName(recursionChain);
         }
 
+        public delegate void RouterInputSourceNameChanged(RouterInput input, string newName);
         public event RouterInputSourceNameChanged SourceNameChanged;
 
         private void sourceNameChangedHandler(IRouterInputSource inputSource, string newName)
@@ -170,8 +167,9 @@ namespace OpenSC.Model.Routers
             return source.GetGreenTally(recursionChain);
         }
 
-        public event RouterInputTallyChanged RedTallyChanged;
-        public event RouterInputTallyChanged GreenTallyChanged;
+        public delegate void TallyChangedDelegate(RouterInput input, bool newState);
+        public event TallyChangedDelegate RedTallyChanged;
+        public event TallyChangedDelegate GreenTallyChanged;
 
         private void sourceRedTallyChangedHandler(IRouterInputSource inputSource, bool newState)
         {

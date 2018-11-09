@@ -8,16 +8,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Routers
 {
-
-    public delegate void RouterIdChangingDelegate(Router router, int oldValue, int newValue);
-    public delegate void RouterIdChangedDelegate(Router router, int oldValue, int newValue);
-
-    public delegate void RouterNameChangingDelegate(Router router, string oldName, string newName);
-    public delegate void RouterNameChangedDelegate(Router router, string oldName, string newName);
-
-    public delegate void RouterInputsChangedDelegate(Router router);
-    public delegate void RouterOutputsChangedDelegate(Router router);
-
+    
     public abstract class Router : ModelBase
     {
 
@@ -35,8 +26,8 @@ namespace OpenSC.Model.Routers
             updateAllCrosspoints();
         }
 
-        public event RouterIdChangingDelegate IdChanging;
-        public event RouterIdChangedDelegate IdChanged;
+        public delegate void IdChangedDelegate(Router router, int oldValue, int newValue);
+        public event IdChangedDelegate IdChanged;
 
         public int id = 0;
 
@@ -49,7 +40,6 @@ namespace OpenSC.Model.Routers
                 if (value == id)
                     return;
                 int oldValue = id;
-                IdChanging?.Invoke(this, oldValue, value);
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
@@ -64,8 +54,9 @@ namespace OpenSC.Model.Routers
                 throw new ArgumentException();
         }
 
-        public event RouterNameChangingDelegate NameChanging;
-        public event RouterNameChangedDelegate NameChanged;
+
+        public delegate void NameChangedDelegate(Router router, string oldName, string newName);
+        public event NameChangedDelegate NameChanged;
 
         [PersistAs("name")]
         private string name;
@@ -79,7 +70,6 @@ namespace OpenSC.Model.Routers
                 if (value == name)
                     return;
                 string oldName = name;
-                NameChanging?.Invoke(this, oldName, value);
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
                 RaisePropertyChanged(nameof(Name));
@@ -138,7 +128,8 @@ namespace OpenSC.Model.Routers
             RaisePropertyChanged(nameof(Inputs));
         }
 
-        public event RouterInputsChangedDelegate InputsChanged;
+        public delegate void InputsChangedDelegate(Router router);
+        public event InputsChangedDelegate InputsChanged;
 
         private ObservableList<RouterOutput> outputs = new ObservableList<RouterOutput>();
 
@@ -186,7 +177,8 @@ namespace OpenSC.Model.Routers
             RaisePropertyChanged(nameof(Outputs));
         }
 
-        public event RouterOutputsChangedDelegate OutputsChanged;
+        public delegate void OutputsChangedDelegate(Router router);
+        public event OutputsChangedDelegate OutputsChanged;
 
         public bool UpdateCrosspoint(RouterOutput output, RouterInput input)
         {

@@ -8,13 +8,6 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Mixers
 {
 
-    public delegate void MixerInputNameChangedDelegate(MixerInput input, string oldName, string newName);
-
-    public delegate void MixerInputSourceChangedDelegate(MixerInput input, Signal oldSource, Signal newSource);
-    public delegate void MixerInputSourceNameChangedDelegate(MixerInput input, string newName);
-
-    public delegate void MixerInputTallyChangedDelegate(MixerInput input, bool newState);
-
     public class MixerInput : ISignalTallySource
     {
 
@@ -30,7 +23,7 @@ namespace OpenSC.Model.Mixers
 
         public void Restored()
         { }
-        
+
         private string name;
 
         public string Name
@@ -48,7 +41,8 @@ namespace OpenSC.Model.Mixers
             }
         }
 
-        public event MixerInputNameChangedDelegate NameChanged;
+        public delegate void InputNameChangedDelegate(MixerInput input, string oldName, string newName);
+        public event InputNameChangedDelegate NameChanged;
 
         public Mixer Mixer { get; internal set; }
 
@@ -91,7 +85,10 @@ namespace OpenSC.Model.Mixers
             }
         }
 
-        public event MixerInputSourceChangedDelegate SourceChanged;
+        public event SourceChangedDelegate SourceChanged;
+
+        public delegate void SourceChangedDelegate(MixerInput input, Signal oldSource, Signal newSource);
+        public delegate void SourceNameChangedDelegate(MixerInput input, string newName);
 
         // "Temp foreign key"
         public int _sourceSignalId;
@@ -106,6 +103,9 @@ namespace OpenSC.Model.Mixers
         {
             get => source.Name;
         }
+
+
+        public delegate void TallyChangedDelegate(MixerInput input, bool newState);
 
         private bool redTally;
 
@@ -122,7 +122,7 @@ namespace OpenSC.Model.Mixers
             }
         }
 
-        public event MixerInputTallyChangedDelegate RedTallyChanged;
+        public event TallyChangedDelegate RedTallyChanged;
 
         private bool greenTally;
 
@@ -139,7 +139,7 @@ namespace OpenSC.Model.Mixers
             }
         }
 
-        public event MixerInputTallyChangedDelegate GreenTallyChanged;
+        public event TallyChangedDelegate GreenTallyChanged;
 
     }
 

@@ -62,9 +62,9 @@ namespace OpenSC.GUI.Signals
             });
             builder.ExternalUpdateEventSubscriberMethod((signal, updateInvoker) =>
             {
-                SignalCategoryIdChangedDelegate signalCategoryIdChangedHandler = (_category, oldCategory, newCategory) => updateInvoker();
-                SignalCategoryNameChangedDelegate signalCategoryNameChangedHandler = (_category, oldName, newName) => updateInvoker();
-                SignalCategoryColorChangedDelegate signalCategoryColorChangedHandler = (_category, oldColor, newColor) => updateInvoker();
+                SignalCategory.IdChangedDelegate signalCategoryIdChangedHandler = (_category, oldCategory, newCategory) => updateInvoker();
+                SignalCategory.NameChangedDelegate signalCategoryNameChangedHandler = (_category, oldName, newName) => updateInvoker();
+                SignalCategory.ColorChangedDelegate signalCategoryColorChangedHandler = (_category, oldColor, newColor) => updateInvoker();
                 if (signal.Category != null)
                 {
                     signal.Category.IdChanged += signalCategoryIdChangedHandler;

@@ -8,35 +8,14 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.VTRs
 {
 
-    public delegate void VtrIdChangingDelegate(Vtr vtr, int oldValue, int newValue);
-    public delegate void VtrIdChangedDelegate(Vtr vtr, int oldValue, int newValue);
-
-    public delegate void VtrNameChangingDelegate(Vtr vtr, string oldName, string newName);
-    public delegate void VtrNameChangedDelegate(Vtr vtr, string oldName, string newName);
-
-    public delegate void VtrTitleChangingDelegate(Vtr vtr, string oldTitle, string newTitle);
-    public delegate void VtrTitleChangedDelegate(Vtr vtr, string oldTitle, string newTitle);
-
-    public delegate void VtrStateChangingDelegate(Vtr vtr, VtrState oldState, VtrState newState);
-    public delegate void VtrStateChangedDelegate(Vtr vtr, VtrState oldState, VtrState newState);
-
-    public delegate void VtrSecondsFullChangingDelegate(Vtr vtr, int oldValue, int newValue);
-    public delegate void VtrSecondsFullChangedDelegate(Vtr vtr, int oldValue, int newValue);
-
-    public delegate void VtrSecondsElapsedChangingDelegate(Vtr vtr, int oldValue, int newValue);
-    public delegate void VtrSecondsElapsedChangedDelegate(Vtr vtr, int oldValue, int newValue);
-
-    public delegate void VtrSecondsRemainingChangingDelegate(Vtr vtr, int oldValue, int newValue);
-    public delegate void VtrSecondsRemainingChangedDelegate(Vtr vtr, int oldValue, int newValue);
-
     public class Vtr : ModelBase
     {
 
         public override void Restored()
         { }
 
-        public event VtrIdChangingDelegate IdChanging;
-        public event VtrIdChangedDelegate IdChanged;
+        public delegate void IdChangedDelegate(Vtr vtr, int oldValue, int newValue);
+        public event IdChangedDelegate IdChanged;
 
         public int id = 0;
 
@@ -47,7 +26,6 @@ namespace OpenSC.Model.VTRs
             {
                 ValidateId(value);
                 int oldValue = id;
-                IdChanging?.Invoke(this, oldValue, value);
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
@@ -62,9 +40,8 @@ namespace OpenSC.Model.VTRs
                 throw new ArgumentException();
         }
 
-
-        public event VtrNameChangingDelegate NameChanging;
-        public event VtrNameChangedDelegate NameChanged;
+        public delegate void NameChangedDelegate(Vtr vtr, string oldName, string newName);
+        public event NameChangedDelegate NameChanged;
 
         [PersistAs("name")]
         private string name;
@@ -77,15 +54,14 @@ namespace OpenSC.Model.VTRs
                 if (value == name)
                     return;
                 string oldName = name;
-                NameChanging?.Invoke(this, oldName, value);
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
                 RaisePropertyChanged(nameof(Name));
             }
         }
 
-        public event VtrTitleChangingDelegate TitleChanging;
-        public event VtrTitleChangedDelegate TitleChanged;
+        public delegate void TitleChangedDelegate(Vtr vtr, string oldTitle, string newTitle);
+        public event TitleChangedDelegate TitleChanged;
 
         private string title;
 
@@ -97,16 +73,14 @@ namespace OpenSC.Model.VTRs
                 if (value == title)
                     return;
                 string oldTitle = title;
-                TitleChanging?.Invoke(this, oldTitle, value);
                 title = value;
                 TitleChanged?.Invoke(this, oldTitle, value);
                 RaisePropertyChanged(nameof(Title));
             }
         }
 
-
-        public event VtrStateChangingDelegate StateChanging;
-        public event VtrStateChangedDelegate StateChanged;
+        public delegate void StateChangedDelegate(Vtr vtr, VtrState oldState, VtrState newState);
+        public event StateChangedDelegate StateChanged;
 
         private VtrState state = VtrState.Stopped;
 
@@ -118,16 +92,14 @@ namespace OpenSC.Model.VTRs
                 if (value == state)
                     return;
                 VtrState oldState = state;
-                StateChanging?.Invoke(this, oldState, value);
-                StateChangingPCN?.Invoke();
                 state = value;
                 StateChanged?.Invoke(this, oldState, value);
                 RaisePropertyChanged(nameof(State));
             }
         }
 
-        public event VtrSecondsFullChangingDelegate SecondsFullChanging;
-        public event VtrSecondsFullChangedDelegate SecondsFullChanged;
+        public delegate void SecondsFullChangedDelegate(Vtr vtr, int oldValue, int newValue);
+        public event SecondsFullChangedDelegate SecondsFullChanged;
 
         private int secondsFull;
 
@@ -139,7 +111,6 @@ namespace OpenSC.Model.VTRs
                 if (value == secondsFull)
                     return;
                 int oldValue = secondsFull;
-                SecondsFullChanging?.Invoke(this, oldValue, value);
                 secondsFull = value;
                 SecondsFullChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(SecondsFull));
@@ -151,8 +122,8 @@ namespace OpenSC.Model.VTRs
             get { return TimeSpan.FromSeconds(secondsFull); }
         }
 
-        public event VtrSecondsElapsedChangingDelegate SecondsElapsedChanging;
-        public event VtrSecondsElapsedChangedDelegate SecondsElapsedChanged;
+        public delegate void SecondsElapsedChangedDelegate(Vtr vtr, int oldValue, int newValue);
+        public event SecondsElapsedChangedDelegate SecondsElapsedChanged;
 
         private int secondsElapsed;
 
@@ -164,7 +135,6 @@ namespace OpenSC.Model.VTRs
                 if (value == secondsElapsed)
                     return;
                 int oldValue = secondsElapsed;
-                SecondsElapsedChanging?.Invoke(this, oldValue, value);
                 secondsElapsed = value;
                 SecondsElapsedChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(SecondsElapsed));
@@ -175,9 +145,9 @@ namespace OpenSC.Model.VTRs
         {
             get { return TimeSpan.FromSeconds(secondsElapsed); }
         }
-
-        public event VtrSecondsRemainingChangingDelegate SecondsRemainingChanging;
-        public event VtrSecondsRemainingChangedDelegate SecondsRemainingChanged;
+        
+        public delegate void SecondsRemainingChangedDelegate(Vtr vtr, int oldValue, int newValue);
+        public event SecondsRemainingChangedDelegate SecondsRemainingChanged;
 
         private int secondsRemaining;
 
@@ -189,7 +159,6 @@ namespace OpenSC.Model.VTRs
                 if (value == secondsRemaining)
                     return;
                 int oldValue = secondsRemaining;
-                SecondsRemainingChanging?.Invoke(this, oldValue, value);
                 secondsRemaining = value;
                 SecondsRemainingChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(SecondsRemaining));

@@ -9,22 +9,6 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Mixers
 {
 
-    public delegate void MixerIdChangingDelegate(Mixer mixer, int oldValue, int newValue);
-    public delegate void MixerIdChangedDelegate(Mixer mixer, int oldValue, int newValue);
-
-    public delegate void MixerNameChangingDelegate(Mixer mixer, string oldName, string newName);
-    public delegate void MixerNameChangedDelegate(Mixer mixer, string oldName, string newName);
-
-    public delegate void MixerOnProgramInputChangingDelegate(Mixer mixer, MixerInput oldInput, MixerInput newInput);
-    public delegate void MixerOnProgramInputChangedDelegate(Mixer mixer, MixerInput oldInput, MixerInput newInput);
-    public delegate void MixerOnProgramInputNameChangedDelegate(Mixer mixer, string newName);
-    
-    public delegate void MixerOnPreviewInputChangingDelegate(Mixer mixer, MixerInput oldInput, MixerInput newInput);
-    public delegate void MixerOnPreviewInputChangedDelegate(Mixer mixer, MixerInput oldInput, MixerInput newInput);
-    public delegate void MixerOnPreviewInputNameChangedDelegate(Mixer mixer, string newName);
-
-    public delegate void MixerInputsChangedDelegate(Mixer mixer);
-
     public abstract class Mixer : ModelBase
     {
 
@@ -37,8 +21,8 @@ namespace OpenSC.Model.Mixers
         }
 
         #region Property: ID
-        public event MixerIdChangingDelegate IdChanging;
-        public event MixerIdChangedDelegate IdChanged;
+        public delegate void IdChangedDelegate(Mixer mixer, int oldValue, int newValue);
+        public event IdChangedDelegate IdChanged;
 
         public int id = 0;
 
@@ -51,7 +35,6 @@ namespace OpenSC.Model.Mixers
                 if (value == id)
                     return;
                 int oldValue = id;
-                IdChanging?.Invoke(this, oldValue, value);
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
@@ -68,8 +51,8 @@ namespace OpenSC.Model.Mixers
         #endregion
 
         #region Property: Name
-        public event MixerNameChangingDelegate NameChanging;
-        public event MixerNameChangedDelegate NameChanged;
+        public delegate void NameChangedDelegate(Mixer mixer, string oldName, string newName);
+        public event NameChangedDelegate NameChanged;
 
         [PersistAs("name")]
         private string name;
@@ -83,7 +66,6 @@ namespace OpenSC.Model.Mixers
                 if (value == name)
                     return;
                 string oldName = name;
-                NameChanging?.Invoke(this, oldName, value);
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
                 RaisePropertyChanged(nameof(Name));
@@ -98,10 +80,11 @@ namespace OpenSC.Model.Mixers
         #endregion
 
         #region Property: OnProgramInput, OnProgramInputName
-        public event MixerOnProgramInputChangingDelegate OnProgramInputChanging;
-        public event MixerOnProgramInputChangedDelegate OnProgramInputChanged;
+        public delegate void OnProgramInputChangedDelegate(Mixer mixer, MixerInput oldInput, MixerInput newInput);
+        public event OnProgramInputChangedDelegate OnProgramInputChanged;
 
-        public event MixerOnProgramInputNameChangedDelegate OnProgramInputNameChanged;
+        public delegate void OnProgramInputNameChangedDelegate(Mixer mixer, string newName);
+        public event OnProgramInputNameChangedDelegate OnProgramInputNameChanged;
 
         private MixerInput onProgramInput;
 
@@ -117,8 +100,6 @@ namespace OpenSC.Model.Mixers
 
                 if (onProgramInput != null)
                     onProgramInput.NameChanged -= onProgramInputNameChangedHandler;
-
-                OnProgramInputChanging?.Invoke(this, oldInput, value);
 
                 onProgramInput = value;
 
@@ -146,10 +127,11 @@ namespace OpenSC.Model.Mixers
         #endregion
 
         #region Property: OnPreviewInput, OnPreviewInputName
-        public event MixerOnPreviewInputChangingDelegate OnPreviewInputChanging;
-        public event MixerOnPreviewInputChangedDelegate OnPreviewInputChanged;
+        public delegate void OnPreviewInputChangedDelegate(Mixer mixer, MixerInput oldInput, MixerInput newInput);
+        public event OnPreviewInputChangedDelegate OnPreviewInputChanged;
 
-        public event MixerOnPreviewInputNameChangedDelegate OnPreviewInputNameChanged;
+        public delegate void OnPreviewInputNameChangedDelegate(Mixer mixer, string newName);
+        public event OnPreviewInputNameChangedDelegate OnPreviewInputNameChanged;
 
         private MixerInput onPreviewInput;
 
@@ -165,8 +147,6 @@ namespace OpenSC.Model.Mixers
 
                 if (onPreviewInput != null)
                     onPreviewInput.NameChanged -= onPreviewInputNameChangedHandler;
-
-                OnPreviewInputChanging?.Invoke(this, oldInput, value);
 
                 onPreviewInput = value;
 
@@ -241,7 +221,8 @@ namespace OpenSC.Model.Mixers
                 input.RestoreSource();
         }
 
-        public event MixerInputsChangedDelegate InputsChanged;
+        public delegate void InputsChangedDelegate(Mixer mixer);
+        public event InputsChangedDelegate InputsChanged;
         #endregion
 
     }

@@ -7,35 +7,6 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Timers
 {
-    public delegate void TimerIdChangingDelegate(Timer timer, int oldValue, int newValue);
-    public delegate void TimerIdChangedDelegate(Timer timer, int oldValue, int newValue);
-
-    public delegate void TimerTitleChangingDelegate(Timer timer, string oldTitle, string newTitle);
-    public delegate void TimerTitleChangedDelegate(Timer timer, string oldTitle, string newTitle);
-
-    public delegate void TimerSecondsChangingDelegate(Timer timer, int oldValue, int newValue);
-    public delegate void TimerSecondsChangedDelegate(Timer timer, int oldValue, int newValue);
-
-    public delegate void TimerCountdownSecondsChangingDelegate(Timer timer, int oldValue, int newValue);
-    public delegate void TimerCountdownSecondsChangedDelegate(Timer timer, int oldValue, int newValue);
-
-    public delegate void TimerRunningStateChangingDelegate(Timer timer, bool oldState, bool newState);
-    public delegate void TimerRunningStateChangedDelegate(Timer timer, bool oldState, bool newState);
-
-    public delegate void TimerModeChangingDelegate(Timer timer, TimerMode oldMode, TimerMode newMode);
-    public delegate void TimerModeChangedDelegate(Timer timer, TimerMode oldMode, TimerMode newMode);
-
-    public delegate void TimerStartingDelegate(Timer timer);
-    public delegate void TimerStartedDelegate(Timer timer);
-
-    public delegate void TimerStoppingDelegate(Timer timer);
-    public delegate void TimerStoppedDelegate(Timer timer);
-
-    public delegate void TimerResetingDelegate(Timer timer);
-    public delegate void TimerResetedDelegate(Timer timer);
-
-    public delegate void TimerOperationsChangingDelegate(Timer timer);
-    public delegate void TimerOperationsChangedDelegate(Timer timer);
 
     public class Timer : ModelBase
     {
@@ -43,8 +14,8 @@ namespace OpenSC.Model.Timers
         public override void Restored()
         { }
 
-        public event TimerIdChangingDelegate IdChanging;
-        public event TimerIdChangedDelegate IdChanged;
+        public delegate void IdChangedDelegate(Timer timer, int oldValue, int newValue);
+        public event IdChangedDelegate IdChanged;
 
         public int id = 0;
 
@@ -55,7 +26,6 @@ namespace OpenSC.Model.Timers
             {
                 ValidateId(value);
                 int oldValue = id;
-                IdChanging?.Invoke(this, oldValue, value);
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
@@ -70,8 +40,8 @@ namespace OpenSC.Model.Timers
                 throw new ArgumentException();
         }
 
-        public event TimerTitleChangingDelegate TitleChanging;
-        public event TimerTitleChangedDelegate TitleChanged;
+        public delegate void TitleChangedDelegate(Timer timer, string oldTitle, string newTitle);
+        public event TitleChangedDelegate TitleChanged;
 
         [PersistAs("title")]
         private string title = "Test";
@@ -82,7 +52,6 @@ namespace OpenSC.Model.Timers
             {
                 ValidateTitle(value);
                 string oldTitle = title;
-                TitleChanging?.Invoke(this, oldTitle, value);
                 title = value;
                 TitleChanged?.Invoke(this, oldTitle, value);
                 RaisePropertyChanged(nameof(Title));
@@ -97,8 +66,8 @@ namespace OpenSC.Model.Timers
                 throw new ArgumentException();
         }
 
-        public event TimerSecondsChangingDelegate SecondsChanging;
-        public event TimerSecondsChangedDelegate SecondsChanged;
+        public delegate void SecondsChangedDelegate(Timer timer, int oldValue, int newValue);
+        public event SecondsChangedDelegate SecondsChanged;
 
         private int seconds = 0;
         public int Seconds
@@ -108,7 +77,6 @@ namespace OpenSC.Model.Timers
                 if (value < 0)
                     throw new ArgumentException();
                 int oldValue = seconds;
-                SecondsChanging?.Invoke(this, oldValue, value);
                 seconds = value;
                 SecondsChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(Seconds));
@@ -121,8 +89,8 @@ namespace OpenSC.Model.Timers
             set { Seconds = (int)value.TotalSeconds; }
         }
 
-        public event TimerCountdownSecondsChangingDelegate CountdownSecondsChanging;
-        public event TimerCountdownSecondsChangedDelegate CountdownSecondsChanged;
+        public delegate void CountdownSecondsChangedDelegate(Timer timer, int oldValue, int newValue);
+        public event CountdownSecondsChangedDelegate CountdownSecondsChanged;
 
         [PersistAs("countdown_seconds")]
         private int countdownSeconds = 5;
@@ -133,7 +101,6 @@ namespace OpenSC.Model.Timers
             {
                 
                 int oldValue = countdownSeconds;
-                CountdownSecondsChanging?.Invoke(this, oldValue, value);
                 countdownSeconds = value;
                 CountdownSecondsChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(CountdownSeconds));
@@ -146,17 +113,17 @@ namespace OpenSC.Model.Timers
                 throw new ArgumentException();
         }
 
-        public event TimerRunningStateChangingDelegate RunningStateChanging;
-        public event TimerRunningStateChangedDelegate RunningStateChanged;
+        public delegate void RunningStateChangedDelegate(Timer timer, bool oldState, bool newState);
+        public event RunningStateChangedDelegate RunningStateChanged;
 
-        public event TimerStartingDelegate Starting;
-        public event TimerStartedDelegate Started;
+        public delegate void StartedDelegate(Timer timer);
+        public event StartedDelegate Started;
 
-        public event TimerStoppingDelegate Stopping;
-        public event TimerStoppedDelegate Stopped;
+        public delegate void StoppedDelegate(Timer timer);
+        public event StoppedDelegate Stopped;
 
-        public event TimerResetingDelegate Reseting;
-        public event TimerResetedDelegate Reseted;
+        public delegate void ResetedDelegate(Timer timer);
+        public event ResetedDelegate Reseted;
 
         private bool running = false;
         public bool Running
@@ -166,19 +133,6 @@ namespace OpenSC.Model.Timers
             {
 
                 bool oldValue = running;
-
-                RunningStateChanging?.Invoke(this, oldValue, value);
-                if (value == true)
-                {
-                    Starting?.Invoke(this);
-                }
-                else
-                {
-                    Stopping?.Invoke(this);
-                }
-                OperationsChanging?.Invoke(this);
-                OperationsChangingPCN?.Invoke();
-
                 running = value;
 
                 RunningStateChanged?.Invoke(this, oldValue, value);
@@ -195,9 +149,9 @@ namespace OpenSC.Model.Timers
 
             }
         }
-
-        public event TimerOperationsChangingDelegate OperationsChanging;
-        public event TimerOperationsChangedDelegate OperationsChanged;
+    
+        public delegate void OperationsChangedDelegate(Timer timer);
+        public event OperationsChangedDelegate OperationsChanged;
 
         public bool CanStart
         {
@@ -214,8 +168,8 @@ namespace OpenSC.Model.Timers
             get => mode != TimerMode.Clock;
         }
 
-        public event TimerModeChangingDelegate ModeChanging;
-        public event TimerModeChangedDelegate ModeChanged;
+        public delegate void ModeChangedDelegate(Timer timer, TimerMode oldMode, TimerMode newMode);
+        public event ModeChangedDelegate ModeChanged;
 
         [PersistAs("mode")]
         private TimerMode mode = TimerMode.Backwards;
@@ -226,9 +180,6 @@ namespace OpenSC.Model.Timers
             set
             {
                 TimerMode oldValue = mode;
-                ModeChanging?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(Mode));
-                OperationsChanging?.Invoke(this);
                 mode = value;
                 if (oldValue != value)
                 {
@@ -300,7 +251,6 @@ namespace OpenSC.Model.Timers
 
         public void Reset()
         {
-            Reseting?.Invoke(this);
             switch (mode)
             {
                 case TimerMode.Forwards:

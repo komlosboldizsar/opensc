@@ -4,7 +4,6 @@ namespace OpenSC.Model.Variables
 {
 
     public delegate void BooleanStateChangedDelegate(IBoolean boolean, bool newState);
-
     public delegate void BooleanNameChangedDelegate(IBoolean boolean, string newName);
     public delegate void BooleanDescriptionChangedDelegate(IBoolean boolean, string newDescription);
 
