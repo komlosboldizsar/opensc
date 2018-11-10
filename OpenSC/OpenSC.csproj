@@ -134,6 +134,12 @@
     <Compile Include="GUI\Menus\MenuItem.cs" />
     <Compile Include="GUI\Menus\MenuManager.cs" />
     <Compile Include="GUI\Menus\SeparatorMenuItem.cs" />
+    <Compile Include="GUI\Routers\LeitchRouterEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\LeitchRouterEditorForm.Designer.cs">
+      <DependentUpon>LeitchRouterEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Routers\RouterControlForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -407,6 +413,9 @@
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohub.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputName.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputSource.cs" />
+    <Compile Include="Model\Routers\InputSourceSignal.cs" />
+    <Compile Include="Model\Routers\IRouterInputSource.cs" />
+    <Compile Include="Model\Routers\Leitch\LeitchRouter.cs" />
     <Compile Include="Model\Routers\Router.cs" />
     <Compile Include="Model\Routers\RouterDatabase.cs" />
     <Compile Include="Model\Routers\RouterInput.cs" />
@@ -525,6 +534,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Mixers\MixerEditorFormBase.resx">
       <DependentUpon>MixerEditorFormBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\LeitchRouterEditorForm.resx">
+      <DependentUpon>LeitchRouterEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\RouterControlForm.resx">
       <DependentUpon>RouterControlForm.cs</DependentUpon>

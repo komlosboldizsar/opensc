@@ -7,6 +7,7 @@ using OpenSC.Model.Persistence;
 using OpenSC.Model.Routers;
 using OpenSC.Model.Routers.BlackMagicDesign;
 using OpenSC.Model.Routers.DynamicTextFunctions;
+using OpenSC.Model.Routers.Leitch;
 using OpenSC.Model.Routers.Virtual;
 using OpenSC.Model.Variables;
 using OpenSC.Model.VTRs.DynamicTextFunctions;
@@ -46,6 +47,7 @@ namespace OpenSC.Modules.Routers
         {
             RegisterRouterType<VirtualRouter, VirtualRouterEditorForm>();
             RegisterRouterType<BmdVideohub, BmdVideohubEditorForm>();
+            RegisterRouterType<LeitchRouter, LeitchRouterEditorForm>();
         }
 
         public void RegisterDatabases()

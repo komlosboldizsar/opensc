@@ -304,6 +304,7 @@ namespace OpenSC.Model.SerialPorts
             {
                 serialPort = new System.IO.Ports.SerialPort(comPortName, baudRate, parity, dataBits, stopBits);
                 serialPort.Open();
+                serialPort.DataReceived += dataReceivedHandler;
                 Initialized = true;
             }
             catch (Exception ex)
@@ -324,8 +325,11 @@ namespace OpenSC.Model.SerialPorts
         {
             try
             {
-                serialPort?.Close();
-                serialPort?.Dispose();
+                if (serialPort != null) {
+                    serialPort.DataReceived -= dataReceivedHandler;
+                    serialPort?.Close();
+                    serialPort?.Dispose(); 
+                }
                 serialPort = null;
                 Initialized = false;
             }
@@ -349,7 +353,7 @@ namespace OpenSC.Model.SerialPorts
             }
         }
 
-        #region Data handling
+        #region Data sending
         public void SendData(byte[] data, DateTime validUntil)
         {
             SendData(new Packet() {
@@ -378,6 +382,31 @@ namespace OpenSC.Model.SerialPorts
         {
             public DateTime ValidUntil;
             public byte[] Data;
+        }
+        #endregion
+
+        #region Data receiving
+        public delegate void ReceivedDataBytesDelegate(SerialPort port, byte[] data);
+        public event ReceivedDataBytesDelegate ReceivedDataBytes;
+
+        public delegate void ReceivedDataAsciiStringDelegate(SerialPort port, string asciiString);
+        public event ReceivedDataAsciiStringDelegate ReceivedDataAsciiString;
+
+        private void dataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
+        {
+
+            if (serialPort == null)
+                return;
+
+            int bytesToRead = serialPort.BytesToRead;
+            byte[] receivedBytes = new byte[bytesToRead];
+            for (int i = 0; i < bytesToRead; i++)
+                receivedBytes[i] = (byte)serialPort.ReadByte();
+
+            ReceivedDataBytes?.Invoke(this, receivedBytes);
+            string receivedAsciiString = Encoding.ASCII.GetString(receivedBytes);
+            ReceivedDataAsciiString?.Invoke(this, receivedAsciiString);
+            
         }
         #endregion
 
