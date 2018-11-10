@@ -24,7 +24,7 @@ namespace OpenSC.Model.SerialPorts
         {
             var portsMenu = MenuManager.Instance.TopMenu["Ports"];
             var serialPortsMenu = portsMenu["Serial ports"];
-            serialPortsMenu.ClickHandler = (menu, tag) => new SerialPortsList().ShowAsChild();
+            serialPortsMenu.ClickHandler = (menu, tag) => new SerialPortList().ShowAsChild();
         }
 
     }
