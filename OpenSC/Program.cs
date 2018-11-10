@@ -8,6 +8,7 @@ using OpenSC.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -18,6 +19,8 @@ namespace OpenSC
     {
 
         private const string LOG_TAG = "ProgramEntry";
+
+        private static GUI.SplashScreen splashScreen = null;
 
         /// <summary>
         /// The main entry point for the application.
@@ -33,6 +36,12 @@ namespace OpenSC
             // Init Win32 GUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            // Splash screen
+            splashScreen = new GUI.SplashScreen();
+            splashScreen.Show();
+            splashScreen.Status = "Initializing components...";
+            Application.DoEvents();
 
             // Thread helpers init
             ThreadHelpers.InvokeHelper.Init();
@@ -50,6 +59,8 @@ namespace OpenSC
         private static void mainFormOpenedHandler(object sender, EventArgs e)
         {
             StartupController.MainWindowOpened();
+            splashScreen.Status = "Program started.";
+            splashScreen.Close();
         }
 
     }

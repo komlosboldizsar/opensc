@@ -228,6 +228,12 @@
     <Compile Include="GUI\Signals\SignalCategoryEditorForm.Designer.cs">
       <DependentUpon>SignalCategoryEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\SplashScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SplashScreen.Designer.cs">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Streams\StreamEditorFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -571,6 +577,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Signals\SignalCategoryEditorForm.resx">
       <DependentUpon>SignalCategoryEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SplashScreen.resx">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Streams\StreamEditorFormBase.resx">
       <DependentUpon>StreamEditorFormBase.cs</DependentUpon>
