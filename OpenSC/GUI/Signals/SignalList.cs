@@ -35,7 +35,7 @@ namespace OpenSC.GUI.Signals
             builder = GetColumnDescriptorBuilderForTable<ISignal>();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Label");
-            builder.Width(150);
+            builder.Width(300);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((signal, cell) => { cell.Value = signal.SignalLabel; });
             builder.AddChangeEvent(nameof(ISignal.SignalLabel));
