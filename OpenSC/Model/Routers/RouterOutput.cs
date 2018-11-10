@@ -96,7 +96,9 @@ namespace OpenSC.Model.Routers
             internal set
             {
 
+                removeIndirectTalliesFromSource(crosspoint?.Source);
                 unsubscribeCrosspointEvents();
+
                 crosspoint = value;
 
                 string logMessage = string.Format("Router crosspoint updated. Router ID: {0}, destination: {1}, source: {2}.",
@@ -105,9 +107,11 @@ namespace OpenSC.Model.Routers
                     value.Index);
                 LogDispatcher.I(Router.LOG_TAG, logMessage);
 
-                fireChangeEventsAtCrosspointChange();
                 CrosspointChanged?.Invoke(this, value);
                 subscribeCrosspointEvents();
+                sendIndirectTalliesToSource(crosspoint?.Source);
+
+                fireChangeEventsAtCrosspointChange();
 
             }
         }
@@ -120,6 +124,8 @@ namespace OpenSC.Model.Routers
             if (crosspoint == null)
                 return;
             crosspoint.SourceNameChanged += crosspointSourceNameChangedHandler;
+            crosspoint.SourceChanging += crosspointSourceChangingHandler;
+            crosspoint.SourceChanged += crosspointSourceChangedHandler;
             crosspoint.RedTallyChanged += crosspointRedTallyChangedHandler;
             crosspoint.GreenTallyChanged += crosspointGreenTallyChangedHandler;
         }
@@ -129,6 +135,8 @@ namespace OpenSC.Model.Routers
             if (crosspoint == null)
                 return;
             crosspoint.SourceNameChanged -= crosspointSourceNameChangedHandler;
+            crosspoint.SourceChanging -= crosspointSourceChangingHandler;
+            crosspoint.SourceChanged -= crosspointSourceChangedHandler;
             crosspoint.RedTallyChanged -= crosspointRedTallyChangedHandler;
             crosspoint.GreenTallyChanged -= crosspointGreenTallyChangedHandler;
         }
@@ -147,6 +155,16 @@ namespace OpenSC.Model.Routers
                 RedTallyChanged?.Invoke(this, false, crosspoint.RedTally);
                 GreenTallyChanged?.Invoke(this, false, crosspoint.GreenTally);
             }
+        }
+
+        private void crosspointSourceChangedHandler(RouterInput input, ISignal oldSource, ISignal newSource)
+        {
+            sendIndirectTalliesToSource(newSource);
+        }
+
+        private void crosspointSourceChangingHandler(RouterInput input, ISignal oldSource, ISignal newSource)
+        {
+            removeIndirectTalliesFromSource(oldSource);
         }
 
         private void crosspointSourceNameChangedHandler(RouterInput input, string newName)
@@ -264,11 +282,6 @@ namespace OpenSC.Model.Routers
             }
         }
 
-        public void IsTalliedFrom(ISignalTallySource source, SignalTallyType type, bool isTallied)
-        {
-            throw new NotImplementedException();
-        }
-
         private class TallyBoolean : BooleanBase
         {
 
@@ -369,6 +382,49 @@ namespace OpenSC.Model.Routers
                 Green
             }
 
+        }
+        #endregion
+
+        #region IsTalliedFrom()
+        private List<ISignalTallySource> redTallySources = new List<ISignalTallySource>();
+        private List<ISignalTallySource> greenTallySources = new List<ISignalTallySource>();
+
+        public void IsTalliedFrom(ISignalTallySource source, SignalTallyType type, bool isTallied)
+        {
+            List<ISignalTallySource> tallySourceList = getTallySourceListByType(type);
+            if (isTallied && !tallySourceList.Contains(source))
+                tallySourceList.Add(source);
+            if (!isTallied && tallySourceList.Contains(source))
+                tallySourceList.Remove(source);
+            crosspoint?.Source?.IsTalliedFrom(source, type, isTallied);
+        }
+
+        private List<ISignalTallySource> getTallySourceListByType(SignalTallyType type)
+        {
+            switch (type)
+            {
+                case SignalTallyType.Red:
+                    return redTallySources;
+                case SignalTallyType.Green:
+                    return greenTallySources;
+            }
+            return null;
+        }
+
+        private void sendIndirectTalliesToSource(ISignal source)
+        {
+            if (source == null)
+                return;
+            redTallySources.ForEach(tallySource => source.IsTalliedFrom(tallySource, SignalTallyType.Red, true));
+            greenTallySources.ForEach(tallySource => source.IsTalliedFrom(tallySource, SignalTallyType.Green, true));
+        }
+
+        private void removeIndirectTalliesFromSource(ISignal source)
+        {
+            if (source == null)
+                return;
+            redTallySources.ForEach(tallySource => source.IsTalliedFrom(tallySource, SignalTallyType.Red, false));
+            greenTallySources.ForEach(tallySource => source.IsTalliedFrom(tallySource, SignalTallyType.Green, false));
         }
         #endregion
 

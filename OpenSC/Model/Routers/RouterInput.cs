@@ -72,15 +72,17 @@ namespace OpenSC.Model.Routers
 
                 if (value == source)
                     return;
+                ISignal oldSource = source;
 
-                if(source != null)
+                SourceChanging?.Invoke(this, oldSource, value);
+
+                if (source != null)
                 {
-                    source.SignalLabelChanged -= sourceNameChangedHandler;
+                    source.SourceSignalNameChanged -= sourceSignalNameChangedHandler;
                     source.RedTallyChanged -= sourceRedTallyChangedHandler;
                     source.GreenTallyChanged -= sourceGreenTallyChangedHandler;
                 }
-
-                ISignal oldSource = source;
+                
                 source = value;
 
                 SourceChanged?.Invoke(this, oldSource, value);
@@ -92,7 +94,7 @@ namespace OpenSC.Model.Routers
 
                 if (source != null)
                 {
-                    source.SignalLabelChanged += sourceNameChangedHandler;
+                    source.SourceSignalNameChanged += sourceSignalNameChangedHandler;
                     source.RedTallyChanged += sourceRedTallyChangedHandler;
                     source.GreenTallyChanged += sourceGreenTallyChangedHandler;
                 }
@@ -100,6 +102,8 @@ namespace OpenSC.Model.Routers
             }
         }
 
+        public delegate void SourceChangingDelegate(RouterInput input, ISignal oldSource, ISignal newSource);
+        public event SourceChangingDelegate SourceChanging;
 
         public delegate void SourceChangedDelegate(RouterInput input, ISignal oldSource, ISignal newSource);
         public event SourceChangedDelegate SourceChanged;
@@ -133,7 +137,7 @@ namespace OpenSC.Model.Routers
         public delegate void RouterInputSourceNameChanged(RouterInput input, string newName);
         public event RouterInputSourceNameChanged SourceNameChanged;
 
-        private void sourceNameChangedHandler(ISignal inputSource, string newName)
+        private void sourceSignalNameChangedHandler(ISignal inputSource, string newName)
         {
             SourceNameChanged?.Invoke(this, newName);
         }
