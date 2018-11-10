@@ -403,6 +403,7 @@
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputSource.cs" />
     <Compile Include="Model\Routers\InputSourceSignal.cs" />
     <Compile Include="Model\Routers\IRouterInputSource.cs" />
+    <Compile Include="Model\Routers\Leitch\LeitchRouter.cs" />
     <Compile Include="Model\Routers\Router.cs" />
     <Compile Include="Model\Routers\RouterDatabase.cs" />
     <Compile Include="Model\Routers\RouterInput.cs" />
