@@ -57,13 +57,24 @@ namespace OpenSC.Model.Mixers
                 return;
         }
 
+        #region Property: Index
         private int index;
 
         public int Index
         {
             get { return index; }
-            internal set { index = value; }
+            set {
+                if (value == index)
+                    return;
+                int oldIndex = index;
+                index = value;
+                IndexChanged?.Invoke(this, oldIndex, value);
+            }
         }
+
+        public delegate void IndexChangedDelegate(MixerInput input, int oldIndex, int newIndex);
+        public event IndexChangedDelegate IndexChanged;
+        #endregion
 
         Signal source;
 
