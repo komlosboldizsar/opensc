@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.Signals;
+using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,9 @@ namespace OpenSC.Model.Mixers
         }
 
         public void Restored()
-        { }
+        {
+            restoreSource();
+        }
 
         private string name;
 
@@ -93,7 +96,7 @@ namespace OpenSC.Model.Mixers
         // "Temp foreign key"
         public int _sourceSignalId;
 
-        public void RestoreSource()
+        private void restoreSource()
         {
             if (_sourceSignalId > 0)
                 Source = SignalDatabases.Signals.GetTById(_sourceSignalId);

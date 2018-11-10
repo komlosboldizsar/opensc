@@ -17,7 +17,7 @@ namespace OpenSC.Model.Mixers
 
         public override void Restored()
         {
-            restoreInputSources();
+            restoreInputs();
         }
 
         #region Property: ID
@@ -257,10 +257,12 @@ namespace OpenSC.Model.Mixers
             InputsChanged?.Invoke(this);
             RaisePropertyChanged(nameof(Inputs));
         }
-        private void restoreInputSources()
+        private void restoreInputs()
         {
             foreach (MixerInput input in inputs)
-                input.RestoreSource();
+                input.Mixer = this;
+            foreach (MixerInput input in inputs)
+                input.Restored();
         }
 
         public delegate void InputsChangedDelegate(Mixer mixer);
