@@ -134,6 +134,12 @@
     <Compile Include="GUI\Menus\MenuItem.cs" />
     <Compile Include="GUI\Menus\MenuManager.cs" />
     <Compile Include="GUI\Menus\SeparatorMenuItem.cs" />
+    <Compile Include="GUI\Routers\LeitchRouterEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\LeitchRouterEditorForm.Designer.cs">
+      <DependentUpon>LeitchRouterEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Routers\RouterControlForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -520,6 +526,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Mixers\MixerEditorFormBase.resx">
       <DependentUpon>MixerEditorFormBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\LeitchRouterEditorForm.resx">
+      <DependentUpon>LeitchRouterEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\RouterControlForm.resx">
       <DependentUpon>RouterControlForm.cs</DependentUpon>
