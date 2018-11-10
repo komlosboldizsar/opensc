@@ -54,7 +54,7 @@ namespace OpenSC.GUI.SerialPorts
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("COM port");
             builder.Width(80);
-            builder.UpdaterMethod((port, cell) => { cell.Value = port.ComPortName });
+            builder.UpdaterMethod((port, cell) => { cell.Value = port.ComPortName; });
             builder.AddChangeEvent(nameof(SerialPort.ComPortName));
             builder.BuildAndAdd();
 
