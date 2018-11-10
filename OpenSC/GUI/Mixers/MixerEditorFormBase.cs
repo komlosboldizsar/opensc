@@ -69,10 +69,12 @@ namespace OpenSC.GUI.Mixers
                 return false;
             }
 
+            mixer.StartUpdate();
             writeFields();
+            mixer.EndUpdate();
+
             if (addingNew)
                 MixerDatabase.Instance.Add(mixer);
-
             AddingNew = false;
 
             return true;

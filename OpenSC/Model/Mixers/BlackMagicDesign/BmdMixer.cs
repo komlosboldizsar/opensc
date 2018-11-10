@@ -70,6 +70,8 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         {
             switcher = new Switcher(ipAddress);
             switcher.ConnectionStateChanged += switcherConnectionStateChanged;
+            State = MixerState.Warning;
+            StateString = "disconnected";
         }
 
         private void deinitSwitcher()
@@ -144,12 +146,16 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
                 {
                     getMixEffectBlockMonitor();
                     getInputMonitors();
+                    State = MixerState.Ok;
+                    StateString = "connected";
                 }
                 else
                 {
                     disposeMixEffectBlockMonitor();
                     disposeInputMonitors();
                     deinitSwitcher();
+                    State = MixerState.Warning;
+                    StateString = "disconnected";
                 }
 
             }

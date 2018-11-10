@@ -64,12 +64,12 @@ namespace OpenSC.GUI.Variables
                 return false;
             }
 
+            dyntext.StartUpdate();
             writeFields();
-            if (addingNew)
-            {
-                DynamicTextDatabase.Instance.Add(dyntext);
-            }
+            dyntext.EndUpdate();
 
+            if (addingNew)
+                DynamicTextDatabase.Instance.Add(dyntext);
             AddingNew = false;
 
             return true;

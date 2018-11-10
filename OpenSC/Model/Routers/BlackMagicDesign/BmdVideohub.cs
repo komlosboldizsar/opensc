@@ -83,6 +83,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             get { return connected; }
             set
             {
+
                 if (value == connected)
                     return;
                 bool oldState = connected;
@@ -90,6 +91,18 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
                 connected = value;
                 ConnectionStateChanged?.Invoke(this, oldState, value);
                 RaisePropertyChanged(nameof(Connected));
+
+                if (value)
+                {
+                    State = RouterState.Ok;
+                    StateString = "connected";
+                }
+                else
+                {
+                    State = RouterState.Warning;
+                    StateString = "disconnected";
+                }
+
             }
         }
 

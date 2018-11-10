@@ -79,10 +79,12 @@ namespace OpenSC.GUI.Timers
                 return false;
             }
 
+            timer.StartUpdate();
             timer.ID = (int)idNumericField.Value;
             timer.Title = titleTextBox.Text;
             timer.Mode = getMode();
             timer.CountdownSeconds = (int)countdownStartNumericField.Value;
+            timer.EndUpdate();
 
             if (addingNew)
             {

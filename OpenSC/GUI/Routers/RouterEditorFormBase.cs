@@ -69,10 +69,12 @@ namespace OpenSC.GUI.Routers
                 return false;
             }
 
+            router.StartUpdate();
             writeFields();
+            router.EndUpdate();
+
             if (addingNew)
                 RouterDatabase.Instance.Add(router);
-
             AddingNew = false;
 
             return true;

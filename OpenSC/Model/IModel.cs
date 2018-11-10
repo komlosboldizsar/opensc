@@ -12,6 +12,6 @@ namespace OpenSC.Model
         void Restored();
         void Removed();
         void StartUpdate();
-        void StopUpdate();
+        void EndUpdate();
     }
 }

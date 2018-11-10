@@ -32,7 +32,7 @@ namespace OpenSC.Model
         protected virtual void beforeUpdate()
         { }
 
-        public void StopUpdate()
+        public void EndUpdate()
         {
             updateCounter--;
             if (updateCounter < 0)

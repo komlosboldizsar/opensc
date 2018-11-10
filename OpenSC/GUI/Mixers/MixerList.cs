@@ -54,10 +54,23 @@ namespace OpenSC.GUI.Mixers
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Name");
             builder.Width(150);
-            builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((mixer, cell) => { cell.Value = mixer.Name; });
             builder.AddChangeEvent(nameof(Mixer.Name));
+            builder.BuildAndAdd();
+
+            // Column: name
+            builder = GetColumnDescriptorBuilderForTable<Mixer>();
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.Header("State");
+            builder.Width(100);
+            builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
+            builder.UpdaterMethod((mixer, cell) => {
+                cell.Style.BackColor = stateColorConverter.Convert(mixer.State);
+                cell.Value = mixer.StateString;
+            });
+            builder.AddChangeEvent(nameof(Mixer.State));
+            builder.AddChangeEvent(nameof(Mixer.StateString));
             builder.BuildAndAdd();
 
             // Column: inputs
@@ -143,6 +156,14 @@ namespace OpenSC.GUI.Mixers
             IModelEditorForm<Mixer> editorForm = MixerEditorFormTypeRegister.Instance.GetFormForType(newMixerType);
             (editorForm as ChildWindowBase)?.ShowAsChild();
         }
+
+        private static readonly EnumConverter<MixerState, Color> stateColorConverter = new EnumConverter<MixerState, Color>(null)
+        {
+            { MixerState.Ok, Color.LightGreen },
+            { MixerState.Warning, Color.FromArgb(255, 255, 244, 104) },
+            { MixerState.Error, Color.LightPink },
+            { MixerState.Unknown, Color.LightSlateGray }
+        };
 
     }
 

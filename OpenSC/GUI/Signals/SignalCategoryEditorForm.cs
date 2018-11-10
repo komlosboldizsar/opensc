@@ -64,12 +64,12 @@ namespace OpenSC.GUI.Signals
                 return false;
             }
 
+            category.StartUpdate();
             writeFields();
-            if (addingNew)
-            {
-                SignalDatabases.Categories.Add(category);
-            }
+            category.EndUpdate();
 
+            if (addingNew)
+                SignalDatabases.Categories.Add(category);
             AddingNew = false;
 
             return true;

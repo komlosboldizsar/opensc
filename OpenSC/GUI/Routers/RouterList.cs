@@ -46,10 +46,23 @@ namespace OpenSC.GUI.Routers
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Name");
             builder.Width(150);
-            builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((router, cell) => { cell.Value = router.Name; });
             builder.AddChangeEvent(nameof(Router.Name));
+            builder.BuildAndAdd();
+
+            // Column: name
+            builder = GetColumnDescriptorBuilderForTable<Router>();
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.Header("State");
+            builder.Width(100);
+            builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
+            builder.UpdaterMethod((router, cell) => {
+                cell.Style.BackColor = stateColorConverter.Convert(router.State);
+                cell.Value = router.StateString;
+            });
+            builder.AddChangeEvent(nameof(Router.State));
+            builder.AddChangeEvent(nameof(Router.StateString));
             builder.BuildAndAdd();
 
             // Column: inputs
@@ -135,6 +148,14 @@ namespace OpenSC.GUI.Routers
             IModelEditorForm<Router> editorForm = RouterEditorFormTypeRegister.Instance.GetFormForType(newRouterType);
             (editorForm as ChildWindowBase)?.ShowAsChild();
         }
+
+        private static readonly EnumConverter<RouterState, Color> stateColorConverter = new EnumConverter<RouterState, Color>(null)
+        {
+            { RouterState.Ok, Color.LightGreen },
+            { RouterState.Warning, Color.FromArgb(255, 255, 244, 104) },
+            { RouterState.Error, Color.LightPink },
+            { RouterState.Unknown, Color.LightSlateGray }
+        };
 
     }
 
