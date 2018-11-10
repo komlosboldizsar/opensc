@@ -431,7 +431,9 @@
     <Compile Include="Model\Routers\RouterState.cs" />
     <Compile Include="Model\Routers\RouterTypeNameConverter.cs" />
     <Compile Include="Model\Routers\Virtual\VirtualRouter.cs" />
+    <Compile Include="Model\SerialPorts\SerialPort.cs" />
     <Compile Include="Model\SerialPorts\SerialPortsManager.cs" />
+    <Compile Include="Model\SerialPorts\SerialPortDatabase.cs" />
     <Compile Include="Model\Settings\Converters\BoolConverter.cs" />
     <Compile Include="Model\Settings\Converters\ColorConverter.cs" />
     <Compile Include="Model\Settings\Converters\IntConverter.cs" />
