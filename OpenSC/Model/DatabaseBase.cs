@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.General;
+﻿using OpenSC.Logger;
+using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using System;
 using System.Collections;
@@ -14,9 +15,16 @@ using System.Xml.Linq;
 
 namespace OpenSC.Model
 {
+
     public abstract class DatabaseBase<T>: IDatabaseBase, IObservableList<T>
         where T: class, IModel
     {
+
+        private const string LOG_TAG_DBNAME_PLACEHOLDER = "@dbname";
+        private const string LOG_TAG = "Database: " + LOG_TAG_DBNAME_PLACEHOLDER;
+        private const string LOG_TAG_DBNAME_UNKNOWN = "(unknown)";
+
+        private readonly string SPECIFIC_LOG_TAG = "Database: ?";
         
         public delegate void AddedItemDelegate(DatabaseBase<T> database, T item);
         public event AddedItemDelegate AddedItem;
@@ -55,6 +63,7 @@ namespace OpenSC.Model
         public DatabaseBase()
         {
             persister  = new DatabasePersister<T>(this);
+            SPECIFIC_LOG_TAG = LOG_TAG.Replace(LOG_TAG_DBNAME_PLACEHOLDER, this.GetName() ?? LOG_TAG_DBNAME_UNKNOWN);
         }
 
         public void Add(T item)
@@ -74,11 +83,14 @@ namespace OpenSC.Model
             // Add element
             items.Add(item.ID, item);
 
+            LogDispatcher.V(SPECIFIC_LOG_TAG, "An item added with ID: " + item.ID);
+
             AddedItem?.Invoke(this, item);
             ChangedItems?.Invoke(this);
 
             ItemAdded?.Invoke();
             ItemsChanged?.Invoke();
+
 
             Save();
 
@@ -96,6 +108,8 @@ namespace OpenSC.Model
 
             // Remove element
             items.Remove(item.ID);
+
+            LogDispatcher.V(SPECIFIC_LOG_TAG, "An item removed with ID: " + item.ID);
 
             RemovedItem?.Invoke(this, item);
             ChangedItems?.Invoke(this);
@@ -148,6 +162,7 @@ namespace OpenSC.Model
         public void Save()
         {
             persister.Save(items);
+            LogDispatcher.I(SPECIFIC_LOG_TAG, "Saved to file.");
         }
 
         public void Load()
@@ -157,6 +172,7 @@ namespace OpenSC.Model
             if (loadedItems != null)
             {
                 items = loadedItems;
+                LogDispatcher.I(SPECIFIC_LOG_TAG, "Loaded from file.");
                 ChangedItems?.Invoke(this);
             }
         }
