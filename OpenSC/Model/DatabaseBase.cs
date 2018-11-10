@@ -92,6 +92,8 @@ namespace OpenSC.Model
             ItemAdded?.Invoke();
             ItemsChanged?.Invoke();
 
+            Save();
+
         }
 
         public bool Remove(T item)
@@ -115,6 +117,8 @@ namespace OpenSC.Model
 
             ItemRemoved?.Invoke();
             ItemsChanged?.Invoke();
+
+            Save();
 
             return true;
 
