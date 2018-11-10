@@ -23,6 +23,17 @@ namespace OpenSC.Model.UMDs
             restoreTallySources();
         }
 
+        public override void Removed()
+        {
+            base.Removed();
+            IdChanged = null;
+            NameChanged = null;
+            StaticTextChanged = null;
+            UseStaticTextChanged = null;
+            for (int i = 0; i < MAX_TALLIES; i++)
+                SetTallySource(i, null);
+        }
+
         public UMD()
         { }
 

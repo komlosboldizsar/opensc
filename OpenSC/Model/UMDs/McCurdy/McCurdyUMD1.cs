@@ -15,6 +15,13 @@ namespace OpenSC.Model.UMDs.McCurdy
     class McCurdyUMD1 : UMD
     {
 
+        public override void Removed()
+        {
+            base.Removed();
+            for(int i = 0; i < 3; i++)
+                SetDynamicTextSource(i, null);
+        }
+
         public override IUMDType Type => new McCurdyUMD1Type();
 
         [PersistAs("port")]
