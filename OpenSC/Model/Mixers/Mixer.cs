@@ -173,6 +173,48 @@ namespace OpenSC.Model.Mixers
         }
         #endregion
 
+        #region Property: State
+        public delegate void StateChangedDelegate(Mixer mixer, MixerState oldState, MixerState newState);
+        public event StateChangedDelegate StateChanged;
+        
+        private MixerState state = MixerState.Unknown;
+
+        public MixerState State
+        {
+            get { return state; }
+            protected set
+            {
+                if (value == state)
+                    return;
+                MixerState oldState = state;
+                state = value;
+                StateChanged?.Invoke(this, oldState, value);
+                RaisePropertyChanged(nameof(State));
+            }
+        }
+        #endregion
+
+        #region Property: StateString
+        public delegate void StateStringChangedDelegate(Mixer mixer, string oldStateString, string newStateString);
+        public event StateStringChangedDelegate StateStringChanged;
+
+        private string stateString = "?";
+
+        public string StateString
+        {
+            get { return stateString; }
+            protected set
+            {
+                if (value == stateString)
+                    return;
+                string oldStateString = stateString;
+                stateString = value;
+                StateStringChanged?.Invoke(this, oldStateString, value);
+                RaisePropertyChanged(nameof(StateString));
+            }
+        }
+        #endregion
+
         #region Inputs
         private ObservableList<MixerInput> inputs = new ObservableList<MixerInput>();
 

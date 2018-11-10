@@ -393,6 +393,7 @@
     <Compile Include="Model\Mixers\BlackMagicDesign\BmdMixer.cs" />
     <Compile Include="Model\Mixers\Mixer.cs" />
     <Compile Include="Model\Mixers\MixerDatabase.cs" />
+    <Compile Include="Model\Mixers\MixerState.cs" />
     <Compile Include="Model\Mixers\MixerTypeNameConverter.cs" />
     <Compile Include="Model\Mixers\MixerInput.cs" />
     <Compile Include="Model\Mixers\MixerInputXmlSerializer.cs" />
