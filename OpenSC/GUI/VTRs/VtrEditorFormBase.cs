@@ -64,7 +64,7 @@ namespace OpenSC.GUI.VTRs
 
             vtr.StartUpdate();
             writeFields();
-            vtr.StopUpdate();
+            vtr.EndUpdate();
 
             if (addingNew)
                 VtrDatabase.Instance.Add(vtr);

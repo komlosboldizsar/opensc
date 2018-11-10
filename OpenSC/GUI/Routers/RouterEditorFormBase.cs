@@ -71,7 +71,7 @@ namespace OpenSC.GUI.Routers
 
             router.StartUpdate();
             writeFields();
-            router.StopUpdate();
+            router.EndUpdate();
 
             if (addingNew)
                 RouterDatabase.Instance.Add(router);

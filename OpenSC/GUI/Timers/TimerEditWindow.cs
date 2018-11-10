@@ -84,7 +84,7 @@ namespace OpenSC.GUI.Timers
             timer.Title = titleTextBox.Text;
             timer.Mode = getMode();
             timer.CountdownSeconds = (int)countdownStartNumericField.Value;
-            timer.StopUpdate();
+            timer.EndUpdate();
 
             if (addingNew)
             {

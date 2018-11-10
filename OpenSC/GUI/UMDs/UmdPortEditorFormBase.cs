@@ -74,7 +74,7 @@ namespace OpenSC.GUI.UMDs
 
             port.StartUpdate();
             writeFields();
-            port.StopUpdate();
+            port.EndUpdate();
 
             if (addingNew)
                 UmdPortDatabase.Instance.Add(port);

@@ -66,7 +66,7 @@ namespace OpenSC.GUI.Signals
 
             category.StartUpdate();
             writeFields();
-            category.StopUpdate();
+            category.EndUpdate();
 
             if (addingNew)
                 SignalDatabases.Categories.Add(category);

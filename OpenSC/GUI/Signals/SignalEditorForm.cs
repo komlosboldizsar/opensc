@@ -68,7 +68,7 @@ namespace OpenSC.GUI.Signals
 
             signal.StartUpdate();
             writeFields();
-            signal.StopUpdate();
+            signal.EndUpdate();
 
             if (addingNew)
                 SignalDatabases.Signals.Add(signal);

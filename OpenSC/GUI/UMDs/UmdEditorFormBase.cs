@@ -79,7 +79,7 @@ namespace OpenSC.GUI.UMDs
 
             umd.StartUpdate();
             writeFields();
-            umd.StopUpdate();
+            umd.EndUpdate();
 
             if (addingNew)
                 UmdDatabase.Instance.Add(umd);

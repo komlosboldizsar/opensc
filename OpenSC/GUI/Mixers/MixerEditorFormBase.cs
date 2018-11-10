@@ -71,7 +71,7 @@ namespace OpenSC.GUI.Mixers
 
             mixer.StartUpdate();
             writeFields();
-            mixer.StopUpdate();
+            mixer.EndUpdate();
 
             if (addingNew)
                 MixerDatabase.Instance.Add(mixer);

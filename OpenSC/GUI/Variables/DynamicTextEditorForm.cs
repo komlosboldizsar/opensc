@@ -66,7 +66,7 @@ namespace OpenSC.GUI.Variables
 
             dyntext.StartUpdate();
             writeFields();
-            dyntext.StopUpdate();
+            dyntext.EndUpdate();
 
             if (addingNew)
                 DynamicTextDatabase.Instance.Add(dyntext);

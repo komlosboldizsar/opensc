@@ -64,7 +64,7 @@ namespace OpenSC.GUI.Streams
 
             stream.StartUpdate();
             writeFields();
-            stream.StopUpdate();
+            stream.EndUpdate();
 
             if (addingNew)
                 StreamDatabase.Instance.Add(stream);
