@@ -26,6 +26,13 @@ namespace OpenSC.Model.Routers.Leitch
             base.Restored();
         }
 
+        public override void Removed()
+        {
+            base.Removed();
+            if (port != null)
+                port.ReceivedDataAsciiString -= receivedDataFromPort;
+        }
+
         #region Property: Port
         private SerialPort port;
         

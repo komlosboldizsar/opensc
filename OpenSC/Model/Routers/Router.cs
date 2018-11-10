@@ -29,6 +29,26 @@ namespace OpenSC.Model.Routers
             updateAllCrosspoints();
         }
 
+        public override void Removed()
+        {
+
+            base.Removed();
+
+            IdChanged = null;
+            NameChanged = null;
+            InputsChanged = null;
+            OutputsChanged = null;
+            StateChanged = null;
+            StateStringChanged = null;
+
+            Inputs.ForEach(i => i.RemovedFromRouter(this));
+            inputs.Clear();
+
+            Outputs.ForEach(o => o.RemovedFromRouter(this));
+            outputs.Clear();
+
+        }
+
         public delegate void IdChangedDelegate(Router router, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
 

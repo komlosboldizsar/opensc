@@ -27,6 +27,28 @@ namespace OpenSC.Model.SerialPorts
             Init();
         }
 
+        public override void Removed()
+        {
+
+            base.Removed();
+
+            DeInit();
+            packetSchedulerThread.Abort();
+            packetSchedulerThread = null;
+
+            IdChanged = null;
+            NameChanged = null;
+            ComPortNameChanged = null;
+            InitializedChanged = null;
+            BaudRateChanged = null;
+            ParityChanged = null;
+            DataBitsChanged = null;
+            StopBitsChanged = null;
+            ReceivedDataBytes = null;
+            ReceivedDataAsciiString = null;
+
+        }
+
         #region Property: ID
         public delegate void IdChangedDelegate(SerialPort port, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
