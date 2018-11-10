@@ -82,8 +82,10 @@ namespace OpenSC.Model.Signals
         [PersistAs("category")]
         private ExternalSignalCategory category;
 
+#pragma warning disable CS0169
         [TempForeignKey(ExternalSignalDatabases.DBNAME_CATEGORIES, nameof(category))]
         private int _category;
+#pragma warning restore CS0169
 
         public ExternalSignalCategory Category
         {
