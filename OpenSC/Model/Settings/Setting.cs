@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Logger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,8 @@ namespace OpenSC.Model.Settings
 
     class Setting<T>: ISetting
     {
+
+        private const string LOG_TAG = "Settings";
 
         public Setting(string key, string category, string humanReadableTitle, string humanReadableDescription, T defaultValue = default(T))
         {
@@ -39,6 +42,7 @@ namespace OpenSC.Model.Settings
                 if (EqualityComparer<T>.Default.Equals(this.value, value))
                     return;
                 this.value = value;
+                LogDispatcher.I(LOG_TAG, string.Format("Value of setting '{0}' changed.", Key));
                 ValueChanged?.Invoke(this, oldValue, value);
             }
         }
@@ -50,8 +54,6 @@ namespace OpenSC.Model.Settings
         }
 
         public Type Type { get; } = typeof(T);
-
-
 
     }
 

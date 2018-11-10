@@ -36,28 +36,22 @@ namespace OpenSC.Modules.UMDs
             RegisterUmdType<McCurdyUMD1, McCurdyUmd1EditorForm>();
             RegisterUmdType<McCurdyUMD1T, McCurdyUmd1TEditorForm>();
             RegisterUmdType<TSL31, Tsl31UmdEditorForm>();
-            RegisterUmdPortType<McCurdyPort, McCurdyUmdPortEditorForm>();
-            RegisterUmdPortType<TSL31Port, Tsl31UmdPortEditorForm>();
         }
 
         public void RegisterDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(UmdDatabase));
-            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(UmdPortDatabase));
         }
 
         public void RegisterWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType(typeof(UmdList));
-            WindowTypeRegister.RegisterWindowType(typeof(UmdPortList));
         }
 
         public void RegisterMenus()
         {
             var umdsMenu = MenuManager.Instance.TopMenu["UMD"]["UMD list"];
             umdsMenu.ClickHandler = (menu, tag) => new UmdList().ShowAsChild();
-            var umdPortsMenu = MenuManager.Instance.TopMenu["UMD"]["UMD port list"];
-            umdPortsMenu.ClickHandler = (menu, tag) => new UmdPortList().ShowAsChild();
         }
 
         public void RegisterSettings()
@@ -75,18 +69,6 @@ namespace OpenSC.Modules.UMDs
                 throw new Exception();
             UmdTypeNameConverter.AddKnownType(typeCode, typeof(TUmd));
             UmdEditorFormTypeRegister.Instance.RegisterFormType<TUmd, TUmdEditorForm>();
-        }
-
-        public void RegisterUmdPortType<TUmdPort, TUmdPortEditorForm>()
-            where TUmdPort : UmdPort
-            where TUmdPortEditorForm : IModelEditorForm<UmdPort>, new()
-        {
-            Type umdPortType = typeof(TUmdPort);
-            string typeCode = umdPortType.GetTypeCode();
-            if (string.IsNullOrEmpty(typeCode))
-                throw new Exception();
-            UmdPortTypeNameConverter.AddKnownType(typeCode, typeof(TUmdPort));
-            UmdPortEditorFormTypeRegister.Instance.RegisterFormType<TUmdPort, TUmdPortEditorForm>();
         }
 
     }

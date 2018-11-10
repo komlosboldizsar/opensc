@@ -1,4 +1,5 @@
 ﻿using BMD.Switcher;
+using OpenSC.Logger;
 using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,8 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
     public class BmdMixer : Mixer
     {
 
+        private const string LOG_TAG = "Mixer/BMD";
+
         public BmdMixer()
         {
             initSwitcher();
@@ -42,13 +45,21 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             {
                 switcher?.Connect();
             }
-            catch (Switcher.CouldNotConnectException)
+            catch (Switcher.CouldNotConnectException ex)
             {
-                // TODO: Logging
+                string errorMessage = string.Format("Couldn't connect to a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}. Exception message: [{2}]",
+                    ID,
+                    IpAddress,
+                    ex.Message);
+                LogDispatcher.E(LOG_TAG, errorMessage);
             }
-            catch(Switcher.AlreadyConnectedException)
+            catch(Switcher.AlreadyConnectedException ex)
             {
-                // TODO: Logging
+                string errorMessage = string.Format("Tried to connect to a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}, but was already connected. Exception message: [{2}]",
+                    ID,
+                    IpAddress,
+                    ex.Message);
+                LogDispatcher.W(LOG_TAG, errorMessage);
             }
         }
 
@@ -58,9 +69,13 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             {
                 switcher?.Disconnect();
             }
-            catch (Switcher.NotConnectedException)
+            catch (Switcher.NotConnectedException ex)
             {
-                // TODO: Logging
+                string errorMessage = string.Format("Tried to disconnect from a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}, but wasn't connected. Exception message: [{2}]",
+                    ID,
+                    IpAddress,
+                    ex.Message);
+                LogDispatcher.W(LOG_TAG, errorMessage);
             }
         }
 
@@ -144,18 +159,38 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
 
                 if (value)
                 {
+
                     getMixEffectBlockMonitor();
                     getInputMonitors();
+
+                    // State
                     State = MixerState.Ok;
                     StateString = "connected";
+
+                    // Log
+                    string logMessage = string.Format("Connected to a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}.",
+                        ID,
+                        IpAddress);
+                    LogDispatcher.I(LOG_TAG, logMessage);
+
                 }
                 else
                 {
+
                     disposeMixEffectBlockMonitor();
                     disposeInputMonitors();
                     deinitSwitcher();
+
+                    // State
                     State = MixerState.Warning;
                     StateString = "disconnected";
+
+                    // Log
+                    string logMessage = string.Format("Disconnected from a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}.",
+                        ID,
+                        IpAddress);
+                    LogDispatcher.I(LOG_TAG, logMessage);
+
                 }
 
             }
@@ -201,6 +236,12 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
 
         private void autoReconnectThreadMethod()
         {
+
+            string logMessage = string.Format("Trying auto reconnect to a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}...",
+                ID,
+                IpAddress);
+            LogDispatcher.I(LOG_TAG, logMessage);
+
             if (autoReconnect && !connected)
                 Connect();
             while (autoReconnect && !connected)
@@ -209,6 +250,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
                 if (autoReconnect && !connected)
                     Connect();
             }
+
         }
         #endregion
 

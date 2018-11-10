@@ -31,11 +31,21 @@
             this.mainContainer.SuspendLayout();
             this.SuspendLayout();
             // 
+            // inputsButtonsPanel
+            // 
+            this.inputsButtonsPanel.Location = new System.Drawing.Point(3, 342);
+            this.inputsButtonsPanel.Size = new System.Drawing.Size(948, 44);
+            // 
+            // outputsButtonsPanel
+            // 
+            this.outputsButtonsPanel.Location = new System.Drawing.Point(3, 342);
+            this.outputsButtonsPanel.Size = new System.Drawing.Size(948, 44);
+            // 
             // VirtualRouterEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(832, 453);
+            this.ClientSize = new System.Drawing.Size(982, 553);
             this.DeleteButtonVisible = true;
             this.Name = "VirtualRouterEditorForm";
             this.Text = "VirtualRouterEditorForm";

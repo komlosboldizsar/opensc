@@ -1,6 +1,6 @@
-﻿namespace OpenSC.GUI.UMDs
+﻿namespace OpenSC.GUI.SerialPorts
 {
-    partial class UmdPortList
+    partial class SerialPortList
     {
         /// <summary>
         /// Required designer variable.
@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.topPanelInner = new System.Windows.Forms.Panel();
-            this.addUmdButton = new OpenSC.GUI.GeneralComponents.SplitButton();
-            this.addableUmdPortTypesMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addSerialPortButton = new OpenSC.GUI.GeneralComponents.SplitButton();
+            this.addableSerialPortTemplatesMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.topPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.topPanelInner.SuspendLayout();
@@ -51,7 +51,7 @@
             // 
             this.topPanelInner.AutoSize = true;
             this.topPanelInner.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.topPanelInner.Controls.Add(this.addUmdButton);
+            this.topPanelInner.Controls.Add(this.addSerialPortButton);
             this.topPanelInner.Dock = System.Windows.Forms.DockStyle.Fill;
             this.topPanelInner.Location = new System.Drawing.Point(0, 0);
             this.topPanelInner.Name = "topPanelInner";
@@ -59,31 +59,33 @@
             this.topPanelInner.Size = new System.Drawing.Size(800, 54);
             this.topPanelInner.TabIndex = 0;
             // 
-            // addUmdButton
+            // addSerialPortButton
             // 
-            this.addUmdButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.addUmdButton.Location = new System.Drawing.Point(650, 13);
-            this.addUmdButton.Menu = this.addableUmdPortTypesMenu;
-            this.addUmdButton.Name = "addUmdButton";
-            this.addUmdButton.Size = new System.Drawing.Size(137, 28);
-            this.addUmdButton.TabIndex = 0;
-            this.addUmdButton.Text = "Add UMD port";
-            this.addUmdButton.UseVisualStyleBackColor = true;
+            this.addSerialPortButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.addSerialPortButton.Location = new System.Drawing.Point(650, 13);
+            this.addSerialPortButton.Menu = this.addableSerialPortTemplatesMenu;
+            this.addSerialPortButton.Name = "addSerialPortButton";
+            this.addSerialPortButton.Size = new System.Drawing.Size(137, 28);
+            this.addSerialPortButton.TabIndex = 0;
+            this.addSerialPortButton.Text = "Add serial port";
+            this.addSerialPortButton.UseVisualStyleBackColor = true;
+            this.addSerialPortButton.Click += new System.EventHandler(this.addSerialPortButton_Click);
             // 
-            // addableUmdPortTypesMenu
+            // addableSerialPortTemplatesMenu
             // 
-            this.addableUmdPortTypesMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.addableUmdPortTypesMenu.Name = "addableUmdTypesMenu";
-            this.addableUmdPortTypesMenu.Size = new System.Drawing.Size(61, 4);
+            this.addableSerialPortTemplatesMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.addableSerialPortTemplatesMenu.Name = "addableUmdTypesMenu";
+            this.addableSerialPortTemplatesMenu.Size = new System.Drawing.Size(61, 4);
             // 
-            // UmdPortList
+            // SerialPortList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.HeaderText = "List of UMD ports";
-            this.Name = "UmdPortList";
-            this.Text = "List of UMD ports";
+            this.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.HeaderText = "List of serial ports";
+            this.Name = "SerialPortList";
+            this.Text = "List of serial ports";
             this.Controls.SetChildIndex(this.mainContainer, 0);
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
@@ -97,7 +99,7 @@
         #endregion
 
         private System.Windows.Forms.Panel topPanelInner;
-        private GeneralComponents.SplitButton addUmdButton;
-        private System.Windows.Forms.ContextMenuStrip addableUmdPortTypesMenu;
+        private GeneralComponents.SplitButton addSerialPortButton;
+        private System.Windows.Forms.ContextMenuStrip addableSerialPortTemplatesMenu;
     }
 }

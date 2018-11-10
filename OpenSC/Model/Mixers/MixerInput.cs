@@ -1,4 +1,6 @@
-﻿using OpenSC.Model.Signals;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Signals;
+using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Mixers
 {
 
-    public class MixerInput : ISignalTallySource
+    public class MixerInput : ISignalTallySource, INotifyPropertyChanged
     {
 
         public MixerInput()
@@ -19,10 +21,14 @@ namespace OpenSC.Model.Mixers
             this.name = name;
             this.Mixer = mixer;
             this.Index = index;
+            createBooleans();
         }
 
         public void Restored()
-        { }
+        {
+            restoreSource();
+            createBooleans();
+        }
 
         private string name;
 
@@ -38,6 +44,7 @@ namespace OpenSC.Model.Mixers
                 string oldName = name;
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
+                PropertyChanged?.Invoke(nameof(Name));
             }
         }
 
@@ -52,15 +59,28 @@ namespace OpenSC.Model.Mixers
                 return;
         }
 
+        #region Property: Index
         private int index;
 
         public int Index
         {
             get { return index; }
-            internal set { index = value; }
+            set {
+                if (value == index)
+                    return;
+                int oldIndex = index;
+                index = value;
+                IndexChanged?.Invoke(this, oldIndex, value);
+                PropertyChanged?.Invoke(nameof(Index));
+            }
         }
 
-        ExternalSignal source;
+        public delegate void IndexChangedDelegate(MixerInput input, int oldIndex, int newIndex);
+        public event IndexChangedDelegate IndexChanged;
+        #endregion
+
+        #region Property: Source
+        private ExternalSignal source;
 
         public ExternalSignal Source
         {
@@ -71,39 +91,59 @@ namespace OpenSC.Model.Mixers
                 if (value == source)
                     return;
 
-                source?.IsTalliedFrom(this, SignalTallyType.Red, false);
-                source?.IsTalliedFrom(this, SignalTallyType.Green, false);
+                if(source != null)
+                {
+                    source.NameChanged -= sourceNameChangedHandler;
+                    source.IsTalliedFrom(this, SignalTallyType.Red, false);
+                    source.IsTalliedFrom(this, SignalTallyType.Green, false);
+                }
 
                 ExternalSignal oldSource = source;
                 source = value;
 
                 SourceChanged?.Invoke(this, oldSource, value);
+                PropertyChanged?.Invoke(nameof(Source));
 
-                source?.IsTalliedFrom(this, SignalTallyType.Red, RedTally);
-                source?.IsTalliedFrom(this, SignalTallyType.Green, GreenTally);
+                SourceNameChanged?.Invoke(this, oldSource?.Name, source?.Name);
+                PropertyChanged?.Invoke(nameof(SourceName));
+
+                if (source != null)
+                {
+                    source.NameChanged += sourceNameChangedHandler;
+                    source.IsTalliedFrom(this, SignalTallyType.Red, RedTally);
+                    source.IsTalliedFrom(this, SignalTallyType.Green, GreenTally);
+                }
 
             }
         }
 
-        public event SourceChangedDelegate SourceChanged;
-
         public delegate void SourceChangedDelegate(MixerInput input, ExternalSignal oldSource, ExternalSignal newSource);
-        public delegate void SourceNameChangedDelegate(MixerInput input, string newName);
+        public event SourceChangedDelegate SourceChanged;
+        #endregion
 
-        // "Temp foreign key"
-        public int _sourceSignalId;
-
-        public void RestoreSource()
-        {
-            if (_sourceSignalId > 0)
-                Source = ExternalSignalDatabases.Signals.GetTById(_sourceSignalId);
-        }
-
+        #region Property: SourceName
         public string SourceName
         {
             get => source.Name;
         }
 
+        private void sourceNameChangedHandler(ExternalSignal signal, string oldName, string newName)
+        {
+            SourceNameChanged?.Invoke(this, oldName, newName);
+        }
+
+        public delegate void SourceNameChangedDelegate(MixerInput input, string oldName, string newName);
+        public SourceNameChangedDelegate SourceNameChanged;
+        #endregion
+
+        // "Temp foreign key"
+        public int _sourceSignalId;
+
+        private void restoreSource()
+        {
+            if (_sourceSignalId > 0)
+                Source = ExternalSignalDatabases.Signals.GetTById(_sourceSignalId);
+        }
 
         public delegate void TallyChangedDelegate(MixerInput input, bool newState);
 
@@ -140,6 +180,37 @@ namespace OpenSC.Model.Mixers
         }
 
         public event TallyChangedDelegate GreenTallyChanged;
+
+        #region Tally booleans
+        private IBoolean redTallyBoolean = null;
+        private IBoolean greenTallyBoolean = null;
+
+        private void createBooleans()
+        {
+            redTallyBoolean = new MixerInputTallyBoolean(this, MixerInputTallyBoolean.TallyColor.Red);
+            greenTallyBoolean = new MixerInputTallyBoolean(this, MixerInputTallyBoolean.TallyColor.Green);
+            BooleanRegister.Instance.RegisterBoolean(redTallyBoolean);
+            BooleanRegister.Instance.RegisterBoolean(greenTallyBoolean);
+        }
+
+        private void removeBooleans()
+        {
+            if (redTallyBoolean != null)
+            {
+                BooleanRegister.Instance.UnregisterBoolean(redTallyBoolean);
+                redTallyBoolean = null;
+            }
+            if (greenTallyBoolean != null)
+            {
+                BooleanRegister.Instance.UnregisterBoolean(greenTallyBoolean);
+                greenTallyBoolean = null;
+            }
+        }
+        #endregion
+
+        #region Implementation of INotifyPropertyChanged
+        public event PropertyChangedDelegate PropertyChanged;
+        #endregion
 
     }
 

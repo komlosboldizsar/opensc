@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.General;
+﻿using OpenSC.Logger;
+using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using System;
 using System.Collections;
@@ -14,28 +15,26 @@ using System.Xml.Linq;
 
 namespace OpenSC.Model
 {
+
     public abstract class DatabaseBase<T>: IDatabaseBase, IObservableList<T>
         where T: class, IModel
     {
 
-        public delegate void AddingItemDelegate(DatabaseBase<T> database, T item);
-        public delegate void AddedItemDelegate(DatabaseBase<T> database, T item);
+        private const string LOG_TAG_DBNAME_PLACEHOLDER = "@dbname";
+        private const string LOG_TAG = "Database: " + LOG_TAG_DBNAME_PLACEHOLDER;
+        private const string LOG_TAG_DBNAME_UNKNOWN = "(unknown)";
 
-        public event AddingItemDelegate AddingItem;
+        private readonly string SPECIFIC_LOG_TAG = "Database: ?";
+        
+        public delegate void AddedItemDelegate(DatabaseBase<T> database, T item);
         public event AddedItemDelegate AddedItem;
         public event ObservableListItemAddedDelegate ItemAdded;
-
-        public delegate void RemovingItemDelegate(DatabaseBase<T> database, T item);
+        
         public delegate void RemovedItemDelegate(DatabaseBase<T> database, T item);
-
-        public event RemovingItemDelegate RemovingItem;
         public event RemovedItemDelegate RemovedItem;
         public event ObservableListItemRemovedDelegate ItemRemoved;
-
-        public delegate void ChangingItemsDelegate(DatabaseBase<T> database);
+        
         public delegate void ChangedItemsDelegate(DatabaseBase<T> database);
-
-        public event ChangingItemsDelegate ChangingItems;
         public event ChangedItemsDelegate ChangedItems;
         public event ObservableListItemsChangedDelegate ItemsChanged;
 
@@ -64,6 +63,7 @@ namespace OpenSC.Model
         public DatabaseBase()
         {
             persister  = new DatabasePersister<T>(this);
+            SPECIFIC_LOG_TAG = LOG_TAG.Replace(LOG_TAG_DBNAME_PLACEHOLDER, this.GetName() ?? LOG_TAG_DBNAME_UNKNOWN);
         }
 
         public void Add(T item)
@@ -81,10 +81,9 @@ namespace OpenSC.Model
                 throw new Exception();
 
             // Add element
-            ChangingItems?.Invoke(this);
-            AddingItem?.Invoke(this, item);
-
             items.Add(item.ID, item);
+
+            LogDispatcher.V(SPECIFIC_LOG_TAG, "An item added with ID: " + item.ID);
 
             AddedItem?.Invoke(this, item);
             ChangedItems?.Invoke(this);
@@ -94,7 +93,12 @@ namespace OpenSC.Model
 
             Save();
 
+            afterAdd();
+
         }
+
+        protected virtual void afterAdd()
+        { }
 
         public bool Remove(T item)
         {
@@ -107,10 +111,9 @@ namespace OpenSC.Model
                 return false;
 
             // Remove element
-            ChangingItems?.Invoke(this);
-            RemovingItem?.Invoke(this, item);
-
             items.Remove(item.ID);
+
+            LogDispatcher.V(SPECIFIC_LOG_TAG, "An item removed with ID: " + item.ID);
 
             RemovedItem?.Invoke(this, item);
             ChangedItems?.Invoke(this);
@@ -120,15 +123,26 @@ namespace OpenSC.Model
 
             Save();
 
+            afterRemove();
+
             return true;
 
         }
 
+        protected virtual void afterRemove()
+        { }
+
         public void ItemUpdated(T item)
         {
-            if(items.ContainsValue(item))
+            if (items.ContainsValue(item))
+            {
                 Save();
+                afterItemUpdate();
+            }
         }
+
+        protected virtual void afterItemUpdate()
+        { }
 
         public T GetTById(int id)
         {
@@ -163,6 +177,7 @@ namespace OpenSC.Model
         public void Save()
         {
             persister.Save(items);
+            LogDispatcher.I(SPECIFIC_LOG_TAG, "Saved to file.");
         }
 
         public void Load()
@@ -171,8 +186,8 @@ namespace OpenSC.Model
             var loadedItems = persister.Load();
             if (loadedItems != null)
             {
-                ChangingItems?.Invoke(this);
                 items = loadedItems;
+                LogDispatcher.I(SPECIFIC_LOG_TAG, "Loaded from file.");
                 ChangedItems?.Invoke(this);
             }
         }

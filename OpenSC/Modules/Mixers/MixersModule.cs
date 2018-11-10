@@ -8,6 +8,7 @@ using OpenSC.Model.Variables;
 using System;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model.Mixers.BlackMagicDesign;
+using OpenSC.Model.Mixers.DynamicTextFunctions;
 
 namespace OpenSC.Modules.Mixers
 {
@@ -25,7 +26,8 @@ namespace OpenSC.Modules.Mixers
 
         public void RegisterDynamicTextFunctions()
         {
-            //DynamicTextFunctionRegister.Instance.RegisterFunction(new /*?*/());
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new MixerProgramInputName());
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new MixerPreviewInputName());
         }
 
         public void RegisterDatabasePersisterSerializers()

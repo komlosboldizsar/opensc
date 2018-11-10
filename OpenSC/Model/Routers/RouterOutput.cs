@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.General;
+﻿using OpenSC.Logger;
+using OpenSC.Model.General;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
@@ -86,11 +87,20 @@ namespace OpenSC.Model.Routers
             get { return crosspoint; }
             internal set
             {
+
                 unsubscribeCrosspointEvents();
                 crosspoint = value;
+
+                string logMessage = string.Format("Router crosspoint updated. Router ID: {0}, destination: {1}, source: {2}.",
+                    Router.ID,
+                    Index,
+                    value.Index);
+                LogDispatcher.I(Router.LOG_TAG, logMessage);
+
                 fireChangeEventsAtCrosspointChange();
                 CrosspointChanged?.Invoke(this, value);
                 subscribeCrosspointEvents();
+
             }
         }
 

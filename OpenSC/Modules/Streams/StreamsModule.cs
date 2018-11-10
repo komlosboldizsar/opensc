@@ -7,7 +7,6 @@ using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.Settings;
 using OpenSC.Model.Streams;
-using OpenSC.Model.Streams.DynamicTextFunctions;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
@@ -30,7 +29,9 @@ namespace OpenSC.Modules.Streams
 
         public void RegisterDynamicTextFunctions()
         {
-            DynamicTextFunctionRegister.Instance.RegisterFunction(new StreamViewerCount());
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new Model.Streams.DynamicTextFunctions.StreamViewerCount());
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new Model.Streams.DynamicTextFunctions.StreamState());
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new Model.Streams.DynamicTextFunctions.StreamStateTranslated());
         }
 
         public void RegisterDatabasePersisterSerializers()

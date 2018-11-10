@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.Persistence;
+using OpenSC.Model.SerialPorts;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
@@ -17,12 +18,12 @@ namespace OpenSC.Model.UMDs.McCurdy
         public override IUMDType Type => new McCurdyUMD1Type();
 
         [PersistAs("port")]
-        private McCurdyPort port;
+        private SerialPort port;
 
-        [TempForeignKey(UmdPortDatabase.DBNAME, nameof(port))]
+        [TempForeignKey(SerialPortDatabase.DBNAME, nameof(port))]
         private int _portId;
 
-        public McCurdyPort Port
+        public SerialPort Port
         {
             get { return port; }
             set { port = value; }
@@ -56,13 +57,9 @@ namespace OpenSC.Model.UMDs.McCurdy
         {
             if (port == null)
                 return;
-            var d = new Datagram()
-            {
-                Text = getTextToSend(),
-                ValidUntil = DateTime.Now + TimeSpan.FromSeconds(5),
-                Tallies = TallyStates
-            };
-            port.SendData(address, d);
+            byte[] dataToSend = Encoding.ASCII.GetBytes(getTextToSend());
+            DateTime packetValidUntil = DateTime.Now + TimeSpan.FromSeconds(5);
+            port.SendData(dataToSend, packetValidUntil);
         }
 
         protected virtual string getTextToSend()

@@ -168,7 +168,7 @@
             this.baseDataTabPage.Location = new System.Drawing.Point(4, 25);
             this.baseDataTabPage.Name = "baseDataTabPage";
             this.baseDataTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.baseDataTabPage.Size = new System.Drawing.Size(804, 289);
+            this.baseDataTabPage.Size = new System.Drawing.Size(804, 306);
             this.baseDataTabPage.TabIndex = 0;
             this.baseDataTabPage.Text = "Base data";
             // 
@@ -217,7 +217,7 @@
             // 
             // addInputButton
             // 
-            this.addInputButton.Location = new System.Drawing.Point(6, 12);
+            this.addInputButton.Location = new System.Drawing.Point(6, 6);
             this.addInputButton.Margin = new System.Windows.Forms.Padding(6);
             this.addInputButton.Name = "addInputButton";
             this.addInputButton.Size = new System.Drawing.Size(126, 26);

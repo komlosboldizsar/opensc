@@ -183,6 +183,18 @@
     <Compile Include="GUI\Routers\RouterEditorFormBase.Designer.cs">
       <DependentUpon>RouterEditorFormBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\SerialPorts\SerialPortList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SerialPorts\SerialPortList.Designer.cs">
+      <DependentUpon>SerialPortList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SerialPorts\SerialPortEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SerialPorts\SerialPortEditorForm.Designer.cs">
+      <DependentUpon>SerialPortEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Settings\ISettingEditorControl.cs" />
     <Compile Include="GUI\Settings\SettingEditorBase.cs">
       <SubType>UserControl</SubType>
@@ -234,6 +246,12 @@
     <Compile Include="GUI\Signals\ExternalSignalCategoryEditorForm.Designer.cs">
       <DependentUpon>ExternalSignalCategoryEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\SplashScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SplashScreen.Designer.cs">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Streams\StreamEditorFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -277,24 +295,6 @@
     <Compile Include="GUI\UMDs\McCurdyUmd1TEditorForm.Designer.cs">
       <DependentUpon>McCurdyUmd1TEditorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\UMDs\Tsl31UmdPortEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\UMDs\Tsl31UmdPortEditorForm.Designer.cs">
-      <DependentUpon>Tsl31UmdPortEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\UMDs\McCurdyUmdPortEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\UMDs\McCurdyUmdPortEditorForm.Designer.cs">
-      <DependentUpon>McCurdyUmdPortEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\UMDs\SerialUmdPortEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\UMDs\SerialUmdPortEditorForm.Designer.cs">
-      <DependentUpon>SerialUmdPortEditorForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\UMDs\Tsl31UmdEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -307,25 +307,12 @@
     <Compile Include="GUI\UMDs\McCurdyUmd1EditorForm.Designer.cs">
       <DependentUpon>McCurdyUmd1EditorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\UMDs\UmdPortEditorFormBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\UMDs\UmdPortEditorFormBase.Designer.cs">
-      <DependentUpon>UmdPortEditorFormBase.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\UMDs\UmdEditorFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\UMDs\UmdEditorFormBase.Designer.cs">
       <DependentUpon>UmdEditorFormBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\UMDs\UmdPortList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\UMDs\UmdPortList.Designer.cs">
-      <DependentUpon>UmdPortList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\UMDs\UmdPortEditorFormTypeRegister.cs" />
     <Compile Include="GUI\UMDs\UmdEditorFormTypeRegister.cs" />
     <Compile Include="GUI\UMDs\UmdList.cs">
       <SubType>Form</SubType>
@@ -397,8 +384,11 @@
     <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\MasterDatabase.cs" />
     <Compile Include="Model\Mixers\BlackMagicDesign\BmdMixer.cs" />
+    <Compile Include="Model\Mixers\DynamicTextFunctions\MixerPreviewInputName.cs" />
+    <Compile Include="Model\Mixers\DynamicTextFunctions\MixerProgramInputName.cs" />
     <Compile Include="Model\Mixers\Mixer.cs" />
     <Compile Include="Model\Mixers\MixerDatabase.cs" />
+    <Compile Include="Model\Mixers\MixerInputTallyBoolean.cs" />
     <Compile Include="Model\Mixers\MixerState.cs" />
     <Compile Include="Model\Mixers\MixerTypeNameConverter.cs" />
     <Compile Include="Model\Mixers\MixerInput.cs" />
@@ -415,6 +405,7 @@
     <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
     <Compile Include="Model\Persistence\XmlTagNamesAttribute.cs" />
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohub.cs" />
+    <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputName.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputSource.cs" />
     <Compile Include="Model\Routers\InputSourceSignal.cs" />
     <Compile Include="Model\Routers\IRouterInputSource.cs" />
@@ -427,6 +418,9 @@
     <Compile Include="Model\Routers\RouterState.cs" />
     <Compile Include="Model\Routers\RouterTypeNameConverter.cs" />
     <Compile Include="Model\Routers\Virtual\VirtualRouter.cs" />
+    <Compile Include="Model\SerialPorts\SerialPort.cs" />
+    <Compile Include="Model\SerialPorts\SerialPortsManager.cs" />
+    <Compile Include="Model\SerialPorts\SerialPortDatabase.cs" />
     <Compile Include="Model\Settings\Converters\BoolConverter.cs" />
     <Compile Include="Model\Settings\Converters\ColorConverter.cs" />
     <Compile Include="Model\Settings\Converters\IntConverter.cs" />
@@ -443,6 +437,8 @@
     <Compile Include="Model\Signals\SignalRegister.cs" />
     <Compile Include="Model\Signals\SignalsManager.cs" />
     <Compile Include="Model\Signals\SignalTallyType.cs" />
+    <Compile Include="Model\Streams\DynamicTextFunctions\StreamStateTranslated.cs" />
+    <Compile Include="Model\Streams\DynamicTextFunctions\StreamState.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamViewerCount.cs" />
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerHhMmSs.cs" />
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerTotalMinutes.cs" />
@@ -464,6 +460,9 @@
     <Compile Include="Model\Variables\IDynamicTextFunctionSubstitute.cs" />
     <Compile Include="Model\Variables\VariablesManager.cs" />
     <Compile Include="Model\VTRs\CasparCgPlayout.cs" />
+    <Compile Include="Model\VTRs\DynamicTextFunctions\VtrState.cs" />
+    <Compile Include="Model\VTRs\DynamicTextFunctions\VtrStateTranslated.cs" />
+    <Compile Include="Model\VTRs\DynamicTextFunctions\VtrElapsedTimeHhMmSs.cs" />
     <Compile Include="Model\VTRs\DynamicTextFunctions\VtrRemainingTimeHhMmSs.cs" />
     <Compile Include="Model\VTRs\Vtr.cs" />
     <Compile Include="Model\VTRs\VtrDatabase.cs" />
@@ -478,19 +477,13 @@
     <Compile Include="Model\UMDs\Datagram.cs" />
     <Compile Include="Model\UMDs\McCurdy\ColumnCount.cs" />
     <Compile Include="Model\UMDs\McCurdy\TextAlignment.cs" />
-    <Compile Include="Model\UMDs\UmdPort.cs" />
     <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1.cs" />
-    <Compile Include="Model\UMDs\McCurdy\McCurdyPort.cs" />
     <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1Type.cs" />
-    <Compile Include="Model\UMDs\UmdPortDatabase.cs" />
     <Compile Include="Model\UMDs\UmdDatabase.cs" />
     <Compile Include="Model\UMDs\TSL31\TSL31.cs" />
     <Compile Include="Model\UMDs\TSL31\TSL31Type.cs" />
-    <Compile Include="Model\UMDs\TSL31\TSL31Port.cs" />
     <Compile Include="Model\UMDs\UMD.cs" />
     <Compile Include="Model\UMDs\IUMDType.cs" />
-    <Compile Include="Model\UMDs\UmdPortTypeNameConverter.cs" />
-    <Compile Include="Model\UMDs\UmdSerialPort.cs" />
     <Compile Include="Model\UMDs\UmdTypeNameConverter.cs" />
     <Compile Include="Modules\IModule.cs" />
     <Compile Include="Modules\Mixers\MixersModule.cs" />
@@ -510,6 +503,7 @@
     <Compile Include="GUI\Timers\TimerWindow.Designer.cs">
       <DependentUpon>TimerWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="StartupController.cs" />
     <EmbeddedResource Include="GUI\ChildWindowBase.resx">
       <DependentUpon>ChildWindowBase.cs</DependentUpon>
     </EmbeddedResource>
@@ -558,6 +552,12 @@
     <EmbeddedResource Include="GUI\Routers\RouterEditorFormBase.resx">
       <DependentUpon>RouterEditorFormBase.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SerialPorts\SerialPortList.resx">
+      <DependentUpon>SerialPortList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SerialPorts\SerialPortEditorForm.resx">
+      <DependentUpon>SerialPortEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Settings\SettingEditorBase.resx">
       <DependentUpon>SettingEditorBase.cs</DependentUpon>
     </EmbeddedResource>
@@ -582,6 +582,9 @@
     <EmbeddedResource Include="GUI\Signals\ExternalSignalCategoryEditorForm.resx">
       <DependentUpon>ExternalSignalCategoryEditorForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SplashScreen.resx">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Streams\StreamEditorFormBase.resx">
       <DependentUpon>StreamEditorFormBase.cs</DependentUpon>
     </EmbeddedResource>
@@ -603,17 +606,8 @@
     <EmbeddedResource Include="GUI\UMDs\McCurdyUmd1EditorForm.resx">
       <DependentUpon>McCurdyUmd1EditorForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\UMDs\SerialUmdPortEditorForm.resx">
-      <DependentUpon>SerialUmdPortEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\UMDs\UmdPortEditorFormBase.resx">
-      <DependentUpon>UmdPortEditorFormBase.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GUI\UMDs\UmdEditorFormBase.resx">
       <DependentUpon>UmdEditorFormBase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\UMDs\UmdPortList.resx">
-      <DependentUpon>UmdPortList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\UMDs\UmdList.resx">
       <DependentUpon>UmdList.cs</DependentUpon>

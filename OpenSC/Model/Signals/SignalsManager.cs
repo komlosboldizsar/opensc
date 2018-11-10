@@ -13,40 +13,20 @@ namespace OpenSC.Model.Signals
     class SignalsManager
     {
 
-        public static void ProgramStarted()
-        {
-            registerSettings();
-            registerModelTypes();
-            registerDatabases();
-            registerWindowTypes();
-            registerMenus();
-        }
-
-        public static void MainWindowOpened()
-        { }
-
-        private static void registerSettings()
-        {
-        }
-
-        private static void registerModelTypes()
-        {
-        }
-
-        private static void registerDatabases()
+        public static void RegisterDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(ExternalSignalDatabases.ExternalSignalCategoryDatabase));
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(ExternalSignalDatabases.ExternalSignalDatabase));
         }
 
-        private static void registerWindowTypes()
+        public static void RegisterWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType(typeof(SignalList));
             WindowTypeRegister.RegisterWindowType(typeof(ExternalSignalList));
             WindowTypeRegister.RegisterWindowType(typeof(ExternalSignalCategoryList));
         }
 
-        private static void registerMenus()
+        public static void RegisterMenus()
         {
             var signalsMenu = MenuManager.Instance.TopMenu["Signals"];
             var allSignalsSubMenu = signalsMenu["All signals"];

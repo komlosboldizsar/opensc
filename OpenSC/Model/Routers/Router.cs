@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.General;
+﻿using OpenSC.Logger;
+using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace OpenSC.Model.Routers
     
     public abstract class Router : ModelBase
     {
+
+        public const string LOG_TAG = "Router";
 
         public Router()
         {
@@ -182,9 +185,18 @@ namespace OpenSC.Model.Routers
 
         public bool UpdateCrosspoint(RouterOutput output, RouterInput input)
         {
+
             if (!outputs.Contains(output))
                 return false;
+
+            string logMessage = string.Format("Router crosspoint update request. Router ID: {0}, destination: {1}, source: {2}.",
+                ID,
+                output.Index,
+                input.Index);
+            LogDispatcher.I(LOG_TAG, logMessage);
+
             return setCrosspoint(output, input);
+
         }
 
         protected abstract bool setCrosspoint(RouterOutput output, RouterInput input);

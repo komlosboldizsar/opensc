@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.VTRs.DynamicTextFunctions
 {
-    class VtrRemainingTimeHhMmSs : IDynamicTextFunction
+    class VtrElapsedTimeHhMmSs : IDynamicTextFunction
     {
-        public string FunctionName => nameof(VtrRemainingTimeHhMmSs);
+        public string FunctionName => nameof(VtrElapsedTimeHhMmSs);
 
-        public string Description => "HH:MM:SS format of remaining time of a playout on a VTR.";
+        public string Description => "HH:MM:SS format of elapsed (played) time of a playout on a VTR.";
 
         public int ParameterCount => 2;
 
@@ -53,19 +53,19 @@ namespace OpenSC.Model.VTRs.DynamicTextFunctions
                 }
                 this.vtr = vtr;
 
-                vtr.SecondsRemainingChanged += vtrSecondsRemainingChangedHandler;
+                vtr.SecondsElapsedChanged += vtrSecondsElapsedChangedHandler;
                 updateValue();
 
             }
 
-            private void vtrSecondsRemainingChangedHandler(Vtr vtr, int oldValue, int newValue)
+            private void vtrSecondsElapsedChangedHandler(Vtr vtr, int oldValue, int newValue)
             {
                 updateValue();
             }
 
             private void updateValue()
             {
-                string timeString = vtr.TimeRemaining.ToString(@"hh\:mm\:ss");
+                string timeString = vtr.TimeElapsed.ToString(@"hh\:mm\:ss");
                 CurrentValue = timeString.Replace(":", colonReplacementWithSpaces);
             }
 

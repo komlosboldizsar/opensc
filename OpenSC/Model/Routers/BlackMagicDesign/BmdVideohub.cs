@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Persistence;
+﻿using OpenSC.Logger;
+using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
     [TypeCode("bmd")]
     public class BmdVideohub : Router
     {
+
+        private const string LOG_TAG = "Router/BMD";
 
         public BmdVideohub()
         {
@@ -94,13 +97,31 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
 
                 if (value)
                 {
+
+                    // State
                     State = RouterState.Ok;
                     StateString = "connected";
+
+                    // Lo
+                    string logMessage = string.Format("Connected to a BlackMagic Design router/videohub (ID: {0}) with IP {1}.",
+                        ID,
+                        IpAddress);
+                    LogDispatcher.I(LOG_TAG, logMessage);
+
                 }
                 else
                 {
+
+                    // State
                     State = RouterState.Warning;
                     StateString = "disconnected";
+
+                    // Log
+                    string logMessage = string.Format("Disconnected from a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}.",
+                        ID,
+                        IpAddress);
+                    LogDispatcher.I(LOG_TAG, logMessage);
+
                 }
 
             }
@@ -143,6 +164,12 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
 
         private void autoReconnectThreadMethod()
         {
+
+            string logMessage = string.Format("Trying auto reconnect to a BlackMagic Design router/videohub (ID: {0}) with IP {1}...",
+                ID,
+                IpAddress);
+            LogDispatcher.I(LOG_TAG, logMessage);
+
             if (autoReconnect && !connected)
                 Connect();
             while(autoReconnect && !connected)
@@ -151,6 +178,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
                 if (autoReconnect && !connected)
                     Connect();
             }
+
         }
         #endregion
 
