@@ -23,7 +23,7 @@ namespace OpenSC.Model.Routers
             return new RouterInput()
             {
                 Name = serializedItem.Attributes[ATTRIBUTE_NAME]?.Value,
-                _sourceString = serializedItem.Attributes[ATTRIBUTE_SOURCE]?.Value
+                _sourceSignalUniqueId = serializedItem.Attributes[ATTRIBUTE_SOURCE]?.Value
             };
         }
 
@@ -36,57 +36,12 @@ namespace OpenSC.Model.Routers
 
             XElement xmlElement = new XElement(TAG_NAME);
             xmlElement.SetAttributeValue(ATTRIBUTE_NAME, input.Name);
-
-            string sourceStr = "";
-            if (input.Source is InputSourceSignal)
-            {
-                ExternalSignal signal = ((InputSourceSignal)input.Source).Signal;
-                sourceStr = string.Format(SOURCE_CODE_FORMAT_SIGNAL, signal.ID);
-            }
-            else if (input.Source is RouterOutput)
-            {
-                RouterOutput output = (RouterOutput)input.Source;
-                sourceStr = string.Format(SOURCE_CODE_FORMAT_OUTPUT, output.Router.ID, output.Index);
-            }
-            xmlElement.SetAttributeValue(ATTRIBUTE_SOURCE, sourceStr);
+            xmlElement.SetAttributeValue(ATTRIBUTE_SOURCE, input.Source?.SignalUniqueId);
 
             return xmlElement;
 
         }
-
-        public const string SOURCE_CODE_FORMAT_SIGNAL = "signal,{0}";
-        public const string SOURCE_CODE_FORMAT_OUTPUT = "output,{0},{1}";
-
-        internal static IRouterInputSource GetSourceByString(string sourceString)
-        {
-
-            string[] tokens = sourceString.Split(',');
-
-            if ((tokens.Length == 2) && (tokens[0] == "signal"))
-            {
-                if (!int.TryParse(tokens[1], out int signalId))
-                    return null;
-                return new InputSourceSignal(ExternalSignalDatabases.Signals.GetTById(signalId));
-            }
-
-            if ((tokens.Length == 3) && (tokens[0] == "output"))
-            {
-                if (!int.TryParse(tokens[1], out int routerId))
-                    return null;
-                Router router = RouterDatabase.Instance.GetTById(routerId);
-                if (router == null)
-                    return null;
-                if (!int.TryParse(tokens[2], out int outputIndex))
-                    return null;
-                if (router.Outputs.Count > outputIndex)
-                    return router.Outputs[outputIndex];
-                return null;
-            }
-
-            return null;
-                
-        }
-
+        
     }
 
 }

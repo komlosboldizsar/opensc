@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.General;
+using OpenSC.Model.Signals;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,9 +62,9 @@ namespace OpenSC.Model.Routers
             internal set { index = value; }
         }
 
-        IRouterInputSource source;
+        ISignal source;
 
-        public IRouterInputSource Source
+        public ISignal Source
         {
             get { return source; }
             set
@@ -74,24 +75,24 @@ namespace OpenSC.Model.Routers
 
                 if(source != null)
                 {
-                    source.SourceNameChanged -= sourceNameChangedHandler;
+                    source.SignalLabelChanged -= sourceNameChangedHandler;
                     source.RedTallyChanged -= sourceRedTallyChangedHandler;
                     source.GreenTallyChanged -= sourceGreenTallyChangedHandler;
                 }
 
-                IRouterInputSource oldSource = source;
+                ISignal oldSource = source;
                 source = value;
 
                 SourceChanged?.Invoke(this, oldSource, value);
                 PropertyChanged?.Invoke(nameof(Source));
 
-                SourceNameChanged?.Invoke(this, source?.SourceName);
+                SourceNameChanged?.Invoke(this, source?.SignalLabel);
                 RedTallyChanged?.Invoke(this, (source?.RedTally == true));
                 GreenTallyChanged?.Invoke(this, (source?.GreenTally == true));
 
                 if (source != null)
                 {
-                    source.SourceNameChanged += sourceNameChangedHandler;
+                    source.SignalLabelChanged += sourceNameChangedHandler;
                     source.RedTallyChanged += sourceRedTallyChangedHandler;
                     source.GreenTallyChanged += sourceGreenTallyChangedHandler;
                 }
@@ -100,24 +101,24 @@ namespace OpenSC.Model.Routers
         }
 
 
-        public delegate void SourceChangedDelegate(RouterInput input, IRouterInputSource oldSource, IRouterInputSource newSource);
+        public delegate void SourceChangedDelegate(RouterInput input, ISignal oldSource, ISignal newSource);
         public event SourceChangedDelegate SourceChanged;
 
         // "Temp foreign key"
-        public string _sourceString;
+        public string _sourceSignalUniqueId;
 
         public void RestoreSource()
         {
-            if(_sourceString != null)
-                Source = RouterInputXmlSerializer.GetSourceByString(_sourceString);
+            if (_sourceSignalUniqueId != null)
+                Source = SignalRegister.Instance.GetSignalByUniqueId(_sourceSignalUniqueId);
         }
 
         public string SourceName
         {
-            get => GetSourceName();
+            get => source.SignalLabel;
         }
 
-        public string GetSourceName(List<object> recursionChain = null)
+        /*public string GetSourceName(List<object> recursionChain = null)
         {
             if (source == null)
                 return null;
@@ -127,12 +128,12 @@ namespace OpenSC.Model.Routers
                 return "(cyclic tieline)";
             recursionChain.Add(this);
             return source.GetSourceName(recursionChain);
-        }
+        }*/
 
         public delegate void RouterInputSourceNameChanged(RouterInput input, string newName);
         public event RouterInputSourceNameChanged SourceNameChanged;
 
-        private void sourceNameChangedHandler(IRouterInputSource inputSource, string newName)
+        private void sourceNameChangedHandler(ISignal inputSource, string newName)
         {
             SourceNameChanged?.Invoke(this, newName);
         }
@@ -143,7 +144,7 @@ namespace OpenSC.Model.Routers
         public bool GreenTally =>
             (source != null) ? source.GreenTally : false;
 
-        public bool GetRedTally(List<object> recursionChain = null)
+        /*public bool GetRedTally(List<object> recursionChain = null)
         {
             if (source == null)
                 return false;
@@ -165,18 +166,18 @@ namespace OpenSC.Model.Routers
                 return false;
             recursionChain.Add(this);
             return source.GetGreenTally(recursionChain);
-        }
+        }*/
 
         public delegate void TallyChangedDelegate(RouterInput input, bool newState);
         public event TallyChangedDelegate RedTallyChanged;
         public event TallyChangedDelegate GreenTallyChanged;
 
-        private void sourceRedTallyChangedHandler(IRouterInputSource inputSource, bool newState)
+        private void sourceRedTallyChangedHandler(ISignal inputSource, bool oldState, bool newState)
         {
             RedTallyChanged?.Invoke(this, newState);
         }
 
-        private void sourceGreenTallyChangedHandler(IRouterInputSource inputSource, bool newState)
+        private void sourceGreenTallyChangedHandler(ISignal inputSource, bool oldState, bool newState)
         {
             GreenTallyChanged?.Invoke(this, newState);
         }

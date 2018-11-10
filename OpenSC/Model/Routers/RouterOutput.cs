@@ -1,5 +1,6 @@
 ﻿using OpenSC.Logger;
 using OpenSC.Model.General;
+using OpenSC.Model.Signals;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public class RouterOutput : IRouterInputSource, INotifyPropertyChanged
+    public class RouterOutput : ISignal, INotifyPropertyChanged
     {
 
         public RouterOutput()
@@ -23,6 +24,7 @@ namespace OpenSC.Model.Routers
             this.Router = router;
             this.Index = index;
             createBooleans();
+            registerAsSignal();
         }
 
         public void Restored()
@@ -58,6 +60,7 @@ namespace OpenSC.Model.Routers
             if (router != Router)
                 return;
             removeBooleans();
+            unregisterAsSignal();
         }
 
         private int index;
@@ -130,14 +133,14 @@ namespace OpenSC.Model.Routers
             if(crosspoint == null)
             {
                 SourceNameChanged?.Invoke(this, null);
-                RedTallyChanged?.Invoke(this, false);
-                GreenTallyChanged?.Invoke(this, false);
+                RedTallyChanged?.Invoke(this, false, false);
+                GreenTallyChanged?.Invoke(this, false, false);
             }
             else
             {
                 SourceNameChanged?.Invoke(this, crosspoint.SourceName);
-                RedTallyChanged?.Invoke(this, crosspoint.RedTally);
-                GreenTallyChanged?.Invoke(this, crosspoint.GreenTally);
+                RedTallyChanged?.Invoke(this, false, crosspoint.RedTally);
+                GreenTallyChanged?.Invoke(this, false, crosspoint.GreenTally);
             }
         }
 
@@ -148,12 +151,12 @@ namespace OpenSC.Model.Routers
 
         private void crosspointRedTallyChangedHandler(RouterInput input, bool newState)
         {
-            RedTallyChanged?.Invoke(this, newState);
+            RedTallyChanged?.Invoke(this, false, newState);
         }
 
         private void crosspointGreenTallyChangedHandler(RouterInput input, bool newState)
         {
-            GreenTallyChanged?.Invoke(this, newState);
+            GreenTallyChanged?.Invoke(this, false, newState);
         }
 
         public string InputName
@@ -163,10 +166,10 @@ namespace OpenSC.Model.Routers
 
         public string SourceName
         {
-            get => GetSourceName();
+            get => crosspoint?.SourceName;
         }
 
-        public string GetSourceName(List<object> recursionChain = null)
+        /*public string GetSourceName(List<object> recursionChain = null)
         {
             if (crosspoint == null)
                 return null;
@@ -176,18 +179,25 @@ namespace OpenSC.Model.Routers
                 return "(cyclic tieline)";
             recursionChain.Add(this);
             return crosspoint.GetSourceName(recursionChain);
-        }
+        }*/
 
-        public event RouterInputSourceSourceNameChanged SourceNameChanged;
+        public delegate void SourceNameChangedDelegate(RouterOutput output, string newName);
+        public event SourceNameChangedDelegate SourceNameChanged;
 
         #region Tallies
         public bool RedTally =>
-            GetRedTally();
+            crosspoint?.RedTally ?? false;
 
         public bool GreenTally =>
-            GetGreenTally();
+            crosspoint?.GreenTally ?? false;
 
-        public bool GetRedTally(List<object> recursionChain = null)
+        public string SignalLabel
+            => string.Format("[#{2}) {3}] output of router [(#{0}) {1}]", Router.ID, Router.Name, (Index + 1), Name);
+
+        public string SignalUniqueId
+            => string.Format("router.{0}.output.{1}", Router.ID, (Index + 1));
+
+        /*public bool GetRedTally(List<object> recursionChain = null)
         {
             if (crosspoint == null)
                 return false;
@@ -209,10 +219,10 @@ namespace OpenSC.Model.Routers
                 return false;
             recursionChain.Add(this);
             return crosspoint.GetGreenTally(recursionChain);
-        }
+        }*/
 
-        public event RouterInputSourceTallyChanged RedTallyChanged;
-        public event RouterInputSourceTallyChanged GreenTallyChanged;
+        public event SignalTallyChangedDelegate RedTallyChanged;
+        public event SignalTallyChangedDelegate GreenTallyChanged;
         #endregion
 
         #region Tally booleans
@@ -239,6 +249,11 @@ namespace OpenSC.Model.Routers
                 BooleanRegister.Instance.UnregisterBoolean(greenTallyBoolean);
                 greenTallyBoolean = null;
             }
+        }
+
+        public void IsTalliedFrom(ISignalTallySource source, SignalTallyType type, bool isTallied)
+        {
+            throw new NotImplementedException();
         }
 
         private class TallyBoolean : BooleanBase
@@ -276,7 +291,7 @@ namespace OpenSC.Model.Routers
                 Description = getDescription(output, color);
             }
 
-            private void tallyChangedHandler(IRouterInputSource output, bool newState)
+            private void tallyChangedHandler(ISignal output, bool oldState, bool newState)
             {
                 CurrentState = newState;
             }
@@ -346,6 +361,19 @@ namespace OpenSC.Model.Routers
 
         #region Implementation of INotifyPropertyChanged
         public event PropertyChangedDelegate PropertyChanged;
+        public event SignalLabelChangedDelegate SignalLabelChanged;
+        #endregion
+
+        #region Signals
+        private void registerAsSignal()
+        {
+            SignalRegister.Instance.RegisterSignal(this);
+        }
+
+        private void unregisterAsSignal()
+        {
+            SignalRegister.Instance.UnregisterSignal(this);
+        }
         #endregion
 
     }

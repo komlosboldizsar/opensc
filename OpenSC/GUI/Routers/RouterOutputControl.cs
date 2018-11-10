@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using OpenSC.Model.Routers;
+using OpenSC.Model.Signals;
 
 namespace OpenSC.GUI.Routers
 {
@@ -61,7 +62,7 @@ namespace OpenSC.GUI.Routers
         private void crosspointChangedHandler(RouterOutput output, RouterInput newInput)
             => crosspoint = newInput;
 
-        private void sourceNameChangedHandler(IRouterInputSource inputSource, string newName)
+        private void sourceNameChangedHandler(ISignal inputSource, string newName)
             => updateLabel();
 
         private void crosspointInputNameChangedHandler(RouterInput input, string oldName, string newName)

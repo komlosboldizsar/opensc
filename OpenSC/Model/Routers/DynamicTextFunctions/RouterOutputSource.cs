@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.Routers;
+using OpenSC.Model.Signals;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
@@ -64,7 +65,7 @@ namespace OpenSC.Model.Routers.DynamicTextFunctions
 
             }
 
-            private void outputSourceNameChangedHandler(IRouterInputSource inputSource, string newName)
+            private void outputSourceNameChangedHandler(ISignal inputSource, string newName)
             {
                 CurrentValue = newName;
             }
