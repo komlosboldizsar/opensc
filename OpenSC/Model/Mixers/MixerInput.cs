@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Signals;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Signals;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Mixers
 {
 
-    public class MixerInput : ISignalTallySource
+    public class MixerInput : ISignalTallySource, INotifyPropertyChanged
     {
 
         public MixerInput()
@@ -43,6 +44,7 @@ namespace OpenSC.Model.Mixers
                 string oldName = name;
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
+                PropertyChanged?.Invoke(nameof(Name));
             }
         }
 
@@ -69,6 +71,7 @@ namespace OpenSC.Model.Mixers
                 int oldIndex = index;
                 index = value;
                 IndexChanged?.Invoke(this, oldIndex, value);
+                PropertyChanged?.Invoke(nameof(Index));
             }
         }
 
@@ -94,6 +97,7 @@ namespace OpenSC.Model.Mixers
                 source = value;
 
                 SourceChanged?.Invoke(this, oldSource, value);
+                PropertyChanged?.Invoke(nameof(Source));
 
                 source?.IsTalliedFrom(this, SignalTallyType.Red, RedTally);
                 source?.IsTalliedFrom(this, SignalTallyType.Green, GreenTally);
@@ -104,6 +108,11 @@ namespace OpenSC.Model.Mixers
         public event SourceChangedDelegate SourceChanged;
 
         public delegate void SourceChangedDelegate(MixerInput input, Signal oldSource, Signal newSource);
+
+        public string SourceName
+        {
+            get => source.Name;
+        }
         public delegate void SourceNameChangedDelegate(MixerInput input, string newName);
 
         // "Temp foreign key"
@@ -114,12 +123,6 @@ namespace OpenSC.Model.Mixers
             if (_sourceSignalId > 0)
                 Source = SignalDatabases.Signals.GetTById(_sourceSignalId);
         }
-
-        public string SourceName
-        {
-            get => source.Name;
-        }
-
 
         public delegate void TallyChangedDelegate(MixerInput input, bool newState);
 
@@ -182,6 +185,10 @@ namespace OpenSC.Model.Mixers
                 greenTallyBoolean = null;
             }
         }
+        #endregion
+
+        #region Implementation of INotifyPropertyChanged
+        public event PropertyChangedDelegate PropertyChanged;
         #endregion
 
     }
