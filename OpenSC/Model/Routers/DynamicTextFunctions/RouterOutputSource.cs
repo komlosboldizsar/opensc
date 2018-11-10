@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSC.Model.VTRs.DynamicTextFunctions
+namespace OpenSC.Model.Routers.DynamicTextFunctions
 {
 
     class RouterOutputSource : IDynamicTextFunction
