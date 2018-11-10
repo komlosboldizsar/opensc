@@ -41,6 +41,7 @@ namespace OpenSC.Model.Signals
 
         private static void registerWindowTypes()
         {
+            WindowTypeRegister.RegisterWindowType(typeof(SignalList));
             WindowTypeRegister.RegisterWindowType(typeof(ExternalSignalList));
             WindowTypeRegister.RegisterWindowType(typeof(ExternalSignalCategoryList));
         }
@@ -48,10 +49,12 @@ namespace OpenSC.Model.Signals
         private static void registerMenus()
         {
             var signalsMenu = MenuManager.Instance.TopMenu["Signals"];
-            var signalsSubMenu = signalsMenu["Signals"];
-            signalsSubMenu.ClickHandler = (menu, tag) => new ExternalSignalList().ShowAsChild();
-            var categoriesSubMenu = signalsMenu["Categories"];
-            categoriesSubMenu.ClickHandler = (menu, tag) => new ExternalSignalCategoryList().ShowAsChild();
+            var allSignalsSubMenu = signalsMenu["All signals"];
+            allSignalsSubMenu.ClickHandler = (menu, tag) => new SignalList().ShowAsChild();
+            var externalSignalsSubMenu = signalsMenu["External signals"];
+            externalSignalsSubMenu.ClickHandler = (menu, tag) => new ExternalSignalList().ShowAsChild();
+            var externalCategoriesSubMenu = signalsMenu["External Categories"];
+            externalCategoriesSubMenu.ClickHandler = (menu, tag) => new ExternalSignalCategoryList().ShowAsChild();
         }
 
     }
