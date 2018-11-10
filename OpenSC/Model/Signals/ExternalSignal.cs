@@ -15,6 +15,29 @@ namespace OpenSC.Model.Signals
             updateTallyBooleans();
         }
 
+        public override void Removed()
+        {
+
+            base.Removed();
+
+            Name = null;
+
+            RedTally = false;
+            GreenTally = false;
+            redTallySources.Clear();
+            greenTallySources.Clear();
+
+            IdChanged = null;
+            NameChanged = null;
+            CategoryChanged = null;
+            SourceSignalNameChanged = null;
+            SignalLabelChanged = null;
+            RedTallyChanged = null;
+            GreenTallyChanged = null;
+
+            unregisterTallyBooleans();
+
+        }
 
         public delegate void IdChangedDelegate(ExternalSignal signal, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
@@ -243,6 +266,14 @@ namespace OpenSC.Model.Signals
         {
             (redTallyBoolean as TallyBoolean)?.Update();
             (greenTallyBoolean as TallyBoolean)?.Update();
+        }
+
+        private void unregisterTallyBooleans()
+        {
+            if(redTallyBoolean != null)
+                BooleanRegister.Instance.UnregisterBoolean(redTallyBoolean);
+            if(greenTallyBoolean != null)
+                BooleanRegister.Instance.UnregisterBoolean(greenTallyBoolean);
         }
 
         private class TallyBoolean : BooleanBase
