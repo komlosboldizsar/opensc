@@ -91,10 +91,14 @@ namespace OpenSC.Model
             ItemAdded?.Invoke();
             ItemsChanged?.Invoke();
 
-
             Save();
 
+            afterAdd();
+
         }
+
+        protected virtual void afterAdd()
+        { }
 
         public bool Remove(T item)
         {
@@ -119,15 +123,26 @@ namespace OpenSC.Model
 
             Save();
 
+            afterRemove();
+
             return true;
 
         }
 
+        protected virtual void afterRemove()
+        { }
+
         public void ItemUpdated(T item)
         {
-            if(items.ContainsValue(item))
+            if (items.ContainsValue(item))
+            {
                 Save();
+                afterItemUpdate();
+            }
         }
+
+        protected virtual void afterItemUpdate()
+        { }
 
         public T GetTById(int id)
         {
