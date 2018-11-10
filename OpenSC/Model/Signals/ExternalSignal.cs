@@ -103,7 +103,7 @@ namespace OpenSC.Model.Signals
         }
 
         private string getSignalLabel()
-            => string.Format("(EXT. #{0}) #1", ID, Name);
+            => string.Format("(EXT. #{0}) {1}", ID, Name);
 
         string ISignal.SignalUniqueId
         {
