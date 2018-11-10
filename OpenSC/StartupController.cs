@@ -1,6 +1,7 @@
 ﻿using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Logger;
 using OpenSC.Model;
+using OpenSC.Model.SerialPorts;
 using OpenSC.Model.Settings;
 using OpenSC.Model.Signals;
 using OpenSC.Model.Variables;
@@ -82,6 +83,7 @@ namespace OpenSC
             Status = "Registering databases...";
             VariablesManager.RegisterDatabases();
             SignalsManager.RegisterDatabases();
+            SerialPortsManager.RegisterDatabases();
             ModuleManager.RegisterDatabasePersisterSerializers();
             ModuleManager.RegisterDatabases();
 
@@ -102,6 +104,7 @@ namespace OpenSC
             Status = "Registering window types...";
             VariablesManager.RegisterWindowTypes();
             SignalsManager.RegisterWindowTypes();
+            SerialPortsManager.RegisterWindowTypes();
             ModuleManager.RegisterWindowTypes();
 
             // Init window manager
@@ -118,6 +121,7 @@ namespace OpenSC
             Status = "Registering menus...";
             VariablesManager.RegisterMenus();
             SignalsManager.RegisterMenus();
+            SerialPortsManager.RegisterMenus();
             ModuleManager.RegisterMenus();
         }
 
