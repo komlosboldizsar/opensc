@@ -10,6 +10,15 @@ namespace OpenSC.Model.Streams
         public override void Restored()
         { }
 
+        public override void Removed()
+        {
+            base.Removed();
+            IdChanged = null;
+            NameChanged = null;
+            StateChanged = null;
+            ViewerCountChanged = null;
+        }
+
         public delegate void IdChangedDelegate(Stream stream, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
 

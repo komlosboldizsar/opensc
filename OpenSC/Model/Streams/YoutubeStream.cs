@@ -61,6 +61,13 @@ namespace OpenSC.Model.Streams
         public override void Restored()
         { }
 
+        public override void Removed()
+        {
+            base.Removed();
+            updaterThread.Abort();
+            updaterThread = null;
+        }
+
         private void createAndStartUpdaterThread()
         {
             updaterThread = new Thread(updaterThreadMethod)
