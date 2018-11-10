@@ -16,6 +16,16 @@ namespace OpenSC.Model.Variables
             formulaUpdated();
         }
 
+        public override void Removed()
+        {
+            base.Removed();
+            IdChanged = null;
+            LabelChanged = null;
+            CurrentTextChanged = null;
+            substitutes.Clear();
+            substituteValues.Clear();
+        }
+
         public delegate void IdChangedDelegate(DynamicText text, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
 
