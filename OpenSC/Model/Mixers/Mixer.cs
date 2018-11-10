@@ -20,6 +20,26 @@ namespace OpenSC.Model.Mixers
             restoreInputs();
         }
 
+        public override void Removed()
+        {
+
+            base.Removed();
+
+            IdChanged = null;
+            NameChanged = null;
+            OnProgramInputChanged = null;
+            OnProgramInputNameChanged = null;
+            OnPreviewInputChanged = null;
+            OnPreviewInputNameChanged = null;
+            StateChanged = null;
+            StateStringChanged = null;
+            InputsChanged = null;
+
+            inputs.ForEach(i => i.RemovedFromMixer(this));
+            inputs.Clear();
+
+        }
+
         #region Property: ID
         public delegate void IdChangedDelegate(Mixer mixer, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;

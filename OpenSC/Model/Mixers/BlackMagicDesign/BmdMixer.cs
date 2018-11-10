@@ -39,6 +39,30 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             Connect();
         }
 
+        public override void Removed()
+        {
+
+            base.Removed();
+
+            Disconnect();
+            deinitSwitcher();
+            switcher = null;
+
+            IpAddressChanged = null;
+            IpAddressChanging = null;
+            AutoReconnectChanged = null;
+            AutoReconnectChanging = null;
+            ConnectionStateChanged = null;
+            ConnectionStateChanging = null;
+
+            disposeInputMonitors();
+            disposeMixEffectBlockMonitor();
+
+            autoReconnectThread?.Abort();
+            autoReconnectThread = null;
+
+        }
+
         public void Connect()
         {
             try
