@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.SerialPorts;
 using OpenSC.GUI.Variables;
 using OpenSC.GUI.WorkspaceManager;
 using System;
@@ -16,14 +17,14 @@ namespace OpenSC.Model.SerialPorts
 
         public static void RegisterWindowTypes()
         {
-            //WindowTypeRegister.RegisterWindowType(typeof(SerialPortsList));
+            WindowTypeRegister.RegisterWindowType(typeof(SerialPortList));
         }
 
         public static void RegisterMenus()
         {
-            /*var portsMenu = MenuManager.Instance.TopMenu["Ports"];
+            var portsMenu = MenuManager.Instance.TopMenu["Ports"];
             var serialPortsMenu = portsMenu["Serial ports"];
-            serialPortsMenu.ClickHandler = (menu, tag) => new SerialPortsList().ShowAsChild();*/
+            serialPortsMenu.ClickHandler = (menu, tag) => new SerialPortsList().ShowAsChild();
         }
 
     }
