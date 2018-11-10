@@ -38,6 +38,28 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             startAutoReconnectThread();
         }
 
+        public override void Removed()
+        {
+
+            base.Removed();
+
+            Disconnect();
+            videohub.CrosspointChanged -= crosspointChangedHandler;
+            videohub.ConnectionStateChanged -= connectionStateChangedHandler;
+            videohub = null;
+
+            IpAddressChanged = null;
+            IpAddressChanging = null;
+            ConnectionStateChanged = null;
+            ConnectionStateChanging = null;
+            AutoReconnectChanged = null;
+            AutoReconnectChanging = null;
+
+            autoReconnectThread?.Abort();
+            autoReconnectThread = null;
+
+        }
+
         public void Connect()
         {
             videohub.Connect();
