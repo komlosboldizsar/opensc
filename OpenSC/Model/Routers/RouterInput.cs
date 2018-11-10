@@ -113,12 +113,12 @@ namespace OpenSC.Model.Routers
                 Source = SignalRegister.Instance.GetSignalByUniqueId(_sourceSignalUniqueId);
         }
 
-        public string SourceName
+        public string SourceSignalName
         {
-            get => source.SignalLabel;
+            get => source?.SourceSignalName;
         }
 
-        /*public string GetSourceName(List<object> recursionChain = null)
+        public string GetSourceSignalName(List<object> recursionChain = null)
         {
             if (source == null)
                 return null;
@@ -127,8 +127,8 @@ namespace OpenSC.Model.Routers
             if (recursionChain.Contains(this))
                 return "(cyclic tieline)";
             recursionChain.Add(this);
-            return source.GetSourceName(recursionChain);
-        }*/
+            return source.GetSourceSignalName(recursionChain);
+        }
 
         public delegate void RouterInputSourceNameChanged(RouterInput input, string newName);
         public event RouterInputSourceNameChanged SourceNameChanged;
@@ -144,7 +144,7 @@ namespace OpenSC.Model.Routers
         public bool GreenTally =>
             (source != null) ? source.GreenTally : false;
 
-        /*public bool GetRedTally(List<object> recursionChain = null)
+        public bool GetRedTally(List<object> recursionChain = null)
         {
             if (source == null)
                 return false;
@@ -166,7 +166,7 @@ namespace OpenSC.Model.Routers
                 return false;
             recursionChain.Add(this);
             return source.GetGreenTally(recursionChain);
-        }*/
+        }
 
         public delegate void TallyChangedDelegate(RouterInput input, bool newState);
         public event TallyChangedDelegate RedTallyChanged;

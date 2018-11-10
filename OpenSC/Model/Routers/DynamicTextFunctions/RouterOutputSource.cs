@@ -60,12 +60,12 @@ namespace OpenSC.Model.Routers.DynamicTextFunctions
                 }
                 output = router.Outputs[outputIndex-1];
 
-                output.SourceNameChanged += outputSourceNameChangedHandler;
-                CurrentValue = output.SourceName;
+                output.SourceSignalNameChanged += outputSourceSignalNameChangedHandler;
+                CurrentValue = output.SourceSignalName;
 
             }
 
-            private void outputSourceNameChangedHandler(ISignal inputSource, string newName)
+            private void outputSourceSignalNameChangedHandler(ISignal inputSource, string newName)
             {
                 CurrentValue = newName;
             }

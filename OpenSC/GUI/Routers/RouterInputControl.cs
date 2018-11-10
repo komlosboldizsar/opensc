@@ -29,7 +29,7 @@ namespace OpenSC.GUI.Routers
             this.Input = input;
             this.containerForm = containerForm;
             button.Text = input.Name;
-            label.Text = ((input.SourceName != null) ? input.SourceName : "-");
+            label.Text = ((input.SourceSignalName != null) ? input.SourceSignalName : "-");
         }
 
         private void RouterInputControl_Load(object sender, EventArgs e)

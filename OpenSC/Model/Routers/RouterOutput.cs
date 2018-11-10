@@ -47,6 +47,8 @@ namespace OpenSC.Model.Routers
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
                 PropertyChanged?.Invoke(nameof(Name));
+                SignalLabelChanged?.Invoke(this, getSignalLabel());
+                PropertyChanged?.Invoke(nameof(ISignal.SignalLabel));
             }
         }
 
@@ -76,6 +78,8 @@ namespace OpenSC.Model.Routers
                 index = value;
                 IndexChanged?.Invoke(this, oldIndex, value);
                 PropertyChanged?.Invoke(nameof(Index));
+                SignalLabelChanged?.Invoke(this, getSignalLabel());
+                PropertyChanged?.Invoke(nameof(ISignal.SignalLabel));
             }
         }
 
@@ -132,13 +136,13 @@ namespace OpenSC.Model.Routers
         {
             if(crosspoint == null)
             {
-                SourceNameChanged?.Invoke(this, null);
+                SourceSignalNameChanged?.Invoke(this, null);
                 RedTallyChanged?.Invoke(this, false, false);
                 GreenTallyChanged?.Invoke(this, false, false);
             }
             else
             {
-                SourceNameChanged?.Invoke(this, crosspoint.SourceName);
+                SourceSignalNameChanged?.Invoke(this, crosspoint.SourceSignalName);
                 RedTallyChanged?.Invoke(this, false, crosspoint.RedTally);
                 GreenTallyChanged?.Invoke(this, false, crosspoint.GreenTally);
             }
@@ -146,7 +150,7 @@ namespace OpenSC.Model.Routers
 
         private void crosspointSourceNameChangedHandler(RouterInput input, string newName)
         {
-            SourceNameChanged?.Invoke(this, newName);
+            SourceSignalNameChanged?.Invoke(this, newName);
         }
 
         private void crosspointRedTallyChangedHandler(RouterInput input, bool newState)
@@ -164,12 +168,13 @@ namespace OpenSC.Model.Routers
             get => crosspoint?.Name;
         }
 
-        public string SourceName
+        #region Property: SourceSignalName
+        public string SourceSignalName
         {
-            get => crosspoint?.SourceName;
+            get => GetSourceSignalName();
         }
 
-        /*public string GetSourceName(List<object> recursionChain = null)
+        public string GetSourceSignalName(List<object> recursionChain = null)
         {
             if (crosspoint == null)
                 return null;
@@ -178,26 +183,33 @@ namespace OpenSC.Model.Routers
             if (recursionChain.Contains(this))
                 return "(cyclic tieline)";
             recursionChain.Add(this);
-            return crosspoint.GetSourceName(recursionChain);
-        }*/
+            return crosspoint.GetSourceSignalName(recursionChain);
+        }
 
-        public delegate void SourceNameChangedDelegate(RouterOutput output, string newName);
-        public event SourceNameChangedDelegate SourceNameChanged;
+        public event SourceSignalNameChangedDelegate SourceSignalNameChanged;
+        #endregion
+
+        #region Property: SignalLabel
+        string ISignal.SignalLabel
+            => getSignalLabel();
+
+        private string getSignalLabel()
+            => string.Format("[#{2}) {3}] output of router [(#{0}) {1}]", Router.ID, Router.Name, (Index + 1), Name);
+
+        public event SignalLabelChangedDelegate SignalLabelChanged;
+        #endregion
 
         #region Tallies
         public bool RedTally =>
-            crosspoint?.RedTally ?? false;
+            GetRedTally();
 
         public bool GreenTally =>
-            crosspoint?.GreenTally ?? false;
-
-        public string SignalLabel
-            => string.Format("[#{2}) {3}] output of router [(#{0}) {1}]", Router.ID, Router.Name, (Index + 1), Name);
+            GetGreenTally();
 
         public string SignalUniqueId
             => string.Format("router.{0}.output.{1}", Router.ID, (Index + 1));
 
-        /*public bool GetRedTally(List<object> recursionChain = null)
+        public bool GetRedTally(List<object> recursionChain = null)
         {
             if (crosspoint == null)
                 return false;
@@ -219,7 +231,7 @@ namespace OpenSC.Model.Routers
                 return false;
             recursionChain.Add(this);
             return crosspoint.GetGreenTally(recursionChain);
-        }*/
+        }
 
         public event SignalTallyChangedDelegate RedTallyChanged;
         public event SignalTallyChangedDelegate GreenTallyChanged;
@@ -361,7 +373,6 @@ namespace OpenSC.Model.Routers
 
         #region Implementation of INotifyPropertyChanged
         public event PropertyChangedDelegate PropertyChanged;
-        public event SignalLabelChangedDelegate SignalLabelChanged;
         #endregion
 
         #region Signals

@@ -69,6 +69,8 @@ namespace OpenSC.Model.Signals
                 RaisePropertyChanged(nameof(Name));
                 SignalLabelChanged?.Invoke(this, getSignalLabel());
                 RaisePropertyChanged(nameof(ISignal.SignalLabel));
+                SourceSignalNameChanged?.Invoke(this, value);
+                RaisePropertyChanged(nameof(SourceSignalName));
 
             }
         }
@@ -96,6 +98,18 @@ namespace OpenSC.Model.Signals
                 RaisePropertyChanged(nameof(Category));
             }
         }
+
+        #region Property: SourceSignalName
+        public string SourceSignalName
+        {
+            get => name;
+        }
+
+        public string GetSourceSignalName(List<object> recursionChain = null)
+            => name;
+
+        public event SourceSignalNameChangedDelegate SourceSignalNameChanged;
+        #endregion
 
         string ISignal.SignalLabel
         {
@@ -130,6 +144,9 @@ namespace OpenSC.Model.Signals
                 RaisePropertyChanged(nameof(RedTally));
             }
         }
+
+        public bool GetRedTally(List<object> recursionChain = null)
+            => redTally;
         
         public event SignalTallyChangedDelegate GreenTallyChanged;
 
@@ -148,6 +165,9 @@ namespace OpenSC.Model.Signals
                 RaisePropertyChanged(nameof(GreenTally));
             }
         }
+
+        public bool GetGreenTally(List<object> recursionChain = null)
+            => greenTally;
         #endregion
 
         #region Tally sources
