@@ -47,6 +47,7 @@ namespace OpenSC
             ThreadHelpers.InvokeHelper.Init();
 
             // Start components
+            StartupController.StatusChanged += startupControllerStatusChangedHandler;
             StartupController.ProgramStarted();
             StartupController.GuiInitializable();
 
@@ -54,6 +55,12 @@ namespace OpenSC
             GUI.MainForm.Instance.Load += mainFormOpenedHandler;
             Application.Run(GUI.MainForm.Instance);
 
+        }
+
+        private static void startupControllerStatusChangedHandler(string status)
+        {
+            splashScreen.Status = status;
+            Application.DoEvents();
         }
 
         private static void mainFormOpenedHandler(object sender, EventArgs e)
