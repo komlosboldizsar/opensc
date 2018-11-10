@@ -37,7 +37,6 @@ namespace OpenSC.Model.Timers.DynamicTextFunctions
         {
 
             private readonly Timer timer;
-            private readonly int spacesAround;
             private readonly string colonReplacementWithSpaces;
 
             public Substitute(Timer timer, int spacesAround)
