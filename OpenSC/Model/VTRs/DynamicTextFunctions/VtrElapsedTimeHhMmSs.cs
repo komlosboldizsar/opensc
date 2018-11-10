@@ -37,7 +37,6 @@ namespace OpenSC.Model.VTRs.DynamicTextFunctions
         {
 
             private readonly Vtr vtr;
-            private readonly int spacesAround;
             private readonly string colonReplacementWithSpaces;
 
             public Substitute(Vtr vtr, int spacesAround)
