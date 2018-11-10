@@ -12,7 +12,7 @@ namespace OpenSC.Model.SerialPorts
 
         public static void RegisterDatabases()
         {
-            //MasterDatabase.Instance.RegisterSingletonDatabase(typeof(SerialPortsDatabase));
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(SerialPortDatabase));
         }
 
         public static void RegisterWindowTypes()
