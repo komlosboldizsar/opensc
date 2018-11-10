@@ -417,6 +417,7 @@
     <Compile Include="Model\Routers\RouterInputXmlSerializer.cs" />
     <Compile Include="Model\Routers\RouterOutput.cs" />
     <Compile Include="Model\Routers\RouterOutputXmlSerializer.cs" />
+    <Compile Include="Model\Routers\RouterState.cs" />
     <Compile Include="Model\Routers\RouterTypeNameConverter.cs" />
     <Compile Include="Model\Routers\Virtual\VirtualRouter.cs" />
     <Compile Include="Model\Settings\Converters\BoolConverter.cs" />

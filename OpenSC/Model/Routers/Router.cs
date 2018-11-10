@@ -212,6 +212,48 @@ namespace OpenSC.Model.Routers
                 output.Restored();
         }
 
+        #region Property: State
+        public delegate void StateChangedDelegate(Router router, RouterState oldState, RouterState newState);
+        public event StateChangedDelegate StateChanged;
+
+        private RouterState state = RouterState.Unknown;
+
+        public RouterState State
+        {
+            get { return state; }
+            protected set
+            {
+                if (value == state)
+                    return;
+                RouterState oldState = state;
+                state = value;
+                StateChanged?.Invoke(this, oldState, value);
+                RaisePropertyChanged(nameof(State));
+            }
+        }
+        #endregion
+
+        #region Property: StateString
+        public delegate void StateStringChangedDelegate(Router router, string oldStateString, string newStateString);
+        public event StateStringChangedDelegate StateStringChanged;
+
+        private string stateString = "?";
+
+        public string StateString
+        {
+            get { return stateString; }
+            protected set
+            {
+                if (value == stateString)
+                    return;
+                string oldStateString = stateString;
+                stateString = value;
+                StateStringChanged?.Invoke(this, oldStateString, value);
+                RaisePropertyChanged(nameof(StateString));
+            }
+        }
+        #endregion
+
     }
 
 }
