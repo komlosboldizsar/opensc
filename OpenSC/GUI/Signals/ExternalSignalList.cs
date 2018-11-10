@@ -12,7 +12,7 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.Signals
 {
 
-    [WindowTypeName("signals.signallist")]
+    [WindowTypeName("signals.externalsignallist")]
     public partial class ExternalSignalList : ChildWindowWithTable
     {
 
