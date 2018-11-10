@@ -52,6 +52,14 @@ namespace OpenSC.Model.Signals
             ItemRemoved?.Invoke();
             ItemsChanged?.Invoke();
         }
+
+        public ISignal GetSignalByUniqueId(string uniqueId)
+        {
+            foreach (ISignal signal in registeredSignals)
+                if (signal.SignalUniqueId == uniqueId)
+                    return signal;
+            return null;
+        }
         
     }
 
