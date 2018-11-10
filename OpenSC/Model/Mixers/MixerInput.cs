@@ -20,11 +20,13 @@ namespace OpenSC.Model.Mixers
             this.name = name;
             this.Mixer = mixer;
             this.Index = index;
+            createBooleans();
         }
 
         public void Restored()
         {
             restoreSource();
+            createBooleans();
         }
 
         private string name;
@@ -143,6 +145,33 @@ namespace OpenSC.Model.Mixers
         }
 
         public event TallyChangedDelegate GreenTallyChanged;
+
+        #region Tally booleans
+        private IBoolean redTallyBoolean = null;
+        private IBoolean greenTallyBoolean = null;
+
+        private void createBooleans()
+        {
+            redTallyBoolean = new MixerInputTallyBoolean(this, MixerInputTallyBoolean.TallyColor.Red);
+            greenTallyBoolean = new MixerInputTallyBoolean(this, MixerInputTallyBoolean.TallyColor.Green);
+            BooleanRegister.Instance.RegisterBoolean(redTallyBoolean);
+            BooleanRegister.Instance.RegisterBoolean(greenTallyBoolean);
+        }
+
+        private void removeBooleans()
+        {
+            if (redTallyBoolean != null)
+            {
+                BooleanRegister.Instance.UnregisterBoolean(redTallyBoolean);
+                redTallyBoolean = null;
+            }
+            if (greenTallyBoolean != null)
+            {
+                BooleanRegister.Instance.UnregisterBoolean(greenTallyBoolean);
+                greenTallyBoolean = null;
+            }
+        }
+        #endregion
 
     }
 
