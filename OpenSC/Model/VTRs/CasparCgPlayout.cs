@@ -20,6 +20,12 @@ namespace OpenSC.Model.VTRs
 
         private const string LOG_TAG = "Vtr/CasparCG";
 
+        public override void Removed()
+        {
+            base.Removed();
+            unsubscribeFromChannelLayer(this);
+        }
+
         [PersistAs("listened_ip")]
         private string listenedIP = "127.0.0.1";
 

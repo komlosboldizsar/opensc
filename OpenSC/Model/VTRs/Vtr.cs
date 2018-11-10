@@ -14,6 +14,21 @@ namespace OpenSC.Model.VTRs
         public override void Restored()
         { }
 
+        public override void Removed()
+        {
+
+            base.Removed();
+
+            IdChanged = null;
+            NameChanged = null;
+            TitleChanged = null;
+            StateChanged = null;
+            SecondsFullChanged = null;
+            SecondsElapsedChanged = null;
+            SecondsRemainingChanged = null;
+
+        }
+
         public delegate void IdChangedDelegate(Vtr vtr, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
 
