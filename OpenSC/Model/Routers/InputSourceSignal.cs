@@ -55,12 +55,12 @@ namespace OpenSC.Model.Routers
         public event RouterInputSourceTallyChanged RedTallyChanged;
         public event RouterInputSourceTallyChanged GreenTallyChanged;
 
-        private void redTallyChangedHandler(ExternalSignal signal, bool oldState, bool newState)
+        private void redTallyChangedHandler(ISignal signal, bool oldState, bool newState)
         {
             RedTallyChanged?.Invoke(this, newState);
         }
 
-        private void greenTallyChangedHandler(ExternalSignal signal, bool oldState, bool newState)
+        private void greenTallyChangedHandler(ISignal signal, bool oldState, bool newState)
         {
             GreenTallyChanged?.Invoke(this, newState);
         }

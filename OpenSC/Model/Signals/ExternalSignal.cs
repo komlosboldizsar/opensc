@@ -7,7 +7,7 @@ using System.Drawing;
 namespace OpenSC.Model.Signals
 {
 
-    public class ExternalSignal : ModelBase
+    public class ExternalSignal : ModelBase, ISignal
     {
 
         public override void Restored()
@@ -26,12 +26,18 @@ namespace OpenSC.Model.Signals
             get { return id; }
             set
             {
+
                 ValidateId(value);
                 int oldValue = id;
                 id = value;
+
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
+                SignalLabelChanged?.Invoke(this, getSignalLabel());
+                RaisePropertyChanged(nameof(ISignal.SignalLabel));
+
                 createTallyBooleansAfterIdChange();
+
             }
         }
 
@@ -58,8 +64,12 @@ namespace OpenSC.Model.Signals
                     return;
                 string oldName = name;
                 name = value;
+
                 NameChanged?.Invoke(this, oldName, value);
                 RaisePropertyChanged(nameof(Name));
+                SignalLabelChanged?.Invoke(this, getSignalLabel());
+                RaisePropertyChanged(nameof(ISignal.SignalLabel));
+
             }
         }
 
@@ -87,8 +97,18 @@ namespace OpenSC.Model.Signals
             }
         }
 
+        string ISignal.SignalLabel
+        {
+            get => getSignalLabel();
+        }
+
+        private string getSignalLabel()
+            => string.Format("(EXT. #{0}) #1", ID, Name);
+
+        public event SignalLabelChangedDelegate SignalLabelChanged;
+
         #region Tallies
-        public event TallyChangedDelegate RedTallyChanged;
+        public event SignalTallyChangedDelegate RedTallyChanged;
 
         private bool redTally;
 
@@ -106,7 +126,7 @@ namespace OpenSC.Model.Signals
             }
         }
         
-        public event TallyChangedDelegate GreenTallyChanged;
+        public event SignalTallyChangedDelegate GreenTallyChanged;
 
         private bool greenTally;
 
@@ -123,8 +143,6 @@ namespace OpenSC.Model.Signals
                 RaisePropertyChanged(nameof(GreenTally));
             }
         }
-
-        public delegate void TallyChangedDelegate(ExternalSignal signal, bool oldState, bool newState);
         #endregion
 
         #region Tally sources
@@ -233,7 +251,7 @@ namespace OpenSC.Model.Signals
                 Description = getDescription(signal, color);
             }
 
-            private void tallyChangedHandler(ExternalSignal signal, bool oldState, bool newState)
+            private void tallyChangedHandler(ISignal signal, bool oldState, bool newState)
             {
                 CurrentState = newState;
             }

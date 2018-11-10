@@ -429,6 +429,7 @@
     <Compile Include="Model\Settings\Setting.cs" />
     <Compile Include="Model\Settings\SettingsManager.cs" />
     <Compile Include="Model\Settings\Converters\SettingValueConverterAttribute.cs" />
+    <Compile Include="Model\Signals\ISignal.cs" />
     <Compile Include="Model\Signals\ISignalTallySource.cs" />
     <Compile Include="Model\Signals\ExternalSignalCategory.cs" />
     <Compile Include="Model\Signals\ExternalSignal.cs" />
