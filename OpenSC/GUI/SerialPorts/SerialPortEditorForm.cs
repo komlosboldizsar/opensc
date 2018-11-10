@@ -33,15 +33,14 @@ namespace OpenSC.GUI.SerialPorts
         public SerialPortEditorForm()
         {
             InitializeComponent();
-            initDropDowns();
         }
 
         public SerialPortEditorForm(SerialPort port)
         {
             InitializeComponent();
+            initDropDowns();
             AddingNew = (port == null);
-            if (port != null)
-                this.port = port;
+            this.port = (port == null) ? new SerialPort() : port;
         }
 
         protected override void loadData()
@@ -50,7 +49,7 @@ namespace OpenSC.GUI.SerialPorts
             if (port == null)
                 return;
 
-            idNumericField.Value = port.ID;
+            idNumericField.Value = (AddingNew ? SerialPortDatabase.Instance.NextValidId() : port.ID);
             nameTextBox.Text = port.Name;
 
             portNameDropDown.SelectByValue(port.ComPortName);
