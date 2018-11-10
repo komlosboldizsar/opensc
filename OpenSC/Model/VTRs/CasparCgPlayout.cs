@@ -1,4 +1,5 @@
 ﻿using Bespoke.Common.Osc;
+using OpenSC.Logger;
 using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,8 @@ namespace OpenSC.Model.VTRs
     [TypeCode("casparcg")]
     public class CasparCgPlayout: Vtr
     {
+
+        private const string LOG_TAG = "Vtr/CasparCG";
 
         [PersistAs("listened_ip")]
         private string listenedIP = "127.0.0.1";
@@ -100,7 +103,13 @@ namespace OpenSC.Model.VTRs
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                string errorMessage = string.Format("Error occurred while trying to process an OSC message (VTR ID: {0}). Exception message: [{1}]",
+                    ID,
+                    ex.Message);
+                LogDispatcher.E(LOG_TAG, errorMessage);
+            }
         }
 
         private bool isPaused = false;
