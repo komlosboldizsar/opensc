@@ -62,10 +62,12 @@ namespace OpenSC.GUI.Streams
                 return false;
             }
 
+            stream.StartUpdate();
             writeFields();
+            stream.StopUpdate();
+
             if (addingNew)
                 StreamDatabase.Instance.Add(stream);
-
             AddingNew = false;
 
             return true;

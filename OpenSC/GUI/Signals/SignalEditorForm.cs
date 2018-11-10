@@ -66,12 +66,12 @@ namespace OpenSC.GUI.Signals
                 return false;
             }
 
+            signal.StartUpdate();
             writeFields();
-            if (addingNew)
-            {
-                SignalDatabases.Signals.Add(signal);
-            }
+            signal.StopUpdate();
 
+            if (addingNew)
+                SignalDatabases.Signals.Add(signal);
             AddingNew = false;
 
             return true;

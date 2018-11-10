@@ -72,12 +72,12 @@ namespace OpenSC.GUI.UMDs
                 return false;
             }
 
+            port.StartUpdate();
             writeFields();
-            if (addingNew)
-            {
-                UmdPortDatabase.Instance.Add(port);
-            }
+            port.StopUpdate();
 
+            if (addingNew)
+                UmdPortDatabase.Instance.Add(port);
             AddingNew = false;
 
             return true;
