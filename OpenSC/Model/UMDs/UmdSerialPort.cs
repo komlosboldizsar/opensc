@@ -13,7 +13,7 @@ namespace OpenSC.Model.UMDs
     abstract class UmdSerialPort: UmdPort
     {
 
-        private const string LOG_TAG = "UMD/Port/SerialPort";
+        private const string LOG_TAG = "Umd/Port/SerialPort";
 
         [PersistAs("port_name")]
         protected string comPortName;
