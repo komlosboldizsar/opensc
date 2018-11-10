@@ -12,6 +12,19 @@ namespace OpenSC.Model.Routers.Virtual
     class VirtualRouter : Router
     {
 
+        public VirtualRouter()
+        {
+            State = RouterState.Ok;
+            StateString = "OK";
+        }
+
+        public override void Restored()
+        {
+            base.Restored();
+            State = RouterState.Ok;
+            StateString = "OK";
+        }
+
         protected override bool setCrosspoint(RouterOutput output, RouterInput input)
         {
             output.Crosspoint = input;
