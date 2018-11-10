@@ -189,6 +189,12 @@
     <Compile Include="GUI\SerialPorts\SerialPortList.Designer.cs">
       <DependentUpon>SerialPortList.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\SerialPorts\SerialPortEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SerialPorts\SerialPortEditorForm.Designer.cs">
+      <DependentUpon>SerialPortEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Settings\ISettingEditorControl.cs" />
     <Compile Include="GUI\Settings\SettingEditorBase.cs">
       <SubType>UserControl</SubType>
@@ -577,6 +583,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\SerialPorts\SerialPortList.resx">
       <DependentUpon>SerialPortList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SerialPorts\SerialPortEditorForm.resx">
+      <DependentUpon>SerialPortEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Settings\SettingEditorBase.resx">
       <DependentUpon>SettingEditorBase.cs</DependentUpon>

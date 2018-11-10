@@ -132,10 +132,7 @@ namespace OpenSC.GUI.SerialPorts
             builder.Header("Edit");
             builder.Width(70);
             builder.ButtonText("Edit");
-            builder.CellContentClickHandlerMethod((port, cell, e) => {
-                /*var editWindow = UmdPortEditorFormTypeRegister.Instance.GetFormForModel(port) as ChildWindowBase;
-                editWindow?.ShowAsChild();*/
-            });
+            builder.CellContentClickHandlerMethod((port, cell, e) => new SerialPortEditorForm(port).ShowAsChild());
             builder.BuildAndAdd();
 
             // Column: delete button
@@ -174,7 +171,7 @@ namespace OpenSC.GUI.SerialPorts
 
         private void addSerialPortButton_Click(object sender, EventArgs e)
         {
-            // TODO
+            new SerialPortEditorForm(null).ShowAsChild();
         }
 
         /*private void loadAddableUmdPortTypes()
