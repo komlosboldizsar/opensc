@@ -29,6 +29,7 @@ namespace OpenSC
             set
             {
                 status = value;
+                LogDispatcher.I(LOG_TAG, value);
                 StatusChanged?.Invoke(value);
             }
         }

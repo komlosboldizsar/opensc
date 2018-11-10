@@ -65,6 +65,7 @@ namespace OpenSC
 
         private static void mainFormOpenedHandler(object sender, EventArgs e)
         {
+            LogDispatcher.I(LOG_TAG, "Main form opened.");
             StartupController.MainWindowOpened();
             splashScreen.Status = "Program started.";
             splashScreen.Close();
