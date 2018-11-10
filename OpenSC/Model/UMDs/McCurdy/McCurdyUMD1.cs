@@ -19,7 +19,7 @@ namespace OpenSC.Model.UMDs.McCurdy
         [PersistAs("port")]
         private McCurdyPort port;
 
-        [TempForeignKey("umd_ports", nameof(port))]
+        [TempForeignKey(UmdPortDatabase.DBNAME, nameof(port))]
         private int _portId;
 
         public McCurdyPort Port
@@ -67,7 +67,7 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         protected virtual string getTextToSend()
         {
-            return currentText;
+            return currentText.Replace('1', (char)0x7E);
         }
 
         private void updateCurrentText()
@@ -78,7 +78,7 @@ namespace OpenSC.Model.UMDs.McCurdy
         [PersistAs("dynamic_text_sources")]
         private DynamicText[] dynamicTextSources = new DynamicText[] { null, null, null };
 
-        [TempForeignKey("dynamictexts", nameof(dynamicTextSources))]
+        [TempForeignKey(DynamicTextDatabase.DBNAME, nameof(dynamicTextSources))]
         private int[] _dynamicTextSources = new int[] { 0, 0, 0 };
 
         public void SetDynamicTextSource(int columnIndex, DynamicText dynamicTextSource)
@@ -197,7 +197,7 @@ namespace OpenSC.Model.UMDs.McCurdy
             }
         }
 
-        private static readonly int[] CHAR_WIDTHS = new int[]{ 4, 1, 3, 5, 5, 5, 5, 2, 3, 3, 5, 5, 2, 3, 2, 5, 5, 3, 5, 5, 5, 5, 5, 5, 5, 5, 2, 2, 4, 5, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 5, 3, 5, 5, 2, 5, 5, 4, 5, 5, 4, 5, 5, 3, 4, 4, 3, 5, 5, 5, 5, 5, 4, 5, 4, 5, 5, 5, 5, 5, 5, 5, 1, 5 };
+        private static readonly int[] CHAR_WIDTHS = new int[]{ 4, 1, 3, 5, 5, 5, 5, 2, 3, 3, 5, 5, 2, 3, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 2, 2, 4, 5, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 5, 3, 5, 5, 2, 5, 5, 4, 5, 5, 4, 5, 5, 3, 4, 4, 3, 5, 5, 5, 5, 5, 4, 5, 4, 5, 5, 5, 5, 5, 5, 5, 1, 5 };
         private const int CHAR_WIDTHS_START = 32;
         private const int CHAR_SEPARATOR_WIDTH = 1;
 
@@ -216,7 +216,7 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         private static readonly int SPACE_WIDTH = CHAR_WIDTHS[' ' - CHAR_WIDTHS_START];
         private const char SEPARATOR_CHAR = '|';
-        private static readonly int SEPARATOR_WIDTH = CHAR_WIDTHS[SEPARATOR_CHAR - CHAR_WIDTHS_START] + CHAR_SEPARATOR_WIDTH + 2 * SPACE_WIDTH;
+        private static readonly int SEPARATOR_WIDTH = CHAR_WIDTHS[SEPARATOR_CHAR - CHAR_WIDTHS_START] + 2 * CHAR_SEPARATOR_WIDTH + 2 * SPACE_WIDTH;
 
         private string alignAndTrimText(string text, int columns, TextAlignment alignment)
         {
@@ -234,11 +234,11 @@ namespace OpenSC.Model.UMDs.McCurdy
                     spacesRight = freeColumns / SPACE_WIDTH;
                     return string.Format("{0}{1}", text, new string(' ', spacesRight));
                 case McCurdy.TextAlignment.Center:
-                    spacesLeft = (freeColumns / 2) / SPACE_WIDTH;
-                    if (spacesLeft < 0)
-                        spacesLeft = 0;
-                    spacesRight = (freeColumns - (spacesLeft * SPACE_WIDTH)) / SPACE_WIDTH;
+                    spacesRight = (freeColumns / 2) / SPACE_WIDTH;
                     if (spacesRight < 0)
+                        spacesRight = 0;
+                    spacesLeft = (freeColumns - (spacesRight * SPACE_WIDTH)) / SPACE_WIDTH;
+                    if (spacesLeft < 0)
                         spacesRight = 0;
                     return string.Format("{1}{0}{2}", text, new string(' ', spacesLeft), new string(' ', spacesRight));
                 case McCurdy.TextAlignment.Right:
@@ -250,39 +250,84 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         }
 
-        private const int DISPLAY_COLUMNS = 160;
-
         private string getFullDynamicText()
         {
 
             int[] width = new int[3];
+            int[] order = new int[] { 0, 1, 2 };
             int count = 0;
 
             switch (columnCount)
             {
                 case ColumnCount.One:
                     count = 1;
-                    width[0] = DISPLAY_COLUMNS;
+                    width[0] = TotalWidth;
                     break;
                 case ColumnCount.Two:
                     count = 2;
                     width[0] = columnWidths[0];
+                    width[1] = TotalWidth - columnWidths[0] - (useSeparators ? SEPARATOR_WIDTH : 0);
                     break;
                 case ColumnCount.Three:
                     count = 3;
                     width[0] = columnWidths[0];
                     width[1] = columnWidths[1];
-                    width[2] = DISPLAY_COLUMNS - columnWidths[0] - columnWidths[1];
+                    width[2] = TotalWidth - columnWidths[0] - columnWidths[1] - (useSeparators ? 2 * SEPARATOR_WIDTH : 0);
+                    order = new int[] { 0, 2, 1 };
                     break;
+            }
+
+            int[] widthTmp = width;
+            int totalRealWidth = 0;
+            string[] textParts = new string[3];
+            for (int i = 0; i < count; i++)
+            {
+                int ci = order[i];
+                string textPart = alignAndTrimText(dynamicTexts[ci], widthTmp[ci], textAlignment[ci]);
+                textParts[ci] = textPart;
+                int realWidth = getWidthOfText(textPart);
+                totalRealWidth += realWidth;
+                if (i < count - 1)
+                    widthTmp[count/2] += width[ci] - realWidth;
             }
 
             string fullText = "";
             for (int i = 0; i < count; i++)
             {
-                fullText += alignAndTrimText(dynamicTexts[i], width[i], textAlignment[i]);
+                fullText += textParts[i];
                 if (useSeparators && (i < count - 1))
                     fullText += " " + SEPARATOR_CHAR + " ";
             }
+
+            int totalRealWidthWithSeparators = getWidthOfText(fullText);
+            int plusSpaces = (TotalWidth - totalRealWidthWithSeparators) / SPACE_WIDTH;
+
+            switch (textAlignment[count / 2])
+            {
+                case McCurdy.TextAlignment.Left:
+                    textParts[count / 2] += new string(' ', plusSpaces);
+                    break;
+                case McCurdy.TextAlignment.Center:
+                    textParts[count / 2] =
+                        new string(' ', (plusSpaces - (plusSpaces / 2)))
+                        + textParts[count / 2] 
+                        + new string(' ', (plusSpaces/2));
+                    break;
+                case McCurdy.TextAlignment.Right:
+                    textParts[count / 2] =
+                        new string(' ', plusSpaces)
+                        + textParts[count / 2];
+                    break;
+            }
+
+            fullText = "";
+            for(int i = 0; i < count; i++)
+            {
+                fullText += textParts[i];
+                if (useSeparators && (i < count - 1))
+                    fullText += " " + SEPARATOR_CHAR + " ";
+            }
+
             return fullText;
 
         }

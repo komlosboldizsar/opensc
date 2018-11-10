@@ -39,7 +39,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         public string[] ChangeEvents { get; private set; }
 
-        public delegate void ExternalUpdateEventSubscriberMethodDelegate(T item, Model.ParameterlessChangeNotifierDelegate handlerDelegate);
+        public delegate void CellUpdaterMethodInvokerDelegate();
+        public delegate void ExternalUpdateEventSubscriberMethodDelegate(T item, CellUpdaterMethodInvokerDelegate updateMethodInvoker);
         public ExternalUpdateEventSubscriberMethodDelegate ExternalUpdateEventSubscriberMethod { get; private set; }
 
         public bool TextEditable { get; private set; }

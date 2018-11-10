@@ -4,43 +4,27 @@ using System;
 namespace OpenSC.Model.Streams
 {
 
-    public delegate void StreamIdChangingDelegate(Stream stream, int oldValue, int newValue);
-    public delegate void StreamIdChangedDelegate(Stream stream, int oldValue, int newValue);
-   
-    public delegate void StreamNameChangingDelegate(Stream stream, string oldName, string newName);
-    public delegate void StreamNameChangedDelegate(Stream stream, string oldName, string newName);
-
-    public delegate void StreamStateChangingDelegate(Stream stream, StreamState oldState, StreamState newState);
-    public delegate void StreamStateChangedDelegate(Stream stream, StreamState oldState, StreamState newState);
-
-    public delegate void StreamViewerCountChangingDelegate(Stream stream, int? oldCount, int? newCount);
-    public delegate void StreamViewerCountChangedDelegate(Stream stream, int? oldCount, int? newCount);
-
-    public abstract class Stream: IModel
+    public abstract class Stream: ModelBase
     {
 
-        public virtual void Restored()
+        public override void Restored()
         { }
 
-        public event StreamIdChangingDelegate IdChanging;
-        public event StreamIdChangedDelegate IdChanged;
-        public event ParameterlessChangeNotifierDelegate IdChangingPCN;
-        public event ParameterlessChangeNotifierDelegate IdChangedPCN;
+        public delegate void IdChangedDelegate(Stream stream, int oldValue, int newValue);
+        public event IdChangedDelegate IdChanged;
 
         public int id = 0;
 
-        public int ID
+        public override int ID
         {
             get { return id; }
             set
             {
                 ValidateId(value);
                 int oldValue = id;
-                IdChanging?.Invoke(this, oldValue, value);
-                IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
-                IdChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ID));
             }
         }
 
@@ -52,10 +36,8 @@ namespace OpenSC.Model.Streams
                 throw new ArgumentException();
         }
 
-        public event StreamNameChangingDelegate NameChanging;
-        public event StreamNameChangedDelegate NameChanged;
-        public event ParameterlessChangeNotifierDelegate NameChangingPCN;
-        public event ParameterlessChangeNotifierDelegate NameChangedPCN;
+        public delegate void NameChangedDelegate(Stream stream, string oldName, string newName);
+        public event NameChangedDelegate NameChanged;
 
         [PersistAs("name")]
         private string name = "Test";
@@ -67,11 +49,9 @@ namespace OpenSC.Model.Streams
             {
                 ValidateName(value);
                 string oldName = name;
-                NameChanging?.Invoke(this, oldName, value);
-                NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                NameChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Name));
             }
         }
 
@@ -81,10 +61,8 @@ namespace OpenSC.Model.Streams
                 throw new ArgumentNullException();
         }
 
-        public event StreamStateChangingDelegate StateChanging;
-        public event StreamStateChangedDelegate StateChanged;
-        public event ParameterlessChangeNotifierDelegate StateChangingPCN;
-        public event ParameterlessChangeNotifierDelegate StateChangedPCN;
+        public delegate void StateChangedDelegate(Stream stream, StreamState oldState, StreamState newState);
+        public event StateChangedDelegate StateChanged;
 
         private StreamState state;
 
@@ -93,18 +71,14 @@ namespace OpenSC.Model.Streams
             get { return state; }
             protected set {
                 StreamState oldState = state;
-                StateChanging?.Invoke(this, oldState, value);
-                StateChangingPCN?.Invoke();
                 state = value;
                 StateChanged?.Invoke(this, oldState, value);
-                StateChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(State));
             }
         }
 
-        public event StreamViewerCountChangingDelegate ViewerCountChanging;
-        public event StreamViewerCountChangedDelegate ViewerCountChanged;
-        public event ParameterlessChangeNotifierDelegate ViewerCountChangingPCN;
-        public event ParameterlessChangeNotifierDelegate ViewerCountChangedPCN;
+        public delegate void ViewerCountChangedDelegate(Stream stream, int? oldCount, int? newCount);
+        public event ViewerCountChangedDelegate ViewerCountChanged;
 
         private int? viewerCount;
 
@@ -114,12 +88,16 @@ namespace OpenSC.Model.Streams
             protected set
             {
                 int? oldCount = viewerCount;
-                ViewerCountChanging?.Invoke(this, oldCount, value);
-                ViewerCountChangingPCN?.Invoke();
                 viewerCount = value;
                 ViewerCountChanged?.Invoke(this, oldCount, value);
-                ViewerCountChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ViewerCount));
             }
+        }
+
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            StreamDatabase.Instance.ItemUpdated(this);
         }
 
     }

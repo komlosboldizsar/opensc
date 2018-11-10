@@ -32,7 +32,7 @@ namespace OpenSC.GUI.Variables
             builder.Header("ID");
             builder.Width(50);
             builder.UpdaterMethod((dyntext, cell) => { cell.Value = string.Format("#{0}", dyntext.ID); });
-            builder.AddChangeEvent(nameof(DynamicText.IdChangedPCN));
+            builder.AddChangeEvent(nameof(DynamicText.ID));
             builder.BuildAndAdd();
 
             // Column: label
@@ -43,7 +43,7 @@ namespace OpenSC.GUI.Variables
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((dyntext, cell) => { cell.Value = dyntext.Label; });
-            builder.AddChangeEvent(nameof(DynamicText.LabelChangedPCN));
+            builder.AddChangeEvent(nameof(DynamicText.Label));
             builder.BuildAndAdd();
 
             // Column: current text
@@ -53,7 +53,7 @@ namespace OpenSC.GUI.Variables
             builder.Width(200);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((dyntext, cell) => { cell.Value = dyntext.CurrentText; });
-            builder.AddChangeEvent(nameof(DynamicText.CurrentTextChangedPCN));
+            builder.AddChangeEvent(nameof(DynamicText.CurrentText));
             builder.BuildAndAdd();
 
             // Column: edit button

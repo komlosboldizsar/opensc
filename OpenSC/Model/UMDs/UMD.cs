@@ -9,23 +9,8 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.UMDs
 {
-
-    public delegate void UmdIdChangingDelegate(UMD timer, int oldValue, int newValue);
-    public delegate void UmdIdChangedDelegate(UMD timer, int oldValue, int newValue);
-
-    public delegate void UmdNameChangingDelegate(UMD timer, string oldName, string newName);
-    public delegate void UmdNameChangedDelegate(UMD timer, string oldName, string newValue);
-
-    public delegate void UmdTextChanging(UMD umd, string oldText, string newText);
-    public delegate void UmdTextChanged(UMD umd, string oldText, string newText);
-
-    public delegate void UmdUseStaticTextChanging(UMD umd, bool oldState, bool newState);
-    public delegate void UmdUseStaticTextChanged(UMD umd, bool oldState, bool newState);
-
-    public delegate void UmdTallyChanging(UMD umd, int index, bool oldState, bool newState);
-    public delegate void UmdTallyChanged(UMD umd, int index, bool oldState, bool newState);
-
-    public abstract class UMD: IModel
+    
+    public abstract class UMD : ModelBase
     {
 
         public abstract IUMDType Type { get; }
@@ -33,7 +18,7 @@ namespace OpenSC.Model.UMDs
 
         protected abstract void update();
 
-        public virtual void Restored()
+        public override void Restored()
         {
             restoreTallySources();
         }
@@ -41,10 +26,8 @@ namespace OpenSC.Model.UMDs
         public UMD()
         { }
 
-        public event UmdTextChanging CurrentTextChanging;
-        public event UmdTextChanged CurrentTextChanged;
-        public event ParameterlessChangeNotifierDelegate CurrentTextChangingPCN;
-        public event ParameterlessChangeNotifierDelegate CurrentTextChangedPCN;
+        public delegate void CurrentTextChangedDelegate(UMD umd, string oldText, string newText);
+        public event CurrentTextChangedDelegate CurrentTextChanged;
 
         protected string currentText;
 
@@ -54,12 +37,10 @@ namespace OpenSC.Model.UMDs
             set
             {
                 string oldValue = currentText;
-                CurrentTextChanging?.Invoke(this, oldValue, value);
-                CurrentTextChangingPCN?.Invoke();
                 currentText = value;
                 update();
                 CurrentTextChanged?.Invoke(this, oldValue, value);
-                CurrentTextChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(CurrentText));
             }
         }
 
@@ -76,10 +57,8 @@ namespace OpenSC.Model.UMDs
             }
         }
 
-        public event UmdTextChanging StaticTextChanging;
-        public event UmdTextChanged StaticTextChanged;
-        public event ParameterlessChangeNotifierDelegate StaticTextChangingPCN;
-        public event ParameterlessChangeNotifierDelegate StaticTextChangedPCN;
+        public delegate void StaticTextChangedDelegate(UMD umd, string oldText, string newText);
+        public event StaticTextChangedDelegate StaticTextChanged;
 
         [PersistAs("static_text")]
         private string staticText;
@@ -90,20 +69,16 @@ namespace OpenSC.Model.UMDs
             set
             {
                 string oldValue = staticText;
-                StaticTextChanging?.Invoke(this, oldValue, value);
-                StaticTextChangingPCN?.Invoke();
                 staticText = value;
                 if (useStaticText)
                     CurrentText = value;
                 StaticTextChanged?.Invoke(this, oldValue, value);
-                StaticTextChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(StaticText));
             }
         }
 
-        public event UmdUseStaticTextChanging UseStaticTextChanging;
-        public event UmdUseStaticTextChanged UseStaticTextChanged;
-        public event ParameterlessChangeNotifierDelegate UseStaticTextChangingPCN;
-        public event ParameterlessChangeNotifierDelegate UseStaticTextChangedPCN;
+        public delegate void UseStaticTextChangedDelegate(UMD umd, bool oldState, bool newState);
+        public event UseStaticTextChangedDelegate UseStaticTextChanged;
 
         [PersistAs("use_static_text")]
         private bool useStaticText = false;
@@ -116,20 +91,16 @@ namespace OpenSC.Model.UMDs
                 bool oldValue = useStaticText;
                 if (oldValue == value)
                     return;
-                UseStaticTextChanging?.Invoke(this, oldValue, value);
-                UseStaticTextChangingPCN?.Invoke();
                 useStaticText = value;
                 CurrentText = useStaticText ? staticText : dynamicText;
                 UseStaticTextChanged?.Invoke(this, oldValue, value);
-                UseStaticTextChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(UseStaticText));
             }
         }
 
         #region Tallies
-        public event UmdTallyChanging TallyChanging;
-        public event UmdTallyChanged TallyChanged;
-        public event ParameterlessChangeNotifierDelegate TallyChangingPCN;
-        public event ParameterlessChangeNotifierDelegate TallyChangedPCN;
+        public delegate void TallyChangedDelegate(UMD umd, int index, bool oldState, bool newState);
+        public event TallyChangedDelegate TallyChanged;
 
         public const int MAX_TALLIES = 8;
 
@@ -196,14 +167,11 @@ namespace OpenSC.Model.UMDs
             if (tallyStates[index] == state)
                 return;
 
-            TallyChanging?.Invoke(this, index, !state, state);
-            TallyChangingPCN?.Invoke();
-
             tallyStates[index] = state;
             tallyChanged(index, state);
 
             TallyChanged?.Invoke(this, index, !state, state);
-            TallyChangedPCN?.Invoke();
+            RaisePropertyChanged(nameof(TallyStates));
 
         }
 
@@ -218,26 +186,21 @@ namespace OpenSC.Model.UMDs
         { }
         #endregion
 
-
-        public event UmdIdChangingDelegate IdChanging;
-        public event UmdIdChangedDelegate IdChanged;
-        public event ParameterlessChangeNotifierDelegate IdChangingPCN;
-        public event ParameterlessChangeNotifierDelegate IdChangedPCN;
+        public delegate void IdChangedDelegate(UMD timer, int oldValue, int newValue);
+        public event IdChangedDelegate IdChanged;
 
         private int id = 0;
 
-        public int ID
+        public override int ID
         {
             get { return id; }
             set
             {
                 ValidateId(value);
                 int oldValue = id;
-                IdChanging?.Invoke(this, oldValue, value);
-                IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
-                IdChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ID));
             }
         }
 
@@ -249,10 +212,9 @@ namespace OpenSC.Model.UMDs
                 throw new ArgumentException();
         }
 
-        public event UmdNameChangingDelegate NameChanging;
-        public event UmdNameChangedDelegate NameChanged;
-        public event ParameterlessChangeNotifierDelegate NameChangingPCN;
-        public event ParameterlessChangeNotifierDelegate NameChangedPCN;
+
+        public delegate void NameChangedDelegate(UMD timer, string oldName, string newValue);
+        public event NameChangedDelegate NameChanged;
 
         [PersistAs("name")]
         private string name;
@@ -264,11 +226,9 @@ namespace OpenSC.Model.UMDs
             {
                 ValidateName(value);
                 string oldValue = name;
-                NameChanging?.Invoke(this, oldValue, value);
-                NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldValue, value);
-                NameChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Name));
             }
 
         }
@@ -277,6 +237,12 @@ namespace OpenSC.Model.UMDs
         {
             if(string.IsNullOrEmpty(name))
                 throw new ArgumentException();
+        }
+
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            UmdDatabase.Instance.ItemUpdated(this);
         }
 
     }

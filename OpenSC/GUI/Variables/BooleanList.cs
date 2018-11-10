@@ -40,7 +40,7 @@ namespace OpenSC.GUI.Variables
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.Width(220);
             builder.UpdaterMethod((boolean, cell) => { cell.Value = boolean.Name; });
-            builder.AddChangeEvent(nameof(IBoolean.NameChangedPCN));
+            builder.AddChangeEvent(nameof(IBoolean.Name));
             builder.BuildAndAdd();
 
             // Column: description
@@ -49,7 +49,7 @@ namespace OpenSC.GUI.Variables
             builder.Header("Description");
             builder.Width(450);
             builder.UpdaterMethod((boolean, cell) => { cell.Value = boolean.Description; });
-            builder.AddChangeEvent(nameof(IBoolean.DescriptionChangedPCN));
+            builder.AddChangeEvent(nameof(IBoolean.Description));
             builder.BuildAndAdd();
 
             // Column: state
@@ -63,7 +63,7 @@ namespace OpenSC.GUI.Variables
                 cell.Value = booleanCurrentState ? "- on -" : "";
                 cell.Style.BackColor = booleanCurrentState ? boolean.Color : OFF_COLOR;
             });
-            builder.AddChangeEvent(nameof(IBoolean.StateChangedPCN));
+            builder.AddChangeEvent(nameof(IBoolean.CurrentState));
             builder.BuildAndAdd();
 
             // Bind database

@@ -8,17 +8,8 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Routers
 {
-
-    public delegate void RouterIdChangingDelegate(Router router, int oldValue, int newValue);
-    public delegate void RouterIdChangedDelegate(Router router, int oldValue, int newValue);
-
-    public delegate void RouterNameChangingDelegate(Router router, string oldName, string newName);
-    public delegate void RouterNameChangedDelegate(Router router, string oldName, string newName);
-
-    public delegate void RouterInputsChangedDelegate(Router router);
-    public delegate void RouterOutputsChangedDelegate(Router router);
-
-    public abstract class Router : IModel
+    
+    public abstract class Router : ModelBase
     {
 
         public Router()
@@ -27,7 +18,7 @@ namespace OpenSC.Model.Routers
             outputs.ItemsChanged += outputsChangedHandler;
         }
 
-        public virtual void Restored()
+        public override void Restored()
         {
             restoreInputSources();
             updateCrosspointRouterAssociations();
@@ -35,14 +26,12 @@ namespace OpenSC.Model.Routers
             updateAllCrosspoints();
         }
 
-        public event RouterIdChangingDelegate IdChanging;
-        public event RouterIdChangedDelegate IdChanged;
-        public event ParameterlessChangeNotifierDelegate IdChangingPCN;
-        public event ParameterlessChangeNotifierDelegate IdChangedPCN;
+        public delegate void IdChangedDelegate(Router router, int oldValue, int newValue);
+        public event IdChangedDelegate IdChanged;
 
         public int id = 0;
 
-        public int ID
+        public override int ID
         {
             get { return id; }
             set
@@ -51,11 +40,9 @@ namespace OpenSC.Model.Routers
                 if (value == id)
                     return;
                 int oldValue = id;
-                IdChanging?.Invoke(this, oldValue, value);
-                IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
-                IdChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ID));
             }
         }
 
@@ -67,10 +54,9 @@ namespace OpenSC.Model.Routers
                 throw new ArgumentException();
         }
 
-        public event RouterNameChangingDelegate NameChanging;
-        public event RouterNameChangedDelegate NameChanged;
-        public event ParameterlessChangeNotifierDelegate NameChangingPCN;
-        public event ParameterlessChangeNotifierDelegate NameChangedPCN;
+
+        public delegate void NameChangedDelegate(Router router, string oldName, string newName);
+        public event NameChangedDelegate NameChanged;
 
         [PersistAs("name")]
         private string name;
@@ -84,11 +70,9 @@ namespace OpenSC.Model.Routers
                 if (value == name)
                     return;
                 string oldName = name;
-                NameChanging?.Invoke(this, oldName, value);
-                NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                NameChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Name));
             }
         }
 
@@ -141,11 +125,11 @@ namespace OpenSC.Model.Routers
         private void inputsChangedHandler()
         {
             InputsChanged?.Invoke(this);
-            InputsChangedPCN?.Invoke();
+            RaisePropertyChanged(nameof(Inputs));
         }
 
-        public event RouterInputsChangedDelegate InputsChanged;
-        public event ParameterlessChangeNotifierDelegate InputsChangedPCN;
+        public delegate void InputsChangedDelegate(Router router);
+        public event InputsChangedDelegate InputsChanged;
 
         private ObservableList<RouterOutput> outputs = new ObservableList<RouterOutput>();
 
@@ -190,11 +174,11 @@ namespace OpenSC.Model.Routers
         private void outputsChangedHandler()
         {
             OutputsChanged?.Invoke(this);
-            OutputsChangedPCN?.Invoke();
+            RaisePropertyChanged(nameof(Outputs));
         }
 
-        public event RouterOutputsChangedDelegate OutputsChanged;
-        public event ParameterlessChangeNotifierDelegate OutputsChangedPCN;
+        public delegate void OutputsChangedDelegate(Router router);
+        public event OutputsChangedDelegate OutputsChanged;
 
         public bool UpdateCrosspoint(RouterOutput output, RouterInput input)
         {
@@ -226,6 +210,54 @@ namespace OpenSC.Model.Routers
                 input.Restored();
             foreach (RouterOutput output in outputs)
                 output.Restored();
+        }
+
+        #region Property: State
+        public delegate void StateChangedDelegate(Router router, RouterState oldState, RouterState newState);
+        public event StateChangedDelegate StateChanged;
+
+        private RouterState state = RouterState.Unknown;
+
+        public RouterState State
+        {
+            get { return state; }
+            protected set
+            {
+                if (value == state)
+                    return;
+                RouterState oldState = state;
+                state = value;
+                StateChanged?.Invoke(this, oldState, value);
+                RaisePropertyChanged(nameof(State));
+            }
+        }
+        #endregion
+
+        #region Property: StateString
+        public delegate void StateStringChangedDelegate(Router router, string oldStateString, string newStateString);
+        public event StateStringChangedDelegate StateStringChanged;
+
+        private string stateString = "?";
+
+        public string StateString
+        {
+            get { return stateString; }
+            protected set
+            {
+                if (value == stateString)
+                    return;
+                string oldStateString = stateString;
+                stateString = value;
+                StateStringChanged?.Invoke(this, oldStateString, value);
+                RaisePropertyChanged(nameof(StateString));
+            }
+        }
+        #endregion
+
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            RouterDatabase.Instance.ItemUpdated(this);
         }
 
     }

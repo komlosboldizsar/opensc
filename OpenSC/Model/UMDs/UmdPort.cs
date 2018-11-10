@@ -8,37 +8,26 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.UMDs
 {
 
-    public delegate void UmdPortIdChangingDelegate(UmdPort port, int oldValue, int newValue);
-    public delegate void UmdPortIdChangedDelegate(UmdPort port, int oldValue, int newValue);
+    
 
-    public delegate void UmdPortNameChangingDelegate(UmdPort port, string oldName, string newName);
-    public delegate void UmdPortNameChangedDelegate(UmdPort port, string oldName, string newName);
-
-    public delegate void UmdPortInitializedChangingDelegate(UmdPort port, bool oldState, bool newState);
-    public delegate void UmdPortInitializedChangedDelegate(UmdPort port, bool oldState, bool newState);
-
-    abstract public class UmdPort: IModel
+    abstract public class UmdPort : ModelBase
     {
 
-        public event UmdPortIdChangingDelegate IdChanging;
-        public event UmdPortIdChangedDelegate IdChanged;
-        public event ParameterlessChangeNotifierDelegate IdChangingPCN;
-        public event ParameterlessChangeNotifierDelegate IdChangedPCN;
+        public delegate void IdChangedDelegate(UmdPort port, int oldValue, int newValue);
+        public event IdChangedDelegate IdChanged;
 
         private int id = 0;
 
-        public int ID
+        public override int ID
         {
             get { return id; }
             set
             {
                 ValidateId(value);
                 int oldValue = id;
-                IdChanging?.Invoke(this, oldValue, value);
-                IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
-                IdChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ID));
             }
         }
 
@@ -50,10 +39,8 @@ namespace OpenSC.Model.UMDs
                 throw new ArgumentException();
         }
 
-        public event UmdPortNameChangingDelegate NameChanging;
-        public event UmdPortNameChangedDelegate NameChanged;
-        public event ParameterlessChangeNotifierDelegate NameChangingPCN;
-        public event ParameterlessChangeNotifierDelegate NameChangedPCN;
+        public delegate void NameChangedDelegate(UmdPort port, string oldName, string newName);
+        public event NameChangedDelegate NameChanged;
 
         [PersistAs("name")]
         private string name;
@@ -66,11 +53,9 @@ namespace OpenSC.Model.UMDs
                 if (value == name)
                     return;
                 string oldName = name;
-                NameChanging?.Invoke(this, oldName, value);
-                NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                NameChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Name));
             }
         }
 
@@ -80,11 +65,8 @@ namespace OpenSC.Model.UMDs
                 throw new ArgumentException();
         }
 
-
-        public event UmdPortInitializedChangingDelegate InitializedChanging;
-        public event UmdPortInitializedChangedDelegate InitializedChanged;
-        public event ParameterlessChangeNotifierDelegate InitializedChangingPCN;
-        public event ParameterlessChangeNotifierDelegate InitializedChangedPCN;
+        public delegate void InitializedChangedDelegate(UmdPort port, bool oldState, bool newState);
+        public event InitializedChangedDelegate InitializedChanged;
 
         private bool initialized;
 
@@ -96,19 +78,22 @@ namespace OpenSC.Model.UMDs
                 if (value == initialized)
                     return;
                 bool oldState = initialized;
-                InitializedChanging?.Invoke(this, oldState, value);
-                InitializedChangingPCN?.Invoke();
                 initialized = value;
                 InitializedChanged?.Invoke(this, oldState, value);
-                InitializedChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Initialized));
             }
         }
 
         public abstract void Init();
         public abstract void DeInit();
 
-        public virtual void Restored()
+        public override void Restored()
+        { }
+
+        protected override void afterUpdate()
         {
+            base.afterUpdate();
+            UmdPortDatabase.Instance.ItemUpdated(this);
         }
 
     }

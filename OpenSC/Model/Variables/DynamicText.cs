@@ -7,32 +7,21 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Variables
 {
-
-    public delegate void DynamicTextIdChangingDelegate(DynamicText text, int oldValue, int newValue);
-    public delegate void DynamicTextIdChangedDelegate(DynamicText text, int oldValue, int newValue);
-
-    public delegate void DynamicTextLabelChangingDelegate(DynamicText text, string oldLabel, string newLabel);
-    public delegate void DynamicTextLabelChangedDelegate(DynamicText text, string oldLabel, string newLabel);
-
-    public delegate void DynamicTextCurrentTextChangingDelegate(DynamicText text, string oldText, string newText);
-    public delegate void DynamicTextCurrentTextChangedDelegate(DynamicText text, string oldText, string newText);
-
-    public class DynamicText: IModel
+  
+    public class DynamicText : ModelBase
     {
 
-        public virtual void Restored()
+        public override void Restored()
         {
             formulaUpdated();
         }
 
-        public event DynamicTextIdChangingDelegate IdChanging;
-        public event DynamicTextIdChangedDelegate IdChanged;
-        public event ParameterlessChangeNotifierDelegate IdChangingPCN;
-        public event ParameterlessChangeNotifierDelegate IdChangedPCN;
+        public delegate void IdChangedDelegate(DynamicText text, int oldValue, int newValue);
+        public event IdChangedDelegate IdChanged;
 
         public int id = 0;
 
-        public int ID
+        public override int ID
         {
             get { return id; }
             set
@@ -41,11 +30,9 @@ namespace OpenSC.Model.Variables
                 if (value == id)
                     return;
                 int oldValue = id;
-                IdChanging?.Invoke(this, oldValue, value);
-                IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
-                IdChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ID));
             }
         }
 
@@ -57,10 +44,8 @@ namespace OpenSC.Model.Variables
                 throw new ArgumentException();
         }
 
-        public event DynamicTextLabelChangingDelegate LabelChanging;
-        public event DynamicTextLabelChangedDelegate LabelChanged;
-        public event ParameterlessChangeNotifierDelegate LabelChangingPCN;
-        public event ParameterlessChangeNotifierDelegate LabelChangedPCN;
+        public delegate void LabelChangedDelegate(DynamicText text, string oldLabel, string newLabel);
+        public event LabelChangedDelegate LabelChanged;
 
         [PersistAs("label")]
         private string label;
@@ -74,11 +59,9 @@ namespace OpenSC.Model.Variables
                 if (value == label)
                     return;
                 string oldLabel = label;
-                LabelChanging?.Invoke(this, oldLabel, value);
-                LabelChangingPCN?.Invoke();
                 label = value;
                 LabelChanged?.Invoke(this, oldLabel, value);
-                LabelChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Label));
             }
         }
 
@@ -88,10 +71,8 @@ namespace OpenSC.Model.Variables
                 throw new ArgumentException();
         }
 
-        public event DynamicTextCurrentTextChangingDelegate CurrentTextChanging;
-        public event DynamicTextCurrentTextChangedDelegate CurrentTextChanged;
-        public event ParameterlessChangeNotifierDelegate CurrentTextChangingPCN;
-        public event ParameterlessChangeNotifierDelegate CurrentTextChangedPCN;
+        public delegate void CurrentTextChangedDelegate(DynamicText text, string oldText, string newText);
+        public event CurrentTextChangedDelegate CurrentTextChanged;
 
         private string currentText;
 
@@ -103,11 +84,9 @@ namespace OpenSC.Model.Variables
                 if (value == currentText)
                     return;
                 string oldValue = currentText;
-                CurrentTextChanging?.Invoke(this, oldValue, value);
-                CurrentTextChangingPCN?.Invoke();
                 currentText = value;
                 CurrentTextChanged?.Invoke(this, oldValue, value);
-                CurrentTextChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(CurrentText));
             }
         }
 
@@ -178,6 +157,12 @@ namespace OpenSC.Model.Variables
         {
             updateAllParts();
             buildCurrentValueFromParts();
+        }
+
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            DynamicTextDatabase.Instance.ItemUpdated(this);
         }
 
     }

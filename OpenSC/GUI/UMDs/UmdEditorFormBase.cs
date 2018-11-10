@@ -77,12 +77,12 @@ namespace OpenSC.GUI.UMDs
                 return false;
             }
 
+            umd.StartUpdate();
             writeFields();
-            if (addingNew)
-            {
-                UmdDatabase.Instance.Add(umd);
-            }
+            umd.EndUpdate();
 
+            if (addingNew)
+                UmdDatabase.Instance.Add(umd);
             AddingNew = false;
 
             return true;

@@ -1,5 +1,8 @@
 ﻿using OpenSC.Model;
+using OpenSC.Model.General;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -10,19 +13,9 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         CustomDataGridView<T> table;
 
+        List<DataGridViewCell> cells = new List<DataGridViewCell>();
+
         T item;
-
-        private static readonly Type storedType = typeof(T);
-
-        private static readonly EventInfo[] typeEventInfos = storedType.GetEvents();
-
-        private static EventInfo getEventInfoByName(string name)
-        {
-            foreach (EventInfo eventInfo in typeEventInfos)
-                if (eventInfo.Name == name)
-                    return eventInfo;
-            return null;
-        }
 
         public CustomDataGridViewRow(CustomDataGridView<T> table, T item)
         {
@@ -37,8 +30,26 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         {
             foreach (CustomDataGridViewColumnDescriptor<T> columnDescriptor in table.ColumnDescriptors)
             {
+                // Create and init cell
                 DataGridViewCell cell = createAndInitCell(columnDescriptor);
-                subscribeEventsForCell(cell, columnDescriptor);
+                cells.Add(cell);
+                // Subscribe to item-related events
+                INotifyPropertyChanged itemCastedINotifyPropertyChanged = item as INotifyPropertyChanged;
+                if(itemCastedINotifyPropertyChanged != null)
+                    itemCastedINotifyPropertyChanged.PropertyChanged += notifyPropertyChangedHandler;
+                // Subscribe to external events
+                columnDescriptor.ExternalUpdateEventSubscriberMethod?.Invoke(item, () => columnDescriptor.UpdaterMethod?.Invoke(item, cell));
+            }
+        }
+
+        private void notifyPropertyChangedHandler(string propertyName)
+        {
+            int column = 0;
+            foreach (CustomDataGridViewColumnDescriptor<T> columnDescriptor in table.ColumnDescriptors)
+            {
+                if (columnDescriptor.ChangeEvents.Contains(propertyName))
+                    columnDescriptor.UpdaterMethod?.Invoke(item, cells[column]);
+                column++;
             }
         }
 
@@ -93,19 +104,6 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
             return cell;
 
-        }
-
-        private void subscribeEventsForCell(DataGridViewCell cell, CustomDataGridViewColumnDescriptor<T> columnDescriptor)
-        {
-            ParameterlessChangeNotifierDelegate cellUpdaterDelegate = new ParameterlessChangeNotifierDelegate(() => updateCell(cell.ColumnIndex));
-            foreach (string eventName in columnDescriptor.ChangeEvents) {
-                try
-                {
-                    getEventInfoByName(eventName)?.AddEventHandler(item, cellUpdaterDelegate);
-                }
-                catch { }
-            }
-            columnDescriptor.ExternalUpdateEventSubscriberMethod?.Invoke(item, cellUpdaterDelegate);
         }
 
         private void updateCell(int columnIndex)

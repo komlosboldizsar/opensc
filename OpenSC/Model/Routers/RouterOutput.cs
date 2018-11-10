@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Variables;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,14 +10,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public delegate void RouterOutputNameChanged(RouterOutput output, string oldName, string newName);
-    public delegate void RouterOutputNameChangedPCN();
-
-    public delegate void RouterOutputIndexChangedDelegate(RouterOutput output, int oldIndex, int newIndex);
-
-    public delegate void RouterCrosspointChangedDelegate(RouterOutput output, RouterInput newInput);
-
-    public class RouterOutput : IRouterInputSource
+    public class RouterOutput : IRouterInputSource, INotifyPropertyChanged
     {
 
         public RouterOutput()
@@ -49,12 +43,12 @@ namespace OpenSC.Model.Routers
                 string oldName = name;
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                NameChangedPCN?.Invoke();
+                PropertyChanged?.Invoke(nameof(Name));
             }
         }
 
-        public event RouterOutputNameChanged NameChanged;
-        public event RouterOutputNameChangedPCN NameChangedPCN;
+        public delegate void NameChangedDelegate(RouterOutput output, string oldName, string newName);
+        public event NameChangedDelegate NameChanged;
 
         public Router Router { get; internal set; }
 
@@ -77,12 +71,13 @@ namespace OpenSC.Model.Routers
                 int oldIndex = index;
                 index = value;
                 IndexChanged?.Invoke(this, oldIndex, value);
-                IndexChangedPCN?.Invoke();
+                PropertyChanged?.Invoke(nameof(Index));
             }
         }
 
-        public event RouterOutputIndexChangedDelegate IndexChanged;
-        public event ParameterlessChangeNotifierDelegate IndexChangedPCN;
+
+        public delegate void IndexChangedDelegate(RouterOutput output, int oldIndex, int newIndex);
+        public event IndexChangedDelegate IndexChanged;
 
         private RouterInput crosspoint;
 
@@ -94,12 +89,13 @@ namespace OpenSC.Model.Routers
                 unsubscribeCrosspointEvents();
                 crosspoint = value;
                 fireChangeEventsAtCrosspointChange();
-                RouterCrosspointChanged?.Invoke(this, value);
+                CrosspointChanged?.Invoke(this, value);
                 subscribeCrosspointEvents();
             }
         }
 
-        public event RouterCrosspointChangedDelegate RouterCrosspointChanged;
+        public delegate void CrosspointChangedDelegate(RouterOutput output, RouterInput newInput);
+        public event CrosspointChangedDelegate CrosspointChanged;
 
         private void subscribeCrosspointEvents()
         {
@@ -336,6 +332,10 @@ namespace OpenSC.Model.Routers
             }
 
         }
+        #endregion
+
+        #region Implementation of INotifyPropertyChanged
+        public event PropertyChangedDelegate PropertyChanged;
         #endregion
 
     }

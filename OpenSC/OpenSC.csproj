@@ -80,6 +80,25 @@
     <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapter.cs" />
     <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapterFactory.cs" />
     <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridViewComboBoxItem.cs" />
+    <Compile Include="GUI\Mixers\BmdMixerEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Mixers\BmdMixerEditorForm.Designer.cs">
+      <DependentUpon>BmdMixerEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Mixers\MixerEditorFormTypeRegister.cs" />
+    <Compile Include="GUI\Mixers\MixerList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Mixers\MixerList.Designer.cs">
+      <DependentUpon>MixerList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Mixers\MixerEditorFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Mixers\MixerEditorFormBase.Designer.cs">
+      <DependentUpon>MixerEditorFormBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ModelEditorFormTypeRegister.cs" />
     <Compile Include="GUI\GeneralComponents\GrowLabel.cs">
       <SubType>Component</SubType>
@@ -364,12 +383,21 @@
     <Compile Include="Model\DatabaseBase.cs" />
     <Compile Include="Model\DatabaseFile.cs" />
     <Compile Include="Model\DatabaseNameAttribute.cs" />
+    <Compile Include="Model\General\INotifyPropertyChanged.cs" />
     <Compile Include="Model\General\IObservableList.cs" />
     <Compile Include="Model\General\IObservableListTyped.cs" />
     <Compile Include="Model\General\ObservableList.cs" />
     <Compile Include="Model\IDatabaseBase.cs" />
     <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\MasterDatabase.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\BmdMixer.cs" />
+    <Compile Include="Model\Mixers\Mixer.cs" />
+    <Compile Include="Model\Mixers\MixerDatabase.cs" />
+    <Compile Include="Model\Mixers\MixerState.cs" />
+    <Compile Include="Model\Mixers\MixerTypeNameConverter.cs" />
+    <Compile Include="Model\Mixers\MixerInput.cs" />
+    <Compile Include="Model\Mixers\MixerInputXmlSerializer.cs" />
+    <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Model\Persistence\ColorXmlSerializer.cs" />
     <Compile Include="Model\Persistence\DatabasePersister.cs" />
     <Compile Include="Model\Persistence\IValueXmlSerializer.cs" />
@@ -390,6 +418,7 @@
     <Compile Include="Model\Routers\RouterInputXmlSerializer.cs" />
     <Compile Include="Model\Routers\RouterOutput.cs" />
     <Compile Include="Model\Routers\RouterOutputXmlSerializer.cs" />
+    <Compile Include="Model\Routers\RouterState.cs" />
     <Compile Include="Model\Routers\RouterTypeNameConverter.cs" />
     <Compile Include="Model\Routers\Virtual\VirtualRouter.cs" />
     <Compile Include="Model\Settings\Converters\BoolConverter.cs" />
@@ -400,10 +429,12 @@
     <Compile Include="Model\Settings\Setting.cs" />
     <Compile Include="Model\Settings\SettingsManager.cs" />
     <Compile Include="Model\Settings\Converters\SettingValueConverterAttribute.cs" />
+    <Compile Include="Model\Signals\ISignalTallySource.cs" />
     <Compile Include="Model\Signals\SignalCategory.cs" />
     <Compile Include="Model\Signals\Signal.cs" />
     <Compile Include="Model\Signals\SignalDatabases.cs" />
     <Compile Include="Model\Signals\SignalsManager.cs" />
+    <Compile Include="Model\Signals\SignalTallyType.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamViewerCount.cs" />
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerHhMmSs.cs" />
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerTotalMinutes.cs" />
@@ -454,6 +485,7 @@
     <Compile Include="Model\UMDs\UmdSerialPort.cs" />
     <Compile Include="Model\UMDs\UmdTypeNameConverter.cs" />
     <Compile Include="Modules\IModule.cs" />
+    <Compile Include="Modules\Mixers\MixersModule.cs" />
     <Compile Include="Modules\ModuleManager.cs" />
     <Compile Include="Modules\VTRs\VtrsModule.cs" />
     <Compile Include="Modules\Routers\RoutersModule.cs" />
@@ -484,6 +516,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Mixers\BmdMixerEditorForm.resx">
+      <DependentUpon>BmdMixerEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Mixers\MixerList.resx">
+      <DependentUpon>MixerList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Mixers\MixerEditorFormBase.resx">
+      <DependentUpon>MixerEditorFormBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\RouterControlForm.resx">
       <DependentUpon>RouterControlForm.cs</DependentUpon>
@@ -659,7 +700,6 @@
   <ItemGroup>
     <None Include="Resources\timer_stopped.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\16_timer_backward.png" />
   </ItemGroup>
@@ -750,10 +790,29 @@
       <Project>{f8a1578f-bebe-4bbe-ab11-a0496bdb746a}</Project>
       <Name>Bespoke.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BMD.Switcher\BMD.Switcher.csproj">
+      <Project>{a9cee499-cf5c-419a-8cf0-66f20596b820}</Project>
+      <Name>BMD.Switcher</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BMD.Videohub\BMD.Videohub.csproj">
       <Project>{eadc56a4-b18d-4742-9855-c5142e90aa19}</Project>
       <Name>BMD.Videohub</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ThreadHelpers\ThreadHelpers.csproj">
+      <Project>{398de4a8-dfbf-4130-83ac-ef37da249587}</Project>
+      <Name>ThreadHelpers</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="BMDSwitcherAPI">
+      <Guid>{8A92B919-156C-4D61-94EF-03F9BE4004B0}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -37,7 +37,7 @@ namespace OpenSC.GUI.Timers
             builder.Header("ID");
             builder.Width(30);
             builder.UpdaterMethod((timer, cell) => { cell.Value = string.Format("#{0}", timer.ID); });
-            builder.AddChangeEvent(nameof(Timer.IdChangedPCN));
+            builder.AddChangeEvent(nameof(Timer.ID));
             builder.BuildAndAdd();
 
             // Column: title
@@ -47,7 +47,7 @@ namespace OpenSC.GUI.Timers
             builder.Width(150);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((timer, cell) => { cell.Value = timer.Title; });
-            builder.AddChangeEvent(nameof(Timer.TitleChangedPCN));
+            builder.AddChangeEvent(nameof(Timer.Title));
             builder.BuildAndAdd();
 
             // Column: mode image
@@ -57,7 +57,7 @@ namespace OpenSC.GUI.Timers
             builder.Width(30);
             builder.CellStyle(TWO_PIXELS_PADDING_CELL_STYLE);
             builder.UpdaterMethod((timer, cell) => { cell.Value = modeImageConverter.Convert(timer.Mode); });
-            builder.AddChangeEvent(nameof(Timer.ModeChangedPCN));
+            builder.AddChangeEvent(nameof(Timer.Mode));
             builder.BuildAndAdd();
 
             // Column: mode label
@@ -67,7 +67,7 @@ namespace OpenSC.GUI.Timers
             builder.Width(100);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((timer, cell) => { cell.Value = modeLabelConverter.Convert(timer.Mode); });
-            builder.AddChangeEvent(nameof(Timer.ModeChangedPCN));
+            builder.AddChangeEvent(nameof(Timer.Mode));
             builder.BuildAndAdd();
 
             // Column: running state
@@ -82,7 +82,7 @@ namespace OpenSC.GUI.Timers
                 else
                     cell.Value = timer.Running ? STATE_IMAGE_RUNNING : STATE_IMAGE_STOPPED;
             });
-            builder.AddChangeEvent(nameof(Timer.ModeChangedPCN));
+            builder.AddChangeEvent(nameof(Timer.Mode));
             builder.BuildAndAdd();
 
             // Column: current value
@@ -92,7 +92,7 @@ namespace OpenSC.GUI.Timers
             builder.Width(100);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((timer, cell) => { cell.Value = timer.TimeSpan.ToString(@"hh\:mm\:ss"); });
-            builder.AddChangeEvent(nameof(Timer.SecondsChangedPCN));
+            builder.AddChangeEvent(nameof(Timer.Seconds));
             builder.BuildAndAdd();
 
             // Column: start value
@@ -104,7 +104,7 @@ namespace OpenSC.GUI.Timers
             builder.UpdaterMethod((timer, cell) => {
                 cell.Value = (timer.Mode == TimerMode.Backwards) ? TimeSpan.FromSeconds(timer.CountdownSeconds).ToString(@"hh\:mm\:ss") : "";
             });
-            builder.AddChangeEvent(nameof(Timer.CountdownSecondsChangedPCN));
+            builder.AddChangeEvent(nameof(Timer.CountdownSeconds));
             builder.BuildAndAdd();
 
             // Column: edit button
@@ -143,8 +143,8 @@ namespace OpenSC.GUI.Timers
             builder.ButtonImagePadding(DEFAULT_IMAGE_BUTTON_PADDING);
             builder.UpdaterMethod((timer, cell) => { ((DataGridViewDisableButtonCell)cell).Enabled = timer.CanStart; });
             builder.CellContentClickHandlerMethod((timer, cell, e) => { timer.Start(); });
-            builder.AddChangeEvent(nameof(Timer.ModeChangedPCN));
-            builder.AddChangeEvent(nameof(Timer.RunningStateChangedPCN));
+            builder.AddChangeEvent(nameof(Timer.Mode));
+            builder.AddChangeEvent(nameof(Timer.Running));
             builder.BuildAndAdd();
 
             // Column: stop button
@@ -156,8 +156,8 @@ namespace OpenSC.GUI.Timers
             builder.ButtonImagePadding(DEFAULT_IMAGE_BUTTON_PADDING);
             builder.UpdaterMethod((timer, cell) => { ((DataGridViewDisableButtonCell)cell).Enabled = timer.CanStop; });
             builder.CellContentClickHandlerMethod((timer, cell, e) => { timer.Stop(); });
-            builder.AddChangeEvent(nameof(Timer.ModeChangedPCN));
-            builder.AddChangeEvent(nameof(Timer.RunningStateChangedPCN));
+            builder.AddChangeEvent(nameof(Timer.Mode));
+            builder.AddChangeEvent(nameof(Timer.Running));
             builder.BuildAndAdd();
 
             // Column: reset button
@@ -170,8 +170,8 @@ namespace OpenSC.GUI.Timers
             builder.ButtonImagePadding(DEFAULT_IMAGE_BUTTON_PADDING);
             builder.UpdaterMethod((timer, cell) => { ((DataGridViewDisableButtonCell)cell).Enabled = timer.CanReset; });
             builder.CellContentClickHandlerMethod((timer, cell, e) => { timer.Reset(); });
-            builder.AddChangeEvent(nameof(Timer.ModeChangedPCN));
-            builder.AddChangeEvent(nameof(Timer.RunningStateChangedPCN));
+            builder.AddChangeEvent(nameof(Timer.Mode));
+            builder.AddChangeEvent(nameof(Timer.Running));
             builder.BuildAndAdd();
 
             // Column: open timer window button

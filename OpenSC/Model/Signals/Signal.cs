@@ -1,52 +1,36 @@
 ﻿using OpenSC.Model.Persistence;
 using OpenSC.Model.Variables;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace OpenSC.Model.Signals
 {
 
-
-    public delegate void SignalIdChangingDelegate(Signal signal, int oldValue, int newValue);
-    public delegate void SignalIdChangedDelegate(Signal signal, int oldValue, int newValue);
-
-    public delegate void SignalNameChangingDelegate(Signal signal, string oldName, string newName);
-    public delegate void SignalNameChangedDelegate(Signal signal, string oldName, string newName);
-
-    public delegate void SignalCategoryChangingDelegate(Signal signal, SignalCategory oldCategory, SignalCategory newCategory);
-    public delegate void SignalCategoryChangedDelegate(Signal signal, SignalCategory oldCategory, SignalCategory newCategory);
-
-    public delegate void SignalTallyChangingDelegate(Signal signal, bool oldState, bool newState);
-    public delegate void SignalTallyChangedDelegate(Signal signal, bool oldState, bool newState);
-
-    public class Signal : IModel
+    public class Signal : ModelBase
     {
 
-        public virtual void Restored()
+        public override void Restored()
         {
             updateTallyBooleans();
-            restoreTallySources();
         }
 
-        public event SignalIdChangingDelegate IdChanging;
-        public event SignalIdChangedDelegate IdChanged;
-        public event ParameterlessChangeNotifierDelegate IdChangingPCN;
-        public event ParameterlessChangeNotifierDelegate IdChangedPCN;
+
+        public delegate void IdChangedDelegate(Signal signal, int oldValue, int newValue);
+        public event IdChangedDelegate IdChanged;
 
         public int id = 0;
 
-        public int ID
+        public override int ID
         {
             get { return id; }
             set
             {
                 ValidateId(value);
                 int oldValue = id;
-                IdChanging?.Invoke(this, oldValue, value);
-                IdChangingPCN?.Invoke();
                 id = value;
                 IdChanged?.Invoke(this, oldValue, value);
-                IdChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(ID));
                 createTallyBooleansAfterIdChange();
             }
         }
@@ -59,11 +43,8 @@ namespace OpenSC.Model.Signals
                 throw new ArgumentException();
         }
 
-
-        public event SignalNameChangingDelegate NameChanging;
-        public event SignalNameChangedDelegate NameChanged;
-        public event ParameterlessChangeNotifierDelegate NameChangingPCN;
-        public event ParameterlessChangeNotifierDelegate NameChangedPCN;
+        public delegate void NameChangedDelegate(Signal signal, string oldName, string newName);
+        public event NameChangedDelegate NameChanged;
 
         [PersistAs("name")]
         private string name;
@@ -76,19 +57,15 @@ namespace OpenSC.Model.Signals
                 if (value == name)
                     return;
                 string oldName = name;
-                NameChanging?.Invoke(this, oldName, value);
-                NameChangingPCN?.Invoke();
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                NameChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Name));
             }
         }
 
 
-        public event SignalCategoryChangingDelegate CategoryChanging;
-        public event SignalCategoryChangedDelegate CategoryChanged;
-        public event ParameterlessChangeNotifierDelegate CategoryChangingPCN;
-        public event ParameterlessChangeNotifierDelegate CategoryChangedPCN;
+        public delegate void CategoryChangedDelegate(Signal signal, SignalCategory oldCategory, SignalCategory newCategory);
+        public event CategoryChangedDelegate CategoryChanged;
 
         [PersistAs("category")]
         private SignalCategory category;
@@ -104,19 +81,14 @@ namespace OpenSC.Model.Signals
                 if (value == category)
                     return;
                 SignalCategory oldCategory = category;
-                CategoryChanging?.Invoke(this, oldCategory, value);
-                CategoryChangingPCN?.Invoke();
                 category = value;
                 CategoryChanged?.Invoke(this, oldCategory, value);
-                CategoryChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(Category));
             }
         }
 
         #region Tallies
-        public event SignalTallyChangingDelegate RedTallyChanging;
-        public event SignalTallyChangedDelegate RedTallyChanged;
-        public event ParameterlessChangeNotifierDelegate RedTallyChangingPCN;
-        public event ParameterlessChangeNotifierDelegate RedTallyChangedPCN;
+        public event TallyChangedDelegate RedTallyChanged;
 
         private bool redTally;
 
@@ -128,18 +100,13 @@ namespace OpenSC.Model.Signals
                 if (value == redTally)
                     return;
                 bool oldState = redTally;
-                RedTallyChanging?.Invoke(this, oldState, value);
-                RedTallyChangingPCN?.Invoke();
                 redTally = value;
                 RedTallyChanged?.Invoke(this, oldState, value);
-                RedTallyChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(RedTally));
             }
         }
-
-        public event SignalTallyChangingDelegate GreenTallyChanging;
-        public event SignalTallyChangedDelegate GreenTallyChanged;
-        public event ParameterlessChangeNotifierDelegate GreenTallyChangingPCN;
-        public event ParameterlessChangeNotifierDelegate GreenTallyChangedPCN;
+        
+        public event TallyChangedDelegate GreenTallyChanged;
 
         private bool greenTally;
 
@@ -151,86 +118,61 @@ namespace OpenSC.Model.Signals
                 if (value == greenTally)
                     return;
                 bool oldState = greenTally;
-                GreenTallyChanging?.Invoke(this, oldState, value);
-                GreenTallyChangingPCN?.Invoke();
                 greenTally = value;
                 GreenTallyChanged?.Invoke(this, oldState, value);
-                GreenTallyChangedPCN?.Invoke();
+                RaisePropertyChanged(nameof(GreenTally));
             }
         }
+
+        public delegate void TallyChangedDelegate(Signal signal, bool oldState, bool newState);
         #endregion
 
         #region Tally sources
-        [PersistAs("red_tally_source")]
-        private string _redTallySource;
+        private List<ISignalTallySource> redTallySources = new List<ISignalTallySource>();
+        private List<ISignalTallySource> greenTallySources = new List<ISignalTallySource>();
 
-        private IBoolean redTallySource;
-
-        public IBoolean RedTallySource
+        public void IsTalliedFrom(ISignalTallySource source, SignalTallyType type, bool isTallied)
         {
-            get => redTallySource;
-            set
+
+            List<ISignalTallySource> tallySourceList = getTallySourceListByType(type);
+            if (tallySourceList == null)
+                return;
+
+            lock (tallySourceList)
             {
-                if (value == redTallySource)
-                    return;
-                if (redTallySource != null)
-                    redTallySource.StateChanged -= redTallyChangedHandler;
-                redTallySource = value;
-                _redTallySource = value?.Name;
-                if (redTallySource != null)
-                {
-                    redTallySource.StateChanged += redTallyChangedHandler;
-                    RedTally = redTallySource.CurrentState;
-                }
-                else
-                {
-                    RedTally = false;
-                }
+                if (isTallied && !tallySourceList.Contains(source))
+                    tallySourceList.Add(source);
+                if (!isTallied && tallySourceList.Contains(source))
+                    tallySourceList.Remove(source);
             }
+
+            setTallyValueByType(type, (tallySourceList.Count > 0));
+
         }
 
-        private void redTallyChangedHandler(IBoolean boolean, bool newState)
+        private List<ISignalTallySource> getTallySourceListByType(SignalTallyType type)
         {
-            RedTally = newState;
-        }
-
-        [PersistAs("green_tally_source")]
-        private string _greenTallySource;
-
-        private IBoolean greenTallySource;
-
-        public IBoolean GreenTallySource
-        {
-            get => greenTallySource;
-            set
+            switch (type)
             {
-                if (value == greenTallySource)
-                    return;
-                if (greenTallySource != null)
-                    greenTallySource.StateChanged -= greenTallyChangedHandler;
-                greenTallySource = value;
-                _greenTallySource = value?.Name;
-                if (greenTallySource != null)
-                {
-                    greenTallySource.StateChanged += greenTallyChangedHandler;
-                    GreenTally = greenTallySource.CurrentState;
-                }
-                else
-                {
-                    GreenTally = false;
-                }
+                case SignalTallyType.Red:
+                    return redTallySources;
+                case SignalTallyType.Green:
+                    return greenTallySources;
             }
+            return null;
         }
 
-        private void greenTallyChangedHandler(IBoolean boolean, bool newState)
+        private void setTallyValueByType(SignalTallyType type, bool isTallied)
         {
-            GreenTally = newState;
-        }
-
-        private void restoreTallySources()
-        {
-            RedTallySource = BooleanRegister.Instance[_redTallySource];
-            GreenTallySource = BooleanRegister.Instance[_greenTallySource];
+            switch (type)
+            {
+                case SignalTallyType.Red:
+                    RedTally = isTallied;
+                    break;
+                case SignalTallyType.Green:
+                    GreenTally = isTallied;
+                    break;
+            }
         }
         #endregion
 
@@ -345,6 +287,12 @@ namespace OpenSC.Model.Signals
 
         }
         #endregion
+
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            SignalDatabases.Signals.ItemUpdated(this);
+        }
 
     }
 

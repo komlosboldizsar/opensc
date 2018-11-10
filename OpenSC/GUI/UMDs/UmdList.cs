@@ -44,7 +44,7 @@ namespace OpenSC.GUI.UMDs
             builder.Header("ID");
             builder.Width(50);
             builder.UpdaterMethod((umd, cell) => { cell.Value = string.Format("#{0}", umd.ID); });
-            builder.AddChangeEvent(nameof(UMD.IdChangedPCN));
+            builder.AddChangeEvent(nameof(UMD.ID));
             builder.BuildAndAdd();
 
             // Column: name
@@ -55,7 +55,7 @@ namespace OpenSC.GUI.UMDs
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             //builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.Name; });
-            builder.AddChangeEvent(nameof(UMD.NameChangedPCN));
+            builder.AddChangeEvent(nameof(UMD.Name));
             builder.BuildAndAdd();
 
             // Column: static text
@@ -64,7 +64,7 @@ namespace OpenSC.GUI.UMDs
             builder.Header("Static text");
             builder.Width(200);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.StaticText; });
-            builder.AddChangeEvent(nameof(UMD.StaticTextChangedPCN));
+            builder.AddChangeEvent(nameof(UMD.StaticText));
             builder.BuildAndAdd();
 
             // Column: use static text
@@ -74,7 +74,7 @@ namespace OpenSC.GUI.UMDs
             builder.Width(50);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.UseStaticText; });
             builder.CellContentClickHandlerMethod((umd, cell, e) => { umd.UseStaticText = !(bool)cell.Value; });
-            builder.AddChangeEvent(nameof(UMD.UseStaticTextChangedPCN));
+            builder.AddChangeEvent(nameof(UMD.UseStaticText));
             builder.BuildAndAdd();
 
             // Column: current text
@@ -84,7 +84,7 @@ namespace OpenSC.GUI.UMDs
             builder.Width(200);
             builder.CellStyle(monospaceTextCellStyle);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.CurrentText; });
-            builder.AddChangeEvent(nameof(UMD.CurrentTextChangedPCN));
+            builder.AddChangeEvent(nameof(UMD.CurrentText));
             builder.BuildAndAdd();
 
             // Columns: tallies
@@ -99,7 +99,7 @@ namespace OpenSC.GUI.UMDs
                 });
                 if (i == MAX_TALLIES - 1)
                     builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
-                builder.AddChangeEvent(nameof(UMD.TallyChangedPCN));
+                builder.AddChangeEvent(nameof(UMD.TallyStates));
                 builder.BuildAndAdd();
             }
 

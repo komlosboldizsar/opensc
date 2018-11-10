@@ -37,7 +37,7 @@ namespace OpenSC.GUI.Signals
             builder.Header("ID");
             builder.Width(30);
             builder.UpdaterMethod((signal, cell) => { cell.Value = string.Format("#{0}", signal.ID); });
-            builder.AddChangeEvent(nameof(Signal.IdChangedPCN));
+            builder.AddChangeEvent(nameof(Signal.ID));
             builder.BuildAndAdd();
 
             // Column: name
@@ -47,7 +47,7 @@ namespace OpenSC.GUI.Signals
             builder.Width(150);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((signal, cell) => { cell.Value = signal.Name; });
-            builder.AddChangeEvent(nameof(Signal.NameChangedPCN));
+            builder.AddChangeEvent(nameof(Signal.Name));
             builder.BuildAndAdd();
 
             // Column: category
@@ -60,30 +60,33 @@ namespace OpenSC.GUI.Signals
                 cell.Value = (signal.Category != null) ? string.Format("(#{0}) {1}", signal.Category.ID, signal.Category.Name) : "(not associated)";
                 cell.Style.BackColor = (signal.Category != null) ? signal.Category.Color : table.DefaultCellStyle.BackColor;
             });
-            builder.ExternalUpdateEventSubscriberMethod((signal, handler) =>
+            builder.ExternalUpdateEventSubscriberMethod((signal, updateInvoker) =>
             {
-                if(signal.Category != null)
+                SignalCategory.IdChangedDelegate signalCategoryIdChangedHandler = (_category, oldCategory, newCategory) => updateInvoker();
+                SignalCategory.NameChangedDelegate signalCategoryNameChangedHandler = (_category, oldName, newName) => updateInvoker();
+                SignalCategory.ColorChangedDelegate signalCategoryColorChangedHandler = (_category, oldColor, newColor) => updateInvoker();
+                if (signal.Category != null)
                 {
-                    signal.Category.IdChangedPCN += handler;
-                    signal.Category.NameChangedPCN += handler;
-                    signal.Category.ColorChangedPCN += handler;
+                    signal.Category.IdChanged += signalCategoryIdChangedHandler;
+                    signal.Category.NameChanged += signalCategoryNameChangedHandler;
+                    signal.Category.ColorChanged += signalCategoryColorChangedHandler;
                 }
                 signal.CategoryChanged += (_signal, oldCategory, newCategory) => {
                     if(oldCategory != null)
                     {
-                        oldCategory.IdChangedPCN -= handler;
-                        oldCategory.NameChangedPCN -= handler;
-                        oldCategory.ColorChangedPCN -= handler;
+                        oldCategory.IdChanged -= signalCategoryIdChangedHandler;
+                        oldCategory.NameChanged -= signalCategoryNameChangedHandler;
+                        oldCategory.ColorChanged -= signalCategoryColorChangedHandler;
                     }
                     if(newCategory != null)
                     {
-                        newCategory.IdChangedPCN += handler;
-                        newCategory.NameChangedPCN += handler;
-                        newCategory.ColorChangedPCN += handler;
+                        newCategory.IdChanged += signalCategoryIdChangedHandler;
+                        newCategory.NameChanged += signalCategoryNameChangedHandler;
+                        newCategory.ColorChanged += signalCategoryColorChangedHandler;
                     }
                 };
             });
-            builder.AddChangeEvent(nameof(Signal.CategoryChangedPCN));
+            builder.AddChangeEvent(nameof(Signal.Category));
             builder.BuildAndAdd();
 
             // Column: red tally
@@ -92,7 +95,7 @@ namespace OpenSC.GUI.Signals
             builder.Header("TR");
             builder.Width(50);
             builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.RedTally ? Color.Red : Color.LightGray); });
-            builder.AddChangeEvent(nameof(Signal.RedTallyChangedPCN));
+            builder.AddChangeEvent(nameof(Signal.RedTally));
             builder.BuildAndAdd();
 
             // Column: green tally
@@ -102,7 +105,7 @@ namespace OpenSC.GUI.Signals
             builder.Width(50);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.GreenTally ? Color.ForestGreen : Color.LightGray); });
-            builder.AddChangeEvent(nameof(Signal.GreenTallyChangedPCN));
+            builder.AddChangeEvent(nameof(Signal.GreenTally));
             builder.BuildAndAdd();
 
             // Column: edit button
