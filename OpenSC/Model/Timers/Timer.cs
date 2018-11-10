@@ -14,6 +14,23 @@ namespace OpenSC.Model.Timers
         public override void Restored()
         { }
 
+        public override void Removed()
+        {
+            base.Removed();
+            IdChanged = null;
+            TitleChanged = null;
+            SecondsChanged = null;
+            CountdownSecondsChanged = null;
+            RunningStateChanged = null;
+            Started = null;
+            Stopped = null;
+            Reseted = null;
+            OperationsChanged = null;
+            ModeChanged = null;
+            ReachedZero = null;
+            innerTimer?.Dispose();
+        }
+
         public delegate void IdChangedDelegate(Timer timer, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
 
