@@ -227,8 +227,7 @@
             // 
             // addInputButton
             // 
-            this.addInputButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.addInputButton.Location = new System.Drawing.Point(666, 12);
+            this.addInputButton.Location = new System.Drawing.Point(6, 6);
             this.addInputButton.Margin = new System.Windows.Forms.Padding(6);
             this.addInputButton.Name = "addInputButton";
             this.addInputButton.Size = new System.Drawing.Size(126, 26);
@@ -282,8 +281,7 @@
             // 
             // addOutputButton
             // 
-            this.addOutputButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.addOutputButton.Location = new System.Drawing.Point(666, 12);
+            this.addOutputButton.Location = new System.Drawing.Point(6, 6);
             this.addOutputButton.Margin = new System.Windows.Forms.Padding(6);
             this.addOutputButton.Name = "addOutputButton";
             this.addOutputButton.Size = new System.Drawing.Size(126, 26);
