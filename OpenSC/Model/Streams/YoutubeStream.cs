@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using OpenSC.Logger;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.Settings;
 using System;
@@ -17,6 +18,8 @@ namespace OpenSC.Model.Streams
     [TypeCode("youtube")]
     class YoutubeStream: Stream
     {
+
+        private const string LOG_TAG = "Stream/YouTube";
 
         public static readonly Setting<string> ApiKeySetting = new Setting<string>(
             "streams.youtubestream.apikey",
@@ -92,9 +95,13 @@ namespace OpenSC.Model.Streams
                     processResponse(reader.ReadToEnd());
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 State = StreamState.Unknown;
+                string logMessage = string.Format("Error occurred while trying to get state of a stream (ID: {0}) using YouTube API. Exception message: [{1}]",
+                    videoId,
+                    ex.Message);
+                LogDispatcher.E(LOG_TAG, logMessage);
             }
         }
 
@@ -143,8 +150,12 @@ namespace OpenSC.Model.Streams
                 State = StreamState.Unknown;
 
             }
-            catch
+            catch (Exception ex)
             {
+                string logMessage = string.Format("Couldn't process response of YouTube API while tried to get state of a stream (ID: {0}). Exception message: [{1}]",
+                    videoId,
+                    ex.Message);
+                LogDispatcher.E(LOG_TAG, logMessage);
                 State = StreamState.Unknown;
             }
             
