@@ -19,7 +19,7 @@ namespace OpenSC.Model.Signals
         { }
         #endregion
 
-        private List<ISignal> registeredSignals;
+        private List<ISignal> registeredSignals = new List<ISignal>();
 
         public ISignal this[int index] => registeredSignals[index];
 
@@ -52,7 +52,7 @@ namespace OpenSC.Model.Signals
             ItemRemoved?.Invoke();
             ItemsChanged?.Invoke();
         }
-
+        
     }
 
 }
