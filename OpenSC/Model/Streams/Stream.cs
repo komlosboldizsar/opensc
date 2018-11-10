@@ -94,5 +94,11 @@ namespace OpenSC.Model.Streams
             }
         }
 
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            StreamDatabase.Instance.ItemUpdated(this);
+        }
+
     }
 }

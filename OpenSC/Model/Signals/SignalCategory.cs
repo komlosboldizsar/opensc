@@ -81,6 +81,12 @@ namespace OpenSC.Model.Signals
             }
         }
 
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            SignalDatabases.Categories.ItemUpdated(this);
+        }
+
     }
 
 }

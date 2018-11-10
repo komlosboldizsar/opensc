@@ -288,6 +288,12 @@ namespace OpenSC.Model.Signals
         }
         #endregion
 
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            SignalDatabases.Signals.ItemUpdated(this);
+        }
+
     }
 
 }

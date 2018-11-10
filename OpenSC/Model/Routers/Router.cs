@@ -212,6 +212,12 @@ namespace OpenSC.Model.Routers
                 output.Restored();
         }
 
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            RouterDatabase.Instance.ItemUpdated(this);
+        }
+
     }
 
 }

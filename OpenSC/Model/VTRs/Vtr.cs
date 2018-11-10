@@ -170,5 +170,11 @@ namespace OpenSC.Model.VTRs
             get { return TimeSpan.FromSeconds(secondsRemaining); }
         }
 
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            VtrDatabase.Instance.ItemUpdated(this);
+        }
+
     }
 }

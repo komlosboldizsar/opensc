@@ -274,5 +274,11 @@ namespace OpenSC.Model.Timers
             innerTimer.Start();
         }
 
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            TimerDatabase.Instance.ItemUpdated(this);
+        }
+
     }
 }

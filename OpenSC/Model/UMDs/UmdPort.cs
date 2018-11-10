@@ -90,5 +90,11 @@ namespace OpenSC.Model.UMDs
         public override void Restored()
         { }
 
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            UmdPortDatabase.Instance.ItemUpdated(this);
+        }
+
     }
 }
