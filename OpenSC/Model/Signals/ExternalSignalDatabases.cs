@@ -43,6 +43,13 @@ namespace OpenSC.Model.Signals
                 SignalRegister.Instance.UnregisterSignal(item);
             }
 
+            protected override void afterLoad()
+            {
+                base.afterLoad();
+                foreach(ISignal signal in ItemsAsList)
+                    SignalRegister.Instance.RegisterSignal(signal);
+            }
+
         }
 
     }
