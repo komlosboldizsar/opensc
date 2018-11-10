@@ -391,6 +391,8 @@
     <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\MasterDatabase.cs" />
     <Compile Include="Model\Mixers\BlackMagicDesign\BmdMixer.cs" />
+    <Compile Include="Model\Mixers\DynamicTextFunctions\MixerPreviewInputName.cs" />
+    <Compile Include="Model\Mixers\DynamicTextFunctions\MixerProgramInputName.cs" />
     <Compile Include="Model\Mixers\Mixer.cs" />
     <Compile Include="Model\Mixers\MixerDatabase.cs" />
     <Compile Include="Model\Mixers\MixerState.cs" />
