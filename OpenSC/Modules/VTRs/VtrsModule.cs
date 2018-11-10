@@ -6,7 +6,6 @@ using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.Variables;
 using OpenSC.Model.VTRs;
-using OpenSC.Model.VTRs.DynamicTextFunctions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +26,10 @@ namespace OpenSC.Modules.VTRs
 
         public void RegisterDynamicTextFunctions()
         {
-            DynamicTextFunctionRegister.Instance.RegisterFunction(new VtrRemainingTimeHhMmSs());
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new Model.VTRs.DynamicTextFunctions.VtrRemainingTimeHhMmSs());
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new Model.VTRs.DynamicTextFunctions.VtrElapsedTimeHhMmSs());
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new Model.VTRs.DynamicTextFunctions.VtrState());
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new Model.VTRs.DynamicTextFunctions.VtrStateTranslated());
         }
 
         public void RegisterDatabasePersisterSerializers()

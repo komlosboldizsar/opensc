@@ -228,6 +228,12 @@
     <Compile Include="GUI\Signals\SignalCategoryEditorForm.Designer.cs">
       <DependentUpon>SignalCategoryEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\SplashScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SplashScreen.Designer.cs">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Streams\StreamEditorFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -391,6 +397,8 @@
     <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\MasterDatabase.cs" />
     <Compile Include="Model\Mixers\BlackMagicDesign\BmdMixer.cs" />
+    <Compile Include="Model\Mixers\DynamicTextFunctions\MixerPreviewInputName.cs" />
+    <Compile Include="Model\Mixers\DynamicTextFunctions\MixerProgramInputName.cs" />
     <Compile Include="Model\Mixers\Mixer.cs" />
     <Compile Include="Model\Mixers\MixerDatabase.cs" />
     <Compile Include="Model\Mixers\MixerInputTallyBoolean.cs" />
@@ -410,6 +418,7 @@
     <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
     <Compile Include="Model\Persistence\XmlTagNamesAttribute.cs" />
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohub.cs" />
+    <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputName.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputSource.cs" />
     <Compile Include="Model\Routers\InputSourceSignal.cs" />
     <Compile Include="Model\Routers\IRouterInputSource.cs" />
@@ -436,6 +445,8 @@
     <Compile Include="Model\Signals\SignalDatabases.cs" />
     <Compile Include="Model\Signals\SignalsManager.cs" />
     <Compile Include="Model\Signals\SignalTallyType.cs" />
+    <Compile Include="Model\Streams\DynamicTextFunctions\StreamStateTranslated.cs" />
+    <Compile Include="Model\Streams\DynamicTextFunctions\StreamState.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamViewerCount.cs" />
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerHhMmSs.cs" />
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerTotalMinutes.cs" />
@@ -457,6 +468,9 @@
     <Compile Include="Model\Variables\IDynamicTextFunctionSubstitute.cs" />
     <Compile Include="Model\Variables\VariablesManager.cs" />
     <Compile Include="Model\VTRs\CasparCgPlayout.cs" />
+    <Compile Include="Model\VTRs\DynamicTextFunctions\VtrState.cs" />
+    <Compile Include="Model\VTRs\DynamicTextFunctions\VtrStateTranslated.cs" />
+    <Compile Include="Model\VTRs\DynamicTextFunctions\VtrElapsedTimeHhMmSs.cs" />
     <Compile Include="Model\VTRs\DynamicTextFunctions\VtrRemainingTimeHhMmSs.cs" />
     <Compile Include="Model\VTRs\Vtr.cs" />
     <Compile Include="Model\VTRs\VtrDatabase.cs" />
@@ -503,6 +517,7 @@
     <Compile Include="GUI\Timers\TimerWindow.Designer.cs">
       <DependentUpon>TimerWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="StartupController.cs" />
     <EmbeddedResource Include="GUI\ChildWindowBase.resx">
       <DependentUpon>ChildWindowBase.cs</DependentUpon>
     </EmbeddedResource>
@@ -571,6 +586,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Signals\SignalCategoryEditorForm.resx">
       <DependentUpon>SignalCategoryEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SplashScreen.resx">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Streams\StreamEditorFormBase.resx">
       <DependentUpon>StreamEditorFormBase.cs</DependentUpon>

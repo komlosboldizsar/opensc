@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers.DynamicTextFunctions
 {
 
-    class RouterOutputSource : IDynamicTextFunction
+    class RouterOutputInputName : IDynamicTextFunction
     {
 
-        public string FunctionName => nameof(RouterOutputSource);
+        public string FunctionName => nameof(RouterOutputInputName);
 
-        public string Description => "The name of the source that is connected to the given output of a router.";
+        public string Description => "The name of the input that is connected to the given output of a router.";
 
         public int ParameterCount => 2;
 
@@ -41,6 +41,7 @@ namespace OpenSC.Model.Routers.DynamicTextFunctions
 
             private Router router;
             private RouterOutput output;
+            private RouterInput currentInput;
 
             public Substitute(Router router, int outputIndex)
             {
@@ -59,14 +60,27 @@ namespace OpenSC.Model.Routers.DynamicTextFunctions
                 }
                 output = router.Outputs[outputIndex-1];
 
-                output.SourceNameChanged += outputSourceNameChangedHandler;
-                CurrentValue = output.SourceName;
+                currentInput = output.Crosspoint;
+                output.CrosspointChanged += crosspointChangedHandler;
+                CurrentValue = output.InputName;
+                if (output.Crosspoint != null)
+                    output.Crosspoint.NameChanged += crosspointNameChangedHandler;
 
             }
 
-            private void outputSourceNameChangedHandler(IRouterInputSource inputSource, string newName)
+            private void crosspointNameChangedHandler(RouterInput input, string oldName, string newName)
             {
                 CurrentValue = newName;
+            }
+
+            private void crosspointChangedHandler(RouterOutput output, RouterInput newInput)
+            {
+                if (currentInput != null)
+                    currentInput.NameChanged -= crosspointNameChangedHandler;
+                currentInput = newInput;
+                if (currentInput != null)
+                    currentInput.NameChanged += crosspointNameChangedHandler;
+                CurrentValue = output.InputName;
             }
 
         }

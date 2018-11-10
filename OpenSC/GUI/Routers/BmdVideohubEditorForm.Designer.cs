@@ -49,26 +49,16 @@
             // baseDataTabPage
             // 
             this.baseDataTabPage.Controls.Add(this.connectionPanel);
-            this.baseDataTabPage.Size = new System.Drawing.Size(454, 0);
+            this.baseDataTabPage.Size = new System.Drawing.Size(954, 389);
             this.baseDataTabPage.Controls.SetChildIndex(this.connectionPanel, 0);
-            // 
-            // inputsButtonsPanel
-            // 
-            this.inputsButtonsPanel.Location = new System.Drawing.Point(3, 239);
-            this.inputsButtonsPanel.Size = new System.Drawing.Size(859, 44);
-            // 
-            // outputsButtonsPanel
-            // 
-            this.outputsButtonsPanel.Location = new System.Drawing.Point(3, 239);
-            this.outputsButtonsPanel.Size = new System.Drawing.Size(859, 44);
             // 
             // customElementsPanel
             // 
-            this.customElementsPanel.Size = new System.Drawing.Size(482, 28);
+            this.customElementsPanel.Size = new System.Drawing.Size(982, 428);
             // 
             // mainContainer
             // 
-            this.mainContainer.Size = new System.Drawing.Size(482, 97);
+            this.mainContainer.Size = new System.Drawing.Size(982, 497);
             // 
             // connectionPanel
             // 
@@ -79,7 +69,7 @@
             this.connectionPanel.Location = new System.Drawing.Point(3, 97);
             this.connectionPanel.Name = "connectionPanel";
             this.connectionPanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
-            this.connectionPanel.Size = new System.Drawing.Size(448, 121);
+            this.connectionPanel.Size = new System.Drawing.Size(948, 121);
             this.connectionPanel.TabIndex = 2;
             // 
             // connectionGroupBox
@@ -91,7 +81,7 @@
             this.connectionGroupBox.Location = new System.Drawing.Point(0, 0);
             this.connectionGroupBox.Name = "connectionGroupBox";
             this.connectionGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.connectionGroupBox.Size = new System.Drawing.Size(448, 114);
+            this.connectionGroupBox.Size = new System.Drawing.Size(948, 114);
             this.connectionGroupBox.TabIndex = 0;
             this.connectionGroupBox.TabStop = false;
             this.connectionGroupBox.Text = "Connection";
@@ -115,7 +105,7 @@
             this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.connectionTable.Size = new System.Drawing.Size(432, 83);
+            this.connectionTable.Size = new System.Drawing.Size(932, 83);
             this.connectionTable.TabIndex = 0;
             // 
             // ipAddressLabel
@@ -135,7 +125,7 @@
             this.ipAddressTextbox.Dock = System.Windows.Forms.DockStyle.Top;
             this.ipAddressTextbox.Location = new System.Drawing.Point(129, 3);
             this.ipAddressTextbox.Name = "ipAddressTextbox";
-            this.ipAddressTextbox.Size = new System.Drawing.Size(300, 22);
+            this.ipAddressTextbox.Size = new System.Drawing.Size(800, 22);
             this.ipAddressTextbox.TabIndex = 1;
             // 
             // panel1
@@ -195,8 +185,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(482, 153);
+            this.ClientSize = new System.Drawing.Size(982, 553);
             this.DeleteButtonVisible = true;
+            this.MinimumSize = new System.Drawing.Size(1000, 600);
             this.Name = "BmdVideohubEditorForm";
             this.Text = "BmdVideohubEditorForm";
             this.baseDataTabPage.ResumeLayout(false);
