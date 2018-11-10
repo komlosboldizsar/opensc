@@ -16,6 +16,8 @@ namespace OpenSC.Model.Signals
         string SignalLabel { get; }
         event SignalLabelChangedDelegate SignalLabelChanged;
 
+        string SignalUniqueId { get; }
+
         bool RedTally { get; }
         event SignalTallyChangedDelegate RedTallyChanged;
 
