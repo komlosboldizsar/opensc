@@ -17,25 +17,16 @@ namespace OpenSC.Model
     public abstract class DatabaseBase<T>: IDatabaseBase, IObservableList<T>
         where T: class, IModel
     {
-
-        public delegate void AddingItemDelegate(DatabaseBase<T> database, T item);
+        
         public delegate void AddedItemDelegate(DatabaseBase<T> database, T item);
-
-        public event AddingItemDelegate AddingItem;
         public event AddedItemDelegate AddedItem;
         public event ObservableListItemAddedDelegate ItemAdded;
-
-        public delegate void RemovingItemDelegate(DatabaseBase<T> database, T item);
+        
         public delegate void RemovedItemDelegate(DatabaseBase<T> database, T item);
-
-        public event RemovingItemDelegate RemovingItem;
         public event RemovedItemDelegate RemovedItem;
         public event ObservableListItemRemovedDelegate ItemRemoved;
-
-        public delegate void ChangingItemsDelegate(DatabaseBase<T> database);
+        
         public delegate void ChangedItemsDelegate(DatabaseBase<T> database);
-
-        public event ChangingItemsDelegate ChangingItems;
         public event ChangedItemsDelegate ChangedItems;
         public event ObservableListItemsChangedDelegate ItemsChanged;
 
@@ -81,9 +72,6 @@ namespace OpenSC.Model
                 throw new Exception();
 
             // Add element
-            ChangingItems?.Invoke(this);
-            AddingItem?.Invoke(this, item);
-
             items.Add(item.ID, item);
 
             AddedItem?.Invoke(this, item);
@@ -107,9 +95,6 @@ namespace OpenSC.Model
                 return false;
 
             // Remove element
-            ChangingItems?.Invoke(this);
-            RemovingItem?.Invoke(this, item);
-
             items.Remove(item.ID);
 
             RemovedItem?.Invoke(this, item);
@@ -171,7 +156,6 @@ namespace OpenSC.Model
             var loadedItems = persister.Load();
             if (loadedItems != null)
             {
-                ChangingItems?.Invoke(this);
                 items = loadedItems;
                 ChangedItems?.Invoke(this);
             }
