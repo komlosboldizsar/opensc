@@ -479,7 +479,6 @@
     <Compile Include="Model\Streams\StreamTypeNameConverter.cs" />
     <Compile Include="Model\Streams\YoutubeStream.cs" />
     <Compile Include="Model\Timers\TimerDatabase.cs" />
-    <Compile Include="Model\UMDs\Datagram.cs" />
     <Compile Include="Model\UMDs\McCurdy\ColumnCount.cs" />
     <Compile Include="Model\UMDs\McCurdy\TextAlignment.cs" />
     <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1.cs" />
