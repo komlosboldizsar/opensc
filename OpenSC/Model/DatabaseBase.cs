@@ -178,7 +178,11 @@ namespace OpenSC.Model
         {
             persister.Save(items);
             LogDispatcher.I(SPECIFIC_LOG_TAG, "Saved to file.");
+            afterSave();
         }
+
+        protected virtual void afterSave()
+        { }
 
         public void Load()
         {
@@ -188,9 +192,12 @@ namespace OpenSC.Model
             {
                 items = loadedItems;
                 LogDispatcher.I(SPECIFIC_LOG_TAG, "Loaded from file.");
+                afterLoad();
                 ChangedItems?.Invoke(this);
             }
         }
+        protected virtual void afterLoad()
+        { }
 
         public void BuildRelationsByForeignKeys()
         {
