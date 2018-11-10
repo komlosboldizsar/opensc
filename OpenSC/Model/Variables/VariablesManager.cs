@@ -9,38 +9,19 @@ namespace OpenSC.Model.Variables
     public class VariablesManager
     {
 
-        public static void ProgramStarted()
-        {
-            registerSettings();
-            registerModelTypes();
-            registerDatabases();
-            registerWindowTypes();
-            registerMenus();
-        }
-
-        public static void MainWindowOpened()
-        { }
-
-        private static void registerSettings()
-        {
-        }
-
-        private static void registerModelTypes()
-        {
-        }
-
-        private static void registerDatabases()
+        public static void RegisterDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(DynamicTextDatabase));
         }
 
-        private static void registerWindowTypes()
+        public static void RegisterWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType(typeof(DynamicTextList));
             WindowTypeRegister.RegisterWindowType(typeof(BooleanList));
         }
 
-        private static void registerMenus() {
+        public static void RegisterMenus()
+        {
             var variablesMenu = MenuManager.Instance.TopMenu["Variables"];
             var dynamicTextsMenu = variablesMenu["Dynamic texts"];
             dynamicTextsMenu.ClickHandler = (menu, tag) => new DynamicTextList().ShowAsChild();

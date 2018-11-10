@@ -502,6 +502,7 @@
     <Compile Include="GUI\Timers\TimerWindow.Designer.cs">
       <DependentUpon>TimerWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="StartupController.cs" />
     <EmbeddedResource Include="GUI\ChildWindowBase.resx">
       <DependentUpon>ChildWindowBase.cs</DependentUpon>
     </EmbeddedResource>

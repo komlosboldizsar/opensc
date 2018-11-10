@@ -22,15 +22,7 @@ namespace OpenSC.Modules
 
         #region Own initialization
         public static void Init()
-        {
-            subscribeEvents();
-        }
-
-        private static void subscribeEvents()
-        {
-            Program.ProgramStarted += programStartedHandler;
-            MainForm.Instance.Load += mainWindowOpenedHandler;
-        }
+        { }
         #endregion
 
         public static void RegisterDynamicTextFunctions()
@@ -75,19 +67,11 @@ namespace OpenSC.Modules
                 module.RegisterSettings();
         }
 
-        #region Event handlers
-        private static void programStartedHandler()
-        {
-            foreach (IModule module in registeredModules)
-                module.ProgramStarted();
-        }
-
-        private static void mainWindowOpenedHandler(object sender, EventArgs e)
+        public static void MainWindowOpened()
         {
             foreach (IModule module in registeredModules)
                 module.MainWindowOpened();
         }
-        #endregion
 
     }
 }
