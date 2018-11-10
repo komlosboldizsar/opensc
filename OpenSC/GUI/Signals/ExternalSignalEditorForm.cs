@@ -7,16 +7,16 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.Signals
 {
 
-    public partial class SignalEditorForm : ModelEditorFormBase
+    public partial class ExternalSignalEditorForm : ModelEditorFormBase
     {
 
-        private const string TITLE_NEW = "New signal";
-        private const string TITLE_EDIT = "Edit signal: (#{0}) {1}";
+        private const string TITLE_NEW = "New external signal";
+        private const string TITLE_EDIT = "Edit external signal: (#{0}) {1}";
 
-        private const string HEADER_TEXT_NEW = "New signal";
-        private const string HEADER_TEXT_EDIT = "Edit signal";
+        private const string HEADER_TEXT_NEW = "New external signal";
+        private const string HEADER_TEXT_EDIT = "Edit external signal";
 
-        protected Signal signal;
+        protected ExternalSignal signal;
 
         bool addingNew = false;
 
@@ -31,24 +31,24 @@ namespace OpenSC.GUI.Signals
             }
         }
 
-        public SignalEditorForm()
+        public ExternalSignalEditorForm()
         {
             InitializeComponent();
         }
 
-        public SignalEditorForm(Signal signal)
+        public ExternalSignalEditorForm(ExternalSignal signal)
         {
             InitializeComponent();
             initCategoryDropDown();
             AddingNew = (signal == null);
-            this.signal = (signal != null) ? signal : new Signal();
+            this.signal = (signal != null) ? signal : new ExternalSignal();
         }
 
         protected override void loadData()
         {
             if (signal == null)
                 return;
-            idNumericField.Value = (addingNew ? SignalDatabases.Signals.NextValidId() : signal.ID);
+            idNumericField.Value = (addingNew ? ExternalSignalDatabases.Signals.NextValidId() : signal.ID);
             nameTextBox.Text = signal.Name;
             categoryDropDown.SelectByValue(signal.Category);
         }
@@ -71,7 +71,7 @@ namespace OpenSC.GUI.Signals
             signal.EndUpdate();
 
             if (addingNew)
-                SignalDatabases.Signals.Add(signal);
+                ExternalSignalDatabases.Signals.Add(signal);
             AddingNew = false;
 
             return true;
@@ -92,13 +92,13 @@ namespace OpenSC.GUI.Signals
                 return;
             signal.ID = (int)idNumericField.Value;
             signal.Name = nameTextBox.Text;
-            signal.Category = categoryDropDown.SelectedValue as SignalCategory;
+            signal.Category = categoryDropDown.SelectedValue as ExternalSignalCategory;
         }
 
         private void initCategoryDropDown()
         {
-            categoryDropDown.CreateAdapterAsDataSource<SignalCategory>(
-                SignalDatabases.Categories.ItemsAsList,
+            categoryDropDown.CreateAdapterAsDataSource<ExternalSignalCategory>(
+                ExternalSignalDatabases.Categories.ItemsAsList,
                 category => string.Format("(#{0}) {1}", category.ID, category.Name),
                 true,
                 "(not associated)");

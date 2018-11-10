@@ -6,7 +6,7 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.Signals
 {
 
-    public partial class SignalCategoryEditorForm : ModelEditorFormBase
+    public partial class ExternalSignalCategoryEditorForm : ModelEditorFormBase
     {
 
         private const string TITLE_NEW = "New signal category";
@@ -15,7 +15,7 @@ namespace OpenSC.GUI.Signals
         private const string HEADER_TEXT_NEW = "New signal category";
         private const string HEADER_TEXT_EDIT = "Edit signal category";
 
-        protected SignalCategory category;
+        protected ExternalSignalCategory category;
 
         bool addingNew = false;
 
@@ -30,23 +30,23 @@ namespace OpenSC.GUI.Signals
             }
         }
 
-        public SignalCategoryEditorForm()
+        public ExternalSignalCategoryEditorForm()
         {
             InitializeComponent();
         }
 
-        public SignalCategoryEditorForm(SignalCategory category)
+        public ExternalSignalCategoryEditorForm(ExternalSignalCategory category)
         {
             InitializeComponent();
             AddingNew = (category == null);
-            this.category = (category != null) ? category : new SignalCategory();
+            this.category = (category != null) ? category : new ExternalSignalCategory();
         }
 
         protected override void loadData()
         {
             if (category == null)
                 return;
-            idNumericField.Value = (addingNew ? SignalDatabases.Categories.NextValidId() : category.ID);
+            idNumericField.Value = (addingNew ? ExternalSignalDatabases.Categories.NextValidId() : category.ID);
             nameTextBox.Text = category.Name;
             colorProperty = category.Color;
         }
@@ -69,7 +69,7 @@ namespace OpenSC.GUI.Signals
             category.EndUpdate();
 
             if (addingNew)
-                SignalDatabases.Categories.Add(category);
+                ExternalSignalDatabases.Categories.Add(category);
             AddingNew = false;
 
             return true;

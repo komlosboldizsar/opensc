@@ -40,7 +40,7 @@ namespace OpenSC.Model.Routers
             string sourceStr = "";
             if (input.Source is InputSourceSignal)
             {
-                Signal signal = ((InputSourceSignal)input.Source).Signal;
+                ExternalSignal signal = ((InputSourceSignal)input.Source).Signal;
                 sourceStr = string.Format(SOURCE_CODE_FORMAT_SIGNAL, signal.ID);
             }
             else if (input.Source is RouterOutput)
@@ -66,7 +66,7 @@ namespace OpenSC.Model.Routers
             {
                 if (!int.TryParse(tokens[1], out int signalId))
                     return null;
-                return new InputSourceSignal(SignalDatabases.Signals.GetTById(signalId));
+                return new InputSourceSignal(ExternalSignalDatabases.Signals.GetTById(signalId));
             }
 
             if ((tokens.Length == 3) && (tokens[0] == "output"))

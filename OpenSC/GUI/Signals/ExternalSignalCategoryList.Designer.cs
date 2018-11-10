@@ -1,6 +1,6 @@
 ﻿namespace OpenSC.GUI.Signals
 {
-    partial class SignalCategoryList
+    partial class ExternalSignalCategoryList
     {
         /// <summary>
         /// Required designer variable.

@@ -11,9 +11,9 @@ namespace OpenSC.Model.Routers
     public class InputSourceSignal : IRouterInputSource
     {
 
-        public Signal Signal { get; private set; }
+        public ExternalSignal Signal { get; private set; }
 
-        public InputSourceSignal(Signal signal)
+        public InputSourceSignal(ExternalSignal signal)
         {
             this.Signal = signal;
             signal.NameChanged += nameChangedHandler;
@@ -33,7 +33,7 @@ namespace OpenSC.Model.Routers
 
         public event RouterInputSourceSourceNameChanged SourceNameChanged;
 
-        private void nameChangedHandler(Signal signal, string oldName, string newName)
+        private void nameChangedHandler(ExternalSignal signal, string oldName, string newName)
         {
             SourceNameChanged?.Invoke(this, newName);
         }
@@ -55,12 +55,12 @@ namespace OpenSC.Model.Routers
         public event RouterInputSourceTallyChanged RedTallyChanged;
         public event RouterInputSourceTallyChanged GreenTallyChanged;
 
-        private void redTallyChangedHandler(Signal signal, bool oldState, bool newState)
+        private void redTallyChangedHandler(ExternalSignal signal, bool oldState, bool newState)
         {
             RedTallyChanged?.Invoke(this, newState);
         }
 
-        private void greenTallyChangedHandler(Signal signal, bool oldState, bool newState)
+        private void greenTallyChangedHandler(ExternalSignal signal, bool oldState, bool newState)
         {
             GreenTallyChanged?.Invoke(this, newState);
         }
@@ -76,7 +76,7 @@ namespace OpenSC.Model.Routers
         public override int GetHashCode()
         {
             var hashCode = -1518684056;
-            hashCode = hashCode * -1521134295 + EqualityComparer<Signal>.Default.GetHashCode(Signal);
+            hashCode = hashCode * -1521134295 + EqualityComparer<ExternalSignal>.Default.GetHashCode(Signal);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SourceName);
             hashCode = hashCode * -1521134295 + RedTally.GetHashCode();
             hashCode = hashCode * -1521134295 + GreenTally.GetHashCode();

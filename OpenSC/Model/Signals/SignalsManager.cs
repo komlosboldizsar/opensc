@@ -35,23 +35,23 @@ namespace OpenSC.Model.Signals
 
         private static void registerDatabases()
         {
-            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(SignalDatabases.SignalCategoryDatabase));
-            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(SignalDatabases.SignalDatabase));
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(ExternalSignalDatabases.ExternalSignalCategoryDatabase));
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(ExternalSignalDatabases.ExternalSignalDatabase));
         }
 
         private static void registerWindowTypes()
         {
-            WindowTypeRegister.RegisterWindowType(typeof(SignalList));
-            WindowTypeRegister.RegisterWindowType(typeof(SignalCategoryList));
+            WindowTypeRegister.RegisterWindowType(typeof(ExternalSignalList));
+            WindowTypeRegister.RegisterWindowType(typeof(ExternalSignalCategoryList));
         }
 
         private static void registerMenus()
         {
             var signalsMenu = MenuManager.Instance.TopMenu["Signals"];
             var signalsSubMenu = signalsMenu["Signals"];
-            signalsSubMenu.ClickHandler = (menu, tag) => new SignalList().ShowAsChild();
+            signalsSubMenu.ClickHandler = (menu, tag) => new ExternalSignalList().ShowAsChild();
             var categoriesSubMenu = signalsMenu["Categories"];
-            categoriesSubMenu.ClickHandler = (menu, tag) => new SignalCategoryList().ShowAsChild();
+            categoriesSubMenu.ClickHandler = (menu, tag) => new ExternalSignalCategoryList().ShowAsChild();
         }
 
     }

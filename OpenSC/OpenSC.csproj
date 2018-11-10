@@ -204,29 +204,29 @@
     <Compile Include="GUI\Settings\StringSettingEditor.Designer.cs">
       <DependentUpon>StringSettingEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Signals\SignalEditorForm.cs">
+    <Compile Include="GUI\Signals\ExternalSignalEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Signals\SignalEditorForm.Designer.cs">
-      <DependentUpon>SignalEditorForm.cs</DependentUpon>
+    <Compile Include="GUI\Signals\ExternalSignalEditorForm.Designer.cs">
+      <DependentUpon>ExternalSignalEditorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Signals\SignalCategoryList.cs">
+    <Compile Include="GUI\Signals\ExternalSignalCategoryList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Signals\SignalCategoryList.Designer.cs">
-      <DependentUpon>SignalCategoryList.cs</DependentUpon>
+    <Compile Include="GUI\Signals\ExternalSignalCategoryList.Designer.cs">
+      <DependentUpon>ExternalSignalCategoryList.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Signals\SignalList.cs">
+    <Compile Include="GUI\Signals\ExternalSignalList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Signals\SignalList.Designer.cs">
-      <DependentUpon>SignalList.cs</DependentUpon>
+    <Compile Include="GUI\Signals\ExternalSignalList.Designer.cs">
+      <DependentUpon>ExternalSignalList.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Signals\SignalCategoryEditorForm.cs">
+    <Compile Include="GUI\Signals\ExternalSignalCategoryEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Signals\SignalCategoryEditorForm.Designer.cs">
-      <DependentUpon>SignalCategoryEditorForm.cs</DependentUpon>
+    <Compile Include="GUI\Signals\ExternalSignalCategoryEditorForm.Designer.cs">
+      <DependentUpon>ExternalSignalCategoryEditorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Streams\StreamEditorFormBase.cs">
       <SubType>Form</SubType>
@@ -430,9 +430,9 @@
     <Compile Include="Model\Settings\SettingsManager.cs" />
     <Compile Include="Model\Settings\Converters\SettingValueConverterAttribute.cs" />
     <Compile Include="Model\Signals\ISignalTallySource.cs" />
-    <Compile Include="Model\Signals\SignalCategory.cs" />
-    <Compile Include="Model\Signals\Signal.cs" />
-    <Compile Include="Model\Signals\SignalDatabases.cs" />
+    <Compile Include="Model\Signals\ExternalSignalCategory.cs" />
+    <Compile Include="Model\Signals\ExternalSignal.cs" />
+    <Compile Include="Model\Signals\ExternalSignalDatabases.cs" />
     <Compile Include="Model\Signals\SignalsManager.cs" />
     <Compile Include="Model\Signals\SignalTallyType.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamViewerCount.cs" />
@@ -559,17 +559,17 @@
     <EmbeddedResource Include="GUI\Settings\StringSettingEditor.resx">
       <DependentUpon>StringSettingEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Signals\SignalEditorForm.resx">
-      <DependentUpon>SignalEditorForm.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\Signals\ExternalSignalEditorForm.resx">
+      <DependentUpon>ExternalSignalEditorForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Signals\SignalCategoryList.resx">
-      <DependentUpon>SignalCategoryList.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\Signals\ExternalSignalCategoryList.resx">
+      <DependentUpon>ExternalSignalCategoryList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Signals\SignalList.resx">
-      <DependentUpon>SignalList.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\Signals\ExternalSignalList.resx">
+      <DependentUpon>ExternalSignalList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Signals\SignalCategoryEditorForm.resx">
-      <DependentUpon>SignalCategoryEditorForm.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\Signals\ExternalSignalCategoryEditorForm.resx">
+      <DependentUpon>ExternalSignalCategoryEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Streams\StreamEditorFormBase.resx">
       <DependentUpon>StreamEditorFormBase.cs</DependentUpon>

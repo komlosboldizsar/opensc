@@ -60,9 +60,9 @@ namespace OpenSC.Model.Mixers
             internal set { index = value; }
         }
 
-        Signal source;
+        ExternalSignal source;
 
-        public Signal Source
+        public ExternalSignal Source
         {
             get { return source; }
             set
@@ -74,7 +74,7 @@ namespace OpenSC.Model.Mixers
                 source?.IsTalliedFrom(this, SignalTallyType.Red, false);
                 source?.IsTalliedFrom(this, SignalTallyType.Green, false);
 
-                Signal oldSource = source;
+                ExternalSignal oldSource = source;
                 source = value;
 
                 SourceChanged?.Invoke(this, oldSource, value);
@@ -87,7 +87,7 @@ namespace OpenSC.Model.Mixers
 
         public event SourceChangedDelegate SourceChanged;
 
-        public delegate void SourceChangedDelegate(MixerInput input, Signal oldSource, Signal newSource);
+        public delegate void SourceChangedDelegate(MixerInput input, ExternalSignal oldSource, ExternalSignal newSource);
         public delegate void SourceNameChangedDelegate(MixerInput input, string newName);
 
         // "Temp foreign key"
@@ -96,7 +96,7 @@ namespace OpenSC.Model.Mixers
         public void RestoreSource()
         {
             if (_sourceSignalId > 0)
-                Source = SignalDatabases.Signals.GetTById(_sourceSignalId);
+                Source = ExternalSignalDatabases.Signals.GetTById(_sourceSignalId);
         }
 
         public string SourceName

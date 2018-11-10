@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
 
-    public class SignalCategory : ModelBase
+    public class ExternalSignalCategory : ModelBase
     {
 
         public override void Restored()
         { }
 
-        public delegate void IdChangedDelegate(SignalCategory category, int oldValue, int newValue);
+        public delegate void IdChangedDelegate(ExternalSignalCategory category, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
 
         public int id = 0;
@@ -37,11 +37,11 @@ namespace OpenSC.Model.Signals
         {
             if (id <= 0)
                 throw new ArgumentException();
-            if (!SignalDatabases.Categories.CanIdBeUsedForItem(id, this))
+            if (!ExternalSignalDatabases.Categories.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
 
-        public delegate void NameChangedDelegate(SignalCategory category, string oldName, string newName);
+        public delegate void NameChangedDelegate(ExternalSignalCategory category, string oldName, string newName);
         public event NameChangedDelegate NameChanged;
 
         [PersistAs("name")]
@@ -61,7 +61,7 @@ namespace OpenSC.Model.Signals
             }
         }
 
-        public delegate void ColorChangedDelegate(SignalCategory category, Color oldColor, Color newColor);
+        public delegate void ColorChangedDelegate(ExternalSignalCategory category, Color oldColor, Color newColor);
         public event ColorChangedDelegate ColorChanged;
 
         [PersistAs("color")]
@@ -84,7 +84,7 @@ namespace OpenSC.Model.Signals
         protected override void afterUpdate()
         {
             base.afterUpdate();
-            SignalDatabases.Categories.ItemUpdated(this);
+            ExternalSignalDatabases.Categories.ItemUpdated(this);
         }
 
     }

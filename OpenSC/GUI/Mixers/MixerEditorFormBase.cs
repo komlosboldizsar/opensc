@@ -151,14 +151,14 @@ namespace OpenSC.GUI.Mixers
             builder.BuildAndAdd();
 
             // Column: source
-            CustomDataGridViewComboBoxItem<Signal>[] signals = getAllSignals();
+            CustomDataGridViewComboBoxItem<ExternalSignal>[] signals = getAllSignals();
             builder = getColumnDescriptorBuilderForTable<MixerInput>(inputsTableCDGV);
             builder.Type(DataGridViewColumnType.ComboBox);
             builder.Header("Source");
             builder.Width(300);
             builder.InitializerMethod((input, cell) => { });
             builder.UpdaterMethod((input, cell) => { cell.Value = input.Source; });
-            builder.CellEndEditHandlerMethod((input, cell, eventargs) => { input.Source = cell.Value as Signal; });
+            builder.CellEndEditHandlerMethod((input, cell, eventargs) => { input.Source = cell.Value as ExternalSignal; });
             builder.DropDownPopulatorMethod((input, cell) => signals);
             builder.BuildAndAdd();
 
@@ -196,18 +196,18 @@ namespace OpenSC.GUI.Mixers
             where T : class
             => new CustomDataGridViewColumnDescriptorBuilder<T>(table);
 
-        private CustomDataGridViewComboBoxItem<Signal>[] getAllSignals()
+        private CustomDataGridViewComboBoxItem<ExternalSignal>[] getAllSignals()
         {
-            List<CustomDataGridViewComboBoxItem<Signal>> signalList = new List<CustomDataGridViewComboBoxItem<Signal>>();
-            signalList.Add(new CustomDataGridViewComboBoxItem<Signal>.NullItem("(not connected)"));
-            foreach (Signal signal in SignalDatabases.Signals.ItemsAsList)
+            List<CustomDataGridViewComboBoxItem<ExternalSignal>> signalList = new List<CustomDataGridViewComboBoxItem<ExternalSignal>>();
+            signalList.Add(new CustomDataGridViewComboBoxItem<ExternalSignal>.NullItem("(not connected)"));
+            foreach (ExternalSignal signal in ExternalSignalDatabases.Signals.ItemsAsList)
                 signalList.Add(new SourceDropDownItem(signal));
             return signalList.ToArray();
         }
 
-        private class SourceDropDownItem: CustomDataGridViewComboBoxItem<Signal>
+        private class SourceDropDownItem: CustomDataGridViewComboBoxItem<ExternalSignal>
         {
-            public SourceDropDownItem(Signal value) : base(value)
+            public SourceDropDownItem(ExternalSignal value) : base(value)
             { }
 
             public override string ToString()

@@ -273,7 +273,7 @@ namespace OpenSC.GUI.Routers
 
             sourceList.Add(new CustomDataGridViewComboBoxItem<IRouterInputSource>.NullItem("(not connected)"));
 
-            foreach (Signal signal in SignalDatabases.Signals.ItemsAsList)
+            foreach (ExternalSignal signal in ExternalSignalDatabases.Signals.ItemsAsList)
                 sourceList.Add(new SourceDropDownItem(new InputSourceSignal(signal)));
 
             foreach (Router router in RouterDatabase.Instance.ItemsAsList)

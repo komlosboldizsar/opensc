@@ -7,7 +7,7 @@ using System.Drawing;
 namespace OpenSC.Model.Signals
 {
 
-    public class Signal : ModelBase
+    public class ExternalSignal : ModelBase
     {
 
         public override void Restored()
@@ -16,7 +16,7 @@ namespace OpenSC.Model.Signals
         }
 
 
-        public delegate void IdChangedDelegate(Signal signal, int oldValue, int newValue);
+        public delegate void IdChangedDelegate(ExternalSignal signal, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
 
         public int id = 0;
@@ -39,11 +39,11 @@ namespace OpenSC.Model.Signals
         {
             if (id <= 0)
                 throw new ArgumentException();
-            if (!SignalDatabases.Signals.CanIdBeUsedForItem(id, this))
+            if (!ExternalSignalDatabases.Signals.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
 
-        public delegate void NameChangedDelegate(Signal signal, string oldName, string newName);
+        public delegate void NameChangedDelegate(ExternalSignal signal, string oldName, string newName);
         public event NameChangedDelegate NameChanged;
 
         [PersistAs("name")]
@@ -64,23 +64,23 @@ namespace OpenSC.Model.Signals
         }
 
 
-        public delegate void CategoryChangedDelegate(Signal signal, SignalCategory oldCategory, SignalCategory newCategory);
+        public delegate void CategoryChangedDelegate(ExternalSignal signal, ExternalSignalCategory oldCategory, ExternalSignalCategory newCategory);
         public event CategoryChangedDelegate CategoryChanged;
 
         [PersistAs("category")]
-        private SignalCategory category;
+        private ExternalSignalCategory category;
 
-        [TempForeignKey(SignalDatabases.DBNAME_CATEGORIES, nameof(category))]
+        [TempForeignKey(ExternalSignalDatabases.DBNAME_CATEGORIES, nameof(category))]
         private int _category;
 
-        public SignalCategory Category
+        public ExternalSignalCategory Category
         {
             get { return category; }
             set
             {
                 if (value == category)
                     return;
-                SignalCategory oldCategory = category;
+                ExternalSignalCategory oldCategory = category;
                 category = value;
                 CategoryChanged?.Invoke(this, oldCategory, value);
                 RaisePropertyChanged(nameof(Category));
@@ -124,7 +124,7 @@ namespace OpenSC.Model.Signals
             }
         }
 
-        public delegate void TallyChangedDelegate(Signal signal, bool oldState, bool newState);
+        public delegate void TallyChangedDelegate(ExternalSignal signal, bool oldState, bool newState);
         #endregion
 
         #region Tally sources
@@ -203,11 +203,11 @@ namespace OpenSC.Model.Signals
         private class TallyBoolean : BooleanBase
         {
 
-            private Signal signal;
+            private ExternalSignal signal;
 
             private TallyColor color;
 
-            public TallyBoolean(Signal signal, TallyColor color):
+            public TallyBoolean(ExternalSignal signal, TallyColor color):
                 base(getName(signal, color), getColor(color), getDescription(signal, color))
             {
                 this.signal = signal;
@@ -233,23 +233,23 @@ namespace OpenSC.Model.Signals
                 Description = getDescription(signal, color);
             }
 
-            private void tallyChangedHandler(Signal signal, bool oldState, bool newState)
+            private void tallyChangedHandler(ExternalSignal signal, bool oldState, bool newState)
             {
                 CurrentState = newState;
             }
 
-            private void idChangedHandler(Signal signal, int oldValue, int newValue)
+            private void idChangedHandler(ExternalSignal signal, int oldValue, int newValue)
             {
                 Name = getName(signal, color);
                 Description = getDescription(signal, color);
             }
 
-            private void nameChangedHandler(Signal signal, string oldName, string newName)
+            private void nameChangedHandler(ExternalSignal signal, string oldName, string newName)
             {
                 Description = getDescription(signal, color);
             }
 
-            private static string getName(Signal signal, TallyColor color)
+            private static string getName(ExternalSignal signal, TallyColor color)
                 =>  string.Format("signal.{0}.{1}tally", signal.ID, getColorString(color));
 
             private static Color getColor(TallyColor color)
@@ -264,7 +264,7 @@ namespace OpenSC.Model.Signals
                 return Color.White;
             }
 
-            private static string getDescription(Signal signal, TallyColor color)
+            private static string getDescription(ExternalSignal signal, TallyColor color)
                 => string.Format("Signal [(#{0}) {1}] has {2} tally.", signal.ID, signal.Name, getColorString(color));
 
             private static string getColorString(TallyColor color)
@@ -291,7 +291,7 @@ namespace OpenSC.Model.Signals
         protected override void afterUpdate()
         {
             base.afterUpdate();
-            SignalDatabases.Signals.ItemUpdated(this);
+            ExternalSignalDatabases.Signals.ItemUpdated(this);
         }
 
     }

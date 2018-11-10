@@ -1,6 +1,6 @@
 ﻿namespace OpenSC.GUI.Signals
 {
-    partial class SignalList
+    partial class ExternalSignalList
     {
         /// <summary>
         /// Required designer variable.
@@ -68,15 +68,15 @@
             this.addSignalButton.UseVisualStyleBackColor = true;
             this.addSignalButton.Click += new System.EventHandler(this.addSignalButton_Click);
             // 
-            // SignalList
+            // ExternalSignalList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.HeaderText = "List of signals";
-            this.Name = "SignalList";
-            this.Text = "List of signals";
+            this.HeaderText = "List of external signals";
+            this.Name = "ExternalSignalList";
+            this.Text = "List of external signals";
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
             this.mainContainer.ResumeLayout(false);
