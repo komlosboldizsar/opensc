@@ -79,6 +79,7 @@ namespace OpenSC.Model.Mixers
         public event IndexChangedDelegate IndexChanged;
         #endregion
 
+        #region Property: Source
         Signal source;
 
         public Signal Source
@@ -90,8 +91,12 @@ namespace OpenSC.Model.Mixers
                 if (value == source)
                     return;
 
-                source?.IsTalliedFrom(this, SignalTallyType.Red, false);
-                source?.IsTalliedFrom(this, SignalTallyType.Green, false);
+                if(source != null)
+                {
+                    source.NameChanged -= sourceNameChangedHandler;
+                    source.IsTalliedFrom(this, SignalTallyType.Red, false);
+                    source.IsTalliedFrom(this, SignalTallyType.Green, false);
+                }
 
                 Signal oldSource = source;
                 source = value;
@@ -99,21 +104,37 @@ namespace OpenSC.Model.Mixers
                 SourceChanged?.Invoke(this, oldSource, value);
                 PropertyChanged?.Invoke(nameof(Source));
 
-                source?.IsTalliedFrom(this, SignalTallyType.Red, RedTally);
-                source?.IsTalliedFrom(this, SignalTallyType.Green, GreenTally);
+                SourceNameChanged?.Invoke(this, oldSource?.Name, source?.Name);
+                PropertyChanged?.Invoke(nameof(SourceName));
+
+                if (source != null)
+                {
+                    source.NameChanged += sourceNameChangedHandler;
+                    source.IsTalliedFrom(this, SignalTallyType.Red, RedTally);
+                    source.IsTalliedFrom(this, SignalTallyType.Green, GreenTally);
+                }
 
             }
         }
 
-        public event SourceChangedDelegate SourceChanged;
-
         public delegate void SourceChangedDelegate(MixerInput input, Signal oldSource, Signal newSource);
+        public event SourceChangedDelegate SourceChanged;
+        #endregion
 
+        #region Property: SourceName
         public string SourceName
         {
             get => source.Name;
         }
-        public delegate void SourceNameChangedDelegate(MixerInput input, string newName);
+
+        private void sourceNameChangedHandler(Signal signal, string oldName, string newName)
+        {
+            SourceNameChanged?.Invoke(this, oldName, newName);
+        }
+
+        public delegate void SourceNameChangedDelegate(MixerInput input, string oldName, string newName);
+        public event SourceNameChangedDelegate SourceNameChanged;
+        #endregion
 
         // "Temp foreign key"
         public int _sourceSignalId;
