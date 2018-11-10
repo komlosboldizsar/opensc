@@ -24,7 +24,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
     public class BmdVideohub : Router
     {
 
-        private const string LOG_TAG = "Router/BMD";
+        private new const string LOG_TAG = "Router/BMD";
 
         public BmdVideohub()
         {
