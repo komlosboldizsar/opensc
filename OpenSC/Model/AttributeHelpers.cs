@@ -32,6 +32,14 @@ namespace OpenSC.Model
             return string.Empty;
         }
 
+        public static string GetName(this IDatabaseBase database)
+        {
+            object[] databaseNameAttributes = database.GetType().GetCustomAttributes(typeof(DatabaseNameAttribute), true);
+            if (databaseNameAttributes.Length <= 0)
+                return null;
+            return (databaseNameAttributes[0] as DatabaseNameAttribute)?.Name;
+        }
+
     }
 
 }
