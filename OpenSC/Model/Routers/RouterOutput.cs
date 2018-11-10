@@ -30,6 +30,7 @@ namespace OpenSC.Model.Routers
         public void Restored()
         {
             createBooleans();
+            registerAsSignal();
         }
 
         private string name;
