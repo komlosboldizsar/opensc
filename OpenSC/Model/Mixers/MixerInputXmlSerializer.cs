@@ -26,14 +26,14 @@ namespace OpenSC.Model.Mixers
             if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_INDEX]?.Value, out int index))
                 index = 1;
 
-            if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_SOURCE]?.Value, out int sourceSignalId))
-                sourceSignalId = 0;
+            string sourceSignalUniqueIdAttributeValue = serializedItem.Attributes[ATTRIBUTE_SOURCE]?.Value;
+            string sourceSignalUniqueId = (sourceSignalUniqueIdAttributeValue != string.Empty) ? sourceSignalUniqueIdAttributeValue : null;
 
             return new MixerInput()
             {
                 Name = serializedItem.Attributes[ATTRIBUTE_NAME]?.Value,
                 Index = index,
-                _sourceSignalId = sourceSignalId
+                _sourceSignalUniqueId = sourceSignalUniqueId
             };
 
         }
@@ -48,7 +48,7 @@ namespace OpenSC.Model.Mixers
             XElement xmlElement = new XElement(TAG_NAME);
             xmlElement.SetAttributeValue(ATTRIBUTE_NAME, input.Name);
             xmlElement.SetAttributeValue(ATTRIBUTE_INDEX, input.Index);
-            xmlElement.SetAttributeValue(ATTRIBUTE_SOURCE, ((input.Source != null) ? input.Source.ID.ToString() : ""));
+            xmlElement.SetAttributeValue(ATTRIBUTE_SOURCE, ((input.Source != null) ? input.Source.SignalUniqueId : ""));
 
             return xmlElement;
 

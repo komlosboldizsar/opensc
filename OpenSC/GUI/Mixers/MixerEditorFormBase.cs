@@ -151,7 +151,7 @@ namespace OpenSC.GUI.Mixers
             builder.BuildAndAdd();
 
             // Column: source
-            CustomDataGridViewComboBoxItem<ExternalSignal>[] signals = getAllSignals();
+            CustomDataGridViewComboBoxItem<ISignal>[] signals = getAllSignals();
             builder = getColumnDescriptorBuilderForTable<MixerInput>(inputsTableCDGV);
             builder.Type(DataGridViewColumnType.ComboBox);
             builder.Header("Source");
@@ -196,24 +196,23 @@ namespace OpenSC.GUI.Mixers
             where T : class
             => new CustomDataGridViewColumnDescriptorBuilder<T>(table);
 
-        private CustomDataGridViewComboBoxItem<ExternalSignal>[] getAllSignals()
+        private CustomDataGridViewComboBoxItem<ISignal>[] getAllSignals()
         {
-            List<CustomDataGridViewComboBoxItem<ExternalSignal>> signalList = new List<CustomDataGridViewComboBoxItem<ExternalSignal>>();
-            signalList.Add(new CustomDataGridViewComboBoxItem<ExternalSignal>.NullItem("(not connected)"));
-            foreach (ExternalSignal signal in ExternalSignalDatabases.Signals.ItemsAsList)
+            List<CustomDataGridViewComboBoxItem<ISignal>> signalList = new List<CustomDataGridViewComboBoxItem<ISignal>>();
+            signalList.Add(new CustomDataGridViewComboBoxItem<ISignal>.NullItem("(not connected)"));
+            foreach (ISignal signal in SignalRegister.Instance)
                 signalList.Add(new SourceDropDownItem(signal));
             return signalList.ToArray();
         }
 
-        private class SourceDropDownItem: CustomDataGridViewComboBoxItem<ExternalSignal>
+        private class SourceDropDownItem: CustomDataGridViewComboBoxItem<ISignal>
         {
-            public SourceDropDownItem(ExternalSignal value) : base(value)
+            public SourceDropDownItem(ISignal value) : base(value)
             { }
 
             public override string ToString()
-                => string.Format("Signal: (#{0}) {1}", Value.ID, Value.Name);
+                => Value.SignalLabel;
         }
-
 
         private void addInputButton_Click(object sender, EventArgs e)
         {

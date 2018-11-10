@@ -80,9 +80,9 @@ namespace OpenSC.Model.Mixers
         #endregion
 
         #region Property: Source
-        private ExternalSignal source;
+        private ISignal source;
 
-        public ExternalSignal Source
+        public ISignal Source
         {
             get { return source; }
             set
@@ -93,23 +93,23 @@ namespace OpenSC.Model.Mixers
 
                 if(source != null)
                 {
-                    source.NameChanged -= sourceNameChangedHandler;
+                    source.SignalLabelChanged -= signalLabelChangedHandler;
                     source.IsTalliedFrom(this, SignalTallyType.Red, false);
                     source.IsTalliedFrom(this, SignalTallyType.Green, false);
                 }
 
-                ExternalSignal oldSource = source;
+                ISignal oldSource = source;
                 source = value;
 
                 SourceChanged?.Invoke(this, oldSource, value);
                 PropertyChanged?.Invoke(nameof(Source));
 
-                SourceNameChanged?.Invoke(this, oldSource?.Name, source?.Name);
+                SourceSignalLabelChanged?.Invoke(this, source?.SignalLabel);
                 PropertyChanged?.Invoke(nameof(SourceName));
 
                 if (source != null)
                 {
-                    source.NameChanged += sourceNameChangedHandler;
+                    source.SignalLabelChanged += signalLabelChangedHandler;
                     source.IsTalliedFrom(this, SignalTallyType.Red, RedTally);
                     source.IsTalliedFrom(this, SignalTallyType.Green, GreenTally);
                 }
@@ -117,32 +117,32 @@ namespace OpenSC.Model.Mixers
             }
         }
 
-        public delegate void SourceChangedDelegate(MixerInput input, ExternalSignal oldSource, ExternalSignal newSource);
+        public delegate void SourceChangedDelegate(MixerInput input, ISignal oldSource, ISignal newSource);
         public event SourceChangedDelegate SourceChanged;
         #endregion
 
         #region Property: SourceName
         public string SourceName
         {
-            get => source.Name;
+            get => source.SignalLabel;
         }
 
-        private void sourceNameChangedHandler(ExternalSignal signal, string oldName, string newName)
+        private void signalLabelChangedHandler(ISignal signal, string newLabel)
         {
-            SourceNameChanged?.Invoke(this, oldName, newName);
+            SourceSignalLabelChanged?.Invoke(this, newLabel);
         }
 
-        public delegate void SourceNameChangedDelegate(MixerInput input, string oldName, string newName);
-        public SourceNameChangedDelegate SourceNameChanged;
+        public delegate void SourceSignalLabelChangedDelegate(MixerInput input, string newName);
+        public SourceSignalLabelChangedDelegate SourceSignalLabelChanged;
         #endregion
 
         // "Temp foreign key"
-        public int _sourceSignalId;
+        public string _sourceSignalUniqueId;
 
         private void restoreSource()
         {
-            if (_sourceSignalId > 0)
-                Source = ExternalSignalDatabases.Signals.GetTById(_sourceSignalId);
+            if (_sourceSignalUniqueId != null)
+                Source = SignalRegister.Instance.GetSignalByUniqueId(_sourceSignalUniqueId);
         }
 
         public delegate void TallyChangedDelegate(MixerInput input, bool newState);
