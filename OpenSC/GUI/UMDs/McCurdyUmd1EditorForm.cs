@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.GeneralComponents.DropDowns;
+using OpenSC.Model.SerialPorts;
 using OpenSC.Model.UMDs;
 using OpenSC.Model.UMDs.McCurdy;
 using OpenSC.Model.Variables;
@@ -83,7 +84,7 @@ namespace OpenSC.GUI.UMDs
             if (mcCurdyUmd == null)
                 return;
 
-            mcCurdyUmd.Port = portDropDown.SelectedValue as McCurdyPort;
+            mcCurdyUmd.Port = portDropDown.SelectedValue as SerialPort;
             mcCurdyUmd.Address = (int)addressNumericField.Value;
 
             mcCurdyUmd.ColumnCount = convertIntToColumnCountEnum(columnCount);
@@ -176,9 +177,7 @@ namespace OpenSC.GUI.UMDs
         {
 
             // Ports
-            List<UmdPort> ports = new List<UmdPort>();
-            ports.AddRange(UmdPortDatabase.Instance.ItemsAsList.OfType<McCurdyPort>());
-            portDropDown.CreateAdapterAsDataSource(ports, port => port.Name, true, "(not connected)");
+            portDropDown.CreateAdapterAsDataSource(SerialPortDatabase.Instance, port => port.Name, true, "(not connected)");
 
             // Dynamic text sources
             IComboBoxAdapterFactory dynamicTextAdapterFactory = new ComboBoxAdapterFactory<DynamicText>(DynamicTextDatabase.Instance.ItemsAsList, dt => dt.Label, true, "(empty)");

@@ -10,6 +10,5 @@ namespace OpenSC.Model.UMDs
     {
         string Name { get; }
         int TallyCount { get; }
-        Type[] PortTypes { get; }
     }
 }

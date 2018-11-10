@@ -289,24 +289,6 @@
     <Compile Include="GUI\UMDs\McCurdyUmd1TEditorForm.Designer.cs">
       <DependentUpon>McCurdyUmd1TEditorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\UMDs\Tsl31UmdPortEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\UMDs\Tsl31UmdPortEditorForm.Designer.cs">
-      <DependentUpon>Tsl31UmdPortEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\UMDs\McCurdyUmdPortEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\UMDs\McCurdyUmdPortEditorForm.Designer.cs">
-      <DependentUpon>McCurdyUmdPortEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\UMDs\SerialUmdPortEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\UMDs\SerialUmdPortEditorForm.Designer.cs">
-      <DependentUpon>SerialUmdPortEditorForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\UMDs\Tsl31UmdEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -319,25 +301,12 @@
     <Compile Include="GUI\UMDs\McCurdyUmd1EditorForm.Designer.cs">
       <DependentUpon>McCurdyUmd1EditorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\UMDs\UmdPortEditorFormBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\UMDs\UmdPortEditorFormBase.Designer.cs">
-      <DependentUpon>UmdPortEditorFormBase.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\UMDs\UmdEditorFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\UMDs\UmdEditorFormBase.Designer.cs">
       <DependentUpon>UmdEditorFormBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\UMDs\UmdPortList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\UMDs\UmdPortList.Designer.cs">
-      <DependentUpon>UmdPortList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\UMDs\UmdPortEditorFormTypeRegister.cs" />
     <Compile Include="GUI\UMDs\UmdEditorFormTypeRegister.cs" />
     <Compile Include="GUI\UMDs\UmdList.cs">
       <SubType>Form</SubType>
@@ -500,19 +469,13 @@
     <Compile Include="Model\UMDs\Datagram.cs" />
     <Compile Include="Model\UMDs\McCurdy\ColumnCount.cs" />
     <Compile Include="Model\UMDs\McCurdy\TextAlignment.cs" />
-    <Compile Include="Model\UMDs\UmdPort.cs" />
     <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1.cs" />
-    <Compile Include="Model\UMDs\McCurdy\McCurdyPort.cs" />
     <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1Type.cs" />
-    <Compile Include="Model\UMDs\UmdPortDatabase.cs" />
     <Compile Include="Model\UMDs\UmdDatabase.cs" />
     <Compile Include="Model\UMDs\TSL31\TSL31.cs" />
     <Compile Include="Model\UMDs\TSL31\TSL31Type.cs" />
-    <Compile Include="Model\UMDs\TSL31\TSL31Port.cs" />
     <Compile Include="Model\UMDs\UMD.cs" />
     <Compile Include="Model\UMDs\IUMDType.cs" />
-    <Compile Include="Model\UMDs\UmdPortTypeNameConverter.cs" />
-    <Compile Include="Model\UMDs\UmdSerialPort.cs" />
     <Compile Include="Model\UMDs\UmdTypeNameConverter.cs" />
     <Compile Include="Modules\IModule.cs" />
     <Compile Include="Modules\Mixers\MixersModule.cs" />
@@ -632,17 +595,8 @@
     <EmbeddedResource Include="GUI\UMDs\McCurdyUmd1EditorForm.resx">
       <DependentUpon>McCurdyUmd1EditorForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\UMDs\SerialUmdPortEditorForm.resx">
-      <DependentUpon>SerialUmdPortEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\UMDs\UmdPortEditorFormBase.resx">
-      <DependentUpon>UmdPortEditorFormBase.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GUI\UMDs\UmdEditorFormBase.resx">
       <DependentUpon>UmdEditorFormBase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\UMDs\UmdPortList.resx">
-      <DependentUpon>UmdPortList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\UMDs\UmdList.resx">
       <DependentUpon>UmdList.cs</DependentUpon>

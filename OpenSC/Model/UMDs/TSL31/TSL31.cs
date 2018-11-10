@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.Persistence;
+using OpenSC.Model.SerialPorts;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -16,9 +17,12 @@ namespace OpenSC.Model.UMDs.TSL31
         public override IUMDType Type => new TSL31Type();
 
         [PersistAs("port")]
-        private TSL31Port port;
+        private SerialPort port;
 
-        public TSL31Port Port
+        [TempForeignKey(SerialPortDatabase.DBNAME, nameof(port))]
+        private int _portId;
+
+        public SerialPort Port
         {
             get { return port; }
             set { port = value; }
@@ -50,13 +54,19 @@ namespace OpenSC.Model.UMDs.TSL31
         {
             if (port == null)
                 return;
-            var d = new Datagram()
-            {
-                Text = currentText,
-                ValidUntil = DateTime.Now + TimeSpan.FromSeconds(5),
-                Tallies = TallyStates
-            };
-            port.SendData(address, d);
+            DateTime packetValidUntil = DateTime.Now + TimeSpan.FromSeconds(5);
+            port.SendData(getBytesToSend(), packetValidUntil);
+        }
+
+        protected virtual byte[] getBytesToSend()
+        {
+            byte[] bytes = new byte[18];
+            bytes[0] = (byte)Address;
+            bytes[1] = (byte)((TallyStates[0] ? 1 : 0) & (TallyStates[1] ? 1 : 0) * 2);
+            byte[] text = Encoding.ASCII.GetBytes(currentText);
+            for (int i = 0; i < 16; i++)
+                bytes[i + 2] = (i < text.Length) ? text[i] : (byte)' ';
+            return bytes;
         }
 
     }
