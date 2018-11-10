@@ -28,7 +28,19 @@ namespace OpenSC.Model.Signals
         [XmlTagNames("external_signals", "signal")]
         public class ExternalSignalDatabase : DatabaseBase<ExternalSignal>
         {
+
             public static ExternalSignalDatabase Instance { get; } = new ExternalSignalDatabase();
+
+            protected override void afterAdd(ExternalSignal item)
+            {
+                SignalRegister.Instance.RegisterSignal(item);
+            }
+
+            protected override void afterRemove(ExternalSignal item)
+            {
+                SignalRegister.Instance.UnregisterSignal(item);
+            }
+
         }
 
     }
