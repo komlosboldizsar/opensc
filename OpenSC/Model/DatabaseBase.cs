@@ -124,6 +124,11 @@ namespace OpenSC.Model
 
         }
 
+        public void ItemUpdated(T item)
+        {
+            Save();
+        }
+
         public T GetTById(int id)
         {
             if (items.TryGetValue(id, out T value))
