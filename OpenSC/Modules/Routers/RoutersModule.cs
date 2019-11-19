@@ -35,6 +35,7 @@ namespace OpenSC.Modules.Routers
         {
             DynamicTextFunctionRegister.Instance.RegisterFunction(new RouterOutputSource());
             DynamicTextFunctionRegister.Instance.RegisterFunction(new RouterOutputInputName());
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new RouterOutputInputLabel());
         }
 
         public void RegisterDatabasePersisterSerializers()
