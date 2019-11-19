@@ -15,6 +15,7 @@ namespace OpenSC.Model.Routers
 
         public override void Restored()
         {
+            updateLabelLabelsetAssociations();
             notifyLabelsRestored();
         }
 
@@ -99,6 +100,12 @@ namespace OpenSC.Model.Routers
             }
         }
 
+        private void updateLabelLabelsetAssociations()
+        {
+            foreach (Label label in labels)
+                label.Labelset = this;
+        }
+
         private void notifyLabelsRestored()
         {
             foreach (Label label in labels)
@@ -126,8 +133,18 @@ namespace OpenSC.Model.Routers
                 label.Text = text;
                 return;
             }
-            label = new Label(text, routerInput);
+            label = new Label(this, text, routerInput);
             labels.Add(label);
+        }
+
+        public delegate void LabelTextChangedDelegate(Labelset labelset, RouterInput routerInput, string oldText, string newText);
+        public event LabelTextChangedDelegate LabelTextChanged;
+
+        internal void NotifyLabelTextChanged(Label label, string oldText, string newText)
+        {
+            if (label.Labelset != this)
+                return;
+            LabelTextChanged?.Invoke(this, label.RouterInput, oldText, newText);
         }
 
     }

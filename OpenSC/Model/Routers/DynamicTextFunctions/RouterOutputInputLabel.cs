@@ -74,27 +74,19 @@ namespace OpenSC.Model.Routers.DynamicTextFunctions
                 currentInput = output.Crosspoint;
                 output.CrosspointChanged += crosspointChangedHandler;
                 CurrentValue = labelset.GetText(output.Crosspoint);
-                // TODO: Labelset text changes
-                /*if (output.Crosspoint != null)
-                    output.Crosspoint.NameChanged += crosspointNameChangedHandler;*/
+                labelset.LabelTextChanged += labelsetLabelChanged;
 
             }
 
-            // TODO: Labelset text changes
-            /*private void crosspointNameChangedHandler(RouterInput input, string oldName, string newName)
+            private void labelsetLabelChanged(Labelset labelset, RouterInput routerInput, string oldText, string newText)
             {
-                CurrentValue = newName;
-            }*/
-
+                if ((labelset == this.labelset) && (currentInput == routerInput))
+                    CurrentValue = newText;
+            }
             private void crosspointChangedHandler(RouterOutput output, RouterInput newInput)
             {
-                // TODO: Labelset text changes
-                /*if (currentInput != null)
-                    currentInput.NameChanged -= crosspointNameChangedHandler;
                 currentInput = newInput;
-                if (currentInput != null)
-                    currentInput.NameChanged += crosspointNameChangedHandler;
-                CurrentValue = output.InputName;*/
+                CurrentValue = labelset.GetText(output.Crosspoint);
             }
 
         }

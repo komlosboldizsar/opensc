@@ -12,14 +12,17 @@ namespace OpenSC.Model.Routers
         public Label()
         { }
 
-        public Label(string text, RouterInput routerInput)
+        public Label(Labelset labelset, string text, RouterInput routerInput)
         {
+            this.Labelset = labelset;
             this.text = text;
             this.RouterInput = routerInput;
         }
 
         public void Restored()
         { }
+
+        public Labelset Labelset { get; internal set; }
 
         private string text;
 
