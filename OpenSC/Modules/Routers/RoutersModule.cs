@@ -41,6 +41,7 @@ namespace OpenSC.Modules.Routers
         {
             DatabasePersister<Router>.RegisterSerializer(new RouterInputXmlSerializer());
             DatabasePersister<Router>.RegisterSerializer(new RouterOutputXmlSerializer());
+            DatabasePersister<Labelset>.RegisterSerializer(new LabelXmlSerializer());
         }
 
         public void RegisterModelTypes()
@@ -53,6 +54,7 @@ namespace OpenSC.Modules.Routers
         public void RegisterDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(RouterDatabase));
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(LabelsetDatabase));
         }
 
         public void RegisterWindowTypes()
