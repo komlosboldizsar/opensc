@@ -1,7 +1,9 @@
 ﻿using OpenSC.GUI.GeneralComponents.Tables;
+using OpenSC.Model.General;
 using OpenSC.Model.Routers;
 using OpenSC.Model.Signals;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -19,6 +21,8 @@ namespace OpenSC.GUI.Routers
         private const string HEADER_TEXT_EDIT = "Edit labelset";
 
         protected Labelset labelset;
+
+        protected LabelsetProxy labelsetProxy;
 
         private bool addingNew = false;
 
@@ -49,9 +53,10 @@ namespace OpenSC.GUI.Routers
         {
             if (labelset == null)
                 return;
+            labelsetProxy = new LabelsetProxy(labelset);
             idNumericField.Value = (addingNew ? LabelsetDatabase.Instance.NextValidId() : labelset.ID);
             nameTextBox.Text = labelset.Name;
-            //initInputsTable();
+            initLabelsTable();
         }
 
         protected sealed override bool saveData()
@@ -95,16 +100,16 @@ namespace OpenSC.GUI.Routers
             labelset.Name = nameTextBox.Text;
         }
 
-        private CustomDataGridView<Model.Routers.Label> labelsTableCDGV;
+        private CustomDataGridView<LabelProxy> labelsTableCDGV;
 
-        private void initInputsTable()
+        private void initLabelsTable()
         {
 
-            labelsTableCDGV = createTable<Model.Routers.Label>(labelsTableContainerPanel, ref this.labelsTable);
-            CustomDataGridViewColumnDescriptorBuilder<Model.Routers.Label> builder;
+            labelsTableCDGV = createTable<LabelProxy>(labelsTableContainerPanel, ref this.labelsTable);
+            CustomDataGridViewColumnDescriptorBuilder<LabelProxy> builder;
 
             // Column: router name
-            builder = getColumnDescriptorBuilderForTable<Model.Routers.Label>(labelsTableCDGV);
+            builder = getColumnDescriptorBuilderForTable<LabelProxy>(labelsTableCDGV);
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Router");
             builder.Width(100);
@@ -113,7 +118,7 @@ namespace OpenSC.GUI.Routers
             builder.BuildAndAdd();
 
             // Column: router input index
-            builder = getColumnDescriptorBuilderForTable<Model.Routers.Label>(labelsTableCDGV);
+            builder = getColumnDescriptorBuilderForTable<LabelProxy>(labelsTableCDGV);
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Input");
             builder.Width(50);
@@ -122,12 +127,12 @@ namespace OpenSC.GUI.Routers
             builder.BuildAndAdd();
 
             // Column: text
-            builder = getColumnDescriptorBuilderForTable<Model.Routers.Label>(labelsTableCDGV);
+            builder = getColumnDescriptorBuilderForTable<LabelProxy>(labelsTableCDGV);
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Input");
             builder.Width(100);
             builder.UpdaterMethod((label, cell) => { cell.Value = label.Text; });
-            builder.AddChangeEvent(nameof(Model.Routers.Label.Text));
+            builder.AddChangeEvent(nameof(LabelProxy.Text));
             builder.TextEditable(true);
             builder.CellEndEditHandlerMethod((label, cell, eventargs) =>
             {
@@ -144,7 +149,7 @@ namespace OpenSC.GUI.Routers
             builder.BuildAndAdd();
 
             // Bind collection
-            labelsTableCDGV.BoundCollection = labelset.Labels;
+            labelsTableCDGV.BoundCollection = labelsetProxy;
 
         }
 
@@ -163,6 +168,52 @@ namespace OpenSC.GUI.Routers
             where T : class
         {
              return new CustomDataGridViewColumnDescriptorBuilder<T>(table);
+        }
+
+        protected class LabelProxy : Model.General.INotifyPropertyChanged
+        {
+
+            private Labelset labelset;
+
+            public RouterInput RouterInput { get; private set; }
+            
+            public LabelProxy(Labelset labelset, RouterInput routerInput)
+            {
+                this.labelset = labelset;
+                this.RouterInput = routerInput;
+            }
+            public string Text
+            {
+                get { return labelset.GetText(RouterInput); }
+                set { labelset.SetText(RouterInput, value); }
+            }
+
+            public void TextChanged() => PropertyChanged?.Invoke(nameof(LabelProxy.Text));
+
+            public event PropertyChangedDelegate PropertyChanged;
+
+        }
+
+        protected class LabelsetProxy : ObservableList<LabelProxy>
+        {
+
+            public Labelset Labelset { get; private set; }
+            public LabelsetProxy(Labelset labelset)
+            {
+                this.Labelset = labelset;
+                this.Labelset.LabelTextChanged += labelTextChanged;
+                foreach (Router router in RouterDatabase.Instance)
+                    foreach (RouterInput routerInput in router.Inputs)
+                        Add(new LabelProxy(Labelset, routerInput));
+            }
+
+            private void labelTextChanged(Labelset labelset, RouterInput routerInput, string oldText, string newText)
+            {
+                foreach (LabelProxy labelProxy in this)
+                    if (labelProxy.RouterInput == routerInput)
+                        labelProxy.TextChanged();
+            }
+
         }
 
     }
