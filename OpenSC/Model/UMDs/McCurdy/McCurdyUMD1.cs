@@ -73,7 +73,8 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         protected virtual string getTextToSend()
         {
-            return currentText.Replace('1', (char)0x7E);
+            string replaced = currentText.Replace('1', (char)0x7E);
+            return string.Format("%{0}D{1}%Z", address, replaced); // TODO: %-s
         }
 
         private void updateCurrentText()

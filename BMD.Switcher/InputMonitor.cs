@@ -31,7 +31,7 @@ namespace BMD.Switcher
                     InvokeHelper.Invoke(() =>
                     {
                         Input.IsPreviewTallied(out int isPreviewTallied);
-                        IsProgramTallied = (isPreviewTallied != 0);
+                        IsPreviewTallied = (isPreviewTallied != 0);
                     });
                     break;
             }
