@@ -61,6 +61,7 @@ namespace OpenSC.Modules.Routers
         {
             WindowTypeRegister.RegisterWindowType(typeof(RouterList));
             WindowTypeRegister.RegisterWindowType(typeof(RouterControlForm));
+            WindowTypeRegister.RegisterWindowType(typeof(LabelsetList));
         }
 
         public void RegisterMenus()
@@ -70,6 +71,9 @@ namespace OpenSC.Modules.Routers
 
             var routersListMenu = routersMenu["Routers list"];
             routersListMenu.ClickHandler = (menu, tag) => new RouterList().ShowAsChild();
+
+            var labelsetsListMenu = routersMenu["Labelsets list"];
+            labelsetsListMenu.ClickHandler = (menu, tag) => new LabelsetList().ShowAsChild();
 
             routersMenu.AddSeparator("sep1");
 
