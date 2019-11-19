@@ -105,6 +105,30 @@ namespace OpenSC.Model.Routers
                 label.Restored();
         }
 
+        private Label getLabel(RouterInput routerInput)
+        {
+            foreach (Label label in labels)
+                if (label.RouterInput == routerInput)
+                    return label;
+            return null;
+        }
+
+        public string GetText(RouterInput routerInput)
+        {
+            return getLabel(routerInput)?.Text;
+        }
+
+        public void SetText(RouterInput routerInput, string text)
+        {
+            Label label = getLabel(routerInput);
+            if (label == null)
+            {
+                label.Text = text;
+                return;
+            }
+            label = new Label(text, routerInput);
+            labels.Add(label);
+        }
 
     }
 
