@@ -29,6 +29,7 @@ namespace OpenSC.Model.Routers
 
         }
 
+        #region Property: ID
         public delegate void IdChangedDelegate(Labelset labelset, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
 
@@ -54,7 +55,9 @@ namespace OpenSC.Model.Routers
             if (!LabelsetDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
+        #endregion
 
+        #region Property: Name
         public delegate void NameChangedDelegate(Labelset labelset, string oldName, string newName);
         public event NameChangedDelegate NameChanged;
 
@@ -79,7 +82,9 @@ namespace OpenSC.Model.Routers
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
         }
+        #endregion
 
+        #region Label collection
         private ObservableList<Label> labels = new ObservableList<Label>();
 
         public ObservableList<Label> Labels
@@ -118,7 +123,9 @@ namespace OpenSC.Model.Routers
                     return label;
             return null;
         }
+        #endregion
 
+        #region Label text getters, setters and events
         public string GetText(RouterInput routerInput)
         {
             return getLabel(routerInput)?.Text;
@@ -145,6 +152,7 @@ namespace OpenSC.Model.Routers
                 return;
             LabelTextChanged?.Invoke(this, label.RouterInput, oldText, newText);
         }
+        #endregion
 
         protected override void afterUpdate()
         {

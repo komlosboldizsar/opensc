@@ -26,6 +26,7 @@ namespace OpenSC.Model.Routers
 
         public Labelset Labelset { get; internal set; }
 
+        #region Property: Text
         private string text;
 
         public string Text
@@ -46,6 +47,7 @@ namespace OpenSC.Model.Routers
 
         public delegate void TextChangedDelegate(Label input, string oldText, string newText);
         public event TextChangedDelegate TextChanged;
+        #endregion
 
         #region Router input association
         public RouterInput RouterInput { get; internal set; }
