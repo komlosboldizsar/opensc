@@ -129,7 +129,7 @@ namespace OpenSC.GUI.Routers
             // Column: text
             builder = getColumnDescriptorBuilderForTable<LabelProxy>(labelsTableCDGV);
             builder.Type(DataGridViewColumnType.TextBox);
-            builder.Header("Input");
+            builder.Header("Text");
             builder.Width(100);
             builder.UpdaterMethod((label, cell) => { cell.Value = label.Text; });
             builder.AddChangeEvent(nameof(LabelProxy.Text));

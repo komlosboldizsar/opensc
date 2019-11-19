@@ -99,7 +99,6 @@ namespace OpenSC.Model.Routers
                     labels.AddRange(value);
             }
         }
-
         private void updateLabelLabelsetAssociations()
         {
             foreach (Label label in labels)
@@ -128,7 +127,7 @@ namespace OpenSC.Model.Routers
         public void SetText(RouterInput routerInput, string text)
         {
             Label label = getLabel(routerInput);
-            if (label == null)
+            if (label != null)
             {
                 label.Text = text;
                 return;
