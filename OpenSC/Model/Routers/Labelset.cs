@@ -146,6 +146,12 @@ namespace OpenSC.Model.Routers
             LabelTextChanged?.Invoke(this, label.RouterInput, oldText, newText);
         }
 
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            LabelsetDatabase.Instance.ItemUpdated(this);
+        }
+
     }
 
 }
