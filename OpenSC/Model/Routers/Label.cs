@@ -20,7 +20,9 @@ namespace OpenSC.Model.Routers
         }
 
         public void Restored()
-        { }
+        {
+            restoreRouterInputAssociation();
+        }
 
         public Labelset Labelset { get; internal set; }
 
@@ -45,16 +47,18 @@ namespace OpenSC.Model.Routers
         public delegate void TextChangedDelegate(Label input, string oldText, string newText);
         public event TextChangedDelegate TextChanged;
 
+        #region Router input association
         public RouterInput RouterInput { get; internal set; }
 
         // "Temp foreign key"
         public int _routerId;
         public int _routerInputIndex;
 
-        public void RestoreRouterInput()
+        public void restoreRouterInputAssociation()
         {
             RouterInput = RouterDatabase.Instance.GetTById(_routerId).Inputs[_routerInputIndex];
         }
+        #endregion
 
         #region Implementation of INotifyPropertyChanged
         public event PropertyChangedDelegate PropertyChanged;
