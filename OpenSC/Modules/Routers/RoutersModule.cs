@@ -62,6 +62,7 @@ namespace OpenSC.Modules.Routers
         {
             WindowTypeRegister.RegisterWindowType(typeof(RouterList));
             WindowTypeRegister.RegisterWindowType(typeof(RouterControlForm));
+            WindowTypeRegister.RegisterWindowType(typeof(RouterControlTableForm));
             WindowTypeRegister.RegisterWindowType(typeof(LabelsetList));
         }
 
@@ -78,7 +79,7 @@ namespace OpenSC.Modules.Routers
 
             routersMenu.AddSeparator("sep1");
 
-            MenuItem.MenuClickHandler routerCrosspointsSubMenuClickHandler = (menu, tag) => new RouterControlForm((Router)tag).ShowAsChild();
+            MenuItem.MenuClickHandler routerCrosspointsSubMenuClickHandler = (menu, tag) => new RouterControlTableForm((Router)tag).ShowAsChild();
             foreach (Router router in RouterDatabase.Instance.ItemsAsList)
             {
                 string menuId = string.Format("router-{0}", router.ID);

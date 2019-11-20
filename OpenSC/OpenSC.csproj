@@ -141,6 +141,12 @@
     <Compile Include="GUI\Routers\LeitchRouterEditorForm.Designer.cs">
       <DependentUpon>LeitchRouterEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Routers\RouterControlTableForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\RouterControlTableForm.Designer.cs">
+      <DependentUpon>RouterControlTableForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Routers\RouterControlForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -553,6 +559,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\LeitchRouterEditorForm.resx">
       <DependentUpon>LeitchRouterEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\RouterControlTableForm.resx">
+      <DependentUpon>RouterControlTableForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\RouterControlForm.resx">
       <DependentUpon>RouterControlForm.cs</DependentUpon>
