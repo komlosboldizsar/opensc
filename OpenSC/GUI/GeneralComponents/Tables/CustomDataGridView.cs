@@ -63,12 +63,16 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private void cellEndEditHandler(object sender, DataGridViewCellEventArgs e)
         {
+            if ((e.RowIndex < 0) || (e.RowIndex >= Rows.Count))
+                return;
             CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
             row?.HandleEndEdit(e);
         }
 
         private void cellContentClickHandler(object sender, DataGridViewCellEventArgs e)
         {
+            if ((e.RowIndex < 0) || (e.RowIndex >= Rows.Count))
+                return;
             CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
             row?.HandleContentClick(e);
         }
