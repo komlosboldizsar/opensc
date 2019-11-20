@@ -99,6 +99,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             column.DividerWidth = columnDescriptor.DividerWidth;
             if(columnDescriptor.CellStyle != null)
                 column.DefaultCellStyle = columnDescriptor.CellStyle;
+            column.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
             Columns.Add(column);
         }
 
@@ -187,12 +188,10 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 Rectangle rect = GetColumnDisplayRectangle(e.ColumnIndex, true);
                 Size titleSize = TextRenderer.MeasureText(e.Value.ToString(), e.CellStyle.Font);
                 if (ColumnHeadersHeight < titleSize.Width)
-                {
-                    ColumnHeadersHeight = titleSize.Width;
-                }
+                    ColumnHeadersHeight = titleSize.Width + 15;
                 e.Graphics.TranslateTransform(0, titleSize.Width);
                 e.Graphics.RotateTransform(-90.0F);
-                e.Graphics.DrawString(e.Value.ToString(), this.Font, Brushes.Black, new PointF(rect.Y - (ColumnHeadersHeight - titleSize.Width), rect.X));
+                e.Graphics.DrawString(e.Value.ToString(), this.Font, Brushes.Black, new PointF(rect.Y - (ColumnHeadersHeight - titleSize.Width), rect.X + rect.Width/2 - titleSize.Height/2));
                 e.Graphics.RotateTransform(90.0F);
                 e.Graphics.TranslateTransform(0, -titleSize.Width);
                 e.Handled = true;
