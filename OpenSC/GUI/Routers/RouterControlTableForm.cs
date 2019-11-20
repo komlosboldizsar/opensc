@@ -77,7 +77,7 @@ namespace OpenSC.GUI.Routers
         private static readonly Color BACKCOLOR_CROSSPOINT_ACTIVE = Color.LightPink;
         private static readonly Color ICONCOLOR_CROSSPOINT_ACTIVE = Color.Red;
 
-        private static readonly Color BACKCOLOR_CROSSPOINT_SELECTED = Color.LightCyan;
+        private static readonly Color BACKCOLOR_CROSSPOINT_SELECTED = Color.LightBlue;
         private static readonly Color ICONCOLOR_CROSSPOINT_SELECTED = Color.Blue;
 
         private static readonly Color BACKCOLOR_CROSSPOINT_EMPTY = Color.White;
@@ -135,6 +135,12 @@ namespace OpenSC.GUI.Routers
                 builder.IconColor(Color.Red);
                 builder.IconType(DataGridViewSmallIconCell.IconTypes.Circle);
                 builder.IconShown(false);
+                builder.CellDoubleClickHandlerMethod((routerOutputProxy, cell, e) => {
+                    if (autotake)
+                        routerOutputProxy.ActiveCrosspoint = routerInput;
+                    else
+                        routerOutputProxy.SelectedCrosspoint = routerInput;
+                });
                 builder.UpdaterMethod((routerOutputProxy, cell) => {
                     DataGridViewSmallIconCell typedCell = ((DataGridViewSmallIconCell)cell);
                     if (routerOutputProxy.ActiveCrosspoint == routerInput)
@@ -198,7 +204,11 @@ namespace OpenSC.GUI.Routers
             #endregion
 
             #region Active crosspoint
-            public RouterInput ActiveCrosspoint => routerOutput.Crosspoint;
+            public RouterInput ActiveCrosspoint
+            {
+                get => routerOutput.Crosspoint;
+                set { routerOutput.Crosspoint = value; }
+            }
 
             private void RouterOutput_CrosspointChanged(RouterOutput output, RouterInput newInput)
             {
