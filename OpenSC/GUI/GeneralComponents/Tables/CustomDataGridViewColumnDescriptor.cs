@@ -34,6 +34,9 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public delegate void CellContentClickHandlerMethodDelegate(T item, DataGridViewCell cell, DataGridViewCellEventArgs eventArgs);
         public CellContentClickHandlerMethodDelegate ContentClickHandlerMethod { get; private set; }
 
+        public delegate void CellDoubleClickHandlerMethodDelegate(T item, DataGridViewCell cell, DataGridViewCellEventArgs eventArgs);
+        public CellDoubleClickHandlerMethodDelegate DoubleClickHandlerMethod { get; private set; }
+
         public delegate void CellEndEditHandlerMethodDelegate(T item, DataGridViewCell cell, DataGridViewCellEventArgs eventArgs);
         public CellEndEditHandlerMethodDelegate EndEditHandlerMethod { get; private set; }
 
@@ -69,6 +72,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 CellUpdaterMethodDelegate updaterMethod,
                 CellDropDownPopulatorMethodDelegate dropDownPopulatorMethod,
                 CellContentClickHandlerMethodDelegate contentClickHandlerMethod,
+                CellDoubleClickHandlerMethodDelegate doubleClickHandlerMethod,
                 CellEndEditHandlerMethodDelegate endEditHandlerMethod,
                 string[] changeEvents,
                 ExternalUpdateEventSubscriberMethodDelegate externalUpdateEventSubscriberMethod,
@@ -90,6 +94,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             UpdaterMethod = updaterMethod;
             DropDownPopulatorMethod = dropDownPopulatorMethod;
             ContentClickHandlerMethod = contentClickHandlerMethod;
+            DoubleClickHandlerMethod = doubleClickHandlerMethod;
             EndEditHandlerMethod = endEditHandlerMethod;
             ChangeEvents = changeEvents;
             ExternalUpdateEventSubscriberMethod = externalUpdateEventSubscriberMethod;

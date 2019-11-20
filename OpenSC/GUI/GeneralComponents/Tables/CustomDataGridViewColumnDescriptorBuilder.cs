@@ -32,6 +32,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private CustomDataGridViewColumnDescriptor<T>.CellContentClickHandlerMethodDelegate contentClickHandlerMethod;
 
+        private CustomDataGridViewColumnDescriptor<T>.CellDoubleClickHandlerMethodDelegate doubleClickHandlerMethod;
+
         private CustomDataGridViewColumnDescriptor<T>.CellEndEditHandlerMethodDelegate endEditHandlerMethod;
 
         private List<string> changeEvents = new List<string>();
@@ -79,6 +81,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 updaterMethod,
                 dropDownPopulatorMethod,
                 contentClickHandlerMethod,
+                doubleClickHandlerMethod,
                 endEditHandlerMethod,
                 changeEvents.ToArray(),
                 externalUpdateEventSubscriberMethod,
@@ -156,6 +159,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public CustomDataGridViewColumnDescriptorBuilder<T> CellContentClickHandlerMethod(CustomDataGridViewColumnDescriptor<T>.CellContentClickHandlerMethodDelegate contentClickHandlerMethod)
         {
             this.contentClickHandlerMethod = contentClickHandlerMethod;
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> CellDoubleClickHandlerMethod(CustomDataGridViewColumnDescriptor<T>.CellDoubleClickHandlerMethodDelegate contentDoubleClickHandlerMethod)
+        {
+            this.doubleClickHandlerMethod = contentDoubleClickHandlerMethod;
             return this;
         }
 

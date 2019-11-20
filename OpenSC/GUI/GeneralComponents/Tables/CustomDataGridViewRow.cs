@@ -158,6 +158,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             getColumnDescriptor(ci).ContentClickHandlerMethod?.Invoke(item, Cells[ci], eventArgs);
         }
 
+        public void HandleDoubleClick(DataGridViewCellEventArgs eventArgs)
+        {
+            int ci = eventArgs.ColumnIndex;
+            getColumnDescriptor(ci).DoubleClickHandlerMethod?.Invoke(item, Cells[ci], eventArgs);
+        }
+
         public void HandleEndEdit(DataGridViewCellEventArgs eventArgs)
         {
             int ci = eventArgs.ColumnIndex;
