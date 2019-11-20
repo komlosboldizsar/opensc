@@ -146,6 +146,18 @@
     <Compile Include="GUI\Routers\RouterControlForm.Designer.cs">
       <DependentUpon>RouterControlForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Routers\LabelsetList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\LabelsetList.Designer.cs">
+      <DependentUpon>LabelsetList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Routers\LabelsetEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\LabelsetEditorForm.Designer.cs">
+      <DependentUpon>LabelsetEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Routers\RouterOutputControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -411,8 +423,13 @@
     <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
     <Compile Include="Model\Persistence\XmlTagNamesAttribute.cs" />
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohub.cs" />
+    <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputLabel.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputName.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputSource.cs" />
+    <Compile Include="Model\Routers\Label.cs" />
+    <Compile Include="Model\Routers\Labelset.cs" />
+    <Compile Include="Model\Routers\LabelsetDatabase.cs" />
+    <Compile Include="Model\Routers\LabelXmlSerializer.cs" />
     <Compile Include="Model\Routers\Leitch\LeitchRouter.cs" />
     <Compile Include="Model\Routers\Router.cs" />
     <Compile Include="Model\Routers\RouterDatabase.cs" />
@@ -537,6 +554,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\RouterControlForm.resx">
       <DependentUpon>RouterControlForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\LabelsetList.resx">
+      <DependentUpon>LabelsetList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\LabelsetEditorForm.resx">
+      <DependentUpon>LabelsetEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\RouterOutputControl.resx">
       <DependentUpon>RouterOutputControl.cs</DependentUpon>

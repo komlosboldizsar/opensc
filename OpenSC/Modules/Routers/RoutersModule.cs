@@ -35,12 +35,14 @@ namespace OpenSC.Modules.Routers
         {
             DynamicTextFunctionRegister.Instance.RegisterFunction(new RouterOutputSource());
             DynamicTextFunctionRegister.Instance.RegisterFunction(new RouterOutputInputName());
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new RouterOutputInputLabel());
         }
 
         public void RegisterDatabasePersisterSerializers()
         {
             DatabasePersister<Router>.RegisterSerializer(new RouterInputXmlSerializer());
             DatabasePersister<Router>.RegisterSerializer(new RouterOutputXmlSerializer());
+            DatabasePersister<Labelset>.RegisterSerializer(new LabelXmlSerializer());
         }
 
         public void RegisterModelTypes()
@@ -53,12 +55,14 @@ namespace OpenSC.Modules.Routers
         public void RegisterDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(RouterDatabase));
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(LabelsetDatabase));
         }
 
         public void RegisterWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType(typeof(RouterList));
             WindowTypeRegister.RegisterWindowType(typeof(RouterControlForm));
+            WindowTypeRegister.RegisterWindowType(typeof(LabelsetList));
         }
 
         public void RegisterMenus()
@@ -68,6 +72,9 @@ namespace OpenSC.Modules.Routers
 
             var routersListMenu = routersMenu["Routers list"];
             routersListMenu.ClickHandler = (menu, tag) => new RouterList().ShowAsChild();
+
+            var labelsetsListMenu = routersMenu["Labelsets list"];
+            labelsetsListMenu.ClickHandler = (menu, tag) => new LabelsetList().ShowAsChild();
 
             routersMenu.AddSeparator("sep1");
 
