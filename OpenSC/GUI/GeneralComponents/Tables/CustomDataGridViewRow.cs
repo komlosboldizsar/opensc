@@ -57,8 +57,6 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         {
 
             DataGridViewCell cell = getCellByType(columnDescriptor.Type);
-            columnDescriptor.InitializerMethod?.Invoke(item, cell);
-            columnDescriptor.UpdaterMethod?.Invoke(item, cell);
 
             if (columnDescriptor.Type == DataGridViewColumnType.CheckBox)
             {
@@ -115,7 +113,10 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             {
                 cell.ReadOnly = true;
             }
-            
+
+            columnDescriptor.InitializerMethod?.Invoke(item, cell);
+            columnDescriptor.UpdaterMethod?.Invoke(item, cell);
+
             return cell;
 
         }
