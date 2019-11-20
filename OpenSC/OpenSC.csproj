@@ -141,6 +141,12 @@
     <Compile Include="GUI\Routers\LeitchRouterEditorForm.Designer.cs">
       <DependentUpon>LeitchRouterEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Routers\RouterControlTableForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\RouterControlTableForm.Designer.cs">
+      <DependentUpon>RouterControlTableForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Routers\RouterControlForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -398,6 +404,7 @@
     <Compile Include="Model\General\INotifyPropertyChanged.cs" />
     <Compile Include="Model\General\IObservableList.cs" />
     <Compile Include="Model\General\IObservableListTyped.cs" />
+    <Compile Include="Model\General\ObservableProxyList.cs" />
     <Compile Include="Model\General\ObservableList.cs" />
     <Compile Include="Model\IDatabaseBase.cs" />
     <Compile Include="Model\IModel.cs" />
@@ -552,6 +559,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\LeitchRouterEditorForm.resx">
       <DependentUpon>LeitchRouterEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\RouterControlTableForm.resx">
+      <DependentUpon>RouterControlTableForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\RouterControlForm.resx">
       <DependentUpon>RouterControlForm.cs</DependentUpon>
