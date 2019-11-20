@@ -267,7 +267,9 @@ namespace OpenSC.GUI.Routers
         }
         #endregion
 
-        private bool autotake;
+        #region Take
+
+        private bool autotake = false;
 
         private bool Autotake
         {
@@ -275,7 +277,23 @@ namespace OpenSC.GUI.Routers
             set
             {
                 autotake = value;
+                autotakeButton.ForeColor = autotake ? AUTOTAKE_ACTIVE_FOREGROUND : AUTOTAKE_INCTIVE_FOREGROUND;
+                autotakeButton.BackColor = autotake ? AUTOTAKE_ACTIVE_BACKGROUND : AUTOTAKE_INCTIVE_BACKGROUND;
+                autotakeButton.FlatAppearance.BorderColor = autotake ? AUTOTAKE_ACTIVE_BORDER : AUTOTAKE_INCTIVE_BORDER;
             }
+        }
+
+        private static Color AUTOTAKE_ACTIVE_FOREGROUND = Color.FromArgb(255, 224, 192);
+        private static Color AUTOTAKE_ACTIVE_BACKGROUND = Color.FromArgb(192, 164, 0);
+        private static Color AUTOTAKE_ACTIVE_BORDER = Color.FromArgb(192, 164, 0);
+
+        private static Color AUTOTAKE_INCTIVE_FOREGROUND = Color.FromArgb(192, 164, 0);
+        private static Color AUTOTAKE_INCTIVE_BACKGROUND = Color.FromArgb(255, 224, 192);
+        private static Color AUTOTAKE_INCTIVE_BORDER = Color.FromArgb(192, 164, 0);
+
+        private void autotakeButton_Click(object sender, EventArgs e)
+        {
+            Autotake = !Autotake;
         }
 
         private void takeButton_Click(object sender, EventArgs e)
@@ -285,8 +303,16 @@ namespace OpenSC.GUI.Routers
 
         private void take()
         {
-            // Do something
+            foreach (RouterOutputProxy routerOutputProxy in routerOutputProxies)
+            {
+                if (routerOutputProxy.SelectedCrosspoint != null)
+                {
+                    routerOutputProxy.ActiveCrosspoint = routerOutputProxy.SelectedCrosspoint;
+                    routerOutputProxy.SelectedCrosspoint = null;
+                }
+            }
         }
+        #endregion
 
     }
 
