@@ -13,7 +13,7 @@ namespace OpenSC.Model.General
 
         protected ObservableList<TOriginal> originalList;
 
-        protected List<TProxy> proxyList;
+        protected List<TProxy> proxyList = new List<TProxy>();
 
         public delegate TProxy OriginalToProxyConverterMethodDelegate(TOriginal original);
         protected OriginalToProxyConverterMethodDelegate converterMethod;
@@ -44,6 +44,7 @@ namespace OpenSC.Model.General
 
         private void rebuildProxies()
         {
+            proxyList.Clear();
             foreach (TOriginal original in originalList)
                 proxyList.Add(converterMethod(original));
             ItemsChanged?.Invoke();
