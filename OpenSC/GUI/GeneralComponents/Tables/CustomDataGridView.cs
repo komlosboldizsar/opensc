@@ -1,6 +1,7 @@
 ﻿using OpenSC.Model;
 using OpenSC.Model.General;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace OpenSC.GUI.GeneralComponents.Tables
@@ -57,16 +58,21 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             AllowUserToAddRows = false;
             AllowUserToDeleteRows = false;
             AllowUserToOrderColumns = false;
+            saveHeaderProperties();
         }
 
         private void cellEndEditHandler(object sender, DataGridViewCellEventArgs e)
         {
+            if ((e.RowIndex < 0) || (e.RowIndex >= Rows.Count))
+                return;
             CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
             row?.HandleEndEdit(e);
         }
 
         private void cellContentClickHandler(object sender, DataGridViewCellEventArgs e)
         {
+            if ((e.RowIndex < 0) || (e.RowIndex >= Rows.Count))
+                return;
             CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
             row?.HandleContentClick(e);
         }
@@ -97,6 +103,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             column.DividerWidth = columnDescriptor.DividerWidth;
             if(columnDescriptor.CellStyle != null)
                 column.DefaultCellStyle = columnDescriptor.CellStyle;
+            column.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
             Columns.Add(column);
         }
 
@@ -127,6 +134,72 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                     return new DataGridViewButtonColumn();
             }
             return null;
+        }
+
+        private bool verticalHeader = false;
+
+        public bool VerticalHeader
+        {
+            get => verticalHeader;
+            set
+            {
+                verticalHeader = value;
+                if (value)
+                {
+                    setHeaderPropertiesToVertical();
+                    CellPainting += cellPaintHandlerOnVerticalHeader;
+                }
+                else
+                {
+                    restoreHeaderProperties();
+                    CellPainting -= cellPaintHandlerOnVerticalHeader;
+                }
+                Invalidate();
+            }
+        }
+
+        DataGridViewColumnHeadersHeightSizeMode _columnHeadersHeightSizeMode;
+        int _columnHeadersHeight;
+        DataGridViewAutoSizeColumnsMode _autoSizeColumnsMode;
+
+        private void saveHeaderProperties()
+        {
+            _columnHeadersHeightSizeMode = ColumnHeadersHeightSizeMode;
+            _columnHeadersHeight = ColumnHeadersHeight;
+            _autoSizeColumnsMode = AutoSizeColumnsMode;
+        }
+
+        private void restoreHeaderProperties()
+        {
+            ColumnHeadersHeightSizeMode = _columnHeadersHeightSizeMode;
+            ColumnHeadersHeight = _columnHeadersHeight;
+            AutoSizeColumnsMode = _autoSizeColumnsMode;
+        }
+
+        private void setHeaderPropertiesToVertical()
+        {
+            ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+            ColumnHeadersHeight = 50;
+            AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
+        }
+
+        // @source https://stackoverflow.com/a/5783099
+        void cellPaintHandlerOnVerticalHeader(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.RowIndex == -1 && e.ColumnIndex >= 0)
+            {
+                e.PaintBackground(e.ClipBounds, true);
+                Rectangle rect = GetColumnDisplayRectangle(e.ColumnIndex, true);
+                Size titleSize = TextRenderer.MeasureText(e.Value.ToString(), e.CellStyle.Font);
+                if (ColumnHeadersHeight < titleSize.Width)
+                    ColumnHeadersHeight = titleSize.Width + 15;
+                e.Graphics.TranslateTransform(0, titleSize.Width);
+                e.Graphics.RotateTransform(-90.0F);
+                e.Graphics.DrawString(e.Value.ToString(), this.Font, Brushes.Black, new PointF(rect.Y - (ColumnHeadersHeight - titleSize.Width), rect.X + rect.Width/2 - titleSize.Height/2));
+                e.Graphics.RotateTransform(90.0F);
+                e.Graphics.TranslateTransform(0, -titleSize.Width);
+                e.Handled = true;
+            }
         }
 
     }
