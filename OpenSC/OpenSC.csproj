@@ -398,6 +398,7 @@
     <Compile Include="Model\General\INotifyPropertyChanged.cs" />
     <Compile Include="Model\General\IObservableList.cs" />
     <Compile Include="Model\General\IObservableListTyped.cs" />
+    <Compile Include="Model\General\ObservableProxyList.cs" />
     <Compile Include="Model\General\ObservableList.cs" />
     <Compile Include="Model\IDatabaseBase.cs" />
     <Compile Include="Model\IModel.cs" />
