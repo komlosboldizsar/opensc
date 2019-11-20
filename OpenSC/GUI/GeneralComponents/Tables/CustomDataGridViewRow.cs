@@ -81,6 +81,15 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 typedCell.ImagePadding = columnDescriptor.ButtonImagePadding;
             }
 
+            if (columnDescriptor.Type == DataGridViewColumnType.SmallIcon)
+            {
+                DataGridViewSmallIconCell typedCell = (DataGridViewSmallIconCell)cell;
+                typedCell.IconShown = columnDescriptor.IconShown;
+                typedCell.IconColor = columnDescriptor.IconColor;
+                typedCell.IconType = columnDescriptor.IconType;
+                typedCell.IconPadding = columnDescriptor.IconPadding;
+            }
+
             if (columnDescriptor.Type == DataGridViewColumnType.Button)
             {
                 cell.Value = columnDescriptor.ButtonText;
@@ -102,6 +111,11 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 cell.ReadOnly = !columnDescriptor.TextEditable;
             }
 
+            if (columnDescriptor.Type == DataGridViewColumnType.SmallIcon)
+            {
+                cell.ReadOnly = true;
+            }
+            
             return cell;
 
         }
@@ -131,6 +145,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                     return new DataGridViewDisableButtonCell();
                 case DataGridViewColumnType.ImageButton:
                     return new DataGridViewImageButtonCell();
+                case DataGridViewColumnType.SmallIcon:
+                    return new DataGridViewSmallIconCell();
             }
             return null;
         }

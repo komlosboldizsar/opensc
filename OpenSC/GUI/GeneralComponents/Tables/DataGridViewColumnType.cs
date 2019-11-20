@@ -15,6 +15,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         ComboBox,
         Link,
         DisableButton,
-        ImageButton
+        ImageButton,
+        SmallIcon
     }
 }

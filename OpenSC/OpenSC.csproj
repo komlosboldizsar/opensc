@@ -80,6 +80,7 @@
     <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapter.cs" />
     <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapterFactory.cs" />
     <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridViewComboBoxItem.cs" />
+    <Compile Include="GUI\GeneralComponents\Tables\DataGridViewSmallIconCell.cs" />
     <Compile Include="GUI\Mixers\BmdMixerEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>

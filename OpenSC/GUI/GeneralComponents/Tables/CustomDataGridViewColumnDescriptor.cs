@@ -51,6 +51,14 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         public Padding ButtonImagePadding { get; set; }
 
+        public bool IconShown { get; set; }
+
+        public Color IconColor { get; set; }
+
+        public DataGridViewSmallIconCell.IconTypes IconType { get; set; }
+
+        public Padding IconPadding { get; set; }
+
         public CustomDataGridViewColumnDescriptor(
                 DataGridViewColumnType type,
                 string header,
@@ -67,7 +75,11 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 bool textEditable,
                 string buttonText,
                 Image buttonImage,
-                Padding buttonImagePadding)
+                Padding buttonImagePadding,
+                bool iconShown,
+                Color iconColor,
+                DataGridViewSmallIconCell.IconTypes iconType,
+                Padding iconPadding)
         {
             Type = type;
             Header = header;
@@ -85,6 +97,10 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             ButtonText = buttonText;
             ButtonImage = buttonImage;
             ButtonImagePadding = buttonImagePadding;
+            IconShown = iconShown;
+            IconColor = iconColor;
+            IconType = iconType;
+            IconPadding = iconPadding;
         }
 
     }

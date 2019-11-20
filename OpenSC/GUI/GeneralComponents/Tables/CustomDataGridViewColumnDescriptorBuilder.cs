@@ -46,6 +46,14 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private Padding buttonImagePadding;
 
+        private bool iconShown;
+
+        private Color iconColor;
+
+        private DataGridViewSmallIconCell.IconTypes iconType;
+
+        private Padding iconPadding;
+
         public CustomDataGridViewColumnDescriptorBuilder()
         { }
 
@@ -77,7 +85,11 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 textEditable,
                 buttonText,
                 buttonImage,
-                buttonImagePadding);
+                buttonImagePadding,
+                iconShown,
+                iconColor,
+                iconType,
+                iconPadding);
         }
 
         public CustomDataGridViewColumnDescriptor<T> BuildAndAdd(CustomDataGridView<T> table) {
@@ -186,6 +198,30 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public CustomDataGridViewColumnDescriptorBuilder<T> ButtonImagePadding(Padding buttonImagePadding)
         {
             this.buttonImagePadding = buttonImagePadding;
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> IconShown(bool iconShown)
+        {
+            this.iconShown = iconShown;
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> IconColor(Color iconColor)
+        {
+            this.iconColor = iconColor;
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> IconType(DataGridViewSmallIconCell.IconTypes iconType)
+        {
+            this.iconType = iconType;
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> IconPadding(Padding iconPadding)
+        {
+            this.iconPadding = iconPadding;
             return this;
         }
 

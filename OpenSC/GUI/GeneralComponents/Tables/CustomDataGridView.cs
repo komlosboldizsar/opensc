@@ -132,6 +132,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                     return new DataGridViewButtonColumn();
                 case DataGridViewColumnType.ImageButton:
                     return new DataGridViewButtonColumn();
+                case DataGridViewColumnType.SmallIcon:
+                    return new DataGridViewTextBoxColumn();
             }
             return null;
         }
