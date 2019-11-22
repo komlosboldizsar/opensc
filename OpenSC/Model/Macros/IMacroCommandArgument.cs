@@ -6,20 +6,15 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Macros
 {
-
-    public interface IMacroCommand
+    public interface IMacroCommandArgument
     {
-
-        string CommandCode { get; }
-
-        string CommandName { get; }
+        string Name { get; }
 
         string Description { get; }
 
-        IMacroCommandArgument[] Arguments { get; }
+        Type Type { get; }
 
-        void Run(object[] argumentValues);
+        object[] Possibilities { get; }
 
     }
-
 }
