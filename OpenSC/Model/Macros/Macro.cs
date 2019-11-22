@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Persistence;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,13 @@ namespace OpenSC.Model.Macros
 
     public class Macro : ModelBase
     {
+
+        public override void Restored()
+        {
+            base.Restored();
+            foreach (MacroCommandWithArguments command in commands)
+                command.Restored();
+        }
 
         public delegate void IdChangedDelegate(Macro text, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
@@ -65,6 +73,28 @@ namespace OpenSC.Model.Macros
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
         }
+
+        #region Commands
+        private ObservableList<MacroCommandWithArguments> commands = new ObservableList<MacroCommandWithArguments>();
+
+        public ObservableList<MacroCommandWithArguments> Commands
+        {
+            get { return commands; }
+        }
+
+        [PersistAs("commands")]
+        [PersistAs("command", 1)]
+        private MacroCommandWithArguments[] _commands
+        {
+            get { return commands.ToArray(); }
+            set
+            {
+                commands.Clear();
+                if (value != null)
+                    commands.AddRange(value);
+            }
+        }
+        #endregion
 
     }
 

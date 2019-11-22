@@ -408,8 +408,8 @@
     <Compile Include="Model\General\ObservableList.cs" />
     <Compile Include="Model\IDatabaseBase.cs" />
     <Compile Include="Model\IModel.cs" />
+    <Compile Include="Model\Macros\MacroCommandWithArguments.cs" />
     <Compile Include="Model\Macros\IMacroCommandArgument.cs" />
-    <Compile Include="Model\Macros\IMacroTrigger.cs" />
     <Compile Include="Model\Macros\IMacroCommandArgumentT.cs" />
     <Compile Include="Model\Macros\MacroDatabase.cs" />
     <Compile Include="Model\Macros\IMacroCommand.cs" />

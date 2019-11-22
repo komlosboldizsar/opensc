@@ -20,6 +20,10 @@ namespace OpenSC.Model.Macros
 
         void Run(object[] argumentValues);
 
+        object[] GetArgumentsByKeys(string[] argumentKeys);
+
+        string[] GetArgumentKeys(object[] arguments);
+
     }
 
 }
