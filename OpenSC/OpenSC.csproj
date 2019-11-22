@@ -81,6 +81,12 @@
     <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapterFactory.cs" />
     <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridViewComboBoxItem.cs" />
     <Compile Include="GUI\GeneralComponents\Tables\DataGridViewSmallIconCell.cs" />
+    <Compile Include="GUI\Macros\MacroList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Macros\MacroList.Designer.cs">
+      <DependentUpon>MacroList.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Mixers\BmdMixerEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -551,6 +557,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ChildWindowWithTitleTwoParts.resx">
       <DependentUpon>ChildWindowWithTitleTwoParts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Macros\MacroList.resx">
+      <DependentUpon>MacroList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
