@@ -65,6 +65,11 @@ namespace OpenSC.Modules.Mixers
 
         }
 
+        public void RegisterMacroCommandsAndTriggers()
+        {
+
+        }
+
         public void RegisterMixerType<TMixer, TMixerEditorForm>()
             where TMixer : Mixer
             where TMixerEditorForm : IModelEditorForm<Mixer>, new()

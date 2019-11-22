@@ -63,5 +63,10 @@ namespace OpenSC.Modules.Timers
 
         }
 
+        public void RegisterMacroCommandsAndTriggers()
+        {
+
+        }
+
     }
 }

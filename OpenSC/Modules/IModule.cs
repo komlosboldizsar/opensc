@@ -11,6 +11,7 @@ namespace OpenSC.Modules
         void ProgramStarted();
         void MainWindowOpened();
         void RegisterDynamicTextFunctions();
+        void RegisterMacroCommandsAndTriggers();
         void RegisterDatabasePersisterSerializers();
         void RegisterModelTypes();
         void RegisterDatabases();

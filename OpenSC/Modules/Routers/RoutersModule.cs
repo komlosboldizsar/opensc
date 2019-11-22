@@ -93,6 +93,11 @@ namespace OpenSC.Modules.Routers
 
         }
 
+        public void RegisterMacroCommandsAndTriggers()
+        {
+
+        }
+
         public void RegisterRouterType<TRouter, TRouterEditorForm>()
             where TRouter : Router
             where TRouterEditorForm : IModelEditorForm<Router>, new()

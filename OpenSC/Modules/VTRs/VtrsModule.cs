@@ -62,6 +62,11 @@ namespace OpenSC.Modules.VTRs
 
         }
 
+        public void RegisterMacroCommandsAndTriggers()
+        {
+
+        }
+
         public void RegisterVtrType<TVtr, TVtrEditorForm>()
             where TVtr : Vtr
             where TVtrEditorForm : IModelEditorForm<Vtr>, new()

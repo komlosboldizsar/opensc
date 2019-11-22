@@ -71,5 +71,10 @@ namespace OpenSC.Modules.UMDs
             UmdEditorFormTypeRegister.Instance.RegisterFormType<TUmd, TUmdEditorForm>();
         }
 
+        public void RegisterMacroCommandsAndTriggers()
+        {
+
+        }
+
     }
 }

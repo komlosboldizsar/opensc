@@ -408,6 +408,11 @@
     <Compile Include="Model\General\ObservableList.cs" />
     <Compile Include="Model\IDatabaseBase.cs" />
     <Compile Include="Model\IModel.cs" />
+    <Compile Include="Model\Macros\IMacroTrigger.cs" />
+    <Compile Include="Model\Macros\MacroDatabase.cs" />
+    <Compile Include="Model\Macros\IMacroCommand.cs" />
+    <Compile Include="Model\Macros\Macro.cs" />
+    <Compile Include="Model\Macros\MacrosManager.cs" />
     <Compile Include="Model\MasterDatabase.cs" />
     <Compile Include="Model\Mixers\BlackMagicDesign\BmdMixer.cs" />
     <Compile Include="Model\Mixers\DynamicTextFunctions\MixerPreviewInputName.cs" />
@@ -860,5 +865,6 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

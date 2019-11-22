@@ -1,6 +1,7 @@
 ﻿using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Logger;
 using OpenSC.Model;
+using OpenSC.Model.Macros;
 using OpenSC.Model.SerialPorts;
 using OpenSC.Model.Settings;
 using OpenSC.Model.Signals;
@@ -74,6 +75,8 @@ namespace OpenSC
             ModuleManager.RegisterModelTypes();
             Status = "Registering dynamic text functions...";
             ModuleManager.RegisterDynamicTextFunctions();
+            Status = "Registering macro commands and triggers...";
+            ModuleManager.RegisterMacroCommandsAndTriggers();
         }
 
         private static void InitDatabases()
@@ -81,6 +84,7 @@ namespace OpenSC
             
             // Register databases
             Status = "Registering databases...";
+            MacrosManager.RegisterDatabases();
             VariablesManager.RegisterDatabases();
             SignalsManager.RegisterDatabases();
             SerialPortsManager.RegisterDatabases();
@@ -103,6 +107,7 @@ namespace OpenSC
             // Register window types
             Status = "Registering window types...";
             VariablesManager.RegisterWindowTypes();
+            MacrosManager.RegisterWindowTypes();
             SignalsManager.RegisterWindowTypes();
             SerialPortsManager.RegisterWindowTypes();
             ModuleManager.RegisterWindowTypes();
@@ -120,6 +125,7 @@ namespace OpenSC
         {
             Status = "Registering menus...";
             VariablesManager.RegisterMenus();
+            MacrosManager.RegisterMenus();
             SignalsManager.RegisterMenus();
             SerialPortsManager.RegisterMenus();
             ModuleManager.RegisterMenus();

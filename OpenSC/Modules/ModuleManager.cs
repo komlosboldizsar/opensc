@@ -31,6 +31,12 @@ namespace OpenSC.Modules
                 module.RegisterDynamicTextFunctions();
         }
 
+        public static void RegisterMacroCommandsAndTriggers()
+        {
+            foreach (IModule module in registeredModules)
+                module.RegisterMacroCommandsAndTriggers();
+        }
+
         public static void RegisterDatabasePersisterSerializers()
         {
             foreach (IModule module in registeredModules)

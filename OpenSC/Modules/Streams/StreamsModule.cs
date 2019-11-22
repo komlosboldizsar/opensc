@@ -76,5 +76,10 @@ namespace OpenSC.Modules.Streams
             StreamEditorFormTypeRegister.Instance.RegisterFormType<TStream, TStreamEditorForm>();
         }
 
+        public void RegisterMacroCommandsAndTriggers()
+        {
+
+        }
+
     }
 }
