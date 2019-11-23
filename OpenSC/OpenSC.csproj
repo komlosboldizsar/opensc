@@ -81,6 +81,12 @@
     <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapterFactory.cs" />
     <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridViewComboBoxItem.cs" />
     <Compile Include="GUI\GeneralComponents\Tables\DataGridViewSmallIconCell.cs" />
+    <Compile Include="GUI\Macros\MacroPanelForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Macros\MacroPanelForm.Designer.cs">
+      <DependentUpon>MacroPanelForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Macros\MacroPanelList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +104,12 @@
     </Compile>
     <Compile Include="GUI\Macros\MacroEditorForm.Designer.cs">
       <DependentUpon>MacroEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Macros\MacroPanelElementButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Macros\MacroPanelElementButton.Designer.cs">
+      <DependentUpon>MacroPanelElementButton.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Mixers\BmdMixerEditorForm.cs">
       <SubType>Form</SubType>
@@ -577,6 +589,9 @@
     <EmbeddedResource Include="GUI\ChildWindowWithTitleTwoParts.resx">
       <DependentUpon>ChildWindowWithTitleTwoParts.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Macros\MacroPanelForm.resx">
+      <DependentUpon>MacroPanelForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Macros\MacroPanelList.resx">
       <DependentUpon>MacroPanelList.cs</DependentUpon>
     </EmbeddedResource>
@@ -585,6 +600,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Macros\MacroEditorForm.resx">
       <DependentUpon>MacroEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Macros\MacroPanelElementButton.resx">
+      <DependentUpon>MacroPanelElementButton.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

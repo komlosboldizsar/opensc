@@ -33,7 +33,7 @@ namespace OpenSC.GUI.Macros
             builder.Header("ID");
             builder.Width(50);
             builder.UpdaterMethod((macroPanel, cell) => { cell.Value = string.Format("#{0}", macroPanel.ID); });
-            builder.AddChangeEvent(nameof(MacroPanel.ID));
+            builder.AddChangeEvent(nameof(Macro.ID));
             builder.BuildAndAdd();
 
             // Column: name
@@ -44,7 +44,7 @@ namespace OpenSC.GUI.Macros
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((macroPanel, cell) => { cell.Value = macroPanel.Name; });
-            builder.AddChangeEvent(nameof(MacroPanel.Name));
+            builder.AddChangeEvent(nameof(Macro.Name));
             builder.BuildAndAdd();
 
             // Column: command count
@@ -64,8 +64,8 @@ namespace OpenSC.GUI.Macros
             builder.Width(70);
             builder.ButtonText("Open");
             builder.CellContentClickHandlerMethod((macroPanel, cell, e) => {
-                /*var editWindow = new MacroPanel(macroPanel);
-                editWindow.ShowAsChild();*/
+                /*var window = new MacroPanelForm(macroPanel, false);
+                window.ShowAsChild();*/
             });
             builder.BuildAndAdd();
 
@@ -76,8 +76,8 @@ namespace OpenSC.GUI.Macros
             builder.Width(70);
             builder.ButtonText("Edit");
             builder.CellContentClickHandlerMethod((macroPanel, cell, e) => {
-                /*var editWindow = new MacroPanelEditor(macroPanel);
-                editWindow.ShowAsChild();*/
+                var editWindow = new MacroPanelForm(macroPanel);
+                editWindow.ShowAsChild();
             });
             builder.BuildAndAdd();
 
@@ -102,8 +102,8 @@ namespace OpenSC.GUI.Macros
 
         private void addMacroPanelButton_Click(object sender, EventArgs e)
         {
-            /*var editWindow = new MacroPanelEditor(null);
-            editWindow.ShowAsChild();*/
+            var editWindow = new MacroPanelForm(null);
+            editWindow.ShowAsChild();
         }
 
     }
