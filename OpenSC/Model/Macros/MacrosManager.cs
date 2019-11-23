@@ -23,6 +23,7 @@ namespace OpenSC.Model.Macros
         {
             WindowTypeRegister.RegisterWindowType(typeof(MacroList));
             WindowTypeRegister.RegisterWindowType(typeof(MacroPanelList));
+            WindowTypeRegister.RegisterWindowType(typeof(MacroPanelForm));
         }
 
         public static void RegisterMenus()

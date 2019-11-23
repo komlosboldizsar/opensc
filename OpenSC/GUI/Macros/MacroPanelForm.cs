@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Macros;
+﻿using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model.Macros;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,10 +12,13 @@ using System.Windows.Forms;
 
 namespace OpenSC.GUI.Macros
 {
+    [WindowTypeName("macros.macropanel")]
     public partial class MacroPanelForm : ChildWindowWithTitle
     {
 
         private const string TITLE_TEXT = "[Macro panel] {1}";
+
+        protected MacroPanel _macroPanelTempRef;
 
         protected MacroPanel macroPanel;
 
@@ -26,7 +30,7 @@ namespace OpenSC.GUI.Macros
         public MacroPanelForm(MacroPanel macroPanel)
         {
             InitializeComponent();
-            this.macroPanel = macroPanel;
+            this._macroPanelTempRef = macroPanel;
         }
 
         #region Elements
@@ -65,6 +69,7 @@ namespace OpenSC.GUI.Macros
 
         private void MacroPanelForm_Load(object sender, EventArgs e)
         {
+            macroPanel = _macroPanelTempRef;
             if (macroPanel == null)
                 return;
             Text = string.Format(TITLE_TEXT, macroPanel.ID, macroPanel.Name);
@@ -83,6 +88,23 @@ namespace OpenSC.GUI.Macros
         {
             loadElements();
         }
+
+        #region Persistence
+        private const string PERSISTENCE_KEY_MACRO_PANEL_ID = "macro_panel_id";
+
+        protected override void restoreBeforeOpen(Dictionary<string, object> keyValuePairs)
+        {
+            base.restoreBeforeOpen(keyValuePairs);
+            _macroPanelTempRef = MacroPanelDatabase.Instance.GetTById((int)keyValuePairs[PERSISTENCE_KEY_MACRO_PANEL_ID]);
+        }
+
+        public override Dictionary<string, object> GetKeyValuePairs()
+        {
+            var dict = base.GetKeyValuePairs();
+            dict.Add(PERSISTENCE_KEY_MACRO_PANEL_ID, macroPanel?.ID);
+            return dict;
+        }
+        #endregion
 
     }
 }
