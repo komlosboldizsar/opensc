@@ -10,6 +10,7 @@ namespace OpenSC.Model.Macros
     public class MacroPanelElement
     {
 
+        public MacroPanel Parent { get; internal set; }
         public Macro Macro { get; set; }
 
         // "Temp foreign key"
@@ -31,7 +32,7 @@ namespace OpenSC.Model.Macros
 
         public int SizeH { get; set; }
 
-        public MacroPanelElement()
+        internal MacroPanelElement()
         { }
 
         public MacroPanelElement(int macroId)
@@ -42,6 +43,11 @@ namespace OpenSC.Model.Macros
         public void Restored()
         {
             Macro = MacroDatabase.Instance.GetTById(_macroId);
+        }
+
+        public void Updated()
+        {
+            Parent.ElementUpdated();
         }
 
     }

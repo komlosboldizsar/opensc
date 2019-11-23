@@ -98,7 +98,28 @@ namespace OpenSC.Model.Macros
                 elements.Clear();
                 if (value != null)
                     elements.AddRange(value);
+                foreach (var element in elements)
+                    element.Parent = this;
             }
+        }
+
+        internal void ElementUpdated()
+        { }
+
+        public MacroPanelElement AddElement()
+        {
+            MacroPanelElement newElement = new MacroPanelElement();
+            newElement.Parent = this;
+            elements.Add(newElement);
+            return newElement;
+        }
+
+        public void RemoveElement(MacroPanelElement element)
+        {
+            if (!elements.Contains(element))
+                return;
+            elements.Remove(element);
+            element.Parent = null;
         }
         #endregion
 
