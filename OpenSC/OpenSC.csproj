@@ -420,6 +420,9 @@
     <Compile Include="Model\General\ObservableList.cs" />
     <Compile Include="Model\IDatabaseBase.cs" />
     <Compile Include="Model\IModel.cs" />
+    <Compile Include="Model\Macros\MacroPanelElementXmlSerializer.cs" />
+    <Compile Include="Model\Macros\MacroPanelDatabase.cs" />
+    <Compile Include="Model\Macros\MacroPanel.cs" />
     <Compile Include="Model\Macros\MacroCommandBase.cs" />
     <Compile Include="Model\Macros\MacroCommandRegister.cs" />
     <Compile Include="Model\Macros\MacroCommandWithArguments.cs" />
@@ -428,6 +431,7 @@
     <Compile Include="Model\Macros\MacroDatabase.cs" />
     <Compile Include="Model\Macros\IMacroCommand.cs" />
     <Compile Include="Model\Macros\Macro.cs" />
+    <Compile Include="Model\Macros\MacroPanelElement.cs" />
     <Compile Include="Model\Macros\MacrosManager.cs" />
     <Compile Include="Model\Macros\MacroCommandWithArgumentsXmlSerializer.cs" />
     <Compile Include="Model\MasterDatabase.cs" />
