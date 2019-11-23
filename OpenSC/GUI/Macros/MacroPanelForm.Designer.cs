@@ -96,11 +96,11 @@
             // 
             this.customElementsPanel.Controls.Add(this.elementsPanel);
             this.customElementsPanel.Controls.Add(this.editorPanel);
-            this.customElementsPanel.Size = new System.Drawing.Size(1134, 551);
+            this.customElementsPanel.Size = new System.Drawing.Size(1186, 599);
             // 
             // mainContainer
             // 
-            this.mainContainer.Size = new System.Drawing.Size(1134, 620);
+            this.mainContainer.Size = new System.Drawing.Size(1186, 668);
             // 
             // elementsPanel
             // 
@@ -108,7 +108,7 @@
             this.elementsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.elementsPanel.Location = new System.Drawing.Point(10, 10);
             this.elementsPanel.Name = "elementsPanel";
-            this.elementsPanel.Size = new System.Drawing.Size(834, 541);
+            this.elementsPanel.Size = new System.Drawing.Size(886, 589);
             this.elementsPanel.TabIndex = 0;
             // 
             // editorPanel
@@ -117,9 +117,10 @@
             this.editorPanel.Controls.Add(this.elementOperationsPanel);
             this.editorPanel.Controls.Add(this.baseDataPanel);
             this.editorPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.editorPanel.Location = new System.Drawing.Point(844, 10);
+            this.editorPanel.Location = new System.Drawing.Point(896, 10);
             this.editorPanel.Name = "editorPanel";
-            this.editorPanel.Size = new System.Drawing.Size(280, 541);
+            this.editorPanel.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.editorPanel.Size = new System.Drawing.Size(280, 589);
             this.editorPanel.TabIndex = 1;
             // 
             // elementDataPanel
@@ -128,10 +129,10 @@
             this.elementDataPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.elementDataPanel.Controls.Add(this.elementDataGroupBox);
             this.elementDataPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.elementDataPanel.Location = new System.Drawing.Point(0, 179);
+            this.elementDataPanel.Location = new System.Drawing.Point(10, 179);
             this.elementDataPanel.Name = "elementDataPanel";
             this.elementDataPanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
-            this.elementDataPanel.Size = new System.Drawing.Size(280, 336);
+            this.elementDataPanel.Size = new System.Drawing.Size(270, 336);
             this.elementDataPanel.TabIndex = 2;
             // 
             // elementDataGroupBox
@@ -143,7 +144,7 @@
             this.elementDataGroupBox.Location = new System.Drawing.Point(0, 0);
             this.elementDataGroupBox.Name = "elementDataGroupBox";
             this.elementDataGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.elementDataGroupBox.Size = new System.Drawing.Size(280, 329);
+            this.elementDataGroupBox.Size = new System.Drawing.Size(270, 329);
             this.elementDataGroupBox.TabIndex = 0;
             this.elementDataGroupBox.TabStop = false;
             this.elementDataGroupBox.Text = "Button settings";
@@ -189,7 +190,7 @@
             this.elementDataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.elementDataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.elementDataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.elementDataTableLayout.Size = new System.Drawing.Size(264, 298);
+            this.elementDataTableLayout.Size = new System.Drawing.Size(254, 298);
             this.elementDataTableLayout.TabIndex = 0;
             // 
             // elementPosXLabel
@@ -317,7 +318,7 @@
             this.elementLabelTextBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.elementLabelTextBox.Location = new System.Drawing.Point(109, 33);
             this.elementLabelTextBox.Name = "elementLabelTextBox";
-            this.elementLabelTextBox.Size = new System.Drawing.Size(152, 22);
+            this.elementLabelTextBox.Size = new System.Drawing.Size(142, 22);
             this.elementLabelTextBox.TabIndex = 2;
             this.elementLabelTextBox.TextChanged += new System.EventHandler(this.elementLabelTextBox_TextChanged);
             // 
@@ -327,7 +328,7 @@
             this.elementMacroDropDown.FormattingEnabled = true;
             this.elementMacroDropDown.Location = new System.Drawing.Point(109, 3);
             this.elementMacroDropDown.Name = "elementMacroDropDown";
-            this.elementMacroDropDown.Size = new System.Drawing.Size(152, 24);
+            this.elementMacroDropDown.Size = new System.Drawing.Size(142, 24);
             this.elementMacroDropDown.TabIndex = 3;
             this.elementMacroDropDown.SelectedIndexChanged += new System.EventHandler(this.elementMacroDropDown_SelectedIndexChanged);
             // 
@@ -337,7 +338,7 @@
             this.elementShowLabelCheckBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.elementShowLabelCheckBox.Location = new System.Drawing.Point(109, 61);
             this.elementShowLabelCheckBox.Name = "elementShowLabelCheckBox";
-            this.elementShowLabelCheckBox.Size = new System.Drawing.Size(152, 17);
+            this.elementShowLabelCheckBox.Size = new System.Drawing.Size(142, 17);
             this.elementShowLabelCheckBox.TabIndex = 5;
             this.elementShowLabelCheckBox.UseVisualStyleBackColor = true;
             this.elementShowLabelCheckBox.CheckedChanged += new System.EventHandler(this.showLabelCheckBox_CheckedChanged);
@@ -349,7 +350,7 @@
             this.backgroundControlsContainerPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.backgroundControlsContainerPanel.Location = new System.Drawing.Point(109, 119);
             this.backgroundControlsContainerPanel.Name = "backgroundControlsContainerPanel";
-            this.backgroundControlsContainerPanel.Size = new System.Drawing.Size(152, 29);
+            this.backgroundControlsContainerPanel.Size = new System.Drawing.Size(142, 29);
             this.backgroundControlsContainerPanel.TabIndex = 9;
             // 
             // backgroundColorPanelContainerPanel
@@ -359,7 +360,7 @@
             this.backgroundColorPanelContainerPanel.Location = new System.Drawing.Point(0, 0);
             this.backgroundColorPanelContainerPanel.Name = "backgroundColorPanelContainerPanel";
             this.backgroundColorPanelContainerPanel.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.backgroundColorPanelContainerPanel.Size = new System.Drawing.Size(94, 29);
+            this.backgroundColorPanelContainerPanel.Size = new System.Drawing.Size(84, 29);
             this.backgroundColorPanelContainerPanel.TabIndex = 1;
             // 
             // backgroundColorPanel
@@ -368,13 +369,13 @@
             this.backgroundColorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.backgroundColorPanel.Location = new System.Drawing.Point(0, 0);
             this.backgroundColorPanel.Name = "backgroundColorPanel";
-            this.backgroundColorPanel.Size = new System.Drawing.Size(84, 29);
+            this.backgroundColorPanel.Size = new System.Drawing.Size(74, 29);
             this.backgroundColorPanel.TabIndex = 0;
             // 
             // pickBackgroundColorButton
             // 
             this.pickBackgroundColorButton.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pickBackgroundColorButton.Location = new System.Drawing.Point(94, 0);
+            this.pickBackgroundColorButton.Location = new System.Drawing.Point(84, 0);
             this.pickBackgroundColorButton.Margin = new System.Windows.Forms.Padding(0);
             this.pickBackgroundColorButton.Name = "pickBackgroundColorButton";
             this.pickBackgroundColorButton.Size = new System.Drawing.Size(58, 29);
@@ -390,7 +391,7 @@
             this.foregroundControlsContainerPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.foregroundControlsContainerPanel.Location = new System.Drawing.Point(109, 84);
             this.foregroundControlsContainerPanel.Name = "foregroundControlsContainerPanel";
-            this.foregroundControlsContainerPanel.Size = new System.Drawing.Size(152, 29);
+            this.foregroundControlsContainerPanel.Size = new System.Drawing.Size(142, 29);
             this.foregroundControlsContainerPanel.TabIndex = 8;
             // 
             // foregroundColorPanelContainerPanel
@@ -400,7 +401,7 @@
             this.foregroundColorPanelContainerPanel.Location = new System.Drawing.Point(0, 0);
             this.foregroundColorPanelContainerPanel.Name = "foregroundColorPanelContainerPanel";
             this.foregroundColorPanelContainerPanel.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.foregroundColorPanelContainerPanel.Size = new System.Drawing.Size(94, 29);
+            this.foregroundColorPanelContainerPanel.Size = new System.Drawing.Size(84, 29);
             this.foregroundColorPanelContainerPanel.TabIndex = 1;
             // 
             // foregroundColorPanel
@@ -409,13 +410,13 @@
             this.foregroundColorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.foregroundColorPanel.Location = new System.Drawing.Point(0, 0);
             this.foregroundColorPanel.Name = "foregroundColorPanel";
-            this.foregroundColorPanel.Size = new System.Drawing.Size(84, 29);
+            this.foregroundColorPanel.Size = new System.Drawing.Size(74, 29);
             this.foregroundColorPanel.TabIndex = 0;
             // 
             // pickForegroundColorButton
             // 
             this.pickForegroundColorButton.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pickForegroundColorButton.Location = new System.Drawing.Point(94, 0);
+            this.pickForegroundColorButton.Location = new System.Drawing.Point(84, 0);
             this.pickForegroundColorButton.Margin = new System.Windows.Forms.Padding(0);
             this.pickForegroundColorButton.Name = "pickForegroundColorButton";
             this.pickForegroundColorButton.Size = new System.Drawing.Size(58, 29);
@@ -430,7 +431,7 @@
             this.removeSelectedElementButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.removeSelectedElementButton.Location = new System.Drawing.Point(109, 154);
             this.removeSelectedElementButton.Name = "removeSelectedElementButton";
-            this.removeSelectedElementButton.Size = new System.Drawing.Size(152, 29);
+            this.removeSelectedElementButton.Size = new System.Drawing.Size(142, 29);
             this.removeSelectedElementButton.TabIndex = 11;
             this.removeSelectedElementButton.Text = "Delete";
             this.removeSelectedElementButton.UseVisualStyleBackColor = true;
@@ -494,10 +495,10 @@
             this.elementOperationsPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.elementOperationsPanel.Controls.Add(this.elementOperationsGroupBox);
             this.elementOperationsPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.elementOperationsPanel.Location = new System.Drawing.Point(0, 94);
+            this.elementOperationsPanel.Location = new System.Drawing.Point(10, 94);
             this.elementOperationsPanel.Name = "elementOperationsPanel";
             this.elementOperationsPanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
-            this.elementOperationsPanel.Size = new System.Drawing.Size(280, 85);
+            this.elementOperationsPanel.Size = new System.Drawing.Size(270, 85);
             this.elementOperationsPanel.TabIndex = 2;
             // 
             // elementOperationsGroupBox
@@ -509,7 +510,7 @@
             this.elementOperationsGroupBox.Location = new System.Drawing.Point(0, 0);
             this.elementOperationsGroupBox.Name = "elementOperationsGroupBox";
             this.elementOperationsGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.elementOperationsGroupBox.Size = new System.Drawing.Size(280, 78);
+            this.elementOperationsGroupBox.Size = new System.Drawing.Size(270, 78);
             this.elementOperationsGroupBox.TabIndex = 0;
             this.elementOperationsGroupBox.TabStop = false;
             this.elementOperationsGroupBox.Text = "Buttons";
@@ -531,10 +532,10 @@
             this.baseDataPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.baseDataPanel.Controls.Add(this.baseDataGroupBox);
             this.baseDataPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.baseDataPanel.Location = new System.Drawing.Point(0, 0);
+            this.baseDataPanel.Location = new System.Drawing.Point(10, 0);
             this.baseDataPanel.Name = "baseDataPanel";
             this.baseDataPanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
-            this.baseDataPanel.Size = new System.Drawing.Size(280, 94);
+            this.baseDataPanel.Size = new System.Drawing.Size(270, 94);
             this.baseDataPanel.TabIndex = 1;
             // 
             // baseDataGroupBox
@@ -546,7 +547,7 @@
             this.baseDataGroupBox.Location = new System.Drawing.Point(0, 0);
             this.baseDataGroupBox.Name = "baseDataGroupBox";
             this.baseDataGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.baseDataGroupBox.Size = new System.Drawing.Size(280, 87);
+            this.baseDataGroupBox.Size = new System.Drawing.Size(270, 87);
             this.baseDataGroupBox.TabIndex = 0;
             this.baseDataGroupBox.TabStop = false;
             this.baseDataGroupBox.Text = "Base data";
@@ -568,7 +569,7 @@
             this.baseDataTableLayout.RowCount = 2;
             this.baseDataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.baseDataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.baseDataTableLayout.Size = new System.Drawing.Size(264, 56);
+            this.baseDataTableLayout.Size = new System.Drawing.Size(254, 56);
             this.baseDataTableLayout.TabIndex = 0;
             // 
             // idLabel
@@ -600,7 +601,7 @@
             this.nameTextBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.nameTextBox.Location = new System.Drawing.Point(70, 31);
             this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(191, 22);
+            this.nameTextBox.Size = new System.Drawing.Size(181, 22);
             this.nameTextBox.TabIndex = 2;
             // 
             // idNumericField
@@ -614,7 +615,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1134, 676);
+            this.ClientSize = new System.Drawing.Size(1186, 724);
             this.DeleteButtonVisible = true;
             this.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.HeaderText = "Edit macro panel";

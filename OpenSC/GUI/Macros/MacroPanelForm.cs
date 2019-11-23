@@ -44,8 +44,8 @@ namespace OpenSC.GUI.Macros
         public MacroPanelForm(MacroPanel macroPanel)
         {
             InitializeComponent();
-            AddingNew = (macroPanel == null);
             this.macroPanel = (macroPanel != null) ? macroPanel : new MacroPanel();
+            AddingNew = (macroPanel == null);
         }
 
         protected override void loadData()
