@@ -11,7 +11,7 @@ namespace OpenSC.Model.Macros
     class MacroPanelElementXmlSerializer : IValueXmlSerializer
     {
 
-        public Type Type => typeof(MacroCommandWithArguments);
+        public Type Type => typeof(MacroPanelElement);
 
         private const string TAG_NAME = "macro_panel_element";
         private const string ATTRIBUTE_MACRO = "macro";
