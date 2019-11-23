@@ -64,8 +64,8 @@ namespace OpenSC.GUI.Macros
             builder.Width(70);
             builder.ButtonText("Open");
             builder.CellContentClickHandlerMethod((macroPanel, cell, e) => {
-                /*var window = new MacroPanelForm(macroPanel, false);
-                window.ShowAsChild();*/
+                var window = new MacroPanelForm(macroPanel);
+                window.ShowAsChild();
             });
             builder.BuildAndAdd();
 

@@ -83,6 +83,12 @@
     <Compile Include="GUI\GeneralComponents\Tables\DataGridViewSmallIconCell.cs" />
     <Compile Include="GUI\Helpers\ResizableControls.cs" />
     <Compile Include="GUI\Helpers\DraggableControls.cs" />
+    <Compile Include="GUI\Macros\MacroPanelForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Macros\MacroPanelForm.Designer.cs">
+      <DependentUpon>MacroPanelForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Macros\MacroPanelEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -590,6 +596,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ChildWindowWithTitleTwoParts.resx">
       <DependentUpon>ChildWindowWithTitleTwoParts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Macros\MacroPanelForm.resx">
+      <DependentUpon>MacroPanelForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Macros\MacroPanelEditorForm.resx">
       <DependentUpon>MacroPanelEditorForm.cs</DependentUpon>
