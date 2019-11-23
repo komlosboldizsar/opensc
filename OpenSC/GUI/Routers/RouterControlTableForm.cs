@@ -77,7 +77,7 @@ namespace OpenSC.GUI.Routers
         private static readonly Color BACKCOLOR_CROSSPOINT_ACTIVE = Color.LightPink;
         private static readonly Color ICONCOLOR_CROSSPOINT_ACTIVE = Color.Red;
 
-        private static readonly Color BACKCOLOR_CROSSPOINT_SELECTED = Color.LightCyan;
+        private static readonly Color BACKCOLOR_CROSSPOINT_SELECTED = Color.LightBlue;
         private static readonly Color ICONCOLOR_CROSSPOINT_SELECTED = Color.Blue;
 
         private static readonly Color BACKCOLOR_CROSSPOINT_EMPTY = Color.White;
@@ -135,6 +135,12 @@ namespace OpenSC.GUI.Routers
                 builder.IconColor(Color.Red);
                 builder.IconType(DataGridViewSmallIconCell.IconTypes.Circle);
                 builder.IconShown(false);
+                builder.CellDoubleClickHandlerMethod((routerOutputProxy, cell, e) => {
+                    if (autotake)
+                        routerOutputProxy.ActiveCrosspoint = routerInput;
+                    else
+                        routerOutputProxy.SelectedCrosspoint = routerInput;
+                });
                 builder.UpdaterMethod((routerOutputProxy, cell) => {
                     DataGridViewSmallIconCell typedCell = ((DataGridViewSmallIconCell)cell);
                     if (routerOutputProxy.ActiveCrosspoint == routerInput)
@@ -198,7 +204,11 @@ namespace OpenSC.GUI.Routers
             #endregion
 
             #region Active crosspoint
-            public RouterInput ActiveCrosspoint => routerOutput.Crosspoint;
+            public RouterInput ActiveCrosspoint
+            {
+                get => routerOutput.Crosspoint;
+                set { routerOutput.Crosspoint = value; }
+            }
 
             private void RouterOutput_CrosspointChanged(RouterOutput output, RouterInput newInput)
             {
@@ -257,7 +267,9 @@ namespace OpenSC.GUI.Routers
         }
         #endregion
 
-        private bool autotake;
+        #region Take
+
+        private bool autotake = false;
 
         private bool Autotake
         {
@@ -265,7 +277,23 @@ namespace OpenSC.GUI.Routers
             set
             {
                 autotake = value;
+                autotakeButton.ForeColor = autotake ? AUTOTAKE_ACTIVE_FOREGROUND : AUTOTAKE_INCTIVE_FOREGROUND;
+                autotakeButton.BackColor = autotake ? AUTOTAKE_ACTIVE_BACKGROUND : AUTOTAKE_INCTIVE_BACKGROUND;
+                autotakeButton.FlatAppearance.BorderColor = autotake ? AUTOTAKE_ACTIVE_BORDER : AUTOTAKE_INCTIVE_BORDER;
             }
+        }
+
+        private static Color AUTOTAKE_ACTIVE_FOREGROUND = Color.FromArgb(255, 224, 192);
+        private static Color AUTOTAKE_ACTIVE_BACKGROUND = Color.FromArgb(192, 164, 0);
+        private static Color AUTOTAKE_ACTIVE_BORDER = Color.FromArgb(192, 164, 0);
+
+        private static Color AUTOTAKE_INCTIVE_FOREGROUND = Color.FromArgb(192, 164, 0);
+        private static Color AUTOTAKE_INCTIVE_BACKGROUND = Color.FromArgb(255, 224, 192);
+        private static Color AUTOTAKE_INCTIVE_BORDER = Color.FromArgb(192, 164, 0);
+
+        private void autotakeButton_Click(object sender, EventArgs e)
+        {
+            Autotake = !Autotake;
         }
 
         private void takeButton_Click(object sender, EventArgs e)
@@ -275,8 +303,16 @@ namespace OpenSC.GUI.Routers
 
         private void take()
         {
-            // Do something
+            foreach (RouterOutputProxy routerOutputProxy in routerOutputProxies)
+            {
+                if (routerOutputProxy.SelectedCrosspoint != null)
+                {
+                    routerOutputProxy.ActiveCrosspoint = routerOutputProxy.SelectedCrosspoint;
+                    routerOutputProxy.SelectedCrosspoint = null;
+                }
+            }
         }
+        #endregion
 
     }
 

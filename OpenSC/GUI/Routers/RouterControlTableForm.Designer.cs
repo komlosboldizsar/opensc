@@ -88,6 +88,7 @@
             this.autotakeButton.TabIndex = 1;
             this.autotakeButton.Text = "AUTOTAKE";
             this.autotakeButton.UseVisualStyleBackColor = false;
+            this.autotakeButton.Click += new System.EventHandler(this.autotakeButton_Click);
             // 
             // crosspointsTable
             // 
