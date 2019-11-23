@@ -2,6 +2,7 @@
 using OpenSC.GUI.Menus;
 using OpenSC.GUI.Variables;
 using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model.Persistence;
 using System;
 
 namespace OpenSC.Model.Macros
@@ -12,6 +13,7 @@ namespace OpenSC.Model.Macros
 
         public static void RegisterDatabases()
         {
+            DatabasePersister<Macro>.RegisterSerializer(new MacroCommandWithArgumentsXmlSerializer()); // TODO: shouldn't register here
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(MacroDatabase));
         }
 

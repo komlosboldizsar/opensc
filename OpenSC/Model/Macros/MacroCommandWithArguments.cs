@@ -11,14 +11,27 @@ namespace OpenSC.Model.Macros
 
         public IMacroCommand Command { get; private set; }
 
-        public string[] argumentValueKeys;
+        public string CommandCode => Command?.CommandCode;
 
         public object[] ArgumentValues { get; private set; }
 
-        public MacroCommandWithArguments(IMacroCommand command, string[] argumentValueKeys)
+        private string[] argumentKeys;
+
+        public string[] ArgumentKeys
+        {
+            get => Command.GetArgumentKeys(ArgumentValues);
+        }
+
+        public MacroCommandWithArguments(IMacroCommand command, string[] argumentKeys)
         {
             this.Command = command;
-            this.argumentValueKeys = argumentValueKeys;
+            this.argumentKeys = argumentKeys;
+        }
+
+        public MacroCommandWithArguments(IMacroCommand command, object[] argumentValues)
+        {
+            this.Command = command;
+            this.ArgumentValues = argumentValues;
         }
 
         public void Restored()
@@ -28,12 +41,14 @@ namespace OpenSC.Model.Macros
 
         private void restoreArgumentValues()
         {
-            ArgumentValues = Command.GetArgumentsByKeys(argumentValueKeys);
+            if (argumentKeys != null)
+                ArgumentValues = Command.GetArgumentsByKeys(ArgumentKeys);
         }
 
         public void Run()
         {
-            Command.Run(ArgumentValues);
+            if (ArgumentValues != null)
+                Command.Run(ArgumentValues);
         }
 
     }
