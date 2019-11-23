@@ -126,8 +126,8 @@ namespace OpenSC.GUI.Macros
                 backgroundColorPanel.BackColor = selectedElement.ElementBackColor;
                 elementPosXNumericField.Value = selectedElement.Location.X;
                 elementPosYNumericField.Value = selectedElement.Location.Y;
-                elementSizeWNumericField.Value = selectedElement.SizeW;
-                elementSizeHNumericField.Value = selectedElement.SizeH;
+                elementSizeWNumericField.Value = selectedElement.Width;
+                elementSizeHNumericField.Value = selectedElement.Height;
 
             }
         }
@@ -172,9 +172,11 @@ namespace OpenSC.GUI.Macros
             MacroPanelElementButton elementButton = new MacroPanelElementButton(element);
             elementButton.ButtonRightClick += ElementButton_ButtonRightClick;
             elementButton.LocationChanged += ElementButton_LocationChanged;
-            elementButton.ElementSizeChanged += ElementButton_ElementSizeChanged;
+            elementButton.SizeChanged += ElementButton_SizeChanged;
             elements.Add(element, elementButton);
             elementsPanel.Controls.Add(elementButton);
+            elementButton.Resizable();
+            elementButton.Draggable(true);
             return elementButton;
         }
 
@@ -183,12 +185,12 @@ namespace OpenSC.GUI.Macros
             SelectedElement = sender;
         }
 
-        private void ElementButton_ElementSizeChanged(object sender, EventArgs e)
+        private void ElementButton_SizeChanged(object sender, EventArgs e)
         {
             if (sender != SelectedElement)
                 return;
-            elementSizeWNumericField.Value = selectedElement.SizeW;
-            elementSizeHNumericField.Value = selectedElement.SizeH;
+            elementSizeWNumericField.Value = selectedElement.Width;
+            elementSizeHNumericField.Value = selectedElement.Height;
         }
 
         private void ElementButton_LocationChanged(object sender, EventArgs e)
@@ -256,14 +258,14 @@ namespace OpenSC.GUI.Macros
         {
             if (SelectedElement == null)
                 return;
-            SelectedElement.SizeW = (int)elementSizeWNumericField.Value;
+            SelectedElement.Width = (int)elementSizeWNumericField.Value;
         }
 
         private void elementSizeHNumericField_ValueChanged(object sender, EventArgs e)
         {
             if (SelectedElement == null)
                 return;
-            SelectedElement.SizeH = (int)elementSizeHNumericField.Value;
+            SelectedElement.Height = (int)elementSizeHNumericField.Value;
         }
 
         private void pickForegroundColorButton_Click(object sender, EventArgs e)

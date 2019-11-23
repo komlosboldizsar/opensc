@@ -78,32 +78,6 @@ namespace OpenSC.GUI.Macros
             }
         }
 
-        public event EventHandler ElementSizeChanged;
-
-        public int SizeW
-        {
-            get => button.Width;
-            set
-            {
-                int oldWidth = button.Width;
-                button.Width = value;
-                if (value != oldWidth)
-                    ElementSizeChanged?.Invoke(this, new EventArgs());
-            }
-        }
-
-        public int SizeH
-        {
-            get => button.Height;
-            set
-            {
-                int oldHeight = button.Height;
-                button.Height = value;
-                if (value != oldHeight)
-                    ElementSizeChanged?.Invoke(this, new EventArgs());
-            }
-        }
-
         public MacroPanelElementButton(MacroPanelElement element)
         {
             this.Element = element;
@@ -126,8 +100,8 @@ namespace OpenSC.GUI.Macros
             button.ForeColor = Element.ForeColor;
             button.BackColor = Element.BackColor;
             Location = new Point(Element.PositionX, Element.PositionY);
-            button.Width = Element.SizeW;
-            button.Height = Element.SizeH;
+            Width = Element.SizeW;
+            Height = Element.SizeH;
         }
 
         public void SaveToModel()

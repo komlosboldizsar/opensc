@@ -34,13 +34,15 @@
             // button
             // 
             this.button.BackColor = System.Drawing.Color.White;
+            this.button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.button.Location = new System.Drawing.Point(0, 0);
             this.button.Margin = new System.Windows.Forms.Padding(0);
+            this.button.MinimumSize = new System.Drawing.Size(20, 20);
             this.button.Name = "button";
-            this.button.Size = new System.Drawing.Size(134, 66);
+            this.button.Size = new System.Drawing.Size(125, 125);
             this.button.TabIndex = 0;
             this.button.Text = "ButtonText";
             this.button.UseVisualStyleBackColor = false;
@@ -53,12 +55,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.button);
             this.Margin = new System.Windows.Forms.Padding(0);
+            this.MinimumSize = new System.Drawing.Size(20, 20);
             this.Name = "MacroPanelElementButton";
-            this.Size = new System.Drawing.Size(134, 66);
+            this.Size = new System.Drawing.Size(100, 100);
             this.Load += new System.EventHandler(this.MacroPanelElementButton_Load);
             this.ResumeLayout(false);
 
