@@ -14,7 +14,7 @@ namespace OpenSC.GUI.Macros
     public partial class MacroPanelForm : ChildWindowWithTitle
     {
 
-        private const string TITLE_NEW = "New macro panel";
+        private const string TITLE_TEXT = "[Macro panel] {1}";
 
         protected MacroPanel macroPanel;
 
@@ -67,6 +67,8 @@ namespace OpenSC.GUI.Macros
         {
             if (macroPanel == null)
                 return;
+            Text = string.Format(TITLE_TEXT, macroPanel.ID, macroPanel.Name);
+            HeaderText = macroPanel.Name;
             loadElements();
             resizeElementsPanel();
             macroPanel.Elements.ItemsChanged += Elements_ItemsChanged;
