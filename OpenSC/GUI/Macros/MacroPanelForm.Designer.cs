@@ -621,6 +621,7 @@
             this.HeaderText = "Edit macro panel";
             this.MinimumSize = new System.Drawing.Size(1000, 600);
             this.Name = "MacroPanelForm";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Edit macro panel";
             this.Load += new System.EventHandler(this.MacroPanelForm_Load);
             this.customElementsPanel.ResumeLayout(false);

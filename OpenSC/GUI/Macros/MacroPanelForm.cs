@@ -7,6 +7,7 @@ using OpenSC.Model.Signals;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace OpenSC.GUI.Macros
@@ -54,6 +55,7 @@ namespace OpenSC.GUI.Macros
                 return;
             idNumericField.Value = (addingNew ? MacroPanelDatabase.Instance.NextValidId() : macroPanel.ID);
             nameTextBox.Text = macroPanel.Name;
+            resizeElementsPanel();
             loadElements();
             SelectedElement = null;
         }
@@ -96,6 +98,8 @@ namespace OpenSC.GUI.Macros
                 return;
             macroPanel.ID = (int)idNumericField.Value;
             macroPanel.Name = nameTextBox.Text;
+            macroPanel.SizeW = elementsPanel.Width;
+            macroPanel.SizeH = elementsPanel.Height;
             saveElements();
         }
 
@@ -303,6 +307,14 @@ namespace OpenSC.GUI.Macros
         private void MacroDatabase_ChangedItems(Model.DatabaseBase<Macro> database)
         {
             loadMacros();
+        }
+
+        private void resizeElementsPanel()
+        {
+            Size elementsPanelOriginalSize = elementsPanel.Size;
+            Size elementsPanelNewSize = new Size(macroPanel.SizeW, macroPanel.SizeH);
+            Size difference = elementsPanelNewSize - elementsPanelOriginalSize;
+            Size += difference;
         }
 
     }
