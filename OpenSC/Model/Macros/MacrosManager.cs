@@ -22,6 +22,7 @@ namespace OpenSC.Model.Macros
         public static void RegisterWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType(typeof(MacroList));
+            WindowTypeRegister.RegisterWindowType(typeof(MacroPanelList));
         }
 
         public static void RegisterMenus()
@@ -29,6 +30,8 @@ namespace OpenSC.Model.Macros
             var macrosMenu = MenuManager.Instance.TopMenu["Macros"];
             var listMacrosMenu = macrosMenu["Macros list"];
             listMacrosMenu.ClickHandler = (menu, tag) => new MacroList().ShowAsChild();
+            var listMacroPanelsMenu = macrosMenu["Macro panels list"];
+            listMacroPanelsMenu.ClickHandler = (menu, tag) => new MacroPanelList().ShowAsChild();
         }
 
     }

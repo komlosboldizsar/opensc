@@ -81,6 +81,12 @@
     <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapterFactory.cs" />
     <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridViewComboBoxItem.cs" />
     <Compile Include="GUI\GeneralComponents\Tables\DataGridViewSmallIconCell.cs" />
+    <Compile Include="GUI\Macros\MacroPanelList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Macros\MacroPanelList.Designer.cs">
+      <DependentUpon>MacroPanelList.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Macros\MacroList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -570,6 +576,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ChildWindowWithTitleTwoParts.resx">
       <DependentUpon>ChildWindowWithTitleTwoParts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Macros\MacroPanelList.resx">
+      <DependentUpon>MacroPanelList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Macros\MacroList.resx">
       <DependentUpon>MacroList.cs</DependentUpon>
