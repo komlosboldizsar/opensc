@@ -51,7 +51,7 @@ namespace OpenSC.GUI.Helpers
                 return;
             data.minWidth = minWidth;
             data.minHeight = minHeight;
-            data.minWidth = minWidth;
+            data.maxWidth = maxWidth;
             data.maxHeight = maxHeight;
         }
 
@@ -157,6 +157,19 @@ namespace OpenSC.GUI.Helpers
                         result.newSize = _newSize;
                         result.sizeChange = mouseOffset;
                     }
+                    else
+                    {
+                        if ((min != null) && (_newSize < min))
+                        {
+                            result.newSize = (int)min;
+                            result.sizeChange = result.newSize - originalSize;
+                        }
+                        else if ((max != null) && (_newSize > min))
+                        {
+                            result.newSize = (int)max;
+                            result.sizeChange = result.newSize - originalSize;
+                        }
+                    }
                     break;
                 case ResizingDirection.ResizingReverse:
                     _newSize = originalSize - mouseOffset;
@@ -165,6 +178,21 @@ namespace OpenSC.GUI.Helpers
                         result.newSize = _newSize;
                         result.sizeChange = -mouseOffset;
                         result.locationDelta = mouseOffset;
+                    }
+                    else
+                    {
+                        if ((min != null) && (_newSize < min))
+                        {
+                            result.newSize = (int)min;
+                            result.sizeChange = result.newSize - originalSize;
+                            result.locationDelta = -result.sizeChange;
+                        }
+                        else if ((max != null) && (_newSize > min))
+                        {
+                            result.newSize = (int)max;
+                            result.sizeChange = result.newSize - originalSize;
+                            result.locationDelta = -result.sizeChange;
+                        }
                     }
                     break;
                 case ResizingDirection.NoResizing:
