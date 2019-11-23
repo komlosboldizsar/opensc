@@ -87,6 +87,12 @@
     <Compile Include="GUI\Macros\MacroList.Designer.cs">
       <DependentUpon>MacroList.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Macros\MacroEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Macros\MacroEditorForm.Designer.cs">
+      <DependentUpon>MacroEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Mixers\BmdMixerEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -560,6 +566,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Macros\MacroList.resx">
       <DependentUpon>MacroList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Macros\MacroEditorForm.resx">
+      <DependentUpon>MacroEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

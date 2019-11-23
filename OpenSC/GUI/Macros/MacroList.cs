@@ -79,8 +79,8 @@ namespace OpenSC.GUI.Macros
             builder.Width(70);
             builder.ButtonText("Edit");
             builder.CellContentClickHandlerMethod((macro, cell, e) => {
-                /*var editWindow = new MacroEditorForm(macro);
-                editWindow.ShowAsChild();*/
+                var editWindow = new MacroEditorForm(macro);
+                editWindow.ShowAsChild();
             });
             builder.BuildAndAdd();
 
@@ -105,8 +105,8 @@ namespace OpenSC.GUI.Macros
 
         private void addDynamicTextButton_Click(object sender, EventArgs e)
         {
-            /*var editWindow = new MacroEditorForm(null);
-            editWindow.ShowAsChild();*/
+            var editWindow = new MacroEditorForm(null);
+            editWindow.ShowAsChild();
         }
 
     }
