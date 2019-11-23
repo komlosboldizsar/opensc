@@ -81,10 +81,10 @@ namespace OpenSC.Model.Macros
 
             XElement xmlElement = new XElement(TAG_NAME);
             xmlElement.SetAttributeValue(ATTRIBUTE_MACRO, element.Macro?.ID);
-            xmlElement.SetAttributeValue(ATTRIBUTE_LABEL, element.Label);
+            xmlElement.SetAttributeValue(ATTRIBUTE_LABEL, element.Label ?? "");
             xmlElement.SetAttributeValue(ATTRIBUTE_SHOWLABEL, (element.ShowLabel ? "true" : "false"));
-            xmlElement.SetAttributeValue(ATTRIBUTE_BACKCOLOR, ColorTranslator.ToHtml(element.BackColor));
-            xmlElement.SetAttributeValue(ATTRIBUTE_FORECOLOR, ColorTranslator.ToHtml(element.ForeColor));
+            xmlElement.SetAttributeValue(ATTRIBUTE_BACKCOLOR, ColorToHexString(element.BackColor));
+            xmlElement.SetAttributeValue(ATTRIBUTE_FORECOLOR, ColorToHexString(element.ForeColor));
             xmlElement.SetAttributeValue(ATTRIBUTE_X, element.PositionX);
             xmlElement.SetAttributeValue(ATTRIBUTE_Y, element.PositionY);
             xmlElement.SetAttributeValue(ATTRIBUTE_W, element.SizeW);
@@ -92,6 +92,27 @@ namespace OpenSC.Model.Macros
 
             return xmlElement;
 
+        }
+
+        // @source https://www.cambiaresearch.com/articles/1/convert-dotnet-color-to-hex-string
+        static char[] hexDigits = {
+         '0', '1', '2', '3', '4', '5', '6', '7',
+         '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        public static string ColorToHexString(Color color)
+        {
+            byte[] bytes = new byte[3];
+            bytes[0] = color.R;
+            bytes[1] = color.G;
+            bytes[2] = color.B;
+            char[] chars = new char[bytes.Length * 2 + 1];
+            chars[0] = '#';
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                int b = bytes[i];
+                chars[i * 2 + 1] = hexDigits[b >> 4];
+                chars[i * 2 + 2] = hexDigits[b & 0xF];
+            }
+            return new string(chars);
         }
 
     }
