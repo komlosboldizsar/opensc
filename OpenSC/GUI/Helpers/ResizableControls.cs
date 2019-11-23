@@ -64,6 +64,21 @@ namespace OpenSC.GUI.Helpers
             control.MouseMove -= control_MouseMove;
             resizables.Remove(control);
         }
+
+        internal static bool ResizingNow(Control control)
+        {
+            if (!resizables.TryGetValue(control, out ResizingData resizingData))
+                return false;
+            return ((resizingData.horizontalCurrent != ResizingDirection.NoResizing) || (resizingData.verticalCurrent != ResizingDirection.NoResizing));
+        }
+
+        internal static bool CouldStartResize(Control control, MouseEventArgs e)
+        {
+            if (!resizables.TryGetValue(control, out ResizingData resizingData))
+                return false;
+            PossibleResizingDirection prd = getPossibleResizingDirection(control, e);
+            return ((prd.horizontal != ResizingDirection.NoResizing) || (prd.vertical != ResizingDirection.NoResizing));
+        }
         static void control_MouseDown(object sender, MouseEventArgs e)
         {
             Control typedSender = (Control)sender;

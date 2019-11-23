@@ -41,8 +41,10 @@ namespace OpenSC.GUI.Helpers
         }
         static void control_MouseDown(object sender, MouseEventArgs e)
         {
-            mouseOffset = new Size(e.Location);
             Control typedSender = (Control)sender;
+            if (ResizableControls.CouldStartResize(typedSender, e))
+                return;
+            mouseOffset = new Size(e.Location);
             draggables[typedSender] = true;
             originalCursor = typedSender.Cursor;
             typedSender.Cursor = Cursors.SizeAll;
