@@ -13,7 +13,7 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.Macros
 {
 
-    public partial class MacroPanelForm : ModelEditorFormBase
+    public partial class MacroPanelEditorForm : ModelEditorFormBase
     {
 
         private const string TITLE_NEW = "New macro panel";
@@ -37,12 +37,12 @@ namespace OpenSC.GUI.Macros
             }
         }
 
-        public MacroPanelForm()
+        public MacroPanelEditorForm()
         {
             InitializeComponent();
         }
 
-        public MacroPanelForm(MacroPanel macroPanel)
+        public MacroPanelEditorForm(MacroPanel macroPanel)
         {
             InitializeComponent();
             this.macroPanel = (macroPanel != null) ? macroPanel : new MacroPanel();

@@ -1,6 +1,6 @@
 ﻿namespace OpenSC.GUI.Macros
 {
-    partial class MacroPanelForm
+    partial class MacroPanelEditorForm
     {
         /// <summary>
         /// Required designer variable.

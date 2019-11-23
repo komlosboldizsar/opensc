@@ -76,7 +76,7 @@ namespace OpenSC.GUI.Macros
             builder.Width(70);
             builder.ButtonText("Edit");
             builder.CellContentClickHandlerMethod((macroPanel, cell, e) => {
-                var editWindow = new MacroPanelForm(macroPanel);
+                var editWindow = new MacroPanelEditorForm(macroPanel);
                 editWindow.ShowAsChild();
             });
             builder.BuildAndAdd();
@@ -102,7 +102,7 @@ namespace OpenSC.GUI.Macros
 
         private void addMacroPanelButton_Click(object sender, EventArgs e)
         {
-            var editWindow = new MacroPanelForm(null);
+            var editWindow = new MacroPanelEditorForm(null);
             editWindow.ShowAsChild();
         }
 
