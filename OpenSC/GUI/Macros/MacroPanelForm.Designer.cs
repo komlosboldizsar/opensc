@@ -623,6 +623,7 @@
             this.Name = "MacroPanelForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Edit macro panel";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MacroPanelForm_FormClosing);
             this.Load += new System.EventHandler(this.MacroPanelForm_Load);
             this.customElementsPanel.ResumeLayout(false);
             this.mainContainer.ResumeLayout(false);

@@ -304,6 +304,11 @@ namespace OpenSC.GUI.Macros
             MacroDatabase.Instance.ChangedItems += MacroDatabase_ChangedItems;
         }
 
+        private void MacroPanelForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            MacroDatabase.Instance.ChangedItems -= MacroDatabase_ChangedItems;
+        }
+
         private void MacroDatabase_ChangedItems(Model.DatabaseBase<Macro> database)
         {
             loadMacros();
@@ -316,7 +321,7 @@ namespace OpenSC.GUI.Macros
             Size difference = elementsPanelNewSize - elementsPanelOriginalSize;
             Size += difference;
         }
-
+  
     }
 
 }
