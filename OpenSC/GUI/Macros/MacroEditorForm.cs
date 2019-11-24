@@ -6,6 +6,7 @@ using OpenSC.Model.Signals;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace OpenSC.GUI.Macros
@@ -204,6 +205,40 @@ namespace OpenSC.GUI.Macros
 
         private void commandsEditorTextBox_TextChanged(object sender, EventArgs e)
         {
+            foreach (string line in commandsEditorTextBox.Lines)
+            {
+                MacroCodeTokenizer tokenizer = new MacroCodeTokenizer(line);
+                tokenizer.Process();
+                commandsEditorTextBox.SelectAll();
+                commandsEditorTextBox.SelectionColor = Color.Black;
+                foreach (var token in tokenizer.Tokens)
+                {
+                    commandsEditorTextBox.Select(token.StartPosition, token.Length);
+                    switch (token.Type)
+                    {
+                        case MacroCodeTokenizer.TokenType.CommandCode:
+                            commandsEditorTextBox.SelectionColor = Color.Red;
+                            break;
+                        case MacroCodeTokenizer.TokenType.StringArgument:
+                            commandsEditorTextBox.SelectionColor = Color.Green;
+                            break;
+                        case MacroCodeTokenizer.TokenType.IntArgument:
+                            commandsEditorTextBox.SelectionColor = Color.DarkBlue;
+                            break;
+                        case MacroCodeTokenizer.TokenType.FloatArgument:
+                            commandsEditorTextBox.SelectionColor = Color.Purple;
+                            break;
+                    }
+                }
+                if (tokenizer.HasSyntaxError)
+                {
+                    commandsEditorTextBox.Select(tokenizer.SyntaxErrorPosition, 1);
+                    commandsEditorTextBox.SelectionBackColor = Color.Yellow;
+                }
+                commandsEditorTextBox.SelectionStart = commandsEditorTextBox.TextLength;
+                commandsEditorTextBox.SelectionLength = 0;
+                
+            }
 
         }
 

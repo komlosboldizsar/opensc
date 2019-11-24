@@ -223,11 +223,12 @@
             // commandsEditorTextBox
             // 
             this.commandsEditorTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.commandsEditorTextBox.Font = new System.Drawing.Font("Consolas", 10.1F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.commandsEditorTextBox.Location = new System.Drawing.Point(0, 0);
             this.commandsEditorTextBox.Name = "commandsEditorTextBox";
             this.commandsEditorTextBox.Size = new System.Drawing.Size(496, 459);
             this.commandsEditorTextBox.TabIndex = 0;
-            this.commandsEditorTextBox.Text = "";
+            this.commandsEditorTextBox.Text = "Example_Command(1, 2, 4)\nCommand.Test(3, 41, \"x\")";
             this.commandsEditorTextBox.TextChanged += new System.EventHandler(this.commandsEditorTextBox_TextChanged);
             // 
             // addCommandPanel
