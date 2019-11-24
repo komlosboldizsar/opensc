@@ -452,6 +452,7 @@
     <Compile Include="Model\General\ObservableList.cs" />
     <Compile Include="Model\IDatabaseBase.cs" />
     <Compile Include="Model\IModel.cs" />
+    <Compile Include="Model\Macros\MacroCodeTokenizer.cs" />
     <Compile Include="Model\Macros\MacroPanelElementXmlSerializer.cs" />
     <Compile Include="Model\Macros\MacroPanelDatabase.cs" />
     <Compile Include="Model\Macros\MacroPanel.cs" />
