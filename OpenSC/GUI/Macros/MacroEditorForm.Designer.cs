@@ -56,9 +56,9 @@
             this.triggersTable = new System.Windows.Forms.DataGridView();
             this.triggersButtonsPanel = new System.Windows.Forms.Panel();
             this.addTriggerButton = new System.Windows.Forms.Button();
-            this.commandArgumentControl1 = new OpenSC.GUI.Macros.CommandArgumentControl();
             this.commandArgumentControl2 = new OpenSC.GUI.Macros.CommandArgumentControl();
             this.commandArgumentControl3 = new OpenSC.GUI.Macros.CommandArgumentControl();
+            this.commandArgumentControl1 = new OpenSC.GUI.Macros.CommandArgumentControl();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.baseDataPanel.SuspendLayout();
@@ -360,6 +360,7 @@
             this.selectCommandComboBox.Name = "selectCommandComboBox";
             this.selectCommandComboBox.Size = new System.Drawing.Size(472, 24);
             this.selectCommandComboBox.TabIndex = 1;
+            this.selectCommandComboBox.SelectedIndexChanged += new System.EventHandler(this.selectCommandComboBox_SelectedIndexChanged);
             // 
             // triggersTabPage
             // 
@@ -416,14 +417,6 @@
             this.addTriggerButton.UseVisualStyleBackColor = true;
             this.addTriggerButton.Click += new System.EventHandler(this.addTriggerButton_Click);
             // 
-            // commandArgumentControl1
-            // 
-            this.commandArgumentControl1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.commandArgumentControl1.Location = new System.Drawing.Point(0, 0);
-            this.commandArgumentControl1.Name = "commandArgumentControl1";
-            this.commandArgumentControl1.Size = new System.Drawing.Size(451, 88);
-            this.commandArgumentControl1.TabIndex = 0;
-            // 
             // commandArgumentControl2
             // 
             this.commandArgumentControl2.Dock = System.Windows.Forms.DockStyle.Top;
@@ -440,6 +433,14 @@
             this.commandArgumentControl3.Size = new System.Drawing.Size(451, 88);
             this.commandArgumentControl3.TabIndex = 2;
             // 
+            // commandArgumentControl1
+            // 
+            this.commandArgumentControl1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.commandArgumentControl1.Location = new System.Drawing.Point(0, 0);
+            this.commandArgumentControl1.Name = "commandArgumentControl1";
+            this.commandArgumentControl1.Size = new System.Drawing.Size(451, 88);
+            this.commandArgumentControl1.TabIndex = 0;
+            // 
             // MacroEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -451,6 +452,7 @@
             this.MinimumSize = new System.Drawing.Size(1000, 600);
             this.Name = "MacroEditorForm";
             this.Text = "Edit macro";
+            this.Load += new System.EventHandler(this.MacroEditorForm_Load);
             this.customElementsPanel.ResumeLayout(false);
             this.mainContainer.ResumeLayout(false);
             this.baseDataPanel.ResumeLayout(false);
@@ -515,8 +517,8 @@
         private System.Windows.Forms.Panel commandArgumentsPanel;
         private System.Windows.Forms.Panel addCommandButtonsPanel;
         private System.Windows.Forms.Panel distanceHolder1;
-        private CommandArgumentControl commandArgumentControl1;
         private CommandArgumentControl commandArgumentControl3;
         private CommandArgumentControl commandArgumentControl2;
+        private CommandArgumentControl commandArgumentControl1;
     }
 }

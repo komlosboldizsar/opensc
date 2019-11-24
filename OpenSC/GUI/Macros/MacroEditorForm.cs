@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.GeneralComponents.Tables;
+﻿using OpenSC.GUI.GeneralComponents.DropDowns;
+using OpenSC.GUI.GeneralComponents.Tables;
 using OpenSC.Model.Macros;
 using OpenSC.Model.Routers;
 using OpenSC.Model.Signals;
@@ -179,7 +180,21 @@ namespace OpenSC.GUI.Macros
 
         private void addCommandButton_Click(object sender, EventArgs e)
         {
-            //router.AddInput();
+            IMacroCommand command = selectCommandComboBox.SelectedValue as IMacroCommand;
+            if (command == null)
+            {
+                // Show error message
+                return;
+            }
+            List<object> arguments = new List<object>();
+            foreach (CommandArgumentControl argControl in argumentControls)
+                arguments.Add(argControl.ArgumentValue);
+            string[] argumentKeys = command.GetArgumentKeys(arguments.ToArray());
+            string serializedCommand = command.CommandCode + "(";
+            for (int i = 0; i < serializedCommand.Length; i++)
+                serializedCommand += string.Format("{1}{0}{1}{2}", argumentKeys[i], ((command.Arguments[i].Type == typeof(string)) ? "\"" : ""), ((i == (serializedCommand.Length - 1)) ? "" : ", "));
+            serializedCommand += ")\r\n";
+            commandsEditorTextBox.AppendText(serializedCommand);
         }
 
         private void addTriggerButton_Click(object sender, EventArgs e)
@@ -191,6 +206,41 @@ namespace OpenSC.GUI.Macros
         {
 
         }
+
+        private List<CommandArgumentControl> argumentControls = new List<CommandArgumentControl>();
+
+        private void selectCommandComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            IMacroCommand selectedCommand = selectCommandComboBox.SelectedValue as IMacroCommand;
+            commandDescriptionTextBox.Text = "";
+            commandArgumentsPanel.Controls.Clear();
+            argumentControls.Clear();
+            if (selectedCommand != null)
+            {
+                commandDescriptionTextBox.Text = selectedCommand.Description;
+                int i = 0;
+                int argCount = selectedCommand.Arguments.Length;
+                foreach (IMacroCommandArgument arg in selectedCommand.Arguments)
+                {
+                    var argumentControl = new CommandArgumentControl(arg, i, (i == (argCount - 1)));
+                    commandArgumentsPanel.Controls.Add(argumentControl);
+                    argumentControl.Dock = DockStyle.Top;
+                    argumentControls.Add(argumentControl);
+                    i++;
+                }
+            }
+        }
+
+        private void loadCommands()
+        {
+            selectCommandComboBox.CreateAdapterAsDataSource(MacroCommandRegister.Instance.RegisteredCommands, mc => string.Format("[{0}] {1}", mc.CommandCode, mc.CommandName), true, "-");
+        }
+
+        private void MacroEditorForm_Load(object sender, EventArgs e)
+        {
+            loadCommands();
+        }
+
     }
 
 }
