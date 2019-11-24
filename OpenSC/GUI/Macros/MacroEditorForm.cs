@@ -211,6 +211,7 @@ namespace OpenSC.GUI.Macros
                 tokenizer.Process();
                 commandsEditorTextBox.SelectAll();
                 commandsEditorTextBox.SelectionColor = Color.Black;
+                commandsEditorTextBox.SelectionBackColor = Color.White;
                 foreach (var token in tokenizer.Tokens)
                 {
                     commandsEditorTextBox.Select(token.StartPosition, token.Length);
@@ -230,11 +231,13 @@ namespace OpenSC.GUI.Macros
                             break;
                     }
                 }
+
                 if (tokenizer.HasSyntaxError)
                 {
                     commandsEditorTextBox.Select(tokenizer.SyntaxErrorPosition, 1);
                     commandsEditorTextBox.SelectionBackColor = Color.Yellow;
                 }
+
                 commandsEditorTextBox.SelectionStart = commandsEditorTextBox.TextLength;
                 commandsEditorTextBox.SelectionLength = 0;
                 

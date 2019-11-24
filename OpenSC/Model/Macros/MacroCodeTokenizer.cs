@@ -61,9 +61,13 @@ namespace OpenSC.Model.Macros
                         state = State.CommandCode;
                         CommandCode += currentChr;
                     }
+                    else if (currentChr == 0)
+                    {
+                        state = State.Empty;
+                    }
                     else if (!isWhitespace(currentChr))
                     {
-                        syntaxError();
+                        fatalSyntaxError();
                     }
                     break;
 
@@ -82,11 +86,14 @@ namespace OpenSC.Model.Macros
                         state = State.CommandCodeWhiteSpacesAfter;
                         addToken(TokenType.CommandCode, false);
                     }
-                    else
+                    else if (currentChr == 0)
                     {
-                        if (currentChr == 0)
-                            addToken(TokenType.CommandCode, false);
-                        syntaxError();
+                        addToken(TokenType.CommandCode, false);
+                        incomplete();
+                    }
+                    else
+                    { 
+                        fatalSyntaxError();
                     }
                     break;
 
@@ -95,9 +102,13 @@ namespace OpenSC.Model.Macros
                     {
                         state = State.CommandArgumentListStart;
                     }
+                    else if (currentChr == 0)
+                    {
+                        incomplete();
+                    }
                     else if (!isWhitespace(currentChr))
                     {
-                        syntaxError();
+                        fatalSyntaxError();
                     }
                     break;
 
@@ -125,9 +136,13 @@ namespace OpenSC.Model.Macros
                     {
                         state = State.CommandArgumentListStartWhiteSpacesAfter;
                     }
+                    else if (currentChr == 0)
+                    {
+                        incomplete();
+                    }
                     else
                     {
-                        syntaxError();
+                        fatalSyntaxError();
                     }
                     break;
 
@@ -150,9 +165,13 @@ namespace OpenSC.Model.Macros
                     {
                         state = State.CommandArgumentSeparatorWhitespacesAfter;
                     }
+                    else if (currentChr == 0)
+                    {
+                        incomplete();
+                    }
                     else
                     {
-                        syntaxError();
+                        fatalSyntaxError();
                     }
                     break;
 
@@ -161,9 +180,13 @@ namespace OpenSC.Model.Macros
                     {
                         state = State.CommandArgumentSeparator;
                     }
+                    else if (currentChr == 0)
+                    {
+                        incomplete();
+                    }
                     else if (!isWhitespace(currentChr))
                     {
-                        syntaxError();
+                        fatalSyntaxError();
                     }
                     break;
 
@@ -181,9 +204,13 @@ namespace OpenSC.Model.Macros
                         currentTokenStart = currentPosition;
                         currentArgumentValue = "";
                     }
+                    else if (currentChr == 0)
+                    {
+                        incomplete();
+                    }
                     else if (!isWhitespace(currentChr))
                     { 
-                        syntaxError();
+                        fatalSyntaxError();
                     }
                     break;
 
@@ -195,7 +222,7 @@ namespace OpenSC.Model.Macros
                     else if (currentChr == 0)
                     {
                         addToken(TokenType.StringArgument, false);
-                        syntaxError();
+                        incomplete();
                     }
                     else
                     {
@@ -220,7 +247,7 @@ namespace OpenSC.Model.Macros
                     else if (currentChr == 0)
                     {
                         addToken(TokenType.StringArgument, false);
-                        syntaxError();
+                        incomplete();
                     }
                     else
                     {
@@ -249,7 +276,7 @@ namespace OpenSC.Model.Macros
                     }
                     else
                     {
-                        syntaxError();
+                        fatalSyntaxError();
                     }
                     break;
 
@@ -281,11 +308,14 @@ namespace OpenSC.Model.Macros
                         addToken(TokenType.IntArgument, false);
                         state = State.CommandArgumentListEnd;
                     }
-                    else 
+                    else if (currentChr == 0)
                     {
-                        if (currentChr == 0)
-                            addToken(TokenType.IntArgument, false);
-                        syntaxError();
+                        addToken(TokenType.IntArgument, false);
+                        incomplete();
+                    }
+                    else
+                    {
+                        fatalSyntaxError();
                     }
                     break;
 
@@ -295,11 +325,14 @@ namespace OpenSC.Model.Macros
                         state = State.CommandNumberArgumentFractional;
                         currentArgumentValue += currentChr;
                     }
+                    else if (currentChr == 0)
+                    {
+                        addToken(TokenType.FloatArgument, false);
+                        incomplete();
+                    }
                     else
                     {
-                        if (currentChr == 0)
-                            addToken(TokenType.FloatArgument, false);
-                        syntaxError();
+                        fatalSyntaxError();
                     }
                     break;
 
@@ -330,11 +363,14 @@ namespace OpenSC.Model.Macros
                     {
                         state = State.CommandArgumentSeparatorWhitespacesBefore;
                     }
+                    else if (currentChr == 0)
+                    {
+                        addToken(TokenType.FloatArgument, false);
+                        incomplete();
+                    }
                     else
                     {
-                        if (currentChr == 0)
-                            addToken(TokenType.FloatArgument, false);
-                        syntaxError();
+                        fatalSyntaxError();
                     }
                     break;
 
@@ -345,16 +381,18 @@ namespace OpenSC.Model.Macros
                     }
                     else
                     {
-                        syntaxError();
+                        fatalSyntaxError();
                     }
                     break;
 
                 case State.EndingWhiteSpaces:
                     if (!isWhitespace(currentChr))
-                        syntaxError();
+                        fatalSyntaxError();
                     break;
 
                 case State.SyntaxError:
+                case State.EndButIncomplete:
+                case State.Empty:
                 default:
                     break;
 
@@ -403,7 +441,9 @@ namespace OpenSC.Model.Macros
             CommandNumberArgumentDecimalPoint,
             CommandNumberArgumentFractional,
             CommandArgumentListEnd,
-            SyntaxError
+            SyntaxError,
+            EndButIncomplete,
+            Empty
         }
         #endregion
 
@@ -534,42 +574,22 @@ namespace OpenSC.Model.Macros
         public bool IsComplete
             => ((state == State.CommandArgumentListEnd) || (state == State.EndingWhiteSpaces));
 
-        public bool HasSyntaxError { get; private set; } = false; // Needs fix
+        public bool IsEmpty
+            => (state == State.Empty);
+        public bool HasSyntaxError { get; private set; } = false;
 
         public int SyntaxErrorPosition { get; private set; }
-        #endregion
 
-        #region Syntax error
-        private void syntaxError(string message = "")
+        private void fatalSyntaxError()
         {
             state = State.SyntaxError;
             HasSyntaxError = true;
             SyntaxErrorPosition = currentPosition;
-            //throw new FormulaSyntaxErrorException(currentPosition, message);
         }
 
-        public class FormulaSyntaxErrorException : Exception
+        private void incomplete()
         {
-
-            public int Position { get; private set; } = -1;
-
-            public FormulaSyntaxErrorException()
-            { }
-
-            public FormulaSyntaxErrorException(string message) :
-                base(message)
-            { }
-
-            public FormulaSyntaxErrorException(int position, string message = "") :
-                base(string.Format("Syntax error at character {0}.{1}{2}", position, ((message != "") ? " " : ""), message))
-            {
-                Position = position;
-            }
-
-            public FormulaSyntaxErrorException(string message, Exception innerException) :
-                base(message, innerException)
-            { }
-
+            state = State.EndButIncomplete;
         }
         #endregion
 
