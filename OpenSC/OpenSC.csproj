@@ -79,6 +79,12 @@
     <Compile Include="GUI\GeneralComponents\DropDowns\EnumComboBoxAdapter.cs" />
     <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapter.cs" />
     <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapterFactory.cs" />
+    <Compile Include="GUI\GeneralComponents\RichTextBoxWithBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\GeneralComponents\RichTextBoxWithBar.Designer.cs">
+      <DependentUpon>RichTextBoxWithBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridViewComboBoxItem.cs" />
     <Compile Include="GUI\GeneralComponents\Tables\DataGridViewSmallIconCell.cs" />
     <Compile Include="GUI\Helpers\ResizableControls.cs" />
@@ -603,6 +609,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ChildWindowWithTitleTwoParts.resx">
       <DependentUpon>ChildWindowWithTitleTwoParts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\GeneralComponents\RichTextBoxWithBar.resx">
+      <DependentUpon>RichTextBoxWithBar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Macros\CommandArgumentControl.resx">
       <DependentUpon>CommandArgumentControl.cs</DependentUpon>
