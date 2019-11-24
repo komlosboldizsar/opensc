@@ -459,7 +459,6 @@
     <Compile Include="Model\Macros\MacroCommandRegister.cs" />
     <Compile Include="Model\Macros\MacroCommandWithArguments.cs" />
     <Compile Include="Model\Macros\IMacroCommandArgument.cs" />
-    <Compile Include="Model\Macros\IMacroCommandArgumentT.cs" />
     <Compile Include="Model\Macros\MacroDatabase.cs" />
     <Compile Include="Model\Macros\IMacroCommand.cs" />
     <Compile Include="Model\Macros\Macro.cs" />
@@ -497,6 +496,7 @@
     <Compile Include="Model\Routers\LabelsetDatabase.cs" />
     <Compile Include="Model\Routers\LabelXmlSerializer.cs" />
     <Compile Include="Model\Routers\Leitch\LeitchRouter.cs" />
+    <Compile Include="Model\Routers\Macros\SetRouterCrosspointMacroCommand.cs" />
     <Compile Include="Model\Routers\Router.cs" />
     <Compile Include="Model\Routers\RouterDatabase.cs" />
     <Compile Include="Model\Routers\RouterInput.cs" />
