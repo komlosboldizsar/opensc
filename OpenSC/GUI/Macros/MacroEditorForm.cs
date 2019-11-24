@@ -187,6 +187,10 @@ namespace OpenSC.GUI.Macros
             //router.AddOutput();
         }
 
+        private void commandsEditorTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 
 }
