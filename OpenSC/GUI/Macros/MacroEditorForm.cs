@@ -225,14 +225,19 @@ namespace OpenSC.GUI.Macros
                 foreach (IMacroCommandArgument arg in selectedCommand.Arguments)
                 {
                     var argumentControl = new CommandArgumentControl(arg, i, (i == (argCount - 1)));
-                    commandArgumentsPanel.Controls.Add(argumentControl);
-                    argumentControl.AutoSize = false;
-                    argumentControl.Dock = DockStyle.Top;
                     argumentControl.ArgumentValueChanged += ArgumentControl_ArgumentValueChanged;
                     argumentControls.Add(argumentControl);
                     i++;
                 }
             }
+
+            for (int i = argumentControls.Count - 1; i >= 0; i--)
+            {
+                CommandArgumentControl control = argumentControls[i];
+                commandArgumentsPanel.Controls.Add(control);
+                control.Dock = DockStyle.Top;
+            }
+
         }
 
         private void ArgumentControl_ArgumentValueChanged(CommandArgumentControl control, IMacroCommandArgument argument, object newValue)

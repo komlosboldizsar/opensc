@@ -271,14 +271,13 @@
             // commandArgumentsPanel
             // 
             this.commandArgumentsPanel.AutoScroll = true;
-            this.commandArgumentsPanel.AutoSize = true;
             this.commandArgumentsPanel.Controls.Add(this.commandArgumentControl3);
             this.commandArgumentsPanel.Controls.Add(this.commandArgumentControl2);
             this.commandArgumentsPanel.Controls.Add(this.commandArgumentControl1);
             this.commandArgumentsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commandArgumentsPanel.Location = new System.Drawing.Point(8, 23);
-            this.commandArgumentsPanel.MinimumSize = new System.Drawing.Size(0, 30);
             this.commandArgumentsPanel.Name = "commandArgumentsPanel";
+            this.commandArgumentsPanel.Padding = new System.Windows.Forms.Padding(0, 0, 5, 0);
             this.commandArgumentsPanel.Size = new System.Drawing.Size(472, 218);
             this.commandArgumentsPanel.TabIndex = 0;
             // 
@@ -286,18 +285,20 @@
             // 
             this.commandArgumentControl3.AutoSize = true;
             this.commandArgumentControl3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.commandArgumentControl3.Location = new System.Drawing.Point(0, 6);
+            this.commandArgumentControl3.Location = new System.Drawing.Point(0, 208);
             this.commandArgumentControl3.Name = "commandArgumentControl3";
-            this.commandArgumentControl3.Size = new System.Drawing.Size(472, 3);
+            this.commandArgumentControl3.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.commandArgumentControl3.Size = new System.Drawing.Size(446, 104);
             this.commandArgumentControl3.TabIndex = 2;
             // 
             // commandArgumentControl2
             // 
             this.commandArgumentControl2.AutoSize = true;
             this.commandArgumentControl2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.commandArgumentControl2.Location = new System.Drawing.Point(0, 3);
+            this.commandArgumentControl2.Location = new System.Drawing.Point(0, 104);
             this.commandArgumentControl2.Name = "commandArgumentControl2";
-            this.commandArgumentControl2.Size = new System.Drawing.Size(472, 3);
+            this.commandArgumentControl2.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.commandArgumentControl2.Size = new System.Drawing.Size(446, 104);
             this.commandArgumentControl2.TabIndex = 1;
             // 
             // commandArgumentControl1
@@ -306,7 +307,8 @@
             this.commandArgumentControl1.Dock = System.Windows.Forms.DockStyle.Top;
             this.commandArgumentControl1.Location = new System.Drawing.Point(0, 0);
             this.commandArgumentControl1.Name = "commandArgumentControl1";
-            this.commandArgumentControl1.Size = new System.Drawing.Size(472, 3);
+            this.commandArgumentControl1.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.commandArgumentControl1.Size = new System.Drawing.Size(446, 104);
             this.commandArgumentControl1.TabIndex = 0;
             // 
             // addCommandButtonsPanel
@@ -475,7 +477,6 @@
             this.commandArgumentsContainer.ResumeLayout(false);
             this.commandArgumentsContainer.PerformLayout();
             this.commandArgumentsGroupBox.ResumeLayout(false);
-            this.commandArgumentsGroupBox.PerformLayout();
             this.commandArgumentsPanel.ResumeLayout(false);
             this.commandArgumentsPanel.PerformLayout();
             this.addCommandButtonsPanel.ResumeLayout(false);
@@ -518,9 +519,9 @@
         private System.Windows.Forms.GroupBox selectCommandGroupBox;
         private System.Windows.Forms.TextBox commandDescriptionTextBox;
         private System.Windows.Forms.ComboBox selectCommandComboBox;
-        private System.Windows.Forms.Panel commandArgumentsPanel;
         private System.Windows.Forms.Panel addCommandButtonsPanel;
         private System.Windows.Forms.Panel distanceHolder1;
+        private System.Windows.Forms.Panel commandArgumentsPanel;
         private CommandArgumentControl commandArgumentControl3;
         private CommandArgumentControl commandArgumentControl2;
         private CommandArgumentControl commandArgumentControl1;

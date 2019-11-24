@@ -51,25 +51,25 @@
             this.table.Controls.Add(this.argumentDescriptionLabel, 0, 1);
             this.table.Controls.Add(this.valueComboBox, 1, 2);
             this.table.Controls.Add(this.valueLabel, 0, 2);
-            this.table.Dock = System.Windows.Forms.DockStyle.Left;
+            this.table.Dock = System.Windows.Forms.DockStyle.Fill;
             this.table.Location = new System.Drawing.Point(0, 0);
             this.table.Name = "table";
             this.table.RowCount = 4;
             this.table.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.table.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.table.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.table.Size = new System.Drawing.Size(981, 103);
+            this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
+            this.table.Size = new System.Drawing.Size(632, 125);
             this.table.TabIndex = 3;
             // 
             // argumentNameLabel
             // 
             this.argumentNameLabel.AutoSize = true;
             this.argumentNameLabel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.argumentNameLabel.Location = new System.Drawing.Point(199, 3);
+            this.argumentNameLabel.Location = new System.Drawing.Point(129, 3);
             this.argumentNameLabel.Margin = new System.Windows.Forms.Padding(3);
             this.argumentNameLabel.Name = "argumentNameLabel";
-            this.argumentNameLabel.Size = new System.Drawing.Size(779, 17);
+            this.argumentNameLabel.Size = new System.Drawing.Size(500, 17);
             this.argumentNameLabel.TabIndex = 5;
             this.argumentNameLabel.Text = "Argument name";
             // 
@@ -78,10 +78,10 @@
             this.argumentIndexLabel.AutoSize = true;
             this.argumentIndexLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.argumentIndexLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.argumentIndexLabel.Location = new System.Drawing.Point(3, 3);
-            this.argumentIndexLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.argumentIndexLabel.Location = new System.Drawing.Point(5, 3);
+            this.argumentIndexLabel.Margin = new System.Windows.Forms.Padding(5, 3, 5, 3);
             this.argumentIndexLabel.Name = "argumentIndexLabel";
-            this.argumentIndexLabel.Size = new System.Drawing.Size(190, 17);
+            this.argumentIndexLabel.Size = new System.Drawing.Size(116, 17);
             this.argumentIndexLabel.TabIndex = 2;
             this.argumentIndexLabel.Text = "(argN)";
             // 
@@ -89,10 +89,10 @@
             // 
             this.table.SetColumnSpan(this.argumentDescriptionLabel, 2);
             this.argumentDescriptionLabel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.argumentDescriptionLabel.Location = new System.Drawing.Point(5, 28);
-            this.argumentDescriptionLabel.Margin = new System.Windows.Forms.Padding(5);
+            this.argumentDescriptionLabel.Location = new System.Drawing.Point(5, 33);
+            this.argumentDescriptionLabel.Margin = new System.Windows.Forms.Padding(5, 10, 5, 10);
             this.argumentDescriptionLabel.Name = "argumentDescriptionLabel";
-            this.argumentDescriptionLabel.Size = new System.Drawing.Size(971, 17);
+            this.argumentDescriptionLabel.Size = new System.Drawing.Size(622, 17);
             this.argumentDescriptionLabel.TabIndex = 3;
             this.argumentDescriptionLabel.Text = "Egy soros leírás.";
             // 
@@ -101,9 +101,9 @@
             this.valueComboBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.valueComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.valueComboBox.FormattingEnabled = true;
-            this.valueComboBox.Location = new System.Drawing.Point(199, 53);
+            this.valueComboBox.Location = new System.Drawing.Point(129, 63);
             this.valueComboBox.Name = "valueComboBox";
-            this.valueComboBox.Size = new System.Drawing.Size(779, 24);
+            this.valueComboBox.Size = new System.Drawing.Size(500, 24);
             this.valueComboBox.TabIndex = 6;
             this.valueComboBox.SelectedIndexChanged += new System.EventHandler(this.valueComboBox_SelectedIndexChanged);
             // 
@@ -111,7 +111,8 @@
             // 
             this.valueLabel.AutoSize = true;
             this.valueLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.valueLabel.Location = new System.Drawing.Point(3, 50);
+            this.valueLabel.Location = new System.Drawing.Point(5, 60);
+            this.valueLabel.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.valueLabel.Name = "valueLabel";
             this.valueLabel.Size = new System.Drawing.Size(48, 31);
             this.valueLabel.TabIndex = 7;
@@ -125,16 +126,16 @@
             this.tableContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableContainerPanel.Location = new System.Drawing.Point(0, 0);
             this.tableContainerPanel.Name = "tableContainerPanel";
-            this.tableContainerPanel.Size = new System.Drawing.Size(981, 103);
+            this.tableContainerPanel.Size = new System.Drawing.Size(632, 125);
             this.tableContainerPanel.TabIndex = 8;
             // 
             // borderPanel
             // 
             this.borderPanel.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.borderPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.borderPanel.Location = new System.Drawing.Point(0, 103);
+            this.borderPanel.Location = new System.Drawing.Point(0, 125);
             this.borderPanel.Name = "borderPanel";
-            this.borderPanel.Size = new System.Drawing.Size(981, 5);
+            this.borderPanel.Size = new System.Drawing.Size(632, 3);
             this.borderPanel.TabIndex = 8;
             // 
             // CommandArgumentControl
@@ -145,7 +146,8 @@
             this.Controls.Add(this.tableContainerPanel);
             this.Controls.Add(this.borderPanel);
             this.Name = "CommandArgumentControl";
-            this.Size = new System.Drawing.Size(981, 108);
+            this.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.Size = new System.Drawing.Size(632, 133);
             this.Load += new System.EventHandler(this.CommandArgumentControl_Load);
             this.table.ResumeLayout(false);
             this.table.PerformLayout();
