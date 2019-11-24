@@ -214,6 +214,8 @@ namespace OpenSC.GUI.Macros
             IMacroCommand selectedCommand = selectCommandComboBox.SelectedValue as IMacroCommand;
             commandDescriptionTextBox.Text = "";
             commandArgumentsPanel.Controls.Clear();
+            foreach (CommandArgumentControl argControl in argumentControls)
+                argControl.ArgumentValueChanged -= ArgumentControl_ArgumentValueChanged;
             argumentControls.Clear();
             if (selectedCommand != null)
             {
@@ -224,11 +226,38 @@ namespace OpenSC.GUI.Macros
                 {
                     var argumentControl = new CommandArgumentControl(arg, i, (i == (argCount - 1)));
                     commandArgumentsPanel.Controls.Add(argumentControl);
+                    argumentControl.AutoSize = false;
                     argumentControl.Dock = DockStyle.Top;
+                    argumentControl.ArgumentValueChanged += ArgumentControl_ArgumentValueChanged;
                     argumentControls.Add(argumentControl);
                     i++;
                 }
             }
+        }
+
+        private void ArgumentControl_ArgumentValueChanged(CommandArgumentControl control, IMacroCommandArgument argument, object newValue)
+        {
+
+            List<object> argumentValues = new List<object>();
+            object[] argumentValuesArr = null;
+
+            bool collecting = true;
+            foreach (CommandArgumentControl argControl in argumentControls)
+            {
+
+                if (collecting)
+                    argumentValues.Add(argControl.ArgumentValue);
+                else
+                    control.PreviousArgumentValues = argumentValuesArr;
+
+                if (argControl == control)
+                {
+                    collecting = false;
+                    argumentValuesArr = argumentValues.ToArray();
+                }
+
+            }
+
         }
 
         private void loadCommands()

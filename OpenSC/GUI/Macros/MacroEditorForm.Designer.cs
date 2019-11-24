@@ -44,6 +44,9 @@
             this.commandArgumentsContainer = new System.Windows.Forms.Panel();
             this.commandArgumentsGroupBox = new System.Windows.Forms.GroupBox();
             this.commandArgumentsPanel = new System.Windows.Forms.Panel();
+            this.commandArgumentControl3 = new OpenSC.GUI.Macros.CommandArgumentControl();
+            this.commandArgumentControl2 = new OpenSC.GUI.Macros.CommandArgumentControl();
+            this.commandArgumentControl1 = new OpenSC.GUI.Macros.CommandArgumentControl();
             this.addCommandButtonsPanel = new System.Windows.Forms.Panel();
             this.addCommandButton = new System.Windows.Forms.Button();
             this.selectCommandPanel = new System.Windows.Forms.Panel();
@@ -56,9 +59,6 @@
             this.triggersTable = new System.Windows.Forms.DataGridView();
             this.triggersButtonsPanel = new System.Windows.Forms.Panel();
             this.addTriggerButton = new System.Windows.Forms.Button();
-            this.commandArgumentControl2 = new OpenSC.GUI.Macros.CommandArgumentControl();
-            this.commandArgumentControl3 = new OpenSC.GUI.Macros.CommandArgumentControl();
-            this.commandArgumentControl1 = new OpenSC.GUI.Macros.CommandArgumentControl();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.baseDataPanel.SuspendLayout();
@@ -282,6 +282,33 @@
             this.commandArgumentsPanel.Size = new System.Drawing.Size(472, 218);
             this.commandArgumentsPanel.TabIndex = 0;
             // 
+            // commandArgumentControl3
+            // 
+            this.commandArgumentControl3.AutoSize = true;
+            this.commandArgumentControl3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.commandArgumentControl3.Location = new System.Drawing.Point(0, 6);
+            this.commandArgumentControl3.Name = "commandArgumentControl3";
+            this.commandArgumentControl3.Size = new System.Drawing.Size(472, 3);
+            this.commandArgumentControl3.TabIndex = 2;
+            // 
+            // commandArgumentControl2
+            // 
+            this.commandArgumentControl2.AutoSize = true;
+            this.commandArgumentControl2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.commandArgumentControl2.Location = new System.Drawing.Point(0, 3);
+            this.commandArgumentControl2.Name = "commandArgumentControl2";
+            this.commandArgumentControl2.Size = new System.Drawing.Size(472, 3);
+            this.commandArgumentControl2.TabIndex = 1;
+            // 
+            // commandArgumentControl1
+            // 
+            this.commandArgumentControl1.AutoSize = true;
+            this.commandArgumentControl1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.commandArgumentControl1.Location = new System.Drawing.Point(0, 0);
+            this.commandArgumentControl1.Name = "commandArgumentControl1";
+            this.commandArgumentControl1.Size = new System.Drawing.Size(472, 3);
+            this.commandArgumentControl1.TabIndex = 0;
+            // 
             // addCommandButtonsPanel
             // 
             this.addCommandButtonsPanel.Controls.Add(this.addCommandButton);
@@ -417,30 +444,6 @@
             this.addTriggerButton.UseVisualStyleBackColor = true;
             this.addTriggerButton.Click += new System.EventHandler(this.addTriggerButton_Click);
             // 
-            // commandArgumentControl2
-            // 
-            this.commandArgumentControl2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.commandArgumentControl2.Location = new System.Drawing.Point(0, 88);
-            this.commandArgumentControl2.Name = "commandArgumentControl2";
-            this.commandArgumentControl2.Size = new System.Drawing.Size(451, 88);
-            this.commandArgumentControl2.TabIndex = 1;
-            // 
-            // commandArgumentControl3
-            // 
-            this.commandArgumentControl3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.commandArgumentControl3.Location = new System.Drawing.Point(0, 176);
-            this.commandArgumentControl3.Name = "commandArgumentControl3";
-            this.commandArgumentControl3.Size = new System.Drawing.Size(451, 88);
-            this.commandArgumentControl3.TabIndex = 2;
-            // 
-            // commandArgumentControl1
-            // 
-            this.commandArgumentControl1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.commandArgumentControl1.Location = new System.Drawing.Point(0, 0);
-            this.commandArgumentControl1.Name = "commandArgumentControl1";
-            this.commandArgumentControl1.Size = new System.Drawing.Size(451, 88);
-            this.commandArgumentControl1.TabIndex = 0;
-            // 
             // MacroEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -474,6 +477,7 @@
             this.commandArgumentsGroupBox.ResumeLayout(false);
             this.commandArgumentsGroupBox.PerformLayout();
             this.commandArgumentsPanel.ResumeLayout(false);
+            this.commandArgumentsPanel.PerformLayout();
             this.addCommandButtonsPanel.ResumeLayout(false);
             this.selectCommandPanel.ResumeLayout(false);
             this.selectCommandPanel.PerformLayout();

@@ -33,16 +33,7 @@ namespace OpenSC.Model.Macros
             return value?.ToString();
         }
 
-        public object[] GetArgumentsByKeys(string[] keys)
-        {
-            List<object> argumentValues = new List<object>();
-            int i = 0;
-            foreach (string key in keys)
-                argumentValues.Add(getArgumentByKey(i++, key));
-            return argumentValues.ToArray();
-        }
-
-        protected abstract object getArgumentByKey(int index, string key);
+        public abstract object[] GetArgumentsByKeys(string[] keys);
 
         public virtual MacroCommandWithArguments GetWithArguments(string[] argumentKeys)
         {

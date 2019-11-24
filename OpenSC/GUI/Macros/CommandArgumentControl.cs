@@ -53,11 +53,26 @@ namespace OpenSC.GUI.Macros
             argumentIndexLabel.Text = string.Format("(arg{0})", argIndex);
             argumentNameLabel.Text = argument.Name;
             argumentDescriptionLabel.Text = argument.Description;
-            valueComboBox.CreateAdapterAsDataSource<object>(argument.Possibilities, item => argument.GetStringForPossibility(item), true, "-");
+        }
+
+        public object[] PreviousArgumentValues
+        {
+            set
+            {
+                valueComboBox.CreateAdapterAsDataSource<object>(argument.GetPossibilities(value), item => argument.GetStringForPossibility(item), true, "-");
+            }
         }
 
         public object ArgumentValue
             => valueComboBox.SelectedValue;
+
+        public delegate void ArgumentValueChangedDelegate(CommandArgumentControl control, IMacroCommandArgument argument, object newValue);
+        public event ArgumentValueChangedDelegate ArgumentValueChanged;
+
+        private void valueComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ArgumentValueChanged?.Invoke(this, argument, valueComboBox.SelectedValue);
+        }
 
     }
 }

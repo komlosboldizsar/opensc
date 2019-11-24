@@ -14,7 +14,7 @@ namespace OpenSC.Model.Macros
 
         Type Type { get; }
 
-        object[] Possibilities { get; }
+        object[] GetPossibilities(object[] previousArgumentValues);
 
         string GetStringForPossibility(object item);
 
