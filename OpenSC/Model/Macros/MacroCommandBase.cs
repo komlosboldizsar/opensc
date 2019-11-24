@@ -28,7 +28,7 @@ namespace OpenSC.Model.Macros
         protected virtual string getArgumentKey(int index, object value)
         {
             ModelBase argumentAsModel = value as ModelBase;
-            if (value != null)
+            if (argumentAsModel != null)
                 return argumentAsModel.ID.ToString();
             return value?.ToString();
         }
