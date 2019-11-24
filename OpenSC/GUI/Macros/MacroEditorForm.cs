@@ -253,7 +253,7 @@ namespace OpenSC.GUI.Macros
                 if (collecting)
                     argumentValues.Add(argControl.ArgumentValue);
                 else
-                    control.PreviousArgumentValues = argumentValuesArr;
+                    argControl.PreviousArgumentValues = argumentValuesArr;
 
                 if (argControl == control)
                 {
