@@ -53,7 +53,7 @@ namespace OpenSC.GUI.Macros
             argumentIndexLabel.Text = string.Format("(arg{0})", argIndex);
             argumentNameLabel.Text = argument.Name;
             argumentDescriptionLabel.Text = argument.Description;
-            valueComboBox.CreateAdapterAsDataSource<object>(new List<object>(), o => o.ToString(), true, "-");
+            valueComboBox.CreateAdapterAsDataSource<object>(argument.Possibilities, item => argument.GetStringForPossibility(item), true, "-");
         }
 
         public object ArgumentValue

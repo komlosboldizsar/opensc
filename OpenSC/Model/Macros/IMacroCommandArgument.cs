@@ -16,5 +16,7 @@ namespace OpenSC.Model.Macros
 
         object[] Possibilities { get; }
 
+        string GetStringForPossibility(object item);
+
     }
 }
