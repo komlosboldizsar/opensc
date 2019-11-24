@@ -47,7 +47,7 @@ namespace OpenSC.Model.Routers.Macros
 
         public override object[] GetArgumentsByKeys(string[] keys)
         {
-            
+
             if (keys.Length != Arguments.Length)
                 return null;
 
@@ -74,6 +74,8 @@ namespace OpenSC.Model.Routers.Macros
 
         }
 
+        private static readonly object[] ARRAY_EMPTY = new object[] { };
+
         public class Arg0 : IMacroCommandArgument
         {
             public string Name => "Router";
@@ -96,10 +98,10 @@ namespace OpenSC.Model.Routers.Macros
             public object[] GetPossibilities(object[] previousArgumentValues)
             {
                 if (previousArgumentValues.Length < 1)
-                    return null;
+                    return ARRAY_EMPTY;
                 Router router = previousArgumentValues[0] as Router;
                 if (router == null)
-                    return null;
+                    return ARRAY_EMPTY;
                 return router.Outputs.ToArray();
             }
 
@@ -116,10 +118,10 @@ namespace OpenSC.Model.Routers.Macros
             public object[] GetPossibilities(object[] previousArgumentValues)
             {
                 if (previousArgumentValues.Length < 1)
-                    return null;
+                    return ARRAY_EMPTY;
                 Router router = previousArgumentValues[0] as Router;
                 if (router == null)
-                    return null;
+                    return ARRAY_EMPTY;
                 return router.Inputs.ToArray();
             }
 
