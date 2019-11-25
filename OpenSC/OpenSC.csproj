@@ -488,6 +488,7 @@
     <Compile Include="Model\Macros\MacroPanelElement.cs" />
     <Compile Include="Model\Macros\MacrosManager.cs" />
     <Compile Include="Model\Macros\MacroCommandWithArgumentsXmlSerializer.cs" />
+    <Compile Include="Model\Macros\RunMacroMacroCommand.cs" />
     <Compile Include="Model\MasterDatabase.cs" />
     <Compile Include="Model\Mixers\BlackMagicDesign\BmdMixer.cs" />
     <Compile Include="Model\Mixers\DynamicTextFunctions\MixerPreviewInputName.cs" />
