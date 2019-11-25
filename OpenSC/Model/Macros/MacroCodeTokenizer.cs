@@ -403,8 +403,6 @@ namespace OpenSC.Model.Macros
 
             }
 
-            Console.WriteLine("{0}: {1}", currentChr, state);
-
             currentPosition++;
             escaped = setEscapedFlag;
 
