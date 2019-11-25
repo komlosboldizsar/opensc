@@ -567,6 +567,9 @@
     <Compile Include="Model\Timers\Triggers\TimerReachedValueMacroTrigger.cs" />
     <Compile Include="Model\TypeCodeAttribute.cs" />
     <Compile Include="Model\TypeLabelAttribute.cs" />
+    <Compile Include="Model\UMDs\Macros\UmdMacroCommands.cs" />
+    <Compile Include="Model\UMDs\Macros\UmdDynamicTextMacroCommand.cs" />
+    <Compile Include="Model\UMDs\Macros\UmdStaticTextMacroCommand.cs" />
     <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1T.cs" />
     <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1TType.cs" />
     <Compile Include="Model\Variables\BooleanBase.cs" />
