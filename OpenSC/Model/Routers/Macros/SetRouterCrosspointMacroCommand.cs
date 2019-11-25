@@ -45,6 +45,36 @@ namespace OpenSC.Model.Routers.Macros
 
         }
 
+        protected override string getArgumentKey(int index, object value)
+        {
+
+            if (index == 0) {
+                Router router = value as Router;
+                if (router == null)
+                    return "-1";
+                return router.ID.ToString();
+            }
+
+            if (index == 1)
+            {
+                RouterOutput routerOutput = value as RouterOutput;
+                if (routerOutput == null)
+                    return "-1";
+                return routerOutput.Index.ToString();
+            }
+
+            if (index == 2)
+            {
+                RouterInput routerInput = value as RouterInput;
+                if (routerInput == null)
+                    return "-1";
+                return routerInput.Index.ToString();
+            }
+
+            throw new ArgumentException();
+
+        }
+
         public override object[] GetArgumentsByKeys(string[] keys)
         {
 
