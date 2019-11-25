@@ -37,6 +37,17 @@ namespace OpenSC.Model.Macros
             return trigger;
         }
 
+        public interface IMacroTriggerCollection
+        {
+            IMacroTrigger[] TriggersToRegister { get; }
+        }
+
+        public void RegisterTriggerCollection(IMacroTriggerCollection collection)
+        {
+            foreach (IMacroTrigger trigger in collection.TriggersToRegister)
+                RegisterTrigger(trigger);
+        }
+
     }
 
 }

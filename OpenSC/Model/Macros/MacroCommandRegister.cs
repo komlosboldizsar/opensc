@@ -37,6 +37,17 @@ namespace OpenSC.Model.Macros
             return command;
         }
 
+        public interface IMacroCommandCollection
+        {
+            IMacroCommand[] CommandsToRegister { get; }
+        }
+
+        public void RegisterCommandCollection(IMacroCommandCollection collection)
+        {
+            foreach (IMacroCommand command in collection.CommandsToRegister)
+                RegisterCommand(command);
+        }
+
     }
 
 }

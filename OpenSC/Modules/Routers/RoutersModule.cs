@@ -98,8 +98,8 @@ namespace OpenSC.Modules.Routers
 
         public void RegisterMacroCommandsAndTriggers()
         {
-            MacroCommandRegister.Instance.RegisterCommand(new SetRouterCrosspointMacroCommand());
-            MacroTriggerRegister.Instance.RegisterTrigger(RouterMacroTriggers.RouterCrosspointChanged);
+            MacroCommandRegister.Instance.RegisterCommandCollection(RouterMacroCommands.Instance);
+            MacroTriggerRegister.Instance.RegisterTriggerCollection(RouterMacroTriggers.Instance);
         }
 
         public void RegisterRouterType<TRouter, TRouterEditorForm>()

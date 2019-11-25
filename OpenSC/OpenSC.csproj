@@ -519,6 +519,7 @@
     <Compile Include="Model\Routers\LabelsetDatabase.cs" />
     <Compile Include="Model\Routers\LabelXmlSerializer.cs" />
     <Compile Include="Model\Routers\Leitch\LeitchRouter.cs" />
+    <Compile Include="Model\Routers\Macros\RouterMacroCommands.cs" />
     <Compile Include="Model\Routers\Macros\SetRouterCrosspointMacroCommand.cs" />
     <Compile Include="Model\Routers\Router.cs" />
     <Compile Include="Model\Routers\RouterDatabase.cs" />
