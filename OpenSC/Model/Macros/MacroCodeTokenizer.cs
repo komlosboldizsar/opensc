@@ -484,11 +484,13 @@ namespace OpenSC.Model.Macros
         public interface IArgument
         {
             string StrValue { get; }
+            MacroArgumentKeyType Type { get; }
         }
 
         private class StringArgument : IArgument
         {
             public string StrValue => Value.ToString();
+            public MacroArgumentKeyType Type => MacroArgumentKeyType.String;
             public string Value { get; private set; }
             public StringArgument(string str)
             {
@@ -499,6 +501,7 @@ namespace OpenSC.Model.Macros
         private class IntArgument : IArgument
         {
             public string StrValue => Value.ToString();
+            public MacroArgumentKeyType Type => MacroArgumentKeyType.Integer;
             public int Value { get; private set; }
             public IntArgument(string numberStr)
             {
@@ -515,6 +518,7 @@ namespace OpenSC.Model.Macros
 
             private static readonly IFormatProvider FLOAT_PARSE_FORMAT = CultureInfo.CreateSpecificCulture("en-US");
             public string StrValue => Value.ToString();
+            public MacroArgumentKeyType Type => MacroArgumentKeyType.Float;
             public float Value { get; private set; }
             public FloatArgument(string numberStr)
             {

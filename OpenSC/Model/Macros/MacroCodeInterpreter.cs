@@ -43,6 +43,43 @@ namespace OpenSC.Model.Macros
 
         public int SyntaxErrorPosition => tokenizer.SyntaxErrorPosition;
 
+        public bool ArgumentCountMismatch
+        {
+            get
+            {
+                IMacroCommand command = MacroCommandRegister.Instance.GetCommand(tokenizer.CommandCode);
+                if (command == null)
+                    return false;
+                return (tokenizer.Arguments.Count != command.Arguments.Length);
+            }
+        }
+
+        public bool[] ArgumentTypeMatches
+        {
+            get
+            {
+                IMacroCommand command = MacroCommandRegister.Instance.GetCommand(tokenizer.CommandCode);
+                if (command == null)
+                    return new bool[] { };
+                int cmdArgCount = command.Arguments.Length;
+                int interpretedArgCount = tokenizer.Arguments.Count;
+                int resultSize = (interpretedArgCount < cmdArgCount) ? interpretedArgCount: cmdArgCount;
+                bool[] result = new bool[resultSize];
+                for (int i = 0; i < resultSize; i++)
+                    result[i] = argumentTypeSuitable(command.Arguments[i].KeyType, tokenizer.Arguments[i].Type);
+                return result;
+            }
+        }
+
+        private static bool argumentTypeSuitable(MacroArgumentKeyType commandArg, MacroArgumentKeyType interpretedArg)
+        {
+            if (commandArg == interpretedArg)
+                return true;
+            if ((commandArg == MacroArgumentKeyType.Float) && (interpretedArg == MacroArgumentKeyType.Integer))
+                return true;
+            return false;
+        }
+
         public bool CommandExists
             => (MacroCommandRegister.Instance.GetCommand(tokenizer.CommandCode) != null);
 

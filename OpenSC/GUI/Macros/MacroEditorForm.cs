@@ -138,63 +138,115 @@ namespace OpenSC.GUI.Macros
             { MacroCodeTokenizer.TokenType.FloatArgument, Color.Purple },
         };
 
-        private static readonly Color POINTCOLOR_SYNTAX_ERROR = Color.Red;
-
-        private static readonly Color POINTCOLOR_INCOMPLETE = Color.Cyan;
-
-        private static readonly Color POINTCOLOR_OK = Color.DarkGreen;
-
-        private static readonly Color POINTCOLOR_UNKNOWN = Color.Black;
-
         private void interpretLine(int lineIndex)
         {
 
             if (lineIndex < 0)
                 return;
 
+            string line = commandsEditorTextBox.TextBox.Lines[lineIndex];
+            MacroCodeInterpreter interpreter = new MacroCodeInterpreter();
+            interpreter.Formula = line;
+
+            syntaxHighlightLine(lineIndex, interpreter.Tokens, interpreter.HasSyntaxError, interpreter.SyntaxErrorPosition);
+            showPointForLine(lineIndex, interpreter);
+
+        }
+
+        private void syntaxHighlightLine(int lineIndex, IReadOnlyList<MacroCodeTokenizer.Token> tokens, bool hasSyntaxError, int syntaxErrorPosition)
+        {
+
             RichTextBox rtfBox = commandsEditorTextBox.TextBox;
+
             int lineCount = rtfBox.Lines.Length;
             int lineStart = rtfBox.GetFirstCharIndexFromLine(lineIndex);
             int lineEnd = (lineIndex == (lineCount - 1)) ? rtfBox.TextLength : rtfBox.GetFirstCharIndexFromLine(lineIndex + 1);
 
-            string line = rtfBox.Lines[lineIndex];
-            MacroCodeInterpreter interpreter = new MacroCodeInterpreter();
-            interpreter.Formula = line;
-
             rtfBox.Select(lineStart, lineEnd - lineStart);
             rtfBox.SelectionColor = Color.Black;
             rtfBox.SelectionBackColor = Color.White;
-            foreach (var token in interpreter.Tokens)
+            foreach (var token in tokens)
             {
                 rtfBox.Select(lineStart + token.StartPosition, token.Length);
                 rtfBox.SelectionColor = TOKEN_COLOR_CONVERTER.Convert(token.Type);
             }
 
-            commandsEditorTextBox.CircleSize = 16;
+            if (hasSyntaxError)
+            {
+                rtfBox.Select(lineStart + syntaxErrorPosition, 1);
+                rtfBox.SelectionBackColor = Color.Yellow;
+            }
+
+        }
+
+
+        private static readonly Color POINTCOLOR_SYNTAX_ERROR = Color.DarkRed;
+        private static readonly Color POINTCOLOR_INCOMPLETE = Color.Cyan;
+        private static readonly Color POINTCOLOR_NOTEXISTS = Color.Red;
+        private static readonly Color POINTCOLOR_ARGUMENT_COUNT_MISMATCH = Color.Orange;
+        private static readonly Color POINTCOLOR_ARGUMENT_TYPE_MISMATCH = Color.Yellow;
+        private static readonly Color POINTCOLOR_OK = Color.DarkGreen;
+        private static readonly Color POINTCOLOR_UNKNOWN = Color.Black;
+
+        private void showPointForLine(int lineIndex, MacroCodeInterpreter interpreter)
+        {
+
+            RichTextBox rtfBox = commandsEditorTextBox.TextBox;
 
             if (interpreter.HasSyntaxError)
             {
-                rtfBox.Select(lineStart + interpreter.SyntaxErrorPosition, 1);
-                rtfBox.SelectionBackColor = Color.Yellow;
                 string tooltip = string.Format("Syntax error at position {0}.", interpreter.SyntaxErrorPosition);
                 commandsEditorTextBox.SetPointColor(lineIndex, POINTCOLOR_SYNTAX_ERROR, tooltip);
+                return;
             }
-            else if (interpreter.IsEmpty)
+
+            if (interpreter.IsEmpty)
             {
                 commandsEditorTextBox.RemovePoint(lineIndex);
+                return;
             }
-            else if (interpreter.IsComplete)
-            {
-                commandsEditorTextBox.SetPointColor(lineIndex, POINTCOLOR_OK, "OK.");
-            }
-            else if (!interpreter.IsComplete)
+
+            if (!interpreter.IsComplete)
             {
                 commandsEditorTextBox.SetPointColor(lineIndex, POINTCOLOR_INCOMPLETE, "Line incomplete.");
+                return;
             }
-            else
+
+            if (!interpreter.CommandExists)
             {
-                commandsEditorTextBox.SetPointColor(lineIndex, POINTCOLOR_UNKNOWN, "???");
+                commandsEditorTextBox.SetPointColor(lineIndex, POINTCOLOR_NOTEXISTS, "Command does not exist.");
+                return;
             }
+
+            IMacroCommand command = interpreter.GetCommand();
+            if (interpreter.ArgumentCountMismatch)
+            {
+                string tooltip = string.Format("Arguments should have {0} arguments.", command.Arguments.Length);
+                commandsEditorTextBox.SetPointColor(lineIndex, POINTCOLOR_ARGUMENT_COUNT_MISMATCH, tooltip);
+                return;
+            }
+
+            List<bool> argumentTypeMatches = new List<bool>(interpreter.ArgumentTypeMatches);
+            if (!argumentTypeMatches.TrueForAll(atm => atm))
+            {
+                string tooltip = "";
+                for (int i = 0; i < argumentTypeMatches.Count; i++)
+                {
+                    if (!argumentTypeMatches[i])
+                        tooltip += string.Format("Argument #{0} should be a {1}.\n", i+1, command.Arguments[i].KeyType.ToString().ToLower());
+                }
+                tooltip = tooltip.Substring(0, tooltip.Length - 1);
+                commandsEditorTextBox.SetPointColor(lineIndex, POINTCOLOR_ARGUMENT_TYPE_MISMATCH, tooltip);
+                return;
+            }
+
+            if (interpreter.IsComplete)
+            {
+                commandsEditorTextBox.SetPointColor(lineIndex, POINTCOLOR_OK, "OK.");
+                return;
+            }
+
+            commandsEditorTextBox.SetPointColor(lineIndex, POINTCOLOR_UNKNOWN, "???");
 
         }
 
