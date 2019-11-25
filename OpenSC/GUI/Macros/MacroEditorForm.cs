@@ -88,6 +88,7 @@ namespace OpenSC.GUI.Macros
             if (macro == null)
                 return;
             macro.ValidateId((int)idNumericField.Value);
+            macro.ValidateName(nameTextBox.Text);
             validateCode();
         }
 
