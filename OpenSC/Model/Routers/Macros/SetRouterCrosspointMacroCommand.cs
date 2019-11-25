@@ -81,6 +81,7 @@ namespace OpenSC.Model.Routers.Macros
             public string Name => "Router";
             public string Description => "The router that executes the crosspoint change.";
             public Type Type => typeof(Router);
+            public MacroArgumentKeyType KeyType => MacroArgumentKeyType.Integer;
             public object[] GetPossibilities(object[] previousArgumentValues)
                 => RouterDatabase.Instance.ToArray();
             public string GetStringForPossibility(object item)
@@ -92,6 +93,7 @@ namespace OpenSC.Model.Routers.Macros
             public string Name => "Router output";
             public string Description => "The router output that switches to an input.";
             public Type Type => typeof(RouterOutput);
+            public MacroArgumentKeyType KeyType => MacroArgumentKeyType.Integer;
             public string GetStringForPossibility(object item)
                 => ((RouterOutput)item).Name;
 
@@ -112,6 +114,7 @@ namespace OpenSC.Model.Routers.Macros
             public string Name => "Router input";
             public string Description => "The router input to switch to.";
             public Type Type => typeof(RouterInput);
+            public MacroArgumentKeyType KeyType => MacroArgumentKeyType.Integer;
             public string GetStringForPossibility(object item)
                 => ((RouterInput)item).Name;
 
