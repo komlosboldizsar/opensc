@@ -533,6 +533,7 @@
     <Compile Include="Model\Settings\Converters\IntConverter.cs" />
     <Compile Include="Model\Settings\Converters\ISettingValueConverter.cs" />
     <Compile Include="Model\Settings\ISetting.cs" />
+    <Compile Include="Model\Settings\IntSetting.cs" />
     <Compile Include="Model\Settings\Setting.cs" />
     <Compile Include="Model\Settings\SettingsManager.cs" />
     <Compile Include="Model\Settings\Converters\SettingValueConverterAttribute.cs" />

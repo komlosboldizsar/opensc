@@ -34,7 +34,7 @@ namespace OpenSC.Model.Settings
 
         private T value;
 
-        public T Value {
+        public virtual T Value {
             get { return value; }
             set
             {
