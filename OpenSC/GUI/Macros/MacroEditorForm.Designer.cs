@@ -223,7 +223,7 @@
             // commandsEditorTextBox
             // 
             this.commandsEditorTextBox.AutoSize = true;
-            this.commandsEditorTextBox.BarWidth = 25;
+            this.commandsEditorTextBox.BarWidth = 28;
             this.commandsEditorTextBox.CircleSize = 16;
             this.commandsEditorTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commandsEditorTextBox.Font = new System.Drawing.Font("Consolas", 10.1F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -326,6 +326,7 @@
             // 
             // addCommandButton
             // 
+            this.addCommandButton.Enabled = false;
             this.addCommandButton.Location = new System.Drawing.Point(8, 9);
             this.addCommandButton.Margin = new System.Windows.Forms.Padding(6);
             this.addCommandButton.Name = "addCommandButton";

@@ -297,12 +297,16 @@ namespace OpenSC.GUI.Macros
 
         private void selectCommandComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+
             IMacroCommand selectedCommand = selectCommandComboBox.SelectedValue as IMacroCommand;
             commandDescriptionTextBox.Text = "";
             commandArgumentsPanel.Controls.Clear();
             foreach (CommandArgumentControl argControl in argumentControls)
                 argControl.ArgumentValueChanged -= ArgumentControl_ArgumentValueChanged;
             argumentControls.Clear();
+
+            addCommandButton.Enabled = (selectedCommand != null);
+
             if (selectedCommand != null)
             {
                 commandDescriptionTextBox.Text = selectedCommand.Description;

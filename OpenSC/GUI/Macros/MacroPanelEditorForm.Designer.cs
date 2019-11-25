@@ -325,6 +325,7 @@
             // elementMacroDropDown
             // 
             this.elementMacroDropDown.Dock = System.Windows.Forms.DockStyle.Top;
+            this.elementMacroDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.elementMacroDropDown.FormattingEnabled = true;
             this.elementMacroDropDown.Location = new System.Drawing.Point(109, 3);
             this.elementMacroDropDown.Name = "elementMacroDropDown";
@@ -611,7 +612,7 @@
             this.idNumericField.Size = new System.Drawing.Size(120, 22);
             this.idNumericField.TabIndex = 3;
             // 
-            // MacroPanelForm
+            // MacroPanelEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -620,7 +621,7 @@
             this.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.HeaderText = "Edit macro panel";
             this.MinimumSize = new System.Drawing.Size(1000, 600);
-            this.Name = "MacroPanelForm";
+            this.Name = "MacroPanelEditorForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Edit macro panel";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MacroPanelForm_FormClosing);
