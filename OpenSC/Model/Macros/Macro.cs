@@ -16,7 +16,14 @@ namespace OpenSC.Model.Macros
         {
             base.Restored();
             foreach (MacroCommandWithArguments command in commands)
+            {
                 command.Restored();
+            }
+            foreach (MacroTriggerWithArguments trigger in triggers)
+            {
+                trigger.Restored();
+                trigger.Macro = this;
+            }
         }
 
         public delegate void IdChangedDelegate(Macro text, int oldValue, int newValue);
@@ -96,11 +103,49 @@ namespace OpenSC.Model.Macros
         }
         #endregion
 
+        #region Triggers
+        private ObservableList<MacroTriggerWithArguments> triggers = new ObservableList<MacroTriggerWithArguments>();
+
+        public ObservableList<MacroTriggerWithArguments> Triggers
+        {
+            get { return triggers; }
+        }
+
+        [PersistAs("triggers")]
+        [PersistAs("trigger", 1)]
+        private MacroTriggerWithArguments[] _triggers
+        {
+            get { return triggers.ToArray(); }
+            set
+            {
+                triggers.Clear();
+                if (value != null)
+                    triggers.AddRange(value);
+            }
+        }
+
+        public void AddTrigger(MacroTriggerWithArguments trigger)
+        {
+            if (!triggers.Contains(trigger))
+                triggers.Add(trigger);
+            trigger.Macro = this;
+        }
+
+        public void RemoveTrigger(MacroTriggerWithArguments trigger)
+        {
+            triggers.Remove(trigger);
+            trigger.Macro = null;
+        }
+        #endregion
+
         public void Run()
         {
             foreach (MacroCommandWithArguments commandWA in commands)
                 commandWA.Run();
         }
+
+        public void Triggered()
+            => Run(); // TODO: Some log
 
     }
 

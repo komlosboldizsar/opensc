@@ -14,6 +14,7 @@ namespace OpenSC.Model.Macros
         public static void RegisterDatabases()
         {
             DatabasePersister<Macro>.RegisterSerializer(new MacroCommandWithArgumentsXmlSerializer()); // TODO: shouldn't register here
+            DatabasePersister<Macro>.RegisterSerializer(new MacroTriggerWithArgumentsXmlSerializer()); // TODO: shouldn't register here
             DatabasePersister<MacroPanel>.RegisterSerializer(new MacroPanelElementXmlSerializer()); // TODO: shouldn't register here
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(MacroDatabase));
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(MacroPanelDatabase));
