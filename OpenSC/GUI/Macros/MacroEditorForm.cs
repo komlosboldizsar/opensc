@@ -102,6 +102,197 @@ namespace OpenSC.GUI.Macros
         
         private void initCommandsEditor()
         {
+            commandsEditorTextBox.TextBox.TextChanged += commandsEditorTextBox_TextChanged;
+        }
+
+        private bool noInterpretOnTextChange = false;
+
+        private void addCommandButton_Click(object sender, EventArgs e)
+        {
+
+            IMacroCommand command = selectCommandComboBox.SelectedValue as IMacroCommand;
+            if (command == null)
+            {
+                // Show error message
+                return;
+            }
+
+            List<object> argumentValues = new List<object>();
+            foreach (CommandArgumentControl argControl in argumentControls)
+                argumentValues.Add(argControl.ArgumentValue);
+
+            noInterpretOnTextChange = true;
+            RichTextBox rtfBox = commandsEditorTextBox.TextBox;
+            if ((rtfBox.Text.Length > 0) && (rtfBox.Text[rtfBox.Text.Length - 1] != '\n'))
+                commandsEditorTextBox.TextBox.AppendText("\n");
+            commandsEditorTextBox.TextBox.AppendText(command.GetCode(argumentValues.ToArray()) + "\n");
+            interpretCurrentLine(-1);
+            noInterpretOnTextChange = false;
+
+        }
+
+        private static readonly GUI.Helpers.Converters.EnumConverter<MacroCodeTokenizer.TokenType, Color> TOKEN_COLOR_CONVERTER = new Helpers.Converters.EnumConverter<MacroCodeTokenizer.TokenType, Color>(null) {
+            { MacroCodeTokenizer.TokenType.CommandCode, Color.Red },
+            { MacroCodeTokenizer.TokenType.StringArgument, Color.Green },
+            { MacroCodeTokenizer.TokenType.IntArgument, Color.DarkBlue },
+            { MacroCodeTokenizer.TokenType.FloatArgument, Color.Purple },
+        };
+
+        private static readonly Color POINTCOLOR_SYNTAX_ERROR = Color.Red;
+
+        private static readonly Color POINTCOLOR_INCOMPLETE = Color.Cyan;
+
+        private static readonly Color POINTCOLOR_OK = Color.DarkGreen;
+
+        private static readonly Color POINTCOLOR_UNKNOWN = Color.Black;
+
+        private void interpretLine(int lineIndex)
+        {
+
+            if (lineIndex < 0)
+                return;
+
+            RichTextBox rtfBox = commandsEditorTextBox.TextBox;
+            int lineCount = rtfBox.Lines.Length;
+            int lineStart = rtfBox.GetFirstCharIndexFromLine(lineIndex);
+            int lineEnd = (lineIndex == (lineCount - 1)) ? rtfBox.TextLength : rtfBox.GetFirstCharIndexFromLine(lineIndex + 1);
+
+            string line = rtfBox.Lines[lineIndex];
+            MacroCodeInterpreter interpreter = new MacroCodeInterpreter();
+            interpreter.Formula = line;
+
+            rtfBox.Select(lineStart, lineEnd - lineStart);
+            rtfBox.SelectionColor = Color.Black;
+            rtfBox.SelectionBackColor = Color.White;
+            foreach (var token in interpreter.Tokens)
+            {
+                rtfBox.Select(lineStart + token.StartPosition, token.Length);
+                rtfBox.SelectionColor = TOKEN_COLOR_CONVERTER.Convert(token.Type);
+            }
+
+            commandsEditorTextBox.CircleSize = 16;
+
+            if (interpreter.HasSyntaxError)
+            {
+                rtfBox.Select(lineStart + interpreter.SyntaxErrorPosition, 1);
+                rtfBox.SelectionBackColor = Color.Yellow;
+                string tooltip = string.Format("Syntax error at position {0}.", interpreter.SyntaxErrorPosition);
+                commandsEditorTextBox.SetPointColor(lineIndex, POINTCOLOR_SYNTAX_ERROR, tooltip);
+            }
+            else if (interpreter.IsEmpty)
+            {
+                commandsEditorTextBox.RemovePoint(lineIndex);
+            }
+            else if (interpreter.IsComplete)
+            {
+                commandsEditorTextBox.SetPointColor(lineIndex, POINTCOLOR_OK, "OK.");
+            }
+            else if (!interpreter.IsComplete)
+            {
+                commandsEditorTextBox.SetPointColor(lineIndex, POINTCOLOR_INCOMPLETE, "Line incomplete.");
+            }
+            else
+            {
+                commandsEditorTextBox.SetPointColor(lineIndex, POINTCOLOR_UNKNOWN, "???");
+            }
+
+        }
+
+        private int currentLine()
+        {
+            RichTextBox rtfBox = commandsEditorTextBox.TextBox;
+            int currentLineStart = rtfBox.GetFirstCharIndexOfCurrentLine();
+            int currentLine = rtfBox.GetLineFromCharIndex(currentLineStart);
+            if (currentLine >= rtfBox.Lines.Length)
+                currentLine -= 1;
+            return currentLine;
+        }
+
+        private void interpretCurrentLine(int offset = 0)
+            => interpretLine(currentLine() + offset);
+
+        private void interpretAllLines()
+        {
+            for (int i = 0; i < commandsEditorTextBox.TextBox.Lines.Length; i++)
+                interpretLine(i);
+        }
+
+        private void commandsEditorTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (!noInterpretOnTextChange)
+            {
+                RichTextBox rtfBox = commandsEditorTextBox.TextBox;
+                int selectionStart = rtfBox.SelectionStart;
+                if ((selectionStart == rtfBox.Text.Length) && (rtfBox.SelectionLength == 0))
+                    interpretCurrentLine();
+                else
+                    interpretAllLines();
+                rtfBox.SelectionStart = selectionStart;
+                rtfBox.SelectionLength = 0;
+            }
+        }
+
+        private List<CommandArgumentControl> argumentControls = new List<CommandArgumentControl>();
+
+        private void selectCommandComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            IMacroCommand selectedCommand = selectCommandComboBox.SelectedValue as IMacroCommand;
+            commandDescriptionTextBox.Text = "";
+            commandArgumentsPanel.Controls.Clear();
+            foreach (CommandArgumentControl argControl in argumentControls)
+                argControl.ArgumentValueChanged -= ArgumentControl_ArgumentValueChanged;
+            argumentControls.Clear();
+            if (selectedCommand != null)
+            {
+                commandDescriptionTextBox.Text = selectedCommand.Description;
+                int i = 0;
+                int argCount = selectedCommand.Arguments.Length;
+                foreach (IMacroCommandArgument arg in selectedCommand.Arguments)
+                {
+                    var argumentControl = new CommandArgumentControl(arg, i, (i == (argCount - 1)));
+                    argumentControl.ArgumentValueChanged += ArgumentControl_ArgumentValueChanged;
+                    argumentControls.Add(argumentControl);
+                    i++;
+                }
+            }
+
+            for (int i = argumentControls.Count - 1; i >= 0; i--)
+            {
+                CommandArgumentControl control = argumentControls[i];
+                commandArgumentsPanel.Controls.Add(control);
+                control.Dock = DockStyle.Top;
+            }
+
+        }
+
+        private void ArgumentControl_ArgumentValueChanged(CommandArgumentControl control, IMacroCommandArgument argument, object newValue)
+        {
+
+            List<object> argumentValues = new List<object>();
+            object[] argumentValuesArr = null;
+
+            bool collecting = true;
+            foreach (CommandArgumentControl argControl in argumentControls)
+            {
+
+                if (collecting)
+                    argumentValues.Add(argControl.ArgumentValue);
+                else
+                    argControl.PreviousArgumentValues = argumentValuesArr;
+
+                if (argControl == control)
+                {
+                    collecting = false;
+                    argumentValuesArr = argumentValues.ToArray();
+                }
+
+            }
+
+        }
+
+        private void loadCommands()
+        {
+            selectCommandComboBox.CreateAdapterAsDataSource(MacroCommandRegister.Instance.RegisteredCommands, mc => string.Format("[{0}] {1}", mc.CommandCode, mc.CommandName), true, "-");
         }
 
         private CustomDataGridView<RouterOutput> triggersTableCDGV;
@@ -179,137 +370,18 @@ namespace OpenSC.GUI.Macros
              return new CustomDataGridViewColumnDescriptorBuilder<T>(table);
         }
 
-        private void addCommandButton_Click(object sender, EventArgs e)
-        {
-            IMacroCommand command = selectCommandComboBox.SelectedValue as IMacroCommand;
-            if (command == null)
-            {
-                // Show error message
-                return;
-            }
-            List<object> arguments = new List<object>();
-            foreach (CommandArgumentControl argControl in argumentControls)
-                arguments.Add(argControl.ArgumentValue);
-            string[] argumentKeys = command.GetArgumentKeys(arguments.ToArray());
-            string serializedCommand = command.CommandCode + "(";
-            for (int i = 0; i < serializedCommand.Length; i++)
-                serializedCommand += string.Format("{1}{0}{1}{2}", argumentKeys[i], ((command.Arguments[i].Type == typeof(string)) ? "\"" : ""), ((i == (serializedCommand.Length - 1)) ? "" : ", "));
-            serializedCommand += ")\r\n";
-            commandsEditorTextBox.AppendText(serializedCommand);
-        }
+        
 
         private void addTriggerButton_Click(object sender, EventArgs e)
         {
             //router.AddOutput();
         }
 
-        private void commandsEditorTextBox_TextChanged(object sender, EventArgs e)
-        {
-            foreach (string line in commandsEditorTextBox.Lines)
-            {
-                MacroCodeTokenizer tokenizer = new MacroCodeTokenizer(line);
-                tokenizer.Process();
-                commandsEditorTextBox.SelectAll();
-                commandsEditorTextBox.SelectionColor = Color.Black;
-                commandsEditorTextBox.SelectionBackColor = Color.White;
-                foreach (var token in tokenizer.Tokens)
-                {
-                    commandsEditorTextBox.Select(token.StartPosition, token.Length);
-                    switch (token.Type)
-                    {
-                        case MacroCodeTokenizer.TokenType.CommandCode:
-                            commandsEditorTextBox.SelectionColor = Color.Red;
-                            break;
-                        case MacroCodeTokenizer.TokenType.StringArgument:
-                            commandsEditorTextBox.SelectionColor = Color.Green;
-                            break;
-                        case MacroCodeTokenizer.TokenType.IntArgument:
-                            commandsEditorTextBox.SelectionColor = Color.DarkBlue;
-                            break;
-                        case MacroCodeTokenizer.TokenType.FloatArgument:
-                            commandsEditorTextBox.SelectionColor = Color.Purple;
-                            break;
-                    }
-                }
-
-                if (tokenizer.HasSyntaxError)
-                {
-                    commandsEditorTextBox.Select(tokenizer.SyntaxErrorPosition, 1);
-                    commandsEditorTextBox.SelectionBackColor = Color.Yellow;
-                }
-
-                commandsEditorTextBox.SelectionStart = commandsEditorTextBox.TextLength;
-                commandsEditorTextBox.SelectionLength = 0;
-                
-            }
-
-        }
-
-        private List<CommandArgumentControl> argumentControls = new List<CommandArgumentControl>();
-
-        private void selectCommandComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            IMacroCommand selectedCommand = selectCommandComboBox.SelectedValue as IMacroCommand;
-            commandDescriptionTextBox.Text = "";
-            commandArgumentsPanel.Controls.Clear();
-            foreach (CommandArgumentControl argControl in argumentControls)
-                argControl.ArgumentValueChanged -= ArgumentControl_ArgumentValueChanged;
-            argumentControls.Clear();
-            if (selectedCommand != null)
-            {
-                commandDescriptionTextBox.Text = selectedCommand.Description;
-                int i = 0;
-                int argCount = selectedCommand.Arguments.Length;
-                foreach (IMacroCommandArgument arg in selectedCommand.Arguments)
-                {
-                    var argumentControl = new CommandArgumentControl(arg, i, (i == (argCount - 1)));
-                    argumentControl.ArgumentValueChanged += ArgumentControl_ArgumentValueChanged;
-                    argumentControls.Add(argumentControl);
-                    i++;
-                }
-            }
-
-            for (int i = argumentControls.Count - 1; i >= 0; i--)
-            {
-                CommandArgumentControl control = argumentControls[i];
-                commandArgumentsPanel.Controls.Add(control);
-                control.Dock = DockStyle.Top;
-            }
-
-        }
-
-        private void ArgumentControl_ArgumentValueChanged(CommandArgumentControl control, IMacroCommandArgument argument, object newValue)
-        {
-
-            List<object> argumentValues = new List<object>();
-            object[] argumentValuesArr = null;
-
-            bool collecting = true;
-            foreach (CommandArgumentControl argControl in argumentControls)
-            {
-
-                if (collecting)
-                    argumentValues.Add(argControl.ArgumentValue);
-                else
-                    argControl.PreviousArgumentValues = argumentValuesArr;
-
-                if (argControl == control)
-                {
-                    collecting = false;
-                    argumentValuesArr = argumentValues.ToArray();
-                }
-
-            }
-
-        }
-
-        private void loadCommands()
-        {
-            selectCommandComboBox.CreateAdapterAsDataSource(MacroCommandRegister.Instance.RegisteredCommands, mc => string.Format("[{0}] {1}", mc.CommandCode, mc.CommandName), true, "-");
-        }
+        
 
         private void MacroEditorForm_Load(object sender, EventArgs e)
         {
+            initCommandsEditor();
             loadCommands();
         }
 

@@ -39,7 +39,7 @@
             this.baseDataTabPage = new System.Windows.Forms.TabPage();
             this.commandsTabPage = new System.Windows.Forms.TabPage();
             this.commandsEditorContainerPanel = new System.Windows.Forms.Panel();
-            this.commandsEditorTextBox = new System.Windows.Forms.RichTextBox();
+            this.commandsEditorTextBox = new OpenSC.GUI.GeneralComponents.RichTextBoxWithBar();
             this.addCommandPanel = new System.Windows.Forms.Panel();
             this.commandArgumentsContainer = new System.Windows.Forms.Panel();
             this.commandArgumentsGroupBox = new System.Windows.Forms.GroupBox();
@@ -222,13 +222,16 @@
             // 
             // commandsEditorTextBox
             // 
+            this.commandsEditorTextBox.AutoSize = true;
+            this.commandsEditorTextBox.BarWidth = 25;
+            this.commandsEditorTextBox.CircleSize = 16;
             this.commandsEditorTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commandsEditorTextBox.Font = new System.Drawing.Font("Consolas", 10.1F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.commandsEditorTextBox.Location = new System.Drawing.Point(0, 0);
+            this.commandsEditorTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.commandsEditorTextBox.Name = "commandsEditorTextBox";
             this.commandsEditorTextBox.Size = new System.Drawing.Size(496, 459);
             this.commandsEditorTextBox.TabIndex = 0;
-            this.commandsEditorTextBox.Text = "Example_Command(1, 2, 4)\nCommand.Test(3, 41, \"x\")";
             this.commandsEditorTextBox.TextChanged += new System.EventHandler(this.commandsEditorTextBox_TextChanged);
             // 
             // addCommandPanel
@@ -371,7 +374,6 @@
             this.commandDescriptionTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.commandDescriptionTextBox.Size = new System.Drawing.Size(472, 70);
             this.commandDescriptionTextBox.TabIndex = 3;
-            this.commandDescriptionTextBox.Text = "dsagrgre\r\ngre\r\ngre\r\nvf\r\nverw\r\nvre\r\nvre\r\nhrtbrs\r\n";
             // 
             // distanceHolder1
             // 
@@ -473,6 +475,7 @@
             this.baseDataTabPage.PerformLayout();
             this.commandsTabPage.ResumeLayout(false);
             this.commandsEditorContainerPanel.ResumeLayout(false);
+            this.commandsEditorContainerPanel.PerformLayout();
             this.addCommandPanel.ResumeLayout(false);
             this.addCommandPanel.PerformLayout();
             this.commandArgumentsContainer.ResumeLayout(false);
@@ -513,7 +516,7 @@
         protected System.Windows.Forms.TabPage baseDataTabPage;
         protected System.Windows.Forms.Panel addCommandPanel;
         protected System.Windows.Forms.Panel triggersButtonsPanel;
-        private System.Windows.Forms.RichTextBox commandsEditorTextBox;
+        private GeneralComponents.RichTextBoxWithBar commandsEditorTextBox;
         private System.Windows.Forms.Panel commandArgumentsContainer;
         private System.Windows.Forms.GroupBox commandArgumentsGroupBox;
         private System.Windows.Forms.Panel selectCommandPanel;
