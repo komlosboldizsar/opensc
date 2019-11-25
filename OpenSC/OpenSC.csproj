@@ -285,11 +285,11 @@
     <Compile Include="GUI\Settings\SettingsWindow.Designer.cs">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Settings\NumericSettingEditor.cs">
+    <Compile Include="GUI\Settings\IntSettingEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\Settings\NumericSettingEditor.Designer.cs">
-      <DependentUpon>NumericSettingEditor.cs</DependentUpon>
+    <Compile Include="GUI\Settings\IntSettingEditor.Designer.cs">
+      <DependentUpon>IntSettingEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Settings\StringSettingEditor.cs">
       <SubType>UserControl</SubType>
@@ -707,8 +707,8 @@
     <EmbeddedResource Include="GUI\Settings\SettingsWindow.resx">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Settings\NumericSettingEditor.resx">
-      <DependentUpon>NumericSettingEditor.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\Settings\IntSettingEditor.resx">
+      <DependentUpon>IntSettingEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Settings\StringSettingEditor.resx">
       <DependentUpon>StringSettingEditor.cs</DependentUpon>
