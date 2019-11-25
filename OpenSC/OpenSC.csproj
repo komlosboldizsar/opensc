@@ -522,6 +522,8 @@
     <Compile Include="Model\Routers\RouterOutputXmlSerializer.cs" />
     <Compile Include="Model\Routers\RouterState.cs" />
     <Compile Include="Model\Routers\RouterTypeNameConverter.cs" />
+    <Compile Include="Model\Routers\Triggers\RouterCrosspointChangedMacroTrigger.cs" />
+    <Compile Include="Model\Routers\Triggers\RouterMacroTriggers.cs" />
     <Compile Include="Model\Routers\Virtual\VirtualRouter.cs" />
     <Compile Include="Model\SerialPorts\SerialPort.cs" />
     <Compile Include="Model\SerialPorts\SerialPortsManager.cs" />
