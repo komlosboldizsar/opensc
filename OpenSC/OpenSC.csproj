@@ -562,6 +562,8 @@
     <Compile Include="Model\Timers\Macros\StartTimerMacroCommand.cs" />
     <Compile Include="Model\Timers\Macros\TimerMacroCommands.cs" />
     <Compile Include="Model\Timers\Macros\SingleArgTimerMacroCommandBase.cs" />
+    <Compile Include="Model\Timers\Triggers\TimerMacroTriggers.cs" />
+    <Compile Include="Model\Timers\Triggers\TimerReachedValueMacroTrigger.cs" />
     <Compile Include="Model\TypeCodeAttribute.cs" />
     <Compile Include="Model\TypeLabelAttribute.cs" />
     <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1T.cs" />
@@ -976,8 +978,6 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\Timers\Triggers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
