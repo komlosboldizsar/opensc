@@ -459,7 +459,9 @@
     <Compile Include="Model\IDatabaseBase.cs" />
     <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\Macros\MacroArgumentKeyType.cs" />
+    <Compile Include="Model\Macros\MacroCodeInterpreter.cs" />
     <Compile Include="Model\Macros\MacroCodeTokenizer.cs" />
+    <Compile Include="Model\Macros\MacroCommandWithArgumentsToCodeSerializer.cs" />
     <Compile Include="Model\Macros\MacroPanelElementXmlSerializer.cs" />
     <Compile Include="Model\Macros\MacroPanelDatabase.cs" />
     <Compile Include="Model\Macros\MacroPanel.cs" />
