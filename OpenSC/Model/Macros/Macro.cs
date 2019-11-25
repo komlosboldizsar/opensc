@@ -131,10 +131,23 @@ namespace OpenSC.Model.Macros
             trigger.Macro = this;
         }
 
+        public void AddTriggerRange(IEnumerable<MacroTriggerWithArguments> triggers)
+        {
+            foreach (MacroTriggerWithArguments trigger in triggers)
+                AddTrigger(trigger);
+        }
+
         public void RemoveTrigger(MacroTriggerWithArguments trigger)
         {
             triggers.Remove(trigger);
             trigger.Macro = null;
+        }
+
+        public void RemoveAllTriggers()
+        {
+            foreach (MacroTriggerWithArguments trigger in triggers)
+                trigger.Macro = null;
+            triggers.Clear();
         }
         #endregion
 
