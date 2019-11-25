@@ -25,9 +25,42 @@ namespace OpenSC.Model.Routers.Triggers
             addArgument("Output",
                 "Output of the selected router to observe.",
                 typeof(Router),
-                (prev) => ((prev[0] as Router)?.Outputs.ToArray()) ?? (new object[] { }),
+                argPossibilities1,
                 output => ((RouterOutput)output).Name);
         }
+
+        private static readonly object[] ARRAY_EMPTY = new object[] { };
+
+        private static object[] argPossibilities1(object[] prev)
+        {
+            if (prev.Length < 1)
+                return ARRAY_EMPTY;
+            return ((prev[0] as Router)?.Outputs.ToArray()) ?? (new object[] { });
+        }
+
+        protected override string getArgumentKey(int index, object value)
+        {
+
+            if (index == 0)
+            {
+                Router router = value as Router;
+                if (router == null)
+                    return "-1";
+                return router.ID.ToString();
+            }
+
+            if (index == 1)
+            {
+                RouterOutput routerOutput = value as RouterOutput;
+                if (routerOutput == null)
+                    return "-1";
+                return routerOutput.Index.ToString();
+            }
+
+            throw new ArgumentException();
+
+        }
+
 
         public override object[] GetArgumentsByKeys(string[] keys)
         {
