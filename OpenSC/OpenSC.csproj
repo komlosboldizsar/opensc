@@ -557,6 +557,11 @@
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerHhMmSs.cs" />
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerTotalMinutes.cs" />
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerTotalSeconds.cs" />
+    <Compile Include="Model\Timers\Macros\ResetTimerMacroCommand.cs" />
+    <Compile Include="Model\Timers\Macros\StopTimerMacroCommand.cs" />
+    <Compile Include="Model\Timers\Macros\StartTimerMacroCommand.cs" />
+    <Compile Include="Model\Timers\Macros\TimerMacroCommands.cs" />
+    <Compile Include="Model\Timers\Macros\SingleArgTimerMacroCommandBase.cs" />
     <Compile Include="Model\TypeCodeAttribute.cs" />
     <Compile Include="Model\TypeLabelAttribute.cs" />
     <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1T.cs" />
@@ -971,6 +976,8 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Model\Timers\Triggers\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
