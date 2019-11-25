@@ -69,7 +69,7 @@ namespace OpenSC.GUI.Macros
             builder.Width(100);
             builder.ButtonText("Run");
             builder.CellStyle(runButtonCellStyle);
-            builder.CellContentClickHandlerMethod((macro, cell, e) => { /* TODO: macro.Run(); */ });
+            builder.CellContentClickHandlerMethod((macro, cell, e) => { macro.Run(); });
             builder.BuildAndAdd();
 
             // Column: edit button

@@ -96,6 +96,12 @@ namespace OpenSC.Model.Macros
         }
         #endregion
 
+        public void Run()
+        {
+            foreach (MacroCommandWithArguments commandWA in commands)
+                commandWA.Run();
+        }
+
     }
 
 }
