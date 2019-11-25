@@ -94,7 +94,7 @@ namespace OpenSC.Model.Macros
         {
             if (!IsComplete)
                 throw new Exception("Command line is not complete!");
-            return GetCommand().GetWithArguments(ArgumentKeys.ToArray());
+            return GetCommand().GetWithArgumentsByKeysConvertImmediately(ArgumentKeys.ToArray());
         }
 
 

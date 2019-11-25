@@ -35,11 +35,20 @@ namespace OpenSC.Model.Macros
 
         public abstract object[] GetArgumentsByKeys(string[] keys);
 
-        public virtual MacroCommandWithArguments GetWithArguments(string[] argumentKeys)
+        public virtual MacroCommandWithArguments GetWithArgumentsByKeys(string[] argumentKeys)
         {
-            return new MacroCommandWithArguments(this, argumentKeys);
+            return new MacroCommandWithArguments(this, argumentKeys, true);
         }
 
+        public virtual MacroCommandWithArguments GetWithArgumentsByKeysConvertImmediately(string[] argumentKeys)
+        {
+            return new MacroCommandWithArguments(this, GetArgumentsByKeys(argumentKeys));
+        }
+
+        public virtual MacroCommandWithArguments GetWithArguments(object[] argumentValues)
+        {
+            return new MacroCommandWithArguments(this, argumentValues);
+        }
         public abstract void Run(object[] argumentValues);
 
     }

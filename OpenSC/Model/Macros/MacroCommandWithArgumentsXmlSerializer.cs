@@ -38,7 +38,7 @@ namespace OpenSC.Model.Macros
             if (command == null)
                 return null;
 
-            return command.GetWithArguments(argumentKeys.ToArray());
+            return command.GetWithArgumentsByKeys(argumentKeys.ToArray());
 
         }
 

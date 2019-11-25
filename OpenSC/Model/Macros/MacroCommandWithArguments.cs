@@ -22,7 +22,7 @@ namespace OpenSC.Model.Macros
             get => Command.GetArgumentKeys(ArgumentValues);
         }
 
-        public MacroCommandWithArguments(IMacroCommand command, string[] argumentKeys)
+        public MacroCommandWithArguments(IMacroCommand command, string[] argumentKeys, bool byKeys)
         {
             this.Command = command;
             this.argumentKeys = argumentKeys;
@@ -42,7 +42,7 @@ namespace OpenSC.Model.Macros
         private void restoreArgumentValues()
         {
             if (argumentKeys != null)
-                ArgumentValues = Command.GetArgumentsByKeys(ArgumentKeys);
+                ArgumentValues = Command.GetArgumentsByKeys(argumentKeys);
         }
 
         public void Run()
