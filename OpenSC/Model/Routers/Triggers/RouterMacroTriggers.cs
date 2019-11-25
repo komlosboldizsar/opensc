@@ -11,12 +11,12 @@ namespace OpenSC.Model.Routers.Triggers
     public class RouterMacroTriggers : MacroTriggerRegister.IMacroTriggerCollection
     {
 
-        public static readonly IMacroTrigger RouterCrosspointChanged = new RouterCrosspointChangedMacroTrigger();
+        public static readonly IMacroTrigger RouterOutputSourceChanged = new RouterOutputSourceChangedMacroTrigger();
         
         public static readonly MacroTriggerRegister.IMacroTriggerCollection Instance = new RouterMacroTriggers();
 
         public IMacroTrigger[] TriggersToRegister => new IMacroTrigger[] {
-            RouterCrosspointChanged
+            RouterOutputSourceChanged
         };
 
     }

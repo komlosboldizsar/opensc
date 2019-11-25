@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers.Triggers
 {
 
-    class RouterCrosspointChangedMacroTrigger : MacroTriggerDefaultCallImplementations.AllArgumentsMatchStrict
+    class RouterOutputSourceChangedMacroTrigger : MacroTriggerDefaultCallImplementations.AllArgumentsMatchStrict
     {
 
-        public RouterCrosspointChangedMacroTrigger()
-            : base("Routers.CrosspointChanged",
-                  "Router crosspoint changed",
+        public RouterOutputSourceChangedMacroTrigger()
+            : base("Routers.OutputSourceChanged",
+                  "Source of a router output changed",
                   "Observe a single output for source change on a router.",
                   humanReadable)
         {
