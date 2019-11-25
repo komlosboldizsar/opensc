@@ -109,7 +109,8 @@ namespace OpenSC.Model.Routers
                 LogDispatcher.I(Router.LOG_TAG, logMessage);
 
                 CrosspointChanged?.Invoke(this, value);
-                RouterMacroTriggers.RouterCrosspointChanged.Call(Router, this);
+                RouterMacroTriggers.RouterOutputSourceChanged.Call(Router, this);
+                Router.NotifyCrosspointChanged(this);
 
                 subscribeCrosspointEvents();
                 sendIndirectTalliesToSource(crosspoint?.Source);
