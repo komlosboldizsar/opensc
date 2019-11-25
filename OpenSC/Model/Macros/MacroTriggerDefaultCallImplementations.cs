@@ -12,8 +12,8 @@ namespace OpenSC.Model.Macros
 
         public abstract class SimpleArgumentMatch : MacroTriggerBase
         {
-            public SimpleArgumentMatch(string code, string name, string description)
-                : base(code, name, description)
+            public SimpleArgumentMatch(string code, string name, string description, HumanReadableMethodDelegate humanReadableMethod)
+                : base(code, name, description, humanReadableMethod)
             { }
 
             public override void Call(params object[] arguments)
@@ -29,8 +29,8 @@ namespace OpenSC.Model.Macros
 
         public abstract class AllArgumentsMatchStrict : SimpleArgumentMatch
         {
-            public AllArgumentsMatchStrict(string code, string name, string description)
-                : base(code, name, description)
+            public AllArgumentsMatchStrict(string code, string name, string description, HumanReadableMethodDelegate humanReadableMethod)
+                : base(code, name, description, humanReadableMethod)
             { }
 
             protected override bool argumentsPredicate(object[] callArguments, object[] instanceArguments)

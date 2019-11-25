@@ -21,6 +21,7 @@ namespace OpenSC.Model.Macros
         void Register(MacroTriggerWithArguments triggerWithArguments);
         void Unregister(MacroTriggerWithArguments triggerWithArguments);
         void Call(params object[] arguments);
+        string HumanReadable(object[] argumentsValues);
     }
 
 }

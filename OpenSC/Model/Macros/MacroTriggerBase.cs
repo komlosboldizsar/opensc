@@ -14,11 +14,15 @@ namespace OpenSC.Model.Macros
 
         public string Description { get; protected set; }
 
-        public MacroTriggerBase(string code, string name, string description)
+        public delegate string HumanReadableMethodDelegate(object[] argumentsValues);
+        private HumanReadableMethodDelegate humanReadableMethod;
+
+        public MacroTriggerBase(string code, string name, string description, HumanReadableMethodDelegate humanReadableMethod)
         {
             this.Code = code;
             this.Name = name;
             this.Description = description;
+            this.humanReadableMethod = humanReadableMethod;
         }
 
         #region Arguments
@@ -111,6 +115,9 @@ namespace OpenSC.Model.Macros
         }
 
         public abstract void Call(params object[] arguments);
+
+        public string HumanReadable(object[] argumentsValues)
+            => humanReadableMethod(argumentsValues);
 
     }
 }

@@ -24,6 +24,8 @@ namespace OpenSC.Model.Macros
             get => Trigger.GetArgumentKeys(ArgumentValues);
         }
 
+        public string HumanReadable => Trigger?.HumanReadable(ArgumentValues);
+
         public MacroTriggerWithArguments(IMacroTrigger trigger, string[] argumentKeys, bool byKeys)
         {
             trigger.Register(this);
