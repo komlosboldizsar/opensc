@@ -128,7 +128,7 @@ namespace OpenSC.GUI.Macros
 
         public void RunMacro()
         {
-            //Macro?.Run();
+            Macro?.Run();
         }
 
         private void button_Click(object sender, EventArgs e)
