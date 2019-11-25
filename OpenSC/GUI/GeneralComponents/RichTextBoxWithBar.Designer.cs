@@ -42,6 +42,7 @@
             this.richTextBox1.Size = new System.Drawing.Size(317, 268);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
+            this.richTextBox1.WordWrap = false;
             this.richTextBox1.VScroll += new System.EventHandler(this.richTextBox1_VScroll);
             this.richTextBox1.FontChanged += new System.EventHandler(this.richTextBox1_FontChanged);
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);

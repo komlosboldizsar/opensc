@@ -97,9 +97,16 @@ namespace OpenSC.GUI.GeneralComponents
                 Point secondPosition = TextBox.GetPositionFromCharIndex(secondLineFirstCharIndex);
                 lineHeight = secondPosition.Y - basePosition.Y;
             }
+            else
+            {
+                lineHeight = TextBox.Font.Height;
+            }
 
-            float drawSize = (CircleSize >= lineHeight) ? (lineHeight - 1) : CircleSize;
-            float yBase = basePosition.Y + lineHeight / 2 + 2;
+            float drawSize = CircleSize;
+            if ((lineHeight > 0) && (CircleSize >= lineHeight))
+                drawSize = lineHeight - 2;
+
+            float yBase = basePosition.Y + (lineHeight / 2) + 2;
             float xCenter = BarWidth / 2.0f;
             float x = xCenter - (drawSize / 2.0f);
             for (int i = 0; i < richTextBox1.Lines.Length; i++)
