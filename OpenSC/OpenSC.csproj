@@ -291,6 +291,12 @@
     <Compile Include="GUI\Settings\SettingsWindow.Designer.cs">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Settings\IntSettingEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Settings\IntSettingEditor.Designer.cs">
+      <DependentUpon>IntSettingEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Settings\StringSettingEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -539,9 +545,13 @@
     <Compile Include="Model\SerialPorts\SerialPortDatabase.cs" />
     <Compile Include="Model\Settings\Converters\BoolConverter.cs" />
     <Compile Include="Model\Settings\Converters\ColorConverter.cs" />
+    <Compile Include="Model\Settings\Converters\DoubleConverter.cs" />
+    <Compile Include="Model\Settings\Converters\DecimalConverter.cs" />
+    <Compile Include="Model\Settings\Converters\FloatConverter.cs" />
     <Compile Include="Model\Settings\Converters\IntConverter.cs" />
     <Compile Include="Model\Settings\Converters\ISettingValueConverter.cs" />
     <Compile Include="Model\Settings\ISetting.cs" />
+    <Compile Include="Model\Settings\IntSetting.cs" />
     <Compile Include="Model\Settings\Setting.cs" />
     <Compile Include="Model\Settings\SettingsManager.cs" />
     <Compile Include="Model\Settings\Converters\SettingValueConverterAttribute.cs" />
@@ -727,6 +737,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Settings\SettingsWindow.resx">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Settings\IntSettingEditor.resx">
+      <DependentUpon>IntSettingEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Settings\StringSettingEditor.resx">
       <DependentUpon>StringSettingEditor.cs</DependentUpon>
