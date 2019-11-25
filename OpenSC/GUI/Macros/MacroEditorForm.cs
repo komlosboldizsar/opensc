@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 
 namespace OpenSC.GUI.Macros
@@ -44,9 +45,8 @@ namespace OpenSC.GUI.Macros
         public MacroEditorForm(Macro macro)
         {
             InitializeComponent();
+            this.macro = (macro != null) ? macro : new Macro();
             AddingNew = (macro == null);
-            if (macro != null)
-                this.macro = macro;
         }
 
         protected override void loadData()
@@ -55,8 +55,7 @@ namespace OpenSC.GUI.Macros
                 return;
             idNumericField.Value = (addingNew ? MacroDatabase.Instance.NextValidId() : macro.ID);
             nameTextBox.Text = macro.Name;
-            /*initCommandsEditor();
-            initTriggersTable();*/
+            loadCode();
         }
 
         protected sealed override bool saveData()
@@ -89,7 +88,7 @@ namespace OpenSC.GUI.Macros
             if (macro == null)
                 return;
             macro.ValidateId((int)idNumericField.Value);
-            // TODO: validate name
+            validateCode();
         }
 
         protected virtual void writeFields()
@@ -98,8 +97,17 @@ namespace OpenSC.GUI.Macros
                 return;
             macro.ID = (int)idNumericField.Value;
             macro.Name = nameTextBox.Text;
+            macro.Commands.Clear();
+            foreach (MacroCommandWithArguments commandWithArgument in getCommandsWAFromCode())
+                macro.Commands.Add(commandWithArgument);
         }
-        
+
+        private void MacroEditorForm_Load(object sender, EventArgs e)
+        {
+            initCommandsEditor();
+            loadCommands();
+        }
+
         private void initCommandsEditor()
         {
             commandsEditorTextBox.TextBox.TextChanged += commandsEditorTextBox_TextChanged;
@@ -347,6 +355,55 @@ namespace OpenSC.GUI.Macros
             selectCommandComboBox.CreateAdapterAsDataSource(MacroCommandRegister.Instance.RegisteredCommands, mc => string.Format("[{0}] {1}", mc.CommandCode, mc.CommandName), true, "-");
         }
 
+        private List<MacroCommandWithArguments> getCommandsWAFromCode()
+        {
+            MacroCodeInterpreter interpreter = new MacroCodeInterpreter();
+            List<MacroCommandWithArguments> commandsWA = new List<MacroCommandWithArguments>();
+            int lineIndex = 0;
+            foreach (string line in commandsEditorTextBox.TextBox.Lines)
+            {
+                interpreter.Formula = line;
+                if (interpreter.HasSyntaxError)
+                    throw new Exception(string.Format("Line #{0} has syntax error!", (lineIndex + 1)));
+                if (!interpreter.IsComplete && !interpreter.IsEmpty)
+                    throw new Exception(string.Format("Line #{0} is incomplete!", (lineIndex + 1)));
+                if (!interpreter.IsEmpty)
+                    commandsWA.Add(interpreter.GetCommandWithArguments());
+                lineIndex++;
+            }
+            return commandsWA;
+        }
+        private void validateCode()
+        {
+            MacroCodeInterpreter interpreter = new MacroCodeInterpreter();
+            int lineIndex = 0;
+            foreach (string line in commandsEditorTextBox.TextBox.Lines)
+            {
+                interpreter.Formula = line;
+                if (interpreter.HasSyntaxError)
+                    throw new Exception(string.Format("Line #{0} has syntax error!", (lineIndex + 1)));
+                if (!interpreter.IsComplete && !interpreter.IsEmpty)
+                    throw new Exception(string.Format("Line #{0} is incomplete!", (lineIndex + 1)));
+                lineIndex++;
+            }
+        }
+
+        private static string getCodeFromCommandsWA(IEnumerable<MacroCommandWithArguments> commandsWA)
+        {
+            StringBuilder code = new StringBuilder();
+            foreach (MacroCommandWithArguments commandWA in commandsWA)
+                code.AppendLine(commandWA.GetCode());
+            return code.ToString();
+        }
+
+        private void loadCode()
+        {
+            noInterpretOnTextChange = true;
+            commandsEditorTextBox.TextBox.Text = getCodeFromCommandsWA(macro.Commands);
+            noInterpretOnTextChange = false;
+            interpretAllLines();
+        }
+
         private CustomDataGridView<RouterOutput> triggersTableCDGV;
 
         private void initTriggersTable()
@@ -421,21 +478,11 @@ namespace OpenSC.GUI.Macros
         {
              return new CustomDataGridViewColumnDescriptorBuilder<T>(table);
         }
-
-        
-
         private void addTriggerButton_Click(object sender, EventArgs e)
         {
             //router.AddOutput();
         }
-
         
-
-        private void MacroEditorForm_Load(object sender, EventArgs e)
-        {
-            initCommandsEditor();
-            loadCommands();
-        }
 
     }
 
