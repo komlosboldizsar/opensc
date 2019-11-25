@@ -57,6 +57,7 @@ namespace OpenSC.GUI.Macros
             idNumericField.Value = (addingNew ? MacroDatabase.Instance.NextValidId() : macro.ID);
             nameTextBox.Text = macro.Name;
             loadCode();
+            initTriggerCollectionProxies();
             macroTriggersCollectionProxy.Clear();
             macroTriggersCollectionProxy.AddRange(macro.Triggers);
         }
@@ -419,61 +420,75 @@ namespace OpenSC.GUI.Macros
         #endregion
 
         #region Triggers
-        private ObservableList<MacroTriggerWithArguments> macroTriggersCollectionProxy = new ObservableList<MacroTriggerWithArguments>();
+        private CustomDataGridView<MacroTriggerWithArgumentsProxy> triggersTableCDGV;
 
-        private CustomDataGridView<MacroTriggerWithArguments> triggersTableCDGV;
-
+        private static readonly Color CELL_BACKGROUND_EDITING = Color.Yellow;
+        private static readonly Color CELL_BACKGROUND_NOT_EDITING = Color.White;
         private void initTriggersTable()
         {
 
-            triggersTableCDGV = createTable<MacroTriggerWithArguments>(triggersTableContainerPanel, ref this.triggersTable);
-            CustomDataGridViewColumnDescriptorBuilder<MacroTriggerWithArguments> builder;
+            triggersTableCDGV = createTable<MacroTriggerWithArgumentsProxy>(triggersTableContainerPanel, ref this.triggersTable);
+            CustomDataGridViewColumnDescriptorBuilder<MacroTriggerWithArgumentsProxy> builder;
 
             // Column: code
-            builder = getColumnDescriptorBuilderForTable<MacroTriggerWithArguments>(triggersTableCDGV);
+            builder = getColumnDescriptorBuilderForTable<MacroTriggerWithArgumentsProxy>(triggersTableCDGV);
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Code");
             builder.Width(150);
-            builder.UpdaterMethod((trigger, cell) => { cell.Value = trigger.TriggerCode; });
-            builder.AddChangeEvent(nameof(RouterOutput.Name));
-            builder.TextEditable(true);
+            builder.UpdaterMethod((triggerProxy, cell) => {
+                cell.Value = triggerProxy.TriggerCode;
+                cell.Style.BackColor = triggerProxy.Editing ? CELL_BACKGROUND_EDITING : CELL_BACKGROUND_NOT_EDITING;
+            });
+            builder.AddChangeEvent(nameof(MacroTriggerWithArgumentsProxy.TriggerCode));
+            builder.AddChangeEvent(nameof(MacroTriggerWithArgumentsProxy.Editing));
             builder.BuildAndAdd();
 
             // Column: action description
-            builder = getColumnDescriptorBuilderForTable<MacroTriggerWithArguments>(triggersTableCDGV);
+            builder = getColumnDescriptorBuilderForTable<MacroTriggerWithArgumentsProxy>(triggersTableCDGV);
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Action description");
-            builder.Width(400);
-            builder.UpdaterMethod((trigger, cell) => { cell.Value = trigger.HumanReadable; });
-            builder.AddChangeEvent(nameof(RouterOutput.Name));
-            builder.TextEditable(true);
+            builder.Width(350);
+            builder.UpdaterMethod((triggerProxy, cell) => {
+                cell.Value = triggerProxy.HumanReadable;
+                cell.Style.BackColor = triggerProxy.Editing ? CELL_BACKGROUND_EDITING : CELL_BACKGROUND_NOT_EDITING;
+            });
+            builder.AddChangeEvent(nameof(MacroTriggerWithArgumentsProxy.HumanReadable));
+            builder.AddChangeEvent(nameof(MacroTriggerWithArgumentsProxy.Editing));
             builder.BuildAndAdd();
 
             // Column: edit button
-            builder = getColumnDescriptorBuilderForTable<MacroTriggerWithArguments>(triggersTableCDGV);
+            builder = getColumnDescriptorBuilderForTable<MacroTriggerWithArgumentsProxy>(triggersTableCDGV);
             builder.Type(DataGridViewColumnType.Button);
             builder.Header("Edit");
             builder.Width(70);
             builder.ButtonText("Edit");
-            builder.CellContentClickHandlerMethod((trigger, cell, e) => { editTrigger(trigger); });
+            builder.UpdaterMethod((triggerProxy, cell) => {
+                cell.Style.BackColor = triggerProxy.Editing ? CELL_BACKGROUND_EDITING : CELL_BACKGROUND_NOT_EDITING;
+            });
+            builder.AddChangeEvent(nameof(MacroTriggerWithArgumentsProxy.Editing));
+            builder.CellContentClickHandlerMethod((triggerProxy, cell, e) => { editTrigger(triggerProxy.Trigger); });
             builder.BuildAndAdd();
 
             // Column: delete button
-            builder = getColumnDescriptorBuilderForTable<MacroTriggerWithArguments>(triggersTableCDGV);
+            builder = getColumnDescriptorBuilderForTable<MacroTriggerWithArgumentsProxy>(triggersTableCDGV);
             builder.Type(DataGridViewColumnType.Button);
             builder.Header("Delete");
             builder.Width(70);
             builder.ButtonText("Delete");
-            builder.CellContentClickHandlerMethod((trigger, cell, e) => {
+            builder.UpdaterMethod((triggerProxy, cell) => {
+                cell.Style.BackColor = triggerProxy.Editing ? CELL_BACKGROUND_EDITING : CELL_BACKGROUND_NOT_EDITING;
+            });
+            builder.AddChangeEvent(nameof(MacroTriggerWithArgumentsProxy.Editing));
+            builder.CellContentClickHandlerMethod((triggerProxy, cell, e) => {
                 string msgBoxText = string.Format("Do you really want to delete this trigger #{0}?", cell.RowIndex);
                 var confirm = MessageBox.Show(msgBoxText, "Delete confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (confirm == DialogResult.Yes)
-                    macroTriggersCollectionProxy.Remove(trigger);
+                    macroTriggersCollectionProxy.Remove(triggerProxy.Trigger);
             });
             builder.BuildAndAdd();
 
             // Bind collection
-            triggersTableCDGV.BoundCollection = macroTriggersCollectionProxy;
+            triggersTableCDGV.BoundCollection = macroTriggersProxyCollection;
 
         }
 
@@ -492,6 +507,49 @@ namespace OpenSC.GUI.Macros
             where T : class
         {
              return new CustomDataGridViewColumnDescriptorBuilder<T>(table);
+        }
+
+        private ObservableList<MacroTriggerWithArguments> macroTriggersCollectionProxy;
+        private IObservableList<MacroTriggerWithArgumentsProxy> macroTriggersProxyCollection;
+
+        private void initTriggerCollectionProxies()
+        {
+            macroTriggersCollectionProxy = new ObservableList<MacroTriggerWithArguments>();
+            macroTriggersProxyCollection = new ObservableProxyList<MacroTriggerWithArgumentsProxy, MacroTriggerWithArguments>(macroTriggersCollectionProxy, mtwa => new MacroTriggerWithArgumentsProxy(mtwa));
+        }
+
+        private class MacroTriggerWithArgumentsProxy : Model.General.INotifyPropertyChanged
+        {
+
+            public MacroTriggerWithArguments Trigger { get; private set; }
+
+            public string TriggerCode => Trigger.TriggerCode;
+
+            public string HumanReadable => Trigger.HumanReadable;
+
+            public MacroTriggerWithArgumentsProxy(MacroTriggerWithArguments original)
+            {
+                Trigger = original;
+            }
+
+            private bool editing = false;
+            public bool Editing
+            {
+                get => editing;
+                set
+                {
+                    editing = value;
+                    PropertyChanged?.Invoke(nameof(Editing));
+                    if (value == false)
+                    {
+                        PropertyChanged?.Invoke(nameof(TriggerCode));
+                        PropertyChanged?.Invoke(nameof(HumanReadable));
+                    }
+                }
+            }
+
+            public event PropertyChangedDelegate PropertyChanged;
+
         }
 
         private void addOrSaveTriggerButton_Click(object sender, EventArgs e)
@@ -531,6 +589,9 @@ namespace OpenSC.GUI.Macros
 
         private void editTrigger(MacroTriggerWithArguments triggerWA)
         {
+
+            foreach (MacroTriggerWithArgumentsProxy proxy in macroTriggersProxyCollection)
+                proxy.Editing = (proxy.Trigger == triggerWA);
 
             editedTriggerWA = triggerWA;
 
