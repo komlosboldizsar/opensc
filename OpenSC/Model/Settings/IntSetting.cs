@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Settings
 {
 
-    class IntSetting : Setting<int>
+    public class IntSetting : Setting<int>
     {
         public IntSetting(string key, string category, string humanReadableTitle, string humanReadableDescription, int defaultValue, int? minValue, int? maxValue)
             : base(key, category, humanReadableTitle, humanReadableDescription, defaultValue)
