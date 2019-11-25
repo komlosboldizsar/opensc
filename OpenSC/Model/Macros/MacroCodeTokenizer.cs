@@ -12,27 +12,28 @@ namespace OpenSC.Model.Macros
     public class MacroCodeTokenizer
     {
 
-        public MacroCodeTokenizer(string formula)
-        {
-            this.formula = formula;
-        }
 
         private string formula;
 
-        public string CommandCode { get; private set; }
-
-        public List<Token> Process()
+        public string Formula
         {
-            if (formula == null)
-                return tokens;
-            tokens.Clear();
-            processFormula();
-            return tokens;
+            get => formula;
+            set
+            {
+                formula = value;
+                processFormula();
+            }
         }
+
+        public string CommandCode { get; private set; }
 
         private void processFormula()
         {
+            tokens.Clear();
+            arguments.Clear();
             CommandCode = "";
+            if (formula == null)
+                return;
             currentPosition = 0;
             currentTokenStart = 0;
             state = State.StartingWhiteSpaces;
@@ -274,6 +275,10 @@ namespace OpenSC.Model.Macros
                         addToken(TokenType.StringArgument, false);
                         state = State.CommandArgumentListEnd;
                     }
+                    else if (currentChr == 0)
+                    {
+                        incomplete();
+                    }
                     else
                     {
                         fatalSyntaxError();
@@ -379,7 +384,7 @@ namespace OpenSC.Model.Macros
                     {
                         state = State.EndingWhiteSpaces;
                     }
-                    else
+                    else if (currentChr != 0)
                     {
                         fatalSyntaxError();
                     }
@@ -576,14 +581,15 @@ namespace OpenSC.Model.Macros
 
         public bool IsEmpty
             => (state == State.Empty);
-        public bool HasSyntaxError { get; private set; } = false;
+
+        public bool HasSyntaxError
+            => (state == State.SyntaxError);
 
         public int SyntaxErrorPosition { get; private set; }
 
         private void fatalSyntaxError()
         {
             state = State.SyntaxError;
-            HasSyntaxError = true;
             SyntaxErrorPosition = currentPosition;
         }
 
