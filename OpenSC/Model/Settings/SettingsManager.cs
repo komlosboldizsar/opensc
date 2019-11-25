@@ -141,6 +141,9 @@ namespace OpenSC.Model.Settings
         {
             new BoolConverter(),
             new IntConverter(),
+            new DecimalConverter(),
+            new FloatConverter(),
+            new DoubleConverter(),
             new ColorConverter()
         };
 
