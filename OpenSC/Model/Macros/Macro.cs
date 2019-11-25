@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,16 @@ namespace OpenSC.Model.Macros
 
     public class Macro : ModelBase
     {
+
+        public static readonly Setting<int> StackDepthSetting = new IntSetting(
+            "macros.stackdepth",
+            "Macros",
+            "Stack depth",
+            "Determines how deep the macro call stack can be when calling macros by macros or macros by triggers that were fired by macros.",
+            10,
+            1,
+            32
+        );
 
         public override void Restored()
         {

@@ -3,6 +3,7 @@ using OpenSC.GUI.Menus;
 using OpenSC.GUI.Variables;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.Settings;
 using System;
 
 namespace OpenSC.Model.Macros
@@ -22,6 +23,7 @@ namespace OpenSC.Model.Macros
 
             // TODO: shouldn't register here
             MacroCommandRegister.Instance.RegisterCommand(new RunMacroMacroCommand());
+            SettingsManager.Instance.RegisterSetting(Macro.StackDepthSetting);
 
         }
 
