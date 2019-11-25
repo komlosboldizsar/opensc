@@ -1,5 +1,6 @@
 ﻿using OpenSC.GUI.GeneralComponents.DropDowns;
 using OpenSC.GUI.GeneralComponents.Tables;
+using OpenSC.Model.General;
 using OpenSC.Model.Macros;
 using OpenSC.Model.Routers;
 using OpenSC.Model.Signals;
@@ -56,6 +57,8 @@ namespace OpenSC.GUI.Macros
             idNumericField.Value = (addingNew ? MacroDatabase.Instance.NextValidId() : macro.ID);
             nameTextBox.Text = macro.Name;
             loadCode();
+            macroTriggersCollectionProxy.Clear();
+            macroTriggersCollectionProxy.AddRange(macro.Triggers);
         }
 
         protected sealed override bool saveData()
@@ -101,14 +104,20 @@ namespace OpenSC.GUI.Macros
             macro.Commands.Clear();
             foreach (MacroCommandWithArguments commandWithArgument in getCommandsWAFromCode())
                 macro.Commands.Add(commandWithArgument);
+            macro.RemoveAllTriggers();
+            macro.AddTriggerRange(macroTriggersCollectionProxy);
         }
 
         private void MacroEditorForm_Load(object sender, EventArgs e)
         {
             initCommandsEditor();
             loadCommands();
+            initTriggersTable();
+            loadTriggers();
+            editTrigger(null);
         }
 
+        #region Commands
         private void initCommandsEditor()
         {
             commandsEditorTextBox.TextBox.TextChanged += commandsEditorTextBox_TextChanged;
@@ -127,7 +136,7 @@ namespace OpenSC.GUI.Macros
             }
 
             List<object> argumentValues = new List<object>();
-            foreach (CommandArgumentControl argControl in argumentControls)
+            foreach (CommandArgumentControl argControl in commandArgumentControls)
                 argumentValues.Add(argControl.ArgumentValue);
 
             noInterpretOnTextChange = true;
@@ -187,7 +196,6 @@ namespace OpenSC.GUI.Macros
             }
 
         }
-
 
         private static readonly Color POINTCOLOR_SYNTAX_ERROR = Color.DarkRed;
         private static readonly Color POINTCOLOR_INCOMPLETE = Color.Cyan;
@@ -293,7 +301,7 @@ namespace OpenSC.GUI.Macros
             }
         }
 
-        private List<CommandArgumentControl> argumentControls = new List<CommandArgumentControl>();
+        private List<CommandArgumentControl> commandArgumentControls = new List<CommandArgumentControl>();
 
         private void selectCommandComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -301,9 +309,9 @@ namespace OpenSC.GUI.Macros
             IMacroCommand selectedCommand = selectCommandComboBox.SelectedValue as IMacroCommand;
             commandDescriptionTextBox.Text = "";
             commandArgumentsPanel.Controls.Clear();
-            foreach (CommandArgumentControl argControl in argumentControls)
-                argControl.ArgumentValueChanged -= ArgumentControl_ArgumentValueChanged;
-            argumentControls.Clear();
+            foreach (CommandArgumentControl argControl in commandArgumentControls)
+                argControl.ArgumentValueChanged -= CommandArgumentControl_ArgumentValueChanged;
+            commandArgumentControls.Clear();
 
             addCommandButton.Enabled = (selectedCommand != null);
 
@@ -315,29 +323,29 @@ namespace OpenSC.GUI.Macros
                 foreach (IMacroCommandArgument arg in selectedCommand.Arguments)
                 {
                     var argumentControl = new CommandArgumentControl(arg, i, (i == (argCount - 1)));
-                    argumentControl.ArgumentValueChanged += ArgumentControl_ArgumentValueChanged;
-                    argumentControls.Add(argumentControl);
+                    argumentControl.ArgumentValueChanged += CommandArgumentControl_ArgumentValueChanged;
+                    commandArgumentControls.Add(argumentControl);
                     i++;
                 }
             }
 
-            for (int i = argumentControls.Count - 1; i >= 0; i--)
+            for (int i = commandArgumentControls.Count - 1; i >= 0; i--)
             {
-                CommandArgumentControl control = argumentControls[i];
+                CommandArgumentControl control = commandArgumentControls[i];
                 commandArgumentsPanel.Controls.Add(control);
                 control.Dock = DockStyle.Top;
             }
 
         }
 
-        private void ArgumentControl_ArgumentValueChanged(CommandArgumentControl control, IMacroCommandArgument argument, object newValue)
+        private void CommandArgumentControl_ArgumentValueChanged(CommandArgumentControl control, IMacroCommandArgument argument, object newValue)
         {
 
             List<object> argumentValues = new List<object>();
             object[] argumentValuesArr = null;
 
             bool collecting = true;
-            foreach (CommandArgumentControl argControl in argumentControls)
+            foreach (CommandArgumentControl argControl in commandArgumentControls)
             {
 
                 if (collecting)
@@ -408,62 +416,64 @@ namespace OpenSC.GUI.Macros
             noInterpretOnTextChange = false;
             interpretAllLines();
         }
+        #endregion
 
-        private CustomDataGridView<RouterOutput> triggersTableCDGV;
+        #region Triggers
+        private ObservableList<MacroTriggerWithArguments> macroTriggersCollectionProxy = new ObservableList<MacroTriggerWithArguments>();
+
+        private CustomDataGridView<MacroTriggerWithArguments> triggersTableCDGV;
 
         private void initTriggersTable()
         {
 
-            /*triggersTableCDGV = createTable<RouterOutput>(outputsTableContainerPanel, ref this.outputsTable);
-            CustomDataGridViewColumnDescriptorBuilder<RouterOutput> builder;
+            triggersTableCDGV = createTable<MacroTriggerWithArguments>(triggersTableContainerPanel, ref this.triggersTable);
+            CustomDataGridViewColumnDescriptorBuilder<MacroTriggerWithArguments> builder;
 
-            // Column: index
-            builder = getColumnDescriptorBuilderForTable<RouterOutput>(triggersTableCDGV);
+            // Column: code
+            builder = getColumnDescriptorBuilderForTable<MacroTriggerWithArguments>(triggersTableCDGV);
             builder.Type(DataGridViewColumnType.TextBox);
-            builder.Header("#");
-            builder.Width(30);
-            builder.UpdaterMethod((output, cell) => { cell.Value = output.Index + 1; });
-            //builder.AddChangeEvent(nameof(RouterOutput.Index));
-            builder.BuildAndAdd();
-
-            // Column: name
-            builder = getColumnDescriptorBuilderForTable<RouterOutput>(triggersTableCDGV);
-            builder.Type(DataGridViewColumnType.TextBox);
-            builder.Header("Name");
-            builder.Width(100);
-            builder.UpdaterMethod((output, cell) => { cell.Value = output.Name; });
+            builder.Header("Code");
+            builder.Width(150);
+            builder.UpdaterMethod((trigger, cell) => { cell.Value = trigger.TriggerCode; });
             builder.AddChangeEvent(nameof(RouterOutput.Name));
             builder.TextEditable(true);
-            builder.CellEndEditHandlerMethod((output, cell, eventargs) =>
-            {
-                try
-                {
-                    output.Name = cell.Value.ToString();
-                }
-                catch (ArgumentException e)
-                {
-                    MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    cell.Value = output.Name;
-                }
-            });
+            builder.BuildAndAdd();
+
+            // Column: action description
+            builder = getColumnDescriptorBuilderForTable<MacroTriggerWithArguments>(triggersTableCDGV);
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.Header("Action description");
+            builder.Width(400);
+            builder.UpdaterMethod((trigger, cell) => { cell.Value = trigger.HumanReadable; });
+            builder.AddChangeEvent(nameof(RouterOutput.Name));
+            builder.TextEditable(true);
+            builder.BuildAndAdd();
+
+            // Column: edit button
+            builder = getColumnDescriptorBuilderForTable<MacroTriggerWithArguments>(triggersTableCDGV);
+            builder.Type(DataGridViewColumnType.Button);
+            builder.Header("Edit");
+            builder.Width(70);
+            builder.ButtonText("Edit");
+            builder.CellContentClickHandlerMethod((trigger, cell, e) => { editTrigger(trigger); });
             builder.BuildAndAdd();
 
             // Column: delete button
-            builder = getColumnDescriptorBuilderForTable<RouterOutput>(triggersTableCDGV);
+            builder = getColumnDescriptorBuilderForTable<MacroTriggerWithArguments>(triggersTableCDGV);
             builder.Type(DataGridViewColumnType.Button);
             builder.Header("Delete");
             builder.Width(70);
             builder.ButtonText("Delete");
-            builder.CellContentClickHandlerMethod((output, cell, e) => {
-                string msgBoxText = string.Format("Do you really want to delete output #{0}?", (output.Index + 1));
+            builder.CellContentClickHandlerMethod((trigger, cell, e) => {
+                string msgBoxText = string.Format("Do you really want to delete this trigger #{0}?", cell.RowIndex);
                 var confirm = MessageBox.Show(msgBoxText, "Delete confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (confirm == DialogResult.Yes)
-                    router.RemoveOutput(output);
+                    macroTriggersCollectionProxy.Remove(trigger);
             });
             builder.BuildAndAdd();
 
             // Bind collection
-            triggersTableCDGV.BoundCollection = router.Outputs;*/
+            triggersTableCDGV.BoundCollection = macroTriggersCollectionProxy;
 
         }
 
@@ -483,11 +493,134 @@ namespace OpenSC.GUI.Macros
         {
              return new CustomDataGridViewColumnDescriptorBuilder<T>(table);
         }
-        private void addTriggerButton_Click(object sender, EventArgs e)
+
+        private void addOrSaveTriggerButton_Click(object sender, EventArgs e)
         {
-            //router.AddOutput();
+
+            List<object> argumentValues = new List<object>();
+            foreach (TriggerArgumentControl argControl in triggerArgumentControls)
+                argumentValues.Add(argControl.ArgumentValue);
+            object[] argumentValuesArr = argumentValues.ToArray();
+
+            if (editedTriggerWA == null)
+            {
+
+                IMacroTrigger trigger = selectTriggerComboBox.SelectedValue as IMacroTrigger;
+                if (trigger == null)
+                {
+                    // Show error message
+                    return;
+                }
+
+                MacroTriggerWithArguments triggerWA = trigger.GetWithArguments(argumentValuesArr);
+                macroTriggersCollectionProxy.Add(triggerWA);
+
+            }
+            else
+            {
+                editedTriggerWA.ArgumentValues = argumentValuesArr;
+            }
+
+            editTrigger(null);
+
         }
-        
+
+        private const string BUTTON_TEXT_ADD_TRIGGER = "Add trigger";
+
+        private const string BUTTON_TEXT_SAVE_TRIGGER = "Save trigger";
+
+        private void editTrigger(MacroTriggerWithArguments triggerWA)
+        {
+
+            editedTriggerWA = triggerWA;
+
+            if (triggerWA == null)
+            {
+                selectTriggerComboBox.SelectByValue(null);
+                selectTriggerComboBox.Enabled = true;
+                addOrSaveTriggerButton.Text = BUTTON_TEXT_ADD_TRIGGER;
+                return;
+            }
+
+            selectTriggerComboBox.SelectByValue(triggerWA.Trigger);
+            selectTriggerComboBox.Enabled = false;
+            addOrSaveTriggerButton.Text = BUTTON_TEXT_SAVE_TRIGGER;
+            int i = 0;
+            foreach (TriggerArgumentControl argControl in triggerArgumentControls)
+                argControl.ArgumentValue = triggerWA.ArgumentValues[i++];
+
+        }
+
+        private MacroTriggerWithArguments editedTriggerWA = null;
+
+        private List<TriggerArgumentControl> triggerArgumentControls = new List<TriggerArgumentControl>();
+
+        private void selectTriggerComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            IMacroTrigger selectedTrigger = selectTriggerComboBox.SelectedValue as IMacroTrigger;
+            triggerDescriptionTextBox.Text = "";
+            triggerArgumentsPanel.Controls.Clear();
+            foreach (TriggerArgumentControl argControl in triggerArgumentControls)
+                argControl.ArgumentValueChanged -= TriggerArgumentControl_ArgumentValueChanged;
+            triggerArgumentControls.Clear();
+
+            addOrSaveTriggerButton.Enabled = (selectedTrigger != null);
+
+            if (selectedTrigger != null)
+            {
+                triggerDescriptionTextBox.Text = selectedTrigger.Description;
+                int i = 0;
+                int argCount = selectedTrigger.Arguments.Length;
+                foreach (IMacroTriggerArgument arg in selectedTrigger.Arguments)
+                {
+                    var argumentControl = new TriggerArgumentControl(arg, i, (i == (argCount - 1)));
+                    argumentControl.ArgumentValueChanged += TriggerArgumentControl_ArgumentValueChanged;
+                    triggerArgumentControls.Add(argumentControl);
+                    i++;
+                }
+            }
+
+            for (int i = triggerArgumentControls.Count - 1; i >= 0; i--)
+            {
+                TriggerArgumentControl control = triggerArgumentControls[i];
+                triggerArgumentsPanel.Controls.Add(control);
+                control.Dock = DockStyle.Top;
+            }
+
+        }
+
+        private void TriggerArgumentControl_ArgumentValueChanged(TriggerArgumentControl control, IMacroTriggerArgument argument, object newValue)
+        {
+
+            List<object> argumentValues = new List<object>();
+            object[] argumentValuesArr = null;
+
+            bool collecting = true;
+            foreach (TriggerArgumentControl argControl in triggerArgumentControls)
+            {
+
+                if (collecting)
+                    argumentValues.Add(argControl.ArgumentValue);
+                else
+                    argControl.PreviousArgumentValues = argumentValuesArr;
+
+                if (argControl == control)
+                {
+                    collecting = false;
+                    argumentValuesArr = argumentValues.ToArray();
+                }
+
+            }
+
+        }
+
+        private void loadTriggers()
+        {
+            selectTriggerComboBox.CreateAdapterAsDataSource(MacroTriggerRegister.Instance.RegisteredTriggers, mt => string.Format("[{0}] {1}", mt.Code, mt.Name), true, "-");
+        }
+
+        #endregion
 
     }
 

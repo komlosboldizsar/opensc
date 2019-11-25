@@ -89,6 +89,12 @@
     <Compile Include="GUI\GeneralComponents\Tables\DataGridViewSmallIconCell.cs" />
     <Compile Include="GUI\Helpers\ResizableControls.cs" />
     <Compile Include="GUI\Helpers\DraggableControls.cs" />
+    <Compile Include="GUI\Macros\TriggerArgumentControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Macros\TriggerArgumentControl.Designer.cs">
+      <DependentUpon>TriggerArgumentControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Macros\CommandArgumentControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -624,6 +630,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\GeneralComponents\RichTextBoxWithBar.resx">
       <DependentUpon>RichTextBoxWithBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Macros\TriggerArgumentControl.resx">
+      <DependentUpon>TriggerArgumentControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Macros\CommandArgumentControl.resx">
       <DependentUpon>CommandArgumentControl.cs</DependentUpon>

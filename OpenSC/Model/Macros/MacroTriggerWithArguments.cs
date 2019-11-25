@@ -15,7 +15,17 @@ namespace OpenSC.Model.Macros
 
         public Macro Macro { get; internal set; }
 
-        public object[] ArgumentValues { get; private set; }
+        private object[] argumentValues;
+        public object[] ArgumentValues
+        {
+            get => argumentValues;
+            set
+            {
+                if (value.Length != Trigger.ArgumentCount)
+                    throw new ArgumentException();
+                argumentValues = value;
+            }
+        }
 
         private string[] argumentKeys;
 
@@ -37,7 +47,7 @@ namespace OpenSC.Model.Macros
         {
             trigger.Register(this);
             this.Trigger = trigger;
-            this.ArgumentValues = argumentValues;
+            this.argumentValues = argumentValues;
         }
 
         public void Restored()
@@ -48,7 +58,7 @@ namespace OpenSC.Model.Macros
         private void restoreArgumentValues()
         {
             if (argumentKeys != null)
-                ArgumentValues = Trigger.GetArgumentsByKeys(argumentKeys);
+                argumentValues = Trigger.GetArgumentsByKeys(argumentKeys);
         }
 
         public void Fire(IMacroTrigger sender)
