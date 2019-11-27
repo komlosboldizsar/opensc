@@ -239,7 +239,7 @@ namespace OpenSC.GUI.Macros
             IMacroCommand command = interpreter.GetCommand();
             if (interpreter.ArgumentCountMismatch)
             {
-                string tooltip = string.Format("Arguments should have {0} arguments.", command.Arguments.Length);
+                string tooltip = string.Format("Command should have {0} arguments.", command.Arguments.Length);
                 commandsEditorTextBox.SetPointColor(lineIndex, POINTCOLOR_ARGUMENT_COUNT_MISMATCH, tooltip);
                 return;
             }
