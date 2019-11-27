@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.General;
+﻿using OpenSC.Logger;
+using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.Settings;
 using System;
@@ -13,7 +14,7 @@ namespace OpenSC.Model.Macros
     public class Macro : ModelBase
     {
 
-        public static readonly Setting<int> StackDepthSetting = new IntSetting(
+        public static readonly Setting<int> MaxStackDepthSetting = new IntSetting(
             "macros.stackdepth",
             "Macros",
             "Stack depth",
@@ -162,10 +163,19 @@ namespace OpenSC.Model.Macros
         }
         #endregion
 
+        public int CurrentStackDepth { get; private set; } = 0;
+
         public void Run()
         {
+            if (CurrentStackDepth >= MaxStackDepthSetting.Value)
+            {
+                // Error message
+                return;
+            }
+            CurrentStackDepth++;
             foreach (MacroCommandWithArguments commandWA in commands)
                 commandWA.Run();
+            CurrentStackDepth--;
         }
 
         public void Triggered()

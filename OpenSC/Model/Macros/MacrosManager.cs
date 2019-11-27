@@ -23,7 +23,7 @@ namespace OpenSC.Model.Macros
 
             // TODO: shouldn't register here
             MacroCommandRegister.Instance.RegisterCommand(new RunMacroMacroCommand());
-            SettingsManager.Instance.RegisterSetting(Macro.StackDepthSetting);
+            SettingsManager.Instance.RegisterSetting(Macro.MaxStackDepthSetting);
 
         }
 
