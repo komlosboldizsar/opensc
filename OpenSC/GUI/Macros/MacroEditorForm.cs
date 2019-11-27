@@ -583,6 +583,9 @@ namespace OpenSC.GUI.Macros
 
         }
 
+        private void addNewTriggerButton_Click(object sender, EventArgs e)
+            => editTrigger(null);
+
         private const string BUTTON_TEXT_ADD_TRIGGER = "Add trigger";
 
         private const string BUTTON_TEXT_SAVE_TRIGGER = "Save trigger";
@@ -600,12 +603,14 @@ namespace OpenSC.GUI.Macros
                 selectTriggerComboBox.SelectByValue(null);
                 selectTriggerComboBox.Enabled = true;
                 addOrSaveTriggerButton.Text = BUTTON_TEXT_ADD_TRIGGER;
+                addNewTriggerButton.Enabled = false;
                 return;
             }
 
             selectTriggerComboBox.SelectByValue(triggerWA.Trigger);
             selectTriggerComboBox.Enabled = false;
             addOrSaveTriggerButton.Text = BUTTON_TEXT_SAVE_TRIGGER;
+            addNewTriggerButton.Enabled = true;
             int i = 0;
             foreach (TriggerArgumentControl argControl in triggerArgumentControls)
                 argControl.ArgumentValue = triggerWA.ArgumentValues[i++];
