@@ -19,7 +19,7 @@ namespace OpenSC.Model.Macros
             public override void Call(params object[] arguments)
             {
                 foreach (MacroTriggerWithArguments triggerWA in registeredTriggersWithArguments)
-                    if (argumentsPredicate(arguments, triggerWA.ArgumentValues))
+                    if ((triggerWA.ArgumentValues != null) && argumentsPredicate(arguments, triggerWA.ArgumentValues))
                         triggerWA.Fire(this);
             }
 
