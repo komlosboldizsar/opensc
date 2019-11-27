@@ -12,7 +12,7 @@ namespace OpenSC.Model.Routers.Triggers
     {
 
         public RouterCrosspointChangedMacroTrigger()
-            : base("Routers.OutputSourceChanged",
+            : base("Routers.CrosspointChanged",
                   "Crosspoint change on a router",
                   "Observe all outputs for crosspoint change on a router.",
                   humanReadable)
