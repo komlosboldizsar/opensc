@@ -169,13 +169,14 @@ namespace OpenSC.Model.Macros
 
         public void Run()
         {
-            string logMessage = string.Format("Macro #{0} ({1}) is executed externally.",
+            string logMessage = string.Format("Macro #{0} ({1}) is executed externally or from another macro.",
                 id,
                 name);
             LogDispatcher.I(LOG_TAG, logMessage);
+            _run();
         }
 
-        private void _run()
+        public void _run()
         {
             if (CurrentStackDepth >= MaxStackDepthSetting.Value)
             {

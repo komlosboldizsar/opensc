@@ -65,6 +65,7 @@
             this.triggerArgumentControl2 = new OpenSC.GUI.Macros.TriggerArgumentControl();
             this.triggerArgumentControl1 = new OpenSC.GUI.Macros.TriggerArgumentControl();
             this.addTriggerButtonsPanel = new System.Windows.Forms.Panel();
+            this.addNewTriggerButton = new System.Windows.Forms.Button();
             this.addOrSaveTriggerButton = new System.Windows.Forms.Button();
             this.selectTriggerPanel = new System.Windows.Forms.Panel();
             this.selectTriggerGroupBox = new System.Windows.Forms.GroupBox();
@@ -225,7 +226,7 @@
             this.commandsTabPage.Location = new System.Drawing.Point(4, 25);
             this.commandsTabPage.Name = "commandsTabPage";
             this.commandsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.commandsTabPage.Size = new System.Drawing.Size(1454, 465);
+            this.commandsTabPage.Size = new System.Drawing.Size(490, 229);
             this.commandsTabPage.TabIndex = 1;
             this.commandsTabPage.Text = "Commands";
             // 
@@ -235,20 +236,20 @@
             this.commandsEditorContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commandsEditorContainerPanel.Location = new System.Drawing.Point(3, 3);
             this.commandsEditorContainerPanel.Name = "commandsEditorContainerPanel";
-            this.commandsEditorContainerPanel.Size = new System.Drawing.Size(940, 459);
+            this.commandsEditorContainerPanel.Size = new System.Drawing.Size(0, 223);
             this.commandsEditorContainerPanel.TabIndex = 2;
             // 
             // commandsEditorTextBox
             // 
             this.commandsEditorTextBox.AutoSize = true;
-            this.commandsEditorTextBox.BarWidth = 22;
+            this.commandsEditorTextBox.BarWidth = 32;
             this.commandsEditorTextBox.CircleSize = 16;
             this.commandsEditorTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commandsEditorTextBox.Font = new System.Drawing.Font("Consolas", 10.1F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.commandsEditorTextBox.Location = new System.Drawing.Point(0, 0);
             this.commandsEditorTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.commandsEditorTextBox.Name = "commandsEditorTextBox";
-            this.commandsEditorTextBox.Size = new System.Drawing.Size(940, 459);
+            this.commandsEditorTextBox.Size = new System.Drawing.Size(0, 223);
             this.commandsEditorTextBox.TabIndex = 0;
             this.commandsEditorTextBox.TextChanged += new System.EventHandler(this.commandsEditorTextBox_TextChanged);
             // 
@@ -258,10 +259,10 @@
             this.addCommandPanel.Controls.Add(this.addCommandButtonsPanel);
             this.addCommandPanel.Controls.Add(this.selectCommandPanel);
             this.addCommandPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.addCommandPanel.Location = new System.Drawing.Point(943, 3);
+            this.addCommandPanel.Location = new System.Drawing.Point(-21, 3);
             this.addCommandPanel.Name = "addCommandPanel";
             this.addCommandPanel.Padding = new System.Windows.Forms.Padding(10);
-            this.addCommandPanel.Size = new System.Drawing.Size(508, 459);
+            this.addCommandPanel.Size = new System.Drawing.Size(508, 223);
             this.addCommandPanel.TabIndex = 1;
             // 
             // commandArgumentsContainer
@@ -273,7 +274,7 @@
             this.commandArgumentsContainer.Location = new System.Drawing.Point(10, 152);
             this.commandArgumentsContainer.Name = "commandArgumentsContainer";
             this.commandArgumentsContainer.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
-            this.commandArgumentsContainer.Size = new System.Drawing.Size(488, 256);
+            this.commandArgumentsContainer.Size = new System.Drawing.Size(488, 20);
             this.commandArgumentsContainer.TabIndex = 7;
             // 
             // commandArgumentsGroupBox
@@ -285,7 +286,7 @@
             this.commandArgumentsGroupBox.Location = new System.Drawing.Point(0, 0);
             this.commandArgumentsGroupBox.Name = "commandArgumentsGroupBox";
             this.commandArgumentsGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.commandArgumentsGroupBox.Size = new System.Drawing.Size(488, 249);
+            this.commandArgumentsGroupBox.Size = new System.Drawing.Size(488, 13);
             this.commandArgumentsGroupBox.TabIndex = 0;
             this.commandArgumentsGroupBox.TabStop = false;
             this.commandArgumentsGroupBox.Text = "Arguments";
@@ -300,7 +301,7 @@
             this.commandArgumentsPanel.Location = new System.Drawing.Point(8, 23);
             this.commandArgumentsPanel.Name = "commandArgumentsPanel";
             this.commandArgumentsPanel.Padding = new System.Windows.Forms.Padding(0, 0, 5, 0);
-            this.commandArgumentsPanel.Size = new System.Drawing.Size(472, 218);
+            this.commandArgumentsPanel.Size = new System.Drawing.Size(472, 0);
             this.commandArgumentsPanel.TabIndex = 0;
             // 
             // commandArgumentControl3
@@ -310,7 +311,7 @@
             this.commandArgumentControl3.Location = new System.Drawing.Point(0, 208);
             this.commandArgumentControl3.Name = "commandArgumentControl3";
             this.commandArgumentControl3.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.commandArgumentControl3.Size = new System.Drawing.Size(446, 104);
+            this.commandArgumentControl3.Size = new System.Drawing.Size(467, 104);
             this.commandArgumentControl3.TabIndex = 2;
             // 
             // commandArgumentControl2
@@ -320,7 +321,7 @@
             this.commandArgumentControl2.Location = new System.Drawing.Point(0, 104);
             this.commandArgumentControl2.Name = "commandArgumentControl2";
             this.commandArgumentControl2.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.commandArgumentControl2.Size = new System.Drawing.Size(446, 104);
+            this.commandArgumentControl2.Size = new System.Drawing.Size(467, 104);
             this.commandArgumentControl2.TabIndex = 1;
             // 
             // commandArgumentControl1
@@ -330,14 +331,14 @@
             this.commandArgumentControl1.Location = new System.Drawing.Point(0, 0);
             this.commandArgumentControl1.Name = "commandArgumentControl1";
             this.commandArgumentControl1.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.commandArgumentControl1.Size = new System.Drawing.Size(446, 104);
+            this.commandArgumentControl1.Size = new System.Drawing.Size(467, 104);
             this.commandArgumentControl1.TabIndex = 0;
             // 
             // addCommandButtonsPanel
             // 
             this.addCommandButtonsPanel.Controls.Add(this.addCommandButton);
             this.addCommandButtonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.addCommandButtonsPanel.Location = new System.Drawing.Point(10, 408);
+            this.addCommandButtonsPanel.Location = new System.Drawing.Point(10, 172);
             this.addCommandButtonsPanel.Name = "addCommandButtonsPanel";
             this.addCommandButtonsPanel.Size = new System.Drawing.Size(488, 41);
             this.addCommandButtonsPanel.TabIndex = 8;
@@ -498,6 +499,7 @@
             // 
             // triggerArgumentControl3
             // 
+            this.triggerArgumentControl3.ArgumentValue = null;
             this.triggerArgumentControl3.AutoSize = true;
             this.triggerArgumentControl3.Dock = System.Windows.Forms.DockStyle.Top;
             this.triggerArgumentControl3.Location = new System.Drawing.Point(0, 208);
@@ -508,6 +510,7 @@
             // 
             // triggerArgumentControl2
             // 
+            this.triggerArgumentControl2.ArgumentValue = null;
             this.triggerArgumentControl2.AutoSize = true;
             this.triggerArgumentControl2.Dock = System.Windows.Forms.DockStyle.Top;
             this.triggerArgumentControl2.Location = new System.Drawing.Point(0, 104);
@@ -518,6 +521,7 @@
             // 
             // triggerArgumentControl1
             // 
+            this.triggerArgumentControl1.ArgumentValue = null;
             this.triggerArgumentControl1.AutoSize = true;
             this.triggerArgumentControl1.Dock = System.Windows.Forms.DockStyle.Top;
             this.triggerArgumentControl1.Location = new System.Drawing.Point(0, 0);
@@ -528,12 +532,24 @@
             // 
             // addTriggerButtonsPanel
             // 
+            this.addTriggerButtonsPanel.Controls.Add(this.addNewTriggerButton);
             this.addTriggerButtonsPanel.Controls.Add(this.addOrSaveTriggerButton);
             this.addTriggerButtonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.addTriggerButtonsPanel.Location = new System.Drawing.Point(10, 408);
             this.addTriggerButtonsPanel.Name = "addTriggerButtonsPanel";
             this.addTriggerButtonsPanel.Size = new System.Drawing.Size(488, 41);
             this.addTriggerButtonsPanel.TabIndex = 8;
+            // 
+            // addNewTriggerButton
+            // 
+            this.addNewTriggerButton.Location = new System.Drawing.Point(354, 9);
+            this.addNewTriggerButton.Margin = new System.Windows.Forms.Padding(6);
+            this.addNewTriggerButton.Name = "addNewTriggerButton";
+            this.addNewTriggerButton.Size = new System.Drawing.Size(126, 26);
+            this.addNewTriggerButton.TabIndex = 1;
+            this.addNewTriggerButton.Text = "Add new";
+            this.addNewTriggerButton.UseVisualStyleBackColor = true;
+            this.addNewTriggerButton.Click += new System.EventHandler(this.addNewTriggerButton_Click);
             // 
             // addOrSaveTriggerButton
             // 
@@ -709,5 +725,6 @@
         private TriggerArgumentControl triggerArgumentControl3;
         private TriggerArgumentControl triggerArgumentControl2;
         private TriggerArgumentControl triggerArgumentControl1;
+        private System.Windows.Forms.Button addNewTriggerButton;
     }
 }
