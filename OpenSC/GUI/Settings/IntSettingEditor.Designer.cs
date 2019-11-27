@@ -32,17 +32,20 @@
             this.button1 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.valueTextBox = new System.Windows.Forms.TextBox();
+            this.valueNumericField = new System.Windows.Forms.NumericUpDown();
             this.resetButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
+            this.minMaxHintLabel = new System.Windows.Forms.Label();
             this.customElementsPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.valueNumericField)).BeginInit();
             this.SuspendLayout();
             // 
             // customElementsPanel
             // 
+            this.customElementsPanel.Controls.Add(this.minMaxHintLabel);
             this.customElementsPanel.Controls.Add(this.resetButton);
             this.customElementsPanel.Controls.Add(this.saveButton);
-            this.customElementsPanel.Controls.Add(this.valueTextBox);
+            this.customElementsPanel.Controls.Add(this.valueNumericField);
             this.customElementsPanel.MinimumSize = new System.Drawing.Size(250, 10);
             this.customElementsPanel.Size = new System.Drawing.Size(494, 30);
             // 
@@ -80,15 +83,15 @@
             this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // valueTextBox
+            // valueNumericField
             // 
-            this.valueTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.valueNumericField.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.valueTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.valueTextBox.Location = new System.Drawing.Point(6, 3);
-            this.valueTextBox.Name = "valueTextBox";
-            this.valueTextBox.Size = new System.Drawing.Size(405, 24);
-            this.valueTextBox.TabIndex = 0;
+            this.valueNumericField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.valueNumericField.Location = new System.Drawing.Point(6, 3);
+            this.valueNumericField.Name = "valueNumericField";
+            this.valueNumericField.Size = new System.Drawing.Size(240, 24);
+            this.valueNumericField.TabIndex = 0;
             // 
             // resetButton
             // 
@@ -114,14 +117,27 @@
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
-            // StringSettingEditor
+            // minMaxHintLabel
+            // 
+            this.minMaxHintLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.minMaxHintLabel.AutoSize = true;
+            this.minMaxHintLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.minMaxHintLabel.Location = new System.Drawing.Point(253, 6);
+            this.minMaxHintLabel.Name = "minMaxHintLabel";
+            this.minMaxHintLabel.Size = new System.Drawing.Size(105, 17);
+            this.minMaxHintLabel.TabIndex = 3;
+            this.minMaxHintLabel.Text = "(min: ?, max: ?)";
+            // 
+            // IntSettingEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "StringSettingEditor";
+            this.Name = "IntSettingEditor";
             this.Size = new System.Drawing.Size(500, 90);
+            this.Load += new System.EventHandler(this.IntSettingEditor_Load);
             this.customElementsPanel.ResumeLayout(false);
             this.customElementsPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.valueNumericField)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -133,8 +149,9 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox valueTextBox;
+        private System.Windows.Forms.NumericUpDown valueNumericField;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button resetButton;
+        private System.Windows.Forms.Label minMaxHintLabel;
     }
 }
