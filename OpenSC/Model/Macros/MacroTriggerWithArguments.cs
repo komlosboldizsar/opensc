@@ -65,7 +65,7 @@ namespace OpenSC.Model.Macros
         {
             if (sender != Trigger)
                 return;
-            Macro?.Triggered();
+            Macro?.Triggered(this);
         }
 
     }

@@ -24,6 +24,8 @@ namespace OpenSC.Model.Macros
             32
         );
 
+        private const string LOG_TAG = "Macro";
+
         public override void Restored()
         {
             base.Restored();
@@ -167,19 +169,39 @@ namespace OpenSC.Model.Macros
 
         public void Run()
         {
+            string logMessage = string.Format("Macro #{0} ({1}) is executed externally.",
+                id,
+                name);
+            LogDispatcher.I(LOG_TAG, logMessage);
+        }
+
+        private void _run()
+        {
             if (CurrentStackDepth >= MaxStackDepthSetting.Value)
             {
-                // Error message
+                string logMessage = string.Format("Can't execute #{0} ({1}) macro, because stack is full ({2}).",
+                    id,
+                    name,
+                    CurrentStackDepth);
+                LogDispatcher.W(LOG_TAG, logMessage);
                 return;
             }
+
             CurrentStackDepth++;
             foreach (MacroCommandWithArguments commandWA in commands)
                 commandWA.Run();
             CurrentStackDepth--;
         }
 
-        public void Triggered()
-            => Run(); // TODO: Some log
+        public void Triggered(MacroTriggerWithArguments source)
+        {
+            string logMessage = string.Format("Macro #{0} ({1}) triggered. Event: {2}.",
+                id,
+                name,
+                source.HumanReadable);
+            LogDispatcher.I(LOG_TAG, logMessage);
+            _run();
+        }
 
     }
 
