@@ -27,7 +27,27 @@ namespace OpenSC.GUI.Settings
             base(setting)
         {
             InitializeComponent();
-            valueTextBox.Text = ((IntSetting)setting).Value.ToString();
+        }
+
+        private void IntSettingEditor_Load(object sender, EventArgs e)
+        {
+
+            IntSetting typedSetting = (IntSetting)setting;
+            valueNumericField.Value = typedSetting.Value;
+            valueNumericField.Minimum = typedSetting.MinValue ?? -99999;
+            valueNumericField.Maximum = typedSetting.MaxValue ?? 99999;
+
+            List<string> hintTexts = new List<string>();
+            if (typedSetting.MinValue != null)
+                hintTexts.Add(string.Format("min: {0}", typedSetting.MinValue));
+            if (typedSetting.MaxValue != null)
+                hintTexts.Add(string.Format("max: {0}", typedSetting.MaxValue));
+
+            if (hintTexts.Count > 0)
+                minMaxHintLabel.Text = string.Format("({0})", string.Join(", ", hintTexts.ToArray()));
+            else
+                minMaxHintLabel.Text = "";
+
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -38,9 +58,7 @@ namespace OpenSC.GUI.Settings
 
             try
             {
-                if (!int.TryParse(valueTextBox.Text, out int intValue))
-                    throw new ArgumentException("Invalid integer.");
-                ((IntSetting)setting).Value = intValue;
+                ((IntSetting)setting).Value = (int)valueNumericField.Value;
             }
             catch (ArgumentException ex)
             {
@@ -52,7 +70,7 @@ namespace OpenSC.GUI.Settings
         private void resetButton_Click(object sender, EventArgs e)
         {
             if (setting != null)
-                valueTextBox.Text = ((IntSetting)setting).Value.ToString();
+                valueNumericField.Value = ((IntSetting)setting).Value;
         }
 
         public override ISettingEditorControl GetInstanceForSetting(ISetting setting)
