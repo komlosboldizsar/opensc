@@ -93,7 +93,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 cell.Value = columnDescriptor.ButtonText;
             }
 
-            if(columnDescriptor.Type == DataGridViewColumnType.ComboBox)
+            if (columnDescriptor.Type == DataGridViewColumnType.DisableButton)
+            {
+                cell.Value = columnDescriptor.ButtonText;
+            }
+
+            if (columnDescriptor.Type == DataGridViewColumnType.ComboBox)
             {
                 DataGridViewComboBoxCell typedCell = (DataGridViewComboBoxCell)cell;
                 typedCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.DropDownButton;
