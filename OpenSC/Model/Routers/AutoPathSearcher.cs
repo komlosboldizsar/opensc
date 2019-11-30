@@ -86,6 +86,9 @@ namespace OpenSC.Model.Routers
                         if (!input.IsTieline)
                             continue;
 
+                        if (input.TielineIsReserved == true)
+                            continue;
+
                         // Is neighbor?
                         if (!selected.Router.Outputs.Contains(input.Source))
                             continue;
@@ -142,14 +145,14 @@ namespace OpenSC.Model.Routers
 
         }
 
-        public void TakeCrosspoints()
+        public void TakeCrosspointsAndReserve()
         {
             if (Possible == null)
                 throw new Exception();
             if (Possible == false)
                 throw new Exception();
             foreach (Crosspoint cp in Crosspoints)
-                cp.Take();
+                cp.TakeAndReserve();
         }
 
         public class Crosspoint
@@ -164,9 +167,10 @@ namespace OpenSC.Model.Routers
                 Input = input;
             }
             
-            public void Take()
+            public void TakeAndReserve()
             {
                 Output.Crosspoint = Input;
+                Input.TielineIsReserved = true;
             }
 
         }

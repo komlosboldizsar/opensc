@@ -269,8 +269,8 @@ namespace OpenSC.Model.Routers
             get => (IsTieline) ? (bool?)tielineIsReserved : null;
             set
             {
-                if (!IsTieline)
-                    return;
+                /*if (!IsTieline)
+                    return;*/
                 if (value == tielineIsReserved)
                     return;
                 bool? oldValue = tielineIsReserved;

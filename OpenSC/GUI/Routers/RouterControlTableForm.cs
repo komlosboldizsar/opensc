@@ -399,7 +399,7 @@ namespace OpenSC.GUI.Routers
                 return;
             }
 
-            aps.TakeCrosspoints();
+            aps.TakeCrosspointsAndReserve();
 
         }
         #endregion
