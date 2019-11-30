@@ -68,11 +68,11 @@
             // customElementsPanel
             // 
             this.customElementsPanel.Controls.Add(this.tabControl);
-            this.customElementsPanel.Size = new System.Drawing.Size(982, 428);
+            this.customElementsPanel.Size = new System.Drawing.Size(1082, 428);
             // 
             // mainContainer
             // 
-            this.mainContainer.Size = new System.Drawing.Size(982, 497);
+            this.mainContainer.Size = new System.Drawing.Size(1082, 497);
             // 
             // baseDataPanel
             // 
@@ -168,7 +168,7 @@
             this.tabControl.Location = new System.Drawing.Point(10, 10);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(962, 418);
+            this.tabControl.Size = new System.Drawing.Size(1062, 418);
             this.tabControl.TabIndex = 1;
             // 
             // baseDataTabPage
@@ -190,7 +190,7 @@
             this.inputsTabPage.Location = new System.Drawing.Point(4, 25);
             this.inputsTabPage.Name = "inputsTabPage";
             this.inputsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.inputsTabPage.Size = new System.Drawing.Size(490, 229);
+            this.inputsTabPage.Size = new System.Drawing.Size(1054, 389);
             this.inputsTabPage.TabIndex = 1;
             this.inputsTabPage.Text = "Inputs";
             // 
@@ -200,7 +200,7 @@
             this.inputsTableContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inputsTableContainerPanel.Location = new System.Drawing.Point(3, 3);
             this.inputsTableContainerPanel.Name = "inputsTableContainerPanel";
-            this.inputsTableContainerPanel.Size = new System.Drawing.Size(484, 179);
+            this.inputsTableContainerPanel.Size = new System.Drawing.Size(1048, 339);
             this.inputsTableContainerPanel.TabIndex = 2;
             // 
             // inputsTable
@@ -212,17 +212,18 @@
             this.inputsTable.Location = new System.Drawing.Point(0, 0);
             this.inputsTable.Name = "inputsTable";
             this.inputsTable.ReadOnly = true;
+            this.inputsTable.RowHeadersWidth = 51;
             this.inputsTable.RowTemplate.Height = 24;
-            this.inputsTable.Size = new System.Drawing.Size(484, 179);
+            this.inputsTable.Size = new System.Drawing.Size(1048, 339);
             this.inputsTable.TabIndex = 0;
             // 
             // inputsButtonsPanel
             // 
             this.inputsButtonsPanel.Controls.Add(this.addInputButton);
             this.inputsButtonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.inputsButtonsPanel.Location = new System.Drawing.Point(3, 182);
+            this.inputsButtonsPanel.Location = new System.Drawing.Point(3, 342);
             this.inputsButtonsPanel.Name = "inputsButtonsPanel";
-            this.inputsButtonsPanel.Size = new System.Drawing.Size(484, 44);
+            this.inputsButtonsPanel.Size = new System.Drawing.Size(1048, 44);
             this.inputsButtonsPanel.TabIndex = 1;
             // 
             // addInputButton
@@ -266,6 +267,7 @@
             this.outputsTable.Location = new System.Drawing.Point(0, 0);
             this.outputsTable.Name = "outputsTable";
             this.outputsTable.ReadOnly = true;
+            this.outputsTable.RowHeadersWidth = 51;
             this.outputsTable.RowTemplate.Height = 24;
             this.outputsTable.Size = new System.Drawing.Size(484, 179);
             this.outputsTable.TabIndex = 0;
@@ -294,7 +296,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(982, 553);
+            this.ClientSize = new System.Drawing.Size(1082, 553);
             this.DeleteButtonVisible = true;
             this.HeaderText = "Edit router";
             this.MinimumSize = new System.Drawing.Size(1000, 600);
