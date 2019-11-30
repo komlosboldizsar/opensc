@@ -380,6 +380,7 @@ namespace OpenSC.GUI.Routers
 
         private void doAssign(RouterOutput output, IRouterOutputAssignable assignable)
         {
+
             if (singleMode)
             {
                 RouterInput input = assignable as RouterInput;
@@ -390,7 +391,16 @@ namespace OpenSC.GUI.Routers
                 output.Crosspoint = input;
                 return;
             }
-            MessageBox.Show("Not implemented yet!", "Auto path search", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            AutoPathSearcher aps = new AutoPathSearcher(assignable.SourceSignal, output);
+            if (aps.Possible != true)
+            {
+                MessageBox.Show("Assignment cannot be done, no path found.", "Automatic path search", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            aps.TakeCrosspoints();
+
         }
         #endregion
 

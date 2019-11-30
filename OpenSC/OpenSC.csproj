@@ -517,6 +517,7 @@
     <Compile Include="Model\Persistence\ITypeNameConverter.cs" />
     <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
     <Compile Include="Model\Persistence\XmlTagNamesAttribute.cs" />
+    <Compile Include="Model\Routers\AutoPathSearcher.cs" />
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohub.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputLabel.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputName.cs" />
