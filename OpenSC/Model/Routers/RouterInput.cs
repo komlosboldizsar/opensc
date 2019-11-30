@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public class RouterInput : INotifyPropertyChanged
+    public class RouterInput : INotifyPropertyChanged, IRouterOutputAssignable
     {
 
         public RouterInput()
@@ -141,6 +141,29 @@ namespace OpenSC.Model.Routers
 
         public delegate void RouterInputSourceNameChanged(RouterInput input, string newName);
         public event RouterInputSourceNameChanged SourceNameChanged;
+
+        #region Property: SourceSignal
+        public ExternalSignal SourceSignal
+            => GetSourceSignal();
+
+        public ExternalSignal GetSourceSignal(List<object> recursionChain = null)
+        {
+            if (source == null)
+                return null;
+            if (source is ExternalSignal)
+                return ((ExternalSignal)source);
+            if (!(source is RouterOutput))
+                return null;
+            if (recursionChain == null)
+                recursionChain = new List<object>();
+            if (recursionChain.Contains(this))
+                return null;
+            recursionChain.Add(this);
+            return ((RouterOutput)source).GetSourceSignal(recursionChain);
+        }
+
+        public event SourceSignalChangedDelegate SourceSignalChanged;
+        #endregion
 
         private void sourceSignalNameChangedHandler(ISignal inputSource, string newName)
         {

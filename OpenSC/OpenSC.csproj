@@ -521,6 +521,7 @@
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputLabel.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputName.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputSource.cs" />
+    <Compile Include="Model\Routers\IRouterOutputAssignable.cs" />
     <Compile Include="Model\Routers\Label.cs" />
     <Compile Include="Model\Routers\Labelset.cs" />
     <Compile Include="Model\Routers\LabelsetDatabase.cs" />
@@ -533,6 +534,7 @@
     <Compile Include="Model\Routers\RouterInput.cs" />
     <Compile Include="Model\Routers\RouterInputXmlSerializer.cs" />
     <Compile Include="Model\Routers\RouterOutput.cs" />
+    <Compile Include="Model\Routers\RouterOutputAssignableExternalSignal.cs" />
     <Compile Include="Model\Routers\RouterOutputXmlSerializer.cs" />
     <Compile Include="Model\Routers\RouterState.cs" />
     <Compile Include="Model\Routers\RouterTypeNameConverter.cs" />
