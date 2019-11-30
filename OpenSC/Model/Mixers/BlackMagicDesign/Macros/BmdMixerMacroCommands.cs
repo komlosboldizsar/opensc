@@ -15,10 +15,16 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign.Macros
 
         public static readonly IMacroCommand CutTransition = new CutTransitionMacroCommand();
 
+        public static readonly IMacroCommand SetPreviewSource = new SetPreviewSourceMacroCommand();
+
+        public static readonly IMacroCommand SetProgramSource = new SetProgramSourceMacroCommand();
+
         public static readonly MacroCommandRegister.IMacroCommandCollection Instance = new BmdMixerMacroCommands();
         public IMacroCommand[] CommandsToRegister => new IMacroCommand[] {
             AutoTransition,
-            CutTransition
+            CutTransition,
+            SetPreviewSource,
+            SetProgramSource
         };
 
     }

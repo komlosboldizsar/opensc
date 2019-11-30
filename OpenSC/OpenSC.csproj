@@ -497,9 +497,12 @@
     <Compile Include="Model\Macros\RunMacroMacroCommand.cs" />
     <Compile Include="Model\MasterDatabase.cs" />
     <Compile Include="Model\Mixers\BlackMagicDesign\BmdMixer.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\SetProgramSourceMacroCommand.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\SetPreviewSourceMacroCommand.cs" />
     <Compile Include="Model\Mixers\BlackMagicDesign\Macros\CutTransitionMacroCommand.cs" />
     <Compile Include="Model\Mixers\BlackMagicDesign\Macros\AutoTransitionMacroCommand.cs" />
     <Compile Include="Model\Mixers\BlackMagicDesign\Macros\BmdMixerMacroCommands.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\SetPPSourceMacroCommandBase.cs" />
     <Compile Include="Model\Mixers\BlackMagicDesign\Macros\TransitionMacroCommandBase.cs" />
     <Compile Include="Model\Mixers\DynamicTextFunctions\MixerPreviewInputName.cs" />
     <Compile Include="Model\Mixers\DynamicTextFunctions\MixerProgramInputName.cs" />
