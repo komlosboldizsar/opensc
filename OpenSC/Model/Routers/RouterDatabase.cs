@@ -18,6 +18,18 @@ namespace OpenSC.Model.Routers
 
         public const string DBNAME = "routers";
 
+        private List<Router> restoredIO = new List<Router>();
+
+        internal void RestoredIO(Router router)
+        {
+            restoredIO.Add(router);
+            if (this.Except(restoredIO).Count() == 0)
+            {
+                foreach (Router r in this)
+                    r.RestoreInputSources();
+            }
+        }
+
     }
 
 }

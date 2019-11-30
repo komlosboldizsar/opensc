@@ -26,6 +26,7 @@ namespace OpenSC.Model.Routers
         {
             updateCrosspointIOAssociations();
             notifyInputsOutputsRestored();
+            RouterDatabase.Instance.RestoredIO(this);
             updateAllCrosspoints();
         }
 
@@ -238,10 +239,10 @@ namespace OpenSC.Model.Routers
         }
         private void notifyInputsOutputsRestored()
         {
-            foreach (RouterInput input in inputs)
-                input.Restored();
             foreach (RouterOutput output in outputs)
                 output.Restored();
+            foreach (RouterInput input in inputs)
+                input.Restored();
         }
 
         #region Property: State
@@ -290,6 +291,12 @@ namespace OpenSC.Model.Routers
         {
             base.afterUpdate();
             RouterDatabase.Instance.ItemUpdated(this);
+        }
+
+        public void RestoreInputSources()
+        {
+            foreach (RouterInput input in inputs)
+                input.RestoreSource();
         }
 
     }

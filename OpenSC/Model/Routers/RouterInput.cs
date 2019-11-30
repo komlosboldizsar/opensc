@@ -23,9 +23,7 @@ namespace OpenSC.Model.Routers
         }
 
         public void Restored()
-        {
-            restoreSource();
-        }
+        { }
         
         private string name;
 
@@ -114,7 +112,7 @@ namespace OpenSC.Model.Routers
         // "Temp foreign key"
         public string _sourceSignalUniqueId;
 
-        private void restoreSource()
+        public void RestoreSource()
         {
             if (_sourceSignalUniqueId != null)
                 Source = SignalRegister.Instance.GetSignalByUniqueId(_sourceSignalUniqueId);
