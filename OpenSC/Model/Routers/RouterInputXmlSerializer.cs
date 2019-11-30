@@ -30,8 +30,8 @@ namespace OpenSC.Model.Routers
             {
                 Name = serializedItem.Attributes[ATTRIBUTE_NAME]?.Value,
                 _sourceSignalUniqueId = serializedItem.Attributes[ATTRIBUTE_SOURCE]?.Value,
-                TielineCost = tielineCost,
-                TielineIsReserved = tielineIsReserved
+                _tielineCost = tielineCost,
+                _tielineIsReserved = tielineIsReserved
             };
         }
 

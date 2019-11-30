@@ -24,8 +24,7 @@ namespace OpenSC.Model.Routers
 
         public override void Restored()
         {
-            restoreInputSources();
-            updateCrosspointRouterAssociations();
+            updateCrosspointIOAssociations();
             notifyInputsOutputsRestored();
             updateAllCrosspoints();
         }
@@ -230,20 +229,13 @@ namespace OpenSC.Model.Routers
             RouterMacroTriggers.RouterCrosspointChanged.Call(this);
         }
 
-        private void updateCrosspointRouterAssociations()
+        private void updateCrosspointIOAssociations()
         {
             foreach (RouterInput input in inputs)
                 input.Router = this;
             foreach (RouterOutput output in outputs)
                 output.Router = this;
         }
-
-        private void restoreInputSources()
-        {
-            foreach (RouterInput input in inputs)
-                input.RestoreSource();
-        }
-
         private void notifyInputsOutputsRestored()
         {
             foreach (RouterInput input in inputs)

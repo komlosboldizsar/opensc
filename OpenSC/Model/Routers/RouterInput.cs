@@ -23,7 +23,9 @@ namespace OpenSC.Model.Routers
         }
 
         public void Restored()
-        { }
+        {
+            restoreSource();
+        }
         
         private string name;
 
@@ -112,10 +114,12 @@ namespace OpenSC.Model.Routers
         // "Temp foreign key"
         public string _sourceSignalUniqueId;
 
-        public void RestoreSource()
+        private void restoreSource()
         {
             if (_sourceSignalUniqueId != null)
                 Source = SignalRegister.Instance.GetSignalByUniqueId(_sourceSignalUniqueId);
+            TielineCost = _tielineCost;
+            TielineIsReserved = _tielineIsReserved;
         }
 
         public string SourceSignalName
@@ -210,6 +214,9 @@ namespace OpenSC.Model.Routers
         public delegate void IsTielineChangedDelegate(RouterInput input, bool oldValue, bool newValue);
         public event IsTielineChangedDelegate IsTielineChanged;
 
+        // Temporal until restore
+        public int _tielineCost;
+
         private int tielineCost;
 
         public int? TielineCost
@@ -230,6 +237,9 @@ namespace OpenSC.Model.Routers
 
         public delegate void TielineCostChangedDelegate(RouterInput input, int? oldValue, int? newValue);
         public event TielineCostChangedDelegate TielineCostChanged;
+
+        // Temporal until restore
+        public bool _tielineIsReserved;
 
         private bool tielineIsReserved;
 

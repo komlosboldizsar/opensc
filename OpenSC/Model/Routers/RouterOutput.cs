@@ -76,8 +76,10 @@ namespace OpenSC.Model.Routers
             {
                 if (value == index)
                     return;
+                unregisterAsSignal();
                 int oldIndex = index;
                 index = value;
+                registerAsSignal();
                 IndexChanged?.Invoke(this, oldIndex, value);
                 PropertyChanged?.Invoke(nameof(Index));
                 SignalLabelChanged?.Invoke(this, getSignalLabel());
