@@ -12,6 +12,15 @@ namespace OpenSC.Model.Macros
     public class MacrosManager
     {
 
+        public static void Init()
+        {
+            // TODO: shouldn't register here
+            MacroCommandRegister.Instance.RegisterCommand(new RunMacroMacroCommand());
+            SettingsManager.Instance.RegisterSetting(Macro.MaxStackDepthSetting);
+            SettingsManager.Instance.RegisterSetting(MacroOscServer.PortSetting);
+            MacroOscServer.Instance.Start();
+        }
+
         public static void RegisterDatabases()
         {
             
@@ -20,11 +29,7 @@ namespace OpenSC.Model.Macros
             DatabasePersister<MacroPanel>.RegisterSerializer(new MacroPanelElementXmlSerializer()); // TODO: shouldn't register here
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(MacroDatabase));
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(MacroPanelDatabase));
-
-            // TODO: shouldn't register here
-            MacroCommandRegister.Instance.RegisterCommand(new RunMacroMacroCommand());
-            SettingsManager.Instance.RegisterSetting(Macro.MaxStackDepthSetting);
-
+            Init(); // TODO: shouldn't do from this method
         }
 
         public static void RegisterWindowTypes()

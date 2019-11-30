@@ -475,6 +475,7 @@
     <Compile Include="Model\Macros\MacroArgumentKeyType.cs" />
     <Compile Include="Model\Macros\MacroCodeInterpreter.cs" />
     <Compile Include="Model\Macros\MacroCodeTokenizer.cs" />
+    <Compile Include="Model\Macros\MacroOscServer.cs" />
     <Compile Include="Model\Macros\MacroTriggerBase.cs" />
     <Compile Include="Model\Macros\MacroTriggerDefaultCallImplementations.cs" />
     <Compile Include="Model\Macros\MacroTriggerWithArgumentsXmlSerializer.cs" />
