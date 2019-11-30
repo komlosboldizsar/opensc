@@ -3,6 +3,7 @@ using OpenSC.GUI.Menus;
 using OpenSC.GUI.Variables;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.Settings;
 using System;
 
 namespace OpenSC.Model.Macros
@@ -13,10 +14,17 @@ namespace OpenSC.Model.Macros
 
         public static void RegisterDatabases()
         {
+            
             DatabasePersister<Macro>.RegisterSerializer(new MacroCommandWithArgumentsXmlSerializer()); // TODO: shouldn't register here
+            DatabasePersister<Macro>.RegisterSerializer(new MacroTriggerWithArgumentsXmlSerializer()); // TODO: shouldn't register here
             DatabasePersister<MacroPanel>.RegisterSerializer(new MacroPanelElementXmlSerializer()); // TODO: shouldn't register here
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(MacroDatabase));
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(MacroPanelDatabase));
+
+            // TODO: shouldn't register here
+            MacroCommandRegister.Instance.RegisterCommand(new RunMacroMacroCommand());
+            SettingsManager.Instance.RegisterSetting(Macro.MaxStackDepthSetting);
+
         }
 
         public static void RegisterWindowTypes()

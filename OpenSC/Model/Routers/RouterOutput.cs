@@ -1,5 +1,6 @@
 ﻿using OpenSC.Logger;
 using OpenSC.Model.General;
+using OpenSC.Model.Routers.Triggers;
 using OpenSC.Model.Signals;
 using OpenSC.Model.Variables;
 using System;
@@ -108,6 +109,9 @@ namespace OpenSC.Model.Routers
                 LogDispatcher.I(Router.LOG_TAG, logMessage);
 
                 CrosspointChanged?.Invoke(this, value);
+                RouterMacroTriggers.RouterOutputSourceChanged.Call(Router, this);
+                Router.NotifyCrosspointChanged(this);
+
                 subscribeCrosspointEvents();
                 sendIndirectTalliesToSource(crosspoint?.Source);
 

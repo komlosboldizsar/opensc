@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.Persistence;
+using OpenSC.Model.Timers.Triggers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,6 +98,7 @@ namespace OpenSC.Model.Timers
                 seconds = value;
                 SecondsChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(Seconds));
+                TimerMacroTriggers.TimerReachedValue.Call(this, seconds);
             }
         }
 

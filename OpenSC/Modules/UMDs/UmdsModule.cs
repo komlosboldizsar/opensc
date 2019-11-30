@@ -3,7 +3,9 @@ using OpenSC.GUI.Menus;
 using OpenSC.GUI.UMDs;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
+using OpenSC.Model.Macros;
 using OpenSC.Model.UMDs;
+using OpenSC.Model.UMDs.Macros;
 using OpenSC.Model.UMDs.McCurdy;
 using OpenSC.Model.UMDs.TSL31;
 using System;
@@ -73,7 +75,7 @@ namespace OpenSC.Modules.UMDs
 
         public void RegisterMacroCommandsAndTriggers()
         {
-
+            MacroCommandRegister.Instance.RegisterCommandCollection(UmdMacroCommands.Instance);
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.Routers.Triggers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -221,6 +222,13 @@ namespace OpenSC.Model.Routers
 
         protected abstract bool setCrosspoint(RouterOutput output, RouterInput input);
         protected abstract void updateAllCrosspoints();
+
+        internal void NotifyCrosspointChanged(RouterOutput output)
+        {
+            if (!outputs.Contains(output))
+                return;
+            RouterMacroTriggers.RouterCrosspointChanged.Call(this);
+        }
 
         private void updateCrosspointRouterAssociations()
         {

@@ -10,6 +10,7 @@ using OpenSC.Model.Routers.BlackMagicDesign;
 using OpenSC.Model.Routers.DynamicTextFunctions;
 using OpenSC.Model.Routers.Leitch;
 using OpenSC.Model.Routers.Macros;
+using OpenSC.Model.Routers.Triggers;
 using OpenSC.Model.Routers.Virtual;
 using OpenSC.Model.Variables;
 using OpenSC.Model.VTRs.DynamicTextFunctions;
@@ -97,7 +98,8 @@ namespace OpenSC.Modules.Routers
 
         public void RegisterMacroCommandsAndTriggers()
         {
-            MacroCommandRegister.Instance.RegisterCommand(new SetRouterCrosspointMacroCommand());
+            MacroCommandRegister.Instance.RegisterCommandCollection(RouterMacroCommands.Instance);
+            MacroTriggerRegister.Instance.RegisterTriggerCollection(RouterMacroTriggers.Instance);
         }
 
         public void RegisterRouterType<TRouter, TRouterEditorForm>()

@@ -89,6 +89,12 @@
     <Compile Include="GUI\GeneralComponents\Tables\DataGridViewSmallIconCell.cs" />
     <Compile Include="GUI\Helpers\ResizableControls.cs" />
     <Compile Include="GUI\Helpers\DraggableControls.cs" />
+    <Compile Include="GUI\Macros\TriggerArgumentControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Macros\TriggerArgumentControl.Designer.cs">
+      <DependentUpon>TriggerArgumentControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Macros\CommandArgumentControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -285,6 +291,12 @@
     <Compile Include="GUI\Settings\SettingsWindow.Designer.cs">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Settings\IntSettingEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Settings\IntSettingEditor.Designer.cs">
+      <DependentUpon>IntSettingEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Settings\StringSettingEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -458,9 +470,16 @@
     <Compile Include="Model\General\ObservableList.cs" />
     <Compile Include="Model\IDatabaseBase.cs" />
     <Compile Include="Model\IModel.cs" />
+    <Compile Include="Model\Macros\IMacroTriggerArgument.cs" />
+    <Compile Include="Model\Macros\IMacroTrigger.cs" />
     <Compile Include="Model\Macros\MacroArgumentKeyType.cs" />
     <Compile Include="Model\Macros\MacroCodeInterpreter.cs" />
     <Compile Include="Model\Macros\MacroCodeTokenizer.cs" />
+    <Compile Include="Model\Macros\MacroTriggerBase.cs" />
+    <Compile Include="Model\Macros\MacroTriggerDefaultCallImplementations.cs" />
+    <Compile Include="Model\Macros\MacroTriggerWithArgumentsXmlSerializer.cs" />
+    <Compile Include="Model\Macros\MacroTriggerRegister.cs" />
+    <Compile Include="Model\Macros\MacroTriggerWithArguments.cs" />
     <Compile Include="Model\Macros\MacroCommandWithArgumentsToCodeSerializer.cs" />
     <Compile Include="Model\Macros\MacroPanelElementXmlSerializer.cs" />
     <Compile Include="Model\Macros\MacroPanelDatabase.cs" />
@@ -475,6 +494,7 @@
     <Compile Include="Model\Macros\MacroPanelElement.cs" />
     <Compile Include="Model\Macros\MacrosManager.cs" />
     <Compile Include="Model\Macros\MacroCommandWithArgumentsXmlSerializer.cs" />
+    <Compile Include="Model\Macros\RunMacroMacroCommand.cs" />
     <Compile Include="Model\MasterDatabase.cs" />
     <Compile Include="Model\Mixers\BlackMagicDesign\BmdMixer.cs" />
     <Compile Include="Model\Mixers\DynamicTextFunctions\MixerPreviewInputName.cs" />
@@ -506,6 +526,7 @@
     <Compile Include="Model\Routers\LabelsetDatabase.cs" />
     <Compile Include="Model\Routers\LabelXmlSerializer.cs" />
     <Compile Include="Model\Routers\Leitch\LeitchRouter.cs" />
+    <Compile Include="Model\Routers\Macros\RouterMacroCommands.cs" />
     <Compile Include="Model\Routers\Macros\SetRouterCrosspointMacroCommand.cs" />
     <Compile Include="Model\Routers\Router.cs" />
     <Compile Include="Model\Routers\RouterDatabase.cs" />
@@ -515,15 +536,22 @@
     <Compile Include="Model\Routers\RouterOutputXmlSerializer.cs" />
     <Compile Include="Model\Routers\RouterState.cs" />
     <Compile Include="Model\Routers\RouterTypeNameConverter.cs" />
+    <Compile Include="Model\Routers\Triggers\RouterCrosspointChangedMacroTrigger.cs" />
+    <Compile Include="Model\Routers\Triggers\RouterOutputSourceChangedMacroTrigger.cs" />
+    <Compile Include="Model\Routers\Triggers\RouterMacroTriggers.cs" />
     <Compile Include="Model\Routers\Virtual\VirtualRouter.cs" />
     <Compile Include="Model\SerialPorts\SerialPort.cs" />
     <Compile Include="Model\SerialPorts\SerialPortsManager.cs" />
     <Compile Include="Model\SerialPorts\SerialPortDatabase.cs" />
     <Compile Include="Model\Settings\Converters\BoolConverter.cs" />
     <Compile Include="Model\Settings\Converters\ColorConverter.cs" />
+    <Compile Include="Model\Settings\Converters\DoubleConverter.cs" />
+    <Compile Include="Model\Settings\Converters\DecimalConverter.cs" />
+    <Compile Include="Model\Settings\Converters\FloatConverter.cs" />
     <Compile Include="Model\Settings\Converters\IntConverter.cs" />
     <Compile Include="Model\Settings\Converters\ISettingValueConverter.cs" />
     <Compile Include="Model\Settings\ISetting.cs" />
+    <Compile Include="Model\Settings\IntSetting.cs" />
     <Compile Include="Model\Settings\Setting.cs" />
     <Compile Include="Model\Settings\SettingsManager.cs" />
     <Compile Include="Model\Settings\Converters\SettingValueConverterAttribute.cs" />
@@ -541,8 +569,18 @@
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerHhMmSs.cs" />
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerTotalMinutes.cs" />
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerTotalSeconds.cs" />
+    <Compile Include="Model\Timers\Macros\ResetTimerMacroCommand.cs" />
+    <Compile Include="Model\Timers\Macros\StopTimerMacroCommand.cs" />
+    <Compile Include="Model\Timers\Macros\StartTimerMacroCommand.cs" />
+    <Compile Include="Model\Timers\Macros\TimerMacroCommands.cs" />
+    <Compile Include="Model\Timers\Macros\SingleArgTimerMacroCommandBase.cs" />
+    <Compile Include="Model\Timers\Triggers\TimerMacroTriggers.cs" />
+    <Compile Include="Model\Timers\Triggers\TimerReachedValueMacroTrigger.cs" />
     <Compile Include="Model\TypeCodeAttribute.cs" />
     <Compile Include="Model\TypeLabelAttribute.cs" />
+    <Compile Include="Model\UMDs\Macros\UmdMacroCommands.cs" />
+    <Compile Include="Model\UMDs\Macros\UmdDynamicTextMacroCommand.cs" />
+    <Compile Include="Model\UMDs\Macros\UmdStaticTextMacroCommand.cs" />
     <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1T.cs" />
     <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1TType.cs" />
     <Compile Include="Model\Variables\BooleanBase.cs" />
@@ -615,6 +653,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\GeneralComponents\RichTextBoxWithBar.resx">
       <DependentUpon>RichTextBoxWithBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Macros\TriggerArgumentControl.resx">
+      <DependentUpon>TriggerArgumentControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Macros\CommandArgumentControl.resx">
       <DependentUpon>CommandArgumentControl.cs</DependentUpon>
@@ -696,6 +737,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Settings\SettingsWindow.resx">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Settings\IntSettingEditor.resx">
+      <DependentUpon>IntSettingEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Settings\StringSettingEditor.resx">
       <DependentUpon>StringSettingEditor.cs</DependentUpon>

@@ -12,15 +12,15 @@ using OpenSC.GUI.GeneralComponents.DropDowns;
 
 namespace OpenSC.GUI.Macros
 {
-    public partial class CommandArgumentControl : UserControl
+    public partial class TriggerArgumentControl : UserControl
     {
 
-        public CommandArgumentControl()
+        public TriggerArgumentControl()
         {
             InitializeComponent();
         }
 
-        public CommandArgumentControl(IMacroCommandArgument argument, int argIndex, bool last)
+        public TriggerArgumentControl(IMacroTriggerArgument argument, int argIndex, bool last)
         {
             InitializeComponent();
             this.argument = argument;
@@ -28,7 +28,7 @@ namespace OpenSC.GUI.Macros
             this.last = last;
         }
 
-        private IMacroCommandArgument argument;
+        private IMacroTriggerArgument argument;
 
         private int argIndex;
 
@@ -36,7 +36,7 @@ namespace OpenSC.GUI.Macros
 
         private Control valueField;
 
-        private void CommandArgumentControl_Load(object sender, EventArgs e)
+        private void TriggerArgumentControl_Load(object sender, EventArgs e)
         {
 
             if (last)
@@ -104,12 +104,37 @@ namespace OpenSC.GUI.Macros
                     return valueTextBox.Text;
                 NumericUpDown valueNumericField = valueField as NumericUpDown;
                 if (valueNumericField != null)
+                {
+                    if (argument.Type == typeof(int))
+                        return (int)valueNumericField.Value;
+                    if (argument.Type == typeof(float))
+                        return (float)valueNumericField.Value;
+                    if (argument.Type == typeof(double))
+                        return (double)valueNumericField.Value;
                     return valueNumericField.Value;
+                }
                 return valueComboBox.SelectedValue;
+            }
+            set
+            {
+                TextBox valueTextBox = valueField as TextBox;
+                if (valueTextBox != null)
+                {
+                    valueTextBox.Text = value?.ToString() ?? "";
+                    return;
+                }
+                NumericUpDown valueNumericField = valueField as NumericUpDown;
+                if (valueNumericField != null) {
+                    if (!decimal.TryParse((value?.ToString() ?? ""), out decimal valueDecimal))
+                        valueDecimal = 0;
+                    valueNumericField.Value = valueDecimal;
+                    return;
+                }
+                valueComboBox.SelectByValue(value);
             }
         }
 
-        public delegate void ArgumentValueChangedDelegate(CommandArgumentControl control, IMacroCommandArgument argument, object newValue);
+        public delegate void ArgumentValueChangedDelegate(TriggerArgumentControl control, IMacroTriggerArgument argument, object newValue);
         public event ArgumentValueChangedDelegate ArgumentValueChanged;
 
         private void valueComboBox_SelectedIndexChanged(object sender, EventArgs e)
