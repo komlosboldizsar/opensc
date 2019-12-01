@@ -498,6 +498,13 @@
     <Compile Include="Model\Macros\RunMacroMacroCommand.cs" />
     <Compile Include="Model\MasterDatabase.cs" />
     <Compile Include="Model\Mixers\BlackMagicDesign\BmdMixer.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\SetProgramSourceMacroCommand.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\SetPreviewSourceMacroCommand.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\CutTransitionMacroCommand.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\AutoTransitionMacroCommand.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\BmdMixerMacroCommands.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\SetPPSourceMacroCommandBase.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\TransitionMacroCommandBase.cs" />
     <Compile Include="Model\Mixers\DynamicTextFunctions\MixerPreviewInputName.cs" />
     <Compile Include="Model\Mixers\DynamicTextFunctions\MixerProgramInputName.cs" />
     <Compile Include="Model\Mixers\Mixer.cs" />
@@ -518,10 +525,12 @@
     <Compile Include="Model\Persistence\ITypeNameConverter.cs" />
     <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
     <Compile Include="Model\Persistence\XmlTagNamesAttribute.cs" />
+    <Compile Include="Model\Routers\AutoPathSearcher.cs" />
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohub.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputLabel.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputName.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputSource.cs" />
+    <Compile Include="Model\Routers\IRouterOutputAssignable.cs" />
     <Compile Include="Model\Routers\Label.cs" />
     <Compile Include="Model\Routers\Labelset.cs" />
     <Compile Include="Model\Routers\LabelsetDatabase.cs" />
@@ -534,6 +543,7 @@
     <Compile Include="Model\Routers\RouterInput.cs" />
     <Compile Include="Model\Routers\RouterInputXmlSerializer.cs" />
     <Compile Include="Model\Routers\RouterOutput.cs" />
+    <Compile Include="Model\Routers\RouterOutputAssignableExternalSignal.cs" />
     <Compile Include="Model\Routers\RouterOutputXmlSerializer.cs" />
     <Compile Include="Model\Routers\RouterState.cs" />
     <Compile Include="Model\Routers\RouterTypeNameConverter.cs" />

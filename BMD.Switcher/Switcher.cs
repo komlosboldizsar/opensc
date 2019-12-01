@@ -107,6 +107,48 @@ namespace BMD.Switcher
         }
         #endregion
 
+        #region Transitions
+        public void TransitionAuto(int meBlockIndex)
+        {
+            IBMDSwitcherMixEffectBlock meBlock = switcher.GetMixEffectBlock(meBlockIndex);
+            if (meBlock == null)
+                throw new NotExistingMEException(string.Format("Switcher has no M/E block with index #{0}!", meBlockIndex));
+            meBlock.PerformAutoTransition();
+        }
+
+        public void TransitionCut(int meBlockIndex)
+        {
+            IBMDSwitcherMixEffectBlock meBlock = switcher.GetMixEffectBlock(meBlockIndex);
+            if (meBlock == null)
+                throw new NotExistingMEException(string.Format("Switcher has no M/E block with index #{0}!", meBlockIndex));
+            meBlock.PerformCut();
+        }
+        #endregion
+
+        #region Set program, preset/preview
+        public void SetProgramSource(int meBlockIndex, int inputId)
+        {
+            IBMDSwitcherMixEffectBlock meBlock = switcher.GetMixEffectBlock(meBlockIndex);
+            if (meBlock == null)
+                throw new NotExistingMEException(string.Format("Switcher has no M/E block with index #{0}!", meBlockIndex));
+            IBMDSwitcherInput input = switcher.GetInput(inputId);
+            if (input == null)
+                throw new NotExistingInputException(string.Format("Switcher has no input with ID #{0}!", inputId));
+            meBlock.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, inputId);
+        }
+
+        public void SetPreviewSource(int meBlockIndex, int inputId)
+        {
+            IBMDSwitcherMixEffectBlock meBlock = switcher.GetMixEffectBlock(meBlockIndex);
+            if (meBlock == null)
+                throw new NotExistingMEException(string.Format("Switcher has no M/E block with index #{0}!", meBlockIndex));
+            IBMDSwitcherInput input = switcher.GetInput(inputId);
+            if (input == null)
+                throw new NotExistingInputException(string.Format("Switcher has no input with ID #{0}!", inputId));
+            meBlock.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, inputId);
+        }
+        #endregion
+
         private IBMDSwitcher switcher;
         private SwitcherMonitor switcherMonitor;
 
@@ -172,6 +214,34 @@ namespace BMD.Switcher
             { }
 
             public CouldNotConnectException(string message, Exception innerException) : base(message, innerException)
+            { }
+
+        }
+
+        public class NotExistingMEException : Exception
+        {
+
+            public NotExistingMEException()
+            { }
+
+            public NotExistingMEException(string message) : base(message)
+            { }
+
+            public NotExistingMEException(string message, Exception innerException) : base(message, innerException)
+            { }
+
+        }
+
+        public class NotExistingInputException : Exception
+        {
+
+            public NotExistingInputException()
+            { }
+
+            public NotExistingInputException(string message) : base(message)
+            { }
+
+            public NotExistingInputException(string message, Exception innerException) : base(message, innerException)
             { }
 
         }

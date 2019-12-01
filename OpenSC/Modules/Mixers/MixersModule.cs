@@ -9,6 +9,8 @@ using System;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model.Mixers.BlackMagicDesign;
 using OpenSC.Model.Mixers.DynamicTextFunctions;
+using OpenSC.Model.Macros;
+using OpenSC.Model.Mixers.BlackMagicDesign.Macros;
 
 namespace OpenSC.Modules.Mixers
 {
@@ -67,7 +69,7 @@ namespace OpenSC.Modules.Mixers
 
         public void RegisterMacroCommandsAndTriggers()
         {
-
+            MacroCommandRegister.Instance.RegisterCommandCollection(BmdMixerMacroCommands.Instance);
         }
 
         public void RegisterMixerType<TMixer, TMixerEditorForm>()

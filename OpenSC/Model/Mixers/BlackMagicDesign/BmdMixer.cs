@@ -337,6 +337,22 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         }
         #endregion
 
+        #region P/P input sources
+        public void SetProgramSource(int meBlockIndex, int inputId)
+            => switcher.SetProgramSource(meBlockIndex, inputId);
+
+        public void SetPreviewSource(int meBlockIndex, int inputId)
+            => switcher.SetPreviewSource(meBlockIndex, inputId);
+        #endregion
+
+        #region Transitions
+        public void AutoTransition(int meBlockIndex)
+            => switcher.TransitionAuto(meBlockIndex);
+
+        public void CutTransition(int meBlockIndex)
+            => switcher.TransitionCut(meBlockIndex);
+        #endregion
+
     }
 
 }

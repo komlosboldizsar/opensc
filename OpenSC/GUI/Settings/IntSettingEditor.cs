@@ -33,9 +33,9 @@ namespace OpenSC.GUI.Settings
         {
 
             IntSetting typedSetting = (IntSetting)setting;
-            valueNumericField.Value = typedSetting.Value;
             valueNumericField.Minimum = typedSetting.MinValue ?? -99999;
             valueNumericField.Maximum = typedSetting.MaxValue ?? 99999;
+            valueNumericField.Value = typedSetting.Value;
 
             List<string> hintTexts = new List<string>();
             if (typedSetting.MinValue != null)
