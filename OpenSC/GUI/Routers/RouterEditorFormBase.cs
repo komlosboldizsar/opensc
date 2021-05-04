@@ -4,6 +4,7 @@ using OpenSC.Model.Signals;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace OpenSC.GUI.Routers
@@ -97,6 +98,9 @@ namespace OpenSC.GUI.Routers
             router.Name = nameTextBox.Text;
         }
 
+        private static readonly Color CELL_COST_BACK_IS_TIELINE = Color.White;
+        private static readonly Color CELL_COST_BACK_NOT_TIELINE = Color.Gray;
+
         private CustomDataGridView<RouterInput> inputsTableCDGV;
 
         private void initInputsTable()
@@ -146,6 +150,68 @@ namespace OpenSC.GUI.Routers
             builder.UpdaterMethod((input, cell) => { cell.Value = input.Source; });
             builder.CellEndEditHandlerMethod((input, cell, eventargs) => { input.Source = cell.Value as ISignal; });
             builder.DropDownPopulatorMethod((input, cell) => sources);
+            builder.BuildAndAdd();
+
+            // Column: tieline cost
+            builder = getColumnDescriptorBuilderForTable<RouterInput>(inputsTableCDGV);
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.Header("Tieline cost");
+            builder.Width(70);
+            builder.TextEditable(true);
+            builder.UpdaterMethod((input, cell) => {
+                cell.Value = input.TielineCost?.ToString() ?? "";
+                cell.Style.BackColor = input.IsTieline ? CELL_COST_BACK_IS_TIELINE : CELL_COST_BACK_NOT_TIELINE;
+                cell.ReadOnly = !input.IsTieline;
+            });
+            builder.AddChangeEvent(nameof(RouterInput.IsTieline));
+            builder.AddChangeEvent(nameof(RouterInput.TielineCost));
+            builder.CellEndEditHandlerMethod((input, cell, eventargs) => {
+                if (!input.IsTieline)
+                {
+                    MessageBox.Show("This input is not used as tieline, cost cannot be specified.", "Input error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    cell.Value = "";
+                    return;
+                }
+                if(!int.TryParse(cell.Value?.ToString(), out int tielineCost) || (tielineCost < 0))
+                {
+                    MessageBox.Show("Invalid input! Tieline cost must be a non-negative integer!", "Invalid input", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    cell.Value = "";
+                    return;
+                }
+                input.TielineCost = tielineCost;
+            });
+            builder.BuildAndAdd();
+
+            // Column: Reserve tieline
+            builder = getColumnDescriptorBuilderForTable<RouterInput>(inputsTableCDGV);
+            builder.Type(DataGridViewColumnType.DisableButton);
+            builder.Header("Reserve TL");
+            builder.Width(70);
+            builder.ButtonText("Reserve");
+            builder.UpdaterMethod((input, cell) => {
+                ((DataGridViewDisableButtonCell)cell).Enabled = (input.IsTieline && !(input.TielineIsReserved ?? false));
+            });
+            builder.AddChangeEvent(nameof(RouterInput.IsTieline));
+            builder.AddChangeEvent(nameof(RouterInput.TielineIsReserved));
+            builder.CellContentClickHandlerMethod((input, cell, eventargs) => {
+                input.TielineIsReserved = true;
+            });
+            builder.BuildAndAdd();
+
+            // Column: Free tieline
+            builder = getColumnDescriptorBuilderForTable<RouterInput>(inputsTableCDGV);
+            builder.Type(DataGridViewColumnType.DisableButton);
+            builder.Header("Free TL");
+            builder.Width(70);
+            builder.ButtonText("Free");
+            builder.UpdaterMethod((input, cell) => {
+                ((DataGridViewDisableButtonCell)cell).Enabled = (input.IsTieline && (input.TielineIsReserved ?? false));
+            });
+            builder.AddChangeEvent(nameof(RouterInput.IsTieline));
+            builder.AddChangeEvent(nameof(RouterInput.TielineIsReserved));
+            builder.CellContentClickHandlerMethod((input, cell, eventargs) => {
+                input.TielineIsReserved = false;
+            });
             builder.BuildAndAdd();
 
             // Column: delete button

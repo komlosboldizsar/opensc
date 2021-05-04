@@ -82,6 +82,11 @@ namespace OpenSC.Modules.Routers
 
             routersMenu.AddSeparator("sep1");
 
+            var allCrosspointsMenu = routersMenu["All crosspoints"];
+            allCrosspointsMenu.ClickHandler = (menu, tag) => new RouterControlTableForm(RouterDatabase.Instance).ShowAsChild();
+
+            routersMenu.AddSeparator("sep2");
+
             MenuItem.MenuClickHandler routerCrosspointsSubMenuClickHandler = (menu, tag) => new RouterControlTableForm((Router)tag).ShowAsChild();
             foreach (Router router in RouterDatabase.Instance.ItemsAsList)
             {

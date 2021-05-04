@@ -76,8 +76,10 @@ namespace OpenSC.Model.Routers
             {
                 if (value == index)
                     return;
+                unregisterAsSignal();
                 int oldIndex = index;
                 index = value;
+                registerAsSignal();
                 IndexChanged?.Invoke(this, oldIndex, value);
                 PropertyChanged?.Invoke(nameof(Index));
                 SignalLabelChanged?.Invoke(this, getSignalLabel());
@@ -149,12 +151,14 @@ namespace OpenSC.Model.Routers
         {
             if(crosspoint == null)
             {
+                SourceSignalChanged?.Invoke(this, null);
                 SourceSignalNameChanged?.Invoke(this, null);
                 RedTallyChanged?.Invoke(this, false, false);
                 GreenTallyChanged?.Invoke(this, false, false);
             }
             else
             {
+                SourceSignalChanged?.Invoke(this, crosspoint.SourceSignal);
                 SourceSignalNameChanged?.Invoke(this, crosspoint.SourceSignalName);
                 RedTallyChanged?.Invoke(this, false, crosspoint.RedTally);
                 GreenTallyChanged?.Invoke(this, false, crosspoint.GreenTally);
@@ -212,12 +216,32 @@ namespace OpenSC.Model.Routers
         public event SourceSignalNameChangedDelegate SourceSignalNameChanged;
         #endregion
 
+        #region Property: SourceSignal
+        public ExternalSignal SourceSignal
+            => GetSourceSignal();
+
+        public ExternalSignal GetSourceSignal(List<object> recursionChain = null)
+        {
+            if (crosspoint == null)
+                return null;
+            if (recursionChain == null)
+                recursionChain = new List<object>();
+            if (recursionChain.Contains(this))
+                return null;
+            recursionChain.Add(this);
+            return crosspoint.GetSourceSignal(recursionChain);
+        }
+
+        public delegate void SourceSignalChangedDelegate(RouterOutput output, ExternalSignal newSignal);
+        public event SourceSignalChangedDelegate SourceSignalChanged;
+        #endregion
+
         #region Property: SignalLabel
         string ISignal.SignalLabel
             => getSignalLabel();
 
         private string getSignalLabel()
-            => string.Format("[#{2}) {3}] output of router [(#{0}) {1}]", Router.ID, Router.Name, (Index + 1), Name);
+            => string.Format("[(#{2}) {3}] output of router [(#{0}) {1}]", Router.ID, Router.Name, (Index + 1), Name);
 
         public event SignalLabelChangedDelegate SignalLabelChanged;
         #endregion

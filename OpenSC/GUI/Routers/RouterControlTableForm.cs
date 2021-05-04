@@ -2,6 +2,7 @@
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model.General;
 using OpenSC.Model.Routers;
+using OpenSC.Model.Signals;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,41 +20,44 @@ namespace OpenSC.GUI.Routers
     public partial class RouterControlTableForm : ChildWindowWithTitle
     {
 
-        private Router _routerTempRef;
+        private List<Router> _routersTempRef = new List<Router>();
 
-        private Router _router;
+        private List<Router> _routers = new List<Router>();
 
-        private Router router
+        private List<Router> routers
         {
-            get { return _router; }
+            get { return _routers; }
             set
             {
 
-                if (value == _router)
-                    return;
-
-                if (_router != null)
+                foreach (Router router in _routers)
                 {
-                    _router.Inputs.ItemsChanged -= inputsChangedHandler;
-                    _router.Outputs.ItemsChanged -= outputsChangedHandler;
-                    Text = HeaderText = "Router crosspoints: ?";
+                    router.Inputs.ItemsChanged -= inputsChangedHandler;
+                    router.Outputs.ItemsChanged -= outputsChangedHandler;
+                }
+                Text = HeaderText = "Router crosspoints: ?";
+
+                _routers.Clear();
+                if (value != null)
+                    _routers.AddRange(value);
+
+                foreach (Router router in _routers)
+                {
+                    router.Inputs.ItemsChanged += inputsChangedHandler;
+                    router.Outputs.ItemsChanged += outputsChangedHandler;
                 }
 
-                _router = value;
-
-                if (_router != null)
-                {
-
-                    Text = HeaderText = string.Format("Router crosspoints: {0}", router.Name);
-                    _router.Inputs.ItemsChanged += inputsChangedHandler;
-                    _router.Outputs.ItemsChanged += outputsChangedHandler;
-                }
+                Text = HeaderText =
+                    singleMode
+                    ? string.Format("Router crosspoints: {0}", _routers[0].Name)
+                    : "Router crosspoints";
 
                 initializeTable();
 
             }
         }
 
+        private bool singleMode => (_routers.Count == 1);
         public RouterControlTableForm()
         {
             InitializeComponent();
@@ -62,15 +66,22 @@ namespace OpenSC.GUI.Routers
         public RouterControlTableForm(Router router)
         {
             InitializeComponent();
-            this._routerTempRef = router;
+            this._routersTempRef.Clear();
+            this._routersTempRef.Add(router);
+        }
+
+        public RouterControlTableForm(IEnumerable<Router> routers)
+        {
+            InitializeComponent();
+            this._routersTempRef.Clear();
+            this._routersTempRef.AddRange(routers);
         }
 
         private void RouterControlForm_Load(object sender, EventArgs e)
         {
-            router = _routerTempRef;
+            routers = _routersTempRef;
         }
 
-        
 
         #region Table
 
@@ -97,13 +108,20 @@ namespace OpenSC.GUI.Routers
 
             CustomDataGridViewColumnDescriptorBuilder<RouterOutputProxy> builder;
 
+            bool _singleMode = singleMode;
+
             // Column: output name
             builder = getColumnDescriptorBuilderForTable();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("");
             builder.Width(150);
             builder.DividerWidth(3);
-            builder.UpdaterMethod((routerOutputProxy, cell) => { cell.Value = routerOutputProxy.Name; });
+            builder.UpdaterMethod((routerOutputProxy, cell) => {
+                if (_singleMode)
+                    cell.Value = routerOutputProxy.Name;
+                else
+                    cell.Value = string.Format("[{0}] {1}", routerOutputProxy.RouterName, routerOutputProxy.Name);
+            });
             builder.AddChangeEvent(nameof(RouterOutput.Name));
             builder.BuildAndAdd();
 
@@ -126,30 +144,41 @@ namespace OpenSC.GUI.Routers
             builder.AddChangeEvent(nameof(RouterOutput.Name));
             builder.BuildAndAdd();
 
-            foreach (RouterInput routerInput in router.Inputs)
+            List<IRouterOutputAssignable> assignables = getAllAssignables();
+            foreach (IRouterOutputAssignable assignable in assignables)
             {
                 builder = getColumnDescriptorBuilderForTable();
                 builder.Type(DataGridViewColumnType.SmallIcon);
-                builder.Header(routerInput.Name);
+                builder.Header(assignable.Name);
                 builder.Width(30);
                 builder.IconColor(Color.Red);
                 builder.IconType(DataGridViewSmallIconCell.IconTypes.Circle);
                 builder.IconShown(false);
                 builder.CellDoubleClickHandlerMethod((routerOutputProxy, cell, e) => {
                     if (autotake)
-                        routerOutputProxy.ActiveCrosspoint = routerInput;
+                        doAssign(routerOutputProxy.Output, assignable);
                     else
-                        routerOutputProxy.SelectedCrosspoint = routerInput;
+                        routerOutputProxy.SelectedToAssign = assignable;
                 });
                 builder.UpdaterMethod((routerOutputProxy, cell) => {
+
                     DataGridViewSmallIconCell typedCell = ((DataGridViewSmallIconCell)cell);
-                    if (routerOutputProxy.ActiveCrosspoint == routerInput)
+
+                    bool active = _singleMode
+                        ? (routerOutputProxy.ActiveAssigned == assignable)
+                        : (routerOutputProxy.ActiveAssigned?.SourceSignal == assignable.SourceSignal);
+
+                    bool selected = _singleMode
+                        ? (routerOutputProxy.SelectedToAssign == assignable)
+                        : ((routerOutputProxy.SelectedToAssign != null) && (routerOutputProxy.SelectedToAssign?.SourceSignal == assignable.SourceSignal));
+
+                    if (active)
                     {
                         cell.Style.BackColor = BACKCOLOR_CROSSPOINT_ACTIVE;
                         typedCell.IconShown = true;
                         typedCell.IconColor = ICONCOLOR_CROSSPOINT_ACTIVE;
                     }
-                    else if (routerOutputProxy.SelectedCrosspoint == routerInput)
+                    else if (selected)
                     {
                         cell.Style.BackColor = BACKCOLOR_CROSSPOINT_SELECTED;
                         typedCell.IconShown = true;
@@ -161,14 +190,16 @@ namespace OpenSC.GUI.Routers
                         typedCell.IconShown = false;
                         typedCell.IconColor = ICONCOLOR_CROSSPOINT_EMPTY;
                     }
+
                 });
-                builder.AddChangeEvent(nameof(RouterOutputProxy.ActiveCrosspoint));
-                builder.AddChangeEvent(nameof(RouterOutputProxy.SelectedCrosspoint));
+                builder.AddChangeEvent(nameof(RouterOutputProxy.ActiveAssigned));
+                builder.AddChangeEvent(nameof(RouterOutputProxy.SelectedToAssign));
                 builder.BuildAndAdd();
             }
 
             // Bind database
-            routerOutputProxies = new ObservableProxyList<RouterOutputProxy, RouterOutput>(router.Outputs, (routerOutput) => new RouterOutputProxy(routerOutput));
+            ObservableList<RouterOutput> allOutputs = getAllOutputs();
+            routerOutputProxies = new ObservableProxyList<RouterOutputProxy, RouterOutput>(allOutputs, (routerOutput) => new RouterOutputProxy(routerOutput));
             table.BoundCollection = routerOutputProxies;
 
         }
@@ -176,6 +207,23 @@ namespace OpenSC.GUI.Routers
         private CustomDataGridViewColumnDescriptorBuilder<RouterOutputProxy> getColumnDescriptorBuilderForTable()
         {
             return new CustomDataGridViewColumnDescriptorBuilder<RouterOutputProxy>((CustomDataGridView<RouterOutputProxy>)table);
+        }
+
+        private List<IRouterOutputAssignable> getAllAssignables()
+        {
+            if (!singleMode)
+                return RouterOutputAssignableExternalSignal.GetAll();
+            List<IRouterOutputAssignable> inputs = new List<IRouterOutputAssignable>();
+            inputs.AddRange(routers[0].Inputs);
+            return inputs;
+        }
+
+        private ObservableList<RouterOutput> getAllOutputs()
+        {
+            ObservableList<RouterOutput> outputs = new ObservableList<RouterOutput>();
+            foreach (Router router in routers)
+                outputs.AddRange(router.Outputs);
+            return outputs;
         }
         #endregion
 
@@ -185,17 +233,18 @@ namespace OpenSC.GUI.Routers
         private class RouterOutputProxy : Model.General.INotifyPropertyChanged
         {
 
-            private RouterOutput routerOutput;
+            public RouterOutput Output { get; private set; }
 
             public RouterOutputProxy(RouterOutput routerOutput)
             {
-                this.routerOutput = routerOutput;
+                this.Output = routerOutput;
                 routerOutput.NameChanged += RouterOutput_NameChanged;
+                routerOutput.Router.NameChanged += Router_NameChanged;
                 routerOutput.CrosspointChanged += RouterOutput_CrosspointChanged;
             }
 
             #region Property: Name
-            public string Name => routerOutput.Name;
+            public string Name => Output.Name;
 
             private void RouterOutput_NameChanged(RouterOutput output, string oldName, string newName)
             {
@@ -203,34 +252,40 @@ namespace OpenSC.GUI.Routers
             }
             #endregion
 
-            #region Active crosspoint
-            public RouterInput ActiveCrosspoint
-            {
-                get => routerOutput.Crosspoint;
-                set { routerOutput.Crosspoint = value; }
-            }
+            #region Property: RouterName
+            public string RouterName => Output.Router.Name;
 
-            private void RouterOutput_CrosspointChanged(RouterOutput output, RouterInput newInput)
+            private void Router_NameChanged(Router output, string oldName, string newName)
             {
-                PropertyChanged?.Invoke(nameof(ActiveCrosspoint));
+                PropertyChanged?.Invoke(nameof(RouterName));
             }
             #endregion
 
-            #region Selected crosspoint
-            private RouterInput selectedCrosspoint = null;
+            #region Active assignable
+            public IRouterOutputAssignable ActiveAssigned
+                => Output.Crosspoint;
 
-            public RouterInput SelectedCrosspoint
+            private void RouterOutput_CrosspointChanged(RouterOutput output, RouterInput newInput)
             {
-                get { return selectedCrosspoint; }
+                PropertyChanged?.Invoke(nameof(ActiveAssigned));
+            }
+            #endregion
+
+            #region Selected assignable
+            private IRouterOutputAssignable selectedToAssign = null;
+
+            public IRouterOutputAssignable SelectedToAssign
+            {
+                get { return selectedToAssign; }
                 set
                 {
-                    RouterInput newSelectedCrosspoint = value;
-                    if (newSelectedCrosspoint == ActiveCrosspoint)
-                        newSelectedCrosspoint = null;
-                    RouterInput oldSelectedCrosspoint = selectedCrosspoint;
-                    selectedCrosspoint = newSelectedCrosspoint;
-                    if (oldSelectedCrosspoint != newSelectedCrosspoint)
-                        PropertyChanged?.Invoke(nameof(SelectedCrosspoint));
+                    IRouterOutputAssignable newSelectedAssignable = value;
+                    if (newSelectedAssignable == ActiveAssigned)
+                        newSelectedAssignable = null;
+                    IRouterOutputAssignable oldSelectedCrosspoint = selectedToAssign;
+                    selectedToAssign = newSelectedAssignable;
+                    if (oldSelectedCrosspoint != newSelectedAssignable)
+                        PropertyChanged?.Invoke(nameof(SelectedToAssign));
                 }
             }
             #endregion
@@ -251,18 +306,28 @@ namespace OpenSC.GUI.Routers
         }
 
         #region Persistence
-        private const string PERSISTENCE_KEY_ROUTER_ID = "router_id";
+        private const string PERSISTENCE_KEY_ROUTER_IDS = "router_ids";
 
         protected override void restoreBeforeOpen(Dictionary<string, object> keyValuePairs)
         {
             base.restoreBeforeOpen(keyValuePairs);
-            _routerTempRef = RouterDatabase.Instance.GetTById((int)keyValuePairs[PERSISTENCE_KEY_ROUTER_ID]);
+            string[] routerIdsStr = keyValuePairs[PERSISTENCE_KEY_ROUTER_IDS].ToString().Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            _routersTempRef.Clear();
+            foreach (string routerIdStr in routerIdsStr) {
+                if (!int.TryParse(routerIdStr, out int routerId))
+                    continue;
+                Router router = RouterDatabase.Instance.GetTById(routerId);
+                if (router != null)
+                    _routersTempRef.Add(router);
+            }
         }
 
         public override Dictionary<string, object> GetKeyValuePairs()
         {
             var dict = base.GetKeyValuePairs();
-            dict.Add(PERSISTENCE_KEY_ROUTER_ID, router?.ID);
+            List<string> routerIdsStr = new List<string>();
+            routers.ForEach(r => routerIdsStr.Add(r.ID.ToString()));
+            dict.Add(PERSISTENCE_KEY_ROUTER_IDS, string.Join(",", routerIdsStr));
             return dict;
         }
         #endregion
@@ -305,12 +370,37 @@ namespace OpenSC.GUI.Routers
         {
             foreach (RouterOutputProxy routerOutputProxy in routerOutputProxies)
             {
-                if (routerOutputProxy.SelectedCrosspoint != null)
+                if (routerOutputProxy.SelectedToAssign != null)
                 {
-                    routerOutputProxy.ActiveCrosspoint = routerOutputProxy.SelectedCrosspoint;
-                    routerOutputProxy.SelectedCrosspoint = null;
+                    doAssign(routerOutputProxy.Output, routerOutputProxy.SelectedToAssign);
+                    routerOutputProxy.SelectedToAssign = null;
                 }
             }
+        }
+
+        private void doAssign(RouterOutput output, IRouterOutputAssignable assignable)
+        {
+
+            if (singleMode)
+            {
+                RouterInput input = assignable as RouterInput;
+                if (input == null)
+                    return;
+                if (!output.Router.Inputs.Contains(input))
+                    return;
+                output.Crosspoint = input;
+                return;
+            }
+
+            AutoPathSearcher aps = new AutoPathSearcher(assignable.SourceSignal, output);
+            if (aps.Possible != true)
+            {
+                MessageBox.Show("Assignment cannot be done, no path found.", "Automatic path search", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            aps.TakeCrosspointsAndReserve();
+
         }
         #endregion
 

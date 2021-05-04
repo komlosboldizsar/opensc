@@ -475,6 +475,7 @@
     <Compile Include="Model\Macros\MacroArgumentKeyType.cs" />
     <Compile Include="Model\Macros\MacroCodeInterpreter.cs" />
     <Compile Include="Model\Macros\MacroCodeTokenizer.cs" />
+    <Compile Include="Model\Macros\MacroOscServer.cs" />
     <Compile Include="Model\Macros\MacroTriggerBase.cs" />
     <Compile Include="Model\Macros\MacroTriggerDefaultCallImplementations.cs" />
     <Compile Include="Model\Macros\MacroTriggerWithArgumentsXmlSerializer.cs" />
@@ -524,10 +525,12 @@
     <Compile Include="Model\Persistence\ITypeNameConverter.cs" />
     <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
     <Compile Include="Model\Persistence\XmlTagNamesAttribute.cs" />
+    <Compile Include="Model\Routers\AutoPathSearcher.cs" />
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohub.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputLabel.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputName.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputSource.cs" />
+    <Compile Include="Model\Routers\IRouterOutputAssignable.cs" />
     <Compile Include="Model\Routers\Label.cs" />
     <Compile Include="Model\Routers\Labelset.cs" />
     <Compile Include="Model\Routers\LabelsetDatabase.cs" />
@@ -540,6 +543,7 @@
     <Compile Include="Model\Routers\RouterInput.cs" />
     <Compile Include="Model\Routers\RouterInputXmlSerializer.cs" />
     <Compile Include="Model\Routers\RouterOutput.cs" />
+    <Compile Include="Model\Routers\RouterOutputAssignableExternalSignal.cs" />
     <Compile Include="Model\Routers\RouterOutputXmlSerializer.cs" />
     <Compile Include="Model\Routers\RouterState.cs" />
     <Compile Include="Model\Routers\RouterTypeNameConverter.cs" />

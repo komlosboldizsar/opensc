@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public class RouterInput : INotifyPropertyChanged
+    public class RouterInput : INotifyPropertyChanged, IRouterOutputAssignable
     {
 
         public RouterInput()
@@ -84,6 +84,7 @@ namespace OpenSC.Model.Routers
                 }
                 
                 source = value;
+                IsTieline = (source is RouterOutput);
 
                 SourceChanged?.Invoke(this, oldSource, value);
                 PropertyChanged?.Invoke(nameof(Source));
@@ -115,6 +116,8 @@ namespace OpenSC.Model.Routers
         {
             if (_sourceSignalUniqueId != null)
                 Source = SignalRegister.Instance.GetSignalByUniqueId(_sourceSignalUniqueId);
+            TielineCost = _tielineCost;
+            TielineIsReserved = _tielineIsReserved;
         }
 
         public string SourceSignalName
@@ -136,6 +139,29 @@ namespace OpenSC.Model.Routers
 
         public delegate void RouterInputSourceNameChanged(RouterInput input, string newName);
         public event RouterInputSourceNameChanged SourceNameChanged;
+
+        #region Property: SourceSignal
+        public ExternalSignal SourceSignal
+            => GetSourceSignal();
+
+        public ExternalSignal GetSourceSignal(List<object> recursionChain = null)
+        {
+            if (source == null)
+                return null;
+            if (source is ExternalSignal)
+                return ((ExternalSignal)source);
+            if (!(source is RouterOutput))
+                return null;
+            if (recursionChain == null)
+                recursionChain = new List<object>();
+            if (recursionChain.Contains(this))
+                return null;
+            recursionChain.Add(this);
+            return ((RouterOutput)source).GetSourceSignal(recursionChain);
+        }
+
+        public event SourceSignalChangedDelegate SourceSignalChanged;
+        #endregion
 
         private void sourceSignalNameChangedHandler(ISignal inputSource, string newName)
         {
@@ -188,6 +214,74 @@ namespace OpenSC.Model.Routers
 
         #region Implementation of INotifyPropertyChanged
         public event PropertyChangedDelegate PropertyChanged;
+        #endregion
+
+        #region Tieline properties
+        private bool isTieline;
+
+        public bool IsTieline
+        {
+            get => isTieline;
+            private set
+            {
+                if (value == isTieline)
+                    return;
+                isTieline = value;
+                IsTielineChanged?.Invoke(this, !isTieline, isTieline);
+                PropertyChanged?.Invoke(nameof(IsTieline));
+            }
+        }
+
+        public delegate void IsTielineChangedDelegate(RouterInput input, bool oldValue, bool newValue);
+        public event IsTielineChangedDelegate IsTielineChanged;
+
+        // Temporal until restore
+        public int _tielineCost;
+
+        private int tielineCost;
+
+        public int? TielineCost
+        {
+            get => (IsTieline) ? (int?)tielineCost : null;
+            set
+            {
+                if (!IsTieline)
+                    return;
+                if (value == tielineCost)
+                    return;
+                int? oldValue = tielineCost;
+                tielineCost = (int)value;
+                TielineCostChanged?.Invoke(this, oldValue, tielineCost);
+                PropertyChanged?.Invoke(nameof(TielineCost));
+            }
+        }
+
+        public delegate void TielineCostChangedDelegate(RouterInput input, int? oldValue, int? newValue);
+        public event TielineCostChangedDelegate TielineCostChanged;
+
+        // Temporal until restore
+        public bool _tielineIsReserved;
+
+        private bool tielineIsReserved;
+
+        public bool? TielineIsReserved
+        {
+            get => (IsTieline) ? (bool?)tielineIsReserved : null;
+            set
+            {
+                /*if (!IsTieline)
+                    return;*/
+                if (value == tielineIsReserved)
+                    return;
+                bool? oldValue = tielineIsReserved;
+                tielineIsReserved = (bool)value;
+                TielineIsReservedChanged?.Invoke(this, oldValue, tielineIsReserved);
+                PropertyChanged?.Invoke(nameof(TielineIsReserved));
+            }
+        }
+
+        public delegate void TielineIsReservedChangedDelegate(RouterInput input, bool? oldValue, bool? newValue);
+        public event TielineIsReservedChangedDelegate TielineIsReservedChanged;
         #endregion
 
     }
