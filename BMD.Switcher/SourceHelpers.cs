@@ -45,7 +45,7 @@ namespace BMD.Switcher
 
         }
 
-        public static List<IBMDSwitcherInput> GetSources(this IBMDSwitcher apiSwitcher)
+        public static List<IBMDSwitcherInput> GetPorts(this IBMDSwitcher apiSwitcher)
         {
 
             IBMDSwitcherInputIterator inputIterator = apiSwitcher.GetInputIterator();
