@@ -20,14 +20,18 @@ namespace BMD.Switcher
             ApiSource = apiSource;
             ApiSource.AddCallback(this);
             ID = ApiSource.GetSourceId();
+            initTallies();
         }
 
-        public Source(Switcher parentSwitcher, long id)
+        private void initTallies()
         {
-            ParentSwitcher = parentSwitcher;
-            ApiSource = parentSwitcher.ApiSwitcher.GetSource(id);
-            ApiSource.AddCallback(this);
-            ID = ApiSource.GetSourceId();
+            InvokeHelper.Invoke(() =>
+            {
+                ApiSource.IsProgramTallied(out int isProgramTallied);
+                IsProgramTallied = (isProgramTallied != 0);
+                ApiSource.IsPreviewTallied(out int isPreviewTallied);
+                IsPreviewTallied = (isPreviewTallied != 0);
+            });
         }
 
         void IBMDSwitcherInputCallback.Notify(_BMDSwitcherInputEventType eventType)
