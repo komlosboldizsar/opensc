@@ -1,4 +1,5 @@
 ﻿using BMD.Switcher;
+using BMD.Switcher.Exceptions;
 using OpenSC.Logger;
 using OpenSC.Model.Persistence;
 using System;
@@ -55,7 +56,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             ConnectionStateChanged = null;
             ConnectionStateChanging = null;
 
-            disposeInputMonitors();
+            //disposeInputMonitors();
             disposeMixEffectBlockMonitor();
 
             autoReconnectThread?.Abort();
@@ -69,7 +70,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             {
                 switcher?.Connect();
             }
-            catch (Switcher.CouldNotConnectException ex)
+            catch (CouldNotConnectException ex)
             {
                 string errorMessage = string.Format("Couldn't connect to a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}. Exception message: [{2}]",
                     ID,
@@ -77,7 +78,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
                     ex.Message);
                 LogDispatcher.E(LOG_TAG, errorMessage);
             }
-            catch(Switcher.AlreadyConnectedException ex)
+            catch(AlreadyConnectedException ex)
             {
                 string errorMessage = string.Format("Tried to connect to a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}, but was already connected. Exception message: [{2}]",
                     ID,
@@ -93,7 +94,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             {
                 switcher?.Disconnect();
             }
-            catch (Switcher.NotConnectedException ex)
+            catch (NotConnectedException ex)
             {
                 string errorMessage = string.Format("Tried to disconnect from a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}, but wasn't connected. Exception message: [{2}]",
                     ID,
@@ -202,7 +203,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
                 {
 
                     disposeMixEffectBlockMonitor();
-                    disposeInputMonitors();
+                    //disposeInputMonitors();
                     deinitSwitcher();
 
                     // State
@@ -278,79 +279,70 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         }
         #endregion
 
-        #region Input monitors
-        private List<InputMonitor> inputMonitors = new List<InputMonitor>();
-        
+        #region Sources
         private void getInputMonitors()
         {
-            inputMonitors = switcher.GetInputMonitors();
-            foreach(InputMonitor inputMonitor in inputMonitors)
+            foreach(Source source in switcher.GetSources().Values)
             {
-                inputMonitor.IsProgramTalliedChanged += inputMonitorIsProgramTalliedChangedHandler;
-                inputMonitor.IsPreviewTalliedChanged += inputMonitorIsPreviewTalliedChangedHandler;
+                source.IsProgramTalliedChanged += sourceIsProgramTalliedChangedHandler;
+                source.IsPreviewTalliedChanged += sourceIsPreviewTalliedChangedHandler;
             }
         }
 
-        private void disposeInputMonitors()
+        private void sourceIsProgramTalliedChangedHandler(BMDSwitcherAPI.IBMDSwitcherInput apiSource, Source source, bool isTallied)
         {
-            inputMonitors.ForEach(im => im?.Dispose());
-            inputMonitors.Clear();
+            Inputs.FindAll(input => (input.Index == source.ID)).ForEach(input => { input.RedTally = isTallied; });
         }
 
-        private void inputMonitorIsProgramTalliedChangedHandler(BMDSwitcherAPI.IBMDSwitcherInput switcherInput, InputMonitor monitor, bool isTallied)
+        private void sourceIsPreviewTalliedChangedHandler(BMDSwitcherAPI.IBMDSwitcherInput apiSource, Source source, bool isTallied)
         {
-            Inputs.FindAll(input => (input.Index == switcherInput.GetId())).ForEach(input => { input.RedTally = isTallied; });
-        }
-
-        private void inputMonitorIsPreviewTalliedChangedHandler(BMDSwitcherAPI.IBMDSwitcherInput switcherInput, InputMonitor monitor, bool isTallied)
-        {
-            Inputs.FindAll(input => (input.Index == switcherInput.GetId())).ForEach(input => { input.GreenTally = isTallied; });
+            Inputs.FindAll(input => (input.Index == source.ID)).ForEach(input => { input.GreenTally = isTallied; });
         }
         #endregion
 
         #region Mix/effect block monitors
         private const int MONITORED_MIXEFFECT_BLOCK_INDEX = 0;
 
-        MixEffectBlockMonitor mixEffectBlockMonitor;
+        MixEffectBlock mixEffectBlock;
 
         private void getMixEffectBlockMonitor()
         {
-            mixEffectBlockMonitor = switcher.GetMixEffectBlockMonitor(MONITORED_MIXEFFECT_BLOCK_INDEX);
-            mixEffectBlockMonitor.ProgramInputChanged += mixEffectBlockMonitorProgramInputChangedHandler;
-            mixEffectBlockMonitor.PreviewInputChanged += mixEffectBlockMonitorPreviewInputChangedHandler;
+            mixEffectBlock = switcher.GetMixEffectBlock(MONITORED_MIXEFFECT_BLOCK_INDEX);
+            mixEffectBlock.ProgramInputChanged += mixEffectBlockMonitorProgramInputChangedHandler;
+            mixEffectBlock.PreviewInputChanged += mixEffectBlockMonitorPreviewInputChangedHandler;
         }
 
         private void disposeMixEffectBlockMonitor()
         {
-            mixEffectBlockMonitor?.Dispose();
-            mixEffectBlockMonitor = null;
+            mixEffectBlock?.Dispose();
+            mixEffectBlock = null;
         }
 
-        private void mixEffectBlockMonitorProgramInputChangedHandler(BMDSwitcherAPI.IBMDSwitcherMixEffectBlock meBlock, MixEffectBlockMonitor monitor, long inputIndex)
+        private void mixEffectBlockMonitorProgramInputChangedHandler(BMDSwitcherAPI.IBMDSwitcherMixEffectBlock apiMixEffectBlock, MixEffectBlock mixEffectBlock, long sourceId)
         {
-            OnProgramInput = Inputs.First(input => input.Index == inputIndex);
+            OnProgramInput = Inputs.First(input => input.Index == sourceId);
         }
 
-        private void mixEffectBlockMonitorPreviewInputChangedHandler(BMDSwitcherAPI.IBMDSwitcherMixEffectBlock meBlock, MixEffectBlockMonitor monitor, long inputIndex)
+        private void mixEffectBlockMonitorPreviewInputChangedHandler(BMDSwitcherAPI.IBMDSwitcherMixEffectBlock apiMixEffectBlock, MixEffectBlock mixEffectBlock, long sourceId)
         {
-            OnPreviewInput = Inputs.First(input => input.Index == inputIndex);
+            OnPreviewInput = Inputs.First(input => input.Index == sourceId);
         }
         #endregion
 
         #region P/P input sources
         public void SetProgramSource(int meBlockIndex, int inputId)
-            => switcher.SetProgramSource(meBlockIndex, inputId);
+            => switcher.GetMixEffectBlock(meBlockIndex).RequestSetProgramSource(inputId);
 
         public void SetPreviewSource(int meBlockIndex, int inputId)
-            => switcher.SetPreviewSource(meBlockIndex, inputId);
+            => switcher.GetMixEffectBlock(meBlockIndex).RequestSetPreviewSource(inputId);
         #endregion
 
         #region Transitions
         public void AutoTransition(int meBlockIndex)
-            => switcher.TransitionAuto(meBlockIndex);
+            => switcher.GetMixEffectBlock(meBlockIndex).PerformAutoTransition();
 
         public void CutTransition(int meBlockIndex)
-            => switcher.TransitionCut(meBlockIndex);
+            => switcher.GetMixEffectBlock(meBlockIndex).PerformAutoTransition();
         #endregion
 
     }

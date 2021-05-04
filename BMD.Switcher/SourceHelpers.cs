@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace BMD.Switcher
 {
 
-    public static class InputHelpers
+    public static class SourceHelpers
     {
 
         public static IBMDSwitcherInputIterator GetInputIterator(this IBMDSwitcher switcher)
@@ -23,7 +23,7 @@ namespace BMD.Switcher
             return inputIterator;
         }
 
-        public static IBMDSwitcherInput GetInput(this IBMDSwitcher switcher, long inputId)
+        public static IBMDSwitcherInput GetSource(this IBMDSwitcher switcher, long inputId)
         {
             
             IBMDSwitcherInputIterator inputIterator = switcher.GetInputIterator();
@@ -45,10 +45,10 @@ namespace BMD.Switcher
 
         }
 
-        public static List<IBMDSwitcherInput> GetInputs(this IBMDSwitcher switcher)
+        public static List<IBMDSwitcherInput> GetSources(this IBMDSwitcher apiSwitcher)
         {
 
-            IBMDSwitcherInputIterator inputIterator = switcher.GetInputIterator();
+            IBMDSwitcherInputIterator inputIterator = apiSwitcher.GetInputIterator();
             if (inputIterator == null)
                 return null;
 
@@ -66,7 +66,7 @@ namespace BMD.Switcher
 
         }
 
-        public static long GetId(this IBMDSwitcherInput input)
+        public static long GetSourceId(this IBMDSwitcherInput input)
         {
             input.GetInputId(out long inputId);
             return inputId;

@@ -1,4 +1,5 @@
-﻿using BMDSwitcherAPI;
+﻿using BMD.Switcher.Exceptions;
+using BMDSwitcherAPI;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -6,13 +7,15 @@ using System.Runtime.InteropServices;
 namespace BMD.Switcher
 {
 
-    public class Switcher
+    public class Switcher : IBMDSwitcherCallback
     {
 
         public Switcher(string ipAddress)
         {
             this.ipAddress = ipAddress;
         }
+
+        public IBMDSwitcher ApiSwitcher { get; set; }
 
         #region Property: IpAddress
         private string ipAddress;
@@ -68,10 +71,7 @@ namespace BMD.Switcher
             try
             {
                 switcherDiscovery.ConnectTo(ipAddress, out IBMDSwitcher connectedSwitcher, out failReason);
-                switcher = connectedSwitcher;
-                Connected = true;
-                switcherMonitor = new SwitcherMonitor(switcher);
-                switcherMonitor.SwitcherDisconnected += switcherDisconnectedHandler;
+                switcherConnectedHandler(connectedSwitcher);
             }
             catch (COMException ex)
             {
@@ -92,159 +92,75 @@ namespace BMD.Switcher
         {
             if (!Connected)
                 throw new NotConnectedException();
-            Connected = false;
-            switcherMonitor?.Dispose();
-            switcherMonitor = null;
-            switcher = null;
+            switcherDisconnectedHandler();
         }
 
-        private void switcherDisconnectedHandler(IBMDSwitcher switcher, SwitcherMonitor monitor)
+        private void switcherConnectedHandler(IBMDSwitcher connectedSwitcher)
+        {
+
+            ApiSwitcher = connectedSwitcher;
+            ApiSwitcher.AddCallback(this);
+            Connected = true;
+
+            mixEffectBlocks.Clear();
+            int mixEffectBlockIndex = 0;
+            foreach (IBMDSwitcherMixEffectBlock apiMixEffectBlock in ApiSwitcher.GetAllMixEffectBlocks())
+            {
+                mixEffectBlocks.Add(new MixEffectBlock(this, apiMixEffectBlock, mixEffectBlockIndex));
+                mixEffectBlockIndex++;
+            }
+
+            sources.Clear();
+            foreach (IBMDSwitcherInput apiSource in ApiSwitcher.GetSources())
+            {
+                Source source = new Source(this, apiSource);
+                sources.Add(source.ID, source);
+            }
+
+        }
+
+        private void switcherDisconnectedHandler()
         {
             Connected = false;
-            switcherMonitor?.Dispose();
-            switcherMonitor = null;
-            switcher = null;
+            ApiSwitcher = null;
+            mixEffectBlocks.Clear();
+            sources.Clear();
+        }
+
+        void IBMDSwitcherCallback.Notify(_BMDSwitcherEventType eventType, _BMDSwitcherVideoMode coreVideoMode)
+        {
+            switch (eventType)
+            {
+                case _BMDSwitcherEventType.bmdSwitcherEventTypeDisconnected:
+                    switcherDisconnectedHandler();
+                    break;
+            }
         }
         #endregion
 
-        #region Transitions
-        public void TransitionAuto(int meBlockIndex)
-        {
-            IBMDSwitcherMixEffectBlock meBlock = switcher.GetMixEffectBlock(meBlockIndex);
-            if (meBlock == null)
-                throw new NotExistingMEException(string.Format("Switcher has no M/E block with index #{0}!", meBlockIndex));
-            meBlock.PerformAutoTransition();
-        }
+        #region MixEffect Blocks
+        private List<MixEffectBlock> mixEffectBlocks = new List<MixEffectBlock>();
 
-        public void TransitionCut(int meBlockIndex)
+        public MixEffectBlock GetMixEffectBlock(int index)
         {
-            IBMDSwitcherMixEffectBlock meBlock = switcher.GetMixEffectBlock(meBlockIndex);
-            if (meBlock == null)
-                throw new NotExistingMEException(string.Format("Switcher has no M/E block with index #{0}!", meBlockIndex));
-            meBlock.PerformCut();
+            if (index >= mixEffectBlocks.Count)
+                throw new NotExistingMixEffectBlockException();
+            return mixEffectBlocks[index];
         }
         #endregion
 
-        #region Set program, preset/preview
-        public void SetProgramSource(int meBlockIndex, int inputId)
+        #region MixEffect Blocks
+        private Dictionary<long, Source> sources = new Dictionary<long, Source>();
+
+        public Source GetSource(long id)
         {
-            IBMDSwitcherMixEffectBlock meBlock = switcher.GetMixEffectBlock(meBlockIndex);
-            if (meBlock == null)
-                throw new NotExistingMEException(string.Format("Switcher has no M/E block with index #{0}!", meBlockIndex));
-            IBMDSwitcherInput input = switcher.GetInput(inputId);
-            if (input == null)
-                throw new NotExistingInputException(string.Format("Switcher has no input with ID #{0}!", inputId));
-            meBlock.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, inputId);
+            if (!sources.TryGetValue(id, out Source source))
+                throw new NotExistingSourceException();
+            return source;
         }
 
-        public void SetPreviewSource(int meBlockIndex, int inputId)
-        {
-            IBMDSwitcherMixEffectBlock meBlock = switcher.GetMixEffectBlock(meBlockIndex);
-            if (meBlock == null)
-                throw new NotExistingMEException(string.Format("Switcher has no M/E block with index #{0}!", meBlockIndex));
-            IBMDSwitcherInput input = switcher.GetInput(inputId);
-            if (input == null)
-                throw new NotExistingInputException(string.Format("Switcher has no input with ID #{0}!", inputId));
-            meBlock.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, inputId);
-        }
-        #endregion
-
-        private IBMDSwitcher switcher;
-        private SwitcherMonitor switcherMonitor;
-
-        public InputMonitor GetInputMonitor(long inputId)
-        {
-            if (!Connected)
-                throw new NotConnectedException();
-            return new InputMonitor(switcher.GetInput(inputId));
-        }
-
-        public List<InputMonitor> GetInputMonitors()
-        {
-            if (!Connected)
-                throw new NotConnectedException();
-            List<InputMonitor> inputMonitors = new List<InputMonitor>();
-            switcher.GetInputs().ForEach(input => inputMonitors.Add(new InputMonitor(input)));
-            return inputMonitors;
-        }
-
-        public MixEffectBlockMonitor GetMixEffectBlockMonitor(int index)
-        {
-            if (!Connected)
-                throw new NotConnectedException();
-            return new MixEffectBlockMonitor(switcher.GetMixEffectBlock(index));
-        }
-
-        #region Exceptions
-        public class AlreadyConnectedException : Exception
-        {
-
-            public AlreadyConnectedException()
-            { }
-
-            public AlreadyConnectedException(string message) : base(message)
-            { }
-
-            public AlreadyConnectedException(string message, Exception innerException) : base(message, innerException)
-            { }
-
-        }
-
-        public class NotConnectedException : Exception
-        {
-
-            public NotConnectedException()
-            { }
-
-            public NotConnectedException(string message) : base(message)
-            { }
-
-            public NotConnectedException(string message, Exception innerException) : base(message, innerException)
-            { }
-
-        }
-
-        public class CouldNotConnectException : Exception
-        {
-
-            public CouldNotConnectException()
-            { }
-
-            public CouldNotConnectException(string message) : base(message)
-            { }
-
-            public CouldNotConnectException(string message, Exception innerException) : base(message, innerException)
-            { }
-
-        }
-
-        public class NotExistingMEException : Exception
-        {
-
-            public NotExistingMEException()
-            { }
-
-            public NotExistingMEException(string message) : base(message)
-            { }
-
-            public NotExistingMEException(string message, Exception innerException) : base(message, innerException)
-            { }
-
-        }
-
-        public class NotExistingInputException : Exception
-        {
-
-            public NotExistingInputException()
-            { }
-
-            public NotExistingInputException(string message) : base(message)
-            { }
-
-            public NotExistingInputException(string message, Exception innerException) : base(message, innerException)
-            { }
-
-        }
+        public Dictionary<long, Source> GetSources()
+            => sources;
         #endregion
 
     }

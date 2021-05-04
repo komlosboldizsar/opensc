@@ -43,13 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InputHelpers.cs" />
-    <Compile Include="InputMonitor.cs" />
+    <Compile Include="Exceptions\AlreadyConnectedException.cs" />
+    <Compile Include="Exceptions\CouldNotConnectException.cs" />
+    <Compile Include="Exceptions\NotConnectedException.cs" />
+    <Compile Include="Exceptions\NotExistingMixEffectBlockException.cs" />
+    <Compile Include="Exceptions\NotExistingSourceException.cs" />
+    <Compile Include="SourceHelpers.cs" />
+    <Compile Include="Source.cs" />
     <Compile Include="MixEffectBlockHelpers.cs" />
-    <Compile Include="MixEffectBlockMonitor.cs" />
+    <Compile Include="MixEffectBlock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Switcher.cs" />
-    <Compile Include="SwitcherMonitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="BMDSwitcherAPI">
