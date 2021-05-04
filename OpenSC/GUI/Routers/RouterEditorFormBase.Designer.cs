@@ -83,7 +83,7 @@
             this.baseDataPanel.Location = new System.Drawing.Point(3, 3);
             this.baseDataPanel.Name = "baseDataPanel";
             this.baseDataPanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
-            this.baseDataPanel.Size = new System.Drawing.Size(948, 94);
+            this.baseDataPanel.Size = new System.Drawing.Size(1148, 94);
             this.baseDataPanel.TabIndex = 0;
             // 
             // baseDataGroupBox
@@ -95,7 +95,7 @@
             this.baseDataGroupBox.Location = new System.Drawing.Point(0, 0);
             this.baseDataGroupBox.Name = "baseDataGroupBox";
             this.baseDataGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.baseDataGroupBox.Size = new System.Drawing.Size(948, 87);
+            this.baseDataGroupBox.Size = new System.Drawing.Size(1148, 87);
             this.baseDataGroupBox.TabIndex = 0;
             this.baseDataGroupBox.TabStop = false;
             this.baseDataGroupBox.Text = "Base data";
@@ -117,7 +117,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(932, 56);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1132, 56);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // idLabel
@@ -149,7 +149,7 @@
             this.nameTextBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.nameTextBox.Location = new System.Drawing.Point(70, 31);
             this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(859, 22);
+            this.nameTextBox.Size = new System.Drawing.Size(1059, 22);
             this.nameTextBox.TabIndex = 2;
             // 
             // idNumericField
@@ -178,7 +178,7 @@
             this.baseDataTabPage.Location = new System.Drawing.Point(4, 25);
             this.baseDataTabPage.Name = "baseDataTabPage";
             this.baseDataTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.baseDataTabPage.Size = new System.Drawing.Size(954, 389);
+            this.baseDataTabPage.Size = new System.Drawing.Size(1154, 389);
             this.baseDataTabPage.TabIndex = 0;
             this.baseDataTabPage.Text = "Base data";
             // 

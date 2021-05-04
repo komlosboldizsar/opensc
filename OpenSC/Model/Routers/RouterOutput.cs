@@ -241,7 +241,7 @@ namespace OpenSC.Model.Routers
             => getSignalLabel();
 
         private string getSignalLabel()
-            => string.Format("[#{2}) {3}] output of router [(#{0}) {1}]", Router.ID, Router.Name, (Index + 1), Name);
+            => string.Format("[(#{2}) {3}] output of router [(#{0}) {1}]", Router.ID, Router.Name, (Index + 1), Name);
 
         public event SignalLabelChangedDelegate SignalLabelChanged;
         #endregion
