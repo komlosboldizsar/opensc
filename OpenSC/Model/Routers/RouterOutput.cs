@@ -112,6 +112,10 @@ namespace OpenSC.Model.Routers
                 RouterMacroTriggers.RouterOutputSourceChanged.Call(Router, this);
                 Router.NotifyCrosspointChanged(this);
 
+                redTally.PreviousElement = value.RedTally;
+                yellowTally.PreviousElement = value.YellowTally;
+                greenTally.PreviousElement = value.GreenTally;
+
                 subscribeCrosspointEvents();
 
                 fireChangeEventsAtCrosspointChange();
