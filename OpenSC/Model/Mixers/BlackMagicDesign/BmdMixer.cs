@@ -286,6 +286,8 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             {
                 source.IsProgramTalliedChanged += sourceIsProgramTalliedChangedHandler;
                 source.IsPreviewTalliedChanged += sourceIsPreviewTalliedChangedHandler;
+                Inputs.FindAll(input => (input.Index == source.ID)).ForEach(input => { input.RedTally = source.IsProgramTallied; });
+                Inputs.FindAll(input => (input.Index == source.ID)).ForEach(input => { input.GreenTally = source.IsPreviewTallied; });
             }
         }
 
@@ -310,6 +312,8 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             mixEffectBlock = switcher.GetMixEffectBlock(MONITORED_MIXEFFECT_BLOCK_INDEX);
             mixEffectBlock.ProgramInputChanged += mixEffectBlockMonitorProgramInputChangedHandler;
             mixEffectBlock.PreviewInputChanged += mixEffectBlockMonitorPreviewInputChangedHandler;
+            OnProgramInput = Inputs.FirstOrDefault(input => input.Index == mixEffectBlock.ProgramSourceId);
+            OnPreviewInput = Inputs.FirstOrDefault(input => input.Index == mixEffectBlock.PreviewSourceId);
         }
 
         private void disposeMixEffectBlockMonitor()
