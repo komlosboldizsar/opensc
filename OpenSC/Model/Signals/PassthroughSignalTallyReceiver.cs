@@ -47,7 +47,15 @@ namespace OpenSC.Model.Signals
         {
             if (recursionChain.Contains(this))
                 return; // endless loop
-            recursionChains.TryGetValue(recursionChain, out List<ISignalTallySender> extendedChain);
+            List<ISignalTallySender> extendedChain = null;
+            foreach (KeyValuePair<List<ISignalTallySender>, List<ISignalTallySender>> chainKp in recursionChains)
+            {
+                if (recursionChain.SequenceEqual(chainKp.Key))
+                {
+                    extendedChain = chainKp.Value;
+                    break;
+                }
+            }
             if (extendedChain == null)
                 return;
             PreviousElement?.Revoke(extendedChain);
