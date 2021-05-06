@@ -286,6 +286,8 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             {
                 source.IsProgramTalliedChanged += sourceIsProgramTalliedChangedHandler;
                 source.IsPreviewTalliedChanged += sourceIsPreviewTalliedChangedHandler;
+                Inputs.FindAll(input => (input.Index == source.ID)).ForEach(input => { input.RedTally = source.IsProgramTallied; });
+                Inputs.FindAll(input => (input.Index == source.ID)).ForEach(input => { input.GreenTally = source.IsPreviewTallied; });
             }
         }
 
