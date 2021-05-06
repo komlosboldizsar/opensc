@@ -53,7 +53,7 @@ namespace OpenSC.Model.Signals
 
         public void Revoke(List<ISignalTallySender> recursionChain)
         {
-            activeSources.Remove(recursionChain);
+            activeSources.RemoveAll(rc => rc.SequenceEqual(recursionChain));
             updateState();
         }
 
