@@ -44,7 +44,7 @@ namespace OpenSC.Model.Routers
 
             XElement xmlElement = new XElement(TAG_NAME);
             xmlElement.SetAttributeValue(ATTRIBUTE_NAME, input.Name);
-            xmlElement.SetAttributeValue(ATTRIBUTE_SOURCE, input.CurrentSource?.RegisteredSourceSignal?.SignalUniqueId);
+            xmlElement.SetAttributeValue(ATTRIBUTE_SOURCE, (input.CurrentSource as ISignalSourceRegistered)?.SignalUniqueId);
             xmlElement.SetAttributeValue(ATTRIBUTE_TIELINE_COST, input.TielineCost?.ToString());
             xmlElement.SetAttributeValue(ATTRIBUTE_TIELINE_RESERVED, input.TielineIsReserved?.ToString());
 

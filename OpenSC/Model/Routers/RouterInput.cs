@@ -120,7 +120,7 @@ namespace OpenSC.Model.Routers
 
         public void AssignSource(ISignalSource source)
         {
-            CurrentSource = source;
+            CurrentSource = source as ISignalSourceRegistered;
         }
 
         public delegate void SourceChangingDelegate(RouterInput input, ISignalSource oldSource, ISignalSource newSource);
