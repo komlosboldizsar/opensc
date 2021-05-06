@@ -100,7 +100,6 @@ namespace BMD.Switcher
 
             ApiSwitcher = connectedSwitcher;
             ApiSwitcher.AddCallback(this);
-            Connected = true;
 
             mixEffectBlocks.Clear();
             int mixEffectBlockIndex = 0;
@@ -136,6 +135,8 @@ namespace BMD.Switcher
                 }
                 
             }
+
+            Connected = true;
 
         }
 

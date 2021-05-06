@@ -27,28 +27,29 @@ namespace BMD.Switcher
         {
             InvokeHelper.Invoke(() =>
             {
-                ApiMixEffectBlock.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, out long programInput);
+                ApiMixEffectBlock.GetProgramInput(out long programInput);
                 ProgramSourceId = programInput;
-                ApiMixEffectBlock.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out long previewInput);
+                ApiMixEffectBlock.GetPreviewInput(out long previewInput);
                 PreviewSourceId = previewInput;
             });
         }
 
-        public void PropertyChanged(_BMDSwitcherMixEffectBlockPropertyId propertyId)
+
+        public void Notify(_BMDSwitcherMixEffectBlockEventType eventType)
         {
-            switch (propertyId)
+            switch (eventType)
             {
-                case _BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput:
+                case _BMDSwitcherMixEffectBlockEventType.bmdSwitcherMixEffectBlockEventTypeProgramInputChanged:
                     InvokeHelper.Invoke(() =>
                     {
-                        ApiMixEffectBlock.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, out long programInput);
+                        ApiMixEffectBlock.GetProgramInput(out long programInput);
                         ProgramSourceId = programInput;
                     });
                     break;
-                case _BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput:
+                case _BMDSwitcherMixEffectBlockEventType.bmdSwitcherMixEffectBlockEventTypePreviewInputChanged:
                     InvokeHelper.Invoke(() =>
                     {
-                        ApiMixEffectBlock.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out long previewInput);
+                        ApiMixEffectBlock.GetPreviewInput(out long previewInput);
                         PreviewSourceId = previewInput;
                     });
                     break;
@@ -85,7 +86,7 @@ namespace BMD.Switcher
             Source source = ParentSwitcher.GetSource(sourceId);
             if (source == null)
                 throw new NotExistingSourceException(string.Format("Switcher has no source with ID #{0}!", sourceId));
-            ApiMixEffectBlock.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, sourceId);
+            ApiMixEffectBlock.SetProgramInput(sourceId);
         }
 
         public void RequestSetProgramSource(Source source)
@@ -121,13 +122,12 @@ namespace BMD.Switcher
             Source source = ParentSwitcher.GetSource(sourceId);
             if (source == null)
                 throw new NotExistingSourceException(string.Format("Switcher has no source with ID #{0}!", sourceId));
-            ApiMixEffectBlock.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, sourceId);
+            ApiMixEffectBlock.SetPreviewInput(sourceId);
         }
 
         public void RequestSetPreviewSource(Source source)
             => RequestSetPreviewSource(source.ID);
         #endregion
-
 
         #region Transitions
         public void PerformAutoTransition()
