@@ -7,8 +7,13 @@ using System.Drawing;
 namespace OpenSC.Model.Signals
 {
 
-    public class ExternalSignal : ModelBase, ISignal
+    public class ExternalSignal : ModelBase, ISignalSourceRegistered
     {
+
+        public ExternalSignal()
+        {
+            createTallies();
+        }
 
         public override void Restored()
         {
@@ -21,19 +26,11 @@ namespace OpenSC.Model.Signals
             base.Removed();
 
             Name = null;
-
-            RedTally = false;
-            GreenTally = false;
-            redTallySources.Clear();
-            greenTallySources.Clear();
-
             IdChanged = null;
             NameChanged = null;
             CategoryChanged = null;
             SourceSignalNameChanged = null;
             SignalLabelChanged = null;
-            RedTallyChanged = null;
-            GreenTallyChanged = null;
 
             unregisterTallyBooleans();
 
@@ -57,7 +54,7 @@ namespace OpenSC.Model.Signals
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
                 SignalLabelChanged?.Invoke(this, getSignalLabel());
-                RaisePropertyChanged(nameof(ISignal.SignalLabel));
+                RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
 
                 createTallyBooleansAfterIdChange();
 
@@ -91,7 +88,7 @@ namespace OpenSC.Model.Signals
                 NameChanged?.Invoke(this, oldName, value);
                 RaisePropertyChanged(nameof(Name));
                 SignalLabelChanged?.Invoke(this, getSignalLabel());
-                RaisePropertyChanged(nameof(ISignal.SignalLabel));
+                RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
                 SourceSignalNameChanged?.Invoke(this, value);
                 RaisePropertyChanged(nameof(SourceSignalName));
 
@@ -136,7 +133,17 @@ namespace OpenSC.Model.Signals
         public event SourceSignalNameChangedDelegate SourceSignalNameChanged;
         #endregion
 
-        string ISignal.SignalLabel
+        #region Property: RegisteredSourceSignal
+        public ISignalSourceRegistered RegisteredSourceSignal
+        {
+            get => this;
+        }
+
+        public ISignalSourceRegistered GetRegisteredSourceSignal(List<object> recursionChain = null)
+            => this;
+        #endregion
+
+        string ISignalSourceRegistered.SignalLabel
         {
             get => getSignalLabel();
         }
@@ -144,7 +151,7 @@ namespace OpenSC.Model.Signals
         private string getSignalLabel()
             => string.Format("(EXT. #{0}) {1}", ID, Name);
 
-        string ISignal.SignalUniqueId
+        string ISignalSourceRegistered.SignalUniqueId
         {
             get => string.Format("external.{0}", ID);
         }
@@ -152,127 +159,57 @@ namespace OpenSC.Model.Signals
         public event SignalLabelChangedDelegate SignalLabelChanged;
 
         #region Tallies
-        public event SignalTallyChangedDelegate RedTallyChanged;
+        private ExternalSignalTally redTally;
+        private ExternalSignalTally yellowTally;
+        private ExternalSignalTally greenTally;
 
-        private bool redTally;
+        public IBidirectionalSignalTally RedTally => redTally;
+        public IBidirectionalSignalTally YellowTally => yellowTally;
+        public IBidirectionalSignalTally GreenTally => greenTally;
 
-        public bool RedTally
+        private void createTallies()
         {
-            get { return redTally; }
-            private set
-            {
-                if (value == redTally)
-                    return;
-                bool oldState = redTally;
-                redTally = value;
-                RedTallyChanged?.Invoke(this, oldState, value);
-                RaisePropertyChanged(nameof(RedTally));
-            }
-        }
-
-        public bool GetRedTally(List<object> recursionChain = null)
-            => redTally;
-        
-        public event SignalTallyChangedDelegate GreenTallyChanged;
-
-        private bool greenTally;
-
-        public bool GreenTally
-        {
-            get { return greenTally; }
-            private set
-            {
-                if (value == greenTally)
-                    return;
-                bool oldState = greenTally;
-                greenTally = value;
-                GreenTallyChanged?.Invoke(this, oldState, value);
-                RaisePropertyChanged(nameof(GreenTally));
-            }
-        }
-
-        public bool GetGreenTally(List<object> recursionChain = null)
-            => greenTally;
-        #endregion
-
-        #region Tally sources
-        private List<ISignalTallySource> redTallySources = new List<ISignalTallySource>();
-        private List<ISignalTallySource> greenTallySources = new List<ISignalTallySource>();
-
-        public void IsTalliedFrom(ISignalTallySource source, SignalTallyType type, bool isTallied)
-        {
-
-            List<ISignalTallySource> tallySourceList = getTallySourceListByType(type);
-            if (tallySourceList == null)
-                return;
-
-            lock (tallySourceList)
-            {
-                if (isTallied && !tallySourceList.Contains(source))
-                    tallySourceList.Add(source);
-                if (!isTallied && tallySourceList.Contains(source))
-                    tallySourceList.Remove(source);
-            }
-
-            setTallyValueByType(type, (tallySourceList.Count > 0));
-
-        }
-
-        private List<ISignalTallySource> getTallySourceListByType(SignalTallyType type)
-        {
-            switch (type)
-            {
-                case SignalTallyType.Red:
-                    return redTallySources;
-                case SignalTallyType.Green:
-                    return greenTallySources;
-            }
-            return null;
-        }
-
-        private void setTallyValueByType(SignalTallyType type, bool isTallied)
-        {
-            switch (type)
-            {
-                case SignalTallyType.Red:
-                    RedTally = isTallied;
-                    break;
-                case SignalTallyType.Green:
-                    GreenTally = isTallied;
-                    break;
-            }
+            redTally = new ExternalSignalTally(this);
+            yellowTally = new ExternalSignalTally(this);
+            greenTally = new ExternalSignalTally(this);
         }
         #endregion
 
         #region Tally booleans
-        private IBoolean redTallyBoolean = null;
-        private IBoolean greenTallyBoolean = null;
+        private TallyBoolean redTallyBoolean = null;
+        private TallyBoolean yellowTallyBoolean = null;
+        private TallyBoolean greenTallyBoolean = null;
 
         private void createBooleans()
         {
-            redTallyBoolean = new TallyBoolean(this, TallyBoolean.TallyColor.Red);
-            greenTallyBoolean = new TallyBoolean(this, TallyBoolean.TallyColor.Green);
+            redTallyBoolean = new TallyBoolean(this, redTally, SignalTallyColor.Red);
+            yellowTallyBoolean = new TallyBoolean(this, yellowTally, SignalTallyColor.Yellow);
+            greenTallyBoolean = new TallyBoolean(this, greenTally, SignalTallyColor.Green);
             BooleanRegister.Instance.RegisterBoolean(redTallyBoolean);
+            BooleanRegister.Instance.RegisterBoolean(yellowTallyBoolean);
             BooleanRegister.Instance.RegisterBoolean(greenTallyBoolean);
         }
 
         private void createTallyBooleansAfterIdChange()
         {
-            if ((redTallyBoolean == null) || (greenTallyBoolean == null))
+            if ((redTallyBoolean == null) || (yellowTallyBoolean == null) || (greenTallyBoolean == null))
                 createBooleans();
         }
 
         private void updateTallyBooleans()
         {
-            (redTallyBoolean as TallyBoolean)?.Update();
-            (greenTallyBoolean as TallyBoolean)?.Update();
+            redTallyBoolean?.Update();
+            yellowTallyBoolean?.Update();
+            greenTallyBoolean?.Update();
         }
 
         private void unregisterTallyBooleans()
         {
             if(redTallyBoolean != null)
                 BooleanRegister.Instance.UnregisterBoolean(redTallyBoolean);
-            if(greenTallyBoolean != null)
+            if (yellowTallyBoolean != null)
+                BooleanRegister.Instance.UnregisterBoolean(greenTallyBoolean);
+            if (greenTallyBoolean != null)
                 BooleanRegister.Instance.UnregisterBoolean(greenTallyBoolean);
         }
 
@@ -281,37 +218,30 @@ namespace OpenSC.Model.Signals
 
             private ExternalSignal signal;
 
-            private TallyColor color;
+            private ExternalSignalTally tally;
 
-            public TallyBoolean(ExternalSignal signal, TallyColor color):
+            private SignalTallyColor color;
+
+            public TallyBoolean(ExternalSignal signal, ExternalSignalTally tally, SignalTallyColor color) :
                 base(getName(signal, color), getColor(color), getDescription(signal, color))
             {
                 this.signal = signal;
+                this.tally = tally;
                 this.color = color;
                 signal.IdChanged += idChangedHandler;
                 signal.NameChanged += nameChangedHandler;
-                switch (color)
-                {
-                    case TallyColor.Red:
-                        CurrentState = signal.RedTally;
-                        signal.RedTallyChanged += tallyChangedHandler;
-                        break;
-                    case TallyColor.Green:
-                        CurrentState = signal.GreenTally;
-                        signal.GreenTallyChanged += tallyChangedHandler;
-                        break;
-                }
+                tally.StateChanged += tallyChangedHandler;
+            }
+
+            private void tallyChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState)
+            {
+                CurrentState = newState;
             }
 
             public void Update()
             {
                 Name = getName(signal, color);
                 Description = getDescription(signal, color);
-            }
-
-            private void tallyChangedHandler(ISignal signal, bool oldState, bool newState)
-            {
-                CurrentState = newState;
             }
 
             private void idChangedHandler(ExternalSignal signal, int oldValue, int newValue)
@@ -325,40 +255,38 @@ namespace OpenSC.Model.Signals
                 Description = getDescription(signal, color);
             }
 
-            private static string getName(ExternalSignal signal, TallyColor color)
+            private static string getName(ExternalSignal signal, SignalTallyColor color)
                 =>  string.Format("signal.{0}.{1}tally", signal.ID, getColorString(color));
 
-            private static Color getColor(TallyColor color)
+            private static Color getColor(SignalTallyColor color)
             {
                 switch (color)
                 {
-                    case TallyColor.Red:
+                    case SignalTallyColor.Red:
                         return Color.Red;
-                    case TallyColor.Green:
+                    case SignalTallyColor.Yellow:
+                        return Color.Yellow;
+                    case SignalTallyColor.Green:
                         return Color.Green;
                 }
                 return Color.White;
             }
 
-            private static string getDescription(ExternalSignal signal, TallyColor color)
+            private static string getDescription(ExternalSignal signal, SignalTallyColor color)
                 => string.Format("Signal [(#{0}) {1}] has {2} tally.", signal.ID, signal.Name, getColorString(color));
 
-            private static string getColorString(TallyColor color)
+            private static string getColorString(SignalTallyColor color)
             {
                 switch (color)
                 {
-                    case TallyColor.Red:
+                    case SignalTallyColor.Red:
                         return "red";
-                    case TallyColor.Green:
+                    case SignalTallyColor.Yellow:
+                        return "yellow";
+                    case SignalTallyColor.Green:
                         return "green";
                 }
                 return "unknown";
-            }
-
-            public enum TallyColor
-            {
-                Red,
-                Green
             }
 
         }

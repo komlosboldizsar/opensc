@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public class RouterOutput : ISignal, INotifyPropertyChanged
+    public class RouterOutput : ISignalSourceRegistered, INotifyPropertyChanged
     {
 
         public RouterOutput()
@@ -24,13 +24,13 @@ namespace OpenSC.Model.Routers
             this.name = name;
             this.Router = router;
             this.Index = index;
-            createBooleans();
+            createTallies();
             registerAsSignal();
         }
 
         public void Restored()
         {
-            createBooleans();
+            createTallies();
             registerAsSignal();
         }
 
@@ -50,7 +50,7 @@ namespace OpenSC.Model.Routers
                 NameChanged?.Invoke(this, oldName, value);
                 PropertyChanged?.Invoke(nameof(Name));
                 SignalLabelChanged?.Invoke(this, getSignalLabel());
-                PropertyChanged?.Invoke(nameof(ISignal.SignalLabel));
+                PropertyChanged?.Invoke(nameof(ISignalSourceRegistered.SignalLabel));
             }
         }
 
@@ -63,7 +63,6 @@ namespace OpenSC.Model.Routers
         {
             if (router != Router)
                 return;
-            removeBooleans();
             unregisterAsSignal();
         }
 
@@ -83,7 +82,7 @@ namespace OpenSC.Model.Routers
                 IndexChanged?.Invoke(this, oldIndex, value);
                 PropertyChanged?.Invoke(nameof(Index));
                 SignalLabelChanged?.Invoke(this, getSignalLabel());
-                PropertyChanged?.Invoke(nameof(ISignal.SignalLabel));
+                PropertyChanged?.Invoke(nameof(ISignalSourceRegistered.SignalLabel));
             }
         }
 
@@ -99,7 +98,6 @@ namespace OpenSC.Model.Routers
             internal set
             {
 
-                removeIndirectTalliesFromSource(crosspoint?.Source);
                 unsubscribeCrosspointEvents();
 
                 crosspoint = value;
@@ -115,7 +113,6 @@ namespace OpenSC.Model.Routers
                 Router.NotifyCrosspointChanged(this);
 
                 subscribeCrosspointEvents();
-                sendIndirectTalliesToSource(crosspoint?.Source);
 
                 fireChangeEventsAtCrosspointChange();
 
@@ -130,10 +127,6 @@ namespace OpenSC.Model.Routers
             if (crosspoint == null)
                 return;
             crosspoint.SourceNameChanged += crosspointSourceNameChangedHandler;
-            crosspoint.SourceChanging += crosspointSourceChangingHandler;
-            crosspoint.SourceChanged += crosspointSourceChangedHandler;
-            crosspoint.RedTallyChanged += crosspointRedTallyChangedHandler;
-            crosspoint.GreenTallyChanged += crosspointGreenTallyChangedHandler;
         }
 
         private void unsubscribeCrosspointEvents()
@@ -141,10 +134,6 @@ namespace OpenSC.Model.Routers
             if (crosspoint == null)
                 return;
             crosspoint.SourceNameChanged -= crosspointSourceNameChangedHandler;
-            crosspoint.SourceChanging -= crosspointSourceChangingHandler;
-            crosspoint.SourceChanged -= crosspointSourceChangedHandler;
-            crosspoint.RedTallyChanged -= crosspointRedTallyChangedHandler;
-            crosspoint.GreenTallyChanged -= crosspointGreenTallyChangedHandler;
         }
 
         private void fireChangeEventsAtCrosspointChange()
@@ -153,41 +142,17 @@ namespace OpenSC.Model.Routers
             {
                 SourceSignalChanged?.Invoke(this, null);
                 SourceSignalNameChanged?.Invoke(this, null);
-                RedTallyChanged?.Invoke(this, false, false);
-                GreenTallyChanged?.Invoke(this, false, false);
             }
             else
             {
-                SourceSignalChanged?.Invoke(this, crosspoint.SourceSignal);
+                SourceSignalChanged?.Invoke(this, crosspoint.RegisteredSourceSignal);
                 SourceSignalNameChanged?.Invoke(this, crosspoint.SourceSignalName);
-                RedTallyChanged?.Invoke(this, false, crosspoint.RedTally);
-                GreenTallyChanged?.Invoke(this, false, crosspoint.GreenTally);
             }
-        }
-
-        private void crosspointSourceChangedHandler(RouterInput input, ISignal oldSource, ISignal newSource)
-        {
-            sendIndirectTalliesToSource(newSource);
-        }
-
-        private void crosspointSourceChangingHandler(RouterInput input, ISignal oldSource, ISignal newSource)
-        {
-            removeIndirectTalliesFromSource(oldSource);
         }
 
         private void crosspointSourceNameChangedHandler(RouterInput input, string newName)
         {
             SourceSignalNameChanged?.Invoke(this, newName);
-        }
-
-        private void crosspointRedTallyChangedHandler(RouterInput input, bool newState)
-        {
-            RedTallyChanged?.Invoke(this, false, newState);
-        }
-
-        private void crosspointGreenTallyChangedHandler(RouterInput input, bool newState)
-        {
-            GreenTallyChanged?.Invoke(this, false, newState);
         }
 
         public string InputName
@@ -216,11 +181,11 @@ namespace OpenSC.Model.Routers
         public event SourceSignalNameChangedDelegate SourceSignalNameChanged;
         #endregion
 
-        #region Property: SourceSignal
-        public ExternalSignal SourceSignal
-            => GetSourceSignal();
+        #region Property: RegisteredSourceSignal
+        public ISignalSourceRegistered RegisteredSourceSignal
+            => GetRegisteredSourceSignal();
 
-        public ExternalSignal GetSourceSignal(List<object> recursionChain = null)
+        public ISignalSourceRegistered GetRegisteredSourceSignal(List<object> recursionChain = null)
         {
             if (crosspoint == null)
                 return null;
@@ -229,15 +194,15 @@ namespace OpenSC.Model.Routers
             if (recursionChain.Contains(this))
                 return null;
             recursionChain.Add(this);
-            return crosspoint.GetSourceSignal(recursionChain);
+            return crosspoint.GetRegisteredSourceSignal(recursionChain);
         }
 
-        public delegate void SourceSignalChangedDelegate(RouterOutput output, ExternalSignal newSignal);
+        public delegate void SourceSignalChangedDelegate(RouterOutput output, ISignalSourceRegistered newSignal);
         public event SourceSignalChangedDelegate SourceSignalChanged;
         #endregion
 
         #region Property: SignalLabel
-        string ISignal.SignalLabel
+        string ISignalSourceRegistered.SignalLabel
             => getSignalLabel();
 
         private string getSignalLabel()
@@ -246,214 +211,9 @@ namespace OpenSC.Model.Routers
         public event SignalLabelChangedDelegate SignalLabelChanged;
         #endregion
 
-        #region Tallies
-        public bool RedTally =>
-            GetRedTally();
-
-        public bool GreenTally =>
-            GetGreenTally();
-
+        #region Property: SignalUniqueId
         public string SignalUniqueId
             => string.Format("router.{0}.output.{1}", Router.ID, (Index + 1));
-
-        public bool GetRedTally(List<object> recursionChain = null)
-        {
-            if (crosspoint == null)
-                return false;
-            if (recursionChain == null)
-                recursionChain = new List<object>();
-            if (recursionChain.Contains(this))
-                return false;
-            recursionChain.Add(this);
-            return crosspoint.GetRedTally(recursionChain);
-        }
-
-        public bool GetGreenTally(List<object> recursionChain = null)
-        {
-            if (crosspoint == null)
-                return false;
-            if (recursionChain == null)
-                recursionChain = new List<object>();
-            if (recursionChain.Contains(this))
-                return false;
-            recursionChain.Add(this);
-            return crosspoint.GetGreenTally(recursionChain);
-        }
-
-        public event SignalTallyChangedDelegate RedTallyChanged;
-        public event SignalTallyChangedDelegate GreenTallyChanged;
-        #endregion
-
-        #region Tally booleans
-        private IBoolean redTallyBoolean = null;
-        private IBoolean greenTallyBoolean = null;
-
-        private void createBooleans()
-        {
-            redTallyBoolean = new TallyBoolean(this, TallyBoolean.TallyColor.Red);
-            greenTallyBoolean = new TallyBoolean(this, TallyBoolean.TallyColor.Green);
-            BooleanRegister.Instance.RegisterBoolean(redTallyBoolean);
-            BooleanRegister.Instance.RegisterBoolean(greenTallyBoolean);
-        }
-
-        private void removeBooleans()
-        {
-            if (redTallyBoolean != null)
-            {
-                BooleanRegister.Instance.UnregisterBoolean(redTallyBoolean);
-                redTallyBoolean = null;
-            }
-            if (greenTallyBoolean != null)
-            {
-                BooleanRegister.Instance.UnregisterBoolean(greenTallyBoolean);
-                greenTallyBoolean = null;
-            }
-        }
-
-        private class TallyBoolean : BooleanBase
-        {
-
-            private RouterOutput output;
-
-            private TallyColor color;
-
-            public TallyBoolean(RouterOutput output, TallyColor color) :
-                base(getName(output, color), getColor(color), getDescription(output, color))
-            {
-                this.output = output;
-                this.color = color;
-                output.IndexChanged += indexChangedHandler;
-                output.NameChanged += nameChangedHandler;
-                output.Router.IdChanged += routerIdChangedHandler;
-                output.Router.NameChanged += routerNameChangedHandler;
-                switch (color)
-                {
-                    case TallyColor.Red:
-                        CurrentState = output.RedTally;
-                        output.RedTallyChanged += tallyChangedHandler;
-                        break;
-                    case TallyColor.Green:
-                        CurrentState = output.GreenTally;
-                        output.GreenTallyChanged += tallyChangedHandler;
-                        break;
-                }
-            }
-
-            public void Update()
-            {
-                Name = getName(output, color);
-                Description = getDescription(output, color);
-            }
-
-            private void tallyChangedHandler(ISignal output, bool oldState, bool newState)
-            {
-                CurrentState = newState;
-            }
-
-            private void indexChangedHandler(RouterOutput output, int oldIndex, int newIndex)
-            {
-                Name = getName(output, color);
-                Description = getDescription(output, color);
-            }
-
-            private void nameChangedHandler(RouterOutput output, string oldName, string newName)
-            {
-                Description = getDescription(output, color);
-            }
-            private void routerIdChangedHandler(Router router, int oldValue, int newValue)
-            {
-                Name = getName(output, color);
-                Description = getDescription(output, color);
-            }
-
-            private void routerNameChangedHandler(Router router, string oldName, string newName)
-            {
-                Description = getDescription(output, color);
-            }
-
-            private static string getName(RouterOutput output, TallyColor color)
-                => string.Format("router.{0}.output.{1}.{2}tally", output.Router.ID, (output.Index + 1), getColorString(color));
-
-            private static Color getColor(TallyColor color)
-            {
-                switch (color)
-                {
-                    case TallyColor.Red:
-                        return Color.Red;
-                    case TallyColor.Green:
-                        return Color.Green;
-                }
-                return Color.White;
-            }
-
-            private static string getDescription(RouterOutput output, TallyColor color)
-                => string.Format("The signal switched to the [(#{2}) {3}] output of router [(#{0}) {1}] has {4} tally.",
-                    output.Router.ID, output.Router.Name,
-                    (output.Index + 1), output.Name,
-                    getColorString(color));
-
-            private static string getColorString(TallyColor color)
-            {
-                switch (color)
-                {
-                    case TallyColor.Red:
-                        return "red";
-                    case TallyColor.Green:
-                        return "green";
-                }
-                return "unknown";
-            }
-
-            public enum TallyColor
-            {
-                Red,
-                Green
-            }
-
-        }
-        #endregion
-
-        #region IsTalliedFrom()
-        private List<ISignalTallySource> redTallySources = new List<ISignalTallySource>();
-        private List<ISignalTallySource> greenTallySources = new List<ISignalTallySource>();
-
-        public void IsTalliedFrom(ISignalTallySource source, SignalTallyType type, bool isTallied)
-        {
-            List<ISignalTallySource> tallySourceList = getTallySourceListByType(type);
-            if (isTallied && !tallySourceList.Contains(source))
-                tallySourceList.Add(source);
-            if (!isTallied && tallySourceList.Contains(source))
-                tallySourceList.Remove(source);
-            crosspoint?.Source?.IsTalliedFrom(source, type, isTallied);
-        }
-
-        private List<ISignalTallySource> getTallySourceListByType(SignalTallyType type)
-        {
-            switch (type)
-            {
-                case SignalTallyType.Red:
-                    return redTallySources;
-                case SignalTallyType.Green:
-                    return greenTallySources;
-            }
-            return null;
-        }
-
-        private void sendIndirectTalliesToSource(ISignal source)
-        {
-            if (source == null)
-                return;
-            redTallySources.ForEach(tallySource => source.IsTalliedFrom(tallySource, SignalTallyType.Red, true));
-            greenTallySources.ForEach(tallySource => source.IsTalliedFrom(tallySource, SignalTallyType.Green, true));
-        }
-
-        private void removeIndirectTalliesFromSource(ISignal source)
-        {
-            if (source == null)
-                return;
-            redTallySources.ForEach(tallySource => source.IsTalliedFrom(tallySource, SignalTallyType.Red, false));
-            greenTallySources.ForEach(tallySource => source.IsTalliedFrom(tallySource, SignalTallyType.Green, false));
-        }
         #endregion
 
         #region Implementation of INotifyPropertyChanged
@@ -469,6 +229,23 @@ namespace OpenSC.Model.Routers
         private void unregisterAsSignal()
         {
             SignalRegister.Instance.UnregisterSignal(this);
+        }
+        #endregion
+
+        #region Tallies
+        private BidirectionalPassthroughSignalTally redTally;
+        private BidirectionalPassthroughSignalTally yellowTally;
+        private BidirectionalPassthroughSignalTally greenTally;
+
+        public IBidirectionalSignalTally RedTally => redTally;
+        public IBidirectionalSignalTally YellowTally => yellowTally;
+        public IBidirectionalSignalTally GreenTally => greenTally;
+
+        private void createTallies()
+        {
+            redTally = new BidirectionalPassthroughSignalTally(this);
+            yellowTally = new BidirectionalPassthroughSignalTally(this);
+            greenTally = new BidirectionalPassthroughSignalTally(this);
         }
         #endregion
 

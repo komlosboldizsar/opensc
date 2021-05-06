@@ -65,7 +65,7 @@ namespace OpenSC.Model.Routers.DynamicTextFunctions
 
             }
 
-            private void outputSourceSignalNameChangedHandler(ISignal inputSource, string newName)
+            private void outputSourceSignalNameChangedHandler(ISignalSource inputSource, string newName)
             {
                 CurrentValue = newName;
             }

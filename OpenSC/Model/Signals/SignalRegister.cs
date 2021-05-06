@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
 
-    public class SignalRegister : IObservableList<ISignal>
+    public class SignalRegister : IObservableList<ISignalSourceRegistered>
     {
 
         #region Singleton
@@ -19,9 +19,9 @@ namespace OpenSC.Model.Signals
         { }
         #endregion
 
-        private List<ISignal> registeredSignals = new List<ISignal>();
+        private List<ISignalSourceRegistered> registeredSignals = new List<ISignalSourceRegistered>();
 
-        public ISignal this[int index] => registeredSignals[index];
+        public ISignalSourceRegistered this[int index] => registeredSignals[index];
 
         public int Count => registeredSignals.Count;
 
@@ -29,13 +29,13 @@ namespace OpenSC.Model.Signals
         public event ObservableListItemRemovedDelegate ItemRemoved;
         public event ObservableListItemsChangedDelegate ItemsChanged;
 
-        public IEnumerator<ISignal> GetEnumerator()
+        public IEnumerator<ISignalSourceRegistered> GetEnumerator()
             => registeredSignals.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()
             => registeredSignals.GetEnumerator();
 
-        public void RegisterSignal(ISignal signal)
+        public void RegisterSignal(ISignalSourceRegistered signal)
         {
             if (registeredSignals.Contains(signal))
                 return;
@@ -44,7 +44,7 @@ namespace OpenSC.Model.Signals
             ItemsChanged?.Invoke();
         }
 
-        public void UnregisterSignal(ISignal signal)
+        public void UnregisterSignal(ISignalSourceRegistered signal)
         {
             if (!registeredSignals.Contains(signal))
                 return;
@@ -53,9 +53,9 @@ namespace OpenSC.Model.Signals
             ItemsChanged?.Invoke();
         }
 
-        public ISignal GetSignalByUniqueId(string uniqueId)
+        public ISignalSourceRegistered GetSignalByUniqueId(string uniqueId)
         {
-            foreach (ISignal signal in registeredSignals)
+            foreach (ISignalSourceRegistered signal in registeredSignals)
                 if (signal.SignalUniqueId == uniqueId)
                     return signal;
             return null;

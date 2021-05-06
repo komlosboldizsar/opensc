@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public class RouterInput : INotifyPropertyChanged, IRouterOutputAssignable
+    public class RouterInput : INotifyPropertyChanged, ISignalDestination, ISignalSource
     {
 
         public RouterInput()
@@ -23,7 +23,9 @@ namespace OpenSC.Model.Routers
         }
 
         public void Restored()
-        { }
+        {
+            createTallies();
+        }
         
         private string name;
 
@@ -62,9 +64,9 @@ namespace OpenSC.Model.Routers
             internal set { index = value; }
         }
 
-        ISignal source;
+        ISignalSource source;
 
-        public ISignal Source
+        public ISignalSource CurrentSource
         {
             get { return source; }
             set
@@ -72,41 +74,59 @@ namespace OpenSC.Model.Routers
 
                 if (value == source)
                     return;
-                ISignal oldSource = source;
+                ISignalSource oldSource = source;
 
                 SourceChanging?.Invoke(this, oldSource, value);
 
                 if (source != null)
                 {
                     source.SourceSignalNameChanged -= sourceSignalNameChangedHandler;
-                    source.RedTallyChanged -= sourceRedTallyChangedHandler;
-                    source.GreenTallyChanged -= sourceGreenTallyChangedHandler;
                 }
                 
                 source = value;
                 IsTieline = (source is RouterOutput);
 
                 SourceChanged?.Invoke(this, oldSource, value);
-                PropertyChanged?.Invoke(nameof(Source));
+                PropertyChanged?.Invoke(nameof(CurrentSource));
 
-                SourceNameChanged?.Invoke(this, source?.SignalLabel);
-                RedTallyChanged?.Invoke(this, (source?.RedTally == true));
-                GreenTallyChanged?.Invoke(this, (source?.GreenTally == true));
+                //SourceNameChanged?.Invoke(this, source?.SignalLabel);
 
                 if (source != null)
                 {
                     source.SourceSignalNameChanged += sourceSignalNameChangedHandler;
-                    source.RedTallyChanged += sourceRedTallyChangedHandler;
-                    source.GreenTallyChanged += sourceGreenTallyChangedHandler;
                 }
+
+                redTally.PreviousElement = source.RedTally;
+                yellowTally.PreviousElement = source.YellowTally;
+                greenTally.PreviousElement = source.GreenTally;
 
             }
         }
 
-        public delegate void SourceChangingDelegate(RouterInput input, ISignal oldSource, ISignal newSource);
+        private BidirectionalPassthroughSignalTally redTally;
+        private BidirectionalPassthroughSignalTally yellowTally;
+        private BidirectionalPassthroughSignalTally greenTally;
+
+        public IBidirectionalSignalTally RedTally => redTally;
+        public IBidirectionalSignalTally YellowTally => yellowTally;
+        public IBidirectionalSignalTally GreenTally => greenTally;
+
+        private void createTallies()
+        {
+            redTally = new BidirectionalPassthroughSignalTally(this);
+            yellowTally = new BidirectionalPassthroughSignalTally(this);
+            greenTally = new BidirectionalPassthroughSignalTally(this);
+        }
+
+        public void AssignSource(ISignalSource source)
+        {
+            CurrentSource = source;
+        }
+
+        public delegate void SourceChangingDelegate(RouterInput input, ISignalSource oldSource, ISignalSource newSource);
         public event SourceChangingDelegate SourceChanging;
 
-        public delegate void SourceChangedDelegate(RouterInput input, ISignal oldSource, ISignal newSource);
+        public delegate void SourceChangedDelegate(RouterInput input, ISignalSource oldSource, ISignalSource newSource);
         public event SourceChangedDelegate SourceChanged;
 
         // "Temp foreign key"
@@ -115,7 +135,7 @@ namespace OpenSC.Model.Routers
         public void RestoreSource()
         {
             if (_sourceSignalUniqueId != null)
-                Source = SignalRegister.Instance.GetSignalByUniqueId(_sourceSignalUniqueId);
+                CurrentSource = SignalRegister.Instance.GetSignalByUniqueId(_sourceSignalUniqueId);
             TielineCost = _tielineCost;
             TielineIsReserved = _tielineIsReserved;
         }
@@ -140,76 +160,28 @@ namespace OpenSC.Model.Routers
         public delegate void RouterInputSourceNameChanged(RouterInput input, string newName);
         public event RouterInputSourceNameChanged SourceNameChanged;
 
-        #region Property: SourceSignal
-        public ExternalSignal SourceSignal
-            => GetSourceSignal();
+        public event SourceSignalNameChangedDelegate SourceSignalNameChanged;
 
-        public ExternalSignal GetSourceSignal(List<object> recursionChain = null)
+        #region Property: RegisteredSourceSignal
+        public ISignalSourceRegistered RegisteredSourceSignal
+            => GetRegisteredSourceSignal();
+
+        public ISignalSourceRegistered GetRegisteredSourceSignal(List<object> recursionChain = null)
         {
             if (source == null)
-                return null;
-            if (source is ExternalSignal)
-                return ((ExternalSignal)source);
-            if (!(source is RouterOutput))
                 return null;
             if (recursionChain == null)
                 recursionChain = new List<object>();
             if (recursionChain.Contains(this))
                 return null;
             recursionChain.Add(this);
-            return ((RouterOutput)source).GetSourceSignal(recursionChain);
+            return source.GetRegisteredSourceSignal(recursionChain);
         }
-
-        public event SourceSignalChangedDelegate SourceSignalChanged;
         #endregion
 
-        private void sourceSignalNameChangedHandler(ISignal inputSource, string newName)
+        private void sourceSignalNameChangedHandler(ISignalSource inputSource, string newName)
         {
             SourceNameChanged?.Invoke(this, newName);
-        }
-
-        public bool RedTally =>
-            (source != null) ? source.RedTally : false;
-
-        public bool GreenTally =>
-            (source != null) ? source.GreenTally : false;
-
-        public bool GetRedTally(List<object> recursionChain = null)
-        {
-            if (source == null)
-                return false;
-            if (recursionChain == null)
-                recursionChain = new List<object>();
-            if (recursionChain.Contains(this))
-                return false;
-            recursionChain.Add(this);
-            return source.GetRedTally(recursionChain);
-        }
-
-        public bool GetGreenTally(List<object> recursionChain = null)
-        {
-            if (source == null)
-                return false;
-            if (recursionChain == null)
-                recursionChain = new List<object>();
-            if (recursionChain.Contains(this))
-                return false;
-            recursionChain.Add(this);
-            return source.GetGreenTally(recursionChain);
-        }
-
-        public delegate void TallyChangedDelegate(RouterInput input, bool newState);
-        public event TallyChangedDelegate RedTallyChanged;
-        public event TallyChangedDelegate GreenTallyChanged;
-
-        private void sourceRedTallyChangedHandler(ISignal inputSource, bool oldState, bool newState)
-        {
-            RedTallyChanged?.Invoke(this, newState);
-        }
-
-        private void sourceGreenTallyChangedHandler(ISignal inputSource, bool oldState, bool newState)
-        {
-            GreenTallyChanged?.Invoke(this, newState);
         }
 
         #region Implementation of INotifyPropertyChanged

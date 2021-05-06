@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Signals
 {
-    public enum SignalTallyType
+    public interface ISignalDestination
     {
-        Red,
-        Green
+
+        void AssignSource(ISignalSource source);
+        ISignalSource CurrentSource { get; }
+
     }
+
 }

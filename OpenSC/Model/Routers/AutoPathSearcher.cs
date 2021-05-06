@@ -18,10 +18,10 @@ namespace OpenSC.Model.Routers
         public IReadOnlyList<Crosspoint> Crosspoints
             => crosspoints.AsReadOnly();
 
-        public ExternalSignal Source { get; private set; }
+        public ISignalSourceRegistered Source { get; private set; }
 
         public RouterOutput Destination { get; private set; }
-        public AutoPathSearcher(ExternalSignal source, RouterOutput destination)
+        public AutoPathSearcher(ISignalSourceRegistered source, RouterOutput destination)
         {
 
             if (source == null)
@@ -46,7 +46,7 @@ namespace OpenSC.Model.Routers
                 // For all neighbors u to s, set d(u) = w(s,u)
                 foreach (RouterInput input in router.Inputs)
                 {
-                    if (input.Source == Source)
+                    if (input.CurrentSource == Source)
                     {
                         rp.Input = input;
                         rp.TotalCost = 0;
@@ -90,7 +90,7 @@ namespace OpenSC.Model.Routers
                             continue;
 
                         // Is neighbor?
-                        if (!selected.Router.Outputs.Contains(input.Source))
+                        if (!selected.Router.Outputs.Contains(input.CurrentSource))
                             continue;
 
                         if (selected.TotalCost == null)
@@ -123,9 +123,9 @@ namespace OpenSC.Model.Routers
             while (true)
             {
                 crosspoints.Add(new Crosspoint(dst, currentRp.Input));
-                if (currentRp.Input.Source == Source)
+                if (currentRp.Input.CurrentSource == Source)
                     break;
-                dst = (RouterOutput)currentRp.Input.Source;
+                dst = (RouterOutput)currentRp.Input.CurrentSource;
                 currentRp = nodes.FirstOrDefault(rp => (rp.Router == dst.Router));
             }
 
