@@ -21,6 +21,7 @@ namespace BMD.Switcher
             ApiMixEffectBlock = apiMixEffectBlock;
             ApiMixEffectBlock.AddCallback(this);
             Index = index;
+            initPPsources();
         }
 
         private void initPPsources()
