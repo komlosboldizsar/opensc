@@ -100,7 +100,6 @@ namespace BMD.Switcher
 
             ApiSwitcher = connectedSwitcher;
             ApiSwitcher.AddCallback(this);
-            Connected = true;
 
             mixEffectBlocks.Clear();
             int mixEffectBlockIndex = 0;
@@ -111,11 +110,33 @@ namespace BMD.Switcher
             }
 
             sources.Clear();
-            foreach (IBMDSwitcherInput apiSource in ApiSwitcher.GetSources())
+            foreach (IBMDSwitcherInput apiPort in ApiSwitcher.GetPorts())
             {
-                Source source = new Source(this, apiSource);
-                sources.Add(source.ID, source);
+                apiPort.GetPortType(out _BMDSwitcherPortType portType);
+                switch (portType)
+                {
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeExternal:
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeBlack:
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeColorBars:
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeColorGenerator:
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeMediaPlayerFill:
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeMediaPlayerCut:
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeSuperSource:
+                        Source source = new Source(this, apiPort);
+                        sources.Add(source.ID, source);
+                        break;
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeAuxOutput:
+                        AuxOutput auxOutput = new AuxOutput(this, apiPort as IBMDSwitcherInputAux, 0);
+                        break;
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeKeyCutOutput:
+                        break;
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeMixEffectBlockOutput:
+                        break;
+                }
+                
             }
+
+            Connected = true;
 
         }
 
@@ -138,7 +159,7 @@ namespace BMD.Switcher
         }
         #endregion
 
-        #region MixEffect Blocks
+        #region MixEffect blocks
         private List<MixEffectBlock> mixEffectBlocks = new List<MixEffectBlock>();
 
         public MixEffectBlock GetMixEffectBlock(int index)
@@ -149,7 +170,7 @@ namespace BMD.Switcher
         }
         #endregion
 
-        #region MixEffect Blocks
+        #region Sources (external inputs, media players, etc.)
         private Dictionary<long, Source> sources = new Dictionary<long, Source>();
 
         public Source GetSource(long id)
@@ -161,6 +182,17 @@ namespace BMD.Switcher
 
         public Dictionary<long, Source> GetSources()
             => sources;
+        #endregion
+
+        #region Aux outputs
+        private List<AuxOutput> auxOutputs = new List<AuxOutput>();
+
+        public AuxOutput GetAuxOutput(int index)
+        {
+            if (index >= auxOutputs.Count)
+                throw new NotExistingAuxOutputException();
+            return auxOutputs[index];
+        }
         #endregion
 
     }

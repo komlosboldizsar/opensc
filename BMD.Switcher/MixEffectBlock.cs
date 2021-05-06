@@ -15,15 +15,6 @@ namespace BMD.Switcher
 
         public int Index { get; private set; }
 
-        public MixEffectBlock(Switcher parentSwitcher, int index)
-        {
-            ParentSwitcher = parentSwitcher;
-            ApiMixEffectBlock = parentSwitcher.ApiSwitcher.GetMixEffectBlock(index);
-            ApiMixEffectBlock.AddCallback(this);
-            Index = index;
-        }
-
-
         public MixEffectBlock(Switcher parentSwitcher, IBMDSwitcherMixEffectBlock apiMixEffectBlock, int index)
         {
             ParentSwitcher = parentSwitcher;
@@ -32,22 +23,34 @@ namespace BMD.Switcher
             Index = index;
         }
 
-        public void PropertyChanged(_BMDSwitcherMixEffectBlockPropertyId propertyId)
+        private void initPPsources()
         {
-            switch (propertyId)
+            InvokeHelper.Invoke(() =>
             {
-                case _BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput:
+                ApiMixEffectBlock.GetProgramInput(out long programInput);
+                ProgramSourceId = programInput;
+                ApiMixEffectBlock.GetPreviewInput(out long previewInput);
+                PreviewSourceId = previewInput;
+            });
+        }
+
+
+        public void Notify(_BMDSwitcherMixEffectBlockEventType eventType)
+        {
+            switch (eventType)
+            {
+                case _BMDSwitcherMixEffectBlockEventType.bmdSwitcherMixEffectBlockEventTypeProgramInputChanged:
                     InvokeHelper.Invoke(() =>
                     {
-                        ApiMixEffectBlock.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, out long programInput);
-                        ProgramSource = programInput;
+                        ApiMixEffectBlock.GetProgramInput(out long programInput);
+                        ProgramSourceId = programInput;
                     });
                     break;
-                case _BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput:
+                case _BMDSwitcherMixEffectBlockEventType.bmdSwitcherMixEffectBlockEventTypePreviewInputChanged:
                     InvokeHelper.Invoke(() =>
                     {
-                        ApiMixEffectBlock.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out long previewInput);
-                        PreviewSource = previewInput;
+                        ApiMixEffectBlock.GetPreviewInput(out long previewInput);
+                        PreviewSourceId = previewInput;
                     });
                     break;
             }
@@ -64,56 +67,67 @@ namespace BMD.Switcher
         public delegate void ProgramInputChangedDelegate(IBMDSwitcherMixEffectBlock apiMeBlock, MixEffectBlock meBlock, long sourceId);
         public event ProgramInputChangedDelegate ProgramInputChanged;
 
-        private long programSource;
+        private long programSourceId;
 
-        public long ProgramSource
+        public long ProgramSourceId
         {
-            get => programSource;
+            get => programSourceId;
             private set
             {
-                if (value == programSource)
+                if (value == programSourceId)
                     return;
-                programSource = value;
+                programSourceId = value;
                 ProgramInputChanged?.Invoke(ApiMixEffectBlock, this, value);
             }
         }
 
-        public void RequestSetProgramSource(long inputId)
+        public void RequestSetProgramSource(long sourceId)
         {
-            Source source = ParentSwitcher.GetSource(inputId);
+            Source source = ParentSwitcher.GetSource(sourceId);
             if (source == null)
-                throw new NotExistingSourceException(string.Format("Switcher has no source with ID #{0}!", inputId));
-            ApiMixEffectBlock.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, inputId);
+                throw new NotExistingSourceException(string.Format("Switcher has no source with ID #{0}!", sourceId));
+            ApiMixEffectBlock.SetProgramInput(sourceId);
         }
+
+        public void RequestSetProgramSource(Source source)
+            => RequestSetProgramSource(source.ID);
+
+        public Source ProgramSource
+           => ParentSwitcher.GetSource(programSourceId);
         #endregion
 
         #region Preview source
         public delegate void PreviewInputChangedDelegate(IBMDSwitcherMixEffectBlock apiMeBlock, MixEffectBlock meBlock, long sourceId);
         public event PreviewInputChangedDelegate PreviewInputChanged;
 
-        private long previewSource;
+        private long previewSourceId;
 
-        public long PreviewSource
+        public long PreviewSourceId
         {
-            get => previewSource;
+            get => previewSourceId;
             private set
             {
-                if (value == previewSource)
+                if (value == previewSourceId)
                     return;
-                previewSource = value;
+                previewSourceId = value;
                 PreviewInputChanged?.Invoke(ApiMixEffectBlock, this, value);
             }
         }
 
-        public void RequestSetPreviewSource(long inputId)
-        {
-            Source source = ParentSwitcher.GetSource(inputId);
-            if (source == null)
-                throw new NotExistingSourceException(string.Format("Switcher has no source with ID #{0}!", inputId));
-            ApiMixEffectBlock.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, inputId);
-        }
-        #endregion
+        public Source PreviewSource
+            => ParentSwitcher.GetSource(previewSourceId);
 
+        public void RequestSetPreviewSource(long sourceId)
+        {
+            Source source = ParentSwitcher.GetSource(sourceId);
+            if (source == null)
+                throw new NotExistingSourceException(string.Format("Switcher has no source with ID #{0}!", sourceId));
+            ApiMixEffectBlock.SetPreviewInput(sourceId);
+        }
+
+        public void RequestSetPreviewSource(Source source)
+            => RequestSetPreviewSource(source.ID);
+        #endregion
 
         #region Transitions
         public void PerformAutoTransition()

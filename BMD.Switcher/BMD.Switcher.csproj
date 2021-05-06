@@ -46,8 +46,10 @@
     <Compile Include="Exceptions\AlreadyConnectedException.cs" />
     <Compile Include="Exceptions\CouldNotConnectException.cs" />
     <Compile Include="Exceptions\NotConnectedException.cs" />
+    <Compile Include="Exceptions\NotExistingAuxOutputException.cs" />
     <Compile Include="Exceptions\NotExistingMixEffectBlockException.cs" />
     <Compile Include="Exceptions\NotExistingSourceException.cs" />
+    <Compile Include="AuxOutput.cs" />
     <Compile Include="SourceHelpers.cs" />
     <Compile Include="Source.cs" />
     <Compile Include="MixEffectBlockHelpers.cs" />

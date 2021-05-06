@@ -320,12 +320,12 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
 
         private void mixEffectBlockMonitorProgramInputChangedHandler(BMDSwitcherAPI.IBMDSwitcherMixEffectBlock apiMixEffectBlock, MixEffectBlock mixEffectBlock, long sourceId)
         {
-            OnProgramInput = Inputs.First(input => input.Index == sourceId);
+            OnProgramInput = Inputs.FirstOrDefault(input => input.Index == sourceId);
         }
 
         private void mixEffectBlockMonitorPreviewInputChangedHandler(BMDSwitcherAPI.IBMDSwitcherMixEffectBlock apiMixEffectBlock, MixEffectBlock mixEffectBlock, long sourceId)
         {
-            OnPreviewInput = Inputs.First(input => input.Index == sourceId);
+            OnPreviewInput = Inputs.FirstOrDefault(input => input.Index == sourceId);
         }
         #endregion
 
