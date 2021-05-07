@@ -153,15 +153,15 @@ namespace OpenSC.Model.Persistence
             if (isTemporaryForeignKeyField(memberInfo))
                 return;
 
-            string xmlTagName = getXmlTagNameForMember(memberInfo, item);
-            if (xmlTagName == null)
+            PersistAsAttribute persistData = getPersistDataForMember(memberInfo, item);
+            if (persistData == null)
                 return;
 
             object fieldValue = (fieldInfo != null) ? fieldInfo.GetValue(item) : propertyInfo.GetValue(item);
             Type memberType = (fieldInfo != null) ? fieldInfo.FieldType : propertyInfo.PropertyType;
 
             object xmlElementInner = serializeValue(memberInfo, memberType, fieldValue);
-            xmlElement.Add(new XElement(xmlTagName, xmlElementInner));
+            xmlElement.Add(new XElement(persistData.TagName, xmlElementInner));
 
         }
 
@@ -198,11 +198,17 @@ namespace OpenSC.Model.Persistence
 
         private XElement serializeCollectionElement(MemberInfo memberInfo, Type memberType, object element, int arrayDimension)
         {
-            string tagName = getXmlTagNameForMember(memberInfo, element, arrayDimension + 1);
-            if (tagName == null)
-                tagName = UNDEFINED_ARRAY_ITEM_TAG;
+
+            PersistAsAttribute persistData = getPersistDataForMember(memberInfo, element, arrayDimension + 1);
+            if (persistData == null)
+                persistData = new PersistAsAttribute(UNDEFINED_ARRAY_ITEM_TAG, 0);
             object arrayElementValue = serializeValue(memberInfo, memberType, element, arrayDimension + 1);
-            return new XElement(tagName, arrayElementValue);
+
+            if (!(arrayElementValue is XElement) || (persistData.TagName != null)) // packing
+                return new XElement(persistData.TagName, arrayElementValue);
+
+            return (XElement)arrayElementValue;
+
         }
         #endregion
 
@@ -282,16 +288,16 @@ namespace OpenSC.Model.Persistence
             if (isAssociationField(memberInfo))
                 return;
 
-            string xmlTagName = getXmlTagNameForMember(memberInfo, item);
-            if (xmlTagName == null)
+            PersistAsAttribute persistData = getPersistDataForMember(memberInfo, item);
+            if (persistData == null)
                 return;
 
-            if (!persistedValues.TryGetValue(xmlTagName, out XmlElement xmlElement))
+            if (!persistedValues.TryGetValue(persistData.TagName, out XmlElement xmlElement))
                 return;
 
             Type type = (fieldInfo != null) ? fieldInfo.FieldType : propertyInfo.PropertyType;
 
-            object value = deserializeXmlElement(type, xmlElement);
+            object value = deserializeXmlElement(memberInfo, type, xmlElement);
 
             try
             {
@@ -312,7 +318,7 @@ namespace OpenSC.Model.Persistence
             typeof(decimal)
         };
 
-        private object deserializeXmlElement(Type memberType, XmlElement xmlElement)
+        private object deserializeXmlElement(MemberInfo memberInfo, Type memberType, XmlElement xmlElement, int arrayDimension = 0)
         {
 
             if (memberType == typeof(string))
@@ -327,7 +333,7 @@ namespace OpenSC.Model.Persistence
                 foreach (XmlNode childNode in xmlElement.ChildNodes)
                     if (childNode.NodeType == XmlNodeType.Element)
                         childElements.Add((XmlElement)childNode);
-                return deserializeArray(memberType, childElements);
+                return deserializeArray(memberInfo, memberType, childElements, arrayDimension);
             }
 
             if (memberType.IsEnum)
@@ -338,14 +344,18 @@ namespace OpenSC.Model.Persistence
                 IValueXmlSerializer serializer = GetSerializerForType(memberType);
                 if (serializer == null)
                     return xmlElement.InnerText;
-                return serializer.DeserializeItem(xmlElement.OfType<XmlElement>().FirstOrDefault());
+                PersistAsAttribute persistData = getPersistDataForMember(memberInfo, null, arrayDimension);
+                XmlElement itemToDeserialize = xmlElement;
+                if (persistData.TagName != null)
+                    itemToDeserialize = itemToDeserialize.OfType<XmlElement>().FirstOrDefault();
+                return serializer.DeserializeItem(itemToDeserialize);
             }
 
             return Convert.ChangeType(xmlElement.InnerText, memberType);
 
         }
 
-        private object deserializeArray(Type memberType, List<XmlElement> childElements)
+        private object deserializeArray(MemberInfo memberInfo, Type memberType, List<XmlElement> childElements, int arrayDimension)
         {
 
             int childElementCount = childElements.Count;
@@ -355,13 +365,13 @@ namespace OpenSC.Model.Persistence
             {
                 Array typedArray = Array.CreateInstance(elementType, childElementCount);
                 for (int i = 0; i < childElementCount; i++)
-                    typedArray.SetValue(deserializeXmlElement(elementType, childElements[i]), i);
+                    typedArray.SetValue(deserializeXmlElement(memberInfo, elementType, childElements[i], arrayDimension + 1), i);
                 return typedArray;
             }
 
             object[] array = (object[])Activator.CreateInstance(memberType, new object[] { childElementCount });
             for (int i = 0; i < childElementCount; i++)
-                array[i] = deserializeXmlElement(memberType.GetElementType(), childElements[i]);
+                array[i] = deserializeXmlElement(memberInfo, memberType.GetElementType(), childElements[i], arrayDimension + 1);
             return array;
 
         }
@@ -449,13 +459,13 @@ namespace OpenSC.Model.Persistence
 
         #endregion
 
-        private string getXmlTagNameForMember(MemberInfo memberInfo, object item, int dimension = 0)
+        private PersistAsAttribute getPersistDataForMember(MemberInfo memberInfo, object item, int dimension = 0)
         {
 
             IEnumerable<PersistAsAttribute> persistAsAttributes = memberInfo.GetCustomAttributes<PersistAsAttribute>();
             foreach (PersistAsAttribute attr in persistAsAttributes)
                 if (attr.Dimension == dimension)
-                    return attr.TagName;
+                    return attr;
 
             TempForeignKeyAttribute tempForeignKeyAttribute = memberInfo.GetCustomAttribute<TempForeignKeyAttribute>();
             if (tempForeignKeyAttribute == null)
@@ -467,7 +477,7 @@ namespace OpenSC.Model.Persistence
             if (originalMemberInfo.Length == 0)
                 return null;
 
-            return originalMemberInfo[0].GetCustomAttribute<PersistAsAttribute>()?.TagName;
+            return originalMemberInfo[0].GetCustomAttribute<PersistAsAttribute>();
 
         }
 
