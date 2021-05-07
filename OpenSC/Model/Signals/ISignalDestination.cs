@@ -8,10 +8,7 @@ namespace OpenSC.Model.Signals
 {
     public interface ISignalDestination
     {
-
         void AssignSource(ISignalSource source);
         ISignalSource CurrentSource { get; }
-
     }
-
 }

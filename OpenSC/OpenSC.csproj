@@ -582,6 +582,7 @@
     <Compile Include="Model\Signals\SignalRegister.cs" />
     <Compile Include="Model\Signals\SignalsManager.cs" />
     <Compile Include="Model\Signals\ExternalSignalTally.cs" />
+    <Compile Include="Model\Signals\ExternalSignalTallyBoolean.cs" />
     <Compile Include="Model\Signals\SignalTallyColor.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamStateTranslated.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamState.cs" />

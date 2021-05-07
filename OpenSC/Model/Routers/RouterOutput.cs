@@ -144,19 +144,19 @@ namespace OpenSC.Model.Routers
         {
             if(crosspoint == null)
             {
-                SourceSignalChanged?.Invoke(this, null);
-                SourceSignalNameChanged?.Invoke(this, null);
+                RegisteredSourceSignalChanged?.Invoke(this, null);
+                RegisteredSourceSignalNameChanged?.Invoke(this, null);
             }
             else
             {
-                SourceSignalChanged?.Invoke(this, crosspoint.RegisteredSourceSignal);
-                SourceSignalNameChanged?.Invoke(this, crosspoint.SourceSignalName);
+                RegisteredSourceSignalChanged?.Invoke(this, crosspoint.RegisteredSourceSignal);
+                RegisteredSourceSignalNameChanged?.Invoke(this, crosspoint.RegisteredSourceSignalName);
             }
         }
 
         private void crosspointSourceNameChangedHandler(RouterInput input, string newName)
         {
-            SourceSignalNameChanged?.Invoke(this, newName);
+            RegisteredSourceSignalNameChanged?.Invoke(this, newName);
         }
 
         public string InputName
@@ -165,12 +165,12 @@ namespace OpenSC.Model.Routers
         }
 
         #region Property: SourceSignalName
-        public string SourceSignalName
+        public string RegisteredSourceSignalName
         {
-            get => GetSourceSignalName();
+            get => GetRegisteredSourceSignalName();
         }
 
-        public string GetSourceSignalName(List<object> recursionChain = null)
+        public string GetRegisteredSourceSignalName(List<object> recursionChain = null)
         {
             if (crosspoint == null)
                 return null;
@@ -179,10 +179,10 @@ namespace OpenSC.Model.Routers
             if (recursionChain.Contains(this))
                 return "(cyclic tieline)";
             recursionChain.Add(this);
-            return crosspoint.GetSourceSignalName(recursionChain);
+            return crosspoint.GetRegisteredSourceSignalName(recursionChain);
         }
 
-        public event SourceSignalNameChangedDelegate SourceSignalNameChanged;
+        public event RegisteredSourceSignalNameChangedDelegate RegisteredSourceSignalNameChanged;
         #endregion
 
         #region Property: RegisteredSourceSignal
@@ -201,8 +201,7 @@ namespace OpenSC.Model.Routers
             return crosspoint.GetRegisteredSourceSignal(recursionChain);
         }
 
-        public delegate void SourceSignalChangedDelegate(RouterOutput output, ISignalSourceRegistered newSignal);
-        public event SourceSignalChangedDelegate SourceSignalChanged;
+        public event RegisteredSourceSignalChangedDelegate RegisteredSourceSignalChanged; // TODO:FIRE
         #endregion
 
         #region Property: SignalLabel
@@ -218,6 +217,8 @@ namespace OpenSC.Model.Routers
         #region Property: SignalUniqueId
         public string SignalUniqueId
             => string.Format("router.{0}.output.{1}", Router.ID, (Index + 1));
+
+        public event SignalUniqueIdChangedDelegate SignalUniqueIdChanged; // TODO: FIRE
         #endregion
 
         #region Implementation of INotifyPropertyChanged

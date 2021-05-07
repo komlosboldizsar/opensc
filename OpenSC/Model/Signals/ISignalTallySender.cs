@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Signals
 {
-
     public interface ISignalTallySender
     {
         string Label { get; }
     }
-
 }

@@ -19,22 +19,37 @@ namespace OpenSC.Model.Signals
         { }
         #endregion
 
+        #region Store and access signals
         private List<ISignalSourceRegistered> registeredSignals = new List<ISignalSourceRegistered>();
 
         public ISignalSourceRegistered this[int index] => registeredSignals[index];
 
+        public ISignalSourceRegistered GetSignalByUniqueId(string uniqueId)
+        {
+            foreach (ISignalSourceRegistered signal in registeredSignals)
+                if (signal.SignalUniqueId == uniqueId)
+                    return signal;
+            return null;
+        }
+        #endregion
+
+        #region IObservableList implementation
         public int Count => registeredSignals.Count;
 
         public event ObservableListItemAddedDelegate ItemAdded;
         public event ObservableListItemRemovedDelegate ItemRemoved;
         public event ObservableListItemsChangedDelegate ItemsChanged;
+        #endregion
 
+        #region IEnumberable implementation
         public IEnumerator<ISignalSourceRegistered> GetEnumerator()
             => registeredSignals.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()
             => registeredSignals.GetEnumerator();
+        #endregion
 
+        #region Register-unregister
         public void RegisterSignal(ISignalSourceRegistered signal)
         {
             if (registeredSignals.Contains(signal))
@@ -52,14 +67,7 @@ namespace OpenSC.Model.Signals
             ItemRemoved?.Invoke();
             ItemsChanged?.Invoke();
         }
-
-        public ISignalSourceRegistered GetSignalByUniqueId(string uniqueId)
-        {
-            foreach (ISignalSourceRegistered signal in registeredSignals)
-                if (signal.SignalUniqueId == uniqueId)
-                    return signal;
-            return null;
-        }
+        #endregion
         
     }
 

@@ -17,6 +17,7 @@ namespace OpenSC.Model.Signals
 
         public ISignalSource ParentSignalSource { get; private set; }
 
+        #region Property: State
         public bool State => previousElement?.State ?? false;
 
         public bool GetState(List<object> recursionChain = null)
@@ -30,7 +31,9 @@ namespace OpenSC.Model.Signals
         }
 
         public event StateChangedHandler StateChanged;
+        #endregion
 
+        #region Property: PreviousElement
         private ISignalTallyState previousElement = null;
 
         public ISignalTallyState PreviousElement
@@ -58,6 +61,7 @@ namespace OpenSC.Model.Signals
 
         private void previousElementStateChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState)
             => StateChanged?.Invoke(ParentSignalSource, this, newState);
+        #endregion
 
     }
 

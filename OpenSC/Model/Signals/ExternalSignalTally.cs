@@ -10,6 +10,12 @@ namespace OpenSC.Model.Signals
     public class ExternalSignalTally : IBidirectionalSignalTally
     {
 
+        public ExternalSignalTally(ExternalSignal parentSignalSource)
+        {
+            ParentSignalSource = parentSignalSource;
+        }
+
+        #region ISignalTallyState implementation
         public ISignalSource ParentSignalSource { get; private set; }
 
         public event StateChangedHandler StateChanged;
@@ -28,19 +34,15 @@ namespace OpenSC.Model.Signals
             }
         }
 
-        public bool GetState(List<object> recursionChain = null)
-            => state;
+        public bool GetState(List<object> recursionChain = null) => state;
 
         private void updateState()
         {
             State = (activeSources.Count > 0);
         }
+        #endregion
 
-        public ExternalSignalTally(ExternalSignal parentSignalSource)
-        {
-            ParentSignalSource = parentSignalSource;
-        }
-
+        #region ISignalTallyReceiver implementation
         private List<List<ISignalTallySender>> activeSources = new List<List<ISignalTallySender>>();
 
         public void Give(List<ISignalTallySender> recursionChain)
@@ -56,6 +58,7 @@ namespace OpenSC.Model.Signals
             activeSources.RemoveAll(rc => rc.SequenceEqual(recursionChain));
             updateState();
         }
+        #endregion
 
     }
 

@@ -80,7 +80,7 @@ namespace OpenSC.Model.Routers
 
                 if (source != null)
                 {
-                    source.SourceSignalNameChanged -= sourceSignalNameChangedHandler;
+                    source.RegisteredSourceSignalNameChanged -= sourceSignalNameChangedHandler;
                 }
                 
                 source = value;
@@ -89,11 +89,12 @@ namespace OpenSC.Model.Routers
                 SourceChanged?.Invoke(this, oldSource, value);
                 PropertyChanged?.Invoke(nameof(CurrentSource));
 
+                // TODO: fire events like RegisteredSourceSignalNameChanged
                 //SourceNameChanged?.Invoke(this, source?.SignalLabel);
 
                 if (source != null)
                 {
-                    source.SourceSignalNameChanged += sourceSignalNameChangedHandler;
+                    source.RegisteredSourceSignalNameChanged += sourceSignalNameChangedHandler;
                 }
 
                 redTally.PreviousElement = source.RedTally;
@@ -140,12 +141,12 @@ namespace OpenSC.Model.Routers
             TielineIsReserved = _tielineIsReserved;
         }
 
-        public string SourceSignalName
+        public string RegisteredSourceSignalName
         {
-            get => source?.SourceSignalName;
+            get => source?.RegisteredSourceSignalName;
         }
 
-        public string GetSourceSignalName(List<object> recursionChain = null)
+        public string GetRegisteredSourceSignalName(List<object> recursionChain = null)
         {
             if (source == null)
                 return null;
@@ -154,13 +155,14 @@ namespace OpenSC.Model.Routers
             if (recursionChain.Contains(this))
                 return "(cyclic tieline)";
             recursionChain.Add(this);
-            return source.GetSourceSignalName(recursionChain);
+            return source.GetRegisteredSourceSignalName(recursionChain);
         }
 
         public delegate void RouterInputSourceNameChanged(RouterInput input, string newName);
         public event RouterInputSourceNameChanged SourceNameChanged;
 
-        public event SourceSignalNameChangedDelegate SourceSignalNameChanged;
+        public event RegisteredSourceSignalNameChangedDelegate RegisteredSourceSignalNameChanged;
+        public event RegisteredSourceSignalChangedDelegate RegisteredSourceSignalChanged;
 
         #region Property: RegisteredSourceSignal
         public ISignalSourceRegistered RegisteredSourceSignal

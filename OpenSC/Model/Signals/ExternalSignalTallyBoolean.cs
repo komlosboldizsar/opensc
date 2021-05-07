@@ -9,39 +9,59 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
 
-    public class SignalTallyBoolean : BooleanBase
+    public class ExternalSignalTallyBoolean : BooleanBase
     {
 
         private ExternalSignal signal;
         private ExternalSignalTally tally;
         private SignalTallyColor color;
+        private bool registered = false;
 
-        public SignalTallyBoolean(ExternalSignal signal, ExternalSignalTally tally, SignalTallyColor color) :
+        public ExternalSignalTallyBoolean(ExternalSignal signal, ExternalSignalTally tally, SignalTallyColor color) :
             base(getName(signal, color), getColor(color), getDescription(signal, color))
         {
             this.signal = signal;
             this.tally = tally;
             this.color = color;
-            signal.IdChanged += idChangedHandler;
-            signal.NameChanged += nameChangedHandler;
-            tally.StateChanged += tallyChangedHandler;
-            BooleanRegister.Instance.RegisterBoolean(this);
+            signal.IdChanged += signalIdChangedHandler;
+            signal.NameChanged += signalNameChangedHandler;
+            tally.StateChanged += signalTallyChangedHandler;
+            signal.ModelRemoved += signalRemovedHandler;
+            if (signal.ID > 0)
+            {
+                BooleanRegister.Instance.RegisterBoolean(this);
+                registered = true;
+            }
         }
 
-        private void idChangedHandler(ExternalSignal signal, int oldValue, int newValue)
+        private void signalIdChangedHandler(ExternalSignal signal, int oldValue, int newValue)
         {
             Name = getName(signal, color);
             Description = getDescription(signal, color);
+            if (!registered && (newValue > 0))
+            {
+                BooleanRegister.Instance.RegisterBoolean(this);
+                registered = true;
+            }
         }
 
-        private void nameChangedHandler(ExternalSignal signal, string oldName, string newName)
+        private void signalNameChangedHandler(ExternalSignal signal, string oldName, string newName)
         {
             Description = getDescription(signal, color);
         }
 
-        private void tallyChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState)
+        private void signalTallyChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState)
         {
             CurrentState = newState;
+        }
+
+        private void signalRemovedHandler(IModel model)
+        {
+            if (registered)
+            {
+                BooleanRegister.Instance.UnregisterBoolean(this);
+                registered = false;
+            }
         }
 
         private static string getName(ExternalSignal signal, SignalTallyColor color)
