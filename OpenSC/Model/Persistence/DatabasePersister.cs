@@ -186,7 +186,11 @@ namespace OpenSC.Model.Persistence
 
             if (Type.GetTypeCode(memberType) == TypeCode.Object)
             {
-                IValueXmlSerializer serializer = GetSerializerForType(memberType);
+                Type serializeAsType = memberType;
+                PersistSubclassAttribute persistSubclassAttribute = memberInfo.GetCustomAttributes<PersistSubclassAttribute>().FirstOrDefault();
+                if (persistSubclassAttribute != null) // should check if given type is subclass of member type
+                    serializeAsType = persistSubclassAttribute.SubclassType;
+                IValueXmlSerializer serializer = GetSerializerForType(serializeAsType);
                 if (serializer == null)
                     return item.ToString();
                 return serializer.SerializeItem(item);
@@ -339,9 +343,13 @@ namespace OpenSC.Model.Persistence
             if (memberType.IsEnum)
                 return Enum.Parse(memberType, xmlElement.InnerText);
 
+            Type deserializeAsType = memberType;
             if (Type.GetTypeCode(memberType) == TypeCode.Object)
             {
-                IValueXmlSerializer serializer = GetSerializerForType(memberType);
+                PersistSubclassAttribute persistSubclassAttribute = memberInfo.GetCustomAttributes<PersistSubclassAttribute>().FirstOrDefault();
+                if (persistSubclassAttribute != null) // should check if given type is subclass of member type
+                    deserializeAsType = persistSubclassAttribute.SubclassType;
+                IValueXmlSerializer serializer = GetSerializerForType(deserializeAsType);
                 if (serializer == null)
                     return xmlElement.InnerText;
                 PersistAsAttribute persistData = getPersistDataForMember(memberInfo, null, arrayDimension);
@@ -351,7 +359,7 @@ namespace OpenSC.Model.Persistence
                 return serializer.DeserializeItem(itemToDeserialize);
             }
 
-            return Convert.ChangeType(xmlElement.InnerText, memberType);
+            return Convert.ChangeType(xmlElement.InnerText, deserializeAsType);
 
         }
 
