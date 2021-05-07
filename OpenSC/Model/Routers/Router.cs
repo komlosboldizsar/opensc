@@ -114,7 +114,7 @@ namespace OpenSC.Model.Routers
         }
 
         [PersistAs("inputs")]
-        [PersistAs("input", 1)]
+        [PersistAs(null, 1)]
         private RouterInput[] _inputs
         {
             get { return inputs.ToArray(); }
@@ -163,7 +163,7 @@ namespace OpenSC.Model.Routers
         }
 
         [PersistAs("outputs")]
-        [PersistAs("output", 1)]
+        [PersistAs(null, 1)]
         private RouterOutput[] _outputs
         {
             get { return outputs.ToArray(); }

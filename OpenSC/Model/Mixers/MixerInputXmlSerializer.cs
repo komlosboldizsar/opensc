@@ -12,7 +12,7 @@ namespace OpenSC.Model.Mixers
 
         public Type Type => typeof(MixerInput);
 
-        private const string TAG_NAME = "mixer_input";
+        private const string TAG_NAME = "input";
         private const string ATTRIBUTE_NAME = "name";
         private const string ATTRIBUTE_INDEX = "index";
         private const string ATTRIBUTE_SOURCE = "source";

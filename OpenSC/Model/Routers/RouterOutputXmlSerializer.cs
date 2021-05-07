@@ -11,7 +11,7 @@ namespace OpenSC.Model.Routers
 
         public Type Type => typeof(RouterOutput);
 
-        private const string TAG_NAME = "router_output";
+        private const string TAG_NAME = "output";
         private const string ATTRIBUTE_NAME = "name";
 
         public object DeserializeItem(XmlNode serializedItem)
