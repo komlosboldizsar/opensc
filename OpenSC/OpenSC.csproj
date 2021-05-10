@@ -579,6 +579,7 @@
     <Compile Include="Model\Signals\ISignalTallyStateOrReceiver.cs" />
     <Compile Include="Model\Signals\PassthroughSignalTallyState.cs" />
     <Compile Include="Model\Signals\PassthroughSignalTallyReceiver.cs" />
+    <Compile Include="Model\Signals\SignalForwarder.cs" />
     <Compile Include="Model\Signals\SignalRegister.cs" />
     <Compile Include="Model\Signals\SignalsManager.cs" />
     <Compile Include="Model\Signals\ExternalSignalTally.cs" />
