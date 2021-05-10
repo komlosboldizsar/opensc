@@ -616,6 +616,7 @@
     <Compile Include="Model\Variables\IDynamicTextFunctionSubstitute.cs" />
     <Compile Include="Model\Variables\VariablesManager.cs" />
     <Compile Include="Model\VTRs\CasparCgPlayout.cs" />
+    <Compile Include="Model\VTRs\CasparCgPlayoutCommons.cs" />
     <Compile Include="Model\VTRs\DynamicTextFunctions\VtrState.cs" />
     <Compile Include="Model\VTRs\DynamicTextFunctions\VtrStateTranslated.cs" />
     <Compile Include="Model\VTRs\DynamicTextFunctions\VtrElapsedTimeHhMmSs.cs" />

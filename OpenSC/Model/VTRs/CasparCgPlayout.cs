@@ -27,14 +27,15 @@ namespace OpenSC.Model.VTRs
         public override void Restored()
         {
             base.Restored();
-            createAndStartStoppedStateDetectorThread();
-            subscribeToChannelLayer(this);
+            CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this);
+            initStoppedStateDetection();
         }
 
         public override void Removed()
         {
             base.Removed();
-            unsubscribeFromChannelLayer(this);
+            CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this);
+            deinitStoppedStateDetection();
         }
         #endregion
 
@@ -60,9 +61,9 @@ namespace OpenSC.Model.VTRs
             {
                 if (watchedChannel == value)
                     return;
-                unsubscribeFromChannelLayer(this);
+                CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this);
                 watchedChannel = value;
-                subscribeToChannelLayer(this);
+                CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this);
             }
         }
         #endregion
@@ -78,17 +79,18 @@ namespace OpenSC.Model.VTRs
             {
                 if (watchedLayer == value)
                     return;
-                unsubscribeFromChannelLayer(this);
+                CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this);
                 watchedLayer = value;
-                subscribeToChannelLayer(this);
+                CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this);
             }
         }
         #endregion
 
         #region OSC receiving and state processing
         private object stateUpdatingLock = new object();
+        private bool isPaused = false;
 
-        private void processOscMessage(OscMessage message, string subaddress)
+        public void ReceiveOscMessage(OscMessage message, string subaddress)
         {
             try
             {
@@ -129,108 +131,44 @@ namespace OpenSC.Model.VTRs
                 LogDispatcher.E(LOG_TAG, errorMessage);
             }
         }
-
-        private bool isPaused = false;
-        private float lastElapsedTime = -1;
-        private DateTime lastElapsedTimeUpdate = DateTime.Now;
-
-        private Thread stoppedStateDetectorThread;
-        private const int STOPPED_STATE_DIFFERENCE_MILLISECONDS = 1000;
-
-        private void stoppedStateDetectorThreadMethod()
-        {
-            while (true)
-            {
-                lock (stateUpdatingLock)
-                {
-                    if (isPaused)
-                        continue;
-                    TimeSpan diff = DateTime.Now - lastElapsedTimeUpdate;
-                    if (diff.TotalMilliseconds > STOPPED_STATE_DIFFERENCE_MILLISECONDS)
-                        State = VtrState.Stopped;
-                }
-                Thread.Sleep(STOPPED_STATE_DIFFERENCE_MILLISECONDS);
-            }
-        }
-
-        private void createAndStartStoppedStateDetectorThread()
-        {
-            stoppedStateDetectorThread = new Thread(stoppedStateDetectorThreadMethod)
-            {
-                IsBackground = true
-            };
-            stoppedStateDetectorThread.Start();
-        }
         #endregion
 
-        #region Common OSC listener
-        private const int OSC_PORT = 5253;
-        private static OscServer oscServer = new OscServer(TransportType.Udp, IPAddress.Any, OSC_PORT);
+        #region Stopped/paused state detection
+        private float lastElapsedTime = -1;
+        private DateTime lastElapsedTimeUpdate = DateTime.Now;
+        private System.Timers.Timer stoppedStateDetectionTimer;
+        private const int STOPPED_STATE_DIFFERENCE_MILLISECONDS = 500;
 
-        private static void initOscServer()
+        private void stoppedStateDetection(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if (!oscServer.IsRunning)
+            lock (stateUpdatingLock)
             {
-                oscServer.Start();
-                oscServer.BundleReceived += oscBundleReceived;
+                if (isPaused)
+                    return;
+                TimeSpan diff = DateTime.Now - lastElapsedTimeUpdate;
+                if (diff.TotalMilliseconds > STOPPED_STATE_DIFFERENCE_MILLISECONDS)
+                    State = VtrState.Stopped;
             }
         }
 
-        private const string MESSAGE_ADDRESS_REGEXP = @"^/channel/(?<channel>[0-9]+)/stage/layer/(?<layer>[0-9]+)/(?<subaddress>.+)";
-        private static readonly Regex messageAddressRegexp = new Regex(MESSAGE_ADDRESS_REGEXP, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-        private static void oscBundleReceived(object sender, OscBundleReceivedEventArgs e)
+        private void initStoppedStateDetection()
         {
-            var sourceIP = e.Bundle.SourceEndPoint.Address.ToString();
-            foreach(var data in e.Bundle.Data)
-            {
-
-                OscMessage message = data as OscMessage;
-                if (message == null)
-                    continue;
-                MatchCollection messageAddressRegexpMatches = messageAddressRegexp.Matches(message.Address);
-                if (messageAddressRegexpMatches.Count != 1)
-                    continue;
-
-                string channel = messageAddressRegexpMatches[0].Groups["channel"].Value;
-                string layer = messageAddressRegexpMatches[0].Groups["layer"].Value;
-
-                string subscriptionsKey = string.Format("{0},{1},{2}", sourceIP, channel, layer);
-                if (!channelLayerSubscriptions.TryGetValue(subscriptionsKey, out List<CasparCgPlayout> subscriptions))
-                    continue;
-
-                string subaddress = messageAddressRegexpMatches[0].Groups["subaddress"].Value;
-                subscriptions.ForEach(instance => instance.processOscMessage(message, subaddress));
-
-            }
+            if (stoppedStateDetectionTimer != null)
+                return;
+            stoppedStateDetectionTimer = new System.Timers.Timer(STOPPED_STATE_DIFFERENCE_MILLISECONDS);
+            stoppedStateDetectionTimer.Elapsed += stoppedStateDetection;
+            stoppedStateDetectionTimer.AutoReset = true;
+            stoppedStateDetectionTimer.Enabled = true;
         }
 
-        private static Dictionary<string, List<CasparCgPlayout>> channelLayerSubscriptions = new Dictionary<string, List<CasparCgPlayout>>();
-
-        private static List<CasparCgPlayout> getSubscribtionsForChannelLayer(string ip, int channel, int layer)
+        private void deinitStoppedStateDetection()
         {
-            if (channel < 1)
-                throw new ArgumentOutOfRangeException();
-            if (layer < 1)
-                throw new ArgumentOutOfRangeException();
-            string key = string.Format("{0},{1},{2}", ip, channel, layer);
-            if (!channelLayerSubscriptions.TryGetValue(key, out List<CasparCgPlayout> subscriptions))
-                channelLayerSubscriptions.Add(key, new List<CasparCgPlayout>());
-            return channelLayerSubscriptions[key];
-        }
-
-        private static void subscribeToChannelLayer(CasparCgPlayout instance)
-        {
-            List<CasparCgPlayout> subscribers = getSubscribtionsForChannelLayer(instance.ListenedIP, instance.WatchedChannel, instance.WatchedLayer);
-            if (!subscribers.Contains(instance))
-                subscribers.Add(instance);
-            initOscServer();
-        }
-
-        private static void unsubscribeFromChannelLayer(CasparCgPlayout instance)
-        {
-            List<CasparCgPlayout> subscribers = getSubscribtionsForChannelLayer(instance.ListenedIP, instance.WatchedChannel, instance.WatchedLayer);
-            subscribers.RemoveAll(i => (i == instance));
+            if (stoppedStateDetectionTimer == null)
+                return;
+            stoppedStateDetectionTimer.Enabled = false;
+            stoppedStateDetectionTimer.Elapsed -= stoppedStateDetection;
+            stoppedStateDetectionTimer.Dispose();
+            stoppedStateDetectionTimer = null;
         }
         #endregion
 
