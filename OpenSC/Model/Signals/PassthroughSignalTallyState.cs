@@ -24,10 +24,7 @@ namespace OpenSC.Model.Signals
         {
             if (recursionChain?.Contains(this) ?? false)
                 return false; // endless loop
-            if (recursionChain == null)
-                recursionChain = new List<object>();
-            recursionChain.Add(this);
-            return previousElement?.GetState(recursionChain) ?? false;
+            return previousElement?.GetState(recursionChain.ExtendRecursionChain(this)) ?? false;
         }
 
         public event StateChangedHandler StateChanged;

@@ -40,8 +40,7 @@ namespace OpenSC.Model.Signals
                 return; // endless loop
             if (recursionChains.ContainsKey(recursionChain))
                 return;
-            List<ISignalTallySender> extendedChain = new List<ISignalTallySender>(recursionChain);
-            extendedChain.Add(this);
+            List<ISignalTallySender> extendedChain = recursionChain.ExtendRecursionChainT(this);
             recursionChains.Add(recursionChain, extendedChain);
             PreviousElement?.Give(extendedChain);
         }
