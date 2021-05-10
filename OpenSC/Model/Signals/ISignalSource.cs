@@ -7,23 +7,29 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
 
-    public delegate void SourceSignalNameChangedDelegate(ISignalSource signal, string newName);
-    public delegate void SignalLabelChangedDelegate(ISignalSource signal, string newLabel);
-    public delegate void SignalTallyChangedDelegate(ISignalSource signal, bool oldState, bool newState);
+    public delegate void RegisteredSourceSignalNameChangedDelegate(ISignalSource signal, string newName, List<object> recursionChain);
+    public delegate void RegisteredSourceSignalChangedDelegate(ISignalSource signal, ISignalSourceRegistered registeredSignal, List<object> recursionChain);
 
     public interface ISignalSource
     {
 
-        string SourceSignalName { get; }
-        string GetSourceSignalName(List<object> recursionChain = null);
-        event SourceSignalNameChangedDelegate SourceSignalNameChanged;
+        #region Property: RegisteredSourceSignalName
+        string RegisteredSourceSignalName { get; }
+        string GetRegisteredSourceSignalName(List<object> recursionChain = null);
+        event RegisteredSourceSignalNameChangedDelegate RegisteredSourceSignalNameChanged;
+        #endregion
 
+        #region Propety: RegisteredSourceSignal
         ISignalSourceRegistered RegisteredSourceSignal { get; }
         ISignalSourceRegistered GetRegisteredSourceSignal(List<object> recursionChain = null);
+        event RegisteredSourceSignalChangedDelegate RegisteredSourceSignalChanged;
+        #endregion
 
+        #region Tallies
         IBidirectionalSignalTally RedTally { get; }
         IBidirectionalSignalTally YellowTally { get; }
         IBidirectionalSignalTally GreenTally { get; }
+        #endregion
 
     }
 

@@ -149,7 +149,7 @@ namespace OpenSC.GUI.Routers
             {
                 builder = getColumnDescriptorBuilderForTable();
                 builder.Type(DataGridViewColumnType.SmallIcon);
-                builder.Header(assignable.SourceSignalName);
+                builder.Header(assignable.RegisteredSourceSignalName);
                 builder.Width(30);
                 builder.IconColor(Color.Red);
                 builder.IconType(DataGridViewSmallIconCell.IconTypes.Circle);

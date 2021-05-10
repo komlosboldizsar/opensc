@@ -12,9 +12,7 @@ namespace OpenSC.Model.Timers
     public class Timer : ModelBase
     {
 
-        public override void Restored()
-        { }
-
+        #region Persistence, instantiation
         public override void Removed()
         {
             base.Removed();
@@ -32,6 +30,14 @@ namespace OpenSC.Model.Timers
             innerTimer?.Dispose();
         }
 
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            TimerDatabase.Instance.ItemUpdated(this);
+        }
+        #endregion
+
+        #region Property: ID
         public delegate void IdChangedDelegate(Timer timer, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
 
@@ -57,7 +63,9 @@ namespace OpenSC.Model.Timers
             if (!TimerDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
+        #endregion
 
+        #region Property: Title
         public delegate void TitleChangedDelegate(Timer timer, string oldTitle, string newTitle);
         public event TitleChangedDelegate TitleChanged;
 
@@ -83,7 +91,9 @@ namespace OpenSC.Model.Timers
             if (title == string.Empty)
                 throw new ArgumentException();
         }
+        #endregion
 
+        #region Property: Seconds, TimeSpan
         public delegate void SecondsChangedDelegate(Timer timer, int oldValue, int newValue);
         public event SecondsChangedDelegate SecondsChanged;
 
@@ -107,7 +117,9 @@ namespace OpenSC.Model.Timers
             get { return TimeSpan.FromSeconds(seconds); }
             set { Seconds = (int)value.TotalSeconds; }
         }
+        #endregion
 
+        #region Property: CountdownSeconds
         public delegate void CountdownSecondsChangedDelegate(Timer timer, int oldValue, int newValue);
         public event CountdownSecondsChangedDelegate CountdownSecondsChanged;
 
@@ -131,18 +143,11 @@ namespace OpenSC.Model.Timers
             if (value < 0)
                 throw new ArgumentException();
         }
+        #endregion
 
+        #region Property: Running
         public delegate void RunningStateChangedDelegate(Timer timer, bool oldState, bool newState);
         public event RunningStateChangedDelegate RunningStateChanged;
-
-        public delegate void StartedDelegate(Timer timer);
-        public event StartedDelegate Started;
-
-        public delegate void StoppedDelegate(Timer timer);
-        public event StoppedDelegate Stopped;
-
-        public delegate void ResetedDelegate(Timer timer);
-        public event ResetedDelegate Reseted;
 
         private bool running = false;
         public bool Running
@@ -150,49 +155,27 @@ namespace OpenSC.Model.Timers
             get { return running; }
             private set
             {
-
                 bool oldValue = running;
                 running = value;
-
                 RunningStateChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(Running));
                 if (value == true)
-                {
                     Started?.Invoke(this);
-                }
                 else
-                {
                     Stopped?.Invoke(this);
-                }
                 OperationsChanged?.Invoke(this);
 
             }
         }
-    
-        public delegate void OperationsChangedDelegate(Timer timer);
-        public event OperationsChangedDelegate OperationsChanged;
+        #endregion
 
-        public bool CanStart
-        {
-            get => (mode != TimerMode.Clock) && !Running;
-        }
-
-        public bool CanStop
-        {
-            get => (mode != TimerMode.Clock) && Running;
-        }
-
-        public bool CanReset
-        {
-            get => mode != TimerMode.Clock;
-        }
-
+        #region Propety: Mode
         public delegate void ModeChangedDelegate(Timer timer, TimerMode oldMode, TimerMode newMode);
         public event ModeChangedDelegate ModeChanged;
 
         [PersistAs("mode")]
         private TimerMode mode = TimerMode.Backwards;
-        
+
         public TimerMode Mode
         {
             get { return mode; }
@@ -213,10 +196,64 @@ namespace OpenSC.Model.Timers
                 OperationsChanged?.Invoke(this);
             }
         }
+        #endregion
+
+        #region State events
+        public delegate void StartedDelegate(Timer timer);
+        public event StartedDelegate Started;
+
+        public delegate void StoppedDelegate(Timer timer);
+        public event StoppedDelegate Stopped;
+
+        public delegate void ResetedDelegate(Timer timer);
+        public event ResetedDelegate Reseted;
 
         public delegate void BackwardsTimerReachedZeroDelegate(Timer sender);
         public event BackwardsTimerReachedZeroDelegate ReachedZero;
+        #endregion
 
+        #region Possible operations
+        public delegate void OperationsChangedDelegate(Timer timer);
+        public event OperationsChangedDelegate OperationsChanged;
+
+        public bool CanStart => ((mode != TimerMode.Clock) && !Running);
+        public bool CanStop => ((mode != TimerMode.Clock) && Running);
+        public bool CanReset => (mode != TimerMode.Clock);
+        #endregion
+
+        #region Operations
+        public void Start()
+        {
+            Running = true;
+            resetInnerTimer();
+        }
+
+        public void Stop()
+        {
+            Running = false;
+        }
+
+        public void Reset()
+        {
+            switch (mode)
+            {
+                case TimerMode.Forwards:
+                    Seconds = 0;
+                    break;
+                case TimerMode.Backwards:
+                    Seconds = CountdownSeconds;
+                    break;
+                case TimerMode.Clock:
+                    // Do nothing
+                    break;
+            }
+            firstReachedZeroEvent = true;
+            Reseted?.Invoke(this);
+            resetInnerTimer();
+        }
+        #endregion
+
+        #region Timer
         private System.Timers.Timer innerTimer;
 
         public Timer()
@@ -257,47 +294,12 @@ namespace OpenSC.Model.Timers
 
         }
 
-        public void Start()
-        {
-            Running = true;
-            resetInnerTimer();
-        }
-
-        public void Stop()
-        {
-            Running = false;
-        }
-
-        public void Reset()
-        {
-            switch (mode)
-            {
-                case TimerMode.Forwards:
-                    Seconds = 0;
-                    break;
-                case TimerMode.Backwards:
-                    Seconds = CountdownSeconds;
-                    break;
-                case TimerMode.Clock:
-                    // Do nothing
-                    break;
-            }
-            firstReachedZeroEvent = true;
-            Reseted?.Invoke(this);
-            resetInnerTimer();
-        }
-
         private void resetInnerTimer()
         {
             innerTimer.Stop();
             innerTimer.Start();
         }
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            TimerDatabase.Instance.ItemUpdated(this);
-        }
+        #endregion
 
     }
 }

@@ -53,7 +53,7 @@ namespace OpenSC.GUI.Routers
         {
             if (Output != null)
             {
-                Output.SourceSignalNameChanged += sourceSignalNameChangedHandler;
+                Output.RegisteredSourceSignalNameChanged += sourceSignalNameChangedHandler;
                 Output.CrosspointChanged += crosspointChangedHandler;
                 Output.NameChanged += nameChangedHandler;
             }
@@ -62,7 +62,7 @@ namespace OpenSC.GUI.Routers
         private void crosspointChangedHandler(RouterOutput output, RouterInput newInput)
             => crosspoint = newInput;
 
-        private void sourceSignalNameChangedHandler(ISignalSource inputSource, string newName)
+        private void sourceSignalNameChangedHandler(ISignalSource inputSource, string newName, List<object> recursionChain)
             => updateLabel();
 
         private void crosspointInputNameChangedHandler(RouterInput input, string oldName, string newName)
@@ -109,7 +109,7 @@ namespace OpenSC.GUI.Routers
             }
             label.Text = string.Format("{0}\r\n({1})",
                 Output.Crosspoint.Name,
-                ((Output.SourceSignalName != null) ? Output.SourceSignalName : "-"));
+                ((Output.RegisteredSourceSignalName != null) ? Output.RegisteredSourceSignalName : "-"));
 
         }
 

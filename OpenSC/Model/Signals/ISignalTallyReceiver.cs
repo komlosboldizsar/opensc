@@ -9,10 +9,8 @@ namespace OpenSC.Model.Signals
 
     public interface ISignalTallyReceiver : ISignalTallyStateOrReceiver
     {
-
         void Give(List<ISignalTallySender> recursionChain);
         void Revoke(List<ISignalTallySender> recursionChain);
-
     }
 
 }

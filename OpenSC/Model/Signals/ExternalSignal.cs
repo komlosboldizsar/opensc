@@ -10,32 +10,31 @@ namespace OpenSC.Model.Signals
     public class ExternalSignal : ModelBase, ISignalSourceRegistered
     {
 
+        #region Persistence, instantiation
         public ExternalSignal()
         {
             createTallies();
         }
 
-        public override void Restored()
-        {
-            updateTallyBooleans();
-        }
-
         public override void Removed()
         {
-
             base.Removed();
-
             Name = null;
             IdChanged = null;
             NameChanged = null;
             CategoryChanged = null;
-            SourceSignalNameChanged = null;
+            RegisteredSourceSignalNameChanged = null;
             SignalLabelChanged = null;
-
-            unregisterTallyBooleans();
-
         }
 
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            ExternalSignalDatabases.Signals.ItemUpdated(this);
+        }
+        #endregion
+
+        #region Property: ID
         public delegate void IdChangedDelegate(ExternalSignal signal, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
 
@@ -46,18 +45,13 @@ namespace OpenSC.Model.Signals
             get { return id; }
             set
             {
-
                 ValidateId(value);
                 int oldValue = id;
                 id = value;
-
                 IdChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(ID));
-                SignalLabelChanged?.Invoke(this, getSignalLabel());
+                SignalLabelChanged?.Invoke(this, SignalLabel);
                 RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
-
-                createTallyBooleansAfterIdChange();
-
             }
         }
 
@@ -68,7 +62,9 @@ namespace OpenSC.Model.Signals
             if (!ExternalSignalDatabases.Signals.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
+        #endregion
 
+        #region Property: Name
         public delegate void NameChangedDelegate(ExternalSignal signal, string oldName, string newName);
         public event NameChangedDelegate NameChanged;
 
@@ -87,15 +83,18 @@ namespace OpenSC.Model.Signals
 
                 NameChanged?.Invoke(this, oldName, value);
                 RaisePropertyChanged(nameof(Name));
-                SignalLabelChanged?.Invoke(this, getSignalLabel());
+                SignalLabelChanged?.Invoke(this, SignalLabel);
                 RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
-                SourceSignalNameChanged?.Invoke(this, value);
-                RaisePropertyChanged(nameof(SourceSignalName));
+                List<object> recursionChain = new List<object>();
+                recursionChain.Add(this);
+                RegisteredSourceSignalNameChanged?.Invoke(this, value, recursionChain);
+                RaisePropertyChanged(nameof(RegisteredSourceSignalName));
 
             }
         }
+        #endregion
 
-
+        #region Property: Category
         public delegate void CategoryChangedDelegate(ExternalSignal signal, ExternalSignalCategory oldCategory, ExternalSignalCategory newCategory);
         public event CategoryChangedDelegate CategoryChanged;
 
@@ -120,43 +119,29 @@ namespace OpenSC.Model.Signals
                 RaisePropertyChanged(nameof(Category));
             }
         }
+        #endregion
 
-        #region Property: SourceSignalName
-        public string SourceSignalName
-        {
-            get => name;
-        }
-
-        public string GetSourceSignalName(List<object> recursionChain = null)
-            => name;
-
-        public event SourceSignalNameChangedDelegate SourceSignalNameChanged;
+        #region Property: RegisteredSourceSignalName
+        public string RegisteredSourceSignalName => name;
+        public string GetRegisteredSourceSignalName(List<object> recursionChain = null) => name;
+        public event RegisteredSourceSignalNameChangedDelegate RegisteredSourceSignalNameChanged;
         #endregion
 
         #region Property: RegisteredSourceSignal
-        public ISignalSourceRegistered RegisteredSourceSignal
-        {
-            get => this;
-        }
-
-        public ISignalSourceRegistered GetRegisteredSourceSignal(List<object> recursionChain = null)
-            => this;
+        public event RegisteredSourceSignalChangedDelegate RegisteredSourceSignalChanged;
+        public ISignalSourceRegistered RegisteredSourceSignal => this;
+        public ISignalSourceRegistered GetRegisteredSourceSignal(List<object> recursionChain = null) => this;
         #endregion
 
-        string ISignalSourceRegistered.SignalLabel
-        {
-            get => getSignalLabel();
-        }
-
-        private string getSignalLabel()
-            => string.Format("(EXT. #{0}) {1}", ID, Name);
-
-        string ISignalSourceRegistered.SignalUniqueId
-        {
-            get => string.Format("external.{0}", ID);
-        }
-
+        #region Property: SignalLabel
         public event SignalLabelChangedDelegate SignalLabelChanged;
+        public string SignalLabel => string.Format("(EXT. #{0}) {1}", ID, Name);            
+        #endregion
+
+        #region Property: SignalUniqueId
+        public event SignalUniqueIdChangedDelegate SignalUniqueIdChanged;
+        public string SignalUniqueId => string.Format("external.{0}", ID);
+        #endregion
 
         #region Tallies
         private ExternalSignalTally redTally;
@@ -172,131 +157,22 @@ namespace OpenSC.Model.Signals
             redTally = new ExternalSignalTally(this);
             yellowTally = new ExternalSignalTally(this);
             greenTally = new ExternalSignalTally(this);
+            createTallyBooleans();
         }
         #endregion
 
         #region Tally booleans
-        private TallyBoolean redTallyBoolean = null;
-        private TallyBoolean yellowTallyBoolean = null;
-        private TallyBoolean greenTallyBoolean = null;
+        private ExternalSignalTallyBoolean redTallyBoolean = null;
+        private ExternalSignalTallyBoolean yellowTallyBoolean = null;
+        private ExternalSignalTallyBoolean greenTallyBoolean = null;
 
-        private void createBooleans()
+        private void createTallyBooleans()
         {
-            redTallyBoolean = new TallyBoolean(this, redTally, SignalTallyColor.Red);
-            yellowTallyBoolean = new TallyBoolean(this, yellowTally, SignalTallyColor.Yellow);
-            greenTallyBoolean = new TallyBoolean(this, greenTally, SignalTallyColor.Green);
-            BooleanRegister.Instance.RegisterBoolean(redTallyBoolean);
-            BooleanRegister.Instance.RegisterBoolean(yellowTallyBoolean);
-            BooleanRegister.Instance.RegisterBoolean(greenTallyBoolean);
-        }
-
-        private void createTallyBooleansAfterIdChange()
-        {
-            if ((redTallyBoolean == null) || (yellowTallyBoolean == null) || (greenTallyBoolean == null))
-                createBooleans();
-        }
-
-        private void updateTallyBooleans()
-        {
-            redTallyBoolean?.Update();
-            yellowTallyBoolean?.Update();
-            greenTallyBoolean?.Update();
-        }
-
-        private void unregisterTallyBooleans()
-        {
-            if(redTallyBoolean != null)
-                BooleanRegister.Instance.UnregisterBoolean(redTallyBoolean);
-            if (yellowTallyBoolean != null)
-                BooleanRegister.Instance.UnregisterBoolean(greenTallyBoolean);
-            if (greenTallyBoolean != null)
-                BooleanRegister.Instance.UnregisterBoolean(greenTallyBoolean);
-        }
-
-        private class TallyBoolean : BooleanBase
-        {
-
-            private ExternalSignal signal;
-
-            private ExternalSignalTally tally;
-
-            private SignalTallyColor color;
-
-            public TallyBoolean(ExternalSignal signal, ExternalSignalTally tally, SignalTallyColor color) :
-                base(getName(signal, color), getColor(color), getDescription(signal, color))
-            {
-                this.signal = signal;
-                this.tally = tally;
-                this.color = color;
-                signal.IdChanged += idChangedHandler;
-                signal.NameChanged += nameChangedHandler;
-                tally.StateChanged += tallyChangedHandler;
-            }
-
-            private void tallyChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState)
-            {
-                CurrentState = newState;
-            }
-
-            public void Update()
-            {
-                Name = getName(signal, color);
-                Description = getDescription(signal, color);
-            }
-
-            private void idChangedHandler(ExternalSignal signal, int oldValue, int newValue)
-            {
-                Name = getName(signal, color);
-                Description = getDescription(signal, color);
-            }
-
-            private void nameChangedHandler(ExternalSignal signal, string oldName, string newName)
-            {
-                Description = getDescription(signal, color);
-            }
-
-            private static string getName(ExternalSignal signal, SignalTallyColor color)
-                =>  string.Format("signal.{0}.{1}tally", signal.ID, getColorString(color));
-
-            private static Color getColor(SignalTallyColor color)
-            {
-                switch (color)
-                {
-                    case SignalTallyColor.Red:
-                        return Color.Red;
-                    case SignalTallyColor.Yellow:
-                        return Color.Yellow;
-                    case SignalTallyColor.Green:
-                        return Color.Green;
-                }
-                return Color.White;
-            }
-
-            private static string getDescription(ExternalSignal signal, SignalTallyColor color)
-                => string.Format("Signal [(#{0}) {1}] has {2} tally.", signal.ID, signal.Name, getColorString(color));
-
-            private static string getColorString(SignalTallyColor color)
-            {
-                switch (color)
-                {
-                    case SignalTallyColor.Red:
-                        return "red";
-                    case SignalTallyColor.Yellow:
-                        return "yellow";
-                    case SignalTallyColor.Green:
-                        return "green";
-                }
-                return "unknown";
-            }
-
+            redTallyBoolean = new ExternalSignalTallyBoolean(this, redTally, SignalTallyColor.Red);
+            yellowTallyBoolean = new ExternalSignalTallyBoolean(this, yellowTally, SignalTallyColor.Yellow);
+            greenTallyBoolean = new ExternalSignalTallyBoolean(this, greenTally, SignalTallyColor.Green);
         }
         #endregion
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            ExternalSignalDatabases.Signals.ItemUpdated(this);
-        }
 
     }
 

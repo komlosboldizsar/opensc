@@ -579,9 +579,12 @@
     <Compile Include="Model\Signals\ISignalTallyStateOrReceiver.cs" />
     <Compile Include="Model\Signals\PassthroughSignalTallyState.cs" />
     <Compile Include="Model\Signals\PassthroughSignalTallyReceiver.cs" />
+    <Compile Include="Model\Signals\RecursionChainHelpers.cs" />
+    <Compile Include="Model\Signals\SignalForwarder.cs" />
     <Compile Include="Model\Signals\SignalRegister.cs" />
     <Compile Include="Model\Signals\SignalsManager.cs" />
     <Compile Include="Model\Signals\ExternalSignalTally.cs" />
+    <Compile Include="Model\Signals\ExternalSignalTallyBoolean.cs" />
     <Compile Include="Model\Signals\SignalTallyColor.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamStateTranslated.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamState.cs" />
@@ -616,6 +619,7 @@
     <Compile Include="Model\Variables\IDynamicTextFunctionSubstitute.cs" />
     <Compile Include="Model\Variables\VariablesManager.cs" />
     <Compile Include="Model\VTRs\CasparCgPlayout.cs" />
+    <Compile Include="Model\VTRs\CasparCgPlayoutCommons.cs" />
     <Compile Include="Model\VTRs\DynamicTextFunctions\VtrState.cs" />
     <Compile Include="Model\VTRs\DynamicTextFunctions\VtrStateTranslated.cs" />
     <Compile Include="Model\VTRs\DynamicTextFunctions\VtrElapsedTimeHhMmSs.cs" />

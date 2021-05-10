@@ -17,20 +17,20 @@ namespace OpenSC.Model.Signals
 
         public ISignalSource ParentSignalSource { get; private set; }
 
+        #region Property: State
         public bool State => previousElement?.State ?? false;
 
         public bool GetState(List<object> recursionChain = null)
         {
             if (recursionChain?.Contains(this) ?? false)
                 return false; // endless loop
-            if (recursionChain == null)
-                recursionChain = new List<object>();
-            recursionChain.Add(this);
-            return previousElement?.GetState(recursionChain) ?? false;
+            return previousElement?.GetState(recursionChain.ExtendRecursionChain(this)) ?? false;
         }
 
         public event StateChangedHandler StateChanged;
+        #endregion
 
+        #region Property: PreviousElement
         private ISignalTallyState previousElement = null;
 
         public ISignalTallyState PreviousElement
@@ -52,12 +52,17 @@ namespace OpenSC.Model.Signals
                     newState = previousElement.State;
                 }
                 if (previousState != newState)
-                    StateChanged?.Invoke(ParentSignalSource, this, newState);
+                    StateChanged?.Invoke(ParentSignalSource, this, newState, RecursionChainHelpers.CreateRecursionChain(this));
             }
         }
 
-        private void previousElementStateChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState)
-            => StateChanged?.Invoke(ParentSignalSource, this, newState);
+        private void previousElementStateChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState, List<object> recursionChain)
+        {
+            if (recursionChain?.Contains(this) == true)
+                return;
+            StateChanged?.Invoke(ParentSignalSource, this, newState, recursionChain.ExtendRecursionChain(this));
+        }
+        #endregion
 
     }
 

@@ -12,11 +12,19 @@ namespace OpenSC.Model
     {
         public abstract int ID { get; set; }
 
+        public event ModelRemovedHandler ModelRemoved;
+
         public virtual void Removed()
-        { }
+        {
+            ModelRemoved?.Invoke(this);
+        }
+
+        public event ModelRestoredHandler ModelRestored;
 
         public virtual void Restored()
-        { }
+        {
+            ModelRestored?.Invoke(this);
+        }
 
         private int updateCounter = 0;
 
