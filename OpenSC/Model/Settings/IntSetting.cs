@@ -12,17 +12,10 @@ namespace OpenSC.Model.Settings
         public IntSetting(string key, string category, string humanReadableTitle, string humanReadableDescription, int defaultValue, int? minValue, int? maxValue)
             : base(key, category, humanReadableTitle, humanReadableDescription, defaultValue)
         {
-            if ((minValue != null) && (maxValue != null))
-                argumentExceptionMessage = string.Format("Value must be between {0} and {1}.", minValue, maxValue);
-            else if (minValue != null)
-                argumentExceptionMessage = string.Format("Value must be greater than {0}.", minValue);
-            else if (maxValue != null)
-                argumentExceptionMessage = string.Format("Value must be less than {0}.", maxValue);
-            else
-                argumentExceptionMessage = "Value is not limited.";
+            MinValue = minValue;
+            MaxValue = maxValue;
+            generateArgumentExceptionMessage();
         }
-
-        private string argumentExceptionMessage;
 
         public int? MinValue { get; private set; }
         public int? MaxValue { get; private set; }
@@ -33,12 +26,29 @@ namespace OpenSC.Model.Settings
             set
             {
                 if ((MinValue != null) && (value < MinValue))
-                    throw new ArgumentException(argumentExceptionMessage);
+                    throwArgumentException();
                 if ((MaxValue != null) && (value > MaxValue))
-                    throw new ArgumentException(argumentExceptionMessage);
+                    throwArgumentException();
                 base.Value = value;
             }
         }
+
+        private string argumentExceptionMessage;
+
+        private void generateArgumentExceptionMessage()
+        {
+            if ((MinValue != null) && (MaxValue != null))
+                argumentExceptionMessage = string.Format("Value must be between {0} and {1}.", MinValue, MaxValue);
+            else if (MinValue != null)
+                argumentExceptionMessage = string.Format("Value must be greater than {0}.", MinValue);
+            else if (MaxValue != null)
+                argumentExceptionMessage = string.Format("Value must be less than {0}.", MaxValue);
+            else
+                argumentExceptionMessage = "Value is not limited.";
+        }
+
+        private void throwArgumentException() => throw new ArgumentException(argumentExceptionMessage);
+
 
     }
 

@@ -10,19 +10,7 @@ namespace OpenSC.Model.Settings.Converters
     [SettingValueConverter(typeof(int))]
     class IntConverter : ISettingValueConverter
     {
-
-        public string Serialize(object obj)
-        {
-            return obj.ToString();
-        }
-
-        public object Deserialize(string serialized)
-        {
-            if (!int.TryParse(serialized, out int result))
-                return 0;
-            return result;
-        }
-
+        public string Serialize(object obj) => obj.ToString();
+        public object Deserialize(string serialized) => (int.TryParse(serialized, out int result) ? result : 0);
     }
-
 }

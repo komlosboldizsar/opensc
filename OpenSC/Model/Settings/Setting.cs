@@ -23,13 +23,12 @@ namespace OpenSC.Model.Settings
         }
 
         public string Key { get; private set; }
-
         public string Category { get; private set; }
-
         public string HumanReadableTitle { get; private set; }
-
         public string HumanReadableDescription { get; private set; }
+        public Type Type { get; } = typeof(T);
 
+        #region Value properties
         public event SettingValueChangedDelegate ValueChanged;
 
         private T value;
@@ -52,8 +51,7 @@ namespace OpenSC.Model.Settings
             get { return value; }
             set { Value = (T)value; }
         }
-
-        public Type Type { get; } = typeof(T);
+        #endregion
 
     }
 

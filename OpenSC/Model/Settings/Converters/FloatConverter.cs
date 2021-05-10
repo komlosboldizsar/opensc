@@ -6,23 +6,10 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Settings.Converters
 {
-
     [SettingValueConverter(typeof(float))]
     class FloatConverter : ISettingValueConverter
     {
-
-        public string Serialize(object obj)
-        {
-            return obj.ToString();
-        }
-
-        public object Deserialize(string serialized)
-        {
-            if (!float.TryParse(serialized, out float result))
-                return 0;
-            return result;
-        }
-
+        public string Serialize(object obj) => obj.ToString();
+        public object Deserialize(string serialized) => (float.TryParse(serialized, out float result) ? result : 0);
     }
-
 }
