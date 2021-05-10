@@ -50,7 +50,7 @@ namespace OpenSC.Model.Signals
             Description = getDescription(signal, color);
         }
 
-        private void signalTallyChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState)
+        private void signalTallyChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState, List<object> recursionChain)
         {
             CurrentState = newState;
         }

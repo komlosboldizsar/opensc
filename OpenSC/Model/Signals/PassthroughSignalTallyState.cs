@@ -52,12 +52,16 @@ namespace OpenSC.Model.Signals
                     newState = previousElement.State;
                 }
                 if (previousState != newState)
-                    StateChanged?.Invoke(ParentSignalSource, this, newState);
+                    StateChanged?.Invoke(ParentSignalSource, this, newState, RecursionChainHelpers.CreateRecursionChain(this));
             }
         }
 
-        private void previousElementStateChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState)
-            => StateChanged?.Invoke(ParentSignalSource, this, newState);
+        private void previousElementStateChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState, List<object> recursionChain)
+        {
+            if (recursionChain?.Contains(this) == true)
+                return;
+            StateChanged?.Invoke(ParentSignalSource, this, newState, recursionChain.ExtendRecursionChain(this));
+        }
         #endregion
 
     }

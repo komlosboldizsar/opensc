@@ -43,7 +43,7 @@ namespace OpenSC.Model.Signals
         public bool State => tallyState.State;
         public bool GetState(List<object> recursionChain = null) => tallyState.GetState(recursionChain);
         public event StateChangedHandler StateChanged;
-        private void tallyStateChanged(ISignalSource signalSource, ISignalTallyState tally, bool newState) => StateChanged?.Invoke(signalSource, tally, newState);
+        private void tallyStateChanged(ISignalSource signalSource, ISignalTallyState tally, bool newState, List<object> recursionChain) => StateChanged?.Invoke(signalSource, tally, newState, recursionChain);
         #endregion
 
         #region ISignalTallyReceiver interface

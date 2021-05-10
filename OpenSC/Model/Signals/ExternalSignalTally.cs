@@ -30,7 +30,7 @@ namespace OpenSC.Model.Signals
                 if (value == state)
                     return;
                 state = value;
-                StateChanged?.Invoke(ParentSignalSource, this, value);
+                StateChanged?.Invoke(ParentSignalSource, this, value, RecursionChainHelpers.CreateRecursionChain(this));
             }
         }
 

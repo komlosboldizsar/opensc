@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
 
-    public delegate void StateChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState);
+    public delegate void StateChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState, List<object> recursionChain);
 
     public interface ISignalTallyState : ISignalTallyStateOrReceiver
     {
