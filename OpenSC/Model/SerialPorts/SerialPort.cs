@@ -14,8 +14,11 @@ namespace OpenSC.Model.SerialPorts
     public class SerialPort : ModelBase
     {
 
+        #region Constants
         private const string LOG_TAG = "SerialPort";
+        #endregion
 
+        #region Persistence, instantiation
         public SerialPort()
         {
             createAndStartPacketSchedulerThread();
@@ -49,6 +52,17 @@ namespace OpenSC.Model.SerialPorts
 
         }
 
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            if (Initialized)
+            {
+                DeInit();
+                Init();
+            }
+        }
+        #endregion
+
         #region Property: ID
         public delegate void IdChangedDelegate(SerialPort port, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
@@ -57,9 +71,11 @@ namespace OpenSC.Model.SerialPorts
 
         public override int ID
         {
-            get { return id; }
+            get => id;
             set
             {
+                if (value == id)
+                    return;
                 ValidateId(value);
                 int oldValue = id;
                 id = value;
@@ -86,7 +102,7 @@ namespace OpenSC.Model.SerialPorts
 
         public string Name
         {
-            get { return name; }
+            get => name;
             set
             {
                 if (value == name)
@@ -114,7 +130,7 @@ namespace OpenSC.Model.SerialPorts
 
         public string ComPortName
         {
-            get { return comPortName; }
+            get => comPortName;
             set
             {
                 if (value == comPortName)
@@ -138,7 +154,7 @@ namespace OpenSC.Model.SerialPorts
 
         public bool Initialized
         {
-            get { return initialized; }
+            get => initialized;
             set
             {
                 if (value == initialized)
@@ -153,10 +169,12 @@ namespace OpenSC.Model.SerialPorts
 
         // >>>> ComPort properties
 
+        #region ComPort contants
         private const int DEFAULT_BAUDRATE = 9600;
         private const Parity DEFAULT_PARITY = Parity.None;
         private const int DEFAULT_DATABITS = 8;
         private const StopBits DEFAULT_STOPBITS = StopBits.One;
+        #endregion
 
         #region Property: BaudRate
         public delegate void BaudRateChangedDelegate(SerialPort port, int oldBaudRate, int newBaudRate);
@@ -179,10 +197,7 @@ namespace OpenSC.Model.SerialPorts
                 BaudRateChanged?.Invoke(this, oldBaudRate, value);
                 RaisePropertyChanged(nameof(BaudRate));
                 if (Initialized && !Updating)
-                {
-                    DeInit();
-                    Init();
-                }
+                    ReInit();
             }
         }
         #endregion
@@ -206,10 +221,7 @@ namespace OpenSC.Model.SerialPorts
                 ParityChanged?.Invoke(this, oldParity, value);
                 RaisePropertyChanged(nameof(Parity));
                 if (Initialized && !Updating)
-                {
-                    DeInit();
-                    Init();
-                }
+                    ReInit();
             }
         }
         #endregion
@@ -235,10 +247,7 @@ namespace OpenSC.Model.SerialPorts
                 DataBitsChanged?.Invoke(this, oldDataBits, value);
                 RaisePropertyChanged(nameof(DataBits));
                 if (Initialized && !Updating)
-                {
-                    DeInit();
-                    Init();
-                }
+                    ReInit();
             }
         }
         #endregion
@@ -262,10 +271,7 @@ namespace OpenSC.Model.SerialPorts
                 StopBitsChanged?.Invoke(this, oldStopBits, value);
                 RaisePropertyChanged(nameof(StopBits));
                 if (Initialized && !Updating)
-                {
-                    DeInit();
-                    Init();
-                }
+                    ReInit();
             }
         }
         #endregion
@@ -332,12 +338,7 @@ namespace OpenSC.Model.SerialPorts
             catch (Exception ex)
             {
                 string errorMessage = string.Format("Couldn't initialize port (ID: {0}) with settings [baudrate: {1}, parity: {2}, databits: {3}, stopbits: {4}]. Exception message: [{5}].",
-                    ID,
-                    baudRate,
-                    parity,
-                    dataBits,
-                    stopBits,
-                    ex.Message);
+                    ID, baudRate, parity, dataBits, stopBits, ex.Message);
                 LogDispatcher.E(LOG_TAG, errorMessage);
             }
 
@@ -358,22 +359,17 @@ namespace OpenSC.Model.SerialPorts
             catch (Exception ex)
             {
                 string errorMessage = string.Format("Couldn't deinitialize port (ID: {0}). Exception message: [{1}].",
-                        ID,
-                        ex.Message);
+                        ID, ex.Message);
                 LogDispatcher.E(LOG_TAG, errorMessage);
             }
         }
-        #endregion
 
-        protected override void afterUpdate()
+        public void ReInit()
         {
-            base.afterUpdate();
-            if (Initialized)
-            {
-                DeInit();
-                Init();
-            }
+            DeInit();
+            Init();
         }
+        #endregion
 
         #region Data sending
         public void SendData(byte[] data, DateTime validUntil)
@@ -395,10 +391,7 @@ namespace OpenSC.Model.SerialPorts
             }
         }
 
-        protected bool packetIsValid(Packet packet)
-        {
-            return (packet.ValidUntil >= DateTime.Now);
-        }
+        protected bool packetIsValid(Packet packet) => (packet.ValidUntil >= DateTime.Now);
 
         public class Packet
         {
