@@ -13,34 +13,49 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.VTRs
 {
+
     [TypeLabel("CasparCG playout")]
     [TypeCode("casparcg")]
     public class CasparCgPlayout: Vtr
     {
 
+        #region Constants
         private const string LOG_TAG = "Vtr/CasparCG";
+        #endregion
+
+        #region Persistence, instantiation
+        public override void Restored()
+        {
+            base.Restored();
+            createAndStartStoppedStateDetectorThread();
+            subscribeToChannelLayer(this);
+        }
 
         public override void Removed()
         {
             base.Removed();
             unsubscribeFromChannelLayer(this);
         }
+        #endregion
 
+        #region Property: ListenedIP
         [PersistAs("listened_ip")]
         private string listenedIP = "127.0.0.1";
 
         public string ListenedIP
         {
-            get { return listenedIP; }
+            get => listenedIP;
             set { listenedIP = value; }
         }
+        #endregion
 
+        #region Property: WatchedChannel
         [PersistAs("watched_channel")]
         private int watchedChannel = 1;
 
         public int WatchedChannel
         {
-            get { return watchedChannel; }
+            get => watchedChannel;
             set
             {
                 if (watchedChannel == value)
@@ -50,13 +65,15 @@ namespace OpenSC.Model.VTRs
                 subscribeToChannelLayer(this);
             }
         }
+        #endregion
 
+        #region Property: WatchedLayer
         [PersistAs("watched_layer")]
         private int watchedLayer = 10;
 
         public int WatchedLayer
         {
-            get { return watchedLayer; }
+            get => watchedLayer;
             set
             {
                 if (watchedLayer == value)
@@ -66,14 +83,9 @@ namespace OpenSC.Model.VTRs
                 subscribeToChannelLayer(this);
             }
         }
+        #endregion
 
-        public override void Restored()
-        {
-            base.Restored();
-            createAndStartStoppedStateDetectorThread();
-            subscribeToChannelLayer(this);
-        }
-
+        #region OSC receiving and state processing
         private object stateUpdatingLock = new object();
 
         private void processOscMessage(OscMessage message, string subaddress)
@@ -149,6 +161,7 @@ namespace OpenSC.Model.VTRs
             };
             stoppedStateDetectorThread.Start();
         }
+        #endregion
 
         #region Common OSC listener
         private const int OSC_PORT = 5253;
