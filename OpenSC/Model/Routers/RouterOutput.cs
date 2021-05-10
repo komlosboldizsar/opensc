@@ -144,19 +144,19 @@ namespace OpenSC.Model.Routers
         {
             if(crosspoint == null)
             {
-                RegisteredSourceSignalChanged?.Invoke(this, null);
-                RegisteredSourceSignalNameChanged?.Invoke(this, null);
+                RegisteredSourceSignalChanged?.Invoke(this, null, null); // TODO
+                RegisteredSourceSignalNameChanged?.Invoke(this, null, null); // TODO
             }
             else
             {
-                RegisteredSourceSignalChanged?.Invoke(this, crosspoint.RegisteredSourceSignal);
-                RegisteredSourceSignalNameChanged?.Invoke(this, crosspoint.RegisteredSourceSignalName);
+                RegisteredSourceSignalChanged?.Invoke(this, crosspoint.RegisteredSourceSignal, null); // TODO
+                RegisteredSourceSignalNameChanged?.Invoke(this, crosspoint.RegisteredSourceSignalName, null); // TODO
             }
         }
 
         private void crosspointSourceNameChangedHandler(RouterInput input, string newName)
         {
-            RegisteredSourceSignalNameChanged?.Invoke(this, newName);
+            RegisteredSourceSignalNameChanged?.Invoke(this, newName, null); // TODO
         }
 
         public string InputName

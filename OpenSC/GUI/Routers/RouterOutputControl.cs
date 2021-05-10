@@ -62,7 +62,7 @@ namespace OpenSC.GUI.Routers
         private void crosspointChangedHandler(RouterOutput output, RouterInput newInput)
             => crosspoint = newInput;
 
-        private void sourceSignalNameChangedHandler(ISignalSource inputSource, string newName)
+        private void sourceSignalNameChangedHandler(ISignalSource inputSource, string newName, List<object> recursionChain)
             => updateLabel();
 
         private void crosspointInputNameChangedHandler(RouterInput input, string oldName, string newName)

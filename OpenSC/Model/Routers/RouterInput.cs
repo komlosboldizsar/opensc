@@ -181,7 +181,7 @@ namespace OpenSC.Model.Routers
         }
         #endregion
 
-        private void sourceSignalNameChangedHandler(ISignalSource inputSource, string newName)
+        private void sourceSignalNameChangedHandler(ISignalSource inputSource, string newName, List<object> recursionChain)
         {
             SourceNameChanged?.Invoke(this, newName);
         }

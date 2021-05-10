@@ -85,7 +85,9 @@ namespace OpenSC.Model.Signals
                 RaisePropertyChanged(nameof(Name));
                 SignalLabelChanged?.Invoke(this, SignalLabel);
                 RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
-                RegisteredSourceSignalNameChanged?.Invoke(this, value);
+                List<object> recursionChain = new List<object>();
+                recursionChain.Add(this);
+                RegisteredSourceSignalNameChanged?.Invoke(this, value, recursionChain);
                 RaisePropertyChanged(nameof(RegisteredSourceSignalName));
 
             }

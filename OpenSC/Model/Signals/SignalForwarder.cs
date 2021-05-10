@@ -77,23 +77,40 @@ namespace OpenSC.Model.Signals
                 currentSource.RegisteredSourceSignalNameChanged += sourcesRegisteredSourceSignalNameChanged;
             }
 
+            List<object> recursionChain = new List<object>();
+            recursionChain.Add(this);
+
             ISignalSourceRegistered currentRegisteredSourceSignal = currentSource?.RegisteredSourceSignal;
             ISignalSourceRegistered oldRegisteredSourceSignal = oldSource?.RegisteredSourceSignal;
             if (currentRegisteredSourceSignal != oldRegisteredSourceSignal)
-                RegisteredSourceSignalChanged?.Invoke(this, currentRegisteredSourceSignal);
+                RegisteredSourceSignalChanged?.Invoke(this, currentRegisteredSourceSignal, recursionChain);
 
             string currentRegisteredSourceSignalName = currentRegisteredSourceSignal?.RegisteredSourceSignalName;
             string oldRegisteredSourceSignalName = oldRegisteredSourceSignal?.RegisteredSourceSignalName;
             if (currentRegisteredSourceSignalName?.Equals(currentRegisteredSourceSignalName) != true)
-                RegisteredSourceSignalNameChanged?.Invoke(this, currentRegisteredSourceSignalName);
+                RegisteredSourceSignalNameChanged?.Invoke(this, currentRegisteredSourceSignalName, recursionChain);
 
         }
 
-        private void sourcesRegisteredSourceSignalChanged(ISignalSource signal, ISignalSourceRegistered registeredSignal)
-            => RegisteredSourceSignalChanged?.Invoke(this, registeredSignal);
+        private void sourcesRegisteredSourceSignalChanged(ISignalSource signal, ISignalSourceRegistered registeredSignal, List<object> recursionChain = null)
+        {
+            if (recursionChain?.Contains(this) == true)
+                return;
+            if (recursionChain == null)
+                recursionChain = new List<object>();
+            recursionChain.Add(this);
+            RegisteredSourceSignalChanged?.Invoke(this, registeredSignal, recursionChain);
+        }
 
-        private void sourcesRegisteredSourceSignalNameChanged(ISignalSource signal, string newName)
-            => RegisteredSourceSignalNameChanged?.Invoke(this, newName);
+        private void sourcesRegisteredSourceSignalNameChanged(ISignalSource signal, string newName, List<object> recursionChain = null)
+        {
+            if (recursionChain?.Contains(this) == true)
+                return;
+            if (recursionChain == null)
+                recursionChain = new List<object>();
+            recursionChain.Add(this);
+            RegisteredSourceSignalNameChanged?.Invoke(this, newName, recursionChain);
+        }
         #endregion
 
     }

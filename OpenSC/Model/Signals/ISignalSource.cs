@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
 
-    public delegate void RegisteredSourceSignalNameChangedDelegate(ISignalSource signal, string newName);
-    public delegate void RegisteredSourceSignalChangedDelegate(ISignalSource signal, ISignalSourceRegistered registeredSignal);
+    public delegate void RegisteredSourceSignalNameChangedDelegate(ISignalSource signal, string newName, List<object> recursionChain);
+    public delegate void RegisteredSourceSignalChangedDelegate(ISignalSource signal, ISignalSourceRegistered registeredSignal, List<object> recursionChain);
 
     public interface ISignalSource
     {
