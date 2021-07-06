@@ -35,10 +35,13 @@ namespace OpenSC.Model
             updateCounter++;
             Updating = true;
             beforeUpdate();
+            ModelBeforeUpdate?.Invoke(this);
         }
 
         protected virtual void beforeUpdate()
         { }
+
+        public event ModelBeforeUpdateHandler ModelBeforeUpdate;
 
         public void EndUpdate()
         {
@@ -47,10 +50,13 @@ namespace OpenSC.Model
                 updateCounter = 0;
             Updating = !(updateCounter == 0);
             afterUpdate();
+            ModelAfterUpdate?.Invoke(this);
         }
 
         protected virtual void afterUpdate()
         { }
+
+        public event ModelAfterUpdateHandler ModelAfterUpdate;
 
         #region Implementation of INotifyPropertyChanged
         public event PropertyChangedDelegate PropertyChanged;
