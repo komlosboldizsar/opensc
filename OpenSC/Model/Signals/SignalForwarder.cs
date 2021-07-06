@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Signals
 {
-    class SignalForwarder : ISignalSource, ISignalDestination
+    public class SignalForwarder : ISignalSource, ISignalDestination
     {
 
         #region Instantiation
@@ -58,7 +58,9 @@ namespace OpenSC.Model.Signals
 
         public ISignalSource CurrentSource => currentSource;
 
-        public void AssignSource(ISignalSource source)
+        public event CurrentSourceChangedDelegate CurrentSourceChanged;
+
+        public virtual void AssignSource(ISignalSource source)
         {
 
             ISignalSource oldSource = currentSource;
@@ -74,6 +76,8 @@ namespace OpenSC.Model.Signals
                 currentSource.RegisteredSourceSignalChanged += sourcesRegisteredSourceSignalChanged;
                 currentSource.RegisteredSourceSignalNameChanged += sourcesRegisteredSourceSignalNameChanged;
             }
+
+            CurrentSourceChanged?.Invoke(this, source);
 
             ISignalSourceRegistered currentRegisteredSourceSignal = currentSource?.RegisteredSourceSignal;
             ISignalSourceRegistered oldRegisteredSourceSignal = oldSource?.RegisteredSourceSignal;
