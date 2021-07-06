@@ -16,12 +16,6 @@ namespace OpenSC.Model.Streams
             StateChanged = null;
             ViewerCountChanged = null;
         }
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            StreamDatabase.Instance.ItemUpdated(this);
-        }
         #endregion
 
         #region Property: ID

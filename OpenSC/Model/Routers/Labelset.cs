@@ -154,12 +154,6 @@ namespace OpenSC.Model.Routers
         }
         #endregion
 
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            LabelsetDatabase.Instance.ItemUpdated(this);
-        }
-
     }
 
 }

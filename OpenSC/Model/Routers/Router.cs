@@ -287,12 +287,6 @@ namespace OpenSC.Model.Routers
         }
         #endregion
 
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            RouterDatabase.Instance.ItemUpdated(this);
-        }
-
         public void RestoreInputSources()
         {
             foreach (RouterInput input in inputs)

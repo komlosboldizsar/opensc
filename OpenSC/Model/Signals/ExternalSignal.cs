@@ -26,12 +26,6 @@ namespace OpenSC.Model.Signals
             RegisteredSourceSignalNameChanged = null;
             SignalLabelChanged = null;
         }
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            ExternalSignalDatabases.Signals.ItemUpdated(this);
-        }
         #endregion
 
         #region Property: ID

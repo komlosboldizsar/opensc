@@ -23,12 +23,6 @@ namespace OpenSC.Model.VTRs
             SecondsElapsedChanged = null;
             SecondsRemainingChanged = null;
         }
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            VtrDatabase.Instance.ItemUpdated(this);
-        }
         #endregion
 
         #region Property: ID

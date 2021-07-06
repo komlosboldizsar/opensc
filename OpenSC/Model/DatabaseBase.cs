@@ -91,6 +91,8 @@ namespace OpenSC.Model
             ItemAdded?.Invoke();
             ItemsChanged?.Invoke();
 
+            item.ModelAfterUpdate += itemAfterUpdateHandler;
+
             Save();
 
             afterAdd(item);
@@ -121,6 +123,8 @@ namespace OpenSC.Model
             ItemRemoved?.Invoke();
             ItemsChanged?.Invoke();
 
+            item.ModelAfterUpdate -= itemAfterUpdateHandler;
+
             Save();
 
             afterRemove(item);
@@ -131,6 +135,9 @@ namespace OpenSC.Model
 
         protected virtual void afterRemove(T item)
         { }
+
+        private void itemAfterUpdateHandler(IModel model)
+            => ItemUpdated(model as T);
 
         public void ItemUpdated(T item)
         {

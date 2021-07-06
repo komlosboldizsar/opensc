@@ -169,12 +169,6 @@ namespace OpenSC.Model.Variables
             buildCurrentValueFromParts();
         }
 
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            DynamicTextDatabase.Instance.ItemUpdated(this);
-        }
-
     }
 
 }
