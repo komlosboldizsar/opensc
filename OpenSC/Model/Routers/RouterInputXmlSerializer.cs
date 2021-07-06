@@ -29,7 +29,7 @@ namespace OpenSC.Model.Routers
             return new RouterInput()
             {
                 Name = serializedItem.Attributes[ATTRIBUTE_NAME]?.Value,
-                _sourceSignalUniqueId = serializedItem.Attributes[ATTRIBUTE_SOURCE]?.Value,
+                _sourceUniqueId = serializedItem.Attributes[ATTRIBUTE_SOURCE]?.Value,
                 _tielineCost = tielineCost,
                 _tielineIsReserved = tielineIsReserved
             };

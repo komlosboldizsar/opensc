@@ -220,25 +220,28 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
 
         private void crosspointChangedHandler(int output, int? input)
         {
-            if ((output < Outputs.Count) && (input != null) && (input < Inputs.Count))
-                Outputs[output].Crosspoint = Inputs[(int)input];
+            if (input == null)
+                return;
+            try
+            {
+                notifyCrosspointChanged(output, (int)input);
+            }
+            catch { }
         }
 
-        protected override bool setCrosspoint(RouterOutput output, RouterInput input)
+        protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)
         {
             try
             {
                 videohub.SetCrosspoint(output.Index, input.Index);
-                return true;
             }
             catch (ArgumentOutOfRangeException)
             { }
-            return false;
         }
 
-        protected override void updateAllCrosspoints()
+        protected override void queryAllCrosspoints()
         {
-            //
+            videohub.QueryAllCrosspoints();
         }
 
     }

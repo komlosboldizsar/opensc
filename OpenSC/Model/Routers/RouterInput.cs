@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public class RouterInput : INotifyPropertyChanged, ISignalDestination, ISignalSource
+    public class RouterInput : SignalForwarder, INotifyPropertyChanged
     {
 
-        public RouterInput()
+        public RouterInput() : base()
         { }
 
         public RouterInput(string name, Router router, int index)
+            : base()
         {
             this.name = name;
             this.Router = router;
@@ -23,10 +24,9 @@ namespace OpenSC.Model.Routers
         }
 
         public void Restored()
-        {
-            createTallies();
-        }
-        
+        { }
+
+        #region Property: Name
         private string name;
 
         public string Name
@@ -47,150 +47,46 @@ namespace OpenSC.Model.Routers
 
         public delegate void NameChangedDelegate(RouterInput input, string oldName, string newName);
         public event NameChangedDelegate NameChanged;
+        #endregion
 
-        public Router Router { get; internal set; }
+        #region Property: Router
+        public Router Router { get; private set; }
+
+        internal void AssignParentRouter(Router router)
+        {
+            if (Router != null)
+                return;
+            Router = router;
+        }
 
         public void RemovedFromRouter(Router router)
         {
             if (router != Router)
                 return;
-        }
-
-        private int index;
-
-        public int Index
-        {
-            get { return index; }
-            internal set { index = value; }
-        }
-
-        ISignalSource source;
-
-        public ISignalSource CurrentSource
-        {
-            get { return source; }
-            set
-            {
-
-                if (value == source)
-                    return;
-                ISignalSource oldSource = source;
-
-                SourceChanging?.Invoke(this, oldSource, value);
-
-                if (source != null)
-                {
-                    source.RegisteredSourceSignalNameChanged -= sourceSignalNameChangedHandler;
-                }
-                
-                source = value;
-                IsTieline = (source is RouterOutput);
-
-                SourceChanged?.Invoke(this, oldSource, value);
-                PropertyChanged?.Invoke(nameof(CurrentSource));
-
-                // TODO: fire events like RegisteredSourceSignalNameChanged
-                //SourceNameChanged?.Invoke(this, source?.SignalLabel);
-
-                if (source != null)
-                {
-                    source.RegisteredSourceSignalNameChanged += sourceSignalNameChangedHandler;
-                }
-
-                redTally.PreviousElement = source.RedTally;
-                yellowTally.PreviousElement = source.YellowTally;
-                greenTally.PreviousElement = source.GreenTally;
-
-            }
-        }
-
-        private BidirectionalPassthroughSignalTally redTally;
-        private BidirectionalPassthroughSignalTally yellowTally;
-        private BidirectionalPassthroughSignalTally greenTally;
-
-        public IBidirectionalSignalTally RedTally => redTally;
-        public IBidirectionalSignalTally YellowTally => yellowTally;
-        public IBidirectionalSignalTally GreenTally => greenTally;
-
-        private void createTallies()
-        {
-            redTally = new BidirectionalPassthroughSignalTally(this);
-            yellowTally = new BidirectionalPassthroughSignalTally(this);
-            greenTally = new BidirectionalPassthroughSignalTally(this);
-        }
-
-        public void AssignSource(ISignalSource source)
-        {
-            CurrentSource = source as ISignalSourceRegistered;
-        }
-
-        public delegate void SourceChangingDelegate(RouterInput input, ISignalSource oldSource, ISignalSource newSource);
-        public event SourceChangingDelegate SourceChanging;
-
-        public delegate void SourceChangedDelegate(RouterInput input, ISignalSource oldSource, ISignalSource newSource);
-        public event SourceChangedDelegate SourceChanged;
-
-        // "Temp foreign key"
-        public string _sourceSignalUniqueId;
-
-        public void RestoreSource()
-        {
-            if (_sourceSignalUniqueId != null)
-                CurrentSource = SignalRegister.Instance.GetSignalByUniqueId(_sourceSignalUniqueId);
-            TielineCost = _tielineCost;
-            TielineIsReserved = _tielineIsReserved;
-        }
-
-        public string RegisteredSourceSignalName
-        {
-            get => source?.RegisteredSourceSignalName;
-        }
-
-        public string GetRegisteredSourceSignalName(List<object> recursionChain = null)
-        {
-            if (source == null)
-                return null;
-            if (recursionChain == null)
-                recursionChain = new List<object>();
-            if (recursionChain.Contains(this))
-                return "(cyclic tieline)";
-            recursionChain.Add(this);
-            return source.GetRegisteredSourceSignalName(recursionChain);
-        }
-
-        public delegate void RouterInputSourceNameChanged(RouterInput input, string newName);
-        public event RouterInputSourceNameChanged SourceNameChanged;
-
-        public event RegisteredSourceSignalNameChangedDelegate RegisteredSourceSignalNameChanged;
-        public event RegisteredSourceSignalChangedDelegate RegisteredSourceSignalChanged;
-
-        #region Property: RegisteredSourceSignal
-        public ISignalSourceRegistered RegisteredSourceSignal
-            => GetRegisteredSourceSignal();
-
-        public ISignalSourceRegistered GetRegisteredSourceSignal(List<object> recursionChain = null)
-        {
-            if (source == null)
-                return null;
-            if (recursionChain == null)
-                recursionChain = new List<object>();
-            if (recursionChain.Contains(this))
-                return null;
-            recursionChain.Add(this);
-            return source.GetRegisteredSourceSignal(recursionChain);
+            Router = null;
         }
         #endregion
 
-        private void sourceSignalNameChangedHandler(ISignalSource inputSource, string newName, List<object> recursionChain)
+        #region Property: Index
+        public int Index { get; private set; }
+        
+        internal void SetIndexFromRouter(Router router, int index)
         {
-            SourceNameChanged?.Invoke(this, newName);
+            if (router != Router)
+                return;
+            if (index == Index)
+                return;
+            int oldIndex = Index;
+            Index = index;
+            IndexChanged?.Invoke(this, oldIndex, Index);
+            PropertyChanged?.Invoke(nameof(Index));
         }
 
-        #region Implementation of INotifyPropertyChanged
-        public event PropertyChangedDelegate PropertyChanged;
+        public delegate void IndexChangedDelegate(RouterInput input, int oldIndex, int newIndex);
+        public event IndexChangedDelegate IndexChanged;
         #endregion
 
-        #region Tieline properties
+        #region Property: IsTieline
         private bool isTieline;
 
         public bool IsTieline
@@ -208,7 +104,9 @@ namespace OpenSC.Model.Routers
 
         public delegate void IsTielineChangedDelegate(RouterInput input, bool oldValue, bool newValue);
         public event IsTielineChangedDelegate IsTielineChanged;
+        #endregion
 
+        #region Property: TielineCost
         // Temporal until restore
         public int _tielineCost;
 
@@ -232,7 +130,9 @@ namespace OpenSC.Model.Routers
 
         public delegate void TielineCostChangedDelegate(RouterInput input, int? oldValue, int? newValue);
         public event TielineCostChangedDelegate TielineCostChanged;
+        #endregion
 
+        #region Property: TielineIsReserved
         // Temporal until restore
         public bool _tielineIsReserved;
 
@@ -256,6 +156,23 @@ namespace OpenSC.Model.Routers
 
         public delegate void TielineIsReservedChangedDelegate(RouterInput input, bool? oldValue, bool? newValue);
         public event TielineIsReservedChangedDelegate TielineIsReservedChanged;
+        #endregion
+
+        #region Source restoration
+        // "Temp foreign key"
+        public string _sourceUniqueId;
+
+        public void RestoreSource()
+        {
+            if (_sourceUniqueId != null)
+                AssignSource(SignalRegister.Instance.GetSignalByUniqueId(_sourceUniqueId));
+            TielineCost = _tielineCost;
+            TielineIsReserved = _tielineIsReserved;
+        }
+        #endregion
+
+        #region Implementation of INotifyPropertyChanged
+        public event PropertyChangedDelegate PropertyChanged;
         #endregion
 
     }

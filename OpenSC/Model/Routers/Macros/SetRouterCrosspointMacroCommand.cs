@@ -41,7 +41,7 @@ namespace OpenSC.Model.Routers.Macros
             if ((input == null) || (input.Router != router))
                 return;
 
-            output.Crosspoint = input;
+            output.RequestCrosspointUpdate(input);
 
         }
 

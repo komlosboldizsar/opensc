@@ -240,7 +240,7 @@ namespace OpenSC.GUI.Routers
                 this.Output = routerOutput;
                 routerOutput.NameChanged += RouterOutput_NameChanged;
                 routerOutput.Router.NameChanged += Router_NameChanged;
-                routerOutput.CrosspointChanged += RouterOutput_CrosspointChanged;
+                routerOutput.CurrentInputChanged += RouterOutput_CrosspointChanged;
             }
 
             #region Property: Name
@@ -263,7 +263,7 @@ namespace OpenSC.GUI.Routers
 
             #region Active assignable
             public ISignalSource ActiveAssigned
-                => Output.Crosspoint;
+                => Output.CurrentSource;
 
             private void RouterOutput_CrosspointChanged(RouterOutput output, RouterInput newInput)
             {
@@ -388,7 +388,7 @@ namespace OpenSC.GUI.Routers
                     return;
                 if (!output.Router.Inputs.Contains(input))
                     return;
-                output.Crosspoint = input;
+                output.RequestCrosspointUpdate(input);
                 return;
             }
 

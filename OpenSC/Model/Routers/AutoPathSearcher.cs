@@ -169,7 +169,7 @@ namespace OpenSC.Model.Routers
             
             public void TakeAndReserve()
             {
-                Output.Crosspoint = Input;
+                Output.RequestCrosspointUpdate(Input);
                 Input.TielineIsReserved = true;
             }
 

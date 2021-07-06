@@ -50,20 +50,6 @@ namespace OpenSC.Model.Routers.DynamicTextFunctions
             public Substitute(Router router, int outputIndex, Labelset labelset)
             {
 
-                if (router == null)
-                {
-                    CurrentValue = "?";
-                    return;
-                }
-                this.router = router;
-
-                if (router.Outputs.Count < outputIndex)
-                {
-                    CurrentValue = "?";
-                    return;
-                }
-                output = router.Outputs[outputIndex-1];
-
                 if (labelset == null)
                 {
                     CurrentValue = "?";
@@ -71,9 +57,23 @@ namespace OpenSC.Model.Routers.DynamicTextFunctions
                 }
                 this.labelset = labelset;
 
-                currentInput = output.Crosspoint;
-                output.CrosspointChanged += crosspointChangedHandler;
-                CurrentValue = labelset.GetText(output.Crosspoint);
+                if (router == null)
+                {
+                    CurrentValue = "?";
+                    return;
+                }
+                this.router = router;
+
+                output = router.GetOutput(outputIndex);
+                if (output == null)
+                    return;
+                output.CurrentInputChanged += currentInputChangedHandler;
+
+                currentInput = output.CurrentInput;
+                if (currentInput == null)
+                    return;
+
+                CurrentValue = labelset.GetText(currentInput);
                 labelset.LabelTextChanged += labelsetLabelChanged;
 
             }
@@ -83,10 +83,11 @@ namespace OpenSC.Model.Routers.DynamicTextFunctions
                 if ((labelset == this.labelset) && (currentInput == routerInput))
                     CurrentValue = newText;
             }
-            private void crosspointChangedHandler(RouterOutput output, RouterInput newInput)
+
+            private void currentInputChangedHandler(RouterOutput output, RouterInput newInput)
             {
                 currentInput = newInput;
-                CurrentValue = labelset.GetText(output.Crosspoint);
+                CurrentValue = labelset.GetText(currentInput);
             }
 
         }

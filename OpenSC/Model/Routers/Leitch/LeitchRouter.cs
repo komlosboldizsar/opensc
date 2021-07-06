@@ -21,11 +21,6 @@ namespace OpenSC.Model.Routers.Leitch
         public LeitchRouter()
         { }
 
-        public override void Restored()
-        {
-            base.Restored();
-        }
-
         public override void Removed()
         {
             base.Removed();
@@ -68,21 +63,14 @@ namespace OpenSC.Model.Routers.Leitch
         #endregion
 
         #region Setting/getting crosspoints
-        protected override bool setCrosspoint(RouterOutput output, RouterInput input)
+        protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)
         {
             sendSerialCommand("@ X:{0}/{1:X},{2:X}\r\n", level, output.Index, input.Index);
-            return true;
         }
 
-        protected override void updateAllCrosspoints()
+        protected override void queryAllCrosspoints()
         {
             sendSerialCommand("@ S?{0}\r\n", level);
-        }
-
-        private void crosspointChanged(int destinationIndex, int sourceIndex)
-        {
-            if (destinationIndex < Outputs.Count)
-                Outputs[destinationIndex].Crosspoint = ((sourceIndex < Inputs.Count)) ? Inputs[sourceIndex] : null;
         }
         #endregion
 
@@ -130,7 +118,7 @@ namespace OpenSC.Model.Routers.Leitch
                 string[] destinationSourceStringParts = destinationSourceString.Split(',');
                 int sourceIndex = int.Parse(destinationSourceStringParts[0], System.Globalization.NumberStyles.HexNumber);
                 int destinationIndex = int.Parse(destinationSourceStringParts[1], System.Globalization.NumberStyles.HexNumber);
-                crosspointChanged(destinationIndex, sourceIndex);
+                notifyCrosspointChanged(destinationIndex, sourceIndex);
             }
             catch
             {
