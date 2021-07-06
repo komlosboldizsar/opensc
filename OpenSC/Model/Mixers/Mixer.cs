@@ -289,12 +289,6 @@ namespace OpenSC.Model.Mixers
         public event InputsChangedDelegate InputsChanged;
         #endregion
 
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            MixerDatabase.Instance.ItemUpdated(this);
-        }
-
     }
 
 }

@@ -29,12 +29,6 @@ namespace OpenSC.Model.Timers
             ReachedZero = null;
             innerTimer?.Dispose();
         }
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            TimerDatabase.Instance.ItemUpdated(this);
-        }
         #endregion
 
         #region Property: ID

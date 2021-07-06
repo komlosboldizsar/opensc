@@ -250,11 +250,5 @@ namespace OpenSC.Model.UMDs
                 throw new ArgumentException();
         }
 
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            UmdDatabase.Instance.ItemUpdated(this);
-        }
-
     }
 }

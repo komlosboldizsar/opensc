@@ -12,14 +12,6 @@ namespace OpenSC.Model.Signals
     public class ExternalSignalCategory : ModelBase
     {
 
-        #region Persistence, instantiation
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            ExternalSignalDatabases.Categories.ItemUpdated(this);
-        }
-        #endregion
-
         #region Property: ID
         public delegate void IdChangedDelegate(ExternalSignalCategory category, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
