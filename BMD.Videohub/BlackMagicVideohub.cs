@@ -161,6 +161,14 @@ namespace BMD.Videohub
             return crosspoints[output];
         }
 
+        public void QueryAllCrosspoints()
+        {
+            if (pendingCrosspointChangeRequest != null)
+                return;
+            socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_ROUTING);
+            socketReceiver.SendLine("");
+        }
+
         public delegate void CrosspointChangedDelegate(int output, int? input);
         public event CrosspointChangedDelegate CrosspointChanged;
 
