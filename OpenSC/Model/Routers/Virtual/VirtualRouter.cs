@@ -23,6 +23,7 @@ namespace OpenSC.Model.Routers.Virtual
             base.Restored();
             State = RouterState.Ok;
             StateString = "OK";
+            queryAllCrosspoints();
         }
 
         protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)

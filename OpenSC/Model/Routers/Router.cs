@@ -55,7 +55,6 @@ namespace OpenSC.Model.Routers
         {
             assignIOsParentRouter();
             notifyIOsRestored();
-            queryAllCrosspoints();
         }
 
         private void assignIOsParentRouter()

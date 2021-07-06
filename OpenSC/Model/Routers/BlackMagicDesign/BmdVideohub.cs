@@ -216,6 +216,8 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         private void connectionStateChangedHandler(bool state)
         {
             Connected = state;
+            if (Connected)
+                queryAllCrosspoints();
         }
 
         private void crosspointChangedHandler(int output, int? input)

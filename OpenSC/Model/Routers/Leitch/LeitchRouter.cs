@@ -21,6 +21,13 @@ namespace OpenSC.Model.Routers.Leitch
         public LeitchRouter()
         { }
 
+        public override void Restored()
+        {
+            base.Restored();
+            if (port != null)
+                port.InitializedChanged += portInitializedChanged;
+        }
+
         public override void Removed()
         {
             base.Removed();
@@ -44,6 +51,12 @@ namespace OpenSC.Model.Routers.Leitch
                 if (port != null)
                     port.ReceivedDataAsciiString += receivedDataFromPort;
             }
+        }
+
+        private void portInitializedChanged(SerialPort port, bool oldState, bool newState)
+        {
+            if (newState)
+                queryAllCrosspoints();
         }
         #endregion
 
