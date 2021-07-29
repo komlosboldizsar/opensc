@@ -198,6 +198,8 @@ namespace OpenSC.Model
             if (loadedItems != null)
             {
                 items = loadedItems;
+                foreach (T item in items.Values)
+                    item.ModelAfterUpdate += itemAfterUpdateHandler;
                 LogDispatcher.I(SPECIFIC_LOG_TAG, "Loaded from file.");
                 afterLoad();
                 ChangedItems?.Invoke(this);
