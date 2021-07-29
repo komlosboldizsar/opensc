@@ -171,7 +171,8 @@ namespace OpenSC.Model.Routers
         private void updateInputIndices()
         {
             int idx = 1;
-            inputs.ForEach(i => i.SetIndexFromRouter(this, idx++));
+            foreach (RouterInput input in inputs)
+                input.SetIndexFromRouter(this, idx++);
         }
 
         private void inputsChangedHandler()
@@ -227,7 +228,8 @@ namespace OpenSC.Model.Routers
         private void updateOutputIndices()
         {
             int idx = 1;
-            outputs.ForEach(o => o.SetIndexFromRouter(this, idx++));
+            foreach (RouterOutput output in outputs)
+                output.SetIndexFromRouter(this, idx++);
         }
 
         private void outputsChangedHandler()
