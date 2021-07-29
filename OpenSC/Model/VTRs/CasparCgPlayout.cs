@@ -46,7 +46,14 @@ namespace OpenSC.Model.VTRs
         public string ListenedIP
         {
             get => listenedIP;
-            set { listenedIP = value; }
+            set
+            {
+                if (listenedIP == value)
+                    return;
+                CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this);
+                listenedIP = value;
+                CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this);
+            }
         }
         #endregion
 
