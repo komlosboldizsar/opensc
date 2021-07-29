@@ -53,15 +53,8 @@ namespace OpenSC.Model.Routers
         #region Restoration
         public override void Restored()
         {
-            assignIOsParentRouter();
             notifyIOsRestored();
             queryAllCrosspoints();
-        }
-
-        private void assignIOsParentRouter()
-        {
-            inputs.ForEach(i => i.AssignParentRouter(this));
-            outputs.ForEach(o => o.AssignParentRouter(this));
         }
 
         private void notifyIOsRestored()
@@ -144,6 +137,7 @@ namespace OpenSC.Model.Routers
                 inputs.Clear();
                 if(value != null)
                     inputs.AddRange(value);
+                inputs.ForEach(i => i.AssignParentRouter(this));
                 updateInputIndices();
             }
         }
@@ -201,6 +195,7 @@ namespace OpenSC.Model.Routers
                 outputs.Clear();
                 if(value != null)
                     outputs.AddRange(value);
+                outputs.ForEach(o => o.AssignParentRouter(this));
                 updateOutputIndices();
             }
         }
