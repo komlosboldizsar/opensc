@@ -414,6 +414,11 @@ namespace OpenSC.Model.SerialPorts
         public delegate void ReceivedDataAsciiStringDelegate(SerialPort port, string asciiString);
         public event ReceivedDataAsciiStringDelegate ReceivedDataAsciiString;
 
+        public delegate void ReceivedDataAsciiLineDelegate(SerialPort port, string asciiLine);
+        public event ReceivedDataAsciiLineDelegate ReceivedDataAsciiLine;
+
+        private string asciiLineBuffer = "";
+
         private void dataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
 
@@ -428,7 +433,18 @@ namespace OpenSC.Model.SerialPorts
             ReceivedDataBytes?.Invoke(this, receivedBytes);
             string receivedAsciiString = Encoding.ASCII.GetString(receivedBytes);
             ReceivedDataAsciiString?.Invoke(this, receivedAsciiString);
-            
+
+            asciiLineBuffer += receivedAsciiString;
+            char lastAsciiChar = asciiLineBuffer[asciiLineBuffer.Length - 1];
+            bool noHalfLine = ((lastAsciiChar == '\r') || (lastAsciiChar == '\n'));
+            List<string> asciiLines = asciiLineBuffer.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            string lastHalfLine = asciiLines[asciiLines.Count - 1];
+            if (!noHalfLine)
+                asciiLines.RemoveAt(asciiLines.Count - 1);
+            foreach (string asciiLine in asciiLines)
+                ReceivedDataAsciiLine?.Invoke(this, asciiLine);
+            asciiLineBuffer = noHalfLine ? "" : lastHalfLine;
+
         }
         #endregion
 
