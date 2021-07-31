@@ -26,9 +26,9 @@ namespace OpenSC.Model.Macros
 
         private const string LOG_TAG = "Macro";
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
-            base.Restored();
+            base.RestoredOwnFields();
             foreach (MacroCommandWithArguments command in commands)
             {
                 command.Restored();

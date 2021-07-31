@@ -11,7 +11,7 @@ namespace OpenSC.Model.Variables
     public class DynamicText : ModelBase
     {
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
             formulaUpdated();
         }

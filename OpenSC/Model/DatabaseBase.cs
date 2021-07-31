@@ -213,10 +213,28 @@ namespace OpenSC.Model
             persister.BuildRelationsByForeignKeys(ref items);
         }
 
-        public void NotifyItemsRestored()
+        public void NotifyItemsRestoredOwnFields()
         {
             foreach (T item in items.Values)
-                item.Restored();
+                item.RestoredOwnFields();
+        }
+
+        public void NotifyItemsRestoredBasicRelations()
+        {
+            foreach (T item in items.Values)
+                item.RestoredBasicRelations();
+        }
+
+        public void RequestRestoreCustomRelations()
+        {
+            foreach (T item in items.Values)
+                item.RestoreCustomRelations();
+        }
+
+        public void NotifyItemsTotallyRestored()
+        {
+            foreach (T item in items.Values)
+                item.TotallyRestored();
         }
 
         public IEnumerator GetEnumerator()

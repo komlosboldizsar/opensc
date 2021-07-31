@@ -18,7 +18,7 @@ namespace OpenSC.Model.UMDs
 
         protected abstract void update();
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
             restoreTallySources();
         }

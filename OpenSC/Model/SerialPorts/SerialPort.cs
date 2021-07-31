@@ -21,7 +21,7 @@ namespace OpenSC.Model.SerialPorts
             createAndStartPacketSchedulerThread();
         }
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
             createAndStartPacketSchedulerThread();
             Init();

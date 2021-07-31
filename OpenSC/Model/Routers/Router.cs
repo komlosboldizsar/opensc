@@ -51,10 +51,16 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Restoration
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
             notifyIOsRestored();
             queryAllCrosspoints();
+        }
+
+        public override void RestoreCustomRelations()
+        {
+            base.RestoreCustomRelations();
+            restoreInputSources();
         }
 
         private void notifyIOsRestored()
@@ -178,7 +184,7 @@ namespace OpenSC.Model.Routers
         public delegate void InputsChangedDelegate(Router router);
         public event InputsChangedDelegate InputsChanged;
 
-        public void RestoreInputSources() => inputs.ForEach(i => i.RestoreSource());
+        private void restoreInputSources() => inputs.ForEach(i => i.RestoreSource());
         #endregion
 
         #region Outputs
