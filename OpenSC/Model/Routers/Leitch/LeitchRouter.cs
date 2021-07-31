@@ -21,9 +21,9 @@ namespace OpenSC.Model.Routers.Leitch
         public LeitchRouter()
         { }
 
-        public override void RestoredOwnFields()
+        public override void TotallyRestored()
         {
-            base.RestoredOwnFields();
+            base.TotallyRestored();
             if (port != null)
             {
                 port.ReceivedDataAsciiLine += receivedLineFromPort;

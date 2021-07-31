@@ -53,7 +53,13 @@ namespace OpenSC.Model.Routers
         #region Restoration
         public override void RestoredOwnFields()
         {
+            base.RestoredOwnFields();
             notifyIOsRestored();
+        }
+
+        public override void TotallyRestored()
+        {
+            base.TotallyRestored();
             queryAllCrosspoints();
         }
 
