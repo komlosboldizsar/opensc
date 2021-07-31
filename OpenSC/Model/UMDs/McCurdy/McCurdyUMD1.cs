@@ -339,9 +339,9 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         }
 
-        public override void RestoredOwnFields()
+        public override void RestoreCustomRelations()
         {
-            base.RestoredOwnFields();
+            base.RestoreCustomRelations();
             DynamicText[] restoredDynamicTextSources = dynamicTextSources;
             dynamicTextSources = new DynamicText[] { null, null, null };
             for (int i = 0; i < 3; i++)
