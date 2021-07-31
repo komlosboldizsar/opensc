@@ -24,7 +24,7 @@ namespace OpenSC.Model.Signals
         {
             if (currentSource == null)
                 return null;
-            if (recursionChain.Contains(this))
+            if (recursionChain?.Contains(this) == true)
                 return null;
             return currentSource?.GetRegisteredSourceSignal(recursionChain.ExtendRecursionChain(this));
         }
@@ -36,7 +36,7 @@ namespace OpenSC.Model.Signals
         {
             if (currentSource == null)
                 return null;
-            if (recursionChain.Contains(this))
+            if (recursionChain?.Contains(this) == true)
                 return null;
             return currentSource.GetRegisteredSourceSignalName(recursionChain.ExtendRecursionChain(this));
         }
