@@ -133,6 +133,7 @@ namespace OpenSC.Model.Streams
                 int totalResults = json["pageInfo"]["totalResults"].ToObject<int>();
                 if (totalResults == 0) {
                     State = StreamState.Unknown;
+                    ViewerCount = null;
                     return;
                 }
 
@@ -143,6 +144,7 @@ namespace OpenSC.Model.Streams
                 if (!string.IsNullOrEmpty(actualEndTime))
                 {
                     State = StreamState.Ended;
+                    ViewerCount = null;
                     return;
                 }
 
@@ -153,7 +155,7 @@ namespace OpenSC.Model.Streams
                     if (int.TryParse(liveStreamingDetails["concurrentViewers"]?.ToString(), out int viewerCount))
                         ViewerCount = viewerCount;
                     else
-                        ViewerCount = 0;
+                        ViewerCount = null;
                     return;
                 }
 
@@ -161,10 +163,12 @@ namespace OpenSC.Model.Streams
                 if (!string.IsNullOrEmpty(scheduledStartTime))
                 {
                     State = StreamState.NotStarted;
+                    ViewerCount = null;
                     return;
                 }
 
                 State = StreamState.Unknown;
+                ViewerCount = null;
 
             }
             catch (Exception ex)
