@@ -24,20 +24,32 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             this.table = table;
             this.item = item;
             createCells();
+            subscribeToItemEvents();
+            subscribeToExternalUpdateEvents();
         }
 
         private void createCells()
         {
             foreach (CustomDataGridViewColumnDescriptor<T> columnDescriptor in table.ColumnDescriptors)
             {
-                // Create and init cell
                 DataGridViewCell cell = createAndInitCell(columnDescriptor);
                 cells.Add(cell);
-                // Subscribe to item-related events
-                INotifyPropertyChanged itemCastedINotifyPropertyChanged = item as INotifyPropertyChanged;
-                if(itemCastedINotifyPropertyChanged != null)
-                    itemCastedINotifyPropertyChanged.PropertyChanged += notifyPropertyChangedHandler;
-                // Subscribe to external events
+            }
+        }
+
+        private void subscribeToItemEvents()
+        {
+            INotifyPropertyChanged itemCastedINotifyPropertyChanged = item as INotifyPropertyChanged;
+            if (itemCastedINotifyPropertyChanged != null)
+                itemCastedINotifyPropertyChanged.PropertyChanged += notifyPropertyChangedHandler;
+        }
+
+        private void subscribeToExternalUpdateEvents()
+        {
+            for (int i = 0; i < cells.Count; i++)
+            {
+                DataGridViewCell cell = cells[i];
+                CustomDataGridViewColumnDescriptor<T> columnDescriptor = table.ColumnDescriptors[i];
                 columnDescriptor.ExternalUpdateEventSubscriberMethod?.Invoke(item, () => columnDescriptor.UpdaterMethod?.Invoke(item, cell));
             }
         }
