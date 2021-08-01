@@ -20,18 +20,6 @@ namespace OpenSC.Model.Signals
         public event RegisteredSourceSignalNameChangedDelegate RegisteredSourceSignalNameChanged;
         public string RegisteredSourceSignalName => GetRegisteredSourceSignalName();
 
-        public ISignalSourceRegistered GetRegisteredSourceSignal(List<object> recursionChain = null)
-        {
-            if (currentSource == null)
-                return null;
-            if (recursionChain?.Contains(this) == true)
-                return null;
-            return currentSource?.GetRegisteredSourceSignal(recursionChain.ExtendRecursionChain(this));
-        }
-
-        public event RegisteredSourceSignalChangedDelegate RegisteredSourceSignalChanged;
-        public ISignalSourceRegistered RegisteredSourceSignal => GetRegisteredSourceSignal();
-
         public string GetRegisteredSourceSignalName(List<object> recursionChain = null)
         {
             if (currentSource == null)
@@ -39,6 +27,18 @@ namespace OpenSC.Model.Signals
             if (recursionChain?.Contains(this) == true)
                 return null;
             return currentSource.GetRegisteredSourceSignalName(recursionChain.ExtendRecursionChain(this));
+        }
+
+        public event RegisteredSourceSignalChangedDelegate RegisteredSourceSignalChanged;
+        public ISignalSourceRegistered RegisteredSourceSignal => GetRegisteredSourceSignal();
+
+        public ISignalSourceRegistered GetRegisteredSourceSignal(List<object> recursionChain = null)
+        {
+            if (currentSource == null)
+                return null;
+            if (recursionChain?.Contains(this) == true)
+                return null;
+            return currentSource?.GetRegisteredSourceSignal(recursionChain.ExtendRecursionChain(this));
         }
 
         public IBidirectionalSignalTally RedTally { get; protected set; }
@@ -86,7 +86,7 @@ namespace OpenSC.Model.Signals
 
             string currentRegisteredSourceSignalName = currentRegisteredSourceSignal?.RegisteredSourceSignalName;
             string oldRegisteredSourceSignalName = oldRegisteredSourceSignal?.RegisteredSourceSignalName;
-            if (currentRegisteredSourceSignalName?.Equals(currentRegisteredSourceSignalName) != true)
+            if (!string.Equals(currentRegisteredSourceSignalName, oldRegisteredSourceSignalName))
                 RegisteredSourceSignalNameChanged?.Invoke(this, currentRegisteredSourceSignalName, RecursionChainHelpers.CreateRecursionChain(this));
 
         }

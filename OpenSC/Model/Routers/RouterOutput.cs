@@ -118,6 +118,7 @@ namespace OpenSC.Model.Routers
                     Index,
                     sourceRouterInput.Index);
             LogDispatcher.I(Router.LOG_TAG, logMessage);
+            CurrentInputChanged?.Invoke(this, source as RouterInput);
             RouterMacroTriggers.RouterOutputSourceChanged.Call(Router, this);
         }
 
