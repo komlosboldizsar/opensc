@@ -466,6 +466,7 @@
     <Compile Include="Model\General\INotifyPropertyChanged.cs" />
     <Compile Include="Model\General\IObservableList.cs" />
     <Compile Include="Model\General\IObservableListTyped.cs" />
+    <Compile Include="Model\General\MultilevelPropertyChangeObserver.cs" />
     <Compile Include="Model\General\ObservableProxyList.cs" />
     <Compile Include="Model\General\ObservableList.cs" />
     <Compile Include="Model\IDatabaseBase.cs" />
@@ -619,6 +620,7 @@
     <Compile Include="Model\Variables\IDynamicTextFunctionSubstitute.cs" />
     <Compile Include="Model\Variables\VariablesManager.cs" />
     <Compile Include="Model\VTRs\CasparCgPlayout.cs" />
+    <Compile Include="Model\VTRs\CasparCgPlayoutCommons.cs" />
     <Compile Include="Model\VTRs\DynamicTextFunctions\VtrState.cs" />
     <Compile Include="Model\VTRs\DynamicTextFunctions\VtrStateTranslated.cs" />
     <Compile Include="Model\VTRs\DynamicTextFunctions\VtrElapsedTimeHhMmSs.cs" />

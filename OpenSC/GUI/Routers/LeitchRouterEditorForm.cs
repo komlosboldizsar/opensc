@@ -22,6 +22,7 @@ namespace OpenSC.GUI.Routers
                 this.router = new LeitchRouter();
             else if (!(router is LeitchRouter))
                 throw new ArgumentException();
+            initDropDowns();
         }
 
         public IModelEditorForm<Router> GetInstance(Router modelInstance)
@@ -62,6 +63,13 @@ namespace OpenSC.GUI.Routers
                 return;
         }
 
-    }
+        private void initDropDowns()
+        {
 
-}
+            // Ports
+            portDropDown.CreateAdapterAsDataSource(SerialPortDatabase.Instance, port => port.Name, true, "(not connected)");
+        }
+
+        }
+
+    }

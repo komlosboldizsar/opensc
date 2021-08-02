@@ -11,14 +11,10 @@ namespace OpenSC.Model.VTRs
     public class Vtr : ModelBase
     {
 
-        public override void Restored()
-        { }
-
+        #region Persistence, instantiation
         public override void Removed()
         {
-
             base.Removed();
-
             IdChanged = null;
             NameChanged = null;
             TitleChanged = null;
@@ -26,9 +22,10 @@ namespace OpenSC.Model.VTRs
             SecondsFullChanged = null;
             SecondsElapsedChanged = null;
             SecondsRemainingChanged = null;
-
         }
+        #endregion
 
+        #region Property: ID
         public delegate void IdChangedDelegate(Vtr vtr, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
 
@@ -36,7 +33,7 @@ namespace OpenSC.Model.VTRs
 
         public override int ID
         {
-            get { return id; }
+            get => id;
             set
             {
                 ValidateId(value);
@@ -54,7 +51,9 @@ namespace OpenSC.Model.VTRs
             if (!VtrDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
+        #endregion
 
+        #region Property: Name
         public delegate void NameChangedDelegate(Vtr vtr, string oldName, string newName);
         public event NameChangedDelegate NameChanged;
 
@@ -63,7 +62,7 @@ namespace OpenSC.Model.VTRs
 
         public string Name
         {
-            get { return name; }
+            get => name;
             set
             {
                 if (value == name)
@@ -74,7 +73,9 @@ namespace OpenSC.Model.VTRs
                 RaisePropertyChanged(nameof(Name));
             }
         }
+        #endregion
 
+        #region Property: Title
         public delegate void TitleChangedDelegate(Vtr vtr, string oldTitle, string newTitle);
         public event TitleChangedDelegate TitleChanged;
 
@@ -82,7 +83,7 @@ namespace OpenSC.Model.VTRs
 
         public string Title
         {
-            get { return title; }
+            get => title;
             protected set
             {
                 if (value == title)
@@ -93,7 +94,9 @@ namespace OpenSC.Model.VTRs
                 RaisePropertyChanged(nameof(Title));
             }
         }
+        #endregion
 
+        #region Property: State
         public delegate void StateChangedDelegate(Vtr vtr, VtrState oldState, VtrState newState);
         public event StateChangedDelegate StateChanged;
 
@@ -101,7 +104,7 @@ namespace OpenSC.Model.VTRs
 
         public VtrState State
         {
-            get { return state; }
+            get => state;
             protected set
             {
                 if (value == state)
@@ -112,7 +115,9 @@ namespace OpenSC.Model.VTRs
                 RaisePropertyChanged(nameof(State));
             }
         }
+        #endregion
 
+        #region Property: SecondsFull, TimeFull
         public delegate void SecondsFullChangedDelegate(Vtr vtr, int oldValue, int newValue);
         public event SecondsFullChangedDelegate SecondsFullChanged;
 
@@ -120,7 +125,7 @@ namespace OpenSC.Model.VTRs
 
         public int SecondsFull
         {
-            get { return secondsFull; }
+            get => secondsFull;
             protected set
             {
                 if (value == secondsFull)
@@ -129,14 +134,14 @@ namespace OpenSC.Model.VTRs
                 secondsFull = value;
                 SecondsFullChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(SecondsFull));
+                RaisePropertyChanged(nameof(TimeFull));
             }
         }
 
-        public TimeSpan TimeFull
-        {
-            get { return TimeSpan.FromSeconds(secondsFull); }
-        }
+        public TimeSpan TimeFull => TimeSpan.FromSeconds(secondsFull);
+        #endregion
 
+        #region Property: SecondsElapsed, TimeElapsed
         public delegate void SecondsElapsedChangedDelegate(Vtr vtr, int oldValue, int newValue);
         public event SecondsElapsedChangedDelegate SecondsElapsedChanged;
 
@@ -144,7 +149,7 @@ namespace OpenSC.Model.VTRs
 
         public int SecondsElapsed
         {
-            get { return secondsElapsed; }
+            get => secondsElapsed;
             protected set
             {
                 if (value == secondsElapsed)
@@ -153,14 +158,14 @@ namespace OpenSC.Model.VTRs
                 secondsElapsed = value;
                 SecondsElapsedChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(SecondsElapsed));
+                RaisePropertyChanged(nameof(TimeElapsed));
             }
         }
 
-        public TimeSpan TimeElapsed
-        {
-            get { return TimeSpan.FromSeconds(secondsElapsed); }
-        }
-        
+        public TimeSpan TimeElapsed => TimeSpan.FromSeconds(secondsElapsed);
+        #endregion
+
+        #region Property: SecondsRemaining, TimeRemaining
         public delegate void SecondsRemainingChangedDelegate(Vtr vtr, int oldValue, int newValue);
         public event SecondsRemainingChangedDelegate SecondsRemainingChanged;
 
@@ -168,7 +173,7 @@ namespace OpenSC.Model.VTRs
 
         public int SecondsRemaining
         {
-            get { return secondsRemaining; }
+            get => secondsRemaining;
             protected set
             {
                 if (value == secondsRemaining)
@@ -177,19 +182,13 @@ namespace OpenSC.Model.VTRs
                 secondsRemaining = value;
                 SecondsRemainingChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(SecondsRemaining));
+                RaisePropertyChanged(nameof(TimeRemaining));
             }
         }
 
-        public TimeSpan TimeRemaining
-        {
-            get { return TimeSpan.FromSeconds(secondsRemaining); }
-        }
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            VtrDatabase.Instance.ItemUpdated(this);
-        }
+        public TimeSpan TimeRemaining => TimeSpan.FromSeconds(secondsRemaining);
+        #endregion
 
     }
+
 }

@@ -12,9 +12,9 @@ namespace OpenSC.Model.Macros
     public class MacroPanel : ModelBase
     {
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
-            base.Restored();
+            base.RestoredOwnFields();
             foreach (MacroPanelElement element in elements)
                 element.Restored();
         }

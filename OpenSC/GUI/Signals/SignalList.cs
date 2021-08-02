@@ -47,7 +47,7 @@ namespace OpenSC.GUI.Signals
             builder.Header("TR");
             builder.Width(50);
             builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.RedTally.State ? Color.Red : Color.LightGray); });
-            //builder.AddChangeEvent(nameof(ExternalSignal.RedTally));
+            builder.AddMultilevelChangeEvent(nameof(ExternalSignal.RedTally), nameof(IBidirectionalSignalTally.State));
             builder.BuildAndAdd();
 
             // Column: green tally
@@ -57,7 +57,7 @@ namespace OpenSC.GUI.Signals
             builder.Width(50);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.GreenTally.State ? Color.ForestGreen : Color.LightGray); });
-            //builder.AddChangeEvent(nameof(ExternalSignal.GreenTally));
+            builder.AddMultilevelChangeEvent(nameof(ExternalSignal.GreenTally), nameof(IBidirectionalSignalTally.State));
             builder.BuildAndAdd();
 
             // Bind database

@@ -47,9 +47,15 @@ namespace OpenSC.Model
             foreach (var database in databases.Values)
                 database.Load();
             foreach (var database in databases.Values)
+                database.NotifyItemsRestoredOwnFields();
+            foreach (var database in databases.Values)
                 database.BuildRelationsByForeignKeys();
             foreach (var database in databases.Values)
-                database.NotifyItemsRestored();
+                database.NotifyItemsRestoredBasicRelations();
+            foreach (var database in databases.Values)
+                database.RequestRestoreCustomRelations();
+            foreach (var database in databases.Values)
+                database.NotifyItemsTotallyRestored();
         }
 
         public void SaveEverything()

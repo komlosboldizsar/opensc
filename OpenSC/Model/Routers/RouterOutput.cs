@@ -13,27 +13,30 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public class RouterOutput : ISignalSourceRegistered, INotifyPropertyChanged
+    public class RouterOutput : SignalForwarder, ISignalSourceRegistered, INotifyPropertyChanged
     {
 
-        public RouterOutput()
-        { }
+        public RouterOutput() : base()
+        {
+            this.CurrentSourceChanged += currentSourceChangedHandler;
+        }
 
         public RouterOutput(string name, Router router, int index)
+            : base()
         {
             this.name = name;
             this.Router = router;
             this.Index = index;
-            createTallies();
+            this.CurrentSourceChanged += currentSourceChangedHandler;
             registerAsSignal();
         }
 
         public void Restored()
         {
-            createTallies();
             registerAsSignal();
         }
 
+        #region Property: Name
         private string name;
 
         public string Name
@@ -56,152 +59,83 @@ namespace OpenSC.Model.Routers
 
         public delegate void NameChangedDelegate(RouterOutput output, string oldName, string newName);
         public event NameChangedDelegate NameChanged;
+        #endregion
 
-        public Router Router { get; internal set; }
+        #region Property: Router
+        public Router Router { get; private set; }
+
+        internal void AssignParentRouter(Router router)
+        {
+            if (Router != null)
+                return;
+            Router = router;
+        }
 
         public void RemovedFromRouter(Router router)
         {
             if (router != Router)
                 return;
+            Router = null;
             unregisterAsSignal();
         }
-
-        private int index;
-
-        public int Index
-        {
-            get { return index; }
-            internal set
-            {
-                if (value == index)
-                    return;
-                unregisterAsSignal();
-                int oldIndex = index;
-                index = value;
-                registerAsSignal();
-                IndexChanged?.Invoke(this, oldIndex, value);
-                PropertyChanged?.Invoke(nameof(Index));
-                SignalLabelChanged?.Invoke(this, getSignalLabel());
-                PropertyChanged?.Invoke(nameof(ISignalSourceRegistered.SignalLabel));
-            }
-        }
-
-
-        public delegate void IndexChangedDelegate(RouterOutput output, int oldIndex, int newIndex);
-        public event IndexChangedDelegate IndexChanged;
-
-        private RouterInput crosspoint;
-
-        public RouterInput Crosspoint
-        {
-            get { return crosspoint; }
-            internal set
-            {
-
-                unsubscribeCrosspointEvents();
-
-                crosspoint = value;
-
-                string logMessage = string.Format("Router crosspoint updated. Router ID: {0}, destination: {1}, source: {2}.",
-                    Router.ID,
-                    Index,
-                    value.Index);
-                LogDispatcher.I(Router.LOG_TAG, logMessage);
-
-                CrosspointChanged?.Invoke(this, value);
-                RouterMacroTriggers.RouterOutputSourceChanged.Call(Router, this);
-                Router.NotifyCrosspointChanged(this);
-
-                redTally.PreviousElement = value.RedTally;
-                yellowTally.PreviousElement = value.YellowTally;
-                greenTally.PreviousElement = value.GreenTally;
-
-                subscribeCrosspointEvents();
-
-                fireChangeEventsAtCrosspointChange();
-
-            }
-        }
-
-        public delegate void CrosspointChangedDelegate(RouterOutput output, RouterInput newInput);
-        public event CrosspointChangedDelegate CrosspointChanged;
-
-        private void subscribeCrosspointEvents()
-        {
-            if (crosspoint == null)
-                return;
-            crosspoint.SourceNameChanged += crosspointSourceNameChangedHandler;
-        }
-
-        private void unsubscribeCrosspointEvents()
-        {
-            if (crosspoint == null)
-                return;
-            crosspoint.SourceNameChanged -= crosspointSourceNameChangedHandler;
-        }
-
-        private void fireChangeEventsAtCrosspointChange()
-        {
-            if(crosspoint == null)
-            {
-                RegisteredSourceSignalChanged?.Invoke(this, null, null); // TODO
-                RegisteredSourceSignalNameChanged?.Invoke(this, null, null); // TODO
-            }
-            else
-            {
-                RegisteredSourceSignalChanged?.Invoke(this, crosspoint.RegisteredSourceSignal, null); // TODO
-                RegisteredSourceSignalNameChanged?.Invoke(this, crosspoint.RegisteredSourceSignalName, null); // TODO
-            }
-        }
-
-        private void crosspointSourceNameChangedHandler(RouterInput input, string newName)
-        {
-            RegisteredSourceSignalNameChanged?.Invoke(this, newName, null); // TODO
-        }
-
-        public string InputName
-        {
-            get => crosspoint?.Name;
-        }
-
-        #region Property: SourceSignalName
-        public string RegisteredSourceSignalName
-        {
-            get => GetRegisteredSourceSignalName();
-        }
-
-        public string GetRegisteredSourceSignalName(List<object> recursionChain = null)
-        {
-            if (crosspoint == null)
-                return null;
-            if (recursionChain == null)
-                recursionChain = new List<object>();
-            if (recursionChain.Contains(this))
-                return "(cyclic tieline)";
-            recursionChain.Add(this);
-            return crosspoint.GetRegisteredSourceSignalName(recursionChain);
-        }
-
-        public event RegisteredSourceSignalNameChangedDelegate RegisteredSourceSignalNameChanged;
         #endregion
 
-        #region Property: RegisteredSourceSignal
-        public ISignalSourceRegistered RegisteredSourceSignal
-            => GetRegisteredSourceSignal();
+        #region Property: Index
+        public int Index { get; private set; }
 
-        public ISignalSourceRegistered GetRegisteredSourceSignal(List<object> recursionChain = null)
+        internal void SetIndexFromRouter(Router router, int index)
         {
-            if (crosspoint == null)
-                return null;
-            if (recursionChain == null)
-                recursionChain = new List<object>();
-            if (recursionChain.Contains(this))
-                return null;
-            recursionChain.Add(this);
-            return crosspoint.GetRegisteredSourceSignal(recursionChain);
+            if (router != Router)
+                return;
+            if (index == Index)
+                return;
+            int oldIndex = Index;
+            Index = index;
+            IndexChanged?.Invoke(this, oldIndex, Index);
+            PropertyChanged?.Invoke(nameof(Index));
+            SignalLabelChanged?.Invoke(this, getSignalLabel());
+            PropertyChanged?.Invoke(nameof(ISignalSourceRegistered.SignalLabel));
+            SignalUniqueIdChanged?.Invoke(this, SignalUniqueId);
+            PropertyChanged?.Invoke(nameof(ISignalSourceRegistered.SignalUniqueId));
         }
 
-        public event RegisteredSourceSignalChangedDelegate RegisteredSourceSignalChanged; // TODO:FIRE
+        public delegate void IndexChangedDelegate(RouterOutput input, int oldIndex, int newIndex);
+        public event IndexChangedDelegate IndexChanged;
+        #endregion
+
+        #region Source assignment
+        public override void AssignSource(ISignalSource source) // when source already changed
+        {
+            RouterInput sourceRouterInput = source as RouterInput;
+            if (sourceRouterInput == null)
+                return;
+            if (sourceRouterInput.Router != Router)
+                throw new ArgumentException();
+            base.AssignSource(source);
+            string logMessage = string.Format("Router crosspoint updated. Router: [(#{0}) {1}], destination: #{2}, source: #{3}.",
+                    Router.ID,
+                    Router.Name,
+                    Index,
+                    sourceRouterInput.Index);
+            LogDispatcher.I(Router.LOG_TAG, logMessage);
+            CurrentInputChanged?.Invoke(this, source as RouterInput);
+            RouterMacroTriggers.RouterOutputSourceChanged.Call(Router, this);
+        }
+
+        public void RequestCrosspointUpdate(RouterInput input)
+        {
+            Router?.RequestCrosspointUpdate(this, input);
+        }
+        #endregion
+
+        #region Property: CurrentInput
+        public RouterInput CurrentInput => CurrentSource as RouterInput;
+
+        public delegate void CurrentInputChangedDelegate(RouterOutput output, RouterInput newInput);
+        public event CurrentInputChangedDelegate CurrentInputChanged;
+
+        private void currentSourceChangedHandler(ISignalDestination signalDestination, ISignalSource newSource)
+            => CurrentInputChanged?.Invoke(this, newSource as RouterInput);
         #endregion
 
         #region Property: SignalLabel
@@ -218,7 +152,7 @@ namespace OpenSC.Model.Routers
         public string SignalUniqueId
             => string.Format("router.{0}.output.{1}", Router.ID, (Index + 1));
 
-        public event SignalUniqueIdChangedDelegate SignalUniqueIdChanged; // TODO: FIRE
+        public event SignalUniqueIdChangedDelegate SignalUniqueIdChanged;
         #endregion
 
         #region Implementation of INotifyPropertyChanged
@@ -234,23 +168,6 @@ namespace OpenSC.Model.Routers
         private void unregisterAsSignal()
         {
             SignalRegister.Instance.UnregisterSignal(this);
-        }
-        #endregion
-
-        #region Tallies
-        private BidirectionalPassthroughSignalTally redTally;
-        private BidirectionalPassthroughSignalTally yellowTally;
-        private BidirectionalPassthroughSignalTally greenTally;
-
-        public IBidirectionalSignalTally RedTally => redTally;
-        public IBidirectionalSignalTally YellowTally => yellowTally;
-        public IBidirectionalSignalTally GreenTally => greenTally;
-
-        private void createTallies()
-        {
-            redTally = new BidirectionalPassthroughSignalTally(this);
-            yellowTally = new BidirectionalPassthroughSignalTally(this);
-            greenTally = new BidirectionalPassthroughSignalTally(this);
         }
         #endregion
 

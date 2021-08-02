@@ -18,25 +18,22 @@ namespace OpenSC.Model.Routers.Virtual
             StateString = "OK";
         }
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
-            base.Restored();
+            base.RestoredOwnFields();
             State = RouterState.Ok;
             StateString = "OK";
         }
 
-        protected override bool setCrosspoint(RouterOutput output, RouterInput input)
-        {
-            output.Crosspoint = input;
-            return true;
-        }
+        protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)
+            => notifyCrosspointChanged(output, input);
 
-        protected override void updateAllCrosspoints()
+        protected override void queryAllCrosspoints()
         {
             Random r = new Random();
             int c = Inputs.Count;
             foreach (RouterOutput output in Outputs)
-                output.Crosspoint = (c > 0) ? Inputs[r.Next(c-1)] : null;
+                notifyCrosspointChanged(output, (c > 0) ? Inputs[r.Next(c - 1)] : null);
         }
 
     }

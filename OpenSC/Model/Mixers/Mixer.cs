@@ -15,7 +15,7 @@ namespace OpenSC.Model.Mixers
         public Mixer()
         { }
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
             restoreInputs();
         }
@@ -288,12 +288,6 @@ namespace OpenSC.Model.Mixers
         public delegate void InputsChangedDelegate(Mixer mixer);
         public event InputsChangedDelegate InputsChanged;
         #endregion
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            MixerDatabase.Instance.ItemUpdated(this);
-        }
 
     }
 

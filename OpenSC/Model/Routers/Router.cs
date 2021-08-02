@@ -16,18 +16,11 @@ namespace OpenSC.Model.Routers
 
         public const string LOG_TAG = "Router";
 
+        #region Persistence, instantiation
         public Router()
         {
             inputs.ItemsChanged += inputsChangedHandler;
             outputs.ItemsChanged += outputsChangedHandler;
-        }
-
-        public override void Restored()
-        {
-            updateCrosspointIOAssociations();
-            notifyInputsOutputsRestored();
-            RouterDatabase.Instance.RestoredIO(this);
-            updateAllCrosspoints();
         }
 
         public override void Removed()
@@ -50,6 +43,40 @@ namespace OpenSC.Model.Routers
 
         }
 
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            RouterDatabase.Instance.ItemUpdated(this);
+        }
+        #endregion
+
+        #region Restoration
+        public override void RestoredOwnFields()
+        {
+            base.RestoredOwnFields();
+            notifyIOsRestored();
+        }
+
+        public override void TotallyRestored()
+        {
+            base.TotallyRestored();
+            queryAllCrosspoints();
+        }
+
+        public override void RestoreCustomRelations()
+        {
+            base.RestoreCustomRelations();
+            restoreInputSources();
+        }
+
+        private void notifyIOsRestored()
+        {
+            inputs.ForEach(i => i.Restored());
+            outputs.ForEach(o => o.Restored());
+        }
+        #endregion
+
+        #region Property: ID
         public delegate void IdChangedDelegate(Router router, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
 
@@ -77,8 +104,9 @@ namespace OpenSC.Model.Routers
             if (!RouterDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
+        #endregion
 
-
+        #region Property: Name
         public delegate void NameChangedDelegate(Router router, string oldName, string newName);
         public event NameChangedDelegate NameChanged;
 
@@ -105,17 +133,15 @@ namespace OpenSC.Model.Routers
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
         }
+        #endregion
 
+        #region Inputs
         private ObservableList<RouterInput> inputs = new ObservableList<RouterInput>();
-
-        public ObservableList<RouterInput> Inputs
-        {
-            get { return inputs; }
-        }
+        public ObservableList<RouterInput> Inputs => inputs;
 
         [PersistAs("inputs")]
         [PersistAs(null, 1)]
-        private RouterInput[] _inputs
+        private RouterInput[] _inputs // for persistence
         {
             get { return inputs.ToArray(); }
             set
@@ -123,6 +149,7 @@ namespace OpenSC.Model.Routers
                 inputs.Clear();
                 if(value != null)
                     inputs.AddRange(value);
+                inputs.ForEach(i => i.AssignParentRouter(this));
                 updateInputIndices();
             }
         }
@@ -140,10 +167,18 @@ namespace OpenSC.Model.Routers
             updateInputIndices();
         }
 
+        public RouterInput GetInput(int index)
+        {
+            if ((index < 1) || (index > inputs.Count))
+                throw new ArgumentException();
+            return inputs[index - 1];
+        }
+
         private void updateInputIndices()
         {
-            for (int i = 0; i < inputs.Count; i++)
-                inputs[i].Index = i;
+            int idx = 0;
+            foreach (RouterInput input in inputs)
+                input.SetIndexFromRouter(this, idx++);
         }
 
         private void inputsChangedHandler()
@@ -155,16 +190,16 @@ namespace OpenSC.Model.Routers
         public delegate void InputsChangedDelegate(Router router);
         public event InputsChangedDelegate InputsChanged;
 
-        private ObservableList<RouterOutput> outputs = new ObservableList<RouterOutput>();
+        private void restoreInputSources() => inputs.ForEach(i => i.RestoreSource());
+        #endregion
 
-        public ObservableList<RouterOutput> Outputs
-        {
-            get { return outputs; }
-        }
+        #region Outputs
+        private ObservableList<RouterOutput> outputs = new ObservableList<RouterOutput>();
+        public ObservableList<RouterOutput> Outputs => outputs;
 
         [PersistAs("outputs")]
         [PersistAs(null, 1)]
-        private RouterOutput[] _outputs
+        private RouterOutput[] _outputs // for persistence
         {
             get { return outputs.ToArray(); }
             set
@@ -172,6 +207,7 @@ namespace OpenSC.Model.Routers
                 outputs.Clear();
                 if(value != null)
                     outputs.AddRange(value);
+                outputs.ForEach(o => o.AssignParentRouter(this));
                 updateOutputIndices();
             }
         }
@@ -189,10 +225,18 @@ namespace OpenSC.Model.Routers
             updateOutputIndices();
         }
 
+        public RouterOutput GetOutput(int index)
+        {
+            if ((index < 1) || (index > outputs.Count))
+                throw new ArgumentException();
+            return outputs[index - 1];
+        }
+
         private void updateOutputIndices()
         {
-            for (int i = 0; i < outputs.Count; i++)
-                outputs[i].Index = i;
+            int idx = 0;
+            foreach (RouterOutput output in outputs)
+                output.SetIndexFromRouter(this, idx++);
         }
 
         private void outputsChangedHandler()
@@ -203,47 +247,46 @@ namespace OpenSC.Model.Routers
 
         public delegate void OutputsChangedDelegate(Router router);
         public event OutputsChangedDelegate OutputsChanged;
+        #endregion
 
-        public bool UpdateCrosspoint(RouterOutput output, RouterInput input)
+        #region Crosspoint update
+        public void RequestCrosspointUpdate(RouterOutput output, RouterInput input)
         {
 
             if (!outputs.Contains(output))
-                return false;
+                throw new ArgumentException();
 
-            string logMessage = string.Format("Router crosspoint update request. Router ID: {0}, destination: {1}, source: {2}.",
+            string logMessage = string.Format("Router crosspoint update request. Router: [(#{0}) #1], destination: {2}, source: {3}.",
                 ID,
+                Name,
                 output.Index,
                 input.Index);
             LogDispatcher.I(LOG_TAG, logMessage);
 
-            return setCrosspoint(output, input);
+            requestCrosspointUpdateImpl(output, input);
 
         }
 
-        protected abstract bool setCrosspoint(RouterOutput output, RouterInput input);
-        protected abstract void updateAllCrosspoints();
+        protected abstract void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input);
+        protected abstract void queryAllCrosspoints();
 
-        internal void NotifyCrosspointChanged(RouterOutput output)
+        protected void notifyCrosspointChanged(RouterOutput output, RouterInput input)
         {
             if (!outputs.Contains(output))
-                return;
+                throw new ArgumentException();
+            output.AssignSource(input);
             RouterMacroTriggers.RouterCrosspointChanged.Call(this);
         }
 
-        private void updateCrosspointIOAssociations()
+        protected void notifyCrosspointChanged(int outputIndex, int inputIndex)
         {
-            foreach (RouterInput input in inputs)
-                input.Router = this;
-            foreach (RouterOutput output in outputs)
-                output.Router = this;
+            if ((outputIndex < 0) || (outputIndex >= outputs.Count))
+                throw new ArgumentException();
+            if ((inputIndex < 0) || (inputIndex >= inputs.Count))
+                throw new ArgumentException();
+            notifyCrosspointChanged(outputs[outputIndex], inputs[inputIndex]);
         }
-        private void notifyInputsOutputsRestored()
-        {
-            foreach (RouterOutput output in outputs)
-                output.Restored();
-            foreach (RouterInput input in inputs)
-                input.Restored();
-        }
+        #endregion
 
         #region Property: State
         public delegate void StateChangedDelegate(Router router, RouterState oldState, RouterState newState);
@@ -286,18 +329,6 @@ namespace OpenSC.Model.Routers
             }
         }
         #endregion
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            RouterDatabase.Instance.ItemUpdated(this);
-        }
-
-        public void RestoreInputSources()
-        {
-            foreach (RouterInput input in inputs)
-                input.RestoreSource();
-        }
 
     }
 

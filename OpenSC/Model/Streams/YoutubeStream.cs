@@ -19,17 +19,36 @@ namespace OpenSC.Model.Streams
     class YoutubeStream: Stream
     {
 
+        #region Persistence, instantiation
+        public YoutubeStream()
+        {
+            createAndStartUpdaterThread();
+        }
+
+        public override void Removed()
+        {
+            base.Removed();
+            updaterThread.Abort();
+            updaterThread = null;
+        }
+        #endregion
+
+        #region Constants
         private const string LOG_TAG = "Stream/YouTube";
 
+        private const string API_URL = "https://www.googleapis.com/youtube/v3/videos?id={0}&part=liveStreamingDetails&key={1}";
+        #endregion
+
+        #region Settings
         public static readonly Setting<string> ApiKeySetting = new Setting<string>(
             "streams.youtubestream.apikey",
             "Streams",
             "YouTube API key",
             "Get this from Google Developer Console!"
         );
+        #endregion
 
-        private const string API_URL = "https://www.googleapis.com/youtube/v3/videos?id={0}&part=liveStreamingDetails&key={1}";
-
+        #region Property: VideoId
         [PersistAs("video_id")]
         private string videoId;
 
@@ -38,7 +57,9 @@ namespace OpenSC.Model.Streams
             get { return videoId; }
             set { videoId = value; }
         }
+        #endregion
 
+        #region Property: RefreshRate
         [PersistAs("refresh_rate")]
         private int refreshRate = 5;
 
@@ -52,22 +73,9 @@ namespace OpenSC.Model.Streams
                 refreshRate = value;
             }
         }
+        #endregion
 
-        public YoutubeStream()
-        {
-            createAndStartUpdaterThread();
-        }
-
-        public override void Restored()
-        { }
-
-        public override void Removed()
-        {
-            base.Removed();
-            updaterThread.Abort();
-            updaterThread = null;
-        }
-
+        #region Viewer count update: periodic thread
         private void createAndStartUpdaterThread()
         {
             updaterThread = new Thread(updaterThreadMethod)
@@ -87,7 +95,9 @@ namespace OpenSC.Model.Streams
                 Thread.Sleep(refreshRate * 1000);
             }
         }
+        #endregion
 
+        #region Viewer count update: HTTP request and response processing
         private void doHttpRequest()
         {
             try
@@ -123,6 +133,7 @@ namespace OpenSC.Model.Streams
                 int totalResults = json["pageInfo"]["totalResults"].ToObject<int>();
                 if (totalResults == 0) {
                     State = StreamState.Unknown;
+                    ViewerCount = null;
                     return;
                 }
 
@@ -133,6 +144,7 @@ namespace OpenSC.Model.Streams
                 if (!string.IsNullOrEmpty(actualEndTime))
                 {
                     State = StreamState.Ended;
+                    ViewerCount = null;
                     return;
                 }
 
@@ -143,7 +155,7 @@ namespace OpenSC.Model.Streams
                     if (int.TryParse(liveStreamingDetails["concurrentViewers"]?.ToString(), out int viewerCount))
                         ViewerCount = viewerCount;
                     else
-                        ViewerCount = 0;
+                        ViewerCount = null;
                     return;
                 }
 
@@ -151,10 +163,12 @@ namespace OpenSC.Model.Streams
                 if (!string.IsNullOrEmpty(scheduledStartTime))
                 {
                     State = StreamState.NotStarted;
+                    ViewerCount = null;
                     return;
                 }
 
                 State = StreamState.Unknown;
+                ViewerCount = null;
 
             }
             catch (Exception ex)
@@ -167,6 +181,7 @@ namespace OpenSC.Model.Streams
             }
             
         }
+        #endregion
 
     }
 }

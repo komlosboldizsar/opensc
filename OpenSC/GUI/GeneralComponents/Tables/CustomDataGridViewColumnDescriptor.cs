@@ -41,6 +41,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public CellEndEditHandlerMethodDelegate EndEditHandlerMethod { get; private set; }
 
         public string[] ChangeEvents { get; private set; }
+        public string[][] MultilevelChangeEvents { get; private set; }
 
         public delegate void CellUpdaterMethodInvokerDelegate();
         public delegate void ExternalUpdateEventSubscriberMethodDelegate(T item, CellUpdaterMethodInvokerDelegate updateMethodInvoker);
@@ -75,6 +76,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 CellDoubleClickHandlerMethodDelegate doubleClickHandlerMethod,
                 CellEndEditHandlerMethodDelegate endEditHandlerMethod,
                 string[] changeEvents,
+                string[][] multilevelChangeEvents,
                 ExternalUpdateEventSubscriberMethodDelegate externalUpdateEventSubscriberMethod,
                 bool textEditable,
                 string buttonText,
@@ -97,6 +99,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             DoubleClickHandlerMethod = doubleClickHandlerMethod;
             EndEditHandlerMethod = endEditHandlerMethod;
             ChangeEvents = changeEvents;
+            MultilevelChangeEvents = multilevelChangeEvents;
             ExternalUpdateEventSubscriberMethod = externalUpdateEventSubscriberMethod;
             TextEditable = textEditable;
             ButtonText = buttonText;

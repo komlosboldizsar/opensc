@@ -12,10 +12,7 @@ namespace OpenSC.Model.VTRs
     [XmlTagNames("vtrs", "vtr")]
     public class VtrDatabase : DatabaseBase<Vtr>
     {
-
         public static VtrDatabase Instance { get; } = new VtrDatabase();
-
         public const string DBNAME = "vtrs";
-
     }
 }

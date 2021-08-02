@@ -4,12 +4,10 @@ using System;
 namespace OpenSC.Model.Streams
 {
 
-    public abstract class Stream: ModelBase
+    public abstract class Stream : ModelBase
     {
 
-        public override void Restored()
-        { }
-
+        #region Persistence, instantiation
         public override void Removed()
         {
             base.Removed();
@@ -18,7 +16,9 @@ namespace OpenSC.Model.Streams
             StateChanged = null;
             ViewerCountChanged = null;
         }
+        #endregion
 
+        #region Property: ID
         public delegate void IdChangedDelegate(Stream stream, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
 
@@ -44,12 +44,14 @@ namespace OpenSC.Model.Streams
             if (!StreamDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
+        #endregion
 
+        #region Property: Name
         public delegate void NameChangedDelegate(Stream stream, string oldName, string newName);
         public event NameChangedDelegate NameChanged;
 
         [PersistAs("name")]
-        private string name = "Test";
+        private string name;
 
         public string Name
         {
@@ -69,7 +71,9 @@ namespace OpenSC.Model.Streams
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException();
         }
+        #endregion
 
+        #region Property: State
         public delegate void StateChangedDelegate(Stream stream, StreamState oldState, StreamState newState);
         public event StateChangedDelegate StateChanged;
 
@@ -85,11 +89,13 @@ namespace OpenSC.Model.Streams
                 RaisePropertyChanged(nameof(State));
             }
         }
+        #endregion
 
+        #region Property: ViewerCount
         public delegate void ViewerCountChangedDelegate(Stream stream, int? oldCount, int? newCount);
         public event ViewerCountChangedDelegate ViewerCountChanged;
 
-        private int? viewerCount;
+        private int? viewerCount = null;
 
         public int? ViewerCount
         {
@@ -102,12 +108,7 @@ namespace OpenSC.Model.Streams
                 RaisePropertyChanged(nameof(ViewerCount));
             }
         }
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            StreamDatabase.Instance.ItemUpdated(this);
-        }
+        #endregion
 
     }
 }

@@ -13,7 +13,7 @@ namespace OpenSC.Model.Routers
         public Labelset()
         { }
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
             updateLabelLabelsetAssociations();
             notifyLabelsRestored();
@@ -153,12 +153,6 @@ namespace OpenSC.Model.Routers
             LabelTextChanged?.Invoke(this, label.RouterInput, oldText, newText);
         }
         #endregion
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            LabelsetDatabase.Instance.ItemUpdated(this);
-        }
 
     }
 

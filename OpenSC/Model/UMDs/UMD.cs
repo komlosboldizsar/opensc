@@ -18,7 +18,7 @@ namespace OpenSC.Model.UMDs
 
         protected abstract void update();
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
             restoreTallySources();
         }
@@ -248,12 +248,6 @@ namespace OpenSC.Model.UMDs
         {
             if(string.IsNullOrEmpty(name))
                 throw new ArgumentException();
-        }
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            UmdDatabase.Instance.ItemUpdated(this);
         }
 
     }
