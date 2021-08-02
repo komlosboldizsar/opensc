@@ -10,8 +10,9 @@ namespace OpenSC.Model.General
     public class MultilevelPropertyChangeObserver
     {
 
-        public MultilevelPropertyChangeObserver(INotifyPropertyChanged baseItem, params string[] propertyNames)
+        public MultilevelPropertyChangeObserver(INotifyPropertyChanged baseItem, string[] propertyNames, object tag = null)
         {
+            Tag = tag;
             INotifyPropertyChanged item = baseItem;
             string fullPropertyName = "";
             Level previousLevel = null;
@@ -30,6 +31,8 @@ namespace OpenSC.Model.General
 
         public delegate void MultilevelPropertyChangedDelegate(string fullPropertyName, MultilevelPropertyChangeObserver observer);
         public event MultilevelPropertyChangedDelegate MultilevelPropertyChanged;
+
+        public object Tag { get; private set; }
 
         private void propertyChangedOnLevel(Level level)
         {
