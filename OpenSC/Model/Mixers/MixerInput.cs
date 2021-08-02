@@ -196,9 +196,9 @@ namespace OpenSC.Model.Mixers
                 List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
                 recursionChain.Add(this);
                 if (value)
-                    source?.RedTally.Give(recursionChain);
+                    source?.GreenTally.Give(recursionChain);
                 else
-                    source?.RedTally.Revoke(recursionChain);
+                    source?.GreenTally.Revoke(recursionChain);
 
             }
         }
