@@ -21,16 +21,34 @@ namespace OpenSC.Model.Routers.Leitch
         public LeitchRouter()
         { }
 
+        public override void TotallyRestored()
+        {
+            base.TotallyRestored();
+            if (port != null)
+            {
+                port.ReceivedDataAsciiLine += receivedLineFromPort;
+                port.InitializedChanged += portInitializedChangedHandler;
+                if (port.Initialized)
+                    sendSerialCommand("@ ?\r\n");
+            }
+        }
+
         public override void Removed()
         {
             base.Removed();
             if (port != null)
-                port.ReceivedDataAsciiString -= receivedDataFromPort;
+                port.ReceivedDataAsciiString -= receivedLineFromPort;
         }
 
         #region Property: Port
+        [PersistAs("port")]
         private SerialPort port;
-        
+
+#pragma warning disable CS0169
+        [TempForeignKey(SerialPortDatabase.DBNAME, nameof(port))]
+        private int _portId;
+#pragma warning restore CS0169
+
         public SerialPort Port
         {
             get => port;
@@ -38,12 +56,26 @@ namespace OpenSC.Model.Routers.Leitch
             {
                 if (value == port)
                     return;
-                if(port != null)
-                    port.ReceivedDataAsciiString -= receivedDataFromPort;
+                if (port != null)
+                {
+                    port.ReceivedDataAsciiLine -= receivedLineFromPort;
+                    port.InitializedChanged -= portInitializedChangedHandler;
+                }
                 port = value;
                 if (port != null)
-                    port.ReceivedDataAsciiString += receivedDataFromPort;
+                {
+                    port.ReceivedDataAsciiLine += receivedLineFromPort;
+                    port.InitializedChanged += portInitializedChangedHandler;
+                    if (port.Initialized)
+                        sendSerialCommand("@ ?\r\n");
+                }
             }
+        }
+
+        private void portInitializedChangedHandler(SerialPort port, bool oldState, bool newState)
+        {
+            if (newState)
+                enableReporting();
         }
         #endregion
 
@@ -85,22 +117,16 @@ namespace OpenSC.Model.Routers.Leitch
             port.SendData(commandBytesToSend, validUntil);
         }
 
-        private void receivedDataFromPort(SerialPort port, string asciiString)
+        private void receivedLineFromPort(SerialPort port, string asciiLine)
         {
-            string[] lines = asciiString.Split(new char[] { '\r', '\n' });
-            foreach (string line in lines)
-                if (line != string.Empty)
-                    receivedLineFromPort(line);
-        }
-
-        private void receivedLineFromPort(string line)
-        {
-            if ((line.Length < 2) || (line[1] != ':'))
+            if (string.IsNullOrWhiteSpace(asciiLine))
                 return;
-            switch (line[0])
+            if ((asciiLine.Length < 2) || (asciiLine[1] != ':'))
+                return;
+            switch (asciiLine[0])
             {
                 case 'S':
-                    handleStatusUpdate(line);
+                    handleStatusUpdate(asciiLine);
                     break;
             }
         }
@@ -111,13 +137,14 @@ namespace OpenSC.Model.Routers.Leitch
         {
             try
             {
-                int levelIndex = int.Parse(statusString[2].ToString());
+                Console.WriteLine(statusString);
+                int levelIndex = int.Parse(statusString[2].ToString(), System.Globalization.NumberStyles.HexNumber);
                 if (levelIndex != level)
                     return;
                 string destinationSourceString = statusString.Substring(3);
                 string[] destinationSourceStringParts = destinationSourceString.Split(',');
-                int sourceIndex = int.Parse(destinationSourceStringParts[0], System.Globalization.NumberStyles.HexNumber);
-                int destinationIndex = int.Parse(destinationSourceStringParts[1], System.Globalization.NumberStyles.HexNumber);
+                int destinationIndex = int.Parse(destinationSourceStringParts[0], System.Globalization.NumberStyles.HexNumber);
+                int sourceIndex = int.Parse(destinationSourceStringParts[1], System.Globalization.NumberStyles.HexNumber);
                 notifyCrosspointChanged(destinationIndex, sourceIndex);
             }
             catch
@@ -126,6 +153,11 @@ namespace OpenSC.Model.Routers.Leitch
                     ID, port?.ID, statusString);
                 LogDispatcher.E(LOG_TAG, logMessage);
             }
+        }
+
+        private void enableReporting()
+        {
+            sendSerialCommand("@ ?\r\n");
         }
         #endregion
 

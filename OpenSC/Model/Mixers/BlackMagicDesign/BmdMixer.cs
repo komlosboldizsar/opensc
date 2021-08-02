@@ -33,9 +33,9 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             initSwitcher();
         }
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
-            base.Restored();
+            base.RestoredOwnFields();
             initSwitcher();
             Connect();
         }

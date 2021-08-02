@@ -31,9 +31,9 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             initVideohub();
         }
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
-            base.Restored();
+            base.RestoredOwnFields();
             initVideohub();
             startAutoReconnectThread();
         }
