@@ -11,8 +11,9 @@ namespace OpenSC.Model.Variables
     public class DynamicText : ModelBase
     {
 
-        public override void Restored()
+        public override void TotallyRestored()
         {
+            base.TotallyRestored();
             formulaUpdated();
         }
 
@@ -84,7 +85,7 @@ namespace OpenSC.Model.Variables
         public delegate void CurrentTextChangedDelegate(DynamicText text, string oldText, string newText);
         public event CurrentTextChangedDelegate CurrentTextChanged;
 
-        private string currentText;
+        private string currentText = "";
 
         public string CurrentText
         {

@@ -189,11 +189,12 @@ namespace BMD.Videohub
         #region Sending
         public void SendLine(string line)
         {
-            string toSend = line + "\n";
+            string toSend = line + "\r\n";
             byte[] bytesToSend = Encoding.ASCII.GetBytes(toSend);
             try
             {
                 socket.BeginSend(bytesToSend, 0, bytesToSend.Length, SocketFlags.None, sendCallback, null);
+                Console.Write(toSend);
             }
             catch (SocketException)
             {

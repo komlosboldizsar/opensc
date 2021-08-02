@@ -24,9 +24,9 @@ namespace OpenSC.Model.VTRs
         #endregion
 
         #region Persistence, instantiation
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
-            base.Restored();
+            base.RestoredOwnFields();
             CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this);
             initStoppedStateDetection();
         }
@@ -46,7 +46,14 @@ namespace OpenSC.Model.VTRs
         public string ListenedIP
         {
             get => listenedIP;
-            set { listenedIP = value; }
+            set
+            {
+                if (listenedIP == value)
+                    return;
+                CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this);
+                listenedIP = value;
+                CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this);
+            }
         }
         #endregion
 

@@ -13,7 +13,7 @@ namespace OpenSC.Model.Routers
         public Labelset()
         { }
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
             updateLabelLabelsetAssociations();
             notifyLabelsRestored();

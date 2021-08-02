@@ -402,6 +402,8 @@ namespace OpenSC.Model.Persistence
                     foreach (FieldInfo foreignKeyField in extendedFields)
                         buildRelationForField(item, foreignKeyField, ref items);
                 }
+
+                item.RestoreCustomRelations();
             }
 
         }
