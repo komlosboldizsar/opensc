@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.General;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,7 +44,14 @@ namespace OpenSC.Model.Signals
         public bool State => tallyState.State;
         public bool GetState(List<object> recursionChain = null) => tallyState.GetState(recursionChain);
         public event StateChangedHandler StateChanged;
-        private void tallyStateChanged(ISignalSource signalSource, ISignalTallyState tally, bool newState, List<object> recursionChain) => StateChanged?.Invoke(signalSource, tally, newState, recursionChain);
+
+        private void tallyStateChanged(ISignalSource signalSource, ISignalTallyState tally, bool newState, List<object> recursionChain)
+        {
+            StateChanged?.Invoke(signalSource, tally, newState, recursionChain);
+            PropertyChanged?.Invoke(nameof(State));
+        }
+
+        public event PropertyChangedDelegate PropertyChanged; // INotifyPropertyChanged implementation
         #endregion
 
         #region ISignalTallyReceiver interface

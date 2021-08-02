@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.General;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -52,7 +53,10 @@ namespace OpenSC.Model.Signals
                     newState = previousElement.State;
                 }
                 if (previousState != newState)
+                {
                     StateChanged?.Invoke(ParentSignalSource, this, newState, RecursionChainHelpers.CreateRecursionChain(this));
+                    PropertyChanged?.Invoke(nameof(State));
+                }
             }
         }
 
@@ -61,7 +65,12 @@ namespace OpenSC.Model.Signals
             if (recursionChain?.Contains(this) == true)
                 return;
             StateChanged?.Invoke(ParentSignalSource, this, newState, recursionChain.ExtendRecursionChain(this));
+            PropertyChanged?.Invoke(nameof(State));
         }
+        #endregion
+
+        #region INotifyPropertyChanged interface
+        public event PropertyChangedDelegate PropertyChanged;
         #endregion
 
     }

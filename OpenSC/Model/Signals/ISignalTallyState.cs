@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.General;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace OpenSC.Model.Signals
 
     public delegate void StateChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState, List<object> recursionChain);
 
-    public interface ISignalTallyState : ISignalTallyStateOrReceiver
+    public interface ISignalTallyState : ISignalTallyStateOrReceiver, INotifyPropertyChanged
     {
 
         #region Property: ParentSignalSource
