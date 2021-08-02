@@ -25,6 +25,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             this.item = item;
             createCells();
             subscribeToItemEvents();
+            subscribeToMultilevelItemEvents();
             subscribeToExternalUpdateEvents();
         }
 
@@ -42,6 +43,24 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             INotifyPropertyChanged itemCastedINotifyPropertyChanged = item as INotifyPropertyChanged;
             if (itemCastedINotifyPropertyChanged != null)
                 itemCastedINotifyPropertyChanged.PropertyChanged += notifyPropertyChangedHandler;
+        }
+
+        private void subscribeToMultilevelItemEvents()
+        {
+            INotifyPropertyChanged itemCastedINotifyPropertyChanged = item as INotifyPropertyChanged;
+            if (itemCastedINotifyPropertyChanged == null)
+                return;
+            for (int i = 0; i < cells.Count; i++)
+            {
+                DataGridViewCell cell = cells[i];
+                CustomDataGridViewColumnDescriptor<T> columnDescriptor = table.ColumnDescriptors[i];
+                foreach (string[] eventNames in columnDescriptor.MultilevelChangeEvents)
+                {
+                    object[] tagData = new object[] { cell, columnDescriptor };
+                    MultilevelPropertyChangeObserver multilevelObserver = new MultilevelPropertyChangeObserver(itemCastedINotifyPropertyChanged, eventNames, tagData);
+                    multilevelObserver.MultilevelPropertyChanged += notifyMultilevelPropertyChangedHandler;
+                }
+            }
         }
 
         private void subscribeToExternalUpdateEvents()
@@ -63,6 +82,18 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                     columnDescriptor.UpdaterMethod?.Invoke(item, cells[column]);
                 column++;
             }
+        }
+
+        private void notifyMultilevelPropertyChangedHandler(string fullPropertyName, MultilevelPropertyChangeObserver observer)
+        {
+            object[] tagData = observer.Tag as object[];
+            if ((tagData == null) || (tagData.Length != 2))
+                return;
+            DataGridViewCell cell = tagData[0] as DataGridViewCell;
+            CustomDataGridViewColumnDescriptor<T> columnDescriptor = tagData[1] as CustomDataGridViewColumnDescriptor<T>;
+            if (cell == null)
+                return;
+            columnDescriptor.UpdaterMethod?.Invoke(item, cell);
         }
 
         private DataGridViewCell createAndInitCell(CustomDataGridViewColumnDescriptor<T> columnDescriptor)
