@@ -244,7 +244,7 @@ namespace OpenSC.Model.Mixers
         }
 
         [PersistAs("inputs")]
-        [PersistAs("input", 1)]
+        [PersistAs(null, 1)]
         private MixerInput[] _inputs
         {
             get { return inputs.ToArray(); }
@@ -288,12 +288,6 @@ namespace OpenSC.Model.Mixers
         public delegate void InputsChangedDelegate(Mixer mixer);
         public event InputsChangedDelegate InputsChanged;
         #endregion
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            MixerDatabase.Instance.ItemUpdated(this);
-        }
 
     }
 

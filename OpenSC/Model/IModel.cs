@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model
 {
+
+    public delegate void ModelRestoredHandler(IModel model);
+    public delegate void ModelRemovedHandler(IModel model);
+    public delegate void ModelBeforeUpdateHandler(IModel model);
+    public delegate void ModelAfterUpdateHandler(IModel model);
+
     public interface IModel
     {
         int ID { get; set; }
@@ -13,5 +19,10 @@ namespace OpenSC.Model
         void Removed();
         void StartUpdate();
         void EndUpdate();
+        event ModelRestoredHandler ModelRestored;
+        event ModelRemovedHandler ModelRemoved;
+        event ModelBeforeUpdateHandler ModelBeforeUpdate;
+        event ModelAfterUpdateHandler ModelAfterUpdate;
     }
+
 }

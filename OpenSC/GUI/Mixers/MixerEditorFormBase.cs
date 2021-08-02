@@ -151,14 +151,14 @@ namespace OpenSC.GUI.Mixers
             builder.BuildAndAdd();
 
             // Column: source
-            CustomDataGridViewComboBoxItem<ISignal>[] signals = getAllSignals();
+            CustomDataGridViewComboBoxItem<ISignalSourceRegistered>[] signals = getAllSignals();
             builder = getColumnDescriptorBuilderForTable<MixerInput>(inputsTableCDGV);
             builder.Type(DataGridViewColumnType.ComboBox);
             builder.Header("Source");
             builder.Width(300);
             builder.InitializerMethod((input, cell) => { });
             builder.UpdaterMethod((input, cell) => { cell.Value = input.Source; });
-            builder.CellEndEditHandlerMethod((input, cell, eventargs) => { input.Source = cell.Value as ExternalSignal; });
+            builder.CellEndEditHandlerMethod((input, cell, eventargs) => { input.Source = cell.Value as ISignalSourceRegistered; });
             builder.DropDownPopulatorMethod((input, cell) => signals);
             builder.BuildAndAdd();
 
@@ -196,18 +196,18 @@ namespace OpenSC.GUI.Mixers
             where T : class
             => new CustomDataGridViewColumnDescriptorBuilder<T>(table);
 
-        private CustomDataGridViewComboBoxItem<ISignal>[] getAllSignals()
+        private CustomDataGridViewComboBoxItem<ISignalSourceRegistered>[] getAllSignals()
         {
-            List<CustomDataGridViewComboBoxItem<ISignal>> signalList = new List<CustomDataGridViewComboBoxItem<ISignal>>();
-            signalList.Add(new CustomDataGridViewComboBoxItem<ISignal>.NullItem("(not connected)"));
-            foreach (ISignal signal in SignalRegister.Instance)
+            List<CustomDataGridViewComboBoxItem<ISignalSourceRegistered>> signalList = new List<CustomDataGridViewComboBoxItem<ISignalSourceRegistered>>();
+            signalList.Add(new CustomDataGridViewComboBoxItem<ISignalSourceRegistered>.NullItem("(not connected)"));
+            foreach (ISignalSourceRegistered signal in SignalRegister.Instance)
                 signalList.Add(new SourceDropDownItem(signal));
             return signalList.ToArray();
         }
 
-        private class SourceDropDownItem: CustomDataGridViewComboBoxItem<ISignal>
+        private class SourceDropDownItem: CustomDataGridViewComboBoxItem<ISignalSourceRegistered>
         {
-            public SourceDropDownItem(ISignal value) : base(value)
+            public SourceDropDownItem(ISignalSourceRegistered value) : base(value)
             { }
 
             public override string ToString()

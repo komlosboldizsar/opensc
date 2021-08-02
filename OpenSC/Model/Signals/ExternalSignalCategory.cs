@@ -12,9 +12,7 @@ namespace OpenSC.Model.Signals
     public class ExternalSignalCategory : ModelBase
     {
 
-        public override void Restored()
-        { }
-
+        #region Property: ID
         public delegate void IdChangedDelegate(ExternalSignalCategory category, int oldValue, int newValue);
         public event IdChangedDelegate IdChanged;
 
@@ -40,7 +38,9 @@ namespace OpenSC.Model.Signals
             if (!ExternalSignalDatabases.Categories.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
+        #endregion
 
+        #region Property: Name
         public delegate void NameChangedDelegate(ExternalSignalCategory category, string oldName, string newName);
         public event NameChangedDelegate NameChanged;
 
@@ -60,7 +60,9 @@ namespace OpenSC.Model.Signals
                 RaisePropertyChanged(nameof(Name));
             }
         }
+        #endregion
 
+        #region Property: Color
         public delegate void ColorChangedDelegate(ExternalSignalCategory category, Color oldColor, Color newColor);
         public event ColorChangedDelegate ColorChanged;
 
@@ -80,12 +82,7 @@ namespace OpenSC.Model.Signals
                 RaisePropertyChanged(nameof(Color));
             }
         }
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            ExternalSignalDatabases.Categories.ItemUpdated(this);
-        }
+        #endregion
 
     }
 

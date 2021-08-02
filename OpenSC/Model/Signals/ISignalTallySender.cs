@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Signals
 {
-    public enum SignalTallyType
+    public interface ISignalTallySender
     {
-        Red,
-        Green
+        string Label { get; }
     }
 }

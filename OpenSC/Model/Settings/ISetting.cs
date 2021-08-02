@@ -11,20 +11,13 @@ namespace OpenSC.Model.Settings
 
     public interface ISetting
     {
-
         string Key { get; }
-
         string Category { get; }
-
         string HumanReadableTitle { get; }
-
         string HumanReadableDescription { get; }
-
         object ObjValue { get; set; }
-
         Type Type { get; }
-
         event SettingValueChangedDelegate ValueChanged;
-
     }
+
 }

@@ -5,15 +5,33 @@ using ThreadHelpers;
 namespace BMD.Switcher
 {
 
-    public class InputMonitor : IBMDSwitcherInputCallback, IDisposable
+    public class Source : IBMDSwitcherInputCallback, IDisposable
     {
 
-        public IBMDSwitcherInput Input { get; private set; }
+        public Switcher ParentSwitcher { get; private set; }
 
-        public InputMonitor(IBMDSwitcherInput input)
+        public IBMDSwitcherInput ApiSource { get; private set; }
+
+        public long ID { get; private set; }
+
+        public Source(Switcher parentSwitcher, IBMDSwitcherInput apiSource)
         {
-            Input = input;
-            Input.AddCallback(this);
+            ParentSwitcher = parentSwitcher;
+            ApiSource = apiSource;
+            ApiSource.AddCallback(this);
+            ID = ApiSource.GetSourceId();
+            initTallies();
+        }
+
+        private void initTallies()
+        {
+            InvokeHelper.Invoke(() =>
+            {
+                ApiSource.IsProgramTallied(out int isProgramTallied);
+                IsProgramTallied = (isProgramTallied != 0);
+                ApiSource.IsPreviewTallied(out int isPreviewTallied);
+                IsPreviewTallied = (isPreviewTallied != 0);
+            });
         }
 
         void IBMDSwitcherInputCallback.Notify(_BMDSwitcherInputEventType eventType)
@@ -23,14 +41,14 @@ namespace BMD.Switcher
                 case _BMDSwitcherInputEventType.bmdSwitcherInputEventTypeIsProgramTalliedChanged:
                     InvokeHelper.Invoke(() =>
                     {
-                        Input.IsProgramTallied(out int isProgramTallied);
+                        ApiSource.IsProgramTallied(out int isProgramTallied);
                         IsProgramTallied = (isProgramTallied != 0);
                     });
                     break;
                 case _BMDSwitcherInputEventType.bmdSwitcherInputEventTypeIsPreviewTalliedChanged:
                     InvokeHelper.Invoke(() =>
                     {
-                        Input.IsPreviewTallied(out int isPreviewTallied);
+                        ApiSource.IsPreviewTallied(out int isPreviewTallied);
                         IsPreviewTallied = (isPreviewTallied != 0);
                     });
                     break;
@@ -40,13 +58,13 @@ namespace BMD.Switcher
 
         public void Dispose()
         {
-            Input.RemoveCallback(this);
+            ApiSource.RemoveCallback(this);
             IsProgramTalliedChanged = null;
             IsPreviewTalliedChanged = null;
         }
 
         #region Program tally
-        public delegate void IsProgramTalliedChangedDelegate(IBMDSwitcherInput input, InputMonitor monitor, bool isTallied);
+        public delegate void IsProgramTalliedChangedDelegate(IBMDSwitcherInput apiSource, Source source, bool isTallied);
         public event IsProgramTalliedChangedDelegate IsProgramTalliedChanged;
 
         private bool isProgramTallied;
@@ -59,13 +77,13 @@ namespace BMD.Switcher
                 if (value == isProgramTallied)
                     return;
                 isProgramTallied = value;
-                IsProgramTalliedChanged?.Invoke(Input, this, value);
+                IsProgramTalliedChanged?.Invoke(ApiSource, this, value);
             }
         }
         #endregion
 
         #region Preview tally
-        public delegate void IsPreviewTalliedChangedDelegate(IBMDSwitcherInput input, InputMonitor monitor, bool isTallied);
+        public delegate void IsPreviewTalliedChangedDelegate(IBMDSwitcherInput apiSource, Source source, bool isTallied);
         public event IsPreviewTalliedChangedDelegate IsPreviewTalliedChanged;
 
         private bool isPreviewTallied;
@@ -78,7 +96,7 @@ namespace BMD.Switcher
                 if (value == isPreviewTallied)
                     return;
                 isPreviewTallied = value;
-                IsPreviewTalliedChanged?.Invoke(Input, this, value);
+                IsPreviewTalliedChanged?.Invoke(ApiSource, this, value);
             }
         }
         #endregion

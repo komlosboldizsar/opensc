@@ -141,14 +141,14 @@ namespace OpenSC.GUI.Routers
             builder.BuildAndAdd();
 
             // Column: source
-            CustomDataGridViewComboBoxItem<ISignal>[] sources = getAllSources();
+            CustomDataGridViewComboBoxItem<ISignalSourceRegistered>[] sources = getAllSources();
             builder = getColumnDescriptorBuilderForTable<RouterInput>(inputsTableCDGV);
             builder.Type(DataGridViewColumnType.ComboBox);
             builder.Header("Source");
             builder.Width(300);
             builder.InitializerMethod((input, cell) => { });
-            builder.UpdaterMethod((input, cell) => { cell.Value = input.Source; });
-            builder.CellEndEditHandlerMethod((input, cell, eventargs) => { input.Source = cell.Value as ISignal; });
+            builder.UpdaterMethod((input, cell) => { cell.Value = input.CurrentSource; });
+            builder.CellEndEditHandlerMethod((input, cell, eventargs) => { input.CurrentSource = cell.Value as ISignalSource; });
             builder.DropDownPopulatorMethod((input, cell) => sources);
             builder.BuildAndAdd();
 
@@ -308,9 +308,9 @@ namespace OpenSC.GUI.Routers
              return new CustomDataGridViewColumnDescriptorBuilder<T>(table);
         }
 
-        private class SourceDropDownItem: CustomDataGridViewComboBoxItem<ISignal>
+        private class SourceDropDownItem: CustomDataGridViewComboBoxItem<ISignalSourceRegistered>
         {
-            public SourceDropDownItem(ISignal value) : base(value)
+            public SourceDropDownItem(ISignalSourceRegistered value) : base(value)
             { }
 
             public override string ToString()
@@ -318,11 +318,11 @@ namespace OpenSC.GUI.Routers
 
         }
 
-        private CustomDataGridViewComboBoxItem<ISignal>[] getAllSources()
+        private CustomDataGridViewComboBoxItem<ISignalSourceRegistered>[] getAllSources()
         {
-            List<CustomDataGridViewComboBoxItem<ISignal>> sourceList = new List<CustomDataGridViewComboBoxItem<ISignal>>();
-            sourceList.Add(new CustomDataGridViewComboBoxItem<ISignal>.NullItem("(not connected)"));
-            foreach (ISignal signal in SignalRegister.Instance)
+            List<CustomDataGridViewComboBoxItem<ISignalSourceRegistered>> sourceList = new List<CustomDataGridViewComboBoxItem<ISignalSourceRegistered>>();
+            sourceList.Add(new CustomDataGridViewComboBoxItem<ISignalSourceRegistered>.NullItem("(not connected)"));
+            foreach (ISignalSourceRegistered signal in SignalRegister.Instance)
                 sourceList.Add(new SourceDropDownItem(signal));
             return sourceList.ToArray();
         }

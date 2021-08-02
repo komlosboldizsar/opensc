@@ -7,20 +7,10 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.VTRs
 {
-
     class VtrTypeNameConverter : TypeNameConverterBase
     {
-
-        private static Dictionary<string, Type> KNOWN_TYPES = new Dictionary<string, Type>()
-        { };
-
-        public static void AddKnownType(string typeCode, Type type)
-        {
-            KNOWN_TYPES.Add(typeCode, type);
-        }
-
+        private static Dictionary<string, Type> KNOWN_TYPES = new Dictionary<string, Type>() { };
         protected override Dictionary<string, Type> knownTypes => KNOWN_TYPES;
-
+        public static void AddKnownType(string typeCode, Type type) => KNOWN_TYPES.Add(typeCode, type);
     }
-
 }

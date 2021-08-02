@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Mixers
 {
 
-    public class MixerInput : ISignalTallySource, INotifyPropertyChanged
+    public class MixerInput : ISignalTallySender, INotifyPropertyChanged
     {
 
         public MixerInput()
@@ -80,9 +80,9 @@ namespace OpenSC.Model.Mixers
         #endregion
 
         #region Property: Source
-        private ISignal source;
+        private ISignalSourceRegistered source;
 
-        public ISignal Source
+        public ISignalSourceRegistered Source
         {
             get { return source; }
             set
@@ -91,14 +91,18 @@ namespace OpenSC.Model.Mixers
                 if (value == source)
                     return;
 
-                if(source != null)
+                List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
+                recursionChain.Add(this);
+
+                if (source != null)
                 {
                     source.SignalLabelChanged -= signalLabelChangedHandler;
-                    source.IsTalliedFrom(this, SignalTallyType.Red, false);
-                    source.IsTalliedFrom(this, SignalTallyType.Green, false);
+                    source.RedTally.Revoke(recursionChain);
+                    source.YellowTally.Revoke(recursionChain);
+                    source.GreenTally.Revoke(recursionChain);
                 }
 
-                ISignal oldSource = source;
+                ISignalSource oldSource = source;
                 source = value;
 
                 SourceChanged?.Invoke(this, oldSource, value);
@@ -110,14 +114,18 @@ namespace OpenSC.Model.Mixers
                 if (source != null)
                 {
                     source.SignalLabelChanged += signalLabelChangedHandler;
-                    source.IsTalliedFrom(this, SignalTallyType.Red, RedTally);
-                    source.IsTalliedFrom(this, SignalTallyType.Green, GreenTally);
+                    if (RedTally)
+                        source.RedTally.Give(recursionChain);
+                    /*if (YellowTally)
+                        source.YellowTally.Give(recursionChain);*/
+                    if (GreenTally)
+                        source.GreenTally.Give(recursionChain);
                 }
 
             }
         }
 
-        public delegate void SourceChangedDelegate(MixerInput input, ISignal oldSource, ISignal newSource);
+        public delegate void SourceChangedDelegate(MixerInput input, ISignalSource oldSource, ISignalSource newSource);
         public event SourceChangedDelegate SourceChanged;
         #endregion
 
@@ -127,7 +135,7 @@ namespace OpenSC.Model.Mixers
             get => source.SignalLabel;
         }
 
-        private void signalLabelChangedHandler(ISignal signal, string newLabel)
+        private void signalLabelChangedHandler(ISignalSource signal, string newLabel)
         {
             SourceSignalLabelChanged?.Invoke(this, newLabel);
         }
@@ -154,11 +162,19 @@ namespace OpenSC.Model.Mixers
             get => redTally;
             set
             {
+
                 if (value == redTally)
                     return;
                 redTally = value;
                 RedTallyChanged?.Invoke(this, value);
-                source?.IsTalliedFrom(this, SignalTallyType.Red, value);
+
+                List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
+                recursionChain.Add(this);
+                if (value)
+                    source?.RedTally.Give(recursionChain);
+                else
+                    source?.RedTally.Revoke(recursionChain);
+
             }
         }
 
@@ -171,11 +187,19 @@ namespace OpenSC.Model.Mixers
             get => greenTally;
             set
             {
+
                 if (value == greenTally)
                     return;
                 greenTally = value;
                 GreenTallyChanged?.Invoke(this, value);
-                source?.IsTalliedFrom(this, SignalTallyType.Green, value);
+
+                List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
+                recursionChain.Add(this);
+                if (value)
+                    source?.RedTally.Give(recursionChain);
+                else
+                    source?.RedTally.Revoke(recursionChain);
+
             }
         }
 
@@ -207,6 +231,8 @@ namespace OpenSC.Model.Mixers
             }
         }
         #endregion
+
+        string ISignalTallySender.Label => string.Format("Mixer [#{0} ({1})], input [#{2} ({3})]", Mixer.ID, Mixer.Name, Index, Name);
 
         #region Implementation of INotifyPropertyChanged
         public event PropertyChangedDelegate PropertyChanged;

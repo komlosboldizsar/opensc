@@ -12,7 +12,7 @@ namespace OpenSC.Model.Routers
 
         public Type Type => typeof(RouterInput);
 
-        private const string TAG_NAME = "router_input";
+        private const string TAG_NAME = "input";
         private const string ATTRIBUTE_NAME = "name";
         private const string ATTRIBUTE_SOURCE = "source";
         private const string ATTRIBUTE_TIELINE_COST = "tieline_cost";
@@ -44,7 +44,7 @@ namespace OpenSC.Model.Routers
 
             XElement xmlElement = new XElement(TAG_NAME);
             xmlElement.SetAttributeValue(ATTRIBUTE_NAME, input.Name);
-            xmlElement.SetAttributeValue(ATTRIBUTE_SOURCE, input.Source?.SignalUniqueId);
+            xmlElement.SetAttributeValue(ATTRIBUTE_SOURCE, (input.CurrentSource as ISignalSourceRegistered)?.SignalUniqueId);
             xmlElement.SetAttributeValue(ATTRIBUTE_TIELINE_COST, input.TielineCost?.ToString());
             xmlElement.SetAttributeValue(ATTRIBUTE_TIELINE_RESERVED, input.TielineIsReserved?.ToString());
 

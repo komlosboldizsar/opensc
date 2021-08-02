@@ -144,12 +144,12 @@ namespace OpenSC.GUI.Routers
             builder.AddChangeEvent(nameof(RouterOutput.Name));
             builder.BuildAndAdd();
 
-            List<IRouterOutputAssignable> assignables = getAllAssignables();
-            foreach (IRouterOutputAssignable assignable in assignables)
+            List<ISignalSource> assignables = getAllAssignables();
+            foreach (ISignalSource assignable in assignables)
             {
                 builder = getColumnDescriptorBuilderForTable();
                 builder.Type(DataGridViewColumnType.SmallIcon);
-                builder.Header(assignable.Name);
+                builder.Header(assignable.RegisteredSourceSignalName);
                 builder.Width(30);
                 builder.IconColor(Color.Red);
                 builder.IconType(DataGridViewSmallIconCell.IconTypes.Circle);
@@ -166,11 +166,11 @@ namespace OpenSC.GUI.Routers
 
                     bool active = _singleMode
                         ? (routerOutputProxy.ActiveAssigned == assignable)
-                        : (routerOutputProxy.ActiveAssigned?.SourceSignal == assignable.SourceSignal);
+                        : (routerOutputProxy.ActiveAssigned?.RegisteredSourceSignal == assignable.RegisteredSourceSignal);
 
                     bool selected = _singleMode
                         ? (routerOutputProxy.SelectedToAssign == assignable)
-                        : ((routerOutputProxy.SelectedToAssign != null) && (routerOutputProxy.SelectedToAssign?.SourceSignal == assignable.SourceSignal));
+                        : ((routerOutputProxy.SelectedToAssign != null) && (routerOutputProxy.SelectedToAssign?.RegisteredSourceSignal == assignable.RegisteredSourceSignal));
 
                     if (active)
                     {
@@ -209,11 +209,11 @@ namespace OpenSC.GUI.Routers
             return new CustomDataGridViewColumnDescriptorBuilder<RouterOutputProxy>((CustomDataGridView<RouterOutputProxy>)table);
         }
 
-        private List<IRouterOutputAssignable> getAllAssignables()
+        private List<ISignalSource> getAllAssignables()
         {
             if (!singleMode)
-                return RouterOutputAssignableExternalSignal.GetAll();
-            List<IRouterOutputAssignable> inputs = new List<IRouterOutputAssignable>();
+                return SignalRegister.Instance.ToList<ISignalSource>();
+            List<ISignalSource> inputs = new List<ISignalSource>();
             inputs.AddRange(routers[0].Inputs);
             return inputs;
         }
@@ -262,7 +262,7 @@ namespace OpenSC.GUI.Routers
             #endregion
 
             #region Active assignable
-            public IRouterOutputAssignable ActiveAssigned
+            public ISignalSource ActiveAssigned
                 => Output.Crosspoint;
 
             private void RouterOutput_CrosspointChanged(RouterOutput output, RouterInput newInput)
@@ -272,17 +272,17 @@ namespace OpenSC.GUI.Routers
             #endregion
 
             #region Selected assignable
-            private IRouterOutputAssignable selectedToAssign = null;
+            private ISignalSource selectedToAssign = null;
 
-            public IRouterOutputAssignable SelectedToAssign
+            public ISignalSource SelectedToAssign
             {
                 get { return selectedToAssign; }
                 set
                 {
-                    IRouterOutputAssignable newSelectedAssignable = value;
+                    ISignalSource newSelectedAssignable = value;
                     if (newSelectedAssignable == ActiveAssigned)
                         newSelectedAssignable = null;
-                    IRouterOutputAssignable oldSelectedCrosspoint = selectedToAssign;
+                    ISignalSource oldSelectedCrosspoint = selectedToAssign;
                     selectedToAssign = newSelectedAssignable;
                     if (oldSelectedCrosspoint != newSelectedAssignable)
                         PropertyChanged?.Invoke(nameof(SelectedToAssign));
@@ -378,7 +378,7 @@ namespace OpenSC.GUI.Routers
             }
         }
 
-        private void doAssign(RouterOutput output, IRouterOutputAssignable assignable)
+        private void doAssign(RouterOutput output, ISignalSource assignable)
         {
 
             if (singleMode)
@@ -392,7 +392,7 @@ namespace OpenSC.GUI.Routers
                 return;
             }
 
-            AutoPathSearcher aps = new AutoPathSearcher(assignable.SourceSignal, output);
+            AutoPathSearcher aps = new AutoPathSearcher(assignable.RegisteredSourceSignal, output);
             if (aps.Possible != true)
             {
                 MessageBox.Show("Assignment cannot be done, no path found.", "Automatic path search", MessageBoxButtons.OK, MessageBoxIcon.Warning);
