@@ -24,20 +24,51 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             this.table = table;
             this.item = item;
             createCells();
+            subscribeToItemEvents();
+            subscribeToMultilevelItemEvents();
+            subscribeToExternalUpdateEvents();
         }
 
         private void createCells()
         {
             foreach (CustomDataGridViewColumnDescriptor<T> columnDescriptor in table.ColumnDescriptors)
             {
-                // Create and init cell
                 DataGridViewCell cell = createAndInitCell(columnDescriptor);
                 cells.Add(cell);
-                // Subscribe to item-related events
-                INotifyPropertyChanged itemCastedINotifyPropertyChanged = item as INotifyPropertyChanged;
-                if(itemCastedINotifyPropertyChanged != null)
-                    itemCastedINotifyPropertyChanged.PropertyChanged += notifyPropertyChangedHandler;
-                // Subscribe to external events
+            }
+        }
+
+        private void subscribeToItemEvents()
+        {
+            INotifyPropertyChanged itemCastedINotifyPropertyChanged = item as INotifyPropertyChanged;
+            if (itemCastedINotifyPropertyChanged != null)
+                itemCastedINotifyPropertyChanged.PropertyChanged += notifyPropertyChangedHandler;
+        }
+
+        private void subscribeToMultilevelItemEvents()
+        {
+            INotifyPropertyChanged itemCastedINotifyPropertyChanged = item as INotifyPropertyChanged;
+            if (itemCastedINotifyPropertyChanged == null)
+                return;
+            for (int i = 0; i < cells.Count; i++)
+            {
+                DataGridViewCell cell = cells[i];
+                CustomDataGridViewColumnDescriptor<T> columnDescriptor = table.ColumnDescriptors[i];
+                foreach (string[] eventNames in columnDescriptor.MultilevelChangeEvents)
+                {
+                    object[] tagData = new object[] { cell, columnDescriptor };
+                    MultilevelPropertyChangeObserver multilevelObserver = new MultilevelPropertyChangeObserver(itemCastedINotifyPropertyChanged, eventNames, tagData);
+                    multilevelObserver.MultilevelPropertyChanged += notifyMultilevelPropertyChangedHandler;
+                }
+            }
+        }
+
+        private void subscribeToExternalUpdateEvents()
+        {
+            for (int i = 0; i < cells.Count; i++)
+            {
+                DataGridViewCell cell = cells[i];
+                CustomDataGridViewColumnDescriptor<T> columnDescriptor = table.ColumnDescriptors[i];
                 columnDescriptor.ExternalUpdateEventSubscriberMethod?.Invoke(item, () => columnDescriptor.UpdaterMethod?.Invoke(item, cell));
             }
         }
@@ -51,6 +82,18 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                     columnDescriptor.UpdaterMethod?.Invoke(item, cells[column]);
                 column++;
             }
+        }
+
+        private void notifyMultilevelPropertyChangedHandler(string fullPropertyName, MultilevelPropertyChangeObserver observer)
+        {
+            object[] tagData = observer.Tag as object[];
+            if ((tagData == null) || (tagData.Length != 2))
+                return;
+            DataGridViewCell cell = tagData[0] as DataGridViewCell;
+            CustomDataGridViewColumnDescriptor<T> columnDescriptor = tagData[1] as CustomDataGridViewColumnDescriptor<T>;
+            if (cell == null)
+                return;
+            columnDescriptor.UpdaterMethod?.Invoke(item, cell);
         }
 
         private DataGridViewCell createAndInitCell(CustomDataGridViewColumnDescriptor<T> columnDescriptor)

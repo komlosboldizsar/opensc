@@ -38,6 +38,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private List<string> changeEvents = new List<string>();
 
+        private List<string[]> multilevelChangeEvents = new List<string[]>();
+
         private CustomDataGridViewColumnDescriptor<T>.ExternalUpdateEventSubscriberMethodDelegate externalUpdateEventSubscriberMethod;
 
         private bool textEditable;
@@ -84,6 +86,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 doubleClickHandlerMethod,
                 endEditHandlerMethod,
                 changeEvents.ToArray(),
+                multilevelChangeEvents.ToArray(),
                 externalUpdateEventSubscriberMethod,
                 textEditable,
                 buttonText,
@@ -177,6 +180,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public CustomDataGridViewColumnDescriptorBuilder<T> AddChangeEvent(string eventName)
         {
             changeEvents.Add(eventName);
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> AddMultilevelChangeEvent(params string[] eventNames)
+        {
+            multilevelChangeEvents.Add(eventNames);
             return this;
         }
 
