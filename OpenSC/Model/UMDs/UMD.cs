@@ -18,8 +18,9 @@ namespace OpenSC.Model.UMDs
 
         protected abstract void update();
 
-        public override void RestoredOwnFields()
+        public override void RestoreCustomRelations()
         {
+            base.RestoreCustomRelations();
             restoreTallySources();
         }
 
