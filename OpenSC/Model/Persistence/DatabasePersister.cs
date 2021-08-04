@@ -120,11 +120,25 @@ namespace OpenSC.Model.Persistence
 
             // Get fields
             foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
+            {
                 storeValueOfFieldOrProperty(fieldInfo, ref item, ref xmlElement);
+                Console.WriteLine("{0}::{1}", storedType.Name, fieldInfo.Name);
+            }
 
             if (isPolymorph)
-                foreach (FieldInfo fieldInfo in itemType.GetFields(memberLookupBindingFlags))
-                    storeValueOfFieldOrProperty(fieldInfo, ref item, ref xmlElement);
+            {
+                Type currentType = itemType;
+                do
+                {
+                    foreach (FieldInfo fieldInfo in currentType.GetFields(memberLookupBindingFlags)) {
+                        storeValueOfFieldOrProperty(fieldInfo, ref item, ref xmlElement);
+                        Console.WriteLine("{0}::{1}", currentType.Name, fieldInfo.Name);
+                    }
+                    currentType = currentType.BaseType;
+                    Console.WriteLine("--");
+                } while (!currentType.Equals(storedType));
+            }
+
 
             // Get properties
             foreach (PropertyInfo propertyInfo in storedType.GetProperties(memberLookupBindingFlags))
@@ -133,6 +147,9 @@ namespace OpenSC.Model.Persistence
             if (isPolymorph)
                 foreach (PropertyInfo propertyInfo in itemType.GetProperties(memberLookupBindingFlags))
                     storeValueOfFieldOrProperty(propertyInfo, ref item, ref xmlElement);
+
+
+            Console.WriteLine("----");
 
             return xmlElement;
 
