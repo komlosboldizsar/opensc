@@ -63,19 +63,8 @@ namespace OpenSC.Model.Routers.Leitch
                 }
                 port = value;
                 if (port != null)
-                {
-                    port.ReceivedDataAsciiLine += receivedLineFromPort;
-                    port.InitializedChanged += portInitializedChangedHandler;
-                    if (port.Initialized)
-                        sendSerialCommand("@ ?\r\n");
-                }
+                    port.ReceivedDataAsciiString += receivedDataFromPort;
             }
-        }
-
-        private void portInitializedChangedHandler(SerialPort port, bool oldState, bool newState)
-        {
-            if (newState)
-                enableReporting();
         }
         #endregion
 
@@ -143,9 +132,9 @@ namespace OpenSC.Model.Routers.Leitch
                     return;
                 string destinationSourceString = statusString.Substring(3);
                 string[] destinationSourceStringParts = destinationSourceString.Split(',');
-                int destinationIndex = int.Parse(destinationSourceStringParts[0], System.Globalization.NumberStyles.HexNumber);
-                int sourceIndex = int.Parse(destinationSourceStringParts[1], System.Globalization.NumberStyles.HexNumber);
-                notifyCrosspointChanged(destinationIndex, sourceIndex);
+                int sourceIndex = int.Parse(destinationSourceStringParts[0], System.Globalization.NumberStyles.HexNumber);
+                int destinationIndex = int.Parse(destinationSourceStringParts[1], System.Globalization.NumberStyles.HexNumber);
+                crosspointChanged(destinationIndex, sourceIndex);
             }
             catch
             {

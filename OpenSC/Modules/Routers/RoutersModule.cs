@@ -53,6 +53,7 @@ namespace OpenSC.Modules.Routers
             RegisterRouterType<VirtualRouter, VirtualRouterEditorForm>();
             RegisterRouterType<BmdVideohub, BmdVideohubEditorForm>();
             RegisterRouterType<LeitchRouter, LeitchRouterEditorForm>();
+            RegisterRouterType<VirtualLeitchRouter, VirtualLeitchRouterEditorForm>();
         }
 
         public void RegisterDatabases()

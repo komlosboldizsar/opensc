@@ -176,9 +176,8 @@ namespace OpenSC.Model.Routers
 
         private void updateInputIndices()
         {
-            int idx = 0;
-            foreach (RouterInput input in inputs)
-                input.SetIndexFromRouter(this, idx++);
+            for (int i = 0; i < inputs.Count; i++)
+                inputs[i].Index = i;
         }
 
         private void inputsChangedHandler()
@@ -190,12 +189,12 @@ namespace OpenSC.Model.Routers
         public delegate void InputsChangedDelegate(Router router);
         public event InputsChangedDelegate InputsChanged;
 
-        private void restoreInputSources() => inputs.ForEach(i => i.RestoreSource());
-        #endregion
-
-        #region Outputs
         private ObservableList<RouterOutput> outputs = new ObservableList<RouterOutput>();
-        public ObservableList<RouterOutput> Outputs => outputs;
+
+        public ObservableList<RouterOutput> Outputs
+        {
+            get { return outputs; }
+        }
 
         [PersistAs("outputs")]
         [PersistAs(null, 1)]
@@ -234,9 +233,8 @@ namespace OpenSC.Model.Routers
 
         private void updateOutputIndices()
         {
-            int idx = 0;
-            foreach (RouterOutput output in outputs)
-                output.SetIndexFromRouter(this, idx++);
+            for (int i = 0; i < outputs.Count; i++)
+                outputs[i].Index = i;
         }
 
         private void outputsChangedHandler()
