@@ -25,6 +25,20 @@ namespace OpenSC.Model.Routers.Leitch
             Outputs.ItemRemoved += outputRemoved;
         }
 
+        public override void TotallyRestored()
+        {
+            base.TotallyRestored();
+            if (port != null)
+                port.ReceivedDataAsciiLine += receivedLineFromPort;
+        }
+
+        public override void Removed()
+        {
+            base.Removed();
+            if (port != null)
+                port.ReceivedDataAsciiString -= receivedLineFromPort;
+        }
+
         private void outputAdded(IEnumerable addedOutputs)
         {
             foreach (RouterOutput output in addedOutputs)
@@ -43,20 +57,6 @@ namespace OpenSC.Model.Routers.Leitch
         private void outputsCurrentInputChanged(RouterOutput output, RouterInput newInput)
             => sendOutputInputReport(output);
 
-        public override void Restored()
-        {
-            base.Restored();
-            if (port != null)
-                port.InitializedChanged += portInitializedChanged;
-        }
-
-        public override void Removed()
-        {
-            base.Removed();
-            if (port != null)
-                port.ReceivedDataAsciiString -= receivedDataFromPort;
-        }
-
         #region Property: Port
         public delegate void PortChangedDelegate(VirtualLeitchRouter router, SerialPort oldPort, SerialPort newPort);
         public event PortChangedDelegate PortChanged;
@@ -73,10 +73,10 @@ namespace OpenSC.Model.Routers.Leitch
                     return;
                 SerialPort oldValue = port;
                 if (port != null)
-                    port.ReceivedDataAsciiString -= receivedDataFromPort;
+                    port.ReceivedDataAsciiString -= receivedLineFromPort;
                 port = value;
                 if (port != null)
-                    port.ReceivedDataAsciiString += receivedDataFromPort;
+                    port.ReceivedDataAsciiString += receivedLineFromPort;
                 PortChanged?.Invoke(this, oldValue, value);
                 RaisePropertyChanged(nameof(Port));
             }
@@ -136,16 +136,10 @@ namespace OpenSC.Model.Routers.Leitch
             port.SendData(commandBytesToSend, validUntil);
         }
 
-        private void receivedDataFromPort(SerialPort port, string asciiString)
+        private void receivedLineFromPort(SerialPort port, string line)
         {
-            string[] lines = asciiString.Split(new char[] { '\r', '\n' });
-            foreach (string line in lines)
-                if (line != string.Empty)
-                    receivedLineFromPort(line);
-        }
-
-        private void receivedLineFromPort(string line)
-        {
+            if (string.IsNullOrWhiteSpace(line))
+                return;
             if ((line.Length < 2) || (line[1] != ':'))
                 return;
             string details = line.Substring(2);
