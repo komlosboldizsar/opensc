@@ -22,6 +22,7 @@ namespace OpenSC.GUI.Routers
                 this.router = new VirtualLeitchRouter();
             else if (!(router is VirtualLeitchRouter))
                 throw new ArgumentException();
+            initDropDowns();
         }
 
         public IModelEditorForm<Router> GetInstance(Router modelInstance)
@@ -60,6 +61,12 @@ namespace OpenSC.GUI.Routers
             VirtualLeitchRouter virtualLeitchRouter = router as VirtualLeitchRouter;
             if (virtualLeitchRouter == null)
                 return;
+        }
+
+        private void initDropDowns()
+        {
+            // Ports
+            portDropDown.CreateAdapterAsDataSource(SerialPortDatabase.Instance, port => port.Name, true, "(not connected)");
         }
 
     }
