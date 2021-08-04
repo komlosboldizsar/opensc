@@ -64,6 +64,11 @@ namespace OpenSC.Model.Routers.Leitch
         [PersistAs("port")]
         private SerialPort port;
 
+#pragma warning disable CS0169
+        [TempForeignKey(SerialPortDatabase.DBNAME, nameof(port))]
+        private int _portId;
+#pragma warning restore CS0169
+
         public SerialPort Port
         {
             get => port;
@@ -397,13 +402,13 @@ namespace OpenSC.Model.Routers.Leitch
         {
             switch (details)
             {
-                case "C:":
+                case "C":
                     clearPresets();
                     break;
-                case "E:":
+                case "E":
                     executePresets();
                     break;
-                case "R:":
+                case "R":
                     clearPresets();
                     break;
             }
