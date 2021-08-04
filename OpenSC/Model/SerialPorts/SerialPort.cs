@@ -437,7 +437,8 @@ namespace OpenSC.Model.SerialPorts
             asciiLineBuffer += receivedAsciiString;
             char lastAsciiChar = asciiLineBuffer[asciiLineBuffer.Length - 1];
             bool noHalfLine = ((lastAsciiChar == '\r') || (lastAsciiChar == '\n'));
-            List<string> asciiLines = asciiLineBuffer.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            string[] asciiLinesSplit = asciiLineBuffer.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            List<string> asciiLines = asciiLinesSplit.ToList();
             string lastHalfLine = asciiLines[asciiLines.Count - 1];
             if (!noHalfLine)
                 asciiLines.RemoveAt(asciiLines.Count - 1);
