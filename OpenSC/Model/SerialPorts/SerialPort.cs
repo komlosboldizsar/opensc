@@ -441,9 +441,10 @@ namespace OpenSC.Model.SerialPorts
             List<string> asciiLines = asciiLinesSplit.ToList();
             string lastHalfLine = "";
             if (!noHalfLine)
-                asciiLines.RemoveAt(asciiLines.Count - 1);
-            else
+            {
                 lastHalfLine = asciiLines[asciiLines.Count - 1];
+                asciiLines.RemoveAt(asciiLines.Count - 1);
+            }
             foreach (string asciiLine in asciiLines)
                 ReceivedDataAsciiLine?.Invoke(this, asciiLine);
             asciiLineBuffer = lastHalfLine;
