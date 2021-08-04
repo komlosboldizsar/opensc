@@ -29,7 +29,7 @@ namespace OpenSC.Model.Routers.Leitch
                 port.ReceivedDataAsciiLine += receivedLineFromPort;
                 port.InitializedChanged += portInitializedChangedHandler;
                 if (port.Initialized)
-                    sendSerialCommand("@ ?\r\n");
+                    initSerial();
             }
         }
 
@@ -70,7 +70,13 @@ namespace OpenSC.Model.Routers.Leitch
         private void portInitializedChangedHandler(SerialPort port, bool oldState, bool newState)
         {
             if (newState)
-                queryAllCrosspoints();
+                initSerial();
+        }
+
+        private void initSerial()
+        {
+            enableReporting();
+            queryAllCrosspoints();
         }
         #endregion
 
