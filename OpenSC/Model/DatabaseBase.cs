@@ -88,7 +88,7 @@ namespace OpenSC.Model
             AddedItem?.Invoke(this, item);
             ChangedItems?.Invoke(this);
 
-            ItemAdded?.Invoke();
+            ItemAdded?.Invoke(new object[] { item });
             ItemsChanged?.Invoke();
 
             item.ModelAfterUpdate += itemAfterUpdateHandler;
@@ -120,7 +120,7 @@ namespace OpenSC.Model
             RemovedItem?.Invoke(this, item);
             ChangedItems?.Invoke(this);
 
-            ItemRemoved?.Invoke();
+            ItemRemoved?.Invoke(new object[] { item });
             ItemsChanged?.Invoke();
 
             item.ModelAfterUpdate -= itemAfterUpdateHandler;
