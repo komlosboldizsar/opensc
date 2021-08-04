@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.General;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,7 @@ namespace OpenSC.Model.Signals
                     return;
                 state = value;
                 StateChanged?.Invoke(ParentSignalSource, this, value, RecursionChainHelpers.CreateRecursionChain(this));
+                PropertyChanged?.Invoke(nameof(State));
             }
         }
 
@@ -40,6 +42,8 @@ namespace OpenSC.Model.Signals
         {
             State = (activeSources.Count > 0);
         }
+
+        public event PropertyChangedDelegate PropertyChanged; // INotifyPropertyChanged implementation
         #endregion
 
         #region ISignalTallyReceiver implementation
