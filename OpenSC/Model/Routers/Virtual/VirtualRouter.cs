@@ -18,11 +18,12 @@ namespace OpenSC.Model.Routers.Virtual
             StateString = "OK";
         }
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
-            base.Restored();
+            base.RestoredOwnFields();
             State = RouterState.Ok;
             StateString = "OK";
+            queryAllCrosspoints();
         }
 
         protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)

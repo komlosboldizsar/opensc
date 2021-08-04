@@ -95,7 +95,7 @@ namespace OpenSC.Model.Streams
         public delegate void ViewerCountChangedDelegate(Stream stream, int? oldCount, int? newCount);
         public event ViewerCountChangedDelegate ViewerCountChanged;
 
-        private int? viewerCount;
+        private int? viewerCount = null;
 
         public int? ViewerCount
         {

@@ -163,6 +163,8 @@ namespace BMD.Videohub
 
         public void QueryAllCrosspoints()
         {
+            if (!Connected)
+                return;
             if (pendingCrosspointChangeRequest != null)
                 return;
             socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_ROUTING);

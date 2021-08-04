@@ -19,11 +19,24 @@ namespace OpenSC.Model
             ModelRemoved?.Invoke(this);
         }
 
-        public event ModelRestoredHandler ModelRestored;
+        public event ModelRestoredHandler ModelRestoredOwnFields;
 
-        public virtual void Restored()
+        public virtual void RestoredOwnFields()
         {
-            ModelRestored?.Invoke(this);
+            ModelRestoredOwnFields?.Invoke(this);
+        }
+
+        public virtual void RestoredBasicRelations()
+        { }
+
+        public virtual void RestoreCustomRelations()
+        { }
+
+        public event ModelRestoredHandler ModelTotallyRestored;
+
+        public virtual void TotallyRestored()
+        {
+            ModelTotallyRestored?.Invoke(this);
         }
 
         private int updateCounter = 0;

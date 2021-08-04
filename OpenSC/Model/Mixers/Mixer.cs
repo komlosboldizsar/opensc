@@ -15,7 +15,7 @@ namespace OpenSC.Model.Mixers
         public Mixer()
         { }
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
             restoreInputs();
         }

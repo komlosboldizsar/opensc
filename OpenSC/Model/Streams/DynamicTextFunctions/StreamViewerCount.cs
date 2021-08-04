@@ -44,12 +44,12 @@ namespace OpenSC.Model.Streams.DynamicTextFunctions
                 }
                 this.stream = stream;
                 stream.ViewerCountChanged += streamViewerCountChangedHandler;
-                CurrentValue = stream.ViewerCount.ToString();
+                CurrentValue = stream.ViewerCount?.ToString() ?? "?";
             }
 
             private void streamViewerCountChangedHandler(Stream stream, int? oldCount, int? newCount)
             {
-                CurrentValue = newCount.ToString();
+                CurrentValue = newCount?.ToString() ?? "?";
             }
 
         }

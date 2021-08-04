@@ -191,6 +191,12 @@
     <Compile Include="GUI\Menus\MenuItem.cs" />
     <Compile Include="GUI\Menus\MenuManager.cs" />
     <Compile Include="GUI\Menus\SeparatorMenuItem.cs" />
+    <Compile Include="GUI\Routers\VirtualLeitchRouterEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\VirtualLeitchRouterEditorForm.Designer.cs">
+      <DependentUpon>VirtualLeitchRouterEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Routers\LeitchRouterEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -466,6 +472,7 @@
     <Compile Include="Model\General\INotifyPropertyChanged.cs" />
     <Compile Include="Model\General\IObservableList.cs" />
     <Compile Include="Model\General\IObservableListTyped.cs" />
+    <Compile Include="Model\General\MultilevelPropertyChangeObserver.cs" />
     <Compile Include="Model\General\ObservableProxyList.cs" />
     <Compile Include="Model\General\ObservableList.cs" />
     <Compile Include="Model\IDatabaseBase.cs" />
@@ -535,6 +542,7 @@
     <Compile Include="Model\Routers\Labelset.cs" />
     <Compile Include="Model\Routers\LabelsetDatabase.cs" />
     <Compile Include="Model\Routers\LabelXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Leitch\VirtualLeitchRouter.cs" />
     <Compile Include="Model\Routers\Leitch\LeitchRouter.cs" />
     <Compile Include="Model\Routers\Macros\RouterMacroCommands.cs" />
     <Compile Include="Model\Routers\Macros\SetRouterCrosspointMacroCommand.cs" />
@@ -713,6 +721,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Mixers\MixerEditorFormBase.resx">
       <DependentUpon>MixerEditorFormBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\VirtualLeitchRouterEditorForm.resx">
+      <DependentUpon>VirtualLeitchRouterEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\LeitchRouterEditorForm.resx">
       <DependentUpon>LeitchRouterEditorForm.cs</DependentUpon>

@@ -51,17 +51,22 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Restoration
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
-            assignIOsParentRouter();
+            base.RestoredOwnFields();
             notifyIOsRestored();
+        }
+
+        public override void TotallyRestored()
+        {
+            base.TotallyRestored();
             queryAllCrosspoints();
         }
 
-        private void assignIOsParentRouter()
+        public override void RestoreCustomRelations()
         {
-            inputs.ForEach(i => i.AssignParentRouter(this));
-            outputs.ForEach(o => o.AssignParentRouter(this));
+            base.RestoreCustomRelations();
+            restoreInputSources();
         }
 
         private void notifyIOsRestored()
@@ -144,6 +149,7 @@ namespace OpenSC.Model.Routers
                 inputs.Clear();
                 if(value != null)
                     inputs.AddRange(value);
+                inputs.ForEach(i => i.AssignParentRouter(this));
                 updateInputIndices();
             }
         }
@@ -170,8 +176,8 @@ namespace OpenSC.Model.Routers
 
         private void updateInputIndices()
         {
-            int idx = 1;
-            inputs.ForEach(i => i.SetIndexFromRouter(this, idx++));
+            for (int i = 0; i < inputs.Count; i++)
+                inputs[i].Index = i;
         }
 
         private void inputsChangedHandler()
@@ -183,12 +189,12 @@ namespace OpenSC.Model.Routers
         public delegate void InputsChangedDelegate(Router router);
         public event InputsChangedDelegate InputsChanged;
 
-        public void RestoreInputSources() => inputs.ForEach(i => i.RestoreSource());
-        #endregion
-
-        #region Outputs
         private ObservableList<RouterOutput> outputs = new ObservableList<RouterOutput>();
-        public ObservableList<RouterOutput> Outputs => outputs;
+
+        public ObservableList<RouterOutput> Outputs
+        {
+            get { return outputs; }
+        }
 
         [PersistAs("outputs")]
         [PersistAs(null, 1)]
@@ -200,6 +206,7 @@ namespace OpenSC.Model.Routers
                 outputs.Clear();
                 if(value != null)
                     outputs.AddRange(value);
+                outputs.ForEach(o => o.AssignParentRouter(this));
                 updateOutputIndices();
             }
         }
@@ -226,8 +233,8 @@ namespace OpenSC.Model.Routers
 
         private void updateOutputIndices()
         {
-            int idx = 1;
-            outputs.ForEach(o => o.SetIndexFromRouter(this, idx++));
+            for (int i = 0; i < outputs.Count; i++)
+                outputs[i].Index = i;
         }
 
         private void outputsChangedHandler()
