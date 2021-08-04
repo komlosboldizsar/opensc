@@ -138,8 +138,8 @@ namespace OpenSC.Model.Routers.Leitch
                     return;
                 string destinationSourceString = statusString.Substring(3);
                 string[] destinationSourceStringParts = destinationSourceString.Split(',');
-                int sourceIndex = int.Parse(destinationSourceStringParts[0], System.Globalization.NumberStyles.HexNumber);
-                int destinationIndex = int.Parse(destinationSourceStringParts[1], System.Globalization.NumberStyles.HexNumber);
+                int sourceIndex = int.Parse(destinationSourceStringParts[1], System.Globalization.NumberStyles.HexNumber);
+                int destinationIndex = int.Parse(destinationSourceStringParts[0], System.Globalization.NumberStyles.HexNumber);
                 notifyCrosspointChanged(destinationIndex, sourceIndex);
             }
             catch
