@@ -13,7 +13,7 @@ using System.Xml.Linq;
 namespace OpenSC.Model.Persistence
 {
     class DatabasePersister<T>
-        where T: class, IModel
+        where T : class, IModel
     {
 
         private IDatabaseBase database;
@@ -41,7 +41,7 @@ namespace OpenSC.Model.Persistence
             }
 
             XmlTagNamesAttribute tagNameAttr = database.GetType().GetCustomAttribute<XmlTagNamesAttribute>();
-            if(tagNameAttr != null)
+            if (tagNameAttr != null)
             {
                 rootTag = tagNameAttr.RootTag;
                 itemTag = tagNameAttr.ItemTag;
@@ -130,12 +130,9 @@ namespace OpenSC.Model.Persistence
                 Type currentType = itemType;
                 do
                 {
-                    foreach (FieldInfo fieldInfo in currentType.GetFields(memberLookupBindingFlags)) {
+                    foreach (FieldInfo fieldInfo in currentType.GetFields(memberLookupBindingFlags))
                         storeValueOfFieldOrProperty(fieldInfo, ref item, ref xmlElement);
-                        Console.WriteLine("{0}::{1}", currentType.Name, fieldInfo.Name);
-                    }
                     currentType = currentType.BaseType;
-                    Console.WriteLine("--");
                 } while (!currentType.Equals(storedType));
             }
 
@@ -145,11 +142,15 @@ namespace OpenSC.Model.Persistence
                 storeValueOfFieldOrProperty(propertyInfo, ref item, ref xmlElement);
 
             if (isPolymorph)
-                foreach (PropertyInfo propertyInfo in itemType.GetProperties(memberLookupBindingFlags))
-                    storeValueOfFieldOrProperty(propertyInfo, ref item, ref xmlElement);
-
-
-            Console.WriteLine("----");
+            { 
+                Type currentType = itemType;
+                do
+                {
+                    foreach (PropertyInfo propertyInfo in currentType.GetProperties(memberLookupBindingFlags))
+                        storeValueOfFieldOrProperty(propertyInfo, ref item, ref xmlElement);
+                    currentType = currentType.BaseType;
+                } while (!currentType.Equals(storedType));
+            }
 
             return xmlElement;
 
@@ -279,16 +280,30 @@ namespace OpenSC.Model.Persistence
                 restoreValueForFieldOrProperty(fieldInfo, persistedValues, ref item);
 
             if (isPolymorph)
-                foreach (FieldInfo fieldInfo in type.GetFields(memberLookupBindingFlags))
-                    restoreValueForFieldOrProperty(fieldInfo, persistedValues, ref item);
+            {
+                Type currentType = type;
+                do
+                {
+                    foreach (FieldInfo fieldInfo in currentType.GetFields(memberLookupBindingFlags))
+                        restoreValueForFieldOrProperty(fieldInfo, persistedValues, ref item);
+                    currentType = currentType.BaseType;
+                } while (!currentType.Equals(storedType));
+            }
 
             // Set properties
             foreach (PropertyInfo propertyInfo in storedType.GetProperties(memberLookupBindingFlags))
                 restoreValueForFieldOrProperty(propertyInfo, persistedValues, ref item);
 
             if (isPolymorph)
-                foreach (PropertyInfo propertyInfo in type.GetProperties(memberLookupBindingFlags))
-                    restoreValueForFieldOrProperty(propertyInfo, persistedValues, ref item);
+            {
+                Type currentType = type;
+                do
+                {
+                    foreach (PropertyInfo propertyInfo in currentType.GetProperties(memberLookupBindingFlags))
+                        restoreValueForFieldOrProperty(propertyInfo, persistedValues, ref item);
+                    currentType = currentType.BaseType;
+                } while (!currentType.Equals(storedType));
+            }
 
             return item;
 
@@ -415,9 +430,14 @@ namespace OpenSC.Model.Persistence
 
                 if (isPolymorph)
                 {
-                    FieldInfo[] extendedFields = item.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
-                    foreach (FieldInfo foreignKeyField in extendedFields)
-                        buildRelationForField(item, foreignKeyField, ref items);
+                    Type currentType = item.GetType();
+                    do
+                    {
+                        FieldInfo[] extendedFields = currentType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+                        foreach (FieldInfo foreignKeyField in extendedFields)
+                            buildRelationForField(item, foreignKeyField, ref items);
+                        currentType = currentType.BaseType;
+                    } while (!currentType.Equals(storedType));
                 }
 
                 item.RestoreCustomRelations();
@@ -428,19 +448,30 @@ namespace OpenSC.Model.Persistence
         private void buildRelationForField(T item, FieldInfo foreignKeyField, ref Dictionary<int, T> items)
         {
 
+            
             TempForeignKeyAttribute attr = foreignKeyField.GetCustomAttribute<TempForeignKeyAttribute>();
             if (attr == null)
                 return;
 
+            Console.WriteLine("{0} -- {1}", item.GetType().Name, foreignKeyField.Name);
+
             FieldInfo originalField = storedType.GetField(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             if (isPolymorph && (originalField == null))
-                originalField = item.GetType().GetField(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            {
+                Type currentType = item.GetType();
+                do
+                {
+                    originalField = currentType.GetField(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                    currentType = currentType.BaseType;
+                } while (!currentType.Equals(storedType) && (originalField == null));
+            }
             if (originalField == null)
                 return;
 
             object foreignKeys = foreignKeyField.GetValue(item);
             if (foreignKeys == null)
                 return;
+            Console.WriteLine(foreignKeys.ToString());
 
             object foreignObjects = getAssociatedObjects(foreignKeyField.FieldType, originalField.FieldType, attr.DatabaseName, foreignKeys);
             originalField.SetValue(item, foreignObjects);
@@ -500,7 +531,14 @@ namespace OpenSC.Model.Persistence
 
             MemberInfo[] originalMemberInfo = storedType.GetMember(tempForeignKeyAttribute.OriginalFieldName, memberLookupBindingFlags);
             if (isPolymorph && ((originalMemberInfo == null) || (originalMemberInfo.Length == 0)))
-                originalMemberInfo = item.GetType().GetMember(tempForeignKeyAttribute.OriginalFieldName, memberLookupBindingFlags);
+            {
+                Type currentType = item.GetType();
+                do
+                {
+                    originalMemberInfo = currentType.GetMember(tempForeignKeyAttribute.OriginalFieldName, memberLookupBindingFlags);
+                    currentType = currentType.BaseType;
+                } while (!currentType.Equals(storedType) && ((originalMemberInfo == null) || (originalMemberInfo.Length == 0)));
+            }
             if (originalMemberInfo.Length == 0)
                 return null;
 
