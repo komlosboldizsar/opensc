@@ -41,7 +41,7 @@ namespace OpenSC.Model.UMDs
         public delegate void CurrentTextChangedDelegate(UMD umd, string oldText, string newText);
         public event CurrentTextChangedDelegate CurrentTextChanged;
 
-        protected string currentText;
+        protected string currentText = "";
 
         public string CurrentText
         {
