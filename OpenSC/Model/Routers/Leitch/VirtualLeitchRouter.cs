@@ -30,6 +30,9 @@ namespace OpenSC.Model.Routers.Leitch
             base.TotallyRestored();
             if (port != null)
                 port.ReceivedDataAsciiLine += receivedLineFromPort;
+            RouterInput firstInput = Inputs.FirstOrDefault();
+            foreach (RouterOutput output in Outputs)
+                output.AssignSource(firstInput); // TODO: store last crosspoint
         }
 
         public override void Removed()
