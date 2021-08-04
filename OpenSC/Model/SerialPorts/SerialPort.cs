@@ -439,12 +439,14 @@ namespace OpenSC.Model.SerialPorts
             bool noHalfLine = ((lastAsciiChar == '\r') || (lastAsciiChar == '\n'));
             string[] asciiLinesSplit = asciiLineBuffer.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             List<string> asciiLines = asciiLinesSplit.ToList();
-            string lastHalfLine = asciiLines[asciiLines.Count - 1];
+            string lastHalfLine = "";
             if (!noHalfLine)
                 asciiLines.RemoveAt(asciiLines.Count - 1);
+            else
+                lastHalfLine = asciiLines[asciiLines.Count - 1];
             foreach (string asciiLine in asciiLines)
                 ReceivedDataAsciiLine?.Invoke(this, asciiLine);
-            asciiLineBuffer = noHalfLine ? "" : lastHalfLine;
+            asciiLineBuffer = lastHalfLine;
 
         }
         #endregion
