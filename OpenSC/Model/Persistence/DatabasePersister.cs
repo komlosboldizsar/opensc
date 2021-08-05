@@ -217,7 +217,8 @@ namespace OpenSC.Model.Persistence
                 string itemTypeString = null;
                 if (polymorphFieldAttribute != null)
                 {
-                    typeStringDictionary = polymorphFieldAttribute.TypeStringDictionaryGetter?.Invoke();
+                    MethodInfo typeStringDictionaryGetterMethodInfo = parentItem.GetType().GetMethod(polymorphFieldAttribute.TypeStringDictionaryGetterName, memberLookupBindingFlags);
+                    typeStringDictionary = typeStringDictionaryGetterMethodInfo.Invoke(parentItem, new object[] { }) as Dictionary<Type, string>;
                     if (typeStringDictionary?.TryGetValue(itemType, out itemTypeString) == true)
                         serializeAsType = itemType;
                 }
@@ -406,7 +407,8 @@ namespace OpenSC.Model.Persistence
                 if (polymorphFieldAttribute != null)
                 {
                     string itemTypeString = xmlElement.GetAttribute(polymorphFieldAttribute.TypeAttributeName);
-                    typeStringDictionary = polymorphFieldAttribute.TypeStringDictionaryGetter?.Invoke();
+                    MethodInfo typeStringDictionaryGetterMethodInfo = parentItem.GetType().GetMethod(polymorphFieldAttribute.TypeStringDictionaryGetterName, memberLookupBindingFlags);
+                    typeStringDictionary = typeStringDictionaryGetterMethodInfo.Invoke(parentItem, new object[] { }) as Dictionary<Type, string>;
                     KeyValuePair<Type, string> foundTypeData = typeStringDictionary.FirstOrDefault(kvp => (kvp.Value == itemTypeString));
                     if (foundTypeData.Key != null)
                         deserializeAsType = foundTypeData.Key;
