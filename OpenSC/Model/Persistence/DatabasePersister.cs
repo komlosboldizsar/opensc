@@ -178,12 +178,12 @@ namespace OpenSC.Model.Persistence
             object fieldValue = (fieldInfo != null) ? fieldInfo.GetValue(item) : propertyInfo.GetValue(item);
             Type memberType = (fieldInfo != null) ? fieldInfo.FieldType : propertyInfo.PropertyType;
 
-            object xmlElementInner = serializeValue(memberInfo, memberType, fieldValue);
+            object xmlElementInner = serializeValue(memberInfo, memberType, fieldValue, item);
             xmlElement.Add(new XElement(persistData.TagName, xmlElementInner));
 
         }
 
-        private object serializeValue(MemberInfo memberInfo, Type memberType, object item, int arrayDimension = 0)
+        private object serializeValue(MemberInfo memberInfo, Type memberType, object item, object parentItem, int arrayDimension = 0)
         {
 
             if (item == null)
@@ -211,7 +211,7 @@ namespace OpenSC.Model.Persistence
                 IValueXmlSerializer serializer = GetSerializerForType(serializeAsType);
                 if (serializer == null)
                     return item.ToString();
-                return serializer.SerializeItem(item);
+                return serializer.SerializeItem(item, parentItem);
             }
            
             return item.ToString();
@@ -333,7 +333,7 @@ namespace OpenSC.Model.Persistence
 
             Type type = (fieldInfo != null) ? fieldInfo.FieldType : propertyInfo.PropertyType;
 
-            object value = deserializeXmlElement(memberInfo, type, xmlElement);
+            object value = deserializeXmlElement(memberInfo, type, xmlElement, item);
 
             try
             {
@@ -354,7 +354,7 @@ namespace OpenSC.Model.Persistence
             typeof(decimal)
         };
 
-        private object deserializeXmlElement(MemberInfo memberInfo, Type memberType, XmlElement xmlElement, int arrayDimension = 0)
+        private object deserializeXmlElement(MemberInfo memberInfo, Type memberType, XmlElement xmlElement, object parentItem, int arrayDimension = 0)
         {
 
             if (memberType == typeof(string))
@@ -388,7 +388,7 @@ namespace OpenSC.Model.Persistence
                 XmlElement itemToDeserialize = xmlElement;
                 if (persistData.TagName != null)
                     itemToDeserialize = itemToDeserialize.OfType<XmlElement>().FirstOrDefault();
-                return serializer.DeserializeItem(itemToDeserialize);
+                return serializer.DeserializeItem(itemToDeserialize, parentItem);
             }
 
             return Convert.ChangeType(xmlElement.InnerText, deserializeAsType);

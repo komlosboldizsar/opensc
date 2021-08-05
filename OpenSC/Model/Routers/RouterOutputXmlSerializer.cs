@@ -15,7 +15,7 @@ namespace OpenSC.Model.Routers
         private const string ATTRIBUTE_INDEX = "index";
         private const string ATTRIBUTE_NAME = "name";
 
-        public object DeserializeItem(XmlNode serializedItem)
+        public object DeserializeItem(XmlNode serializedItem, object parentItem)
         {
             if (serializedItem.LocalName != TAG_NAME)
                 return null;
@@ -28,7 +28,7 @@ namespace OpenSC.Model.Routers
             };
         }
 
-        public XElement SerializeItem(object item)
+        public XElement SerializeItem(object item, object parentItem)
         {
 
             RouterOutput output = item as RouterOutput;
