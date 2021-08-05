@@ -221,7 +221,7 @@ namespace OpenSC.Model.Routers.Leitch
 
                 if (lockOpCode == 2)
                     notifyLockChanged(output, RouterOutputLockType.Protect, lockState);
-                else if (output.LockState != RouterOutputLockState.Clear)
+                else if (output.ProtectState != RouterOutputLockState.Clear)
                     notifyLockChanged(output, RouterOutputLockType.Protect, RouterOutputLockState.Clear);
 
                 output.LockProtectOwner = panelId;
