@@ -156,7 +156,7 @@ namespace OpenSC.Model.Routers
 
         public void AddInput()
         {
-            int index = inputs.Max(ri => ri.Index) + 1;
+            int index = (inputs.Count > 0) ? (inputs.Max(ri => ri.Index) + 1) : 0;
             inputs.Add(CreateInput(string.Format("Input #{0}", index + 1), index));
         }
 
@@ -210,7 +210,7 @@ namespace OpenSC.Model.Routers
 
         public void AddOutput()
         {
-            int index = outputs.Max(ro => ro.Index) + 1;
+            int index = (outputs.Count > 0) ? (outputs.Max(ro => ro.Index) + 1) : 0;
             outputs.Add(CreateOutput(string.Format("Output #{0}", index + 1), index));
         }
 
