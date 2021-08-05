@@ -159,7 +159,7 @@ namespace OpenSC.Model.Routers.Leitch
         {
             if (string.IsNullOrWhiteSpace(asciiLine))
                 return;
-            if ((asciiLine.Length < 2) || (asciiLine[1] != ':'))
+            if (asciiLine.Length < 2)
                 return;
             switch (asciiLine[0])
             {
@@ -200,12 +200,14 @@ namespace OpenSC.Model.Routers.Leitch
             try
             {
 
-                string[] split = statusString.Split(':', '/', ',');
-                if (!split[1].Contains(LevelHex))
+                string[] split = statusString.Split(':', '/', ',', '!');
+                if (split.Length != 4)
                     return;
-                int destinationIndex = int.Parse(split[2], System.Globalization.NumberStyles.HexNumber);
-                int panelId = int.Parse(split[3], System.Globalization.NumberStyles.HexNumber);
-                int lockOpCode = int.Parse(split[4]);
+                if (split[1][0] != LevelHex)
+                    return;
+                int destinationIndex = int.Parse(split[1].Substring(1), System.Globalization.NumberStyles.HexNumber);
+                int panelId = int.Parse(split[2], System.Globalization.NumberStyles.HexNumber);
+                int lockOpCode = int.Parse(split[3]);
                 LeitchRouterOutput output = GetOutput(destinationIndex) as LeitchRouterOutput;
                 if (output == null)
                     return;
