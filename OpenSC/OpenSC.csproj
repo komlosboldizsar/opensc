@@ -526,6 +526,7 @@
     <Compile Include="Model\Persistence\DatabasePersister.cs" />
     <Compile Include="Model\Persistence\IValueXmlSerializer.cs" />
     <Compile Include="Model\Persistence\LookupInAttribute.cs" />
+    <Compile Include="Model\Persistence\PolymorphFieldAttribute.cs" />
     <Compile Include="Model\Persistence\PersistSubclassAttribute.cs" />
     <Compile Include="Model\Persistence\PersistAsAttribute.cs" />
     <Compile Include="Model\Persistence\PolymorphDatabaseAttribute.cs" />
