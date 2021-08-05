@@ -59,6 +59,7 @@ namespace BMD.Videohub
                     return;
                 outputCount = value;
                 crosspoints = new int?[outputCount];
+                locks = new LockState?[outputCount];
                 OutputCountChanged?.Invoke(outputCount);
             }
         }
@@ -328,6 +329,12 @@ namespace BMD.Videohub
             if (line == BLOCK_START_VIDEO_OUTPUT_ROUTING)
             {
                 currentBlockType = BlockType.VideoOutputRouting;
+                return;
+            }
+
+            if (line == BLOCK_START_VIDEO_OUTPUT_LOCKS)
+            {
+                currentBlockType = BlockType.VideoOutputLocks;
                 return;
             }
 
