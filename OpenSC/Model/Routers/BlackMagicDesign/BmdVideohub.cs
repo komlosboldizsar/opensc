@@ -246,6 +246,11 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             videohub.QueryAllCrosspoints();
         }
 
+        #region Input and output instantiation
+        public override RouterInput CreateInput(string name, int index) => new RouterInput(name, this, index);
+        public override RouterOutput CreateOutput(string name, int index) => new RouterOutput(name, this, index);
+        #endregion
+
     }
 
 }

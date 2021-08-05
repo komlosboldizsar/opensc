@@ -53,7 +53,14 @@ namespace OpenSC.Model.Routers
         #region Restoration
         public override void RestoredOwnFields()
         {
+            base.RestoredOwnFields();
             notifyIOsRestored();
+        }
+
+        public override void TotallyRestored()
+        {
+            base.TotallyRestored();
+            notifyIOsTotallyRestored();
             queryAllCrosspoints();
         }
 
@@ -67,6 +74,12 @@ namespace OpenSC.Model.Routers
         {
             inputs.ForEach(i => i.Restored());
             outputs.ForEach(o => o.Restored());
+        }
+
+        private void notifyIOsTotallyRestored()
+        {
+            inputs.ForEach(i => i.TotallyRestored());
+            outputs.ForEach(o => o.TotallyRestored());
         }
         #endregion
 
@@ -135,6 +148,7 @@ namespace OpenSC.Model.Routers
 
         [PersistAs("inputs")]
         [PersistAs(null, 1)]
+        [PolymorphField(nameof(InputTypesDictionaryGetter))]
         private RouterInput[] _inputs // for persistence
         {
             get { return inputs.ToArray(); }
@@ -144,36 +158,22 @@ namespace OpenSC.Model.Routers
                 if (value != null)
                     inputs.AddRange(value);
                 inputs.ForEach(i => i.AssignParentRouter(this));
-                updateInputIndices();
             }
         }
 
         public void AddInput()
         {
-            int index = inputs.Count;
-            inputs.Add(new RouterInput(string.Format("Input #{0}", index + 1), this, index));
+            int index = (inputs.Count > 0) ? (inputs.Max(ri => ri.Index) + 1) : 0;
+            inputs.Add(CreateInput(string.Format("Input #{0}", index + 1), index));
         }
 
         public void RemoveInput(RouterInput input)
         {
             inputs.Remove(input);
             input.RemovedFromRouter(this);
-            updateInputIndices();
         }
 
-        public RouterInput GetInput(int index)
-        {
-            if ((index < 1) || (index > inputs.Count))
-                throw new ArgumentException();
-            return inputs[index - 1];
-        }
-
-        private void updateInputIndices()
-        {
-            int idx = 0;
-            foreach (RouterInput input in inputs)
-                input.SetIndexFromRouter(this, idx++);
-        }
+        public RouterInput GetInput(int index) => inputs.FirstOrDefault(ri => (ri.Index == index));
 
         private void inputsChangedHandler()
         {
@@ -185,6 +185,15 @@ namespace OpenSC.Model.Routers
         public event InputsChangedDelegate InputsChanged;
 
         private void restoreInputSources() => inputs.ForEach(i => i.RestoreSource());
+
+        public abstract RouterInput CreateInput(string name, int index);
+
+        private static readonly Dictionary<Type, string> INPUT_TYPES = new Dictionary<Type, string>()
+        {
+            {  typeof(RouterInput), "standard" }
+        };
+
+        protected virtual Dictionary<Type, string> InputTypesDictionaryGetter() => INPUT_TYPES;
         #endregion
 
         #region Outputs
@@ -193,6 +202,7 @@ namespace OpenSC.Model.Routers
 
         [PersistAs("outputs")]
         [PersistAs(null, 1)]
+        [PolymorphField(nameof(OutputTypesDictionaryGetter))]
         private RouterOutput[] _outputs // for persistence
         {
             get { return outputs.ToArray(); }
@@ -202,36 +212,22 @@ namespace OpenSC.Model.Routers
                 if (value != null)
                     outputs.AddRange(value);
                 outputs.ForEach(o => o.AssignParentRouter(this));
-                updateOutputIndices();
             }
         }
 
         public void AddOutput()
         {
-            int index = outputs.Count;
-            outputs.Add(new RouterOutput(string.Format("Output #{0}", index + 1), this, index));
+            int index = (outputs.Count > 0) ? (outputs.Max(ro => ro.Index) + 1) : 0;
+            outputs.Add(CreateOutput(string.Format("Output #{0}", index + 1), index));
         }
 
         public void RemoveOutput(RouterOutput output)
         {
             outputs.Remove(output);
             output.RemovedFromRouter(this);
-            updateOutputIndices();
         }
 
-        public RouterOutput GetOutput(int index)
-        {
-            if ((index < 1) || (index > outputs.Count))
-                throw new ArgumentException();
-            return outputs[index - 1];
-        }
-
-        private void updateOutputIndices()
-        {
-            int idx = 0;
-            foreach (RouterOutput output in outputs)
-                output.SetIndexFromRouter(this, idx++);
-        }
+        public RouterOutput GetOutput(int index) => outputs.FirstOrDefault(ro => (ro.Index == index));
 
         private void outputsChangedHandler()
         {
@@ -241,6 +237,15 @@ namespace OpenSC.Model.Routers
 
         public delegate void OutputsChangedDelegate(Router router);
         public event OutputsChangedDelegate OutputsChanged;
+
+        public abstract RouterOutput CreateOutput(string name, int index);
+
+        private static readonly Dictionary<Type, string> OUTPUT_TYPES = new Dictionary<Type, string>()
+        {
+            {  typeof(RouterOutput), "standard" }
+        };
+
+        protected virtual Dictionary<Type, string> OutputTypesDictionaryGetter() => OUTPUT_TYPES;
         #endregion
 
         #region Crosspoint update

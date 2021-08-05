@@ -30,9 +30,6 @@ namespace OpenSC.Model.Routers.Leitch
             base.TotallyRestored();
             if (port != null)
                 port.ReceivedDataAsciiLine += receivedLineFromPort;
-            RouterInput firstInput = Inputs.FirstOrDefault();
-            foreach (RouterOutput output in Outputs)
-                output.AssignSource(firstInput); // TODO: store last crosspoint
         }
 
         public override void Removed()
@@ -123,6 +120,18 @@ namespace OpenSC.Model.Routers.Leitch
         private readonly char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
         private char LevelHex => HEX_CHARS[level];
+        #endregion
+
+        #region Input and output instantiation
+        public override RouterInput CreateInput(string name, int index) => new RouterInput(name, this, index);
+        public override RouterOutput CreateOutput(string name, int index) => new VirtualLeitchRouterOutput(name, this, index);
+
+        private static readonly Dictionary<Type, string> OUTPUT_TYPES = new Dictionary<Type, string>()
+        {
+            {  typeof(VirtualLeitchRouterOutput), "virtual_leitch" }
+        };
+
+        protected override Dictionary<Type, string> OutputTypesDictionaryGetter() => OUTPUT_TYPES;
         #endregion
 
         #region Setting/getting crosspoints

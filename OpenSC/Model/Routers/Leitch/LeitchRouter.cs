@@ -95,6 +95,11 @@ namespace OpenSC.Model.Routers.Leitch
         }
         #endregion
 
+        #region Input and output instantiation
+        public override RouterInput CreateInput(string name, int index) => new RouterInput(name, this, index);
+        public override RouterOutput CreateOutput(string name, int index) => new RouterOutput(name, this, index);
+        #endregion
+
         #region Setting/getting crosspoints
         protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)
         {

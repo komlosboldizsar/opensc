@@ -36,6 +36,9 @@ namespace OpenSC.Model.Routers
             registerAsSignal();
         }
 
+        public virtual void TotallyRestored()
+        { }
+
         #region Property: Name
         private string name;
 
@@ -81,22 +84,24 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Property: Index
-        public int Index { get; private set; }
+        private int index;
 
-        internal void SetIndexFromRouter(Router router, int index)
+        public int Index
         {
-            if (router != Router)
-                return;
-            if (index == Index)
-                return;
-            int oldIndex = Index;
-            Index = index;
-            IndexChanged?.Invoke(this, oldIndex, Index);
-            PropertyChanged?.Invoke(nameof(Index));
-            SignalLabelChanged?.Invoke(this, getSignalLabel());
-            PropertyChanged?.Invoke(nameof(ISignalSourceRegistered.SignalLabel));
-            SignalUniqueIdChanged?.Invoke(this, SignalUniqueId);
-            PropertyChanged?.Invoke(nameof(ISignalSourceRegistered.SignalUniqueId));
+            get => index;
+            set
+            {
+                if (value == index)
+                    return;
+                int oldValue = index;
+                index = value;
+                IndexChanged?.Invoke(this, oldValue, value);
+                PropertyChanged?.Invoke(nameof(Index));
+                SignalLabelChanged?.Invoke(this, getSignalLabel());
+                PropertyChanged?.Invoke(nameof(ISignalSourceRegistered.SignalLabel));
+                SignalUniqueIdChanged?.Invoke(this, SignalUniqueId);
+                PropertyChanged?.Invoke(nameof(ISignalSourceRegistered.SignalUniqueId));
+            }
         }
 
         public delegate void IndexChangedDelegate(RouterOutput input, int oldIndex, int newIndex);
