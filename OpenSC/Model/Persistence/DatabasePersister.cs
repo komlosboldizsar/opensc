@@ -204,14 +204,32 @@ namespace OpenSC.Model.Persistence
 
             if (Type.GetTypeCode(memberType) == TypeCode.Object)
             {
+
+                Type itemType = item.GetType();
                 Type serializeAsType = memberType;
+
                 PersistSubclassAttribute persistSubclassAttribute = memberInfo.GetCustomAttributes<PersistSubclassAttribute>().FirstOrDefault();
                 if (persistSubclassAttribute != null) // should check if given type is subclass of member type
                     serializeAsType = persistSubclassAttribute.SubclassType;
+                
+                PolymorphFieldAttribute polymorphFieldAttribute = memberInfo.GetCustomAttributes<PolymorphFieldAttribute>().FirstOrDefault();
+                Dictionary<Type, string> typeStringDictionary = null;
+                string itemTypeString = null;
+                if (polymorphFieldAttribute != null)
+                {
+                    typeStringDictionary = polymorphFieldAttribute.TypeStringDictionaryGetter?.Invoke();
+                    if (typeStringDictionary?.TryGetValue(itemType, out itemTypeString) == true)
+                        serializeAsType = itemType;
+                }
+
                 IValueXmlSerializer serializer = GetSerializerForType(serializeAsType);
                 if (serializer == null)
                     return item.ToString();
-                return serializer.SerializeItem(item, parentItem);
+                XElement serializedItem = serializer.SerializeItem(item, parentItem);
+                if ((polymorphFieldAttribute.TypeAttributeName != null) && (itemTypeString != null))
+                    serializedItem.SetAttributeValue(polymorphFieldAttribute.TypeAttributeName, itemTypeString);
+                return serializedItem;
+
             }
            
             return item.ToString();
@@ -378,9 +396,22 @@ namespace OpenSC.Model.Persistence
             Type deserializeAsType = memberType;
             if (Type.GetTypeCode(memberType) == TypeCode.Object)
             {
+                
                 PersistSubclassAttribute persistSubclassAttribute = memberInfo.GetCustomAttributes<PersistSubclassAttribute>().FirstOrDefault();
                 if (persistSubclassAttribute != null) // should check if given type is subclass of member type
                     deserializeAsType = persistSubclassAttribute.SubclassType;
+
+                PolymorphFieldAttribute polymorphFieldAttribute = memberInfo.GetCustomAttributes<PolymorphFieldAttribute>().FirstOrDefault();
+                Dictionary<Type, string> typeStringDictionary = null;
+                if (polymorphFieldAttribute != null)
+                {
+                    string itemTypeString = xmlElement.GetAttribute(polymorphFieldAttribute.TypeAttributeName);
+                    typeStringDictionary = polymorphFieldAttribute.TypeStringDictionaryGetter?.Invoke();
+                    KeyValuePair<Type, string> foundTypeData = typeStringDictionary.FirstOrDefault(kvp => (kvp.Value == itemTypeString));
+                    if (foundTypeData.Key != null)
+                        deserializeAsType = foundTypeData.Key;
+                }
+
                 IValueXmlSerializer serializer = GetSerializerForType(deserializeAsType);
                 if (serializer == null)
                     return xmlElement.InnerText;
