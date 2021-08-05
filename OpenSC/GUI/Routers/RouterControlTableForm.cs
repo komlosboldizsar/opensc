@@ -286,6 +286,7 @@ namespace OpenSC.GUI.Routers
 
         private void lockOperation(RouterOutput output, RouterOutputLockType lockType)
         {
+            Console.WriteLine("hello");
             switch (output.LockState)
             {
                 case RouterOutputLockState.Clear:
@@ -341,7 +342,9 @@ namespace OpenSC.GUI.Routers
                 routerOutput.NameChanged += RouterOutput_NameChanged;
                 routerOutput.Router.NameChanged += Router_NameChanged;
                 routerOutput.CurrentInputChanged += RouterOutput_CrosspointChanged;
+                routerOutput.PropertyChanged += RouterOutput_PropertyChanged;
             }
+
 
             #region Property: Name
             public string Name => Output.Name;
@@ -390,7 +393,11 @@ namespace OpenSC.GUI.Routers
             }
             #endregion
 
+            #region INotifyPropertyChanged implementation
             public event PropertyChangedDelegate PropertyChanged;
+            private void RouterOutput_PropertyChanged(string propertyName)
+                => PropertyChanged?.Invoke(propertyName);
+            #endregion
 
         }
 
