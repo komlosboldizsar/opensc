@@ -319,7 +319,7 @@ namespace OpenSC.GUI.Routers
                         string msgboxTitle = "Confirm force " + verb1;
                         string msgboxBody = string.Format("Output [(#{0}) {1}] of router [(#{2}) {3}] is {4} by another user.\r\nAre you sure you want to force {5} this input?",
                             output.Index, output.Name, output.Router.ID, output.Router.Name, verb2, verb1);
-                        if (MessageBox.Show(msgboxTitle, msgboxBody, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                        if (MessageBox.Show(msgboxBody, msgboxTitle, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                         {
                             if (lockType == RouterOutputLockType.Lock)
                                 output.RequestForceUnlock();
@@ -331,7 +331,7 @@ namespace OpenSC.GUI.Routers
             }
             catch (Exception e)
             {
-                MessageBox.Show("Lock operation error", e.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(e.Message, "Lock operation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
