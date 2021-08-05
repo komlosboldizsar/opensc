@@ -115,7 +115,23 @@ namespace OpenSC.GUI.Routers
             builder.Header("#");
             builder.Width(30);
             builder.UpdaterMethod((input, cell) => { cell.Value = input.Index + 1; });
-            //builder.AddChangeEvent(nameof(RouterInput.Index));
+            builder.AddChangeEvent(nameof(RouterInput.Index));
+            builder.TextEditable(true);
+            builder.CellEndEditHandlerMethod((input, cell, eventargs) =>
+            {
+                try
+                {
+                    int index = int.Parse(cell.Value.ToString()) - 1;
+                    if ((index < 0) || (index > 65534))
+                        throw new ArgumentException("Index of router input must be between 1 and 65535.");
+                    input.Index = index;
+                }
+                catch (ArgumentException e)
+                {
+                    MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    cell.Value = input.Index + 1;
+                }
+            });
             builder.BuildAndAdd();
 
             // Column: name
@@ -247,7 +263,23 @@ namespace OpenSC.GUI.Routers
             builder.Header("#");
             builder.Width(30);
             builder.UpdaterMethod((output, cell) => { cell.Value = output.Index + 1; });
-            //builder.AddChangeEvent(nameof(RouterOutput.Index));
+            builder.AddChangeEvent(nameof(RouterOutput.Index));
+            builder.TextEditable(true);
+            builder.CellEndEditHandlerMethod((output, cell, eventargs) =>
+            {
+                try
+                {
+                    int index = int.Parse(cell.Value.ToString()) - 1;
+                    if ((index < 0) || (index > 65534))
+                        throw new ArgumentException("Index of router input must be between 1 and 65535.");
+                    output.Index = index;
+                }
+                catch (ArgumentException e)
+                {
+                    MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    cell.Value = output.Index + 1;
+                }
+            });
             builder.BuildAndAdd();
 
             // Column: name

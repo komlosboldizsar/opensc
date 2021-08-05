@@ -68,18 +68,20 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Property: Index
-        public int Index { get; private set; }
-        
-        internal void SetIndexFromRouter(Router router, int index)
+        private int index;
+
+        public int Index
         {
-            if (router != Router)
-                return;
-            if (index == Index)
-                return;
-            int oldIndex = Index;
-            Index = index;
-            IndexChanged?.Invoke(this, oldIndex, Index);
-            PropertyChanged?.Invoke(nameof(Index));
+            get => index;
+            set
+            {
+                if (value == index)
+                    return;
+                int oldValue = index;
+                index = value;
+                IndexChanged?.Invoke(this, oldValue, value);
+                PropertyChanged?.Invoke(nameof(Index));
+            }
         }
 
         public delegate void IndexChangedDelegate(RouterInput input, int oldIndex, int newIndex);

@@ -53,7 +53,13 @@ namespace OpenSC.Model.Routers
         #region Restoration
         public override void RestoredOwnFields()
         {
+            base.RestoredOwnFields();
             notifyIOsRestored();
+        }
+
+        public override void TotallyRestored()
+        {
+            base.TotallyRestored();
             queryAllCrosspoints();
         }
 
@@ -144,13 +150,12 @@ namespace OpenSC.Model.Routers
                 if (value != null)
                     inputs.AddRange(value);
                 inputs.ForEach(i => i.AssignParentRouter(this));
-                updateInputIndices();
             }
         }
 
         public void AddInput()
         {
-            int index = inputs.Count;
+            int index = inputs.Max(ri => ri.Index) + 1;
             inputs.Add(new RouterInput(string.Format("Input #{0}", index + 1), this, index));
         }
 
@@ -158,22 +163,9 @@ namespace OpenSC.Model.Routers
         {
             inputs.Remove(input);
             input.RemovedFromRouter(this);
-            updateInputIndices();
         }
 
-        public RouterInput GetInput(int index)
-        {
-            if ((index < 1) || (index > inputs.Count))
-                throw new ArgumentException();
-            return inputs[index - 1];
-        }
-
-        private void updateInputIndices()
-        {
-            int idx = 0;
-            foreach (RouterInput input in inputs)
-                input.SetIndexFromRouter(this, idx++);
-        }
+        public RouterInput GetInput(int index) => inputs.FirstOrDefault(ri => (ri.Index == index));
 
         private void inputsChangedHandler()
         {
@@ -202,13 +194,12 @@ namespace OpenSC.Model.Routers
                 if (value != null)
                     outputs.AddRange(value);
                 outputs.ForEach(o => o.AssignParentRouter(this));
-                updateOutputIndices();
             }
         }
 
         public void AddOutput()
         {
-            int index = outputs.Count;
+            int index = outputs.Max(ro => ro.Index) + 1;
             outputs.Add(new RouterOutput(string.Format("Output #{0}", index + 1), this, index));
         }
 
@@ -216,22 +207,9 @@ namespace OpenSC.Model.Routers
         {
             outputs.Remove(output);
             output.RemovedFromRouter(this);
-            updateOutputIndices();
         }
 
-        public RouterOutput GetOutput(int index)
-        {
-            if ((index < 1) || (index > outputs.Count))
-                throw new ArgumentException();
-            return outputs[index - 1];
-        }
-
-        private void updateOutputIndices()
-        {
-            int idx = 0;
-            foreach (RouterOutput output in outputs)
-                output.SetIndexFromRouter(this, idx++);
-        }
+        public RouterOutput GetOutput(int index) => outputs.FirstOrDefault(ro => (ro.Index == index));
 
         private void outputsChangedHandler()
         {
