@@ -18,7 +18,7 @@ namespace OpenSC.Model.Routers
         private const string ATTRIBUTE_TIELINE_COST = "tieline_cost";
         private const string ATTRIBUTE_TIELINE_RESERVED = "tieline_reserved";
 
-        public object DeserializeItem(XmlNode serializedItem)
+        public object DeserializeItem(XmlNode serializedItem, object parentItem)
         {
             if (serializedItem.LocalName != TAG_NAME)
                 return null;
@@ -35,7 +35,7 @@ namespace OpenSC.Model.Routers
             };
         }
 
-        public XElement SerializeItem(object item)
+        public XElement SerializeItem(object item, object parentItem)
         {
 
             RouterInput input = item as RouterInput;
