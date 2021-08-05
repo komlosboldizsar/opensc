@@ -12,13 +12,13 @@ namespace OpenSC.Model.Persistence
 
         public delegate Dictionary<Type, string> TypeStringDictionaryGetterDelegate();
 
-        public TypeStringDictionaryGetterDelegate TypeStringDictionaryGetter { get; private set; }
+        public string TypeStringDictionaryGetterName { get; private set; }
 
         public string TypeAttributeName { get; private set; }
 
-        public PolymorphFieldAttribute(TypeStringDictionaryGetterDelegate StringTypeDictionaryGetter, string TypeAttributeName = "type")
+        public PolymorphFieldAttribute(string TypeStringDictionaryGetterName, string TypeAttributeName = "type")
         {
-            this.TypeStringDictionaryGetter = StringTypeDictionaryGetter;
+            this.TypeStringDictionaryGetterName = TypeStringDictionaryGetterName;
             this.TypeAttributeName = TypeAttributeName;
         }
 
