@@ -186,6 +186,7 @@ namespace OpenSC.GUI.Routers
                 if (!ro.ProtectsSupported)
                     cell.Style.BackColor = BACKCOLOR_PROTECT_NOTSUPPORTED;
             });
+            builder.CellStyle(protectColumnCellStyle);
             builder.AddChangeEvent(nameof(RouterOutput.ProtectState));
             builder.CellDoubleClickHandlerMethod((routerOutputProxy, cell, e) => lockOperation(routerOutputProxy.Output, RouterOutputLockType.Protect));
             builder.BuildAndAdd();
