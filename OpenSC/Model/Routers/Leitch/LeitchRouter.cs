@@ -111,7 +111,7 @@ namespace OpenSC.Model.Routers.Leitch
             sendSerialCommand("@ S?{0}\r\n", level);
         }
 
-        protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockOperationType operationType)
+        protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
         { }
         #endregion
 

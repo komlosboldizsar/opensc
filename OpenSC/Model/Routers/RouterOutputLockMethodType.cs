@@ -10,9 +10,6 @@ namespace OpenSC.Model.Routers
     {
         Lock,
         Unlock,
-        ForceUnlock,
-        Protect,
-        Unprotect,
-        ForceUnprotect
+        ForceUnlock
     }
 }

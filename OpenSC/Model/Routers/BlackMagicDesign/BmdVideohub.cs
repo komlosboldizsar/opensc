@@ -246,7 +246,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             videohub.QueryAllCrosspoints();
         }
 
-        protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockOperationType operationType)
+        protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
         { }
 
         #region Input and output instantiation

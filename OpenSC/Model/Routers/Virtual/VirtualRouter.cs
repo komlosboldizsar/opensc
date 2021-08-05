@@ -37,7 +37,7 @@ namespace OpenSC.Model.Routers.Virtual
                 notifyCrosspointChanged(output, (c > 0) ? Inputs[r.Next(c - 1)] : null);
         }
 
-        protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockOperationType operationType)
+        protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
         { }
 
         #region Input and output instantiation

@@ -194,7 +194,7 @@ namespace OpenSC.Model.Routers
                 throw new Exception("This output is locked! You must force unprotect before locking.");
             if (LockState == RouterOutputLockState.LockedRemote)
                 throw new Exception("This output is already locked by another user! You must force unlock before.");
-            Router.RequestLock(this);
+            Router.RequestLockOperation(this, RouterOutputLockType.Lock, RouterOutputLockOperationType.Lock);
         }
 
         public void RequestUnlock()
@@ -203,14 +203,14 @@ namespace OpenSC.Model.Routers
                 return;
             if (LockState == RouterOutputLockState.LockedRemote)
                 throw new Exception("This output is locked by another user! You must use the force unlock function.");
-            Router.RequestUnlock(this);
+            Router.RequestLockOperation(this, RouterOutputLockType.Lock, RouterOutputLockOperationType.Unlock);
         }
 
         public void RequestForceUnlock()
         {
             if (LockState == RouterOutputLockState.Clear)
                 return;
-            Router.RequestUnlock(this);
+            Router.RequestLockOperation(this, RouterOutputLockType.Lock, RouterOutputLockOperationType.ForceUnlock);
         }
         #endregion
 
@@ -248,7 +248,7 @@ namespace OpenSC.Model.Routers
                 throw new Exception("This output is locked! You must force unlock before protecting.");
             if (ProtectState == RouterOutputLockState.LockedRemote)
                 throw new Exception("This output is already protected by another user! You must force unprotect before.");
-            Router.RequestProtect(this);
+            Router.RequestLockOperation(this, RouterOutputLockType.Protect, RouterOutputLockOperationType.Lock);
         }
 
         public void RequestUnprotect()
@@ -257,14 +257,14 @@ namespace OpenSC.Model.Routers
                 return;
             if (ProtectState == RouterOutputLockState.LockedRemote)
                 throw new Exception("This output is protected by another user! You must use the force unprotect function.");
-            Router.RequestUnprotect(this);
+            Router.RequestLockOperation(this, RouterOutputLockType.Protect, RouterOutputLockOperationType.Unlock);
         }
 
         public void RequestForceUnprotect()
         {
             if (ProtectState == RouterOutputLockState.Clear)
                 return;
-            Router.RequestUnprotect(this);
+            Router.RequestLockOperation(this, RouterOutputLockType.Protect, RouterOutputLockOperationType.ForceUnlock);
         }
         #endregion
 

@@ -141,7 +141,7 @@ namespace OpenSC.Model.Routers.Leitch
         protected override void queryAllCrosspoints()
         { }
 
-        protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockOperationType operationType)
+        protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
         { }
         #endregion
 

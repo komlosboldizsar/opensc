@@ -272,43 +272,44 @@ namespace OpenSC.Model.Routers
 
         protected void notifyCrosspointChanged(int outputIndex, int inputIndex)
         {
-            if ((outputIndex < 0) || (outputIndex >= outputs.Count))
+            RouterOutput output = outputs.FirstOrDefault(ro => (ro.Index == outputIndex));
+            if (output == null)
                 throw new ArgumentException();
-            if ((inputIndex < 0) || (inputIndex >= inputs.Count))
+            RouterInput input = inputs.FirstOrDefault(ri => (ri.Index == inputIndex));
+            if (output == null)
                 throw new ArgumentException();
-            notifyCrosspointChanged(outputs[outputIndex], inputs[inputIndex]);
+            notifyCrosspointChanged(output, input);
         }
         #endregion
 
         #region Locks and protects update
-        public void RequestLock(RouterOutput output) => requestLockOperation(output, RouterOutputLockOperationType.Lock);
-        public void RequestUnlock(RouterOutput output) => requestLockOperation(output, RouterOutputLockOperationType.Unlock);
-        public void RequestForceUnlock(RouterOutput output) => requestLockOperation(output, RouterOutputLockOperationType.ForceUnlock);
-        public void RequestProtect(RouterOutput output) => requestLockOperation(output, RouterOutputLockOperationType.Protect);
-        public void RequestUnprotect(RouterOutput output) => requestLockOperation(output, RouterOutputLockOperationType.Unprotect);
-        public void RequestForceUnprotect(RouterOutput output) => requestLockOperation(output, RouterOutputLockOperationType.ForceUnprotect);
-
-        private void requestLockOperation(RouterOutput output, RouterOutputLockOperationType operationType)
+        public void RequestLockOperation(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
         {
             if (!outputs.Contains(output))
                 throw new ArgumentException();
             string logMessage = string.Format("Router output {0} request. Router: [(#{1}) #2], destination: {3}.",
-                LOCK_OPERATION_STRINGS[operationType], ID, Name, output.Index);
+                translateLockOperation(lockType, lockOperationType), ID, Name, output.Index);
             LogDispatcher.I(LOG_TAG, logMessage);
-            requestLockOperationImpl(output, operationType);
+            requestLockOperationImpl(output, lockType, lockOperationType);
         }
 
-        private static readonly Dictionary<RouterOutputLockOperationType, string> LOCK_OPERATION_STRINGS = new Dictionary<RouterOutputLockOperationType, string>()
+        private static Dictionary<RouterOutputLockType, string> LOCK_TYPE_TRANSLATIONS = new Dictionary<RouterOutputLockType, string>()
         {
-            { RouterOutputLockOperationType.Lock, "lock" },
-            { RouterOutputLockOperationType.Unlock, "unlock" },
-            { RouterOutputLockOperationType.ForceUnlock, "force unlock" },
-            { RouterOutputLockOperationType.Protect, "protect" },
-            { RouterOutputLockOperationType.Unprotect, "unprotect" },
-            { RouterOutputLockOperationType.ForceUnprotect, "force unprotect" },
+            { RouterOutputLockType.Lock, "lock" },
+            { RouterOutputLockType.Protect, "protect" },
         };
 
-        protected abstract void requestLockOperationImpl(RouterOutput output, RouterOutputLockOperationType operationType);
+        private static Dictionary<RouterOutputLockOperationType, string> LOCK_OPERATION_TYPE_TRANSLATIONS = new Dictionary<RouterOutputLockOperationType, string>()
+        {
+            { RouterOutputLockOperationType.Lock, "{0}" },
+            { RouterOutputLockOperationType.Unlock, "un{0}" },
+            { RouterOutputLockOperationType.ForceUnlock, "force un{0}" },
+        };
+
+        private static string translateLockOperation(RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
+            => string.Format(LOCK_OPERATION_TYPE_TRANSLATIONS[lockOperationType], LOCK_TYPE_TRANSLATIONS[lockType]);
+
+        protected abstract void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType);
 
         protected void notifyLockChanged(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockState lockState)
         {
@@ -327,8 +328,7 @@ namespace OpenSC.Model.Routers
 
         protected void notifyLockChanged(int outputIndex, RouterOutputLockType lockType, RouterOutputLockState lockState)
         {
-            if ((outputIndex < 0) || (outputIndex >= outputs.Count))
-                throw new ArgumentException();
+            RouterOutput output = outputs.FirstOrDefault(ro => (ro.Index == outputIndex));
             notifyLockChanged(outputs[outputIndex], lockType, lockState);
         }
         #endregion
