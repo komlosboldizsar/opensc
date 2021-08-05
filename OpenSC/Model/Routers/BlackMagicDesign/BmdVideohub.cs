@@ -211,13 +211,14 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             videohub = new BMD.Videohub.BlackMagicVideohub(ipAddress);
             videohub.ConnectionStateChanged += connectionStateChangedHandler;
             videohub.CrosspointChanged += crosspointChangedHandler;
+            videohub.LockChanged += lockChangedHandler;
         }
 
         private void connectionStateChangedHandler(bool state)
         {
             Connected = state;
             if (Connected)
-                queryAllCrosspoints();
+                queryAllStates();
         }
 
         private void crosspointChangedHandler(int output, int? input)
@@ -231,6 +232,17 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             catch { }
         }
 
+        private void lockChangedHandler(int output, BMD.Videohub.BlackMagicVideohub.LockState state)
+            => notifyLockChanged(output, RouterOutputLockType.Lock, LOCK_STATE_TRANSLATIONS[state]);
+
+        private static readonly Dictionary<BMD.Videohub.BlackMagicVideohub.LockState, RouterOutputLockState> LOCK_STATE_TRANSLATIONS
+            = new Dictionary<BMD.Videohub.BlackMagicVideohub.LockState, RouterOutputLockState>()
+            {
+                { BMD.Videohub.BlackMagicVideohub.LockState.Unlocked, RouterOutputLockState.Clear },
+                { BMD.Videohub.BlackMagicVideohub.LockState.Owned, RouterOutputLockState.LockedLocal },
+                { BMD.Videohub.BlackMagicVideohub.LockState.Taken, RouterOutputLockState.LockedRemote }
+            };
+
         protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)
         {
             try
@@ -241,17 +253,40 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             { }
         }
 
-        protected override void queryAllCrosspoints()
+        protected override void queryAllStates()
         {
             videohub.QueryAllCrosspoints();
+            videohub.QueryAllLockStates();
         }
 
         protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
-        { }
+        {
+            if (lockType != RouterOutputLockType.Lock)
+                return; // supporting only locks
+            switch (lockOperationType)
+            {
+                case RouterOutputLockOperationType.Lock:
+                    videohub.SetLockState(output.Index, true);
+                    break;
+                case RouterOutputLockOperationType.Unlock:
+                    videohub.SetLockState(output.Index, false);
+                    break;
+                case RouterOutputLockOperationType.ForceUnlock:
+                    videohub.SetLockState(output.Index, false); // TODO
+                    break;
+            }
+        }
 
         #region Input and output instantiation
         public override RouterInput CreateInput(string name, int index) => new RouterInput(name, this, index);
         public override RouterOutput CreateOutput(string name, int index) => new RouterOutput(name, this, index);
+
+        private static readonly Dictionary<Type, string> OUTPUT_TYPES = new Dictionary<Type, string>()
+        {
+            {  typeof(BmdVideohubOutput), "bmd" }
+        };
+
+        protected override Dictionary<Type, string> OutputTypesDictionaryGetter() => OUTPUT_TYPES;
         #endregion
 
     }

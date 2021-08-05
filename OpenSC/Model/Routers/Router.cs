@@ -61,7 +61,7 @@ namespace OpenSC.Model.Routers
         {
             base.TotallyRestored();
             notifyIOsTotallyRestored();
-            queryAllCrosspoints();
+            queryAllStates();
         }
 
         public override void RestoreCustomRelations()
@@ -248,6 +248,8 @@ namespace OpenSC.Model.Routers
         protected virtual Dictionary<Type, string> OutputTypesDictionaryGetter() => OUTPUT_TYPES;
         #endregion
 
+        protected abstract void queryAllStates();
+
         #region Crosspoint update
         public void RequestCrosspointUpdate(RouterOutput output, RouterInput input)
         {
@@ -260,7 +262,6 @@ namespace OpenSC.Model.Routers
         }
 
         protected abstract void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input);
-        protected abstract void queryAllCrosspoints();
 
         protected void notifyCrosspointChanged(RouterOutput output, RouterInput input)
         {

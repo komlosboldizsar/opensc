@@ -169,7 +169,7 @@ namespace OpenSC.Model.Routers
         public RouterOutputLockState LockState
         {
             get => lockState;
-            private set
+            protected set
             {
                 if (value == lockState)
                     return;
@@ -223,7 +223,7 @@ namespace OpenSC.Model.Routers
         public RouterOutputLockState ProtectState
         {
             get => protectState;
-            private set
+            protected set
             {
                 if (value == protectState)
                     return;

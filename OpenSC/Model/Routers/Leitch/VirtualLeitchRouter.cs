@@ -136,9 +136,11 @@ namespace OpenSC.Model.Routers.Leitch
 
         #region Setting/getting crosspoints
         protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)
-            => output.AssignSource(input);
+        {
+            output.AssignSource(input);
+        }
 
-        protected override void queryAllCrosspoints()
+        protected override void queryAllStates()
         { }
 
         protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
@@ -225,8 +227,8 @@ namespace OpenSC.Model.Routers.Leitch
         // V:<level><destination>,<source>
         private void sendOutputPresetReport(RouterOutput output)
         {
-            if (!presets.TryGetValue(output, out RouterInput presetInput))
-                return;
+            VirtualLeitchRouterOutput outputCasted = output as VirtualLeitchRouterOutput;
+            RouterInput presetInput = outputCasted.PresetInput;
             if (presetInput == null)
                 return;
             sendSerialMessage("@ S:{0:X}{1:X},{2:X}", level, output.Index, presetInput.Index);
@@ -234,7 +236,11 @@ namespace OpenSC.Model.Routers.Leitch
 
         // W!<level><destination>,<id>,<status>
         private void sendOutputLockReport(RouterOutput output)
-            => sendSerialMessage("@ W!{0:X}{1:X},0,0", level, output.Index); // TODO: handle locks
+        {
+            VirtualLeitchRouterOutput outputCasted = output as VirtualLeitchRouterOutput;
+            int lockState = ((outputCasted.LockState == RouterOutputLockState.Clear) && (outputCasted.ProtectState == RouterOutputLockState.Clear)) ? 0 : 1;
+            sendSerialMessage("@ W!{0:X}{1:X},{2:X},{3}", level, output.Index, outputCasted.LockOwnerPanelId, lockState);
+        }
 
         private void sendOutputFullStatusReport(RouterOutput output)
         {
@@ -265,15 +271,15 @@ namespace OpenSC.Model.Routers.Leitch
         // response: S:<level><destination>,<source> (many lines)
         private void handleDirectCrosspointTakeMessage(string details)
         {
-            if (!detailsHelper1(details, out int[,] crosspoints, out string id))
+            if (!detailsHelper1(details, out int[,] crosspoints, out int id))
                 return;
             int pairs = crosspoints.GetLength(0);
             for (int p = 0; p < pairs; p++)
             {
-                RouterOutput output = Outputs.FirstOrDefault(o => (o.Index == crosspoints[p, 0]));
+                VirtualLeitchRouterOutput output = Outputs.FirstOrDefault(o => (o.Index == crosspoints[p, 0])) as VirtualLeitchRouterOutput;
                 RouterInput input = Inputs.FirstOrDefault(i => (i.Index == crosspoints[p, 1]));
                 if ((output != null) && (input != null))
-                    output.AssignSource(input);
+                    output.AssignInput(input, id);
             }
         }
 
@@ -281,25 +287,29 @@ namespace OpenSC.Model.Routers.Leitch
         // response: none
         private void handlePresetCrosspointMessage(string details)
         {
-            if (!detailsHelper1(details, out int[,] crosspoints, out string id))
+            if (!detailsHelper1(details, out int[,] crosspoints, out int id))
                 return;
             int pairs = crosspoints.GetLength(0);
             for (int p = 0; p < pairs; p++)
             {
-                RouterOutput output = Outputs.FirstOrDefault(o => (o.Index == crosspoints[p, 0]));
+                VirtualLeitchRouterOutput output = Outputs.FirstOrDefault(o => (o.Index == crosspoints[p, 0])) as VirtualLeitchRouterOutput;
                 RouterInput input = Inputs.FirstOrDefault(i => (i.Index == crosspoints[p, 1]));
                 if ((output != null) && (input != null))
-                    presets[output] = input;
+                    output.AssignPreset(input, id);
             }
         }
 
-        private bool detailsHelper1(string details, out int[,] crosspoints, out string id)
+        private bool detailsHelper1(string details, out int[,] crosspoints, out int id)
         {
             crosspoints = null;
-            id = null;
+            id = -1;
             string[] split1 = details.Split(':');
-            if (split1.Length > 1)
-                id = split1[1];
+            try
+            {
+                if (split1.Length > 1)
+                    id = int.Parse(split1[1], System.Globalization.NumberStyles.HexNumber);
+            }
+            catch { }
             string[] split2 = split1[0].Split('/');
             if (split2.Length < 2)
                 return false;
@@ -383,7 +393,7 @@ namespace OpenSC.Model.Routers.Leitch
         {
             if (details.IndexOf(LevelHex) == -1)
                 return;
-            foreach (RouterOutput output in presets.Keys)
+            foreach (RouterOutput output in Outputs)
                 sendOutputPresetReport(output);
         }
 
@@ -401,12 +411,13 @@ namespace OpenSC.Model.Routers.Leitch
                 int destination = int.Parse(split[1], System.Globalization.NumberStyles.HexNumber);
                 int id = int.Parse(split[2], System.Globalization.NumberStyles.HexNumber);
                 int status = int.Parse(split[3], System.Globalization.NumberStyles.HexNumber);
-                RouterOutput output = Outputs.FirstOrDefault(o => (o.Index == destination));
+                if ((status < 0) || (status > 2))
+                    return;
+                VirtualLeitchRouterOutput output = Outputs.FirstOrDefault(o => (o.Index == destination)) as VirtualLeitchRouterOutput;
                 if (output == null)
                     return;
-                // TODO: handle locks
-                // TODO: sendOutputLockReport
-                sendSerialMessage("@ W!{0:X}/{1:X},{2:X},0", level, destination, id);
+                output.SetLock(status, id);
+                sendOutputLockReport(output);
             }
             catch { }
         }
@@ -428,19 +439,17 @@ namespace OpenSC.Model.Routers.Leitch
                     break;
             }
         }
+
+        private const int FORCE_UNLOCK_PANEL_ID = 65535;
+        public const int OWN_PANEL_ID = 65534;
         #endregion
 
         #region Presets
-        private Dictionary<RouterOutput, RouterInput> presets = new Dictionary<RouterOutput, RouterInput>();
-
-        private void clearPresets() => presets.Clear();
+        private void clearPresets()
+            => Outputs.ForEach(ro => (ro as VirtualLeitchRouterOutput).ClearPreset());
 
         private void executePresets()
-        {
-            foreach (KeyValuePair<RouterOutput, RouterInput> preset in presets)
-                preset.Key.AssignSource(preset.Value);
-            presets.Clear();
-        }
+            => Outputs.ForEach(ro => (ro as VirtualLeitchRouterOutput).ExecutePreset());
         #endregion
 
     }

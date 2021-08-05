@@ -536,6 +536,8 @@
     <Compile Include="Model\Persistence\XmlTagNamesAttribute.cs" />
     <Compile Include="Model\Routers\AutoPathSearcher.cs" />
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohub.cs" />
+    <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohubOutput.cs" />
+    <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohubOutputXmlSerializer.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputLabel.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputName.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputSource.cs" />
@@ -543,6 +545,8 @@
     <Compile Include="Model\Routers\Labelset.cs" />
     <Compile Include="Model\Routers\LabelsetDatabase.cs" />
     <Compile Include="Model\Routers\LabelXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Leitch\LeitchRouterOutput.cs" />
+    <Compile Include="Model\Routers\Leitch\LeitchRouterOutputXmlSerializer.cs" />
     <Compile Include="Model\Routers\Leitch\VirtualLeitchRouterOutputXmlSerializer.cs" />
     <Compile Include="Model\Routers\Leitch\VirtualLeitchRouter.cs" />
     <Compile Include="Model\Routers\Leitch\LeitchRouter.cs" />
@@ -563,6 +567,8 @@
     <Compile Include="Model\Routers\Triggers\RouterCrosspointChangedMacroTrigger.cs" />
     <Compile Include="Model\Routers\Triggers\RouterOutputSourceChangedMacroTrigger.cs" />
     <Compile Include="Model\Routers\Triggers\RouterMacroTriggers.cs" />
+    <Compile Include="Model\Routers\Virtual\VirtualRouterOutputXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Virtual\VirtualRouterOutput.cs" />
     <Compile Include="Model\Routers\Virtual\VirtualRouter.cs" />
     <Compile Include="Model\SerialPorts\SerialPort.cs" />
     <Compile Include="Model\SerialPorts\SerialPortsManager.cs" />

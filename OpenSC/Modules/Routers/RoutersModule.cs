@@ -45,7 +45,10 @@ namespace OpenSC.Modules.Routers
         {
             DatabasePersister<Router>.RegisterSerializer(new RouterInputXmlSerializer());
             DatabasePersister<Router>.RegisterSerializer(new RouterOutputXmlSerializer());
+            DatabasePersister<Router>.RegisterSerializer(new VirtualRouterOutputXmlSerializer());
+            DatabasePersister<Router>.RegisterSerializer(new LeitchRouterOutputXmlSerializer());
             DatabasePersister<Router>.RegisterSerializer(new VirtualLeitchRouterOutputXmlSerializer());
+            DatabasePersister<Router>.RegisterSerializer(new BmdVideohubOutputXmlSerializer());
             DatabasePersister<Labelset>.RegisterSerializer(new LabelXmlSerializer());
         }
 

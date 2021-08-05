@@ -23,7 +23,75 @@ namespace OpenSC.Model.Routers.Leitch
                 AssignSource(associatedInput);
         }
 
+        public void AssignInput(RouterInput input, int panelId)
+        {
+            if (LockState == RouterOutputLockState.Clear)
+                return;
+            if ((ProtectState != RouterOutputLockState.Clear) || (panelId != LockOwnerPanelId))
+                return;
+            AssignSource(input);
+        }
+
+        public void AssignPreset(RouterInput input, int panelId)
+        {
+            if (LockState == RouterOutputLockState.Clear)
+                return;
+            if ((ProtectState != RouterOutputLockState.Clear) || (panelId != LockOwnerPanelId))
+                return;
+            PresetInput = input;
+        }
+
+        public void ClearPreset() => PresetInput = null;
+
+        public void ExecutePreset() => AssignSource(PresetInput);
+
+        public RouterInput PresetInput { get; private set; } = null;
+
         public int _associatedInputIndex;
+
+        public int LockOwnerPanelId { get; private set; } = -1;
+
+        public int LockStatusCode {
+            get
+            {
+                if (LockState != RouterOutputLockState.Clear)
+                    return 1;
+                if (ProtectState != RouterOutputLockState.Clear)
+                    return 2;
+                return 0;
+            }
+        }
+
+        public void SetLock(int state, int panelId)
+        {
+            bool lockOwned = (panelId == VirtualLeitchRouter.OWN_PANEL_ID);
+            switch (state)
+            {
+                case 0:
+                    LockState = RouterOutputLockState.Clear;
+                    ProtectState = RouterOutputLockState.Clear;
+                    LockOwnerPanelId = -1;
+                    break;
+                case 1:
+                    LockState = lockOwned ? RouterOutputLockState.LockedLocal : RouterOutputLockState.LockedRemote;
+                    ProtectState = RouterOutputLockState.Clear;
+                    LockOwnerPanelId = panelId;
+                    break;
+                case 2:
+                    LockState = RouterOutputLockState.Clear;
+                    ProtectState = lockOwned ? RouterOutputLockState.LockedLocal : RouterOutputLockState.LockedRemote;
+                    LockOwnerPanelId = panelId;
+                    break;
+            }
+        }
+
+        #region Supported lock operations
+        public override bool LocksSupported => true;
+        public override bool ProtectsSupported => true;
+
+        public override bool LockOwnerKnown => true;
+        public override bool ProtectOwnerKnown => true;
+        #endregion
 
     }
 
