@@ -186,7 +186,7 @@ namespace OpenSC.Model.Routers
             {  typeof(RouterInput), "standard" }
         };
 
-        protected virtual Dictionary<Type, string> InputTypesDictionaryGetter => INPUT_TYPES;
+        protected virtual Dictionary<Type, string> InputTypesDictionaryGetter() => INPUT_TYPES;
         #endregion
 
         #region Outputs
@@ -238,7 +238,7 @@ namespace OpenSC.Model.Routers
             {  typeof(RouterOutput), "standard" }
         };
 
-        protected virtual Dictionary<Type, string> OutputTypesDictionaryGetter => OUTPUT_TYPES;
+        protected virtual Dictionary<Type, string> OutputTypesDictionaryGetter() => OUTPUT_TYPES;
         #endregion
 
         #region Crosspoint update
