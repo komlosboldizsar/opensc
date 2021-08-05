@@ -114,7 +114,7 @@ namespace OpenSC.Model.Routers.Leitch
         #region Setting/getting crosspoints
         protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)
         {
-            sendSerialCommand("@ X:{0:X}/{1:X},{2:X}", level, output.Index, input.Index);
+            sendSerialCommand("@ X:{0:X}/{1:X},{2:X}:I{3:X}", level, output.Index, input.Index, MY_PANEL_ID);
         }
 
         protected override void queryAllStates()
