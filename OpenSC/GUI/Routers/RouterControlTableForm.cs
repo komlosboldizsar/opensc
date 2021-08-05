@@ -287,45 +287,51 @@ namespace OpenSC.GUI.Routers
 
         private void lockOperation(RouterOutput output, RouterOutputLockType lockType)
         {
-            Console.WriteLine("hello");
-            switch (output.LockState)
+            try
             {
-                case RouterOutputLockState.Clear:
-                    if (lockType == RouterOutputLockType.Lock)
-                        output.RequestLock();
-                    else if (lockType == RouterOutputLockType.Protect)
-                        output.RequestProtect();
-                    break;
-                case RouterOutputLockState.Locked:
-                case RouterOutputLockState.LockedLocal:
-                    if (lockType == RouterOutputLockType.Lock)
-                        output.RequestUnlock();
-                    else if (lockType == RouterOutputLockType.Protect)
-                        output.RequestUnprotect();
-                    break;
-                case RouterOutputLockState.LockedRemote:
-                    string verb1 = "", verb2 = "";
-                    if (lockType == RouterOutputLockType.Lock)
-                    {
-                        verb1 = "unlock";
-                        verb2 = "locked";
-                    }
-                    else if (lockType == RouterOutputLockType.Protect)
-                    {
-                        verb1 = "unprotect";
-                        verb2 = "protected";
-                    }
-                    string msgboxTitle = "Confirm force " + verb1;
-                    string msgboxBody = string.Format("Output [(#{0}) {1}] of router [] is {4} by another user.\r\nAre you sure you want to force {5} this input?",
-                        output.Index, output.Name, output.Router.ID, output.Router.Name, verb2, verb1);
-                    if (MessageBox.Show(msgboxTitle, msgboxBody, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
-                    {
+                switch (output.LockState)
+                {
+                    case RouterOutputLockState.Clear:
                         if (lockType == RouterOutputLockType.Lock)
-                            output.RequestForceUnlock();
+                            output.RequestLock();
                         else if (lockType == RouterOutputLockType.Protect)
-                            output.RequestForceUnprotect();
-                    }
-                    break;
+                            output.RequestProtect();
+                        break;
+                    case RouterOutputLockState.Locked:
+                    case RouterOutputLockState.LockedLocal:
+                        if (lockType == RouterOutputLockType.Lock)
+                            output.RequestUnlock();
+                        else if (lockType == RouterOutputLockType.Protect)
+                            output.RequestUnprotect();
+                        break;
+                    case RouterOutputLockState.LockedRemote:
+                        string verb1 = "", verb2 = "";
+                        if (lockType == RouterOutputLockType.Lock)
+                        {
+                            verb1 = "unlock";
+                            verb2 = "locked";
+                        }
+                        else if (lockType == RouterOutputLockType.Protect)
+                        {
+                            verb1 = "unprotect";
+                            verb2 = "protected";
+                        }
+                        string msgboxTitle = "Confirm force " + verb1;
+                        string msgboxBody = string.Format("Output [(#{0}) {1}] of router [] is {4} by another user.\r\nAre you sure you want to force {5} this input?",
+                            output.Index, output.Name, output.Router.ID, output.Router.Name, verb2, verb1);
+                        if (MessageBox.Show(msgboxTitle, msgboxBody, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                        {
+                            if (lockType == RouterOutputLockType.Lock)
+                                output.RequestForceUnlock();
+                            else if (lockType == RouterOutputLockType.Protect)
+                                output.RequestForceUnprotect();
+                        }
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Lock operation error", e.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
