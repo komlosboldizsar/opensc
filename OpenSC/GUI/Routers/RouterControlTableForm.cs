@@ -289,7 +289,12 @@ namespace OpenSC.GUI.Routers
         {
             try
             {
-                switch (output.LockState)
+                RouterOutputLockState lockState = RouterOutputLockState.Clear;
+                if (lockType == RouterOutputLockType.Lock)
+                    lockState = output.LockState;
+                else if (lockType == RouterOutputLockType.Protect)
+                    lockState = output.ProtectState;
+                switch (lockState)
                 {
                     case RouterOutputLockState.Clear:
                         if (lockType == RouterOutputLockType.Lock)
