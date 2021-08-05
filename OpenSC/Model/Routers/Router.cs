@@ -60,6 +60,7 @@ namespace OpenSC.Model.Routers
         public override void TotallyRestored()
         {
             base.TotallyRestored();
+            notifyIOsTotallyRestored();
             queryAllCrosspoints();
         }
 
@@ -73,6 +74,12 @@ namespace OpenSC.Model.Routers
         {
             inputs.ForEach(i => i.Restored());
             outputs.ForEach(o => o.Restored());
+        }
+
+        private void notifyIOsTotallyRestored()
+        {
+            inputs.ForEach(i => i.TotallyRestored());
+            outputs.ForEach(o => o.TotallyRestored());
         }
         #endregion
 

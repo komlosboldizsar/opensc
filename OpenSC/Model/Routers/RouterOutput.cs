@@ -36,6 +36,9 @@ namespace OpenSC.Model.Routers
             registerAsSignal();
         }
 
+        public virtual void TotallyRestored()
+        { }
+
         #region Property: Name
         private string name;
 

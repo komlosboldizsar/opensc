@@ -6,43 +6,30 @@ using System.Xml.Linq;
 namespace OpenSC.Model.Routers.Leitch
 {
 
-    class VirtualLeitchRouterOutputXmlSerializer : IValueXmlSerializer
+    class VirtualLeitchRouterOutputXmlSerializer : RouterOutputXmlSerializer
     {
 
-        public Type Type => typeof(VirtualLeitchRouterOutput);
+        public override Type Type => typeof(VirtualLeitchRouterOutput);
 
-        private const string TAG_NAME = "output";
-        private const string ATTRIBUTE_INDEX = "index";
-        private const string ATTRIBUTE_NAME = "name";
+        private const string ATTRIBUTE_ASSOCIATED_INPUT = "associated_input";
 
-        public object DeserializeItem(XmlNode serializedItem, object parentItem)
+        public override object DeserializeItem(XmlNode serializedItem, object parentItem)
         {
-
-            Router parentRouter = parentItem as Router;
-
-            if (serializedItem.LocalName != TAG_NAME)
-                return null;
-            if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_INDEX]?.Value, out int index))
-                index = 0;
-
-            VirtualLeitchRouterOutput restoredOutput = parentRouter.CreateOutput(serializedItem.Attributes[ATTRIBUTE_NAME]?.Value, index) as VirtualLeitchRouterOutput;
+            VirtualLeitchRouterOutput restoredOutput = base.DeserializeItem(serializedItem, parentItem) as VirtualLeitchRouterOutput;
+            if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_ASSOCIATED_INPUT]?.Value, out int associatedInput))
+                associatedInput = 0;
+            restoredOutput._associatedInputIndex = associatedInput;
             return restoredOutput;
-
         }
 
-        public XElement SerializeItem(object item, object parentItem)
+        public override XElement SerializeItem(object item, object parentItem)
         {
-
-            RouterOutput output = item as RouterOutput;
+            VirtualLeitchRouterOutput output = item as VirtualLeitchRouterOutput;
             if (output == null)
                 return null;
-
-            XElement xmlElement = new XElement(TAG_NAME);
-            xmlElement.SetAttributeValue(ATTRIBUTE_INDEX, output.Index);
-            xmlElement.SetAttributeValue(ATTRIBUTE_NAME, output.Name);
-            xmlElement.SetAttributeValue("XY", "ZW");
-            return xmlElement;
-
+            XElement serializedOutput = base.SerializeItem(item, parentItem);
+            serializedOutput.SetAttributeValue(ATTRIBUTE_ASSOCIATED_INPUT, output.CurrentInput?.Index ?? 0);
+            return serializedOutput;
         }
 
     }

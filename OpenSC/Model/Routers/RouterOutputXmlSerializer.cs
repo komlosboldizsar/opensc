@@ -9,13 +9,13 @@ namespace OpenSC.Model.Routers
     class RouterOutputXmlSerializer : IValueXmlSerializer
     {
 
-        public Type Type => typeof(RouterOutput);
+        public virtual Type Type => typeof(RouterOutput);
 
         private const string TAG_NAME = "output";
         private const string ATTRIBUTE_INDEX = "index";
         private const string ATTRIBUTE_NAME = "name";
 
-        public object DeserializeItem(XmlNode serializedItem, object parentItem)
+        public virtual object DeserializeItem(XmlNode serializedItem, object parentItem)
         {
 
             Router parentRouter = parentItem as Router;
@@ -30,7 +30,7 @@ namespace OpenSC.Model.Routers
 
         }
 
-        public XElement SerializeItem(object item, object parentItem)
+        public virtual XElement SerializeItem(object item, object parentItem)
         {
 
             RouterOutput output = item as RouterOutput;

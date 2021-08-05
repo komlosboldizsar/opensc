@@ -26,6 +26,9 @@ namespace OpenSC.Model.Routers
         public void Restored()
         { }
 
+        public virtual void TotallyRestored()
+        { }
+
         #region Property: Name
         private string name;
 

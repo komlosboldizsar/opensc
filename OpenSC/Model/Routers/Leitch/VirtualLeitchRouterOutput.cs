@@ -15,6 +15,16 @@ namespace OpenSC.Model.Routers.Leitch
         public VirtualLeitchRouterOutput(string name, Router router, int index) : base(name, router, index)
         { }
 
+        public override void TotallyRestored()
+        {
+            base.TotallyRestored();
+            RouterInput associatedInput = Router.GetInput(_associatedInputIndex);
+            if (associatedInput != null)
+                AssignSource(associatedInput);
+        }
+
+        public int _associatedInputIndex;
+
     }
 
 }
