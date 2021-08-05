@@ -21,22 +21,26 @@ namespace OpenSC.Model.Routers
 
         public object DeserializeItem(XmlNode serializedItem, object parentItem)
         {
+
+            Router parentRouter = parentItem as Router;
+
             if (serializedItem.LocalName != TAG_NAME)
                 return null;
+
             if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_INDEX]?.Value, out int index))
                 index = 0;
             if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_TIELINE_COST]?.Value, out int tielineCost))
                 tielineCost = 0;
             if (!bool.TryParse(serializedItem.Attributes[ATTRIBUTE_TIELINE_RESERVED]?.Value, out bool tielineIsReserved))
                 tielineIsReserved = false;
-            return new RouterInput()
-            {
-                Index = index,
-                Name = serializedItem.Attributes[ATTRIBUTE_NAME]?.Value,
-                _sourceUniqueId = serializedItem.Attributes[ATTRIBUTE_SOURCE]?.Value,
-                _tielineCost = tielineCost,
-                _tielineIsReserved = tielineIsReserved
-            };
+
+            RouterInput restoredInput = parentRouter.CreateInput(serializedItem.Attributes[ATTRIBUTE_NAME]?.Value, index);
+            restoredInput._sourceUniqueId = serializedItem.Attributes[ATTRIBUTE_SOURCE]?.Value;
+            restoredInput._tielineCost = tielineCost;
+            restoredInput._tielineIsReserved = tielineIsReserved;
+
+            return restoredInput;
+
         }
 
         public XElement SerializeItem(object item, object parentItem)

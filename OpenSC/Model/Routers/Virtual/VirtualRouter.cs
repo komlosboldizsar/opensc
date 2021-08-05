@@ -37,6 +37,11 @@ namespace OpenSC.Model.Routers.Virtual
                 notifyCrosspointChanged(output, (c > 0) ? Inputs[r.Next(c - 1)] : null);
         }
 
+        #region Input and output instantiation
+        public override RouterInput CreateInput(string name, int index) => new RouterInput(name, this, index);
+        public override RouterOutput CreateOutput(string name, int index) => new RouterOutput(name, this, index);
+        #endregion
+
     }
 
 }

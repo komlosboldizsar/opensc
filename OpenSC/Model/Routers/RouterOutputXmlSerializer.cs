@@ -17,15 +17,17 @@ namespace OpenSC.Model.Routers
 
         public object DeserializeItem(XmlNode serializedItem, object parentItem)
         {
+
+            Router parentRouter = parentItem as Router;
+
             if (serializedItem.LocalName != TAG_NAME)
                 return null;
             if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_INDEX]?.Value, out int index))
                 index = 0;
-            return new RouterOutput()
-            {
-                Index = index,
-                Name = serializedItem.Attributes[ATTRIBUTE_NAME]?.Value,
-            };
+
+            RouterOutput restoredOutput = parentRouter.CreateOutput(serializedItem.Attributes[ATTRIBUTE_NAME]?.Value, index);
+            return restoredOutput;
+
         }
 
         public XElement SerializeItem(object item, object parentItem)

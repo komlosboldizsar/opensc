@@ -141,6 +141,7 @@ namespace OpenSC.Model.Routers
 
         [PersistAs("inputs")]
         [PersistAs(null, 1)]
+        [PolymorphField(nameof(InputTypesDictionaryGetter))]
         private RouterInput[] _inputs // for persistence
         {
             get { return inputs.ToArray(); }
@@ -156,7 +157,7 @@ namespace OpenSC.Model.Routers
         public void AddInput()
         {
             int index = inputs.Max(ri => ri.Index) + 1;
-            inputs.Add(new RouterInput(string.Format("Input #{0}", index + 1), this, index));
+            inputs.Add(CreateInput(string.Format("Input #{0}", index + 1), index));
         }
 
         public void RemoveInput(RouterInput input)
@@ -177,6 +178,15 @@ namespace OpenSC.Model.Routers
         public event InputsChangedDelegate InputsChanged;
 
         private void restoreInputSources() => inputs.ForEach(i => i.RestoreSource());
+
+        public abstract RouterInput CreateInput(string name, int index);
+
+        private static readonly Dictionary<Type, string> INPUT_TYPES = new Dictionary<Type, string>()
+        {
+            {  typeof(RouterInput), "standard" }
+        };
+
+        protected virtual Dictionary<Type, string> InputTypesDictionaryGetter => INPUT_TYPES;
         #endregion
 
         #region Outputs
@@ -185,6 +195,7 @@ namespace OpenSC.Model.Routers
 
         [PersistAs("outputs")]
         [PersistAs(null, 1)]
+        [PolymorphField(nameof(OutputTypesDictionaryGetter))]
         private RouterOutput[] _outputs // for persistence
         {
             get { return outputs.ToArray(); }
@@ -200,7 +211,7 @@ namespace OpenSC.Model.Routers
         public void AddOutput()
         {
             int index = outputs.Max(ro => ro.Index) + 1;
-            outputs.Add(new RouterOutput(string.Format("Output #{0}", index + 1), this, index));
+            outputs.Add(CreateOutput(string.Format("Output #{0}", index + 1), index));
         }
 
         public void RemoveOutput(RouterOutput output)
@@ -219,6 +230,15 @@ namespace OpenSC.Model.Routers
 
         public delegate void OutputsChangedDelegate(Router router);
         public event OutputsChangedDelegate OutputsChanged;
+
+        public abstract RouterOutput CreateOutput(string name, int index);
+
+        private static readonly Dictionary<Type, string> OUTPUT_TYPES = new Dictionary<Type, string>()
+        {
+            {  typeof(RouterOutput), "standard" }
+        };
+
+        protected virtual Dictionary<Type, string> OutputTypesDictionaryGetter => OUTPUT_TYPES;
         #endregion
 
         #region Crosspoint update
