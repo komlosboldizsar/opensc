@@ -144,7 +144,12 @@ namespace OpenSC.Model.Routers.Leitch
         { }
 
         protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
-        { }
+        {
+            VirtualLeitchRouterOutput outputCasted = output as VirtualLeitchRouterOutput;
+            if (outputCasted == null)
+                return;
+            outputCasted.SetLock(lockType, lockOperationType);
+        }
         #endregion
 
         #region Serial communication
@@ -440,7 +445,7 @@ namespace OpenSC.Model.Routers.Leitch
             }
         }
 
-        private const int FORCE_UNLOCK_PANEL_ID = 65535;
+        public const int FORCE_UNLOCK_PANEL_ID = 65535;
         public const int OWN_PANEL_ID = 65534;
         #endregion
 

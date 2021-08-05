@@ -51,7 +51,8 @@ namespace OpenSC.Model.Routers.Leitch
 
         public int LockOwnerPanelId { get; private set; } = -1;
 
-        public int LockStatusCode {
+        public int LockStatusCode
+        {
             get
             {
                 if (LockState != RouterOutputLockState.Clear)
@@ -82,6 +83,30 @@ namespace OpenSC.Model.Routers.Leitch
                     ProtectState = lockOwned ? RouterOutputLockState.LockedLocal : RouterOutputLockState.LockedRemote;
                     LockOwnerPanelId = panelId;
                     break;
+            }
+        }
+
+        public void SetLock(RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
+        {
+            if (lockOperationType == RouterOutputLockOperationType.Unlock)
+            {
+                SetLock(0, VirtualLeitchRouter.OWN_PANEL_ID);
+                return;
+            }
+            if (lockOperationType == RouterOutputLockOperationType.ForceUnlock)
+            {
+                SetLock(0, VirtualLeitchRouter.FORCE_UNLOCK_PANEL_ID);
+                return;
+            }
+            if (lockType == RouterOutputLockType.Lock)
+            {
+                SetLock(1, VirtualLeitchRouter.OWN_PANEL_ID);
+                return;
+            }
+            if (lockType == RouterOutputLockType.Protect)
+            {
+                SetLock(2, VirtualLeitchRouter.OWN_PANEL_ID);
+                return;
             }
         }
 
