@@ -198,7 +198,7 @@ namespace OpenSC.Model.Persistence
                 Array array = item as Array;
                 List<XElement> arrayElements = new List<XElement>();
                 foreach (var element in array)
-                    arrayElements.Add(serializeCollectionElement(memberInfo, memberType.GetElementType(), element, arrayDimension));
+                    arrayElements.Add(serializeCollectionElement(memberInfo, memberType.GetElementType(), element, parentItem, arrayDimension));
                 return arrayElements;
             }
 
@@ -227,7 +227,7 @@ namespace OpenSC.Model.Persistence
                 if (serializer == null)
                     return item.ToString();
                 XElement serializedItem = serializer.SerializeItem(item, parentItem);
-                if ((polymorphFieldAttribute.TypeAttributeName != null) && (itemTypeString != null))
+                if ((polymorphFieldAttribute?.TypeAttributeName != null) && (itemTypeString != null))
                     serializedItem.SetAttributeValue(polymorphFieldAttribute.TypeAttributeName, itemTypeString);
                 return serializedItem;
 
@@ -237,13 +237,13 @@ namespace OpenSC.Model.Persistence
 
         }
 
-        private XElement serializeCollectionElement(MemberInfo memberInfo, Type memberType, object element, int arrayDimension)
+        private XElement serializeCollectionElement(MemberInfo memberInfo, Type memberType, object element, object parentItem, int arrayDimension)
         {
 
             PersistAsAttribute persistData = getPersistDataForMember(memberInfo, element, arrayDimension + 1);
             if (persistData == null)
                 persistData = new PersistAsAttribute(UNDEFINED_ARRAY_ITEM_TAG, 0);
-            object arrayElementValue = serializeValue(memberInfo, memberType, element, arrayDimension + 1);
+            object arrayElementValue = serializeValue(memberInfo, memberType, element, parentItem, arrayDimension + 1);
 
             if (!(arrayElementValue is XElement) || (persistData.TagName != null)) // packing
                 return new XElement(persistData.TagName, arrayElementValue);
@@ -388,7 +388,7 @@ namespace OpenSC.Model.Persistence
                 foreach (XmlNode childNode in xmlElement.ChildNodes)
                     if (childNode.NodeType == XmlNodeType.Element)
                         childElements.Add((XmlElement)childNode);
-                return deserializeArray(memberInfo, memberType, childElements, arrayDimension);
+                return deserializeArray(memberInfo, memberType, childElements, parentItem, arrayDimension);
             }
 
             if (memberType.IsEnum)
@@ -428,7 +428,7 @@ namespace OpenSC.Model.Persistence
 
         }
 
-        private object deserializeArray(MemberInfo memberInfo, Type memberType, List<XmlElement> childElements, int arrayDimension)
+        private object deserializeArray(MemberInfo memberInfo, Type memberType, List<XmlElement> childElements, object parentItem, int arrayDimension)
         {
 
             int childElementCount = childElements.Count;
@@ -444,7 +444,7 @@ namespace OpenSC.Model.Persistence
 
             object[] array = (object[])Activator.CreateInstance(memberType, new object[] { childElementCount });
             for (int i = 0; i < childElementCount; i++)
-                array[i] = deserializeXmlElement(memberInfo, memberType.GetElementType(), childElements[i], arrayDimension + 1);
+                array[i] = deserializeXmlElement(memberInfo, memberType.GetElementType(), childElements[i], parentItem, arrayDimension + 1);
             return array;
 
         }
