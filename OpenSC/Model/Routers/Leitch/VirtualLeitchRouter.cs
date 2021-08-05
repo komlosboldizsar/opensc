@@ -1,6 +1,7 @@
 ﻿using OpenSC.Logger;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.SerialPorts;
+using OpenSC.Model.Settings;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -446,7 +447,6 @@ namespace OpenSC.Model.Routers.Leitch
         }
 
         public const int FORCE_UNLOCK_PANEL_ID = 65535;
-        public const int OWN_PANEL_ID = 65534;
         #endregion
 
         #region Presets
@@ -455,6 +455,18 @@ namespace OpenSC.Model.Routers.Leitch
 
         private void executePresets()
             => Outputs.ForEach(ro => (ro as VirtualLeitchRouterOutput).ExecutePreset());
+        #endregion
+
+        #region Settings
+        public static readonly IntSetting PanelIdSetting = new IntSetting(
+            "routers.virtualleitch.panelid",
+            "Routers",
+            "Virtual Leitch panel ID",
+            "Used to track ownership of locks.",
+            1,
+            1,
+            1024
+        );
         #endregion
 
     }

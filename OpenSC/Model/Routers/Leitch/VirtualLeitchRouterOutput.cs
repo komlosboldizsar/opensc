@@ -65,7 +65,7 @@ namespace OpenSC.Model.Routers.Leitch
 
         public void SetLock(int state, int panelId)
         {
-            bool lockOwned = (panelId == VirtualLeitchRouter.OWN_PANEL_ID);
+            bool lockOwned = (panelId == VirtualLeitchRouter.PanelIdSetting.Value);
             switch (state)
             {
                 case 0:
@@ -90,7 +90,7 @@ namespace OpenSC.Model.Routers.Leitch
         {
             if (lockOperationType == RouterOutputLockOperationType.Unlock)
             {
-                SetLock(0, VirtualLeitchRouter.OWN_PANEL_ID);
+                SetLock(0, VirtualLeitchRouter.PanelIdSetting.Value);
                 return;
             }
             if (lockOperationType == RouterOutputLockOperationType.ForceUnlock)
@@ -100,12 +100,12 @@ namespace OpenSC.Model.Routers.Leitch
             }
             if (lockType == RouterOutputLockType.Lock)
             {
-                SetLock(1, VirtualLeitchRouter.OWN_PANEL_ID);
+                SetLock(1, VirtualLeitchRouter.PanelIdSetting.Value);
                 return;
             }
             if (lockType == RouterOutputLockType.Protect)
             {
-                SetLock(2, VirtualLeitchRouter.OWN_PANEL_ID);
+                SetLock(2, VirtualLeitchRouter.PanelIdSetting.Value);
                 return;
             }
         }

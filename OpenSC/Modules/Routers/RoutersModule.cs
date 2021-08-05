@@ -12,6 +12,7 @@ using OpenSC.Model.Routers.Leitch;
 using OpenSC.Model.Routers.Macros;
 using OpenSC.Model.Routers.Triggers;
 using OpenSC.Model.Routers.Virtual;
+using OpenSC.Model.Settings;
 using OpenSC.Model.Variables;
 using OpenSC.Model.VTRs.DynamicTextFunctions;
 using System;
@@ -103,7 +104,8 @@ namespace OpenSC.Modules.Routers
 
         public void RegisterSettings()
         {
-
+            SettingsManager.Instance.RegisterSetting(LeitchRouter.PanelIdSetting);
+            SettingsManager.Instance.RegisterSetting(VirtualLeitchRouter.PanelIdSetting);
         }
 
         public void RegisterMacroCommandsAndTriggers()

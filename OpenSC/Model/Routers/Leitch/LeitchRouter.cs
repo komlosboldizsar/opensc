@@ -1,6 +1,7 @@
 ﻿using OpenSC.Logger;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.SerialPorts;
+using OpenSC.Model.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -114,7 +115,7 @@ namespace OpenSC.Model.Routers.Leitch
         #region Setting/getting crosspoints
         protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)
         {
-            sendSerialCommand("@ X:{0:X}/{1:X},{2:X}:I{3:X}", level, output.Index, input.Index, MY_PANEL_ID);
+            sendSerialCommand("@ X:{0:X}/{1:X},{2:X}:I{3:X}", level, output.Index, input.Index, PanelIdSetting.Value);
         }
 
         protected override void queryAllStates()
@@ -136,12 +137,11 @@ namespace OpenSC.Model.Routers.Leitch
                         break;
                 }
             }
-            int panelId = (lockOperationType == RouterOutputLockOperationType.ForceUnlock) ? FORCE_UNLOCK_PANEL_ID : MY_PANEL_ID;
+            int panelId = (lockOperationType == RouterOutputLockOperationType.ForceUnlock) ? FORCE_UNLOCK_PANEL_ID : PanelIdSetting.Value;
             sendSerialCommand("@ W:{0:X}/{1:X},{2:X},{3}", level, output.Index, panelId, protocolLockTypeCode);
         }
 
         private const int FORCE_UNLOCK_PANEL_ID = 65535;
-        private const int MY_PANEL_ID = 91;
         #endregion
 
         #region Serial communication
@@ -212,7 +212,7 @@ namespace OpenSC.Model.Routers.Leitch
                 if (output == null)
                     return;
 
-                RouterOutputLockState lockState = (panelId == MY_PANEL_ID) ? RouterOutputLockState.LockedLocal : RouterOutputLockState.LockedRemote;
+                RouterOutputLockState lockState = (panelId == PanelIdSetting.Value) ? RouterOutputLockState.LockedLocal : RouterOutputLockState.LockedRemote;
                 
                 if (lockOpCode == 1)
                     notifyLockChanged(output, RouterOutputLockType.Lock, lockState);
@@ -239,6 +239,18 @@ namespace OpenSC.Model.Routers.Leitch
         {
             sendSerialCommand("@ ?");
         }
+        #endregion
+
+        #region Settings
+        public static readonly IntSetting PanelIdSetting = new IntSetting(
+            "routers.leitch.panelid",
+            "Routers",
+            "Leitch panel ID",
+            "Used to track ownership of locks.",
+            1,
+            1,
+            1024
+        );
         #endregion
 
     }
