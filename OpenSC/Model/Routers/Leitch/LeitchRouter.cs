@@ -137,7 +137,7 @@ namespace OpenSC.Model.Routers.Leitch
                 }
             }
             int panelId = (lockOperationType == RouterOutputLockOperationType.ForceUnlock) ? FORCE_UNLOCK_PANEL_ID : MY_PANEL_ID;
-            sendSerialCommand("@ W:{0:X}/{1:X},{2:X},{3}", level, output.Index, MY_PANEL_ID, protocolLockTypeCode);
+            sendSerialCommand("@ W:{0:X}/{1:X},{2:X},{3}", level, output.Index, panelId, protocolLockTypeCode);
         }
 
         private const int FORCE_UNLOCK_PANEL_ID = 65535;
