@@ -110,6 +110,9 @@ namespace OpenSC.Model.Routers.Leitch
         {
             sendSerialCommand("@ S?{0}\r\n", level);
         }
+
+        protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockOperationType operationType)
+        { }
         #endregion
 
         #region Serial communication

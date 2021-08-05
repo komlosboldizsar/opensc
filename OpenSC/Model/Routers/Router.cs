@@ -251,19 +251,12 @@ namespace OpenSC.Model.Routers
         #region Crosspoint update
         public void RequestCrosspointUpdate(RouterOutput output, RouterInput input)
         {
-
             if (!outputs.Contains(output))
                 throw new ArgumentException();
-
             string logMessage = string.Format("Router crosspoint update request. Router: [(#{0}) #1], destination: {2}, source: {3}.",
-                ID,
-                Name,
-                output.Index,
-                input.Index);
+                ID, Name, output.Index, input.Index);
             LogDispatcher.I(LOG_TAG, logMessage);
-
             requestCrosspointUpdateImpl(output, input);
-
         }
 
         protected abstract void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input);
@@ -284,6 +277,59 @@ namespace OpenSC.Model.Routers
             if ((inputIndex < 0) || (inputIndex >= inputs.Count))
                 throw new ArgumentException();
             notifyCrosspointChanged(outputs[outputIndex], inputs[inputIndex]);
+        }
+        #endregion
+
+        #region Locks and protects update
+        public void RequestLock(RouterOutput output) => requestLockOperation(output, RouterOutputLockOperationType.Lock);
+        public void RequestUnlock(RouterOutput output) => requestLockOperation(output, RouterOutputLockOperationType.Unlock);
+        public void RequestForceUnlock(RouterOutput output) => requestLockOperation(output, RouterOutputLockOperationType.ForceUnlock);
+        public void RequestProtect(RouterOutput output) => requestLockOperation(output, RouterOutputLockOperationType.Protect);
+        public void RequestUnprotect(RouterOutput output) => requestLockOperation(output, RouterOutputLockOperationType.Unprotect);
+        public void RequestForceUnprotect(RouterOutput output) => requestLockOperation(output, RouterOutputLockOperationType.ForceUnprotect);
+
+        private void requestLockOperation(RouterOutput output, RouterOutputLockOperationType operationType)
+        {
+            if (!outputs.Contains(output))
+                throw new ArgumentException();
+            string logMessage = string.Format("Router output {0} request. Router: [(#{1}) #2], destination: {3}.",
+                LOCK_OPERATION_STRINGS[operationType], ID, Name, output.Index);
+            LogDispatcher.I(LOG_TAG, logMessage);
+            requestLockOperationImpl(output, operationType);
+        }
+
+        private static readonly Dictionary<RouterOutputLockOperationType, string> LOCK_OPERATION_STRINGS = new Dictionary<RouterOutputLockOperationType, string>()
+        {
+            { RouterOutputLockOperationType.Lock, "lock" },
+            { RouterOutputLockOperationType.Unlock, "unlock" },
+            { RouterOutputLockOperationType.ForceUnlock, "force unlock" },
+            { RouterOutputLockOperationType.Protect, "protect" },
+            { RouterOutputLockOperationType.Unprotect, "unprotect" },
+            { RouterOutputLockOperationType.ForceUnprotect, "force unprotect" },
+        };
+
+        protected abstract void requestLockOperationImpl(RouterOutput output, RouterOutputLockOperationType operationType);
+
+        protected void notifyLockChanged(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockState lockState)
+        {
+            if (!outputs.Contains(output))
+                throw new ArgumentException();
+            switch (lockType)
+            {
+                case RouterOutputLockType.Lock:
+                    output.LockStateUpdateFromRouter(lockState);
+                    break;
+                case RouterOutputLockType.Protect:
+                    output.ProtectStateUpdateFromRouter(lockState);
+                    break;
+            }
+        }
+
+        protected void notifyLockChanged(int outputIndex, RouterOutputLockType lockType, RouterOutputLockState lockState)
+        {
+            if ((outputIndex < 0) || (outputIndex >= outputs.Count))
+                throw new ArgumentException();
+            notifyLockChanged(outputs[outputIndex], lockType, lockState);
         }
         #endregion
 

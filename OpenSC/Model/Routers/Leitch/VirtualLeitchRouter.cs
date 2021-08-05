@@ -140,6 +140,9 @@ namespace OpenSC.Model.Routers.Leitch
 
         protected override void queryAllCrosspoints()
         { }
+
+        protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockOperationType operationType)
+        { }
         #endregion
 
         #region Serial communication

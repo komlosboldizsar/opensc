@@ -160,6 +160,114 @@ namespace OpenSC.Model.Routers
         public event SignalUniqueIdChangedDelegate SignalUniqueIdChanged;
         #endregion
 
+        #region Property: LocksSupported, LockState
+        public virtual bool LocksSupported => true;
+        public virtual bool LockOwnerKnown => true;
+
+        private RouterOutputLockState lockState;
+
+        public RouterOutputLockState LockState
+        {
+            get => lockState;
+            private set
+            {
+                if (value == lockState)
+                    return;
+                RouterOutputLockState oldValue = value;
+                lockState = value;
+                LockStateChanged?.Invoke(this, oldValue, value);
+                PropertyChanged?.Invoke(nameof(LockState));
+            }
+        }
+
+        public delegate void LockStateChangedDelegate(RouterOutput output, RouterOutputLockState oldLockState, RouterOutputLockState newLockState);
+        public event LockStateChangedDelegate LockStateChanged;
+
+        internal void LockStateUpdateFromRouter(RouterOutputLockState newState)
+            => LockState = newState;
+
+        public void RequestLock()
+        {
+            if ((LockState == RouterOutputLockState.Locked) || (LockState == RouterOutputLockState.LockedLocal))
+                return;
+            if (ProtectState != RouterOutputLockState.Clear)
+                throw new Exception("This output is locked! You must force unprotect before locking.");
+            if (LockState == RouterOutputLockState.LockedRemote)
+                throw new Exception("This output is already locked by another user! You must force unlock before.");
+            Router.RequestLock(this);
+        }
+
+        public void RequestUnlock()
+        {
+            if (LockState == RouterOutputLockState.Clear)
+                return;
+            if (LockState == RouterOutputLockState.LockedRemote)
+                throw new Exception("This output is locked by another user! You must use the force unlock function.");
+            Router.RequestUnlock(this);
+        }
+
+        public void RequestForceUnlock()
+        {
+            if (LockState == RouterOutputLockState.Clear)
+                return;
+            Router.RequestUnlock(this);
+        }
+        #endregion
+
+        #region Property: ProtectsSupported, ProtectState
+        public virtual bool ProtectsSupported => false;
+        public virtual bool ProtectOwnerKnown => true;
+
+        private RouterOutputLockState protectState;
+
+        public RouterOutputLockState ProtectState
+        {
+            get => protectState;
+            private set
+            {
+                if (value == protectState)
+                    return;
+                RouterOutputLockState oldValue = value;
+                protectState = value;
+                ProtectStateChanged?.Invoke(this, oldValue, value);
+                PropertyChanged?.Invoke(nameof(ProtectState));
+            }
+        }
+
+        public delegate void ProtectStateChangedDelegate(RouterOutput output, RouterOutputLockState oldProtectState, RouterOutputLockState newProtectState);
+        public event ProtectStateChangedDelegate ProtectStateChanged;
+
+        internal void ProtectStateUpdateFromRouter(RouterOutputLockState newState)
+            => ProtectState = newState;
+
+        public void RequestProtect()
+        {
+            if ((ProtectState == RouterOutputLockState.Locked) || (ProtectState == RouterOutputLockState.LockedLocal))
+                return;
+            if (LockState != RouterOutputLockState.Clear)
+                throw new Exception("This output is locked! You must force unlock before protecting.");
+            if (ProtectState == RouterOutputLockState.LockedRemote)
+                throw new Exception("This output is already protected by another user! You must force unprotect before.");
+            Router.RequestProtect(this);
+        }
+
+        public void RequestUnprotect()
+        {
+            if (ProtectState == RouterOutputLockState.Clear)
+                return;
+            if (ProtectState == RouterOutputLockState.LockedRemote)
+                throw new Exception("This output is protected by another user! You must use the force unprotect function.");
+            Router.RequestUnprotect(this);
+        }
+
+        public void RequestForceUnprotect()
+        {
+            if (ProtectState == RouterOutputLockState.Clear)
+                return;
+            Router.RequestUnprotect(this);
+        }
+        #endregion
+
         #region Implementation of INotifyPropertyChanged
         public event PropertyChangedDelegate PropertyChanged;
         #endregion
