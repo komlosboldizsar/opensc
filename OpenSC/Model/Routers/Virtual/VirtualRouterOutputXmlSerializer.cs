@@ -9,7 +9,7 @@ namespace OpenSC.Model.Routers.Virtual
     class VirtualRouterOutputXmlSerializer : RouterOutputXmlSerializer
     {
 
-        public override Type Type => typeof(VirtualRouterOutputXmlSerializer);
+        public override Type Type => typeof(VirtualRouterOutput);
 
         public override object DeserializeItem(XmlNode serializedItem, object parentItem)
         {
@@ -19,7 +19,7 @@ namespace OpenSC.Model.Routers.Virtual
 
         public override XElement SerializeItem(object item, object parentItem)
         {
-            VirtualRouterOutputXmlSerializer output = item as VirtualRouterOutputXmlSerializer;
+            VirtualRouterOutput output = item as VirtualRouterOutput;
             if (output == null)
                 return null;
             XElement serializedOutput = base.SerializeItem(item, parentItem);
