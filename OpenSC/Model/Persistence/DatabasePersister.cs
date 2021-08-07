@@ -120,10 +120,7 @@ namespace OpenSC.Model.Persistence
 
             // Get fields
             foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
-            {
                 storeValueOfFieldOrProperty(fieldInfo, ref item, ref xmlElement);
-                Console.WriteLine("{0}::{1}", storedType.Name, fieldInfo.Name);
-            }
 
             if (isPolymorph)
             {
@@ -393,6 +390,14 @@ namespace OpenSC.Model.Persistence
 
             if (memberType.IsEnum)
                 return Enum.Parse(memberType, xmlElement.InnerText);
+
+            Type nullableUnderlyingType = Nullable.GetUnderlyingType(memberType);
+            if (nullableUnderlyingType?.IsEnum == true)
+            {
+                if (xmlElement.InnerText == string.Empty)
+                    return null;
+                return Enum.Parse(nullableUnderlyingType, xmlElement.InnerText);
+            }
 
             Type deserializeAsType = memberType;
             if (Type.GetTypeCode(memberType) == TypeCode.Object)
