@@ -53,14 +53,14 @@
             this.inputsTableContainerPanel = new System.Windows.Forms.Panel();
             this.inputAssociationsTable = new System.Windows.Forms.DataGridView();
             this.inputsButtonsPanel = new System.Windows.Forms.Panel();
+            this.set11InputAssociationsButton = new System.Windows.Forms.Button();
             this.clearInputAssociationsButton = new System.Windows.Forms.Button();
             this.outputsTabPage = new System.Windows.Forms.TabPage();
             this.outputsTableContainerPanel = new System.Windows.Forms.Panel();
             this.outputAssociationsTable = new System.Windows.Forms.DataGridView();
             this.outputsButtonsPanel = new System.Windows.Forms.Panel();
-            this.clearOutputAssociations = new System.Windows.Forms.Button();
-            this.set11InputAssociationsButton = new System.Windows.Forms.Button();
             this.set11OutputAssociationsButton = new System.Windows.Forms.Button();
+            this.clearOutputAssociations = new System.Windows.Forms.Button();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.baseDataPanel.SuspendLayout();
@@ -364,7 +364,7 @@
             this.inputsTabPage.Location = new System.Drawing.Point(4, 25);
             this.inputsTabPage.Name = "inputsTabPage";
             this.inputsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.inputsTabPage.Size = new System.Drawing.Size(1054, 389);
+            this.inputsTabPage.Size = new System.Drawing.Size(490, 229);
             this.inputsTabPage.TabIndex = 1;
             this.inputsTabPage.Text = "Inputs";
             // 
@@ -374,7 +374,7 @@
             this.inputsTableContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inputsTableContainerPanel.Location = new System.Drawing.Point(3, 3);
             this.inputsTableContainerPanel.Name = "inputsTableContainerPanel";
-            this.inputsTableContainerPanel.Size = new System.Drawing.Size(1048, 339);
+            this.inputsTableContainerPanel.Size = new System.Drawing.Size(484, 179);
             this.inputsTableContainerPanel.TabIndex = 2;
             // 
             // inputAssociationsTable
@@ -388,7 +388,7 @@
             this.inputAssociationsTable.ReadOnly = true;
             this.inputAssociationsTable.RowHeadersWidth = 51;
             this.inputAssociationsTable.RowTemplate.Height = 24;
-            this.inputAssociationsTable.Size = new System.Drawing.Size(1048, 339);
+            this.inputAssociationsTable.Size = new System.Drawing.Size(484, 179);
             this.inputAssociationsTable.TabIndex = 0;
             // 
             // inputsButtonsPanel
@@ -396,10 +396,21 @@
             this.inputsButtonsPanel.Controls.Add(this.set11InputAssociationsButton);
             this.inputsButtonsPanel.Controls.Add(this.clearInputAssociationsButton);
             this.inputsButtonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.inputsButtonsPanel.Location = new System.Drawing.Point(3, 342);
+            this.inputsButtonsPanel.Location = new System.Drawing.Point(3, 182);
             this.inputsButtonsPanel.Name = "inputsButtonsPanel";
-            this.inputsButtonsPanel.Size = new System.Drawing.Size(1048, 44);
+            this.inputsButtonsPanel.Size = new System.Drawing.Size(484, 44);
             this.inputsButtonsPanel.TabIndex = 1;
+            // 
+            // set11InputAssociationsButton
+            // 
+            this.set11InputAssociationsButton.Location = new System.Drawing.Point(197, 6);
+            this.set11InputAssociationsButton.Margin = new System.Windows.Forms.Padding(6);
+            this.set11InputAssociationsButton.Name = "set11InputAssociationsButton";
+            this.set11InputAssociationsButton.Size = new System.Drawing.Size(179, 26);
+            this.set11InputAssociationsButton.TabIndex = 1;
+            this.set11InputAssociationsButton.Text = "Set 1:1";
+            this.set11InputAssociationsButton.UseVisualStyleBackColor = true;
+            this.set11InputAssociationsButton.Click += new System.EventHandler(this.set11InputAssociationsButton_Click);
             // 
             // clearInputAssociationsButton
             // 
@@ -457,28 +468,6 @@
             this.outputsButtonsPanel.Size = new System.Drawing.Size(1048, 44);
             this.outputsButtonsPanel.TabIndex = 1;
             // 
-            // clearOutputAssociations
-            // 
-            this.clearOutputAssociations.Location = new System.Drawing.Point(6, 6);
-            this.clearOutputAssociations.Margin = new System.Windows.Forms.Padding(6);
-            this.clearOutputAssociations.Name = "clearOutputAssociations";
-            this.clearOutputAssociations.Size = new System.Drawing.Size(179, 26);
-            this.clearOutputAssociations.TabIndex = 0;
-            this.clearOutputAssociations.Text = "Clear associations";
-            this.clearOutputAssociations.UseVisualStyleBackColor = true;
-            this.clearOutputAssociations.Click += new System.EventHandler(this.clearOutputAssociations_Click);
-            // 
-            // set11InputAssociationsButton
-            // 
-            this.set11InputAssociationsButton.Location = new System.Drawing.Point(197, 6);
-            this.set11InputAssociationsButton.Margin = new System.Windows.Forms.Padding(6);
-            this.set11InputAssociationsButton.Name = "set11InputAssociationsButton";
-            this.set11InputAssociationsButton.Size = new System.Drawing.Size(179, 26);
-            this.set11InputAssociationsButton.TabIndex = 1;
-            this.set11InputAssociationsButton.Text = "Set 1:1";
-            this.set11InputAssociationsButton.UseVisualStyleBackColor = true;
-            this.set11InputAssociationsButton.Click += new System.EventHandler(this.set11InputAssociationsButton_Click);
-            // 
             // set11OutputAssociationsButton
             // 
             this.set11OutputAssociationsButton.Location = new System.Drawing.Point(197, 6);
@@ -489,6 +478,17 @@
             this.set11OutputAssociationsButton.Text = "Set 1:1";
             this.set11OutputAssociationsButton.UseVisualStyleBackColor = true;
             this.set11OutputAssociationsButton.Click += new System.EventHandler(this.set11OutputAssociationsButton_Click);
+            // 
+            // clearOutputAssociations
+            // 
+            this.clearOutputAssociations.Location = new System.Drawing.Point(6, 6);
+            this.clearOutputAssociations.Margin = new System.Windows.Forms.Padding(6);
+            this.clearOutputAssociations.Name = "clearOutputAssociations";
+            this.clearOutputAssociations.Size = new System.Drawing.Size(179, 26);
+            this.clearOutputAssociations.TabIndex = 0;
+            this.clearOutputAssociations.Text = "Clear associations";
+            this.clearOutputAssociations.UseVisualStyleBackColor = true;
+            this.clearOutputAssociations.Click += new System.EventHandler(this.clearOutputAssociations_Click);
             // 
             // RouterMirrorEditorForm
             // 
