@@ -11,27 +11,35 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
     class EnumComboBoxAdapter<T> : IComboBoxAdapter
     {
 
+        private Type givenType;
         private Type enumType;
 
         private Dictionary<T, string> translations;
+        private string nullTranslation;
 
-        private List<ItemProxy> proxyList = new List<ItemProxy>();
+        private const string DEFAULT_NULL_TRANSLATION = "(null)";
 
-        public bool ContainsNull { get; } = false;
+        private List<IItemProxy> proxyList = new List<IItemProxy>();
+
+        public bool ContainsNull => (Nullable.GetUnderlyingType(givenType) != null);
 
         public bool ContainsListCollection => false;
 
-        public EnumComboBoxAdapter(Dictionary<T, string> translations = null)
+        public EnumComboBoxAdapter(Dictionary<T, string> translations = null, string nullTranslation = "")
         {
 
-            this.enumType = typeof(T);
-            if (!enumType.IsEnum)
+            this.givenType = typeof(T);
+            Type _enumType = Nullable.GetUnderlyingType(this.givenType);
+            this.enumType = (_enumType != null) ? _enumType : givenType;
+            if (!enumType.IsEnum && !Nullable.GetUnderlyingType(enumType).IsEnum)
                 throw new ArgumentException();
 
             if (translations == null)
                 this.translations = new Dictionary<T, string>();
             else
                 this.translations = translations;
+
+            this.nullTranslation = nullTranslation;
 
             createProxyList();
 
@@ -44,6 +52,8 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
 
         private void createProxyList()
         {
+            if (ContainsNull)
+                proxyList.Add(new NullItemProxy(nullTranslation ?? DEFAULT_NULL_TRANSLATION));
             foreach (T item in Enum.GetValues(enumType))
             {
                 if (!translations.TryGetValue(item, out string translation))
@@ -57,22 +67,34 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
             return new EnumComboBoxAdapter<T>(translations);
         }
 
-        private class ItemProxy
+        private interface IItemProxy
         {
+            object Value { get; }
+            string Label { get; }
+        }
 
-            public T Value { get; private set; }
-
+        private class ItemProxy : IItemProxy
+        {
+            public object Value => TValue;
+            public T TValue { get; private set; }
             public string Label { get; private set; }
-
+            public override string ToString() => Label;
             public ItemProxy(T value, string label)
             {
-                Value = value;
+                TValue = value;
                 Label = label;
             }
+        }
 
-            public override string ToString()
-                => Label;
-
+        private class NullItemProxy : IItemProxy
+        {
+            public string Label { get; private set; }
+            public object Value => null;
+            public override string ToString() => Label;
+            public NullItemProxy(string label)
+            {
+                Label = label;
+            }
         }
 
     }
