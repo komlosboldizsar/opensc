@@ -1,6 +1,7 @@
 ﻿using OpenSC.GUI;
 using OpenSC.GUI.Menus;
 using OpenSC.GUI.Routers;
+using OpenSC.GUI.Routers.Mirrors;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.Macros;
@@ -10,6 +11,7 @@ using OpenSC.Model.Routers.BlackMagicDesign;
 using OpenSC.Model.Routers.DynamicTextFunctions;
 using OpenSC.Model.Routers.Leitch;
 using OpenSC.Model.Routers.Macros;
+using OpenSC.Model.Routers.Mirrors;
 using OpenSC.Model.Routers.Triggers;
 using OpenSC.Model.Routers.Virtual;
 using OpenSC.Model.Settings;
@@ -50,6 +52,8 @@ namespace OpenSC.Modules.Routers
             DatabasePersister<Router>.RegisterSerializer(new LeitchRouterOutputXmlSerializer());
             DatabasePersister<Router>.RegisterSerializer(new VirtualLeitchRouterOutputXmlSerializer());
             DatabasePersister<Router>.RegisterSerializer(new BmdVideohubOutputXmlSerializer());
+            DatabasePersister<RouterMirror>.RegisterSerializer(new RouterMirrorInputAssociationXmlSerializer());
+            DatabasePersister<RouterMirror>.RegisterSerializer(new RouterMirrorOutputAssociationXmlSerializer());
             DatabasePersister<Labelset>.RegisterSerializer(new LabelXmlSerializer());
         }
 
@@ -64,6 +68,7 @@ namespace OpenSC.Modules.Routers
         public void RegisterDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(RouterDatabase));
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(RouterMirrorDatabase));
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(LabelsetDatabase));
         }
 
@@ -72,6 +77,7 @@ namespace OpenSC.Modules.Routers
             WindowTypeRegister.RegisterWindowType(typeof(RouterList));
             WindowTypeRegister.RegisterWindowType(typeof(RouterControlForm));
             WindowTypeRegister.RegisterWindowType(typeof(RouterControlTableForm));
+            WindowTypeRegister.RegisterWindowType(typeof(RouterMirrorList));
             WindowTypeRegister.RegisterWindowType(typeof(LabelsetList));
         }
 
@@ -82,6 +88,9 @@ namespace OpenSC.Modules.Routers
 
             var routersListMenu = routersMenu["Routers list"];
             routersListMenu.ClickHandler = (menu, tag) => new RouterList().ShowAsChild();
+
+            var routerMirrorsListMenu = routersMenu["Router mirrors list"];
+            routerMirrorsListMenu.ClickHandler = (menu, tag) => new RouterMirrorList().ShowAsChild();
 
             var labelsetsListMenu = routersMenu["Labelsets list"];
             labelsetsListMenu.ClickHandler = (menu, tag) => new LabelsetList().ShowAsChild();
