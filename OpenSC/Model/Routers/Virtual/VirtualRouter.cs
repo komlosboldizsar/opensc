@@ -14,16 +14,21 @@ namespace OpenSC.Model.Routers.Virtual
 
         public VirtualRouter()
         {
-            State = RouterState.Ok;
-            StateString = "OK";
+            State = RouterState.Unknown;
+            StateString = "unknown";
         }
 
         public override void RestoredOwnFields()
         {
             base.RestoredOwnFields();
+            queryAllStates();
+        }
+
+        public override void TotallyRestored()
+        {
+            base.TotallyRestored();
             State = RouterState.Ok;
             StateString = "OK";
-            queryAllStates();
         }
 
         protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)
