@@ -21,15 +21,28 @@ namespace OpenSC.Model.Variables
                 name = value;
                 NameChanged?.Invoke(this, name);
                 PropertyChanged?.Invoke(nameof(Name));
-                BooleanRegister.Instance.BooleanNameChanged(this);
+                if (Registered)
+                    BooleanRegister.Instance.BooleanNameChanged(this);
             }
         }
 
         public event BooleanNameChangedDelegate NameChanged;
 
-        private readonly Color color;
+        private Color color;
 
-        public Color Color { get => color; }
+        public Color Color
+        {
+            get => color;
+            set
+            {
+                if (value == color)
+                    return;
+                ColorChanged?.Invoke(this, color);
+                PropertyChanged?.Invoke(nameof(Name));
+            }
+        }
+
+        public event BooleanColorChangedDelegate ColorChanged;
 
         private string description;
 
@@ -47,6 +60,9 @@ namespace OpenSC.Model.Variables
         }
 
         public event BooleanDescriptionChangedDelegate DescriptionChanged;
+
+        public BooleanBase()
+        { }
 
         public BooleanBase(string name, Color color, string description = "")
         {
@@ -71,6 +87,26 @@ namespace OpenSC.Model.Variables
         }
 
         public event BooleanStateChangedDelegate StateChanged;
+
+        protected void register()
+        {
+            if (!Registered)
+            {
+                BooleanRegister.Instance.RegisterBoolean(this);
+                Registered = true;
+            }
+        }
+
+        protected void unregister()
+        {
+            if (Registered)
+            {
+                BooleanRegister.Instance.UnregisterBoolean(this);
+                Registered = false;
+            }
+        }
+
+        protected bool Registered { get; private set; }
 
         #region Implementation of INotifyPropertyChanged
         public event PropertyChangedDelegate PropertyChanged;
