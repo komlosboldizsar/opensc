@@ -22,6 +22,8 @@ namespace OpenSC.Model.Routers.Leitch
 
         public VirtualLeitchRouter()
         {
+            State = RouterState.Warning;
+            StateString = "initializing";
             Outputs.ItemAdded += outputAdded;
             Outputs.ItemRemoved += outputRemoved;
         }
@@ -31,6 +33,8 @@ namespace OpenSC.Model.Routers.Leitch
             base.TotallyRestored();
             if (port != null)
                 port.ReceivedDataAsciiLine += receivedLineFromPort;
+            State = RouterState.Ok;
+            StateString = "OK";
         }
 
         public override void Removed()
