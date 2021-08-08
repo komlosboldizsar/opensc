@@ -18,6 +18,7 @@ namespace OpenSC.Model.Signals
             base(tally, color)
         {
             this.signal = signal;
+            updateFields();
             signal.IdChanged += signalIdChangedHandler;
             signal.NameChanged += signalNameChangedHandler;
             tally.StateChanged += signalTallyChangedHandler;

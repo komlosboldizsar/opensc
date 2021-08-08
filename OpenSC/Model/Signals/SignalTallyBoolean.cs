@@ -20,8 +20,6 @@ namespace OpenSC.Model.Signals
         {
             this.tally = tally;
             this.color = color;
-            Name = getName();
-            Description = getDescription();
             Color = getColor(color);
             tally.StateChanged += signalTallyChangedHandler;
         }
@@ -34,6 +32,11 @@ namespace OpenSC.Model.Signals
 
         protected void updateName() => Name = getName();
         protected void updateDescription() => Description = getDescription();
+        protected void updateFields()
+        {
+            updateName();
+            updateDescription();
+        }
 
         protected static Color getColor(SignalTallyColor color)
         {
