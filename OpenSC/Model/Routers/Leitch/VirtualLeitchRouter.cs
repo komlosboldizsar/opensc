@@ -172,7 +172,7 @@ namespace OpenSC.Model.Routers.Leitch
         {
             if (string.IsNullOrWhiteSpace(line))
                 return;
-            if ((line.Length < 2) || (line[1] != ':'))
+            if (line.Length < 2)
                 return;
             string details = line.Substring(2);
             switch (line.Substring(0, 2))
