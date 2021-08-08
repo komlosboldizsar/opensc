@@ -18,8 +18,9 @@ namespace OpenSC.Model.UMDs
 
         protected abstract void update();
 
-        public override void RestoredOwnFields()
+        public override void RestoreCustomRelations()
         {
+            base.RestoreCustomRelations();
             restoreTallySources();
         }
 
@@ -40,7 +41,7 @@ namespace OpenSC.Model.UMDs
         public delegate void CurrentTextChangedDelegate(UMD umd, string oldText, string newText);
         public event CurrentTextChangedDelegate CurrentTextChanged;
 
-        protected string currentText;
+        protected string currentText = "";
 
         public string CurrentText
         {

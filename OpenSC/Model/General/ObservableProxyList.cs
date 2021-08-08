@@ -27,12 +27,12 @@ namespace OpenSC.Model.General
             originalList.ItemsChanged += OriginalList_ItemsChanged;
         }
 
-        private void OriginalList_ItemAdded()
+        private void OriginalList_ItemAdded(IEnumerable addedItems)
         {
             rebuildProxies();
         }
 
-        private void OriginalList_ItemRemoved()
+        private void OriginalList_ItemRemoved(IEnumerable removedItems)
         {
             rebuildProxies();
         }

@@ -17,7 +17,7 @@ namespace OpenSC.Model.Macros
 
         private const string TAG_NAME_ARGUMENT = "argument";
         private const string ATTRIBUTE_ARGUMENT_KEY = "key";
-        public object DeserializeItem(XmlNode serializedItem)
+        public object DeserializeItem(XmlNode serializedItem, object parentItem)
         {
             if (serializedItem.LocalName != TAG_NAME)
                 return null;
@@ -42,7 +42,7 @@ namespace OpenSC.Model.Macros
 
         }
 
-        public XElement SerializeItem(object item)
+        public XElement SerializeItem(object item, object parentItem)
         {
 
             MacroTriggerWithArguments triggerWA = item as MacroTriggerWithArguments;

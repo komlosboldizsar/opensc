@@ -65,11 +65,10 @@ namespace OpenSC.GUI.Routers
 
         private void initDropDowns()
         {
-
             // Ports
             portDropDown.CreateAdapterAsDataSource(SerialPortDatabase.Instance, port => port.Name, true, "(not connected)");
         }
 
-        }
-
     }
+
+}

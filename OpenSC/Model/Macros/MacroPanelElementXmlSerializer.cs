@@ -23,7 +23,7 @@ namespace OpenSC.Model.Macros
         private const string ATTRIBUTE_Y = "y";
         private const string ATTRIBUTE_W = "w";
         private const string ATTRIBUTE_H = "h";
-        public object DeserializeItem(XmlNode serializedItem)
+        public object DeserializeItem(XmlNode serializedItem, object parentItem)
         {
 
             if (serializedItem.LocalName != TAG_NAME)
@@ -72,7 +72,7 @@ namespace OpenSC.Model.Macros
 
         }
 
-        public XElement SerializeItem(object item)
+        public XElement SerializeItem(object item, object parentItem)
         {
 
             MacroPanelElement element = item as MacroPanelElement;

@@ -20,10 +20,9 @@ namespace OpenSC.Model.UMDs.McCurdy
         protected override string getTextToSend()
         {
             string replaced = currentText.Replace('1', (char)0x7E);
-            replaced = string.Format("{0}{1}",
-                (TallyStates[0] ? "#" : "! "),
-                replaced);
-            return string.Format("%{0}D{1}%Z", Address, replaced); // TODO: %-s 
+            replaced = replaced.Replace("%", "%%");
+            replaced = string.Format("{0}{1}", (TallyStates[0] ? "#" : "! "), replaced);
+            return string.Format("%{0}D{1}%Z", Address, replaced);
         }
 
     }

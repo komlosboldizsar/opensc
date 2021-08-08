@@ -191,6 +191,24 @@
     <Compile Include="GUI\Menus\MenuItem.cs" />
     <Compile Include="GUI\Menus\MenuManager.cs" />
     <Compile Include="GUI\Menus\SeparatorMenuItem.cs" />
+    <Compile Include="GUI\Routers\Mirrors\RouterMirrorList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\Mirrors\RouterMirrorList.Designer.cs">
+      <DependentUpon>RouterMirrorList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Routers\Mirrors\RouterMirrorEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\Mirrors\RouterMirrorEditorForm.Designer.cs">
+      <DependentUpon>RouterMirrorEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Routers\VirtualLeitchRouterEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\VirtualLeitchRouterEditorForm.Designer.cs">
+      <DependentUpon>VirtualLeitchRouterEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Routers\LeitchRouterEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -520,6 +538,7 @@
     <Compile Include="Model\Persistence\DatabasePersister.cs" />
     <Compile Include="Model\Persistence\IValueXmlSerializer.cs" />
     <Compile Include="Model\Persistence\LookupInAttribute.cs" />
+    <Compile Include="Model\Persistence\PolymorphFieldAttribute.cs" />
     <Compile Include="Model\Persistence\PersistSubclassAttribute.cs" />
     <Compile Include="Model\Persistence\PersistAsAttribute.cs" />
     <Compile Include="Model\Persistence\PolymorphDatabaseAttribute.cs" />
@@ -529,6 +548,8 @@
     <Compile Include="Model\Persistence\XmlTagNamesAttribute.cs" />
     <Compile Include="Model\Routers\AutoPathSearcher.cs" />
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohub.cs" />
+    <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohubOutput.cs" />
+    <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohubOutputXmlSerializer.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputLabel.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputName.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputSource.cs" />
@@ -536,20 +557,41 @@
     <Compile Include="Model\Routers\Labelset.cs" />
     <Compile Include="Model\Routers\LabelsetDatabase.cs" />
     <Compile Include="Model\Routers\LabelXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Leitch\LeitchRouterOutput.cs" />
+    <Compile Include="Model\Routers\Leitch\LeitchRouterOutputXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Leitch\VirtualLeitchRouterOutputXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Leitch\VirtualLeitchRouter.cs" />
     <Compile Include="Model\Routers\Leitch\LeitchRouter.cs" />
+    <Compile Include="Model\Routers\Leitch\VirtualLeitchRouterOutput.cs" />
     <Compile Include="Model\Routers\Macros\RouterMacroCommands.cs" />
     <Compile Include="Model\Routers\Macros\SetRouterCrosspointMacroCommand.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorAssociation.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorAssociationXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorDatabase.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirror.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorInputAssociation.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorOutputAssociationXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorInputAssociationXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorOutputAssociation.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorSide.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorSideHelpers.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorSynchronizationMode.cs" />
     <Compile Include="Model\Routers\Router.cs" />
     <Compile Include="Model\Routers\RouterDatabase.cs" />
     <Compile Include="Model\Routers\RouterInput.cs" />
     <Compile Include="Model\Routers\RouterInputXmlSerializer.cs" />
+    <Compile Include="Model\Routers\RouterOutputLockMethodType.cs" />
+    <Compile Include="Model\Routers\RouterOutputLockState.cs" />
     <Compile Include="Model\Routers\RouterOutput.cs" />
+    <Compile Include="Model\Routers\RouterOutputLockType.cs" />
     <Compile Include="Model\Routers\RouterOutputXmlSerializer.cs" />
     <Compile Include="Model\Routers\RouterState.cs" />
     <Compile Include="Model\Routers\RouterTypeNameConverter.cs" />
     <Compile Include="Model\Routers\Triggers\RouterCrosspointChangedMacroTrigger.cs" />
     <Compile Include="Model\Routers\Triggers\RouterOutputSourceChangedMacroTrigger.cs" />
     <Compile Include="Model\Routers\Triggers\RouterMacroTriggers.cs" />
+    <Compile Include="Model\Routers\Virtual\VirtualRouterOutputXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Virtual\VirtualRouterOutput.cs" />
     <Compile Include="Model\Routers\Virtual\VirtualRouter.cs" />
     <Compile Include="Model\SerialPorts\SerialPort.cs" />
     <Compile Include="Model\SerialPorts\SerialPortsManager.cs" />
@@ -714,6 +756,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Mixers\MixerEditorFormBase.resx">
       <DependentUpon>MixerEditorFormBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\Mirrors\RouterMirrorList.resx">
+      <DependentUpon>RouterMirrorList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\Mirrors\RouterMirrorEditorForm.resx">
+      <DependentUpon>RouterMirrorEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\VirtualLeitchRouterEditorForm.resx">
+      <DependentUpon>VirtualLeitchRouterEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\LeitchRouterEditorForm.resx">
       <DependentUpon>LeitchRouterEditorForm.cs</DependentUpon>

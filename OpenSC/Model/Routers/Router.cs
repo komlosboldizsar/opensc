@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Routers
 {
-    
+
     public abstract class Router : ModelBase
     {
 
@@ -60,7 +60,8 @@ namespace OpenSC.Model.Routers
         public override void TotallyRestored()
         {
             base.TotallyRestored();
-            queryAllCrosspoints();
+            notifyIOsTotallyRestored();
+            queryAllStates();
         }
 
         public override void RestoreCustomRelations()
@@ -73,6 +74,12 @@ namespace OpenSC.Model.Routers
         {
             inputs.ForEach(i => i.Restored());
             outputs.ForEach(o => o.Restored());
+        }
+
+        private void notifyIOsTotallyRestored()
+        {
+            inputs.ForEach(i => i.TotallyRestored());
+            outputs.ForEach(o => o.TotallyRestored());
         }
         #endregion
 
@@ -141,45 +148,32 @@ namespace OpenSC.Model.Routers
 
         [PersistAs("inputs")]
         [PersistAs(null, 1)]
+        [PolymorphField(nameof(InputTypesDictionaryGetter))]
         private RouterInput[] _inputs // for persistence
         {
             get { return inputs.ToArray(); }
             set
             {
                 inputs.Clear();
-                if(value != null)
+                if (value != null)
                     inputs.AddRange(value);
                 inputs.ForEach(i => i.AssignParentRouter(this));
-                updateInputIndices();
             }
         }
 
         public void AddInput()
         {
-            int index = inputs.Count;
-            inputs.Add(new RouterInput(string.Format("Input #{0}", index + 1), this, index));
+            int index = (inputs.Count > 0) ? (inputs.Max(ri => ri.Index) + 1) : 0;
+            inputs.Add(CreateInput(string.Format("Input #{0}", index + 1), index));
         }
 
         public void RemoveInput(RouterInput input)
         {
             inputs.Remove(input);
             input.RemovedFromRouter(this);
-            updateInputIndices();
         }
 
-        public RouterInput GetInput(int index)
-        {
-            if ((index < 1) || (index > inputs.Count))
-                throw new ArgumentException();
-            return inputs[index - 1];
-        }
-
-        private void updateInputIndices()
-        {
-            int idx = 0;
-            foreach (RouterInput input in inputs)
-                input.SetIndexFromRouter(this, idx++);
-        }
+        public RouterInput GetInput(int index) => inputs.FirstOrDefault(ri => (ri.Index == index));
 
         private void inputsChangedHandler()
         {
@@ -191,6 +185,15 @@ namespace OpenSC.Model.Routers
         public event InputsChangedDelegate InputsChanged;
 
         private void restoreInputSources() => inputs.ForEach(i => i.RestoreSource());
+
+        public abstract RouterInput CreateInput(string name, int index);
+
+        private static readonly Dictionary<Type, string> INPUT_TYPES = new Dictionary<Type, string>()
+        {
+            {  typeof(RouterInput), "standard" }
+        };
+
+        protected virtual Dictionary<Type, string> InputTypesDictionaryGetter() => INPUT_TYPES;
         #endregion
 
         #region Outputs
@@ -199,45 +202,32 @@ namespace OpenSC.Model.Routers
 
         [PersistAs("outputs")]
         [PersistAs(null, 1)]
+        [PolymorphField(nameof(OutputTypesDictionaryGetter))]
         private RouterOutput[] _outputs // for persistence
         {
             get { return outputs.ToArray(); }
             set
             {
                 outputs.Clear();
-                if(value != null)
+                if (value != null)
                     outputs.AddRange(value);
                 outputs.ForEach(o => o.AssignParentRouter(this));
-                updateOutputIndices();
             }
         }
 
         public void AddOutput()
         {
-            int index = outputs.Count;
-            outputs.Add(new RouterOutput(string.Format("Output #{0}", index + 1), this, index));
+            int index = (outputs.Count > 0) ? (outputs.Max(ro => ro.Index) + 1) : 0;
+            outputs.Add(CreateOutput(string.Format("Output #{0}", index + 1), index));
         }
 
         public void RemoveOutput(RouterOutput output)
         {
             outputs.Remove(output);
             output.RemovedFromRouter(this);
-            updateOutputIndices();
         }
 
-        public RouterOutput GetOutput(int index)
-        {
-            if ((index < 1) || (index > outputs.Count))
-                throw new ArgumentException();
-            return outputs[index - 1];
-        }
-
-        private void updateOutputIndices()
-        {
-            int idx = 0;
-            foreach (RouterOutput output in outputs)
-                output.SetIndexFromRouter(this, idx++);
-        }
+        public RouterOutput GetOutput(int index) => outputs.FirstOrDefault(ro => (ro.Index == index));
 
         private void outputsChangedHandler()
         {
@@ -247,28 +237,31 @@ namespace OpenSC.Model.Routers
 
         public delegate void OutputsChangedDelegate(Router router);
         public event OutputsChangedDelegate OutputsChanged;
+
+        public abstract RouterOutput CreateOutput(string name, int index);
+
+        private static readonly Dictionary<Type, string> OUTPUT_TYPES = new Dictionary<Type, string>()
+        {
+            {  typeof(RouterOutput), "standard" }
+        };
+
+        protected virtual Dictionary<Type, string> OutputTypesDictionaryGetter() => OUTPUT_TYPES;
         #endregion
+
+        protected abstract void queryAllStates();
 
         #region Crosspoint update
         public void RequestCrosspointUpdate(RouterOutput output, RouterInput input)
         {
-
             if (!outputs.Contains(output))
                 throw new ArgumentException();
-
             string logMessage = string.Format("Router crosspoint update request. Router: [(#{0}) #1], destination: {2}, source: {3}.",
-                ID,
-                Name,
-                output.Index,
-                input.Index);
+                ID, Name, output.Index, input.Index);
             LogDispatcher.I(LOG_TAG, logMessage);
-
             requestCrosspointUpdateImpl(output, input);
-
         }
 
         protected abstract void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input);
-        protected abstract void queryAllCrosspoints();
 
         protected void notifyCrosspointChanged(RouterOutput output, RouterInput input)
         {
@@ -280,11 +273,64 @@ namespace OpenSC.Model.Routers
 
         protected void notifyCrosspointChanged(int outputIndex, int inputIndex)
         {
-            if ((outputIndex < 0) || (outputIndex >= outputs.Count))
+            RouterOutput output = outputs.FirstOrDefault(ro => (ro.Index == outputIndex));
+            if (output == null)
                 throw new ArgumentException();
-            if ((inputIndex < 0) || (inputIndex >= inputs.Count))
+            RouterInput input = inputs.FirstOrDefault(ri => (ri.Index == inputIndex));
+            if (output == null)
                 throw new ArgumentException();
-            notifyCrosspointChanged(outputs[outputIndex], inputs[inputIndex]);
+            notifyCrosspointChanged(output, input);
+        }
+        #endregion
+
+        #region Locks and protects update
+        public void RequestLockOperation(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
+        {
+            if (!outputs.Contains(output))
+                throw new ArgumentException();
+            string logMessage = string.Format("Router output {0} request. Router: [(#{1}) #2], destination: {3}.",
+                translateLockOperation(lockType, lockOperationType), ID, Name, output.Index);
+            LogDispatcher.I(LOG_TAG, logMessage);
+            requestLockOperationImpl(output, lockType, lockOperationType);
+        }
+
+        private static Dictionary<RouterOutputLockType, string> LOCK_TYPE_TRANSLATIONS = new Dictionary<RouterOutputLockType, string>()
+        {
+            { RouterOutputLockType.Lock, "lock" },
+            { RouterOutputLockType.Protect, "protect" },
+        };
+
+        private static Dictionary<RouterOutputLockOperationType, string> LOCK_OPERATION_TYPE_TRANSLATIONS = new Dictionary<RouterOutputLockOperationType, string>()
+        {
+            { RouterOutputLockOperationType.Lock, "{0}" },
+            { RouterOutputLockOperationType.Unlock, "un{0}" },
+            { RouterOutputLockOperationType.ForceUnlock, "force un{0}" },
+        };
+
+        private static string translateLockOperation(RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
+            => string.Format(LOCK_OPERATION_TYPE_TRANSLATIONS[lockOperationType], LOCK_TYPE_TRANSLATIONS[lockType]);
+
+        protected abstract void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType);
+
+        protected void notifyLockChanged(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockState lockState)
+        {
+            if (!outputs.Contains(output))
+                throw new ArgumentException();
+            switch (lockType)
+            {
+                case RouterOutputLockType.Lock:
+                    output.LockStateUpdateFromRouter(lockState);
+                    break;
+                case RouterOutputLockType.Protect:
+                    output.ProtectStateUpdateFromRouter(lockState);
+                    break;
+            }
+        }
+
+        protected void notifyLockChanged(int outputIndex, RouterOutputLockType lockType, RouterOutputLockState lockState)
+        {
+            RouterOutput output = outputs.FirstOrDefault(ro => (ro.Index == outputIndex));
+            notifyLockChanged(outputs[outputIndex], lockType, lockState);
         }
         #endregion
 
