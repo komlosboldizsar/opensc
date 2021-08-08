@@ -26,6 +26,7 @@ namespace OpenSC.Model.Routers
             routerOutput.NameChanged += routerOutputNameChangedHandler;
             tally.StateChanged += signalTallyChangedHandler;
             routerOutput.Removed += routerOutputRemovedHandler;
+            register();
         }
 
         private void routerNameChangedHandler(Router router, string oldName, string newName)
