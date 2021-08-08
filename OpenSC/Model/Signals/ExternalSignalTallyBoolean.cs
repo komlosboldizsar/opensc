@@ -9,93 +9,43 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
 
-    public class ExternalSignalTallyBoolean : BooleanBase
+    public class ExternalSignalTallyBoolean : SignalTallyBoolean
     {
 
         private ExternalSignal signal;
-        private ExternalSignalTally tally;
-        private SignalTallyColor color;
-        private bool registered = false;
 
         public ExternalSignalTallyBoolean(ExternalSignal signal, ExternalSignalTally tally, SignalTallyColor color) :
-            base(getName(signal, color), getColor(color), getDescription(signal, color))
+            base(tally, color)
         {
             this.signal = signal;
-            this.tally = tally;
-            this.color = color;
             signal.IdChanged += signalIdChangedHandler;
             signal.NameChanged += signalNameChangedHandler;
             tally.StateChanged += signalTallyChangedHandler;
             signal.ModelRemoved += signalRemovedHandler;
             if (signal.ID > 0)
-            {
-                BooleanRegister.Instance.RegisterBoolean(this);
-                registered = true;
-            }
+                register();
         }
 
         private void signalIdChangedHandler(ExternalSignal signal, int oldValue, int newValue)
         {
-            Name = getName(signal, color);
-            Description = getDescription(signal, color);
-            if (!registered && (newValue > 0))
-            {
-                BooleanRegister.Instance.RegisterBoolean(this);
-                registered = true;
-            }
+            updateName();
+            updateDescription();
         }
 
         private void signalNameChangedHandler(ExternalSignal signal, string oldName, string newName)
-        {
-            Description = getDescription(signal, color);
-        }
+            => updateDescription();
 
         private void signalTallyChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState, List<object> recursionChain)
-        {
-            CurrentState = newState;
-        }
+            => CurrentState = newState;
 
         private void signalRemovedHandler(IModel model)
-        {
-            if (registered)
-            {
-                BooleanRegister.Instance.UnregisterBoolean(this);
-                registered = false;
-            }
-        }
+            => unregister();
 
-        private static string getName(ExternalSignal signal, SignalTallyColor color)
+        protected override string getName()
             => string.Format("signal.{0}.{1}tally", signal.ID, getColorString(color));
-        private static string getDescription(ExternalSignal signal, SignalTallyColor color)
+
+        protected override string getDescription()
             => string.Format("Signal [(#{0}) {1}] has {2} tally.", signal.ID, signal.Name, getColorString(color));
-
-        private static Color getColor(SignalTallyColor color)
-        {
-            switch (color)
-            {
-                case SignalTallyColor.Red:
-                    return Color.Red;
-                case SignalTallyColor.Yellow:
-                    return Color.Yellow;
-                case SignalTallyColor.Green:
-                    return Color.Green;
-            }
-            return Color.White;
-        }
-
-        private static string getColorString(SignalTallyColor color)
-        {
-            switch (color)
-            {
-                case SignalTallyColor.Red:
-                    return "red";
-                case SignalTallyColor.Yellow:
-                    return "yellow";
-                case SignalTallyColor.Green:
-                    return "green";
-            }
-            return "unknown";
-        }
 
     }
 
