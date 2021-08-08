@@ -30,7 +30,8 @@ namespace OpenSC.Model.UMDs.TSL31
             set { port = value; }
         }
 
-        private int address;
+        [PersistAs("address")]
+        private int address = 1;
 
         public int Address
         {

@@ -55,7 +55,7 @@ namespace OpenSC.Model.Signals
             if (registeredSignals.Contains(signal))
                 return;
             registeredSignals.Add(signal);
-            ItemAdded?.Invoke();
+            ItemAdded?.Invoke(new object[] { signal });
             ItemsChanged?.Invoke();
         }
 
@@ -64,7 +64,7 @@ namespace OpenSC.Model.Signals
             if (!registeredSignals.Contains(signal))
                 return;
             registeredSignals.Remove(signal);
-            ItemRemoved?.Invoke();
+            ItemRemoved?.Invoke(new object[] { signal });
             ItemsChanged?.Invoke();
         }
         #endregion

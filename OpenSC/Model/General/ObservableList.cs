@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,7 +27,7 @@ namespace OpenSC.Model.General
         public new void Add(T item)
         {
             base.Add(item);
-            ItemAdded?.Invoke();
+            ItemAdded?.Invoke(new object[] { item });
             ItemsChanged?.Invoke();
         }
 
@@ -35,7 +36,7 @@ namespace OpenSC.Model.General
             base.AddRange(collection);
             if (collection.Count() > 0)
             {
-                ItemAdded?.Invoke();
+                ItemAdded?.Invoke(collection);
                 ItemsChanged?.Invoke();
             }
         }
@@ -43,10 +44,11 @@ namespace OpenSC.Model.General
         public new void Clear()
         {
             int count = Count;
+            IEnumerable removedItems = new List<T>(this);
             base.Clear();
             if (count > 0)
             { 
-                ItemRemoved?.Invoke();
+                ItemRemoved?.Invoke(removedItems);
                 ItemsChanged?.Invoke();
             }
         }
@@ -54,7 +56,7 @@ namespace OpenSC.Model.General
         public new void Insert(int index, T item)
         {
             base.Insert(index, item);
-            ItemAdded?.Invoke();
+            ItemAdded?.Invoke(new object[] { item });
             ItemsChanged?.Invoke();
         }
 
@@ -62,7 +64,7 @@ namespace OpenSC.Model.General
         {
             base.InsertRange(index, collection);
             if (collection.Count() > 0) {
-                ItemAdded?.Invoke();
+                ItemAdded?.Invoke(collection);
                 ItemsChanged?.Invoke();
             }
         }
@@ -71,7 +73,7 @@ namespace OpenSC.Model.General
         {
             if (base.Remove(item))
             {
-                ItemRemoved?.Invoke();
+                ItemRemoved?.Invoke(new object[] { item });
                 ItemsChanged?.Invoke();
                 return true;
             }
@@ -80,23 +82,26 @@ namespace OpenSC.Model.General
 
         public new int RemoveAll(Predicate<T> match)
         {
+            IEnumerable removedItems = new List<T>(this.Where(i => match(i)));
             int removedCount = base.RemoveAll(match);
-            ItemRemoved?.Invoke();
+            ItemRemoved?.Invoke(removedItems);
             ItemsChanged?.Invoke();
             return removedCount;
         }
 
         public new void RemoveAt(int index)
         {
+            T removedItem = this[index];
             base.RemoveAt(index);
-            ItemRemoved?.Invoke();
+            ItemRemoved?.Invoke(new object[] { removedItem });
             ItemsChanged?.Invoke();
         }
 
         public new void RemoveRange(int index, int count)
         {
+            IEnumerable removedItems = new List<T>(this.GetRange(index, count));
             base.RemoveRange(index, count);
-            ItemRemoved?.Invoke();
+            ItemRemoved?.Invoke(removedItems);
             ItemsChanged?.Invoke();
         }
 
@@ -137,15 +142,7 @@ namespace OpenSC.Model.General
         }
 
         public new void TrimExcess()
-        {
-            int oldCount = Count;
-            base.TrimExcess();
-            if (oldCount != Count)
-            {
-                ItemRemoved?.Invoke();
-                ItemsChanged?.Invoke();
-            }
-        }
+            => base.TrimExcess();
 
     }
 
