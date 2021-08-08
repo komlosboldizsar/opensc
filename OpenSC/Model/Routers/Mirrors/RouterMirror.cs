@@ -308,7 +308,7 @@ namespace OpenSC.Model.Routers.Mirrors
                 return;
             RouterInput otherSideCurrentInput = otherSideOutput.CurrentInput;
             if (otherSideCurrentInput != otherSideNewInput)
-                otherSideOutput.AssignSource(otherSideNewInput);
+                otherSideOutput.RequestCrosspointUpdate(otherSideNewInput);
         }
 
         internal void OutputChanged(RouterOutput output, RouterInput newInput, RouterMirrorSide side)
