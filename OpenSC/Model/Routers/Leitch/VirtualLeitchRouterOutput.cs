@@ -25,7 +25,7 @@ namespace OpenSC.Model.Routers.Leitch
 
         public void AssignInput(RouterInput input, int panelId)
         {
-            if (LockState == RouterOutputLockState.Clear)
+            if (LockState != RouterOutputLockState.Clear)
                 return;
             if ((ProtectState != RouterOutputLockState.Clear) || (panelId != LockOwnerPanelId))
                 return;
@@ -34,7 +34,7 @@ namespace OpenSC.Model.Routers.Leitch
 
         public void AssignPreset(RouterInput input, int panelId)
         {
-            if (LockState == RouterOutputLockState.Clear)
+            if (LockState != RouterOutputLockState.Clear)
                 return;
             if ((ProtectState != RouterOutputLockState.Clear) || (panelId != LockOwnerPanelId))
                 return;
