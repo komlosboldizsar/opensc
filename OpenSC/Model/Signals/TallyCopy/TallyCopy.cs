@@ -200,7 +200,7 @@ namespace OpenSC.Model.Signals.TallyCopying
 
         #region Property: ToTallyColor
         public delegate void ToTallyColorChangedDelegate(TallyCopy tallyCopy, SignalTallyColor oldValue, SignalTallyColor newValue);
-        public event FromTallyColorChangedDelegate ToTallyColorChanged;
+        public event ToTallyColorChangedDelegate ToTallyColorChanged;
 
         [PersistAs("to_tally_color")]
         private SignalTallyColor toTallyColor;

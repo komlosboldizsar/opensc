@@ -1,7 +1,9 @@
 ﻿using OpenSC.GUI.Menus;
 using OpenSC.GUI.Signals;
+using OpenSC.GUI.Signals.BooleanTallies;
 using OpenSC.GUI.Signals.TallyCopying;
 using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model.Signals.BooleanTallies;
 using OpenSC.Model.Signals.TallyCopying;
 using System;
 using System.Collections.Generic;
@@ -20,6 +22,7 @@ namespace OpenSC.Model.Signals
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(ExternalSignalDatabases.ExternalSignalCategoryDatabase));
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(ExternalSignalDatabases.ExternalSignalDatabase));
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(TallyCopyDatabase));
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(BooleanTallyDatabase));
         }
 
         public static void RegisterWindowTypes()
@@ -28,6 +31,7 @@ namespace OpenSC.Model.Signals
             WindowTypeRegister.RegisterWindowType(typeof(ExternalSignalList));
             WindowTypeRegister.RegisterWindowType(typeof(ExternalSignalCategoryList));
             WindowTypeRegister.RegisterWindowType(typeof(TallyCopyList));
+            WindowTypeRegister.RegisterWindowType(typeof(BooleanTallyList));
         }
 
         public static void RegisterMenus()
@@ -41,6 +45,8 @@ namespace OpenSC.Model.Signals
             externalCategoriesSubMenu.ClickHandler = (menu, tag) => new ExternalSignalCategoryList().ShowAsChild();
             var tallyCopiesSubMenu = signalsMenu["Tally copies"];
             tallyCopiesSubMenu.ClickHandler = (menu, tag) => new TallyCopyList().ShowAsChild();
+            var booleanTalliesSubMenu = signalsMenu["Boolean tallies"];
+            booleanTalliesSubMenu.ClickHandler = (menu, tag) => new BooleanTallyList().ShowAsChild();
         }
 
     }

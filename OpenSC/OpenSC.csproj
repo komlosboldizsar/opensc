@@ -321,6 +321,18 @@
     <Compile Include="GUI\Settings\StringSettingEditor.Designer.cs">
       <DependentUpon>StringSettingEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Signals\BooleanTally\BooleanTallyEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Signals\BooleanTally\BooleanTallyEditorForm.Designer.cs">
+      <DependentUpon>BooleanTallyEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Signals\BooleanTally\BooleanTallyList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Signals\BooleanTally\BooleanTallyList.Designer.cs">
+      <DependentUpon>BooleanTallyList.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Signals\ExternalSignalEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -623,6 +635,8 @@
     <Compile Include="Model\Settings\SettingsManager.cs" />
     <Compile Include="Model\Settings\Converters\SettingValueConverterAttribute.cs" />
     <Compile Include="Model\Signals\BidirectionalPassthroughSignalTally.cs" />
+    <Compile Include="Model\Signals\BooleanTally\BooleanTallyDatabase.cs" />
+    <Compile Include="Model\Signals\BooleanTally\BooleanTally.cs" />
     <Compile Include="Model\Signals\IBidirectionalSignalTally.cs" />
     <Compile Include="Model\Signals\ISignalDestination.cs" />
     <Compile Include="Model\Signals\ISignalSourceRegistered.cs" />
@@ -837,6 +851,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Settings\StringSettingEditor.resx">
       <DependentUpon>StringSettingEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Signals\BooleanTally\BooleanTallyEditorForm.resx">
+      <DependentUpon>BooleanTallyEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Signals\BooleanTally\BooleanTallyList.resx">
+      <DependentUpon>BooleanTallyList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Signals\ExternalSignalEditorForm.resx">
       <DependentUpon>ExternalSignalEditorForm.cs</DependentUpon>
