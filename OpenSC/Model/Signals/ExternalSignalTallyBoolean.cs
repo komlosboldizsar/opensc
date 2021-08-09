@@ -31,6 +31,8 @@ namespace OpenSC.Model.Signals
         {
             updateName();
             updateDescription();
+            if (!registered)
+                register();
         }
 
         private void signalNameChangedHandler(ExternalSignal signal, string oldName, string newName)
