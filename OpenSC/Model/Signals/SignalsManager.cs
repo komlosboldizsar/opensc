@@ -1,6 +1,8 @@
 ﻿using OpenSC.GUI.Menus;
 using OpenSC.GUI.Signals;
+using OpenSC.GUI.Signals.TallyCopying;
 using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model.Signals.TallyCopying;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,7 @@ namespace OpenSC.Model.Signals
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(ExternalSignalDatabases.ExternalSignalCategoryDatabase));
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(ExternalSignalDatabases.ExternalSignalDatabase));
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(TallyCopyDatabase));
         }
 
         public static void RegisterWindowTypes()
@@ -24,6 +27,7 @@ namespace OpenSC.Model.Signals
             WindowTypeRegister.RegisterWindowType(typeof(SignalList));
             WindowTypeRegister.RegisterWindowType(typeof(ExternalSignalList));
             WindowTypeRegister.RegisterWindowType(typeof(ExternalSignalCategoryList));
+            WindowTypeRegister.RegisterWindowType(typeof(TallyCopyList));
         }
 
         public static void RegisterMenus()
@@ -35,6 +39,8 @@ namespace OpenSC.Model.Signals
             externalSignalsSubMenu.ClickHandler = (menu, tag) => new ExternalSignalList().ShowAsChild();
             var externalCategoriesSubMenu = signalsMenu["External Categories"];
             externalCategoriesSubMenu.ClickHandler = (menu, tag) => new ExternalSignalCategoryList().ShowAsChild();
+            var tallyCopiesSubMenu = signalsMenu["Tally copies"];
+            tallyCopiesSubMenu.ClickHandler = (menu, tag) => new TallyCopyList().ShowAsChild();
         }
 
     }
