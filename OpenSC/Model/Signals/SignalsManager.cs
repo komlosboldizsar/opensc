@@ -41,7 +41,7 @@ namespace OpenSC.Model.Signals
             allSignalsSubMenu.ClickHandler = (menu, tag) => new SignalList().ShowAsChild();
             var externalSignalsSubMenu = signalsMenu["External signals"];
             externalSignalsSubMenu.ClickHandler = (menu, tag) => new ExternalSignalList().ShowAsChild();
-            var externalCategoriesSubMenu = signalsMenu["External Categories"];
+            var externalCategoriesSubMenu = signalsMenu["External categories"];
             externalCategoriesSubMenu.ClickHandler = (menu, tag) => new ExternalSignalCategoryList().ShowAsChild();
             var tallyCopiesSubMenu = signalsMenu["Tally copies"];
             tallyCopiesSubMenu.ClickHandler = (menu, tag) => new TallyCopyList().ShowAsChild();
