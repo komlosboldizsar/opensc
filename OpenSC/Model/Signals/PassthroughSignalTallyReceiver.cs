@@ -43,6 +43,7 @@ namespace OpenSC.Model.Signals
             List<ISignalTallySender> extendedChain = recursionChain.ExtendRecursionChainT(this);
             recursionChains.Add(recursionChain, extendedChain);
             PreviousElement?.Give(extendedChain);
+            Got?.Invoke(this, recursionChain);
         }
 
         public void Revoke(List<ISignalTallySender> recursionChain)
@@ -62,7 +63,13 @@ namespace OpenSC.Model.Signals
                 return;
             PreviousElement?.Revoke(extendedChain);
             recursionChains.Remove(recursionChain);
+            Revoked?.Invoke(this, recursionChain);
         }
+
+        public event SignalTallyReceiverGotTally Got;
+        public event SignalTallyReceiverRevokedTally Revoked;
+
+        public List<List<ISignalTallySender>> CurrentRecursionChains => recursionChains.Keys.ToList();
         #endregion
 
         #region ISignalTallySender implementation
