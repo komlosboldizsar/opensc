@@ -258,20 +258,17 @@ namespace OpenSC.Model.Signals.TallyCopying
         {
             if (recursionChain.Contains(this))
                 return; // endless loop
-            List<ISignalTallySender> baseChain = null;
             List<ISignalTallySender> extendedChain = null;
             foreach (KeyValuePair<List<ISignalTallySender>, List<ISignalTallySender>> chainKp in recursionChains)
             {
                 if (recursionChain.SequenceEqual(chainKp.Key))
                 {
-                    baseChain = chainKp.Key;
                     extendedChain = chainKp.Value;
                     break;
                 }
             }
             if (extendedChain == null)
                 return;
-            recursionChains.Remove(baseChain);
             toTally.Revoke(extendedChain);
         }
 

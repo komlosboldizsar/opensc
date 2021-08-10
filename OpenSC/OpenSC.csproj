@@ -321,6 +321,18 @@
     <Compile Include="GUI\Settings\StringSettingEditor.Designer.cs">
       <DependentUpon>StringSettingEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Signals\BooleanTally\BooleanTallyEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Signals\BooleanTally\BooleanTallyEditorForm.Designer.cs">
+      <DependentUpon>BooleanTallyEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Signals\BooleanTally\BooleanTallyList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Signals\BooleanTally\BooleanTallyList.Designer.cs">
+      <DependentUpon>BooleanTallyList.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Signals\ExternalSignalEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -333,6 +345,7 @@
     <Compile Include="GUI\Signals\ExternalSignalCategoryList.Designer.cs">
       <DependentUpon>ExternalSignalCategoryList.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Signals\Helpers\SignalTallyHelpers.cs" />
     <Compile Include="GUI\Signals\SignalList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -350,6 +363,18 @@
     </Compile>
     <Compile Include="GUI\Signals\ExternalSignalCategoryEditorForm.Designer.cs">
       <DependentUpon>ExternalSignalCategoryEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Signals\TallyCopy\TallyCopyEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Signals\TallyCopy\TallyCopyEditorForm.Designer.cs">
+      <DependentUpon>TallyCopyEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Signals\TallyCopy\TallyCopyList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Signals\TallyCopy\TallyCopyList.Designer.cs">
+      <DependentUpon>TallyCopyList.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\SplashScreen.cs">
       <SubType>Form</SubType>
@@ -553,6 +578,7 @@
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputLabel.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputName.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputSource.cs" />
+    <Compile Include="Model\Routers\RouterOutputTallyBoolean.cs" />
     <Compile Include="Model\Routers\Label.cs" />
     <Compile Include="Model\Routers\Labelset.cs" />
     <Compile Include="Model\Routers\LabelsetDatabase.cs" />
@@ -609,10 +635,13 @@
     <Compile Include="Model\Settings\SettingsManager.cs" />
     <Compile Include="Model\Settings\Converters\SettingValueConverterAttribute.cs" />
     <Compile Include="Model\Signals\BidirectionalPassthroughSignalTally.cs" />
+    <Compile Include="Model\Signals\BooleanTally\BooleanTallyDatabase.cs" />
+    <Compile Include="Model\Signals\BooleanTally\BooleanTally.cs" />
     <Compile Include="Model\Signals\IBidirectionalSignalTally.cs" />
     <Compile Include="Model\Signals\ISignalDestination.cs" />
     <Compile Include="Model\Signals\ISignalSourceRegistered.cs" />
     <Compile Include="Model\Signals\ISignalSource.cs" />
+    <Compile Include="Model\Signals\ISignalSourceTallyHelper.cs" />
     <Compile Include="Model\Signals\ISignalTallyState.cs" />
     <Compile Include="Model\Signals\ExternalSignalCategory.cs" />
     <Compile Include="Model\Signals\ExternalSignal.cs" />
@@ -628,7 +657,10 @@
     <Compile Include="Model\Signals\SignalsManager.cs" />
     <Compile Include="Model\Signals\ExternalSignalTally.cs" />
     <Compile Include="Model\Signals\ExternalSignalTallyBoolean.cs" />
+    <Compile Include="Model\Signals\SignalTallyBoolean.cs" />
     <Compile Include="Model\Signals\SignalTallyColor.cs" />
+    <Compile Include="Model\Signals\TallyCopy\TallyCopyDatabase.cs" />
+    <Compile Include="Model\Signals\TallyCopy\TallyCopy.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamStateTranslated.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamState.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamViewerCount.cs" />
@@ -820,6 +852,12 @@
     <EmbeddedResource Include="GUI\Settings\StringSettingEditor.resx">
       <DependentUpon>StringSettingEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Signals\BooleanTally\BooleanTallyEditorForm.resx">
+      <DependentUpon>BooleanTallyEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Signals\BooleanTally\BooleanTallyList.resx">
+      <DependentUpon>BooleanTallyList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Signals\ExternalSignalEditorForm.resx">
       <DependentUpon>ExternalSignalEditorForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -834,6 +872,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Signals\ExternalSignalCategoryEditorForm.resx">
       <DependentUpon>ExternalSignalCategoryEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Signals\TallyCopy\TallyCopyEditorForm.resx">
+      <DependentUpon>TallyCopyEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Signals\TallyCopy\TallyCopyList.resx">
+      <DependentUpon>TallyCopyList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\SplashScreen.resx">
       <DependentUpon>SplashScreen.cs</DependentUpon>

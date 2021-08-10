@@ -17,6 +17,8 @@ namespace OpenSC.Model.Signals
             tallyState = new PassthroughSignalTallyState(ParentSignalSource);
             tallyReceiver = new PassthroughSignalTallyReceiver();
             tallyState.StateChanged += tallyStateChanged;
+            tallyReceiver.Got += (r, rc) => Got?.Invoke(r, rc);
+            tallyReceiver.Revoked += (r, rc) => Revoked?.Invoke(r, rc);
         }
 
         #region Composite elements
@@ -55,8 +57,22 @@ namespace OpenSC.Model.Signals
         #endregion
 
         #region ISignalTallyReceiver interface
-        public void Give(List<ISignalTallySender> recursionChain) => tallyReceiver.Give(recursionChain);
-        public void Revoke(List<ISignalTallySender> recursionChain) => tallyReceiver.Revoke(recursionChain);
+        public void Give(List<ISignalTallySender> recursionChain)
+        {
+            tallyReceiver.Give(recursionChain);
+            Got?.Invoke(this, recursionChain);
+        }
+
+        public void Revoke(List<ISignalTallySender> recursionChain)
+        {
+            tallyReceiver.Revoke(recursionChain);
+            Revoked?.Invoke(this, recursionChain);
+        }
+
+        public event SignalTallyReceiverGotTally Got;
+        public event SignalTallyReceiverRevokedTally Revoked;
+
+        public List<List<ISignalTallySender>> CurrentRecursionChains => tallyReceiver.CurrentRecursionChains;
         #endregion
 
         #region ISignalTallySender interface

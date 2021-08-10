@@ -55,13 +55,20 @@ namespace OpenSC.Model.Signals
                 return;
             activeSources.Add(recursionChain);
             updateState();
+            Got?.Invoke(this, recursionChain);
         }
 
         public void Revoke(List<ISignalTallySender> recursionChain)
         {
             activeSources.RemoveAll(rc => rc.SequenceEqual(recursionChain));
             updateState();
+            Revoked?.Invoke(this, recursionChain);
         }
+
+        public event SignalTallyReceiverGotTally Got;
+        public event SignalTallyReceiverRevokedTally Revoked;
+
+        public List<List<ISignalTallySender>> CurrentRecursionChains => activeSources;
         #endregion
 
     }

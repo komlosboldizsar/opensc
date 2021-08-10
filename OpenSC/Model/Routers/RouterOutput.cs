@@ -34,10 +34,14 @@ namespace OpenSC.Model.Routers
         public void Restored()
         {
             registerAsSignal();
+            createTallyBooleans();
         }
 
         public virtual void TotallyRestored()
         { }
+
+        public delegate void RemovedDelegate(RouterOutput routerOutput);
+        public event RemovedDelegate Removed;
 
         #region Property: Name
         private string name;
@@ -80,6 +84,7 @@ namespace OpenSC.Model.Routers
                 return;
             Router = null;
             unregisterAsSignal();
+            Removed?.Invoke(this);
         }
         #endregion
 
@@ -107,7 +112,7 @@ namespace OpenSC.Model.Routers
         public delegate void IndexChangedDelegate(RouterOutput input, int oldIndex, int newIndex);
         public event IndexChangedDelegate IndexChanged;
         #endregion
-
+        
         #region Source assignment
         public override void AssignSource(ISignalSource source) // when source already changed
         {
@@ -281,6 +286,19 @@ namespace OpenSC.Model.Routers
         private void unregisterAsSignal()
         {
             SignalRegister.Instance.UnregisterSignal(this);
+        }
+        #endregion
+
+        #region Tally booleans
+        private RouterOutputTallyBoolean redTallyBoolean = null;
+        private RouterOutputTallyBoolean yellowTallyBoolean = null;
+        private RouterOutputTallyBoolean greenTallyBoolean = null;
+
+        private void createTallyBooleans()
+        {
+            redTallyBoolean = new RouterOutputTallyBoolean(this, RedTally, SignalTallyColor.Red);
+            yellowTallyBoolean = new RouterOutputTallyBoolean(this, YellowTally, SignalTallyColor.Yellow);
+            greenTallyBoolean = new RouterOutputTallyBoolean(this, GreenTally, SignalTallyColor.Green);
         }
         #endregion
 

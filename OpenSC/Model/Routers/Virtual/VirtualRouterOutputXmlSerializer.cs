@@ -13,7 +13,7 @@ namespace OpenSC.Model.Routers.Virtual
 
         public override object DeserializeItem(XmlNode serializedItem, object parentItem)
         {
-            VirtualRouterOutputXmlSerializer restoredOutput = base.DeserializeItem(serializedItem, parentItem) as VirtualRouterOutputXmlSerializer;
+            VirtualRouterOutput restoredOutput = base.DeserializeItem(serializedItem, parentItem) as VirtualRouterOutput;
             return restoredOutput;
         }
 
