@@ -11,10 +11,11 @@ namespace OpenSC.Model.Signals
     {
 
         public static List<T> ExtendRecursionChainT<T>(this List<T> recursionChain, T newElement) {
-            if (recursionChain == null)
-                recursionChain = new List<T>();
-            recursionChain.Add(newElement);
-            return recursionChain;
+            List<T> newRecursionChain = new List<T>();
+            if (recursionChain != null)
+                newRecursionChain.AddRange(recursionChain);
+            newRecursionChain.Add(newElement);
+            return newRecursionChain;
         }
 
         public static List<object> ExtendRecursionChain(this List<object> recursionChain, object newElement)
