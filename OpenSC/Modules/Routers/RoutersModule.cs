@@ -8,6 +8,7 @@ using OpenSC.Model.Macros;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.Routers;
 using OpenSC.Model.Routers.BlackMagicDesign;
+using OpenSC.Model.Routers.CrosspointStores;
 using OpenSC.Model.Routers.DynamicTextFunctions;
 using OpenSC.Model.Routers.Leitch;
 using OpenSC.Model.Routers.Macros;
@@ -70,6 +71,7 @@ namespace OpenSC.Modules.Routers
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(RouterDatabase));
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(RouterMirrorDatabase));
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(LabelsetDatabase));
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(CrosspointStoreDatabase));
         }
 
         public void RegisterWindowTypes()

@@ -594,6 +594,8 @@
     <Compile Include="Model\Routers\Virtual\VirtualRouterOutputXmlSerializer.cs" />
     <Compile Include="Model\Routers\Virtual\VirtualRouterOutput.cs" />
     <Compile Include="Model\Routers\Virtual\VirtualRouter.cs" />
+    <Compile Include="Model\Routers\CrosspointStores\CrosspointStore.cs" />
+    <Compile Include="Model\Routers\CrosspointStores\CrosspointStoreDatabase.cs" />
     <Compile Include="Model\SerialPorts\SerialPort.cs" />
     <Compile Include="Model\SerialPorts\SerialPortsManager.cs" />
     <Compile Include="Model\SerialPorts\SerialPortDatabase.cs" />
@@ -1074,6 +1076,8 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="GUI\Routers\CrosspointStores\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
