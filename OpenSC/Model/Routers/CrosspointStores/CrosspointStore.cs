@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers.CrosspointStores
 {
 
-    public abstract class CrosspointStore : ModelBase
+    public class CrosspointStore : ModelBase
     {
 
         public const string LOG_TAG = "CrosspointStore";
