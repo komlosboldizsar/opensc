@@ -293,8 +293,8 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
                 }
                 if (newValue != null)
                 {
-                    oldValue.IdChanged += watchedRouterIdChanged;
-                    oldValue.NameChanged += watchedRouterNameChanged;
+                    newValue.IdChanged += watchedRouterIdChanged;
+                    newValue.NameChanged += watchedRouterNameChanged;
                 }
                 updateNameAndDescription();
             }
@@ -314,8 +314,8 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
                 }
                 if (newValue != null)
                 {
-                    oldValue.IndexChanged += watchedInputIndexChanged;
-                    oldValue.NameChanged += watchedInputNameChanged;
+                    newValue.IndexChanged += watchedInputIndexChanged;
+                    newValue.NameChanged += watchedInputNameChanged;
                 }
                 updateNameAndDescription();
                 updateState();
@@ -337,9 +337,9 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
                 }
                 if (newValue != null)
                 {
-                    oldValue.IndexChanged += watchedOutputIndexChanged;
-                    oldValue.NameChanged += watchedOutputNameChanged;
-                    oldValue.CurrentInputChanged += watchedOutputCurrentInputChanged;
+                    newValue.IndexChanged += watchedOutputIndexChanged;
+                    newValue.NameChanged += watchedOutputNameChanged;
+                    newValue.CurrentInputChanged += watchedOutputCurrentInputChanged;
                 }
                 updateNameAndDescription();
                 updateState();
