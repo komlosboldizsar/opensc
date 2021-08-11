@@ -272,6 +272,8 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
             {
                 Color = DEFAULT_COLOR;
                 this.parent = parent;
+                parent.IdChanged += parentIdChanged;
+                parent.NameChanged += parentNameChanged;
                 parent.WatchedRouterChanged += watchedRouterChanged;
                 parent.WatchedInputChanged += watchedInputChanged;
                 parent.WatchedOutputChanged += watchedOutputChanged;
@@ -283,6 +285,15 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
 
             private void parentRemoved(IModel model)
                 => unregister();
+
+            private void parentIdChanged(CrosspointBoolean crosspointBoolean, int oldValue, int newValue)
+            {
+                updateNameAndDescription();
+                register();
+            }
+
+            private void parentNameChanged(CrosspointBoolean crosspointBoolean, string oldName, string newName)
+                => updateDescription();
 
             private void watchedRouterChanged(CrosspointBoolean crosspointBoolean, Router oldValue, Router newValue)
             {
