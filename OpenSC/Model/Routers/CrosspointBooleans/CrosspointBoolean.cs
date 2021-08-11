@@ -314,7 +314,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
                 => updateNameAndDescription();
 
             private void watchedRouterNameChanged(Router router, string oldName, string newName)
-                => updateNameAndDescription();
+                => updateDescription();
 
             private void watchedInputChanged(CrosspointBoolean crosspointBoolean, RouterInput oldValue, RouterInput newValue)
             {
@@ -336,7 +336,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
                 => updateNameAndDescription();
 
             private void watchedInputNameChanged(RouterInput input, string oldName, string newName)
-                => updateNameAndDescription();
+                => updateDescription();
 
             private void watchedOutputChanged(CrosspointBoolean crosspointBoolean, RouterOutput oldValue, RouterOutput newValue)
             {
@@ -360,7 +360,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
                 => updateNameAndDescription();
 
             private void watchedOutputNameChanged(RouterOutput output, string oldName, string newName)
-                => updateNameAndDescription();
+                => updateDescription();
 
             private void watchedOutputCurrentInputChanged(RouterOutput output, RouterInput newInput)
                 => updateState();
