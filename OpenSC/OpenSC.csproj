@@ -191,6 +191,18 @@
     <Compile Include="GUI\Menus\MenuItem.cs" />
     <Compile Include="GUI\Menus\MenuManager.cs" />
     <Compile Include="GUI\Menus\SeparatorMenuItem.cs" />
+    <Compile Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanEditorForm.Designer.cs">
+      <DependentUpon>CrosspointBooleanEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanList.Designer.cs">
+      <DependentUpon>CrosspointBooleanList.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Routers\CrosspointStores\CrosspointStoreEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -774,6 +786,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Mixers\MixerEditorFormBase.resx">
       <DependentUpon>MixerEditorFormBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanEditorForm.resx">
+      <DependentUpon>CrosspointBooleanEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanList.resx">
+      <DependentUpon>CrosspointBooleanList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\Mirrors\RouterMirrorList.resx">
       <DependentUpon>RouterMirrorList.cs</DependentUpon>

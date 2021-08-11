@@ -1,6 +1,7 @@
 ﻿using OpenSC.GUI;
 using OpenSC.GUI.Menus;
 using OpenSC.GUI.Routers;
+using OpenSC.GUI.Routers.CrosspointBooleans;
 using OpenSC.GUI.Routers.CrosspointStores;
 using OpenSC.GUI.Routers.Mirrors;
 using OpenSC.GUI.WorkspaceManager;
@@ -85,6 +86,7 @@ namespace OpenSC.Modules.Routers
             WindowTypeRegister.RegisterWindowType(typeof(RouterMirrorList));
             WindowTypeRegister.RegisterWindowType(typeof(LabelsetList));
             WindowTypeRegister.RegisterWindowType(typeof(CrosspointStoreList));
+            WindowTypeRegister.RegisterWindowType(typeof(CrosspointBooleanList));
         }
 
         public void RegisterMenus()
@@ -105,6 +107,9 @@ namespace OpenSC.Modules.Routers
 
             var crosspointStoresListMenu = routersMenu["Crosspoint store list"];
             crosspointStoresListMenu.ClickHandler = (menu, tag) => new CrosspointStoreList().ShowAsChild();
+
+            var crosspointBooleansListMenu = routersMenu["Crosspoint boolean list"];
+            crosspointBooleansListMenu.ClickHandler = (menu, tag) => new CrosspointBooleanList().ShowAsChild();
 
             routersMenu.AddSeparator("sep1");
 
