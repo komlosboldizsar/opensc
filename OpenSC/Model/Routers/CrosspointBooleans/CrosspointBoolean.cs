@@ -382,13 +382,13 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
                     Description = descriptionFirstPart + "invalid settings";
                     return;
                 }
-                Description = descriptionFirstPart + string.Format("crosspoint [I: [(#{1}) {2}], O: [(#{3}) {4}]] of router [(#{5}) {6}] is active.",
-                    parent.WatchedRouter.ID,
-                    parent.WatchedRouter.Name,
+                Description = descriptionFirstPart + string.Format("crosspoint [I: [(#{0}) {1}], O: [(#{2}) {3}]] of router [(#{4}) {5}] is active.",
                     parent.WatchedInput.Index,
                     parent.WatchedInput.Name,
                     parent.WatchedOutput.Index,
-                    parent.WatchedOutput.Name);
+                    parent.WatchedOutput.Name,
+                    parent.WatchedRouter.ID,
+                    parent.WatchedRouter.Name);
             }
 
             private void updateState()
