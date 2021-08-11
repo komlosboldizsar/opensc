@@ -191,6 +191,18 @@
     <Compile Include="GUI\Menus\MenuItem.cs" />
     <Compile Include="GUI\Menus\MenuManager.cs" />
     <Compile Include="GUI\Menus\SeparatorMenuItem.cs" />
+    <Compile Include="GUI\Routers\CrosspointStores\CrosspointStoreEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\CrosspointStores\CrosspointStoreEditorForm.Designer.cs">
+      <DependentUpon>CrosspointStoreEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Routers\CrosspointStores\CrosspointStoreList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\CrosspointStores\CrosspointStoreList.Designer.cs">
+      <DependentUpon>CrosspointStoreList.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Routers\Mirrors\RouterMirrorList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -802,6 +814,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\RouterList.resx">
       <DependentUpon>RouterList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\CrosspointStores\CrosspointStoreEditorForm.resx">
+      <DependentUpon>CrosspointStoreEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\CrosspointStores\CrosspointStoreList.resx">
+      <DependentUpon>CrosspointStoreList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\RouterEditorFormBase.resx">
       <DependentUpon>RouterEditorFormBase.cs</DependentUpon>

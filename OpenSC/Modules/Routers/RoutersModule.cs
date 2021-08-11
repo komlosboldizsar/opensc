@@ -1,6 +1,7 @@
 ﻿using OpenSC.GUI;
 using OpenSC.GUI.Menus;
 using OpenSC.GUI.Routers;
+using OpenSC.GUI.Routers.CrosspointStores;
 using OpenSC.GUI.Routers.Mirrors;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
@@ -81,6 +82,7 @@ namespace OpenSC.Modules.Routers
             WindowTypeRegister.RegisterWindowType(typeof(RouterControlTableForm));
             WindowTypeRegister.RegisterWindowType(typeof(RouterMirrorList));
             WindowTypeRegister.RegisterWindowType(typeof(LabelsetList));
+            WindowTypeRegister.RegisterWindowType(typeof(CrosspointStoreList));
         }
 
         public void RegisterMenus()
@@ -97,12 +99,17 @@ namespace OpenSC.Modules.Routers
             var labelsetsListMenu = routersMenu["Labelsets list"];
             labelsetsListMenu.ClickHandler = (menu, tag) => new LabelsetList().ShowAsChild();
 
+            routersMenu.AddSeparator("sep2");
+
+            var crosspointStoresListMenu = routersMenu["Crosspoint store list"];
+            crosspointStoresListMenu.ClickHandler = (menu, tag) => new CrosspointStoreList().ShowAsChild();
+
             routersMenu.AddSeparator("sep1");
 
             var allCrosspointsMenu = routersMenu["All crosspoints"];
             allCrosspointsMenu.ClickHandler = (menu, tag) => new RouterControlTableForm(RouterDatabase.Instance).ShowAsChild();
 
-            routersMenu.AddSeparator("sep2");
+            routersMenu.AddSeparator("sep3");
 
             MenuItem.MenuClickHandler routerCrosspointsSubMenuClickHandler = (menu, tag) => new RouterControlTableForm((Router)tag).ShowAsChild();
             foreach (Router router in RouterDatabase.Instance.ItemsAsList)
