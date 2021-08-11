@@ -60,7 +60,7 @@ namespace OpenSC.Model.Routers.CrosspointStores
         {
             if (id <= 0)
                 throw new ArgumentException();
-            if (!RouterDatabase.Instance.CanIdBeUsedForItem(id, this))
+            if (!CrosspointStoreDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
         #endregion
