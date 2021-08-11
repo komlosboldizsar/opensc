@@ -89,6 +89,10 @@ namespace OpenSC.Model.Signals
             if (!string.Equals(currentRegisteredSourceSignalName, oldRegisteredSourceSignalName))
                 RegisteredSourceSignalNameChanged?.Invoke(this, currentRegisteredSourceSignalName, RecursionChainHelpers.CreateRecursionChain(this));
 
+            ((BidirectionalPassthroughSignalTally)RedTally).PreviousElement = source?.RedTally;
+            ((BidirectionalPassthroughSignalTally)YellowTally).PreviousElement = source?.YellowTally;
+            ((BidirectionalPassthroughSignalTally)GreenTally).PreviousElement = source?.GreenTally;
+
         }
 
         private void sourcesRegisteredSourceSignalChanged(ISignalSource signal, ISignalSourceRegistered registeredSignal, List<object> recursionChain = null)
