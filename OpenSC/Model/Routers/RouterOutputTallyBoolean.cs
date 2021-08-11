@@ -26,6 +26,7 @@ namespace OpenSC.Model.Routers
             routerOutput.NameChanged += routerOutputNameChangedHandler;
             tally.StateChanged += signalTallyChangedHandler;
             routerOutput.Removed += routerOutputRemovedHandler;
+            register();
         }
 
         private void routerNameChangedHandler(Router router, string oldName, string newName)
@@ -53,7 +54,7 @@ namespace OpenSC.Model.Routers
             => unregister();
 
         protected override string getName()
-            => string.Format("router.{0}.output.{1}.{2}tally", routerOutput.Router.ID, routerOutput.Name, getColorString(color));
+            => string.Format("router.{0}.output.{1}.{2}tally", routerOutput.Router.ID, routerOutput.Index, getColorString(color));
 
         protected override string getDescription()
             => string.Format("Output [(#{0}) {1}] of router [(#{2}) {3}] has {4} tally.", routerOutput.Index, routerOutput.Name, routerOutput.Router.ID, routerOutput.Router.Name, getColorString(color));
