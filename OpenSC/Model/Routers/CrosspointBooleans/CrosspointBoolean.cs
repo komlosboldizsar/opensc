@@ -131,7 +131,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
         {
             Router wir = watchedInput?.Router;
             Router wor = watchedOutput?.Router;
-            WatchedRouter = (wir == wor) ? wir : null;
+            WatchedRouter = (wir == wor) ? wor : null;
         }
         #endregion
 
