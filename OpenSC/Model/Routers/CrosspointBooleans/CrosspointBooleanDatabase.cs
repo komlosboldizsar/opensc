@@ -12,6 +12,6 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
     public class CrosspointBooleanDatabase : DatabaseBase<CrosspointBoolean>
     {
         public static CrosspointBooleanDatabase Instance { get; } = new CrosspointBooleanDatabase();
-        public const string DBNAME = "crosspoint_stores";
+        public const string DBNAME = "crosspoint_booleans";
     }
 }
