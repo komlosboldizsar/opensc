@@ -37,6 +37,7 @@ namespace OpenSC.Model.Variables
             {
                 if (value == color)
                     return;
+                color = value;
                 ColorChanged?.Invoke(this, color);
                 PropertyChanged?.Invoke(nameof(Name));
             }
