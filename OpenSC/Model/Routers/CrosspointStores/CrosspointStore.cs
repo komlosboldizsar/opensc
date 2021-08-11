@@ -33,6 +33,12 @@ namespace OpenSC.Model.Routers.CrosspointStores
         #endregion
 
         #region Restoration
+        public override void TotallyRestored()
+        {
+            base.TotallyRestored();
+            restoreStoredInput();
+            restoreStoredOutput();
+        }
         #endregion
 
         #region Property: ID
@@ -146,6 +152,7 @@ namespace OpenSC.Model.Routers.CrosspointStores
 
         private string __storedOutputId; // "Temp foreign key"
 
+        [PersistAs("stored_output")]
         private string _storedOutputId
         {
             get => (storedOutput != null) ? string.Format("router.{0}.output.{1}", storedOutput.Router.ID, storedInput.Index) : null;
