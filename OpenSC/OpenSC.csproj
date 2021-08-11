@@ -562,6 +562,8 @@
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohub.cs" />
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohubOutput.cs" />
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohubOutputXmlSerializer.cs" />
+    <Compile Include="Model\Routers\CrosspointBooleans\CrosspointBoolean.cs" />
+    <Compile Include="Model\Routers\CrosspointBooleans\CrosspointBooleanDatabase.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputLabel.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputName.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputSource.cs" />
@@ -1094,8 +1096,6 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GUI\Routers\CrosspointStores\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
