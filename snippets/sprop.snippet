@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Set Property</Title>
+            <Shortcut>sprop</Shortcut>
+            <Description>Set Property by calling setProperty()</Description>
+            <Author>Komlos Boldizsar</Author>
+            <SnippetTypes>
+                <SnippetType>Expansion</SnippetType>
+            </SnippetTypes>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>NProperty</ID>
+                    <ToolTip>Property Name</ToolTip>
+                    <Default>PropertyName</Default>
+                </Literal>
+                <Literal>
+                    <ID>NMember</ID>
+                    <ToolTip>Member Name</ToolTip>
+                    <Default>memberName</Default>
+                </Literal>
+            </Declarations>
+            <Code Language="csharp">
+                <![CDATA[setProperty(this, ref $NMember$, value, $NProperty$Changed);$end$]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>
