@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model;
 using OpenSC.Model.Timers;
 using System;
 using System.Collections.Generic;
@@ -92,7 +93,7 @@ namespace OpenSC.GUI.Timers
             blinking = false;
         }
 
-        private void timerIdChangedHandler(Model.Timers.Timer timer, int oldValue, int newValue)
+        private void timerIdChangedHandler(IModel timer, int oldValue, int newValue)
         {
             if (timer != this.timer)
                 return;

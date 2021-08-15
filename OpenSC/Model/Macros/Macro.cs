@@ -40,24 +40,15 @@ namespace OpenSC.Model.Macros
             }
         }
 
-        public event PropertyChangedTwoValuesDelegate<Macro, int> IdChanged;
-
-        public int id = 0;
-
-        public override int ID
+        #region ID validation
+        protected override void validateIdForDatabase(int id)
         {
-            get => id;
-            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
-        }
-
-        public void ValidateId(int id)
-        {
-            if (id <= 0)
-                throw new ArgumentException();
             if (!MacroDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
+        #endregion
 
+        #region Property: Name
         public event PropertyChangedTwoValuesDelegate<Macro, string> NameChanged;
 
         [PersistAs("name")]
@@ -74,6 +65,7 @@ namespace OpenSC.Model.Macros
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
         }
+        #endregion
 
         #region Commands
         private ObservableList<MacroCommandWithArguments> commands = new ObservableList<MacroCommandWithArguments>();
@@ -149,9 +141,7 @@ namespace OpenSC.Model.Macros
 
         public void Run()
         {
-            string logMessage = string.Format("Macro #{0} ({1}) is executed externally or from another macro.",
-                id,
-                name);
+            string logMessage = string.Format("Macro #{0} ({1}) is executed externally or from another macro.", ID, name);
             LogDispatcher.I(LOG_TAG, logMessage);
             _run();
         }
@@ -160,10 +150,7 @@ namespace OpenSC.Model.Macros
         {
             if (CurrentStackDepth >= MaxStackDepthSetting.Value)
             {
-                string logMessage = string.Format("Can't execute #{0} ({1}) macro, because stack is full ({2}).",
-                    id,
-                    name,
-                    CurrentStackDepth);
+                string logMessage = string.Format("Can't execute #{0} ({1}) macro, because stack is full ({2}).", ID, name, CurrentStackDepth);
                 LogDispatcher.W(LOG_TAG, logMessage);
                 return;
             }
@@ -176,10 +163,7 @@ namespace OpenSC.Model.Macros
 
         public void Triggered(MacroTriggerWithArguments source)
         {
-            string logMessage = string.Format("Macro #{0} ({1}) triggered. Event: {2}.",
-                id,
-                name,
-                source.HumanReadable);
+            string logMessage = string.Format("Macro #{0} ({1}) triggered. Event: {2}.", ID, name, source.HumanReadable);
             LogDispatcher.I(LOG_TAG, logMessage);
             _run();
         }

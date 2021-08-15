@@ -20,7 +20,6 @@ namespace OpenSC.Model.Signals
         {
             base.Removed();
             Name = null;
-            IdChanged = null;
             NameChanged = null;
             CategoryChanged = null;
             RegisteredSourceSignalNameChanged = null;
@@ -28,29 +27,17 @@ namespace OpenSC.Model.Signals
         }
         #endregion
 
-        #region Property: ID
-        public event PropertyChangedTwoValuesDelegate<ExternalSignal, int> IdChanged;
-
-        public int id = 0;
-
-        public override int ID
+        #region ID validation and change
+        protected override void validateIdForDatabase(int id)
         {
-            get => id;
-            set
-            {
-                if (!setProperty(this, ref id, value, IdChanged, validator: ValidateId))
-                    return;
-                SignalLabelChanged?.Invoke(this, SignalLabel);
-                RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
-            }
-        }
-
-        public void ValidateId(int id)
-        {
-            if (id <= 0)
-                throw new ArgumentException();
             if (!ExternalSignalDatabases.Signals.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
+        }
+
+        protected override void afterIdChange()
+        {
+            SignalLabelChanged?.Invoke(this, SignalLabel);
+            RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
         }
         #endregion
 

@@ -32,7 +32,7 @@ namespace OpenSC.Model.Routers
         private void routerNameChangedHandler(Router router, string oldName, string newName)
             => updateDescription();
 
-        private void routerIdChangedHandler(Router router, int oldValue, int newValue)
+        private void routerIdChangedHandler(IModel router, int oldValue, int newValue)
         {
             updateName();
             updateDescription();

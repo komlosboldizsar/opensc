@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.General;
+using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,40 @@ namespace OpenSC.Model
     public abstract class ModelBase : SystemObjectBase, IModel
     {
 
-        public abstract int ID { get; set; }
+        #region Property: ID
+        public event PropertyChangedTwoValuesDelegate<IModel, int> IdChanged;
+
+        [PersistAs("id")]
+        private int id;
+
+        public int ID
+        {
+            get => id;
+            set => setProperty(this, ref id, value, IdChanged, null, (ov, nv) => afterIdChange(), ValidateId);
+        }
+
+        public void ValidateId(int id)
+        {
+            if (id <= 0)
+                throw new ArgumentException();
+            validateIdForDatabase(id);
+            validateIdExtended(id);
+        }
+
+        protected abstract void validateIdForDatabase(int id);
+
+        protected virtual void validateIdExtended(int id)
+        { }
+
+        protected virtual void afterIdChange()
+        { }
+        #endregion
 
         public event ModelRemovedHandler ModelRemoved;
 
         public virtual void Removed()
         {
+            IdChanged = null;
             ModelRemoved?.Invoke(this);
         }
 

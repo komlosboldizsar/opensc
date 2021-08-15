@@ -27,7 +27,7 @@ namespace OpenSC.Model.Signals
                 register();
         }
 
-        private void signalIdChangedHandler(ExternalSignal signal, int oldValue, int newValue)
+        private void signalIdChangedHandler(IModel signal, int oldValue, int newValue)
         {
             updateName();
             updateDescription();

@@ -59,7 +59,7 @@ namespace OpenSC.Model.Mixers
         {
             Description = getDescription(output, color);
         }
-        private void routerIdChangedHandler(Mixer mixer, int oldValue, int newValue)
+        private void routerIdChangedHandler(IModel mixer, int oldValue, int newValue)
         {
             Name = getName(input, color);
             Description = getDescription(input, color);

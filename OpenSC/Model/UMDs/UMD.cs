@@ -27,7 +27,6 @@ namespace OpenSC.Model.UMDs
         public override void Removed()
         {
             base.Removed();
-            IdChanged = null;
             NameChanged = null;
             StaticTextChanged = null;
             UseStaticTextChanged = null;
@@ -39,20 +38,8 @@ namespace OpenSC.Model.UMDs
         { }
 
         #region Property: ID
-        public event PropertyChangedTwoValuesDelegate<UMD, int> IdChanged;
-
-        private int id = 0;
-
-        public override int ID
+        protected override void validateIdForDatabase(int id)
         {
-            get => id;
-            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
-        }
-
-        public void ValidateId(int id)
-        {
-            if (id <= 0)
-                throw new ArgumentException();
             if (!UmdDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }

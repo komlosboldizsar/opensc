@@ -21,7 +21,6 @@ namespace OpenSC.Model.Signals.BooleanTallies
         {
             base.Removed();
             Name = null;
-            IdChanged = null;
             NameChanged = null;
         }
 
@@ -33,20 +32,10 @@ namespace OpenSC.Model.Signals.BooleanTallies
         }
         #endregion
 
-        #region Property: ID
-        public event PropertyChangedTwoValuesDelegate<BooleanTally, int> IdChanged;
-
-        public int id = 0;
-
-        public override int ID
+        #region ID validation
+        protected override void validateIdForDatabase(int id)
         {
-            get => id;
-            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
-        }
-
-        public void ValidateId(int id)
-        {
-            if (id <= 0)
+            if (!BooleanTallyDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
         #endregion

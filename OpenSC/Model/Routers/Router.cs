@@ -25,22 +25,16 @@ namespace OpenSC.Model.Routers
 
         public override void Removed()
         {
-
             base.Removed();
-
-            IdChanged = null;
             NameChanged = null;
             InputsChanged = null;
             OutputsChanged = null;
             StateChanged = null;
             StateStringChanged = null;
-
             Inputs.ForEach(i => i.RemovedFromRouter(this));
             inputs.Clear();
-
             Outputs.ForEach(o => o.RemovedFromRouter(this));
             outputs.Clear();
-
         }
 
         protected override void afterUpdate()
@@ -83,21 +77,9 @@ namespace OpenSC.Model.Routers
         }
         #endregion
 
-        #region Property: ID
-        public event PropertyChangedTwoValuesDelegate<Router, int> IdChanged;
-
-        public int id = 0;
-
-        public override int ID
+        #region ID validation
+        protected override void validateIdForDatabase(int id)
         {
-            get => id;
-            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
-        }
-
-        public void ValidateId(int id)
-        {
-            if (id <= 0)
-                throw new ArgumentException();
             if (!RouterDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }

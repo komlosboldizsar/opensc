@@ -15,6 +15,7 @@ namespace OpenSC.Model
     public interface IModel
     {
         int ID { get; set; }
+        event PropertyChangedTwoValuesDelegate<IModel, int> IdChanged;
         void RestoredOwnFields();
         void RestoredBasicRelations();
         void RestoreCustomRelations();

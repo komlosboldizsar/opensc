@@ -13,20 +13,8 @@ namespace OpenSC.Model.Signals
     {
 
         #region Property: ID
-        public event PropertyChangedTwoValuesDelegate<ExternalSignalCategory, int> IdChanged;
-
-        public int id = 0;
-
-        public override int ID
+        protected override void validateIdForDatabase(int id)
         {
-            get => id;
-            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
-        }
-
-        public void ValidateId(int id)
-        {
-            if (id <= 0)
-                throw new ArgumentException();
             if (!ExternalSignalDatabases.Categories.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }

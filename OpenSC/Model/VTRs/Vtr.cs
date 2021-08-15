@@ -15,7 +15,6 @@ namespace OpenSC.Model.VTRs
         public override void Removed()
         {
             base.Removed();
-            IdChanged = null;
             NameChanged = null;
             TitleChanged = null;
             StateChanged = null;
@@ -25,21 +24,9 @@ namespace OpenSC.Model.VTRs
         }
         #endregion
 
-        #region Property: ID
-        public event PropertyChangedTwoValuesDelegate<Vtr, int> IdChanged;
-
-        public int id = 0;
-
-        public override int ID
+        #region ID validation
+        protected override void validateIdForDatabase(int id)
         {
-            get => id;
-            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
-        }
-
-        public void ValidateId(int id)
-        {
-            if (id <= 0)
-                throw new ArgumentException();
             if (!VtrDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }

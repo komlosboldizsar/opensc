@@ -29,14 +29,10 @@ namespace OpenSC.Model.SerialPorts
 
         public override void Removed()
         {
-
             base.Removed();
-
             DeInit();
             packetSchedulerThread.Abort();
             packetSchedulerThread = null;
-
-            IdChanged = null;
             NameChanged = null;
             ComPortNameChanged = null;
             InitializedChanged = null;
@@ -46,24 +42,11 @@ namespace OpenSC.Model.SerialPorts
             StopBitsChanged = null;
             ReceivedDataBytes = null;
             ReceivedDataAsciiString = null;
-
         }
 
-        #region Property: ID
-        public event PropertyChangedTwoValuesDelegate<SerialPort, int> IdChanged;
-
-        private int id = 0;
-
-        public override int ID
+        #region ID validation
+        protected override void validateIdForDatabase(int id)
         {
-            get => id;
-            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
-        }
-
-        public void ValidateId(int id)
-        {
-            if (id <= 0)
-                throw new ArgumentException();
             if (!SerialPortDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }

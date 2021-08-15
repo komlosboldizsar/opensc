@@ -23,7 +23,6 @@ namespace OpenSC.Model.Routers.Mirrors
         public override void Removed()
         {
             base.Removed();
-            IdChanged = null;
             NameChanged = null;
             ClearInputAssociations();
             ClearOutputAssociations();
@@ -60,21 +59,9 @@ namespace OpenSC.Model.Routers.Mirrors
         private RouterMirrorSide? synchronizeFromOnTotallyRestored = null;
         #endregion
 
-        #region Property: ID
-        public event PropertyChangedTwoValuesDelegate<RouterMirror, int> IdChanged;
-
-        public int id = 0;
-
-        public override int ID
+        #region ID validation
+        protected override void validateIdForDatabase(int id)
         {
-            get => id;
-            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
-        }
-
-        public void ValidateId(int id)
-        {
-            if (id <= 0)
-                throw new ArgumentException();
             if (!RouterMirrorDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
