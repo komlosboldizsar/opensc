@@ -50,21 +50,17 @@ namespace OpenSC.Model.SerialPorts
         }
 
         #region Property: ID
-        public delegate void IdChangedDelegate(SerialPort port, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
+        public event PropertyChangedTwoValuesDelegate<SerialPort, int> IdChanged;
 
         private int id = 0;
 
         public override int ID
         {
-            get { return id; }
+            get => id;
             set
             {
                 ValidateId(value);
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
+                setProperty(this, ref id, value, IdChanged);
             }
         }
 
@@ -78,23 +74,18 @@ namespace OpenSC.Model.SerialPorts
         #endregion
 
         #region Property: Name
-        public delegate void NameChangedDelegate(SerialPort port, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
+        public event PropertyChangedTwoValuesDelegate<SerialPort, string> NameChanged;
 
         [PersistAs("name")]
         private string name;
 
         public string Name
         {
-            get { return name; }
+            get => name;
             set
             {
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
+                ValidateName(value);
+                setProperty(this, ref name, value, NameChanged);
             }
         }
 
@@ -106,48 +97,36 @@ namespace OpenSC.Model.SerialPorts
         #endregion
 
         #region Property: ComPortName
-        public delegate void ComPortNameChangedDelegate(SerialPort port, string oldComPortName, string newComPortName);
-        public event ComPortNameChangedDelegate ComPortNameChanged;
+        public event PropertyChangedTwoValuesDelegate<SerialPort, string> ComPortNameChanged;
 
         [PersistAs("port_name")]
         protected string comPortName;
 
         public string ComPortName
         {
-            get { return comPortName; }
+            get => comPortName;
             set
             {
-                if (value == comPortName)
+                BeforeChangePropertyDelegate<string> beforeChangeDelegate = (ov, nv) => {
+                    if (serialPort?.IsOpen == true)
+                        DeInit();
+                };
+                if (!setProperty(this, ref comPortName, value, ComPortNameChanged, beforeChangeDelegate))
                     return;
-                if ((serialPort != null) && (serialPort.IsOpen))
-                    DeInit();
-                string oldComPortName = comPortName;
-                comPortName = value;
-                ComPortNameChanged?.Invoke(this, oldComPortName, value);
-                RaisePropertyChanged(nameof(ComPortName));
                 Init();
             }
         }
         #endregion
 
         #region Property: Initialized
-        public delegate void InitializedChangedDelegate(SerialPort port, bool oldState, bool newState);
-        public event InitializedChangedDelegate InitializedChanged;
+        public event PropertyChangedTwoValuesDelegate<SerialPort, bool> InitializedChanged;
         
         protected bool initialized;
 
         public bool Initialized
         {
-            get { return initialized; }
-            set
-            {
-                if (value == initialized)
-                    return;
-                bool oldState = initialized;
-                initialized = value;
-                InitializedChanged?.Invoke(this, oldState, value);
-                RaisePropertyChanged(nameof(Initialized));
-            }
+            get => initialized;
+            set => setProperty(this, ref initialized, value, InitializedChanged);
         }
         #endregion
 
@@ -158,9 +137,17 @@ namespace OpenSC.Model.SerialPorts
         private const int DEFAULT_DATABITS = 8;
         private const StopBits DEFAULT_STOPBITS = StopBits.One;
 
+        private void afterPortPropertyChanged()
+        {
+            if (Initialized && !Updating)
+            {
+                DeInit();
+                Init();
+            }
+        }
+
         #region Property: BaudRate
-        public delegate void BaudRateChangedDelegate(SerialPort port, int oldBaudRate, int newBaudRate);
-        public event BaudRateChangedDelegate BaudRateChanged;
+        public event PropertyChangedTwoValuesDelegate<SerialPort, int> BaudRateChanged;
 
         [PersistAs("baudrate")]
         private int baudRate = DEFAULT_BAUDRATE;
@@ -170,26 +157,22 @@ namespace OpenSC.Model.SerialPorts
             get => baudRate;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentOutOfRangeException();
-                if (value == baudRate)
+                ValidateBaudRate(value);
+                if (!setProperty(this, ref baudRate, value, BaudRateChanged))
                     return;
-                int oldBaudRate = baudRate;
-                baudRate = value;
-                BaudRateChanged?.Invoke(this, oldBaudRate, value);
-                RaisePropertyChanged(nameof(BaudRate));
-                if (Initialized && !Updating)
-                {
-                    DeInit();
-                    Init();
-                }
+                afterPortPropertyChanged();
             }
+        }
+        
+        public void ValidateBaudRate(int baudRate)
+        {
+            if (baudRate <= 0)
+                throw new ArgumentOutOfRangeException();
         }
         #endregion
 
         #region Property: Parity
-        public delegate void ParityChangedDelegate(SerialPort port, Parity oldParity, Parity newParity);
-        public event ParityChangedDelegate ParityChanged;
+        public event PropertyChangedTwoValuesDelegate<SerialPort, Parity> ParityChanged;
 
         [PersistAs("parity")]
         private Parity parity = DEFAULT_PARITY;
@@ -199,24 +182,15 @@ namespace OpenSC.Model.SerialPorts
             get => parity;
             set
             {
-                if (value == parity)
+                if (!setProperty(this, ref parity, value, ParityChanged))
                     return;
-                Parity oldParity = parity;
-                parity = value;
-                ParityChanged?.Invoke(this, oldParity, value);
-                RaisePropertyChanged(nameof(Parity));
-                if (Initialized && !Updating)
-                {
-                    DeInit();
-                    Init();
-                }
+                afterPortPropertyChanged();
             }
         }
         #endregion
 
         #region Property: DataBits
-        public delegate void DataBitsChangedDelegate(SerialPort port, int oldDataBits, int newDataBits);
-        public event DataBitsChangedDelegate DataBitsChanged;
+        public event PropertyChangedTwoValuesDelegate<SerialPort, int> DataBitsChanged;
 
         [PersistAs("databits")]
         private int dataBits = DEFAULT_DATABITS;
@@ -226,26 +200,22 @@ namespace OpenSC.Model.SerialPorts
             get => dataBits;
             set
             {
-                if ((value < 5) || (value > 8))
-                    throw new ArgumentOutOfRangeException();
-                if (value == dataBits)
+                ValidateDataBits(value);
+                if (!setProperty(this, ref dataBits, value, DataBitsChanged))
                     return;
-                int oldDataBits = dataBits;
-                dataBits = value;
-                DataBitsChanged?.Invoke(this, oldDataBits, value);
-                RaisePropertyChanged(nameof(DataBits));
-                if (Initialized && !Updating)
-                {
-                    DeInit();
-                    Init();
-                }
+                afterPortPropertyChanged();
             }
+        }
+
+        public void ValidateDataBits(int dataBits)
+        {
+            if ((dataBits < 5) || (dataBits > 8))
+                throw new ArgumentOutOfRangeException();
         }
         #endregion
 
         #region Property: StopBits
-        public delegate void StopBitsChangedDelegate(SerialPort port, StopBits oldStopBits, StopBits newStopBits);
-        public event StopBitsChangedDelegate StopBitsChanged;
+        public event PropertyChangedTwoValuesDelegate<SerialPort, StopBits> StopBitsChanged;
 
         [PersistAs("stopbits")]
         private StopBits stopBits = DEFAULT_STOPBITS;
@@ -255,17 +225,9 @@ namespace OpenSC.Model.SerialPorts
             get => stopBits;
             set
             {
-                if (value == stopBits)
+                if (!setProperty(this, ref stopBits, value, StopBitsChanged))
                     return;
-                StopBits oldStopBits = stopBits;
-                stopBits = value;
-                StopBitsChanged?.Invoke(this, oldStopBits, value);
-                RaisePropertyChanged(nameof(StopBits));
-                if (Initialized && !Updating)
-                {
-                    DeInit();
-                    Init();
-                }
+                afterPortPropertyChanged();
             }
         }
         #endregion

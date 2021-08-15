@@ -4,63 +4,8 @@ using System.Drawing;
 namespace OpenSC.Model.Variables
 {
 
-    public class BooleanBase : IBoolean, INotifyPropertyChanged
+    public class BooleanBase : SystemObjectBase, IBoolean, INotifyPropertyChanged
     {
-
-        private string name;
-
-        public string Name
-        {
-            get => name;
-            set
-            {
-                if (!BooleanRegister.Instance.CanNameUsedForBoolean(this, value))
-                    return;
-                if (value == name)
-                    return;
-                name = value;
-                NameChanged?.Invoke(this, name);
-                PropertyChanged?.Invoke(nameof(Name));
-                if (Registered)
-                    BooleanRegister.Instance.BooleanNameChanged(this);
-            }
-        }
-
-        public event BooleanNameChangedDelegate NameChanged;
-
-        private Color color;
-
-        public Color Color
-        {
-            get => color;
-            set
-            {
-                if (value == color)
-                    return;
-                color = value;
-                ColorChanged?.Invoke(this, color);
-                PropertyChanged?.Invoke(nameof(Name));
-            }
-        }
-
-        public event BooleanColorChangedDelegate ColorChanged;
-
-        private string description;
-
-        public string Description
-        {
-            get => description;
-            set
-            {
-                if (value == description)
-                    return;
-                description = value;
-                DescriptionChanged?.Invoke(this, description);
-                PropertyChanged?.Invoke(nameof(Description));
-            }
-        }
-
-        public event BooleanDescriptionChangedDelegate DescriptionChanged;
 
         public BooleanBase()
         { }
@@ -72,46 +17,79 @@ namespace OpenSC.Model.Variables
             this.description = description;
         }
 
+        #region Property: Name
+        public event PropertyChangedTwoValuesDelegate<IBoolean, string> NameChanged;
+
+        private string name;
+
+        public string Name
+        {
+            get => name;
+            set
+            {
+                if (!BooleanRegister.Instance.CanNameUsedForBoolean(this, value))
+                    return;
+                if (!setProperty(this, ref name, value, NameChanged))
+                    return;
+                if (Registered)
+                    BooleanRegister.Instance.BooleanNameChanged(this);
+            }
+        }
+        #endregion
+
+        #region Property: Color
+        public event PropertyChangedTwoValuesDelegate<IBoolean, Color> ColorChanged;
+
+        private Color color;
+
+        public Color Color
+        {
+            get => color;
+            set => setProperty(this, ref color, value, ColorChanged);
+        }
+        #endregion
+
+        #region Property: Description
+        public event PropertyChangedTwoValuesDelegate<IBoolean, string> DescriptionChanged;
+
+        private string description;
+
+        public string Description
+        {
+            get => description;
+            set => setProperty(this, ref description, value, DescriptionChanged);
+        }
+        #endregion
+
+        #region Property: CurrentState
+        public event PropertyChangedTwoValuesDelegate<IBoolean, bool> StateChanged;
+
         private bool currentState;
 
         public bool CurrentState
         {
-            get { return currentState; }
-            protected set
-            {
-                if (value == currentState)
-                    return;
-                currentState = value;
-                StateChanged?.Invoke(this, currentState);
-                PropertyChanged?.Invoke(nameof(CurrentState));
-            }
+            get => currentState;
+            protected set => setProperty(this, ref currentState, value, StateChanged);
         }
-
-        public event BooleanStateChangedDelegate StateChanged;
+        #endregion
 
         protected void register()
         {
-            if (!Registered)
-            {
-                BooleanRegister.Instance.RegisterBoolean(this);
-                Registered = true;
-            }
+            if (Registered)
+                return;
+            BooleanRegister.Instance.RegisterBoolean(this);
+            Registered = true;
         }
 
         protected void unregister()
         {
-            if (Registered)
-            {
-                BooleanRegister.Instance.UnregisterBoolean(this);
-                Registered = false;
-            }
+            if (!Registered)
+                return;
+            BooleanRegister.Instance.UnregisterBoolean(this);
+            Registered = false;
         }
 
         protected bool Registered { get; private set; }
-
-        #region Implementation of INotifyPropertyChanged
-        public event PropertyChangedDelegate PropertyChanged;
-        #endregion
 
     }
 

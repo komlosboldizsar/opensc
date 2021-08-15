@@ -84,23 +84,17 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Property: ID
-        public delegate void IdChangedDelegate(Router router, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
+        public event PropertyChangedTwoValuesDelegate<Router, int> IdChanged;
 
         public int id = 0;
 
         public override int ID
         {
-            get { return id; }
+            get => id;
             set
             {
                 ValidateId(value);
-                if (value == id)
-                    return;
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
+                setProperty(this, ref id, value, IdChanged);
             }
         }
 
@@ -114,24 +108,18 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Property: Name
-        public delegate void NameChangedDelegate(Router router, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
+        public event PropertyChangedTwoValuesDelegate<Router, string> NameChanged;
 
         [PersistAs("name")]
         private string name;
 
         public string Name
         {
-            get { return name; }
+            get => name;
             set
             {
                 ValidateName(value);
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
+                setProperty(this, ref name, value, NameChanged);
             }
         }
 
@@ -181,8 +169,7 @@ namespace OpenSC.Model.Routers
             RaisePropertyChanged(nameof(Inputs));
         }
 
-        public delegate void InputsChangedDelegate(Router router);
-        public event InputsChangedDelegate InputsChanged;
+        public PropertyChangedNoValueDelegate<Router> InputsChanged;
 
         private void restoreInputSources() => inputs.ForEach(i => i.RestoreSource());
 
@@ -235,8 +222,7 @@ namespace OpenSC.Model.Routers
             RaisePropertyChanged(nameof(Outputs));
         }
 
-        public delegate void OutputsChangedDelegate(Router router);
-        public event OutputsChangedDelegate OutputsChanged;
+        public event PropertyChangedNoValueDelegate<Router> OutputsChanged;
 
         public abstract RouterOutput CreateOutput(string name, int index);
 
@@ -335,44 +321,26 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Property: State
-        public delegate void StateChangedDelegate(Router router, RouterState oldState, RouterState newState);
-        public event StateChangedDelegate StateChanged;
+        public event PropertyChangedTwoValuesDelegate<Router, RouterState> StateChanged;
 
         private RouterState state = RouterState.Unknown;
 
         public RouterState State
         {
-            get { return state; }
-            protected set
-            {
-                if (value == state)
-                    return;
-                RouterState oldState = state;
-                state = value;
-                StateChanged?.Invoke(this, oldState, value);
-                RaisePropertyChanged(nameof(State));
-            }
+            get => state;
+            protected set => setProperty(this, ref state, value, StateChanged);
         }
         #endregion
 
         #region Property: StateString
-        public delegate void StateStringChangedDelegate(Router router, string oldStateString, string newStateString);
-        public event StateStringChangedDelegate StateStringChanged;
+        public event PropertyChangedTwoValuesDelegate<Router, string> StateStringChanged;
 
         private string stateString = "?";
 
         public string StateString
         {
-            get { return stateString; }
-            protected set
-            {
-                if (value == stateString)
-                    return;
-                string oldStateString = stateString;
-                stateString = value;
-                StateStringChanged?.Invoke(this, oldStateString, value);
-                RaisePropertyChanged(nameof(StateString));
-            }
+            get => stateString;
+            protected set => setProperty(this, ref stateString, value, StateStringChanged);
         }
         #endregion
 

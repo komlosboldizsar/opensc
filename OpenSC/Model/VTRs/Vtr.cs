@@ -26,8 +26,7 @@ namespace OpenSC.Model.VTRs
         #endregion
 
         #region Property: ID
-        public delegate void IdChangedDelegate(Vtr vtr, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
+        public event PropertyChangedTwoValuesDelegate<Vtr, int> IdChanged;
 
         public int id = 0;
 
@@ -37,10 +36,7 @@ namespace OpenSC.Model.VTRs
             set
             {
                 ValidateId(value);
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
+                setProperty(this, ref id, value, IdChanged, propertyName: nameof(ID));
             }
         }
 
@@ -54,8 +50,7 @@ namespace OpenSC.Model.VTRs
         #endregion
 
         #region Property: Name
-        public delegate void NameChangedDelegate(Vtr vtr, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
+        public event PropertyChangedTwoValuesDelegate<Vtr, string> NameChanged;
 
         [PersistAs("name")]
         private string name;
@@ -63,63 +58,36 @@ namespace OpenSC.Model.VTRs
         public string Name
         {
             get => name;
-            set
-            {
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
-            }
+            set => setProperty(this, ref name, value, NameChanged, propertyName: nameof(Name));
         }
         #endregion
 
         #region Property: Title
-        public delegate void TitleChangedDelegate(Vtr vtr, string oldTitle, string newTitle);
-        public event TitleChangedDelegate TitleChanged;
+        public event PropertyChangedTwoValuesDelegate<Vtr, string> TitleChanged;
 
         private string title;
 
         public string Title
         {
             get => title;
-            protected set
-            {
-                if (value == title)
-                    return;
-                string oldTitle = title;
-                title = value;
-                TitleChanged?.Invoke(this, oldTitle, value);
-                RaisePropertyChanged(nameof(Title));
-            }
+            protected set => setProperty(this, ref title, value, TitleChanged, propertyName: nameof(Title));
         }
         #endregion
 
         #region Property: State
-        public delegate void StateChangedDelegate(Vtr vtr, VtrState oldState, VtrState newState);
-        public event StateChangedDelegate StateChanged;
+        public event PropertyChangedTwoValuesDelegate<Vtr, VtrState> StateChanged;
 
         private VtrState state = VtrState.Stopped;
 
         public VtrState State
         {
             get => state;
-            protected set
-            {
-                if (value == state)
-                    return;
-                VtrState oldState = state;
-                state = value;
-                StateChanged?.Invoke(this, oldState, value);
-                RaisePropertyChanged(nameof(State));
-            }
+            protected set => setProperty(this, ref state, value, StateChanged, propertyName: nameof(State));
         }
         #endregion
 
         #region Property: SecondsFull, TimeFull
-        public delegate void SecondsFullChangedDelegate(Vtr vtr, int oldValue, int newValue);
-        public event SecondsFullChangedDelegate SecondsFullChanged;
+        public event PropertyChangedTwoValuesDelegate<Vtr, int> SecondsFullChanged;
 
         private int secondsFull;
 
@@ -128,12 +96,8 @@ namespace OpenSC.Model.VTRs
             get => secondsFull;
             protected set
             {
-                if (value == secondsFull)
+                if (!setProperty(this, ref secondsFull, value, SecondsFullChanged, propertyName: nameof(SecondsFull)))
                     return;
-                int oldValue = secondsFull;
-                secondsFull = value;
-                SecondsFullChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(SecondsFull));
                 RaisePropertyChanged(nameof(TimeFull));
             }
         }
@@ -142,8 +106,7 @@ namespace OpenSC.Model.VTRs
         #endregion
 
         #region Property: SecondsElapsed, TimeElapsed
-        public delegate void SecondsElapsedChangedDelegate(Vtr vtr, int oldValue, int newValue);
-        public event SecondsElapsedChangedDelegate SecondsElapsedChanged;
+        public event PropertyChangedTwoValuesDelegate<Vtr, int> SecondsElapsedChanged;
 
         private int secondsElapsed;
 
@@ -152,12 +115,8 @@ namespace OpenSC.Model.VTRs
             get => secondsElapsed;
             protected set
             {
-                if (value == secondsElapsed)
+                if (!setProperty(this, ref secondsElapsed, value, SecondsElapsedChanged, propertyName: nameof(SecondsElapsed)))
                     return;
-                int oldValue = secondsElapsed;
-                secondsElapsed = value;
-                SecondsElapsedChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(SecondsElapsed));
                 RaisePropertyChanged(nameof(TimeElapsed));
             }
         }
@@ -166,8 +125,7 @@ namespace OpenSC.Model.VTRs
         #endregion
 
         #region Property: SecondsRemaining, TimeRemaining
-        public delegate void SecondsRemainingChangedDelegate(Vtr vtr, int oldValue, int newValue);
-        public event SecondsRemainingChangedDelegate SecondsRemainingChanged;
+        public event PropertyChangedTwoValuesDelegate<Vtr, int> SecondsRemainingChanged;
 
         private int secondsRemaining;
 
@@ -176,12 +134,8 @@ namespace OpenSC.Model.VTRs
             get => secondsRemaining;
             protected set
             {
-                if (value == secondsRemaining)
+                if (!setProperty(this, ref secondsRemaining, value, SecondsRemainingChanged, propertyName: nameof(SecondsRemaining)))
                     return;
-                int oldValue = secondsRemaining;
-                secondsRemaining = value;
-                SecondsRemainingChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(SecondsRemaining));
                 RaisePropertyChanged(nameof(TimeRemaining));
             }
         }

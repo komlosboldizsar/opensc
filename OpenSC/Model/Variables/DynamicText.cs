@@ -27,23 +27,18 @@ namespace OpenSC.Model.Variables
             substituteValues.Clear();
         }
 
-        public delegate void IdChangedDelegate(DynamicText text, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
+        #region Property: ID
+        public event PropertyChangedTwoValuesDelegate<DynamicText, int> IdChanged;
 
         public int id = 0;
 
         public override int ID
         {
-            get { return id; }
+            get => id;
             set
             {
                 ValidateId(value);
-                if (value == id)
-                    return;
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
+                setProperty(this, ref id, value, IdChanged);
             }
         }
 
@@ -54,25 +49,21 @@ namespace OpenSC.Model.Variables
             if (!DynamicTextDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
+        #endregion
 
-        public delegate void LabelChangedDelegate(DynamicText text, string oldLabel, string newLabel);
-        public event LabelChangedDelegate LabelChanged;
+        #region Property: Label
+        public event PropertyChangedTwoValuesDelegate<DynamicText, string> LabelChanged;
 
         [PersistAs("label")]
         private string label;
 
         public string Label
         {
-            get { return label; }
+            get => label;
             set
             {
                 ValidateLabel(value);
-                if (value == label)
-                    return;
-                string oldLabel = label;
-                label = value;
-                LabelChanged?.Invoke(this, oldLabel, value);
-                RaisePropertyChanged(nameof(Label));
+                setProperty(this, ref label, value, LabelChanged);
             }
         }
 
@@ -81,35 +72,33 @@ namespace OpenSC.Model.Variables
             if (string.IsNullOrWhiteSpace(label))
                 throw new ArgumentException();
         }
+        #endregion
 
-        public delegate void CurrentTextChangedDelegate(DynamicText text, string oldText, string newText);
-        public event CurrentTextChangedDelegate CurrentTextChanged;
+        #region Property: CurrentText
+        public event PropertyChangedTwoValuesDelegate<DynamicText, string> CurrentTextChanged;
 
         private string currentText = "";
 
         public string CurrentText
         {
-            get { return currentText; }
-            private set
-            {
-                if (value == currentText)
-                    return;
-                string oldValue = currentText;
-                currentText = value;
-                CurrentTextChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(CurrentText));
-            }
+            get => currentText;
+            private set => setProperty(this, ref currentText, value, CurrentTextChanged);
         }
+        #endregion
+
+        #region Property: Formula
+        public event PropertyChangedTwoValuesDelegate<DynamicText, string> FormulaChanged;
 
         [PersistAs("formula")]
         private string formula;
 
         public string Formula
         {
-            get { return formula; }
+            get => formula;
             set
             {
-                formula = value;
+                if (!setProperty(this, ref formula, value, FormulaChanged))
+                    return;
                 formulaUpdated();
             }
         }
@@ -126,6 +115,7 @@ namespace OpenSC.Model.Variables
                 CurrentText = string.Format("Syntax error in formula at character position {0}.", ex.Position);
             }
         }
+        #endregion
 
         private List<IDynamicTextFunctionSubstitute> substitutes = new List<IDynamicTextFunctionSubstitute>();
 

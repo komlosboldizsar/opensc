@@ -63,8 +63,7 @@ namespace OpenSC.Model.Routers.Leitch
             => sendOutputInputReport(output);
 
         #region Property: Port
-        public delegate void PortChangedDelegate(VirtualLeitchRouter router, SerialPort oldPort, SerialPort newPort);
-        public event PortChangedDelegate PortChanged;
+        public event PropertyChangedTwoValuesDelegate<VirtualLeitchRouter, SerialPort> PortChanged;
 
         [PersistAs("port")]
         private SerialPort port;
@@ -77,19 +76,15 @@ namespace OpenSC.Model.Routers.Leitch
         public SerialPort Port
         {
             get => port;
-            set
-            {
-                if (value == port)
-                    return;
-                SerialPort oldValue = port;
-                if (port != null)
-                    port.ReceivedDataAsciiString -= receivedLineFromPort;
-                port = value;
-                if (port != null)
-                    port.ReceivedDataAsciiString += receivedLineFromPort;
-                PortChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(Port));
-            }
+            set => setProperty(this, ref port, value, PortChanged,
+                (ov, nv) => {
+                    if (ov != null)
+                        ov.ReceivedDataAsciiString -= receivedLineFromPort;
+                },
+                (ov, nv) => {
+                    if (nv != null)
+                        port.ReceivedDataAsciiString += receivedLineFromPort;
+                });
         }
 
         private void portInitializedChanged(SerialPort port, bool oldState, bool newState)
@@ -100,8 +95,7 @@ namespace OpenSC.Model.Routers.Leitch
         #endregion
 
         #region Property: Level
-        public delegate void LevelChangedDelegate(VirtualLeitchRouter router, int oldLevel, int newLevel);
-        public event LevelChangedDelegate LevelChanged;
+        public event PropertyChangedTwoValuesDelegate<VirtualLeitchRouter, int> LevelChanged;
 
         [PersistAs("level")]
         private int level;
@@ -111,15 +105,15 @@ namespace OpenSC.Model.Routers.Leitch
             get => level;
             set
             {
-                if (value == level)
-                    return;
-                int oldValue = level;
-                if ((value < 0) || (value > 9))
-                    throw new ArgumentOutOfRangeException();
-                level = value;
-                LevelChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(Level));
+                ValidateLevel(level);
+                setProperty(this, ref level, value, LevelChanged);
             }
+        }
+
+        public void ValidateLevel(int level)
+        {
+            if ((level < 0) || (level > 15))
+                throw new ArgumentOutOfRangeException();
         }
 
         private readonly char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };

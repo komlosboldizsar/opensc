@@ -5,21 +5,13 @@ using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace OpenSC.Model.Mixers.BlackMagicDesign
 {
-
-    public delegate void BmdMixerIpAddressChangingDelegate(BmdMixer mixer, string oldIpAddress, string newIpAddress);
-    public delegate void BmdMixerIpAddressChangedDelegate(BmdMixer mixer, string oldIpAddress, string newIpAddress);
-
-    public delegate void BmdMixerConnectionStateChangingDelegate(BmdMixer mixer, bool oldState, bool newState);
-    public delegate void BmdMixerConnectionStateChangedDelegate(BmdMixer mixer, bool oldState, bool newState);
-
-    public delegate void BmdMixerAutoReconnectChangingDelegate(BmdMixer mixer, bool oldSetting, bool newSetting);
-    public delegate void BmdMixerAutoReconnectChangedDelegate(BmdMixer mixer, bool oldSetting, bool newSetting);
 
     [TypeLabel("BMD Switcher")]
     [TypeCode("bmd")]
@@ -50,11 +42,8 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             switcher = null;
 
             IpAddressChanged = null;
-            IpAddressChanging = null;
             AutoReconnectChanged = null;
-            AutoReconnectChanging = null;
             ConnectionStateChanged = null;
-            ConnectionStateChanging = null;
 
             //disposeInputMonitors();
             disposeMixEffectBlockMonitor();
@@ -73,17 +62,13 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             catch (CouldNotConnectException ex)
             {
                 string errorMessage = string.Format("Couldn't connect to a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}. Exception message: [{2}]",
-                    ID,
-                    IpAddress,
-                    ex.Message);
+                    ID, IpAddress, ex.Message);
                 LogDispatcher.E(LOG_TAG, errorMessage);
             }
             catch(AlreadyConnectedException ex)
             {
                 string errorMessage = string.Format("Tried to connect to a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}, but was already connected. Exception message: [{2}]",
-                    ID,
-                    IpAddress,
-                    ex.Message);
+                    ID, IpAddress, ex.Message);
                 LogDispatcher.W(LOG_TAG, errorMessage);
             }
         }
@@ -97,9 +82,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             catch (NotConnectedException ex)
             {
                 string errorMessage = string.Format("Tried to disconnect from a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}, but wasn't connected. Exception message: [{2}]",
-                    ID,
-                    IpAddress,
-                    ex.Message);
+                    ID, IpAddress, ex.Message);
                 LogDispatcher.W(LOG_TAG, errorMessage);
             }
         }
@@ -120,36 +103,21 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         }
 
         private void switcherConnectionStateChanged(Switcher switcher, bool newState)
-        {
-            Connected = newState;
-        }
+            => ConnectionState = newState;
 
         #region Property: IpAddress
-        public event BmdMixerIpAddressChangingDelegate IpAddressChanging;
-        public event BmdMixerIpAddressChangedDelegate IpAddressChanged;
+        public event PropertyChangedTwoValuesDelegate<BmdMixer, string> IpAddressChanged;
 
         [PersistAs("ip_address")]
         private string ipAddress;
 
         public string IpAddress
         {
-            get { return ipAddress; }
+            get => ipAddress;
             set
             {
-
                 ValidateIpAddress(ipAddress);
-                if (value == ipAddress)
-                    return;
-                string oldIpAddress = ipAddress;
-
-                IpAddressChanging?.Invoke(this, oldIpAddress, value);
-
-                ipAddress = value;
-                switcher.IpAddress = value;
-
-                IpAddressChanged?.Invoke(this, oldIpAddress, value);
-                RaisePropertyChanged(nameof(IpAddress));
-
+                setProperty(this, ref ipAddress, value, IpAddressChanged, null, (ov, nv) => switcher.IpAddress = nv);
             }
         }
 
@@ -160,88 +128,53 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         #endregion
 
         #region Property: ConnectionState
-        public event BmdMixerConnectionStateChangingDelegate ConnectionStateChanging;
-        public event BmdMixerConnectionStateChangedDelegate ConnectionStateChanged;
+        public event PropertyChangedTwoValuesDelegate<BmdMixer, bool> ConnectionStateChanged;
 
-        private bool connected;
+        private bool connectionState;
 
-        public bool Connected
+        public bool ConnectionState
         {
-            get { return connected; }
+            get => connectionState;
             set
             {
-
-                if (value == connected)
-                    return;
-                bool oldState = connected;
-
-                ConnectionStateChanging?.Invoke(this, oldState, value);
-
-                connected = value;
-
-                ConnectionStateChanged?.Invoke(this, oldState, value);
-                RaisePropertyChanged(nameof(Connected));
-
-                if (value)
+                AfterChangePropertyDelegate<bool> afterChangeDelegate = (ov, nv) =>
                 {
+                    if (nv)
+                    {
+                        getMixEffectBlockMonitor();
+                        getInputMonitors();
+                        State = MixerState.Ok;
+                        StateString = "connected";
+                        string logMessage = string.Format("Connected to a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}.", ID, IpAddress);
+                        LogDispatcher.I(LOG_TAG, logMessage);
+                    }
+                    else
+                    {
+                        disposeMixEffectBlockMonitor();
+                        //disposeInputMonitors();
+                        deinitSwitcher();
+                        State = MixerState.Warning;
+                        StateString = "disconnected";
+                        string logMessage = string.Format("Disconnected from a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}.", ID, IpAddress);
+                        LogDispatcher.I(LOG_TAG, logMessage);
 
-                    getMixEffectBlockMonitor();
-                    getInputMonitors();
-
-                    // State
-                    State = MixerState.Ok;
-                    StateString = "connected";
-
-                    // Log
-                    string logMessage = string.Format("Connected to a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}.",
-                        ID,
-                        IpAddress);
-                    LogDispatcher.I(LOG_TAG, logMessage);
-
-                }
-                else
-                {
-
-                    disposeMixEffectBlockMonitor();
-                    //disposeInputMonitors();
-                    deinitSwitcher();
-
-                    // State
-                    State = MixerState.Warning;
-                    StateString = "disconnected";
-
-                    // Log
-                    string logMessage = string.Format("Disconnected from a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}.",
-                        ID,
-                        IpAddress);
-                    LogDispatcher.I(LOG_TAG, logMessage);
-
-                }
-
+                    }
+                };
+                setProperty(this, ref connectionState, value, ConnectionStateChanged, null, afterChangeDelegate);             
             }
         }
         #endregion
 
         #region Property: AutoReconnect
-        public event BmdMixerAutoReconnectChangingDelegate AutoReconnectChanging;
-        public event BmdMixerAutoReconnectChangedDelegate AutoReconnectChanged;
+        public event PropertyChangedTwoValuesDelegate<BmdMixer, bool> AutoReconnectChanged;
 
         [PersistAs("auto_reconnect")]
         private bool autoReconnect;
 
         public bool AutoReconnect
         {
-            get { return autoReconnect; }
-            set
-            {
-                if (value == autoReconnect)
-                    return;
-                bool oldValue = autoReconnect;
-                AutoReconnectChanging?.Invoke(this, oldValue, value);
-                autoReconnect = value;
-                AutoReconnectChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(AutoReconnect));
-            }
+            get => autoReconnect;
+            set => setProperty(this, ref autoReconnect, value, AutoReconnectChanged);
         }
         #endregion
 
@@ -262,17 +195,15 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         private void autoReconnectThreadMethod()
         {
 
-            string logMessage = string.Format("Trying auto reconnect to a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}...",
-                ID,
-                IpAddress);
+            string logMessage = string.Format("Trying auto reconnect to a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}...", ID, IpAddress);
             LogDispatcher.I(LOG_TAG, logMessage);
 
-            if (autoReconnect && !connected)
+            if (autoReconnect && !connectionState)
                 Connect();
-            while (autoReconnect && !connected)
+            while (autoReconnect && !connectionState)
             {
                 Thread.Sleep(RECONNECT_TRY_INTERVAL);
-                if (autoReconnect && !connected)
+                if (autoReconnect && !connectionState)
                     Connect();
             }
 
@@ -292,14 +223,10 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         }
 
         private void sourceIsProgramTalliedChangedHandler(BMDSwitcherAPI.IBMDSwitcherInput apiSource, Source source, bool isTallied)
-        {
-            Inputs.FindAll(input => (input.Index == source.ID)).ForEach(input => { input.RedTally = isTallied; });
-        }
+            => Inputs.FindAll(input => (input.Index == source.ID)).ForEach(input => { input.RedTally = isTallied; });
 
         private void sourceIsPreviewTalliedChangedHandler(BMDSwitcherAPI.IBMDSwitcherInput apiSource, Source source, bool isTallied)
-        {
-            Inputs.FindAll(input => (input.Index == source.ID)).ForEach(input => { input.GreenTally = isTallied; });
-        }
+            => Inputs.FindAll(input => (input.Index == source.ID)).ForEach(input => { input.GreenTally = isTallied; });
         #endregion
 
         #region Mix/effect block monitors
@@ -323,14 +250,10 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         }
 
         private void mixEffectBlockMonitorProgramInputChangedHandler(BMDSwitcherAPI.IBMDSwitcherMixEffectBlock apiMixEffectBlock, MixEffectBlock mixEffectBlock, long sourceId)
-        {
-            OnProgramInput = Inputs.FirstOrDefault(input => input.Index == sourceId);
-        }
+            => OnProgramInput = Inputs.FirstOrDefault(input => input.Index == sourceId);
 
         private void mixEffectBlockMonitorPreviewInputChangedHandler(BMDSwitcherAPI.IBMDSwitcherMixEffectBlock apiMixEffectBlock, MixEffectBlock mixEffectBlock, long sourceId)
-        {
-            OnPreviewInput = Inputs.FirstOrDefault(input => input.Index == sourceId);
-        }
+            => OnPreviewInput = Inputs.FirstOrDefault(input => input.Index == sourceId);
         #endregion
 
         #region P/P input sources

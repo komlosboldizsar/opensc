@@ -38,77 +38,119 @@ namespace OpenSC.Model.UMDs
         public UMD()
         { }
 
-        public delegate void CurrentTextChangedDelegate(UMD umd, string oldText, string newText);
-        public event CurrentTextChangedDelegate CurrentTextChanged;
+        #region Property: ID
+        public event PropertyChangedTwoValuesDelegate<UMD, int> IdChanged;
+
+        private int id = 0;
+
+        public override int ID
+        {
+            get => id;
+            set
+            {
+                ValidateId(value);
+                setProperty(this, ref id, value, IdChanged);
+            }
+        }
+
+        public void ValidateId(int id)
+        {
+            if (id <= 0)
+                throw new ArgumentException();
+            if (!UmdDatabase.Instance.CanIdBeUsedForItem(id, this))
+                throw new ArgumentException();
+        }
+        #endregion
+
+        #region Property: Name
+        public event PropertyChangedTwoValuesDelegate<UMD, string> NameChanged;
+
+        [PersistAs("name")]
+        private string name;
+
+        public string Name
+        {
+            get => name;
+            set
+            {
+                ValidateName(value);
+                setProperty(this, ref name, value, NameChanged);
+            }
+
+        }
+
+        public void ValidateName(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException();
+        }
+        #endregion
+
+        #region Property: CurrentText
+        public event PropertyChangedTwoValuesDelegate<UMD, string> CurrentTextChanged;
 
         protected string currentText = "";
 
         public string CurrentText
         {
-            get { return currentText; }
-            set
-            {
-                string oldValue = currentText;
-                currentText = value;
-                update();
-                CurrentTextChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(CurrentText));
-            }
+            get => currentText;
+            set => setProperty(this, ref currentText, value, CurrentTextChanged, null, (ov, nv) => update());
         }
+        #endregion
+
+        #region Property: DynamicText
+        public event PropertyChangedTwoValuesDelegate<UMD, string> DynamicTextChanged;
 
         private string dynamicText;
         
         protected string DynamicText
         {
-            get { return dynamicText; }
+            get => dynamicText;
             set
             {
-                dynamicText = value;
-                if (!useStaticText)
-                    CurrentText = value;
+                AfterChangePropertyDelegate<string> afterChangeDelegate = (ov, nv) =>
+                {
+                    if (!useStaticText)
+                        CurrentText = nv;
+                };
+                setProperty(this, ref dynamicText, value, DynamicTextChanged);
             }
         }
+        #endregion
 
-        public delegate void StaticTextChangedDelegate(UMD umd, string oldText, string newText);
-        public event StaticTextChangedDelegate StaticTextChanged;
+        #region Property: StaticText
+        public event PropertyChangedTwoValuesDelegate<UMD, string> StaticTextChanged;
 
         [PersistAs("static_text")]
         private string staticText;
 
         public string StaticText
         {
-            get { return staticText; }
+            get => staticText;
             set
             {
-                string oldValue = staticText;
-                staticText = value;
-                if (useStaticText)
-                    CurrentText = value;
-                StaticTextChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(StaticText));
+                AfterChangePropertyDelegate<string> afterChangeDelegate = (ov, nv) => {
+                    if (useStaticText)
+                        CurrentText = nv;
+                };
+                setProperty(this, ref staticText, value, StaticTextChanged);
             }
         }
+        #endregion
 
-        public delegate void UseStaticTextChangedDelegate(UMD umd, bool oldState, bool newState);
-        public event UseStaticTextChangedDelegate UseStaticTextChanged;
+        #region Property: UseStaticText
+        public event PropertyChangedTwoValuesDelegate<UMD, bool> UseStaticTextChanged;
 
         [PersistAs("use_static_text")]
         private bool useStaticText = false;
 
         public bool UseStaticText
         {
-            get { return useStaticText; }
-            set
-            {
-                bool oldValue = useStaticText;
-                if (oldValue == value)
-                    return;
-                useStaticText = value;
-                CurrentText = useStaticText ? staticText : dynamicText;
-                UseStaticTextChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(UseStaticText));
-            }
+            get => useStaticText;
+            set => setProperty(this, ref useStaticText, value, UseStaticTextChanged, null,
+                (ov, nv) => { CurrentText = nv ? staticText : dynamicText; });
         }
+        #endregion
 
         #region Tallies
         public delegate void TallyChangedDelegate(UMD umd, int index, bool oldState, bool newState);
@@ -159,7 +201,7 @@ namespace OpenSC.Model.UMDs
             }
         }   
 
-        private void tallyStateChangedHandler(IBoolean boolean, bool newState)
+        private void tallyStateChangedHandler(IBoolean boolean, bool oldState, bool newState)
         {
             for (int i = 0; i < MAX_TALLIES; i++)
                 if (tallySources[i] == boolean)
@@ -197,59 +239,6 @@ namespace OpenSC.Model.UMDs
         protected virtual void tallyChanged(int index, bool state)
         { }
         #endregion
-
-        public delegate void IdChangedDelegate(UMD timer, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
-
-        private int id = 0;
-
-        public override int ID
-        {
-            get { return id; }
-            set
-            {
-                ValidateId(value);
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
-            }
-        }
-
-        public void ValidateId(int id)
-        {
-            if (id <= 0)
-                throw new ArgumentException();
-            if (!UmdDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-
-
-        public delegate void NameChangedDelegate(UMD timer, string oldName, string newValue);
-        public event NameChangedDelegate NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get { return name; }
-            set
-            {
-                ValidateName(value);
-                string oldValue = name;
-                name = value;
-                NameChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(Name));
-            }
-
-        }
-
-        public void ValidateName(string name)
-        {
-            if(string.IsNullOrEmpty(name))
-                throw new ArgumentException();
-        }
 
     }
 }

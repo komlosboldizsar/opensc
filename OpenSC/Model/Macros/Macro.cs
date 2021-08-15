@@ -40,23 +40,17 @@ namespace OpenSC.Model.Macros
             }
         }
 
-        public delegate void IdChangedDelegate(Macro text, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
+        public event PropertyChangedTwoValuesDelegate<Macro, int> IdChanged;
 
         public int id = 0;
 
         public override int ID
         {
-            get { return id; }
+            get => id;
             set
             {
                 ValidateId(value);
-                if (value == id)
-                    return;
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
+                setProperty(this, ref id, value, IdChanged);
             }
         }
 
@@ -68,25 +62,15 @@ namespace OpenSC.Model.Macros
                 throw new ArgumentException();
         }
 
-        public delegate void NameChangedDelegate(Macro text, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
+        public event PropertyChangedTwoValuesDelegate<Macro, string> NameChanged;
 
         [PersistAs("name")]
         private string name;
 
         public string Name
         {
-            get { return name; }
-            set
-            {
-                ValidateName(value);
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
-            }
+            get => name;
+            set => setProperty(this, ref name, value, NameChanged);
         }
 
         public void ValidateName(string name)

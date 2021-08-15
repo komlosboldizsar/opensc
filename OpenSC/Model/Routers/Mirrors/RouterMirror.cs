@@ -61,23 +61,17 @@ namespace OpenSC.Model.Routers.Mirrors
         #endregion
 
         #region Property: ID
-        public delegate void IdChangedDelegate(RouterMirror routerMirror, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
+        public event PropertyChangedTwoValuesDelegate<RouterMirror, int> IdChanged;
 
         public int id = 0;
 
         public override int ID
         {
-            get { return id; }
+            get => id;
             set
             {
                 ValidateId(value);
-                if (value == id)
-                    return;
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
+                setProperty(this, ref id, value, IdChanged);
             }
         }
 
@@ -91,8 +85,7 @@ namespace OpenSC.Model.Routers.Mirrors
         #endregion
 
         #region Property: Name
-        public delegate void NameChangedDelegate(RouterMirror routerMirror, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
+        public event PropertyChangedTwoValuesDelegate<RouterMirror, string> NameChanged;
 
         [PersistAs("name")]
         private string name;
@@ -103,12 +96,7 @@ namespace OpenSC.Model.Routers.Mirrors
             set
             {
                 ValidateName(value);
-                if (value == name)
-                    return;
-                string oldValue = name;
-                name = value;
-                NameChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(Name));
+                setProperty(this, ref name, value, NameChanged);
             }
         }
 
@@ -120,6 +108,8 @@ namespace OpenSC.Model.Routers.Mirrors
         #endregion
 
         #region Property: Routers
+        public event PropertyChangedTwoValuesDelegate<RouterMirror, Router> RouterAChanged;
+
         [PersistAs("router_a")]
         private Router routerA;
 
@@ -133,29 +123,25 @@ namespace OpenSC.Model.Routers.Mirrors
             get => routerA;
             set
             {
-                if (value == routerA)
-                    return;
-                if (routerA != null)
-                {
-                    routerA.StateChanged -= routerAstateChangedHandler;
+                BeforeChangePropertyDelegate<Router> beforeChangeDelegate = (ov, nv) => {
+                    if (ov != null)
+                        ov.StateChanged -= routerAstateChangedHandler;
                     routerAstate = RouterState.Unknown;
-                }
-                Router oldValue = routerA;
-                routerA = value;
-                if (routerA != null)
-                {
-                    routerA.StateChanged += routerAstateChangedHandler;
-                    routerAstate = routerA.State;
-                }
-                RouterAChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(RouterA));
-                ClearInputAssociations();
-                ClearOutputAssociations();
+                };
+                AfterChangePropertyDelegate<Router> afterChangeProperty = (ov, nv) => {
+                    if (nv != null)
+                    {
+                        nv.StateChanged += routerAstateChangedHandler;
+                        routerAstate = nv.State;
+                    }
+                    ClearInputAssociations();
+                    ClearOutputAssociations();
+                };
+                setProperty(this, ref routerA, value, RouterAChanged);
             }
         }
 
-        public delegate void RouterAChangedDelegate(RouterMirror routerMirror, Router oldValue, Router newValue);
-        public event RouterAChangedDelegate RouterAChanged;
+        public event PropertyChangedTwoValuesDelegate<RouterMirror, Router> RouterBChanged;
 
         [PersistAs("router_b")]
         private Router routerB;
@@ -170,50 +156,35 @@ namespace OpenSC.Model.Routers.Mirrors
             get => routerB;
             set
             {
-                if (value == routerB)
-                    return;
-                if (routerB != null)
-                {
-                    routerB.StateChanged -= routerBstateChangedHandler;
+                BeforeChangePropertyDelegate<Router> beforeChangeDelegate = (ov, nv) => {
+                    if (ov != null)
+                        ov.StateChanged -= routerBstateChangedHandler;
                     routerBstate = RouterState.Unknown;
-                }
-                Router oldValue = routerB;
-                routerB = value;
-                if (routerB != null)
-                {
-                    routerB.StateChanged += routerBstateChangedHandler;
-                    routerBstate = RouterState.Unknown;
-                }
-                RouterBChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(RouterB));
-                ClearInputAssociations();
-                ClearOutputAssociations();
+                };
+                AfterChangePropertyDelegate<Router> afterChangeProperty = (ov, nv) => {
+                    if (nv != null)
+                    {
+                        nv.StateChanged += routerBstateChangedHandler;
+                        routerBstate = nv.State;
+                    }
+                    ClearInputAssociations();
+                    ClearOutputAssociations();
+                };
+                setProperty(this, ref routerB, value, RouterBChanged);
             }
         }
-
-        public delegate void RouterBChangedDelegate(RouterMirror routerMirror, Router oldValue, Router newValue);
-        public event RouterAChangedDelegate RouterBChanged;
         #endregion
 
         #region Property: SynchronizationMode
-        public delegate void SynchronizationModeDelegate(RouterMirror routerMirror, RouterMirrorSynchronizationMode oldMode, RouterMirrorSynchronizationMode newMode);
-        public event SynchronizationModeDelegate SynchronizationModeChanged;
+        public event PropertyChangedTwoValuesDelegate<RouterMirror, RouterMirrorSynchronizationMode> SynchronizationModeChanged;
 
         [PersistAs("synchronization_mode")]
         private RouterMirrorSynchronizationMode synchronizationMode;
 
         public RouterMirrorSynchronizationMode SynchronizationMode
         {
-            get { return synchronizationMode; }
-            set
-            {
-                if (value == synchronizationMode)
-                    return;
-                RouterMirrorSynchronizationMode oldValue = synchronizationMode;
-                synchronizationMode = value;
-                SynchronizationModeChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(SynchronizationMode));
-            }
+            get => synchronizationMode;
+            set => setProperty(this, ref synchronizationMode, value, SynchronizationModeChanged);
         }
         #endregion
 
@@ -225,7 +196,7 @@ namespace OpenSC.Model.Routers.Mirrors
         [PersistAs(null, 1)]
         private RouterMirrorInputAssociation[] _inputAssociations // for persistence
         {
-            get { return inputAssociations.ToArray(); }
+            get => inputAssociations.ToArray();
             set
             {
                 inputAssociations.Clear();
@@ -265,7 +236,7 @@ namespace OpenSC.Model.Routers.Mirrors
         [PersistAs(null, 1)]
         private RouterMirrorOutputAssociation[] _outputAssociations // for persistence
         {
-            get { return outputAssociations.ToArray(); }
+            get => outputAssociations.ToArray();
             set
             {
                 outputAssociations.Clear();

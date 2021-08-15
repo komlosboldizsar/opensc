@@ -12,20 +12,16 @@ namespace OpenSC.Model.Variables
     {
 
         string Name { get; set; }
-
-        event BooleanNameChangedDelegate NameChanged;
+        event PropertyChangedTwoValuesDelegate<IBoolean, string> NameChanged;
 
         Color Color { get; set; }
-
-        event BooleanColorChangedDelegate ColorChanged;
+        event PropertyChangedTwoValuesDelegate<IBoolean, Color> ColorChanged;
 
         string Description { get; set; }
-
-        event BooleanDescriptionChangedDelegate DescriptionChanged;
+        event PropertyChangedTwoValuesDelegate<IBoolean, string> DescriptionChanged;
 
         bool CurrentState { get; }
-
-        event BooleanStateChangedDelegate StateChanged;
+        event PropertyChangedTwoValuesDelegate<IBoolean, bool> StateChanged;
 
     }
 

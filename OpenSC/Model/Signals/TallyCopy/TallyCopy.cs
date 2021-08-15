@@ -33,21 +33,17 @@ namespace OpenSC.Model.Signals.TallyCopying
         #endregion
 
         #region Property: ID
-        public delegate void IdChangedDelegate(TallyCopy tallyCopy, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
+        public event PropertyChangedTwoValuesDelegate<TallyCopy, int> IdChanged;
 
         public int id = 0;
 
         public override int ID
         {
-            get { return id; }
+            get => id;
             set
             {
                 ValidateId(value);
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
+                setProperty(this, ref id, value, IdChanged);
             }
         }
 
@@ -59,30 +55,20 @@ namespace OpenSC.Model.Signals.TallyCopying
         #endregion
 
         #region Property: Name
-        public delegate void NameChangedDelegate(TallyCopy tallyCopy, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
+        public event PropertyChangedTwoValuesDelegate<TallyCopy, string> NameChanged;
 
         [PersistAs("name")]
         private string name;
 
         public string Name
         {
-            get { return name; }
-            set
-            {
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
-            }
+            get => name;
+            set => setProperty(this, ref name, value, NameChanged);
         }
         #endregion
 
         #region Property: FromSignal
-        public delegate void FromSignalChangedDelegate(TallyCopy tallyCopy, ISignalSourceRegistered oldValue, ISignalSourceRegistered newValue);
-        public event FromSignalChangedDelegate FromSignalChanged;
+        public event PropertyChangedTwoValuesDelegate<TallyCopy, ISignalSourceRegistered> FromSignalChanged;
 
         private string _fromSignalUniqueId; // "Temp foreign key"
 
@@ -97,40 +83,21 @@ namespace OpenSC.Model.Signals.TallyCopying
 
         public ISignalSourceRegistered FromSignal
         {
-            get { return fromSignal; }
-            set
-            {
-                if (value == fromSignal)
-                    return;
-                ISignalSourceRegistered oldFromSignal = fromSignal;
-                fromSignal = value;
-                updateFromTally();
-                FromSignalChanged?.Invoke(this, oldFromSignal, value);
-                RaisePropertyChanged(nameof(FromSignal));
-            }
+            get => fromSignal;
+            set => setProperty(this, ref fromSignal, value, FromSignalChanged, null, (ov, nv) => updateFromTally());
         }
         #endregion
 
         #region Property: FromTallyColor
-        public delegate void FromTallyColorChangedDelegate(TallyCopy tallyCopy, SignalTallyColor oldValue, SignalTallyColor newValue);
-        public event FromTallyColorChangedDelegate FromTallyColorChanged;
+        public event PropertyChangedTwoValuesDelegate<TallyCopy, SignalTallyColor> FromTallyColorChanged;
 
         [PersistAs("from_tally_color")]
         private SignalTallyColor fromTallyColor;
 
         public SignalTallyColor FromTallyColor
         {
-            get { return fromTallyColor; }
-            set
-            {
-                if (value == fromTallyColor)
-                    return;
-                SignalTallyColor oldFromTallyColor = fromTallyColor;
-                fromTallyColor = value;
-                updateFromTally();
-                FromTallyColorChanged?.Invoke(this, oldFromTallyColor, value);
-                RaisePropertyChanged(nameof(FromTallyColor));
-            }
+            get => fromTallyColor;
+            set => setProperty(this, ref fromTallyColor, value, FromTallyColorChanged, null, (ov, nv) => updateFromTally());
         }
         #endregion
 
@@ -168,8 +135,7 @@ namespace OpenSC.Model.Signals.TallyCopying
         #endregion
 
         #region Property: ToSignal
-        public delegate void ToSignalChangedDelegate(TallyCopy tallyCopy, ISignalSourceRegistered oldValue, ISignalSourceRegistered newValue);
-        public event ToSignalChangedDelegate ToSignalChanged;
+        public event PropertyChangedTwoValuesDelegate<TallyCopy, ISignalSourceRegistered> ToSignalChanged;
 
         private string _toSignalUniqueId; // "Temp foreign key"
 
@@ -184,40 +150,21 @@ namespace OpenSC.Model.Signals.TallyCopying
 
         public ISignalSourceRegistered ToSignal
         {
-            get { return toSignal; }
-            set
-            {
-                if (value == toSignal)
-                    return;
-                ISignalSourceRegistered oldToSignal = toSignal;
-                toSignal = value;
-                updateToTally();
-                ToSignalChanged?.Invoke(this, oldToSignal, value);
-                RaisePropertyChanged(nameof(ToSignal));
-            }
+            get => toSignal;
+            set => setProperty(this, ref toSignal, value, ToSignalChanged, null, (ov, nv) => updateToTally());
         }
         #endregion
 
         #region Property: ToTallyColor
-        public delegate void ToTallyColorChangedDelegate(TallyCopy tallyCopy, SignalTallyColor oldValue, SignalTallyColor newValue);
-        public event ToTallyColorChangedDelegate ToTallyColorChanged;
+        public event PropertyChangedTwoValuesDelegate<TallyCopy, SignalTallyColor> ToTallyColorChanged;
 
         [PersistAs("to_tally_color")]
         private SignalTallyColor toTallyColor;
 
         public SignalTallyColor ToTallyColor
         {
-            get { return toTallyColor; }
-            set
-            {
-                if (value == toTallyColor)
-                    return;
-                SignalTallyColor oldToTallyColor = toTallyColor;
-                toTallyColor = value;
-                updateToTally();
-                ToTallyColorChanged?.Invoke(this, oldToTallyColor, value);
-                RaisePropertyChanged(nameof(ToTallyColor));
-            }
+            get => toTallyColor;
+            set => setProperty(this, ref toTallyColor, value, ToTallyColorChanged, null, (ov, nv) => updateToTally());
         }
         #endregion
 

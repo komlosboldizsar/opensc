@@ -13,21 +13,17 @@ namespace OpenSC.Model.Signals
     {
 
         #region Property: ID
-        public delegate void IdChangedDelegate(ExternalSignalCategory category, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
+        public event PropertyChangedTwoValuesDelegate<ExternalSignalCategory, int> IdChanged;
 
         public int id = 0;
 
         public override int ID
         {
-            get { return id; }
+            get => id;
             set
             {
                 ValidateId(value);
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
+                setProperty(this, ref id, value, IdChanged);
             }
         }
 
@@ -41,46 +37,28 @@ namespace OpenSC.Model.Signals
         #endregion
 
         #region Property: Name
-        public delegate void NameChangedDelegate(ExternalSignalCategory category, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
+        public event PropertyChangedTwoValuesDelegate<ExternalSignalCategory, string> NameChanged;
 
         [PersistAs("name")]
         private string name;
 
         public string Name
         {
-            get { return name; }
-            set
-            {
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
-            }
+            get => name;
+            set => setProperty(this, ref name, value, NameChanged);
         }
         #endregion
 
         #region Property: Color
-        public delegate void ColorChangedDelegate(ExternalSignalCategory category, Color oldColor, Color newColor);
-        public event ColorChangedDelegate ColorChanged;
+        public event PropertyChangedTwoValuesDelegate<ExternalSignalCategory, Color> ColorChanged;
 
         [PersistAs("color")]
         private Color color;
 
         public Color Color
         {
-            get { return color; }
-            set
-            {
-                if (value == color)
-                    return;
-                Color oldColor = color;
-                color = value;
-                ColorChanged?.Invoke(this, oldColor, value);
-                RaisePropertyChanged(nameof(Color));
-            }
+            get => color;
+            set => setProperty(this, ref color, value, ColorChanged);
         }
         #endregion
 

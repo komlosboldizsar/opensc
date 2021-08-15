@@ -34,21 +34,17 @@ namespace OpenSC.Model.Signals.BooleanTallies
         #endregion
 
         #region Property: ID
-        public delegate void IdChangedDelegate(BooleanTally booleanTally, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
+        public event PropertyChangedTwoValuesDelegate<BooleanTally, int> IdChanged;
 
         public int id = 0;
 
         public override int ID
         {
-            get { return id; }
+            get => id;
             set
             {
                 ValidateId(value);
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
+                setProperty(this, ref id, value, IdChanged);
             }
         }
 
@@ -60,30 +56,20 @@ namespace OpenSC.Model.Signals.BooleanTallies
         #endregion
 
         #region Property: Name
-        public delegate void NameChangedDelegate(BooleanTally booleanTally, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
+        public event PropertyChangedTwoValuesDelegate<BooleanTally, string> NameChanged;
 
         [PersistAs("name")]
         private string name;
 
         public string Name
         {
-            get { return name; }
-            set
-            {
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
-            }
+            get => name;
+            set => setProperty(this, ref name, value, NameChanged);
         }
         #endregion
 
         #region Property: FromBoolean
-        public delegate void FromBooleanChangedDelegate(BooleanTally booleanTally, IBoolean oldValue, IBoolean newValue);
-        public event FromBooleanChangedDelegate FromBooleanChanged;
+        public event PropertyChangedTwoValuesDelegate<BooleanTally, IBoolean> FromBooleanChanged;
 
         private string _fromBooleanUniqueId; // "Temp foreign key"
 
@@ -98,28 +84,24 @@ namespace OpenSC.Model.Signals.BooleanTallies
 
         public IBoolean FromBoolean
         {
-            get { return fromBoolean; }
+            get => fromBoolean;
             set
             {
-                if (value == fromBoolean)
-                    return;
-                IBoolean oldFromBoolean = fromBoolean;
-                fromBoolean = value;
-                bool oldState = oldFromBoolean?.CurrentState ?? false;
-                bool newState = fromBoolean?.CurrentState ?? false;
-                if (!oldState && newState)
-                    toTally?.Give(myRecursionChain);
-                if (oldState && !newState)
-                    toTally?.Revoke(myRecursionChain);
-                FromBooleanChanged?.Invoke(this, oldFromBoolean, value);
-                RaisePropertyChanged(nameof(FromBoolean));
+                AfterChangePropertyDelegate<IBoolean> afterChangeDelegate = (ov, nv) => {
+                    bool oldState = ov?.CurrentState ?? false;
+                    bool newState = nv?.CurrentState ?? false;
+                    if (!oldState && newState)
+                        toTally?.Give(myRecursionChain);
+                    if (oldState && !newState)
+                        toTally?.Revoke(myRecursionChain);
+                };
+                setProperty(this, ref fromBoolean, value, FromBooleanChanged, null, afterChangeDelegate);
             }
         }
         #endregion
 
         #region Property: ToSignal
-        public delegate void ToSignalChangedDelegate(BooleanTally booleanTally, ISignalSourceRegistered oldValue, ISignalSourceRegistered newValue);
-        public event ToSignalChangedDelegate ToSignalChanged;
+        public event PropertyChangedTwoValuesDelegate<BooleanTally, ISignalSourceRegistered> ToSignalChanged;
 
         private string _toSignalUniqueId; // "Temp foreign key"
 
@@ -134,40 +116,21 @@ namespace OpenSC.Model.Signals.BooleanTallies
 
         public ISignalSourceRegistered ToSignal
         {
-            get { return toSignal; }
-            set
-            {
-                if (value == toSignal)
-                    return;
-                ISignalSourceRegistered oldToSignal = toSignal;
-                toSignal = value;
-                updateToTally();
-                ToSignalChanged?.Invoke(this, oldToSignal, value);
-                RaisePropertyChanged(nameof(ToSignal));
-            }
+            get => toSignal;
+            set => setProperty(this, ref toSignal, value, ToSignalChanged, null, (ov, nv) => updateToTally());
         }
         #endregion
 
         #region Property: ToTallyColor
-        public delegate void ToTallyColorChangedDelegate(BooleanTally booleanTally, SignalTallyColor oldValue, SignalTallyColor newValue);
-        public event ToTallyColorChangedDelegate ToTallyColorChanged;
+        public event PropertyChangedTwoValuesDelegate<BooleanTally, SignalTallyColor> ToTallyColorChanged;
 
         [PersistAs("to_tally_color")]
         private SignalTallyColor toTallyColor;
 
         public SignalTallyColor ToTallyColor
         {
-            get { return toTallyColor; }
-            set
-            {
-                if (value == toTallyColor)
-                    return;
-                SignalTallyColor oldToTallyColor = toTallyColor;
-                toTallyColor = value;
-                updateToTally();
-                ToTallyColorChanged?.Invoke(this, oldToTallyColor, value);
-                RaisePropertyChanged(nameof(ToTallyColor));
-            }
+            get => toTallyColor;
+            set => setProperty(this, ref toTallyColor, value, ToTallyColorChanged, null, (ov, nv) => updateToTally());
         }
         #endregion
 
@@ -188,8 +151,7 @@ namespace OpenSC.Model.Signals.BooleanTallies
             }
         }
 
-        private void updateToTally()
-            => ToTally = toSignal?.GetTally(toTallyColor);
+        private void updateToTally() => ToTally = toSignal?.GetTally(toTallyColor);
         #endregion
 
         #region Source and boolean restoration

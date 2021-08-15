@@ -42,23 +42,17 @@ namespace OpenSC.Model.Routers.CrosspointStores
         #endregion
 
         #region Property: ID
-        public delegate void IdChangedDelegate(CrosspointStore crosspointStore, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
+        public event PropertyChangedTwoValuesDelegate<CrosspointStore, int> IdChanged;
 
         public int id = 0;
 
         public override int ID
         {
-            get { return id; }
+            get => id;
             set
             {
                 ValidateId(value);
-                if (value == id)
-                    return;
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
+                setProperty(this, ref id, value, IdChanged);
             }
         }
 
@@ -72,8 +66,7 @@ namespace OpenSC.Model.Routers.CrosspointStores
         #endregion
 
         #region Property: Name
-        public delegate void NameChangedDelegate(CrosspointStore crosspointStore, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
+        public event PropertyChangedTwoValuesDelegate<CrosspointStore, string> NameChanged;
 
         [PersistAs("name")]
         private string name;
@@ -84,12 +77,7 @@ namespace OpenSC.Model.Routers.CrosspointStores
             set
             {
                 ValidateName(value);
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
+                setProperty(this, ref name, value, NameChanged);
             }
         }
 
@@ -101,8 +89,7 @@ namespace OpenSC.Model.Routers.CrosspointStores
         #endregion
 
         #region Property: StoredInput
-        public delegate void StoredInputChangedDelegate(CrosspointStore crosspointStore, RouterInput oldValue, RouterInput newValue);
-        public event StoredInputChangedDelegate StoredInputChanged;
+        public event PropertyChangedTwoValuesDelegate<CrosspointStore, RouterInput> StoredInputChanged;
 
         private string __storedInputId; // "Temp foreign key"
 
@@ -117,15 +104,11 @@ namespace OpenSC.Model.Routers.CrosspointStores
 
         public RouterInput StoredInput
         {
-            get { return storedInput; }
+            get => storedInput;
             set
             {
-                if (value == storedInput)
+                if (!setProperty(this, ref storedInput, value, StoredInputChanged))
                     return;
-                RouterInput oldValue = storedInput;
-                storedInput = value;
-                StoredInputChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(StoredInput));
                 if (Autotake)
                     Take();
             }
@@ -147,8 +130,7 @@ namespace OpenSC.Model.Routers.CrosspointStores
         #endregion
 
         #region Property: StoredOutput
-        public delegate void StoredOutputChangedDelegate(CrosspointStore crosspointStore, RouterOutput oldValue, RouterOutput newValue);
-        public event StoredOutputChangedDelegate StoredOutputChanged;
+        public event PropertyChangedTwoValuesDelegate<CrosspointStore, RouterOutput> StoredOutputChanged;
 
         private string __storedOutputId; // "Temp foreign key"
 
@@ -163,16 +145,8 @@ namespace OpenSC.Model.Routers.CrosspointStores
 
         public RouterOutput StoredOutput
         {
-            get { return storedOutput; }
-            set
-            {
-                if (value == storedOutput)
-                    return;
-                RouterOutput oldValue = storedOutput;
-                storedOutput = value;
-                StoredOutputChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(StoredOutput));
-            }
+            get => storedOutput;
+            set => setProperty(this, ref storedOutput, value, StoredOutputChanged);
         }
 
         private void restoreStoredOutput()
@@ -191,67 +165,40 @@ namespace OpenSC.Model.Routers.CrosspointStores
         #endregion
 
         #region Property: ClearInputAfterTake
-        public delegate void ClearInputAfterTakeChangedDelegate(CrosspointStore crosspointStore, bool oldValue, bool newValue);
-        public event ClearInputAfterTakeChangedDelegate ClearInputAfterTakeChanged;
+        public event PropertyChangedTwoValuesDelegate<CrosspointStore, bool> ClearInputAfterTakeChanged;
 
         [PersistAs("clear_input_after_take")]
         private bool clearInputAfterTake;
 
         public bool ClearInputAfterTake
         {
-            get { return clearInputAfterTake; }
-            set
-            {
-                if (value == clearInputAfterTake)
-                    return;
-                bool oldValue = clearInputAfterTake;
-                clearInputAfterTake = value;
-                ClearInputAfterTakeChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ClearInputAfterTake));
-            }
+            get => clearInputAfterTake;
+            set => setProperty(this, ref clearInputAfterTake, value, ClearInputAfterTakeChanged);
         }
         #endregion
 
         #region Property: ClearOutputAfterTake
-        public delegate void ClearOutputAfterTakeChangedDelegate(CrosspointStore crosspointStore, bool oldValue, bool newValue);
-        public event ClearOutputAfterTakeChangedDelegate ClearOutputAfterTakeChanged;
+        public event PropertyChangedTwoValuesDelegate<CrosspointStore, bool> ClearOutputAfterTakeChanged;
 
         [PersistAs("clear_output_after_take")]
         private bool clearOutputAfterTake;
 
         public bool ClearOutputAfterTake
         {
-            get { return clearOutputAfterTake; }
-            set
-            {
-                if (value == clearOutputAfterTake)
-                    return;
-                bool oldValue = clearOutputAfterTake;
-                clearOutputAfterTake = value;
-                ClearOutputAfterTakeChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ClearOutputAfterTakeChanged));
-            }
+            get => clearOutputAfterTake;
+            set => setProperty(this, ref clearOutputAfterTake, value, ClearOutputAfterTakeChanged);
         }
         #endregion
 
-        #region Property: StoredOutput
-        public delegate void AutotakeChangedDelegate(CrosspointStore crosspointStore, bool oldValue, bool newValue);
-        public event AutotakeChangedDelegate AutotakeChanged;
+        #region Property: Autotake
+        public event PropertyChangedTwoValuesDelegate<CrosspointStore, bool> AutotakeChanged;
 
         private bool autotake;
 
         public bool Autotake
         {
-            get { return autotake; }
-            set
-            {
-                if (value == autotake)
-                    return;
-                bool oldValue = autotake;
-                autotake = value;
-                AutotakeChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(Autotake));
-            }
+            get => autotake;
+            set => setProperty(this, ref autotake, value, AutotakeChanged);
         }
         #endregion
 

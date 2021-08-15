@@ -49,29 +49,38 @@ namespace OpenSC.Model.Streams
         #endregion
 
         #region Property: VideoId
+        public event PropertyChangedTwoValuesDelegate<YoutubeStream, string> VideoIdChanged;
+
         [PersistAs("video_id")]
         private string videoId;
 
         public string VideoId
         {
-            get { return videoId; }
-            set { videoId = value; }
+            get => videoId;
+            set => setProperty(this, ref videoId, value, VideoIdChanged);
         }
         #endregion
 
         #region Property: RefreshRate
+        public event PropertyChangedTwoValuesDelegate<YoutubeStream, int> RefreshRateChanged;
+
         [PersistAs("refresh_rate")]
         private int refreshRate = 5;
 
         public int RefreshRate
         {
-            get { return refreshRate; }
+            get => refreshRate;
             set
             {
-                if ((value < 1) || (value > 30))
-                    throw new ArgumentOutOfRangeException();
-                refreshRate = value;
+                ValidateRefreshRate(value);
+                setProperty(this, ref refreshRate, value, RefreshRateChanged);
             }
+        }
+
+        public void ValidateRefreshRate(int refreshRate)
+        {
+            if ((refreshRate < 1) || (refreshRate > 30))
+                throw new ArgumentOutOfRangeException();
         }
         #endregion
 

@@ -40,56 +40,47 @@ namespace OpenSC.Model.VTRs
         #endregion
 
         #region Property: ListenedIP
-        [PersistAs("listened_ip")]
-        private string listenedIP = "127.0.0.1";
+        public event PropertyChangedTwoValuesDelegate<CasparCgPlayout, string> ListenedIpChanged;
 
-        public string ListenedIP
+        [PersistAs("listened_ip")]
+        private string listenedIp = "127.0.0.1";
+
+        public string ListenedIp
         {
-            get => listenedIP;
-            set
-            {
-                if (listenedIP == value)
-                    return;
-                CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this);
-                listenedIP = value;
-                CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this);
-            }
+            get => listenedIp;
+            set => setProperty(this, ref listenedIp, value, ListenedIpChanged, (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this),
+                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this),
+                nameof(ListenedIp));
         }
         #endregion
 
         #region Property: WatchedChannel
+        public event PropertyChangedTwoValuesDelegate<CasparCgPlayout, int> WatchedChannelChanged;
+
         [PersistAs("watched_channel")]
         private int watchedChannel = 1;
 
         public int WatchedChannel
         {
             get => watchedChannel;
-            set
-            {
-                if (watchedChannel == value)
-                    return;
-                CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this);
-                watchedChannel = value;
-                CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this);
-            }
+            set => setProperty(this, ref watchedChannel, value, WatchedChannelChanged, (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this),
+                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this),
+                nameof(WatchedChannel));
         }
         #endregion
 
         #region Property: WatchedLayer
+        public event PropertyChangedTwoValuesDelegate<CasparCgPlayout, int> WatchedLayerChanged;
+
         [PersistAs("watched_layer")]
         private int watchedLayer = 10;
 
         public int WatchedLayer
         {
             get => watchedLayer;
-            set
-            {
-                if (watchedLayer == value)
-                    return;
-                CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this);
-                watchedLayer = value;
-                CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this);
-            }
+            set => setProperty(this, ref watchedLayer, value, WatchedLayerChanged, (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this),
+                (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this),
+                nameof(WatchedLayer));
         }
         #endregion
 

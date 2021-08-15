@@ -40,7 +40,7 @@ namespace OpenSC.GUI.VTRs
             CasparCgPlayout casparVtr = vtr as CasparCgPlayout;
             if (casparVtr == null)
                 return;
-            ipTextBox.Text = casparVtr.ListenedIP;
+            ipTextBox.Text = casparVtr.ListenedIp;
             channelNumericField.Value = casparVtr.WatchedChannel;
             layerNumericField.Value = casparVtr.WatchedLayer;
         }
@@ -51,7 +51,7 @@ namespace OpenSC.GUI.VTRs
             CasparCgPlayout casparVtr = vtr as CasparCgPlayout;
             if (casparVtr == null)
                 return;
-            casparVtr.ListenedIP = ipTextBox.Text;
+            casparVtr.ListenedIp = ipTextBox.Text;
             casparVtr.WatchedChannel = Convert.ToInt32(channelNumericField.Value);
             casparVtr.WatchedLayer = Convert.ToInt32(layerNumericField.Value);
         }

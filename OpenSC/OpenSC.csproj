@@ -692,6 +692,7 @@
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamStateTranslated.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamState.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamViewerCount.cs" />
+    <Compile Include="Model\SystemObjectBase.cs" />
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerHhMmSs.cs" />
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerTotalMinutes.cs" />
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerTotalSeconds.cs" />

@@ -38,8 +38,8 @@ namespace OpenSC.GUI.Mixers
             autoReconnectCheckbox.Checked = bmdMixer.AutoReconnect;
 
             bmdMixer.ConnectionStateChanged += connectionStateChangedHandler;
-            connectButton.Enabled = !bmdMixer.Connected;
-            disconnectButton.Enabled = bmdMixer.Connected;
+            connectButton.Enabled = !bmdMixer.ConnectionState;
+            disconnectButton.Enabled = bmdMixer.ConnectionState;
 
         }
 

@@ -29,21 +29,17 @@ namespace OpenSC.Model.Signals
         #endregion
 
         #region Property: ID
-        public delegate void IdChangedDelegate(ExternalSignal signal, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
+        public event PropertyChangedTwoValuesDelegate<ExternalSignal, int> IdChanged;
 
         public int id = 0;
 
         public override int ID
         {
-            get { return id; }
+            get => id;
             set
             {
                 ValidateId(value);
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
+                setProperty(this, ref id, value, IdChanged);
                 SignalLabelChanged?.Invoke(this, SignalLabel);
                 RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
             }
@@ -59,38 +55,29 @@ namespace OpenSC.Model.Signals
         #endregion
 
         #region Property: Name
-        public delegate void NameChangedDelegate(ExternalSignal signal, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
+        public event PropertyChangedTwoValuesDelegate<ExternalSignal, string> NameChanged;
 
         [PersistAs("name")]
         private string name;
 
         public string Name
         {
-            get { return name; }
+            get => name;
             set
             {
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
+                setProperty(this, ref name, value, NameChanged);
                 SignalLabelChanged?.Invoke(this, SignalLabel);
                 RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
                 List<object> recursionChain = new List<object>();
                 recursionChain.Add(this);
                 RegisteredSourceSignalNameChanged?.Invoke(this, value, recursionChain);
                 RaisePropertyChanged(nameof(RegisteredSourceSignalName));
-
             }
         }
         #endregion
 
         #region Property: Category
-        public delegate void CategoryChangedDelegate(ExternalSignal signal, ExternalSignalCategory oldCategory, ExternalSignalCategory newCategory);
-        public event CategoryChangedDelegate CategoryChanged;
+        public event PropertyChangedTwoValuesDelegate<ExternalSignal, ExternalSignalCategory> CategoryChanged;
 
         [PersistAs("category")]
         private ExternalSignalCategory category;
@@ -102,16 +89,8 @@ namespace OpenSC.Model.Signals
 
         public ExternalSignalCategory Category
         {
-            get { return category; }
-            set
-            {
-                if (value == category)
-                    return;
-                ExternalSignalCategory oldCategory = category;
-                category = value;
-                CategoryChanged?.Invoke(this, oldCategory, value);
-                RaisePropertyChanged(nameof(Category));
-            }
+            get => category;
+            set => setProperty(this, ref category, value, CategoryChanged);
         }
         #endregion
 
@@ -128,12 +107,12 @@ namespace OpenSC.Model.Signals
         #endregion
 
         #region Property: SignalLabel
-        public event SignalLabelChangedDelegate SignalLabelChanged;
+        public event PropertyChangedOneValueDelegate<ISignalSourceRegistered, string> SignalLabelChanged;
         public string SignalLabel => string.Format("(EXT. #{0}) {1}", ID, Name);            
         #endregion
 
         #region Property: SignalUniqueId
-        public event SignalUniqueIdChangedDelegate SignalUniqueIdChanged;
+        public event PropertyChangedOneValueDelegate<ISignalSourceRegistered, string> SignalUniqueIdChanged;
         public string SignalUniqueId => string.Format("external.{0}", ID);
         #endregion
 

@@ -48,23 +48,17 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
         #endregion
 
         #region Property: ID
-        public delegate void IdChangedDelegate(CrosspointBoolean crosspointBoolean, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
+        public event PropertyChangedTwoValuesDelegate<CrosspointBoolean, int> IdChanged;
 
         public int id = 0;
 
         public override int ID
         {
-            get { return id; }
+            get => id;
             set
             {
                 ValidateId(value);
-                if (value == id)
-                    return;
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
+                setProperty(this, ref id, value, IdChanged);
             }
         }
 
@@ -78,24 +72,18 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
         #endregion
 
         #region Property: Name
-        public delegate void NameChangedDelegate(CrosspointBoolean crosspointBoolean, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
+        public event PropertyChangedTwoValuesDelegate<CrosspointBoolean, string> NameChanged;
 
         [PersistAs("name")]
         private string name;
 
         public string Name
         {
-            get { return name; }
+            get => name;
             set
             {
                 ValidateName(value);
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
+                setProperty(this, ref name, value, NameChanged);
             }
         }
 
@@ -107,24 +95,14 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
         #endregion
 
         #region Property: WatchedRouter
-
-        public delegate void WatchedRouterChangedDelegate(CrosspointBoolean crosspointBoolean, Router oldValue, Router newValue);
-        public event WatchedRouterChangedDelegate WatchedRouterChanged;
+        public event PropertyChangedTwoValuesDelegate<CrosspointBoolean, Router> WatchedRouterChanged;
 
         private Router watchedRouter;
 
         public Router WatchedRouter
         {
             get => watchedRouter;
-            set
-            {
-                if (value == watchedRouter)
-                    return;
-                Router oldValue = watchedRouter;
-                watchedRouter = value;
-                WatchedRouterChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(WatchedRouter));
-            }
+            set => setProperty(this, ref watchedRouter, value, WatchedRouterChanged);
         }
 
         private void updateWatchedRouter()
@@ -136,8 +114,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
         #endregion
 
         #region Property: WatchedInput
-        public delegate void WatchedInputChangedDelegate(CrosspointBoolean crosspointBoolean, RouterInput oldValue, RouterInput newValue);
-        public event WatchedInputChangedDelegate WatchedInputChanged;
+        public event PropertyChangedTwoValuesDelegate<CrosspointBoolean, RouterInput> WatchedInputChanged;
 
         private string __watchedInputId; // "Temp foreign key"
 
@@ -152,17 +129,14 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
 
         public RouterInput WatchedInput
         {
-            get { return watchedInput; }
+            get => watchedInput;
             set
             {
-                if (value == watchedInput)
-                    return;
-                RouterInput oldValue = watchedInput;
-                watchedInput = value;
-                updateWatchedRouter();
-                updateIsValid();
-                WatchedInputChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(WatchedInput));
+                setProperty(this, ref watchedInput, value, WatchedInputChanged, null,
+                    (ov, nv) => {
+                        updateWatchedRouter();
+                        updateIsValid();
+                    });
             }
         }
 
@@ -182,8 +156,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
         #endregion
 
         #region Property: WatchedOutput
-        public delegate void WatchedOutputChangedDelegate(CrosspointBoolean crosspointBoolean, RouterOutput oldValue, RouterOutput newValue);
-        public event WatchedOutputChangedDelegate WatchedOutputChanged;
+        public event PropertyChangedTwoValuesDelegate<CrosspointBoolean, RouterOutput> WatchedOutputChanged;
 
         private string __watchedOutputId; // "Temp foreign key"
 
@@ -198,17 +171,14 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
 
         public RouterOutput WatchedOutput
         {
-            get { return watchedOutput; }
+            get => watchedOutput;
             set
             {
-                if (value == watchedOutput)
-                    return;
-                RouterOutput oldValue = watchedOutput;
-                watchedOutput = value;
-                updateWatchedRouter();
-                updateIsValid();
-                WatchedOutputChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(WatchedOutput));
+                setProperty(this, ref watchedOutput, value, WatchedOutputChanged, null,
+                    (ov, nv)=> {
+                        updateWatchedRouter();
+                        updateIsValid();
+                    });
             }
         }
 
@@ -232,30 +202,19 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
         }
         #endregion
 
-        #region Property: WatchedRouter
-        public delegate void IsValidChangedDelegate(CrosspointBoolean crosspointBoolean, bool oldValue, bool newValue);
-        public event IsValidChangedDelegate IsValidChanged;
+        #region Property: IsValid
+        public event PropertyChangedTwoValuesDelegate<CrosspointBoolean, bool> IsValidChanged;
 
         private bool isValid;
 
         public bool IsValid
         {
             get => isValid;
-            set
-            {
-                if (value == isValid)
-                    return;
-                bool oldValue = isValid;
-                isValid = value;
-                IsValidChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(IsValidChanged));
-            }
+            set => setProperty(this, ref isValid, value, IsValidChanged);
         }
 
         private void updateIsValid()
-        {
-            IsValid = ((watchedRouter != null) && (watchedInput != null) && (watchedOutput != null));
-        }
+            => IsValid = ((watchedRouter != null) && (watchedInput != null) && (watchedOutput != null));
         #endregion
 
         #region CrosspointActiveBoolean class, IBoolean implementation

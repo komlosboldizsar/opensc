@@ -79,7 +79,7 @@ namespace OpenSC.Model.VTRs
 
         internal void SubscribeToChannelLayer(CasparCgPlayout instance)
         {
-            List<CasparCgPlayout> subscribers = getSubscribtionsForChannelLayer(instance.ListenedIP, instance.WatchedChannel, instance.WatchedLayer);
+            List<CasparCgPlayout> subscribers = getSubscribtionsForChannelLayer(instance.ListenedIp, instance.WatchedChannel, instance.WatchedLayer);
             if (!subscribers.Contains(instance))
                 subscribers.Add(instance);
             initOscServer();
@@ -87,7 +87,7 @@ namespace OpenSC.Model.VTRs
 
         internal void UnsubscribeFromChannelLayer(CasparCgPlayout instance)
         {
-            List<CasparCgPlayout> subscribers = getSubscribtionsForChannelLayer(instance.ListenedIP, instance.WatchedChannel, instance.WatchedLayer);
+            List<CasparCgPlayout> subscribers = getSubscribtionsForChannelLayer(instance.ListenedIp, instance.WatchedChannel, instance.WatchedLayer);
             subscribers.RemoveAll(i => (i == instance));
         }
         #endregion

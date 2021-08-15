@@ -42,6 +42,8 @@ namespace OpenSC.Model.Routers.Leitch
         }
 
         #region Property: Port
+        PropertyChangedTwoValuesDelegate<LeitchRouter, SerialPort> PortChanged;
+        
         [PersistAs("port")]
         private SerialPort port;
 
@@ -55,16 +57,14 @@ namespace OpenSC.Model.Routers.Leitch
             get => port;
             set
             {
-                if (value == port)
-                    return;
-                if (port != null)
-                {
-                    port.ReceivedDataAsciiLine -= receivedLineFromPort;
-                    port.InitializedChanged -= portInitializedChangedHandler;
-                }
-                port = value;
-                if (port != null)
+                BeforeChangePropertyDelegate<SerialPort> beforeChangeDelegate = (ov, nv) => {
+                    ov.ReceivedDataAsciiLine -= receivedLineFromPort;
+                    ov.InitializedChanged -= portInitializedChangedHandler;
+                };
+                AfterChangePropertyDelegate<SerialPort> afterChangeDelegate = (ov, nv) => {
                     port.ReceivedDataAsciiString += receivedLineFromPort;
+                };
+                setProperty(this, ref port, value, PortChanged, beforeChangeDelegate, afterChangeDelegate);
             }
         }
 
@@ -82,6 +82,8 @@ namespace OpenSC.Model.Routers.Leitch
         #endregion
 
         #region Property: Level
+        public event PropertyChangedTwoValuesDelegate<LeitchRouter, int> LevelChanged;
+
         private int level;
 
         public int Level
@@ -89,10 +91,15 @@ namespace OpenSC.Model.Routers.Leitch
             get => level;
             set
             {
-                if ((value < 0) || (value > 9))
-                    throw new ArgumentOutOfRangeException();
-                level = value;
+                ValidateLevel(level);
+                setProperty(this, ref level, value, LevelChanged);
             }
+        }
+
+        public void ValidateLevel(int level)
+        {
+            if ((level < 0) || (level > 15))
+                throw new ArgumentOutOfRangeException();
         }
 
         private readonly char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
@@ -106,7 +113,7 @@ namespace OpenSC.Model.Routers.Leitch
 
         private static readonly Dictionary<Type, string> OUTPUT_TYPES = new Dictionary<Type, string>()
         {
-            {  typeof(LeitchRouterOutput), "leitch" }
+            { typeof(LeitchRouterOutput), "leitch" }
         };
 
         protected override Dictionary<Type, string> OutputTypesDictionaryGetter() => OUTPUT_TYPES;
@@ -114,14 +121,10 @@ namespace OpenSC.Model.Routers.Leitch
 
         #region Setting/getting crosspoints
         protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)
-        {
-            sendSerialCommand("@ X:{0:X}/{1:X},{2:X}:I{3:X}", level, output.Index, input.Index, PanelIdSetting.Value);
-        }
+            => sendSerialCommand("@ X:{0:X}/{1:X},{2:X}:I{3:X}", level, output.Index, input.Index, PanelIdSetting.Value);
 
         protected override void queryAllStates()
-        {
-            sendSerialCommand("@ S?{0:X}", level);
-        }
+            => sendSerialCommand("@ S?{0:X}", level);
 
         protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
         {

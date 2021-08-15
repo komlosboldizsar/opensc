@@ -19,21 +19,17 @@ namespace OpenSC.Model.Streams
         #endregion
 
         #region Property: ID
-        public delegate void IdChangedDelegate(Stream stream, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
+        public event PropertyChangedTwoValuesDelegate<Stream, int> IdChanged;
 
         public int id = 0;
 
         public override int ID
         {
-            get { return id; }
+            get => id;
             set
             {
                 ValidateId(value);
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
+                setProperty(this, ref id, value, IdChanged);
             }
         }
 
@@ -47,22 +43,18 @@ namespace OpenSC.Model.Streams
         #endregion
 
         #region Property: Name
-        public delegate void NameChangedDelegate(Stream stream, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
+        public event PropertyChangedTwoValuesDelegate<Stream, string> NameChanged;
 
         [PersistAs("name")]
         private string name;
 
         public string Name
         {
-            get { return name; }
+            get => name;
             set
             {
                 ValidateName(value);
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
+                setProperty(this, ref name, value, NameChanged);
             }
         }
 
@@ -74,39 +66,26 @@ namespace OpenSC.Model.Streams
         #endregion
 
         #region Property: State
-        public delegate void StateChangedDelegate(Stream stream, StreamState oldState, StreamState newState);
-        public event StateChangedDelegate StateChanged;
+        public event PropertyChangedTwoValuesDelegate<Stream, StreamState> StateChanged;
 
         private StreamState state;
 
         public StreamState State
         {
-            get { return state; }
-            protected set {
-                StreamState oldState = state;
-                state = value;
-                StateChanged?.Invoke(this, oldState, value);
-                RaisePropertyChanged(nameof(State));
-            }
+            get => state;
+            protected set => setProperty(this, ref state, value, StateChanged);
         }
         #endregion
 
         #region Property: ViewerCount
-        public delegate void ViewerCountChangedDelegate(Stream stream, int? oldCount, int? newCount);
-        public event ViewerCountChangedDelegate ViewerCountChanged;
+        public event PropertyChangedTwoValuesDelegate<Stream, int?> ViewerCountChanged;
 
         private int? viewerCount = null;
 
         public int? ViewerCount
         {
-            get { return viewerCount; }
-            protected set
-            {
-                int? oldCount = viewerCount;
-                viewerCount = value;
-                ViewerCountChanged?.Invoke(this, oldCount, value);
-                RaisePropertyChanged(nameof(ViewerCount));
-            }
+            get => viewerCount;
+            protected set => setProperty(this, ref viewerCount, value, ViewerCountChanged);
         }
         #endregion
 

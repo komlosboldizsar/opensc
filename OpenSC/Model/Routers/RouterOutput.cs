@@ -155,14 +155,14 @@ namespace OpenSC.Model.Routers
         private string getSignalLabel()
             => string.Format("[(#{2}) {3}] output of router [(#{0}) {1}]", Router.ID, Router.Name, (Index + 1), Name);
 
-        public event SignalLabelChangedDelegate SignalLabelChanged;
+        public event PropertyChangedOneValueDelegate<ISignalSourceRegistered, string> SignalLabelChanged;
         #endregion
 
         #region Property: SignalUniqueId
         public string SignalUniqueId
             => string.Format("router.{0}.output.{1}", Router.ID, (Index + 1));
 
-        public event SignalUniqueIdChangedDelegate SignalUniqueIdChanged;
+        public event PropertyChangedOneValueDelegate<ISignalSourceRegistered, string> SignalUniqueIdChanged;
         #endregion
 
         #region Property: LocksSupported, LockState

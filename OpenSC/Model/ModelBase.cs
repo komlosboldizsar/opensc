@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 namespace OpenSC.Model
 {
 
-    public abstract class ModelBase : IModel, INotifyPropertyChanged
+    public abstract class ModelBase : SystemObjectBase, IModel
     {
+
         public abstract int ID { get; set; }
 
         public event ModelRemovedHandler ModelRemoved;
@@ -70,15 +71,6 @@ namespace OpenSC.Model
         { }
 
         public event ModelAfterUpdateHandler ModelAfterUpdate;
-
-        #region Implementation of INotifyPropertyChanged
-        public event PropertyChangedDelegate PropertyChanged;
-
-        protected void RaisePropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(propertyName);
-        }
-        #endregion
 
     }
 
