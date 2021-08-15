@@ -54,7 +54,7 @@ namespace OpenSC.Model
             AfterChangePropertyDelegate<TProperty> afterChangePropertyDelegate = null,
             PropertyValidatorDelegate<TProperty> validator = null,
             [CallerMemberName] string propertyName = "")
-            => setProperty(item, ref member, newValue, (i, ov, nv) => propertyChangedDelegate?.Invoke(i), beforeChangePropertyDelegate, afterChangePropertyDelegate, propertyName: validator, propertyName);
+            => setProperty(item, ref member, newValue, (i, ov, nv) => propertyChangedDelegate?.Invoke(i), beforeChangePropertyDelegate, afterChangePropertyDelegate, validator, propertyName);
 
         #region Implementation of INotifyPropertyChanged
         public event PropertyChangedDelegate PropertyChanged;
