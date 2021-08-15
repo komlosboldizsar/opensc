@@ -19,24 +19,15 @@ namespace OpenSC.Model.Macros
                 element.Restored();
         }
 
-        public delegate void IdChangedDelegate(MacroPanel panel, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
+        #region Property: ID
+        public event PropertyChangedTwoValuesDelegate<MacroPanel, int> IdChanged;
 
         public int id = 0;
 
         public override int ID
         {
-            get { return id; }
-            set
-            {
-                ValidateId(value);
-                if (value == id)
-                    return;
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
-            }
+            get => id;
+            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
         }
 
         public void ValidateId(int id)
@@ -46,26 +37,18 @@ namespace OpenSC.Model.Macros
             if (!MacroPanelDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
+        #endregion
 
-        public delegate void NameChangedDelegate(MacroPanel panel, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
+        #region Property: Name
+        public event PropertyChangedTwoValuesDelegate<MacroPanel, string> NameChanged;
 
         [PersistAs("name")]
         private string name;
 
         public string Name
         {
-            get { return name; }
-            set
-            {
-                ValidateName(value);
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
-            }
+            get => name;
+            set => setProperty(this, ref name, value, NameChanged, validator: ValidateName);
         }
 
         public void ValidateName(string name)
@@ -73,20 +56,38 @@ namespace OpenSC.Model.Macros
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
         }
+        #endregion
+
+        #region Property: Width
+        public event PropertyChangedTwoValuesDelegate<MacroPanel, int> SizeWChanged;
 
         [PersistAs("width")]
-        public int SizeW { get; set; }
+        private int width;
+
+        public int SizeW
+        {
+            get => width;
+            set => setProperty(this, ref width, value, SizeWChanged);
+        }
+        #endregion
+
+        #region Property: Height
+        public event PropertyChangedTwoValuesDelegate<MacroPanel, int> SizeHChanged;
 
         [PersistAs("height")]
-        public int SizeH { get; set; }
+        private int height;
+
+        public int SizeH
+        {
+            get => height;
+            set => setProperty(this, ref height, value, SizeHChanged);
+        }
+        #endregion
 
         #region Elements
         private ObservableList<MacroPanelElement> elements = new ObservableList<MacroPanelElement>();
 
-        public ObservableList<MacroPanelElement> Elements
-        {
-            get { return elements; }
-        }
+        public ObservableList<MacroPanelElement> Elements => elements;
 
         [PersistAs("elements")]
         [PersistAs("element", 1)]

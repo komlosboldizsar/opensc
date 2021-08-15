@@ -9,13 +9,6 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Routers.BlackMagicDesign
 {
-
-    public delegate void BmdVideohubIpAddressChangingDelegate(BmdVideohub router, string oldIpAddress, string newIpAddress);
-    public delegate void BmdVideohubIpAddressChangedDelegate(BmdVideohub router, string oldIpAddress, string newIpAddress);
-
-    public delegate void BmdVideohubConnectionStateChangingDelegate(BmdVideohub router, bool oldState, bool newState);
-    public delegate void BmdVideohubConnectionStateChangedDelegate(BmdVideohub router, bool oldState, bool newState);
-
     public delegate void BmdVideohubAutoReconnectChangingDelegate(BmdVideohub router, bool oldSetting, bool newSetting);
     public delegate void BmdVideohubAutoReconnectChangedDelegate(BmdVideohub router, bool oldSetting, bool newSetting);
 
@@ -49,128 +42,82 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             videohub = null;
 
             IpAddressChanged = null;
-            IpAddressChanging = null;
             ConnectionStateChanged = null;
-            ConnectionStateChanging = null;
             AutoReconnectChanged = null;
-            AutoReconnectChanging = null;
 
             autoReconnectThread?.Abort();
             autoReconnectThread = null;
 
         }
 
-        public void Connect()
-        {
-            videohub.Connect();
-        }
+        public void Connect() => videohub.Connect();
+        public void Disconnect() => videohub.Disconnect();
 
-        public void Disconnect()
-        {
-            videohub.Disconnect();
-        }
-
-        public event BmdVideohubIpAddressChangingDelegate IpAddressChanging;
-        public event BmdVideohubIpAddressChangedDelegate IpAddressChanged;
+        #region Property: IpAddress
+        public event PropertyChangedTwoValuesDelegate<BmdVideohub, string> IpAddressChanged;
 
         [PersistAs("ip_address")]
         private string ipAddress;
 
         public string IpAddress
         {
-            get { return ipAddress; }
-            set
-            {
-                ValidateIpAddress(ipAddress);
-                if (value == ipAddress)
-                    return;
-                string oldIpAddress = ipAddress;
-                IpAddressChanging?.Invoke(this, oldIpAddress, value);
-                ipAddress = value;
-                videohub.IpAddress = value;
-                IpAddressChanged?.Invoke(this, oldIpAddress, value);
-                RaisePropertyChanged(nameof(IpAddress));
-            }
+            get => ipAddress;
+            set => setProperty(this, ref ipAddress, value, IpAddressChanged,
+                null, (ov, nv) => { videohub.IpAddress = nv; }, ValidateIpAddress);
         }
 
         public void ValidateIpAddress(string ipAddress)
         {
             // ... throw new ArgumentException();
         }
+        #endregion
 
-        public event BmdVideohubConnectionStateChangingDelegate ConnectionStateChanging;
-        public event BmdVideohubConnectionStateChangedDelegate ConnectionStateChanged;
+        #region Property: Connected
+        public event PropertyChangedTwoValuesDelegate<BmdVideohub, bool> ConnectionStateChanged;
 
         private bool connected;
 
         public bool Connected
         {
-            get { return connected; }
+            get => connected;
             set
             {
-
-                if (value == connected)
-                    return;
-                bool oldState = connected;
-                ConnectionStateChanging?.Invoke(this, oldState, value);
-                connected = value;
-                ConnectionStateChanged?.Invoke(this, oldState, value);
-                RaisePropertyChanged(nameof(Connected));
-
-                if (value)
+                AfterChangePropertyDelegate<bool> afterChangeDelegate = (ov, nv) =>
                 {
-
-                    // State
-                    State = RouterState.Ok;
-                    StateString = "connected";
-
-                    // Lo
-                    string logMessage = string.Format("Connected to a BlackMagic Design router/videohub (ID: {0}) with IP {1}.",
-                        ID,
-                        IpAddress);
-                    LogDispatcher.I(LOG_TAG, logMessage);
-
-                }
-                else
-                {
-
-                    // State
-                    State = RouterState.Warning;
-                    StateString = "disconnected";
-
-                    // Log
-                    string logMessage = string.Format("Disconnected from a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}.",
-                        ID,
-                        IpAddress);
-                    LogDispatcher.I(LOG_TAG, logMessage);
-
-                }
-
+                    if (nv)
+                    {
+                        State = RouterState.Ok;
+                        StateString = "connected";
+                        string logMessage = string.Format("Connected to a BlackMagic Design router/videohub (ID: {0}) with IP {1}.", ID, IpAddress);
+                        LogDispatcher.I(LOG_TAG, logMessage);
+                    }
+                    else
+                    {
+                        State = RouterState.Warning;
+                        StateString = "disconnected";
+                        string logMessage = string.Format("Disconnected from a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}.", ID, IpAddress);
+                        LogDispatcher.I(LOG_TAG, logMessage);
+                    }
+                };
+                setProperty(this, ref connected, value, ConnectionStateChanged, null, afterChangeDelegate);
             }
         }
+        #endregion
 
         #region Auto reconnect
-        public event BmdVideohubAutoReconnectChangingDelegate AutoReconnectChanging;
-        public event BmdVideohubAutoReconnectChangedDelegate AutoReconnectChanged;
+        public event PropertyChangedTwoValuesDelegate<BmdVideohub, bool> AutoReconnectChanged;
 
         [PersistAs("auto_reconnect")]
         private bool autoReconnect;
 
         public bool AutoReconnect
         {
-            get { return autoReconnect; }
-            set
-            {
-                if (value == autoReconnect)
-                    return;
-                bool oldValue = autoReconnect;
-                AutoReconnectChanging?.Invoke(this, oldValue, value);
-                autoReconnect = value;
-                AutoReconnectChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(AutoReconnect));
-            }
+            get => autoReconnect;
+            set => setProperty(this, ref autoReconnect, value, AutoReconnectChanged);
         }
+        #endregion
 
+        #region Auto reconnect thread
         private const int RECONNECT_TRY_INTERVAL = 10000;
 
         private Thread autoReconnectThread = null;

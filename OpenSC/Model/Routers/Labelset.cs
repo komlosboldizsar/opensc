@@ -30,23 +30,13 @@ namespace OpenSC.Model.Routers
         }
 
         #region Property: ID
-        public delegate void IdChangedDelegate(Labelset labelset, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
+        public event PropertyChangedTwoValuesDelegate<Labelset, int> IdChanged;
 
         public int id = 0;
         public override int ID
         {
-            get { return id; }
-            set
-            {
-                ValidateId(value);
-                if (value == id)
-                    return;
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
-            }
+            get => id;
+            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
         }
         public void ValidateId(int id)
         {
@@ -58,24 +48,15 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Property: Name
-        public delegate void NameChangedDelegate(Labelset labelset, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
+        public event PropertyChangedTwoValuesDelegate<Labelset, string> NameChanged;
 
         [PersistAs("name")]
         private string name;
+        
         public string Name
         {
-            get { return name; }
-            set
-            {
-                ValidateName(value);
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
-            }
+            get => name;
+            set => setProperty(this, ref name, value, NameChanged, validator: ValidateName);
         }
         public void ValidateName(string name)
         {
