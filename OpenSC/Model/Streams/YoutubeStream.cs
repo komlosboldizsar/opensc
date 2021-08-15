@@ -70,11 +70,7 @@ namespace OpenSC.Model.Streams
         public int RefreshRate
         {
             get => refreshRate;
-            set
-            {
-                ValidateRefreshRate(value);
-                setProperty(this, ref refreshRate, value, RefreshRateChanged);
-            }
+            set => setProperty(this, ref refreshRate, value, RefreshRateChanged, validator: ValidateRefreshRate);
         }
 
         public void ValidateRefreshRate(int refreshRate)

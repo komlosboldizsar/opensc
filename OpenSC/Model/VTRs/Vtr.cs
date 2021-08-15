@@ -33,11 +33,7 @@ namespace OpenSC.Model.VTRs
         public override int ID
         {
             get => id;
-            set
-            {
-                ValidateId(value);
-                setProperty(this, ref id, value, IdChanged, propertyName: nameof(ID));
-            }
+            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
         }
 
         public void ValidateId(int id)
@@ -58,7 +54,7 @@ namespace OpenSC.Model.VTRs
         public string Name
         {
             get => name;
-            set => setProperty(this, ref name, value, NameChanged, propertyName: nameof(Name));
+            set => setProperty(this, ref name, value, NameChanged);
         }
         #endregion
 
@@ -70,7 +66,7 @@ namespace OpenSC.Model.VTRs
         public string Title
         {
             get => title;
-            protected set => setProperty(this, ref title, value, TitleChanged, propertyName: nameof(Title));
+            protected set => setProperty(this, ref title, value, TitleChanged);
         }
         #endregion
 
@@ -82,7 +78,7 @@ namespace OpenSC.Model.VTRs
         public VtrState State
         {
             get => state;
-            protected set => setProperty(this, ref state, value, StateChanged, propertyName: nameof(State));
+            protected set => setProperty(this, ref state, value, StateChanged);
         }
         #endregion
 
@@ -96,7 +92,7 @@ namespace OpenSC.Model.VTRs
             get => secondsFull;
             protected set
             {
-                if (!setProperty(this, ref secondsFull, value, SecondsFullChanged, propertyName: nameof(SecondsFull)))
+                if (!setProperty(this, ref secondsFull, value, SecondsFullChanged))
                     return;
                 RaisePropertyChanged(nameof(TimeFull));
             }
@@ -115,7 +111,7 @@ namespace OpenSC.Model.VTRs
             get => secondsElapsed;
             protected set
             {
-                if (!setProperty(this, ref secondsElapsed, value, SecondsElapsedChanged, propertyName: nameof(SecondsElapsed)))
+                if (!setProperty(this, ref secondsElapsed, value, SecondsElapsedChanged))
                     return;
                 RaisePropertyChanged(nameof(TimeElapsed));
             }
@@ -134,7 +130,7 @@ namespace OpenSC.Model.VTRs
             get => secondsRemaining;
             protected set
             {
-                if (!setProperty(this, ref secondsRemaining, value, SecondsRemainingChanged, propertyName: nameof(SecondsRemaining)))
+                if (!setProperty(this, ref secondsRemaining, value, SecondsRemainingChanged))
                     return;
                 RaisePropertyChanged(nameof(TimeRemaining));
             }

@@ -49,11 +49,7 @@ namespace OpenSC.Model.Routers.CrosspointStores
         public override int ID
         {
             get => id;
-            set
-            {
-                ValidateId(value);
-                setProperty(this, ref id, value, IdChanged);
-            }
+            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
         }
 
         public void ValidateId(int id)
@@ -73,12 +69,8 @@ namespace OpenSC.Model.Routers.CrosspointStores
 
         public string Name
         {
-            get { return name; }
-            set
-            {
-                ValidateName(value);
-                setProperty(this, ref name, value, NameChanged);
-            }
+            get => name;
+            set => setProperty(this, ref name, value, NameChanged, validator: ValidateName);
         }
 
         public void ValidateName(string name)

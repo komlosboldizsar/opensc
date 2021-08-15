@@ -40,11 +40,7 @@ namespace OpenSC.Model.Signals.TallyCopying
         public override int ID
         {
             get => id;
-            set
-            {
-                ValidateId(value);
-                setProperty(this, ref id, value, IdChanged);
-            }
+            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
         }
 
         public void ValidateId(int id)

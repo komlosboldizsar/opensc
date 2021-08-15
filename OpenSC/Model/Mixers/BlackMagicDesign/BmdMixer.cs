@@ -114,11 +114,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         public string IpAddress
         {
             get => ipAddress;
-            set
-            {
-                ValidateIpAddress(ipAddress);
-                setProperty(this, ref ipAddress, value, IpAddressChanged, null, (ov, nv) => switcher.IpAddress = nv);
-            }
+            set => setProperty(this, ref ipAddress, value, IpAddressChanged, null, (ov, nv) => switcher.IpAddress = nv, ValidateIpAddress);
         }
 
         public void ValidateIpAddress(string ipAddress)

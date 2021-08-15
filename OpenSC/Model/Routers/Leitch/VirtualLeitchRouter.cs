@@ -103,11 +103,7 @@ namespace OpenSC.Model.Routers.Leitch
         public int Level
         {
             get => level;
-            set
-            {
-                ValidateLevel(level);
-                setProperty(this, ref level, value, LevelChanged);
-            }
+            set => setProperty(this, ref level, value, LevelChanged, validator: ValidateLevel);
         }
 
         public void ValidateLevel(int level)

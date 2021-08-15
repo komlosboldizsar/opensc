@@ -38,8 +38,8 @@ namespace OpenSC.Model.Signals
             get => id;
             set
             {
-                ValidateId(value);
-                setProperty(this, ref id, value, IdChanged);
+                if (!setProperty(this, ref id, value, IdChanged, validator: ValidateId))
+                    return;
                 SignalLabelChanged?.Invoke(this, SignalLabel);
                 RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
             }
@@ -65,7 +65,8 @@ namespace OpenSC.Model.Signals
             get => name;
             set
             {
-                setProperty(this, ref name, value, NameChanged);
+                if (!setProperty(this, ref name, value, NameChanged))
+                    return;
                 SignalLabelChanged?.Invoke(this, SignalLabel);
                 RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
                 List<object> recursionChain = new List<object>();

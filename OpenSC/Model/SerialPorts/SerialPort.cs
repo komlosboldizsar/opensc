@@ -57,11 +57,7 @@ namespace OpenSC.Model.SerialPorts
         public override int ID
         {
             get => id;
-            set
-            {
-                ValidateId(value);
-                setProperty(this, ref id, value, IdChanged);
-            }
+            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
         }
 
         public void ValidateId(int id)
@@ -82,11 +78,7 @@ namespace OpenSC.Model.SerialPorts
         public string Name
         {
             get => name;
-            set
-            {
-                ValidateName(value);
-                setProperty(this, ref name, value, NameChanged);
-            }
+            set => setProperty(this, ref name, value, NameChanged, validator: ValidateName);
         }
 
         public void ValidateName(string name)
@@ -157,8 +149,7 @@ namespace OpenSC.Model.SerialPorts
             get => baudRate;
             set
             {
-                ValidateBaudRate(value);
-                if (!setProperty(this, ref baudRate, value, BaudRateChanged))
+                if (!setProperty(this, ref baudRate, value, BaudRateChanged, validator: ValidateBaudRate))
                     return;
                 afterPortPropertyChanged();
             }
@@ -200,8 +191,7 @@ namespace OpenSC.Model.SerialPorts
             get => dataBits;
             set
             {
-                ValidateDataBits(value);
-                if (!setProperty(this, ref dataBits, value, DataBitsChanged))
+                if (!setProperty(this, ref dataBits, value, DataBitsChanged, validator: ValidateDataBits))
                     return;
                 afterPortPropertyChanged();
             }

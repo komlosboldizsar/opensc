@@ -18,14 +18,17 @@ namespace OpenSC.Model
 
         public delegate void BeforeChangePropertyDelegate<TProperty>(TProperty oldValue, TProperty newValue);
         public delegate void AfterChangePropertyDelegate<TProperty>(TProperty oldValue, TProperty newValue);
+        public delegate void PropertyValidatorDelegate<TProperty>(TProperty value);
 
         protected bool setProperty<TItem, TProperty>
             (TItem item, ref TProperty member, TProperty newValue,
             PropertyChangedTwoValuesDelegate<TItem, TProperty> propertyChangedDelegate,
             BeforeChangePropertyDelegate<TProperty> beforeChangePropertyDelegate = null,
             AfterChangePropertyDelegate<TProperty> afterChangePropertyDelegate = null,
+            PropertyValidatorDelegate<TProperty> validator = null,
             [CallerMemberName] string propertyName = "")
         {
+            validator?.Invoke(newValue);
             if (member?.Equals(newValue) == true)
                 return false;
             TProperty oldValue = member;
@@ -41,15 +44,17 @@ namespace OpenSC.Model
             (TItem item, ref TProperty member, TProperty newValue, PropertyChangedOneValueDelegate<TItem, TProperty> propertyChangedDelegate,
             BeforeChangePropertyDelegate<TProperty> beforeChangePropertyDelegate = null,
             AfterChangePropertyDelegate<TProperty> afterChangePropertyDelegate = null,
+            PropertyValidatorDelegate<TProperty> validator = null,
             [CallerMemberName] string propertyName = "")
-            => setProperty(item, ref member, newValue, (i, ov, nv) => propertyChangedDelegate?.Invoke(i, nv), beforeChangePropertyDelegate, afterChangePropertyDelegate, propertyName);
+            => setProperty(item, ref member, newValue, (i, ov, nv) => propertyChangedDelegate?.Invoke(i, nv), beforeChangePropertyDelegate, afterChangePropertyDelegate, validator, propertyName);
 
         protected bool setProperty<TItem, TProperty>
             (TItem item, ref TProperty member, TProperty newValue, PropertyChangedNoValueDelegate<TItem> propertyChangedDelegate,
             BeforeChangePropertyDelegate<TProperty> beforeChangePropertyDelegate = null,
             AfterChangePropertyDelegate<TProperty> afterChangePropertyDelegate = null,
+            PropertyValidatorDelegate<TProperty> validator = null,
             [CallerMemberName] string propertyName = "")
-            => setProperty(item, ref member, newValue, (i, ov, nv) => propertyChangedDelegate?.Invoke(i), beforeChangePropertyDelegate, afterChangePropertyDelegate, propertyName);
+            => setProperty(item, ref member, newValue, (i, ov, nv) => propertyChangedDelegate?.Invoke(i), beforeChangePropertyDelegate, afterChangePropertyDelegate, propertyName: validator, propertyName);
 
         #region Implementation of INotifyPropertyChanged
         public event PropertyChangedDelegate PropertyChanged;

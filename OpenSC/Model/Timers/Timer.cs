@@ -39,11 +39,7 @@ namespace OpenSC.Model.Timers
         public override int ID
         {
             get => id;
-            set
-            {
-                ValidateId(value);
-                setProperty(this, ref id, value, IdChanged);
-            }
+            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
         }
 
         public void ValidateId(int id)
@@ -63,11 +59,7 @@ namespace OpenSC.Model.Timers
         public string Title
         {
             get => title;
-            set
-            {
-                ValidateTitle(value);
-                setProperty(this, ref title, value, TitleChanged);
-            }
+            set => setProperty(this, ref title, value, TitleChanged, validator: ValidateTitle);
         }
 
         public void ValidateTitle(string title)
@@ -88,8 +80,7 @@ namespace OpenSC.Model.Timers
             get => seconds;
             set
             {
-                ValidateSeconds(value);
-                if (!setProperty(this, ref seconds, value, SecondsChanged))
+                if (!setProperty(this, ref seconds, value, SecondsChanged, validator: ValidateSeconds))
                     return;
                 RaisePropertyChanged(nameof(TimeSpan));
                 TimerMacroTriggers.TimerReachedValue.Call(this, seconds);
@@ -117,11 +108,7 @@ namespace OpenSC.Model.Timers
         public int CountdownSeconds
         {
             get => countdownSeconds;
-            set
-            {
-                ValidateCountdownSeconds(value);
-                setProperty(this, ref countdownSeconds, value, CountdownSecondsChanged);
-            }
+            set => setProperty(this, ref countdownSeconds, value, CountdownSecondsChanged, validator: ValidateCountdownSeconds);
         }
 
         public void ValidateCountdownSeconds(int value)

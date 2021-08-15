@@ -51,11 +51,7 @@ namespace OpenSC.Model.UMDs.McCurdy
         public int Address
         {
             get => address;
-            set
-            {
-                ValidateAddress(value);
-                setProperty(this, ref address, value, AddressChanged);
-            }
+            set => setProperty(this, ref address, value, AddressChanged, validator: ValidateAddress);
         }
 
         public void ValidateAddress(int address)

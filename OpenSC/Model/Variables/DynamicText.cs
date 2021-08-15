@@ -35,11 +35,7 @@ namespace OpenSC.Model.Variables
         public override int ID
         {
             get => id;
-            set
-            {
-                ValidateId(value);
-                setProperty(this, ref id, value, IdChanged);
-            }
+            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
         }
 
         public void ValidateId(int id)
@@ -60,11 +56,7 @@ namespace OpenSC.Model.Variables
         public string Label
         {
             get => label;
-            set
-            {
-                ValidateLabel(value);
-                setProperty(this, ref label, value, LabelChanged);
-            }
+            set => setProperty(this, ref label, value, LabelChanged, validator: ValidateLabel);
         }
 
         public void ValidateLabel(string label)

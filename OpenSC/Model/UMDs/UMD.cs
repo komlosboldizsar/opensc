@@ -46,11 +46,7 @@ namespace OpenSC.Model.UMDs
         public override int ID
         {
             get => id;
-            set
-            {
-                ValidateId(value);
-                setProperty(this, ref id, value, IdChanged);
-            }
+            set => setProperty(this, ref id, value, IdChanged, validator: ValidateId);
         }
 
         public void ValidateId(int id)
@@ -71,12 +67,7 @@ namespace OpenSC.Model.UMDs
         public string Name
         {
             get => name;
-            set
-            {
-                ValidateName(value);
-                setProperty(this, ref name, value, NameChanged);
-            }
-
+            set => setProperty(this, ref name, value, NameChanged, validator: ValidateName);
         }
 
         public void ValidateName(string name)

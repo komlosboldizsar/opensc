@@ -43,11 +43,7 @@ namespace OpenSC.Model.UMDs.TSL31
         public int Address
         {
             get => address;
-            set
-            {
-                ValidateAddress(value);
-                setProperty(this, ref address, value, AddressChanged);
-            }
+            set => setProperty(this, ref address, value, AddressChanged, validator: ValidateAddress);
         }
 
         public void ValidateAddress(int address)
