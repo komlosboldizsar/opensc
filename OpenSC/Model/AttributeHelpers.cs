@@ -10,35 +10,17 @@ namespace OpenSC.Model
     static class AttributeHelpers
     {
 
+        public static TAttribute GetAttribute<TAttribute>(this Type type) where TAttribute : Attribute
+            => type.GetCustomAttributes(typeof(TAttribute), true).FirstOrDefault() as TAttribute;
+
         public static string GetTypeLabel(this Type type)
-        {
-            foreach(object attribute in type.GetCustomAttributes(true))
-            {
-                TypeLabelAttribute typedAttribute = attribute as TypeLabelAttribute;
-                if (typedAttribute != null)
-                    return typedAttribute.Label;
-            }
-            return string.Empty;
-        }
+            => type.GetAttribute<TypeLabelAttribute>()?.Label;
 
         public static string GetTypeCode(this Type type)
-        {
-            foreach (object attribute in type.GetCustomAttributes(true))
-            {
-                TypeCodeAttribute typedAttribute = attribute as TypeCodeAttribute;
-                if (typedAttribute != null)
-                    return typedAttribute.Code;
-            }
-            return string.Empty;
-        }
+            => type.GetAttribute<TypeCodeAttribute>()?.Code;
 
         public static string GetName(this IDatabaseBase database)
-        {
-            object[] databaseNameAttributes = database.GetType().GetCustomAttributes(typeof(DatabaseNameAttribute), true);
-            if (databaseNameAttributes.Length <= 0)
-                return null;
-            return (databaseNameAttributes[0] as DatabaseNameAttribute)?.Name;
-        }
+            => database.GetType().GetAttribute<DatabaseNameAttribute>()?.Name;
 
     }
 
