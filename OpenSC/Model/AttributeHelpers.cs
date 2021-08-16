@@ -10,6 +10,9 @@ namespace OpenSC.Model
     static class AttributeHelpers
     {
 
+        public static TAttribute GetAttribute<TAttribute>(this Type type) where TAttribute : Attribute
+            => type.GetCustomAttributes(true).OfType<TAttribute>().FirstOrDefault();
+
         public static string GetTypeLabel(this Type type)
         {
             foreach(object attribute in type.GetCustomAttributes(true))
