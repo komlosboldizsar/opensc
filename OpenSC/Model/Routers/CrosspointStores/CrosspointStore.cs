@@ -125,7 +125,15 @@ namespace OpenSC.Model.Routers.CrosspointStores
         public RouterOutput StoredOutput
         {
             get => storedOutput;
-            set => setProperty(this, ref storedOutput, value, StoredOutputChanged);
+            set
+            {
+                AfterChangePropertyDelegate<RouterOutput> afterChangeDelegate = (ov, nv) =>
+                {
+                    if (importInputAfterOutputSet)
+                        StoredInput = nv?.CurrentInput;
+                };
+                setProperty(this, ref storedOutput, value, StoredOutputChanged, null, afterChangeDelegate);
+            }
         }
 
         private void restoreStoredOutput()
@@ -166,6 +174,19 @@ namespace OpenSC.Model.Routers.CrosspointStores
         {
             get => clearOutputAfterTake;
             set => setProperty(this, ref clearOutputAfterTake, value, ClearOutputAfterTakeChanged);
+        }
+        #endregion
+
+        #region Property: ImportInputAfterOutputSet
+        public event PropertyChangedTwoValuesDelegate<CrosspointStore, bool> ImportInputAfterOutputSetChanged;
+
+        [PersistAs("import_input_after_output_set")]
+        private bool importInputAfterOutputSet;
+
+        public bool ImportInputAfterOutputSet
+        {
+            get => importInputAfterOutputSet;
+            set => setProperty(this, ref importInputAfterOutputSet, value, ImportInputAfterOutputSetChanged);
         }
         #endregion
 

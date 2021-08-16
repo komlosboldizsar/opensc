@@ -1,21 +1,22 @@
 ﻿using OpenSC.Model.Macros;
+using OpenSC.Model.Routers.CrosspointStores;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSC.Model.Routers.Macros
+namespace OpenSC.Model.Routers.CrosspointStores.Macros
 {
 
-    public class SetRouterCrosspointMacroCommand : MacroCommandBase
+    public class SetCrosspointStoreInputMacroCommand : MacroCommandBase
     {
 
-        public override string CommandCode => "Routers.SetCrosspoint";
+        public override string CommandCode => "CrosspointStores.SetInput";
 
-        public override string CommandName => "Set router crosspoint";
+        public override string CommandName => "Set input on a crosspoint store";
 
-        public override string Description => "Set a single router crosspoint. Switch an output to a selected input.";
+        public override string Description => "Change the stored input of a crosspoint store.";
 
         public override IMacroCommandArgument[] Arguments => new IMacroCommandArgument[] {
             new Arg0(),
@@ -29,19 +30,19 @@ namespace OpenSC.Model.Routers.Macros
             if (argumentValues.Length != Arguments.Length)
                 return;
 
-            Router router = argumentValues[0] as Router;
-            if (router == null)
+            CrosspointStore crosspointStore = argumentValues[0] as CrosspointStore;
+            if (crosspointStore == null)
                 return;
 
-            RouterOutput output = argumentValues[1] as RouterOutput;
-            if ((output == null) || (output.Router != router))
+            Router router = argumentValues[1] as Router;
+            if (router == null)
                 return;
 
             RouterInput input = argumentValues[2] as RouterInput;
             if ((input == null) || (input.Router != router))
                 return;
 
-            output.RequestCrosspointUpdate(input);
+            crosspointStore.StoredInput = input;
 
         }
 
@@ -49,18 +50,18 @@ namespace OpenSC.Model.Routers.Macros
         {
 
             if (index == 0) {
-                Router router = value as Router;
-                if (router == null)
+                CrosspointStore crosspointStore = value as CrosspointStore;
+                if (crosspointStore == null)
                     return "-1";
-                return router.ID.ToString();
+                return crosspointStore.ID.ToString();
             }
 
             if (index == 1)
             {
-                RouterOutput routerOutput = value as RouterOutput;
-                if (routerOutput == null)
+                Router router = value as Router;
+                if (router == null)
                     return "-1";
-                return routerOutput.Index.ToString();
+                return router.ID.ToString();
             }
 
             if (index == 2)
@@ -81,24 +82,28 @@ namespace OpenSC.Model.Routers.Macros
             if (keys.Length != Arguments.Length)
                 return null;
 
-            if (!int.TryParse(keys[0], out int routerId))
+            if (!int.TryParse(keys[0], out int crosspointStoreId))
                 return null;
-            if (!int.TryParse(keys[1], out int outputIndex))
+            if (!int.TryParse(keys[1], out int routerId))
                 return null;
             if (!int.TryParse(keys[2], out int inputIndex))
+                return null;
+
+            CrosspointStore crosspointStore = CrosspointStoreDatabase.Instance.GetTById(crosspointStoreId);
+            if (crosspointStore == null)
                 return null;
 
             Router router = RouterDatabase.Instance.GetTById(routerId);
             if (router == null)
                 return null;
 
-            if ((router.Outputs.Count <= outputIndex) || (router.Inputs.Count <= inputIndex))
+            if (router.Inputs.Count <= inputIndex)
                 return null;
 
             return new object[]
             {
+                crosspointStore,
                 router,
-                router.Outputs[outputIndex],
                 router.Inputs[inputIndex]
             };
 
@@ -108,9 +113,21 @@ namespace OpenSC.Model.Routers.Macros
 
         public class Arg0 : IMacroCommandArgument
         {
+            public string Name => "CrosspointStore";
+            public string Description => "The crosspoint store to change the stored input.";
+            public Type Type => typeof(CrosspointStore);
+            public MacroArgumentKeyType KeyType => MacroArgumentKeyType.Integer;
+            public object[] GetPossibilities(object[] previousArgumentValues)
+                => CrosspointStoreDatabase.Instance.ToArray();
+            public string GetStringForPossibility(object item)
+                => ((CrosspointStore)item).Name;
+        }
+
+        public class Arg1 : IMacroCommandArgument
+        {
             public string Name => "Router";
-            public string Description => "The router that executes the crosspoint change.";
-            public Type Type => typeof(Router);
+            public string Description => "The router that contains the input to store.";
+            public Type Type => typeof(RouterOutput);
             public MacroArgumentKeyType KeyType => MacroArgumentKeyType.Integer;
             public object[] GetPossibilities(object[] previousArgumentValues)
                 => RouterDatabase.Instance.ToArray();
@@ -118,31 +135,10 @@ namespace OpenSC.Model.Routers.Macros
                 => ((Router)item).Name;
         }
 
-        public class Arg1 : IMacroCommandArgument
-        {
-            public string Name => "Router output";
-            public string Description => "The router output that switches to an input.";
-            public Type Type => typeof(RouterOutput);
-            public MacroArgumentKeyType KeyType => MacroArgumentKeyType.Integer;
-            public string GetStringForPossibility(object item)
-                => ((RouterOutput)item).Name;
-
-            public object[] GetPossibilities(object[] previousArgumentValues)
-            {
-                if (previousArgumentValues.Length < 1)
-                    return ARRAY_EMPTY;
-                Router router = previousArgumentValues[0] as Router;
-                if (router == null)
-                    return ARRAY_EMPTY;
-                return router.Outputs.ToArray();
-            }
-
-        }
-
         public class Arg2 : IMacroCommandArgument
         {
             public string Name => "Router input";
-            public string Description => "The router input to switch to.";
+            public string Description => "The router input to change the crosspoint store's input to.";
             public Type Type => typeof(RouterInput);
             public MacroArgumentKeyType KeyType => MacroArgumentKeyType.Integer;
             public string GetStringForPossibility(object item)
@@ -152,7 +148,7 @@ namespace OpenSC.Model.Routers.Macros
             {
                 if (previousArgumentValues.Length < 1)
                     return ARRAY_EMPTY;
-                Router router = previousArgumentValues[0] as Router;
+                Router router = previousArgumentValues[1] as Router;
                 if (router == null)
                     return ARRAY_EMPTY;
                 return router.Inputs.ToArray();

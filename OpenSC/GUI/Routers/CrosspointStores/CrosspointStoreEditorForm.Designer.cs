@@ -36,10 +36,10 @@
             this.basicDataGroupBox = new System.Windows.Forms.GroupBox();
             this.routerInputGroupBox = new System.Windows.Forms.GroupBox();
             this.routerInputTable = new System.Windows.Forms.TableLayoutPanel();
+            this.routerInputInputLabel = new System.Windows.Forms.Label();
+            this.routerInputInputDropDown = new System.Windows.Forms.ComboBox();
             this.routerInputRouterLabel = new System.Windows.Forms.Label();
             this.routerInputRouterDropDown = new System.Windows.Forms.ComboBox();
-            this.routerInputInputDropDown = new System.Windows.Forms.ComboBox();
-            this.routerInputInputLabel = new System.Windows.Forms.Label();
             this.routerOutputGroupBox = new System.Windows.Forms.GroupBox();
             this.routerOutputTable = new System.Windows.Forms.TableLayoutPanel();
             this.routerOutputOutputLabel = new System.Windows.Forms.Label();
@@ -48,12 +48,14 @@
             this.routerOutputRouterDropDown = new System.Windows.Forms.ComboBox();
             this.modeLabel = new System.Windows.Forms.GroupBox();
             this.modeTable = new System.Windows.Forms.TableLayoutPanel();
+            this.clearOutputAfterTakeLabel = new System.Windows.Forms.Label();
+            this.clearInputAfterTakeCheckbox = new System.Windows.Forms.CheckBox();
+            this.clearInputAfterTakeLabel = new System.Windows.Forms.Label();
             this.autotakeAfterOutputSetLabel = new System.Windows.Forms.Label();
             this.autotakeAfterOutputSetCheckbox = new System.Windows.Forms.CheckBox();
-            this.clearInputAfterTakeLabel = new System.Windows.Forms.Label();
-            this.clearInputAfterTakeCheckbox = new System.Windows.Forms.CheckBox();
             this.clearOutputAfterTakeCheckbox = new System.Windows.Forms.CheckBox();
-            this.clearOutputAfterTakeLabel = new System.Windows.Forms.Label();
+            this.importInputAfterOutputSetCheckbox = new System.Windows.Forms.CheckBox();
+            this.importInputAfterOutputSetLabel = new System.Windows.Forms.Label();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.basicDataTable.SuspendLayout();
@@ -191,6 +193,27 @@
             this.routerInputTable.Size = new System.Drawing.Size(473, 60);
             this.routerInputTable.TabIndex = 0;
             // 
+            // routerInputInputLabel
+            // 
+            this.routerInputInputLabel.AutoSize = true;
+            this.routerInputInputLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.routerInputInputLabel.Location = new System.Drawing.Point(3, 30);
+            this.routerInputInputLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.routerInputInputLabel.Name = "routerInputInputLabel";
+            this.routerInputInputLabel.Size = new System.Drawing.Size(39, 30);
+            this.routerInputInputLabel.TabIndex = 5;
+            this.routerInputInputLabel.Text = "Input";
+            this.routerInputInputLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // routerInputInputDropDown
+            // 
+            this.routerInputInputDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.routerInputInputDropDown.FormattingEnabled = true;
+            this.routerInputInputDropDown.Location = new System.Drawing.Point(72, 33);
+            this.routerInputInputDropDown.Name = "routerInputInputDropDown";
+            this.routerInputInputDropDown.Size = new System.Drawing.Size(339, 24);
+            this.routerInputInputDropDown.TabIndex = 4;
+            // 
             // routerInputRouterLabel
             // 
             this.routerInputRouterLabel.AutoSize = true;
@@ -211,27 +234,6 @@
             this.routerInputRouterDropDown.Name = "routerInputRouterDropDown";
             this.routerInputRouterDropDown.Size = new System.Drawing.Size(339, 24);
             this.routerInputRouterDropDown.TabIndex = 3;
-            // 
-            // routerInputInputDropDown
-            // 
-            this.routerInputInputDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.routerInputInputDropDown.FormattingEnabled = true;
-            this.routerInputInputDropDown.Location = new System.Drawing.Point(72, 33);
-            this.routerInputInputDropDown.Name = "routerInputInputDropDown";
-            this.routerInputInputDropDown.Size = new System.Drawing.Size(339, 24);
-            this.routerInputInputDropDown.TabIndex = 4;
-            // 
-            // routerInputInputLabel
-            // 
-            this.routerInputInputLabel.AutoSize = true;
-            this.routerInputInputLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.routerInputInputLabel.Location = new System.Drawing.Point(3, 30);
-            this.routerInputInputLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.routerInputInputLabel.Name = "routerInputInputLabel";
-            this.routerInputInputLabel.Size = new System.Drawing.Size(39, 30);
-            this.routerInputInputLabel.TabIndex = 5;
-            this.routerInputInputLabel.Text = "Input";
-            this.routerInputInputLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // routerOutputGroupBox
             // 
@@ -320,7 +322,7 @@
             this.modeLabel.Margin = new System.Windows.Forms.Padding(10);
             this.modeLabel.Name = "modeLabel";
             this.modeLabel.Padding = new System.Windows.Forms.Padding(8, 4, 8, 8);
-            this.modeLabel.Size = new System.Drawing.Size(489, 96);
+            this.modeLabel.Size = new System.Drawing.Size(489, 119);
             this.modeLabel.TabIndex = 4;
             this.modeLabel.TabStop = false;
             this.modeLabel.Text = "Mode";
@@ -332,6 +334,8 @@
             this.modeTable.ColumnCount = 2;
             this.modeTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.modeTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.modeTable.Controls.Add(this.importInputAfterOutputSetLabel, 0, 3);
+            this.modeTable.Controls.Add(this.importInputAfterOutputSetCheckbox, 1, 3);
             this.modeTable.Controls.Add(this.clearOutputAfterTakeLabel, 0, 2);
             this.modeTable.Controls.Add(this.clearInputAfterTakeCheckbox, 1, 1);
             this.modeTable.Controls.Add(this.clearInputAfterTakeLabel, 0, 1);
@@ -341,12 +345,46 @@
             this.modeTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.modeTable.Location = new System.Drawing.Point(8, 19);
             this.modeTable.Name = "modeTable";
-            this.modeTable.RowCount = 3;
+            this.modeTable.RowCount = 4;
             this.modeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.modeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.modeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.modeTable.Size = new System.Drawing.Size(473, 69);
+            this.modeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.modeTable.Size = new System.Drawing.Size(473, 92);
             this.modeTable.TabIndex = 0;
+            // 
+            // clearOutputAfterTakeLabel
+            // 
+            this.clearOutputAfterTakeLabel.AutoSize = true;
+            this.clearOutputAfterTakeLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.clearOutputAfterTakeLabel.Location = new System.Drawing.Point(3, 46);
+            this.clearOutputAfterTakeLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.clearOutputAfterTakeLabel.Name = "clearOutputAfterTakeLabel";
+            this.clearOutputAfterTakeLabel.Size = new System.Drawing.Size(149, 23);
+            this.clearOutputAfterTakeLabel.TabIndex = 6;
+            this.clearOutputAfterTakeLabel.Text = "Clear output after take";
+            this.clearOutputAfterTakeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // clearInputAfterTakeCheckbox
+            // 
+            this.clearInputAfterTakeCheckbox.AutoSize = true;
+            this.clearInputAfterTakeCheckbox.Location = new System.Drawing.Point(203, 26);
+            this.clearInputAfterTakeCheckbox.Name = "clearInputAfterTakeCheckbox";
+            this.clearInputAfterTakeCheckbox.Size = new System.Drawing.Size(18, 17);
+            this.clearInputAfterTakeCheckbox.TabIndex = 3;
+            this.clearInputAfterTakeCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // clearInputAfterTakeLabel
+            // 
+            this.clearInputAfterTakeLabel.AutoSize = true;
+            this.clearInputAfterTakeLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.clearInputAfterTakeLabel.Location = new System.Drawing.Point(3, 23);
+            this.clearInputAfterTakeLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.clearInputAfterTakeLabel.Name = "clearInputAfterTakeLabel";
+            this.clearInputAfterTakeLabel.Size = new System.Drawing.Size(140, 23);
+            this.clearInputAfterTakeLabel.TabIndex = 2;
+            this.clearInputAfterTakeLabel.Text = "Clear input after take";
+            this.clearInputAfterTakeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // autotakeAfterOutputSetLabel
             // 
@@ -363,53 +401,41 @@
             // autotakeAfterOutputSetCheckbox
             // 
             this.autotakeAfterOutputSetCheckbox.AutoSize = true;
-            this.autotakeAfterOutputSetCheckbox.Location = new System.Drawing.Point(185, 3);
+            this.autotakeAfterOutputSetCheckbox.Location = new System.Drawing.Point(203, 3);
             this.autotakeAfterOutputSetCheckbox.Name = "autotakeAfterOutputSetCheckbox";
             this.autotakeAfterOutputSetCheckbox.Size = new System.Drawing.Size(18, 17);
             this.autotakeAfterOutputSetCheckbox.TabIndex = 1;
             this.autotakeAfterOutputSetCheckbox.UseVisualStyleBackColor = true;
             // 
-            // clearInputAfterTakeLabel
-            // 
-            this.clearInputAfterTakeLabel.AutoSize = true;
-            this.clearInputAfterTakeLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.clearInputAfterTakeLabel.Location = new System.Drawing.Point(3, 23);
-            this.clearInputAfterTakeLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.clearInputAfterTakeLabel.Name = "clearInputAfterTakeLabel";
-            this.clearInputAfterTakeLabel.Size = new System.Drawing.Size(140, 23);
-            this.clearInputAfterTakeLabel.TabIndex = 2;
-            this.clearInputAfterTakeLabel.Text = "Clear input after take";
-            this.clearInputAfterTakeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // clearInputAfterTakeCheckbox
-            // 
-            this.clearInputAfterTakeCheckbox.AutoSize = true;
-            this.clearInputAfterTakeCheckbox.Location = new System.Drawing.Point(185, 26);
-            this.clearInputAfterTakeCheckbox.Name = "clearInputAfterTakeCheckbox";
-            this.clearInputAfterTakeCheckbox.Size = new System.Drawing.Size(18, 17);
-            this.clearInputAfterTakeCheckbox.TabIndex = 3;
-            this.clearInputAfterTakeCheckbox.UseVisualStyleBackColor = true;
-            // 
             // clearOutputAfterTakeCheckbox
             // 
             this.clearOutputAfterTakeCheckbox.AutoSize = true;
-            this.clearOutputAfterTakeCheckbox.Location = new System.Drawing.Point(185, 49);
+            this.clearOutputAfterTakeCheckbox.Location = new System.Drawing.Point(203, 49);
             this.clearOutputAfterTakeCheckbox.Name = "clearOutputAfterTakeCheckbox";
             this.clearOutputAfterTakeCheckbox.Size = new System.Drawing.Size(18, 17);
             this.clearOutputAfterTakeCheckbox.TabIndex = 5;
             this.clearOutputAfterTakeCheckbox.UseVisualStyleBackColor = true;
             // 
-            // clearOutputAfterTakeLabel
+            // importInputAfterOutputSetCheckbox
             // 
-            this.clearOutputAfterTakeLabel.AutoSize = true;
-            this.clearOutputAfterTakeLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.clearOutputAfterTakeLabel.Location = new System.Drawing.Point(3, 46);
-            this.clearOutputAfterTakeLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.clearOutputAfterTakeLabel.Name = "clearOutputAfterTakeLabel";
-            this.clearOutputAfterTakeLabel.Size = new System.Drawing.Size(149, 23);
-            this.clearOutputAfterTakeLabel.TabIndex = 6;
-            this.clearOutputAfterTakeLabel.Text = "Clear output after take";
-            this.clearOutputAfterTakeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.importInputAfterOutputSetCheckbox.AutoSize = true;
+            this.importInputAfterOutputSetCheckbox.Location = new System.Drawing.Point(203, 72);
+            this.importInputAfterOutputSetCheckbox.Name = "importInputAfterOutputSetCheckbox";
+            this.importInputAfterOutputSetCheckbox.Size = new System.Drawing.Size(18, 17);
+            this.importInputAfterOutputSetCheckbox.TabIndex = 7;
+            this.importInputAfterOutputSetCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // importInputAfterOutputSetLabel
+            // 
+            this.importInputAfterOutputSetLabel.AutoSize = true;
+            this.importInputAfterOutputSetLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.importInputAfterOutputSetLabel.Location = new System.Drawing.Point(3, 69);
+            this.importInputAfterOutputSetLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.importInputAfterOutputSetLabel.Name = "importInputAfterOutputSetLabel";
+            this.importInputAfterOutputSetLabel.Size = new System.Drawing.Size(182, 23);
+            this.importInputAfterOutputSetLabel.TabIndex = 8;
+            this.importInputAfterOutputSetLabel.Text = "Import input after output set";
+            this.importInputAfterOutputSetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // CrosspointStoreEditorForm
             // 
@@ -474,5 +500,7 @@
         private System.Windows.Forms.CheckBox clearInputAfterTakeCheckbox;
         private System.Windows.Forms.Label clearInputAfterTakeLabel;
         private System.Windows.Forms.Label clearOutputAfterTakeLabel;
+        private System.Windows.Forms.Label importInputAfterOutputSetLabel;
+        private System.Windows.Forms.CheckBox importInputAfterOutputSetCheckbox;
     }
 }

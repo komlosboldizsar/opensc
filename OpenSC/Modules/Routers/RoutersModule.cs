@@ -12,6 +12,7 @@ using OpenSC.Model.Routers;
 using OpenSC.Model.Routers.BlackMagicDesign;
 using OpenSC.Model.Routers.CrosspointBooleans;
 using OpenSC.Model.Routers.CrosspointStores;
+using OpenSC.Model.Routers.CrosspointStores.Macros;
 using OpenSC.Model.Routers.DynamicTextFunctions;
 using OpenSC.Model.Routers.Leitch;
 using OpenSC.Model.Routers.Macros;
@@ -136,6 +137,7 @@ namespace OpenSC.Modules.Routers
         public void RegisterMacroCommandsAndTriggers()
         {
             MacroCommandRegister.Instance.RegisterCommandCollection(RouterMacroCommands.Instance);
+            MacroCommandRegister.Instance.RegisterCommandCollection(CrosspointStoreMacroCommands.Instance);
             MacroTriggerRegister.Instance.RegisterTriggerCollection(RouterMacroTriggers.Instance);
         }
 

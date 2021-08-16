@@ -601,6 +601,10 @@
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohubOutputXmlSerializer.cs" />
     <Compile Include="Model\Routers\CrosspointBooleans\CrosspointBoolean.cs" />
     <Compile Include="Model\Routers\CrosspointBooleans\CrosspointBooleanDatabase.cs" />
+    <Compile Include="Model\Routers\CrosspointStores\Macros\CrosspointStoreMacroCommands.cs" />
+    <Compile Include="Model\Routers\CrosspointStores\Macros\TakeCrosspointStoreMacroCommand.cs" />
+    <Compile Include="Model\Routers\CrosspointStores\Macros\SetCrosspointStoreOutputMacroCommand.cs" />
+    <Compile Include="Model\Routers\CrosspointStores\Macros\SetCrosspointStoreInputMacroCommand.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputLabel.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputName.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputSource.cs" />
