@@ -68,6 +68,7 @@ namespace OpenSC.GUI.Routers.CrosspointStores
             autotakeAfterOutputSetCheckbox.Checked = crosspointStore.Autotake;
             clearInputAfterTakeCheckbox.Checked = crosspointStore.ClearInputAfterTake;
             clearOutputAfterTakeCheckbox.Checked = crosspointStore.ClearOutputAfterTake;
+            importInputAfterOutputSetCheckbox.Checked = crosspointStore.ImportInputAfterOutputSet;
         }
 
         protected sealed override bool saveData()
@@ -114,6 +115,7 @@ namespace OpenSC.GUI.Routers.CrosspointStores
             crosspointStore.Autotake = autotakeAfterOutputSetCheckbox.Checked;
             crosspointStore.ClearInputAfterTake = clearInputAfterTakeCheckbox.Checked;
             crosspointStore.ClearOutputAfterTake = clearOutputAfterTakeCheckbox.Checked;
+            crosspointStore.ImportInputAfterOutputSet = importInputAfterOutputSetCheckbox.Checked;
         }
 
         private void initRouterDropDown(ComboBox dropDown)
