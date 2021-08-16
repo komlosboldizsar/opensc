@@ -99,7 +99,7 @@ namespace OpenSC.Model.Routers.Macros
             {
                 router,
                 router.Outputs[outputIndex],
-                router.Inputs[outputIndex]
+                router.Inputs[inputIndex]
             };
 
         }
