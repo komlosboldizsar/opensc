@@ -67,6 +67,9 @@ namespace OpenSC.Model
         { }
         #endregion
 
+        public override string ToString()
+            => $"(#{id}) {name}";
+
         public event ModelRemovedHandler ModelRemoved;
 
         public virtual void Removed()
