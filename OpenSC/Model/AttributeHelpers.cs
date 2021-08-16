@@ -11,7 +11,7 @@ namespace OpenSC.Model
     {
 
         public static TAttribute GetAttribute<TAttribute>(this Type type) where TAttribute : Attribute
-            => type.GetCustomAttributes(true).OfType<TAttribute>().FirstOrDefault();
+            => type.GetCustomAttributes(typeof(TAttribute), true).FirstOrDefault() as TAttribute;
 
         public static string GetTypeLabel(this Type type)
             => type.GetAttribute<TypeLabelAttribute>()?.Label;
