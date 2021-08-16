@@ -29,7 +29,7 @@ namespace OpenSC.Model
             [CallerMemberName] string propertyName = "")
         {
             validator?.Invoke(newValue);
-            if (member?.Equals(newValue) == true)
+            if (object.Equals(member, newValue))
                 return false;
             TProperty oldValue = member;
             beforeChangePropertyDelegate?.Invoke(oldValue, newValue);
