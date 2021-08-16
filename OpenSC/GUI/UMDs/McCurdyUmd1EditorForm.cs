@@ -180,7 +180,7 @@ namespace OpenSC.GUI.UMDs
             portDropDown.CreateAdapterAsDataSource(SerialPortDatabase.Instance, port => port.Name, true, "(not connected)");
 
             // Dynamic text sources
-            IComboBoxAdapterFactory dynamicTextAdapterFactory = new ComboBoxAdapterFactory<DynamicText>(DynamicTextDatabase.Instance.ItemsAsList, dt => dt.Label, true, "(empty)");
+            IComboBoxAdapterFactory dynamicTextAdapterFactory = new ComboBoxAdapterFactory<DynamicText>(DynamicTextDatabase.Instance.ItemsAsList, dt => dt.Name, true, "(empty)");
             for (int i = 0; i < MAX_COLUMN_COUNT; i++)
                 columnDynamicTextSourceDropDowns[i].GetAdapterFromFactoryAsDataSource(dynamicTextAdapterFactory);
 

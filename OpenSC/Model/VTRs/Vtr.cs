@@ -15,7 +15,6 @@ namespace OpenSC.Model.VTRs
         public override void Removed()
         {
             base.Removed();
-            NameChanged = null;
             TitleChanged = null;
             StateChanged = null;
             SecondsFullChanged = null;
@@ -29,19 +28,6 @@ namespace OpenSC.Model.VTRs
         {
             if (!VtrDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
-        }
-        #endregion
-
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<Vtr, string> NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get => name;
-            set => setProperty(this, ref name, value, NameChanged);
         }
         #endregion
 

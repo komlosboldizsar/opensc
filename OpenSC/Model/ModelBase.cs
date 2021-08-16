@@ -41,6 +41,32 @@ namespace OpenSC.Model
         { }
         #endregion
 
+        #region Property: Name
+        public event PropertyChangedTwoValuesDelegate<IModel, string> NameChanged;
+
+        [PersistAs("name")]
+        private string name;
+
+        public string Name
+        {
+            get => name;
+            set => setProperty(this, ref name, value, NameChanged, null, (ov, nv) => afterNameChange(), ValidateName);
+        }
+
+        public void ValidateName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException();
+            validateNameExtended(name);
+        }
+
+        protected virtual void validateNameExtended(string name)
+        { }
+
+        protected virtual void afterNameChange()
+        { }
+        #endregion
+
         public event ModelRemovedHandler ModelRemoved;
 
         public virtual void Removed()

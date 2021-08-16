@@ -46,8 +46,8 @@ namespace OpenSC.GUI.Timers
             builder.Header("Title");
             builder.Width(150);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
-            builder.UpdaterMethod((timer, cell) => { cell.Value = timer.Title; });
-            builder.AddChangeEvent(nameof(Timer.Title));
+            builder.UpdaterMethod((timer, cell) => { cell.Value = timer.Name; });
+            builder.AddChangeEvent(nameof(Timer.Name));
             builder.BuildAndAdd();
 
             // Column: mode image
@@ -127,7 +127,7 @@ namespace OpenSC.GUI.Timers
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.ButtonText("Delete");
             builder.CellContentClickHandlerMethod((timer, cell, e) => {
-                string msgBoxText = string.Format("Do you really want to delete this timer?\n(#{0}) {1}", timer.ID, timer.Title);
+                string msgBoxText = string.Format("Do you really want to delete this timer?\n(#{0}) {1}", timer.ID, timer.Name);
                 var confirm = MessageBox.Show(msgBoxText, "Delete confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (confirm == DialogResult.Yes)
                     TimerDatabase.Instance.Remove(timer);

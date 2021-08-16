@@ -42,8 +42,8 @@ namespace OpenSC.GUI.Variables
             builder.Width(150);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
-            builder.UpdaterMethod((dyntext, cell) => { cell.Value = dyntext.Label; });
-            builder.AddChangeEvent(nameof(DynamicText.Label));
+            builder.UpdaterMethod((dyntext, cell) => { cell.Value = dyntext.Name; });
+            builder.AddChangeEvent(nameof(DynamicText.Name));
             builder.BuildAndAdd();
 
             // Column: current text
@@ -75,7 +75,7 @@ namespace OpenSC.GUI.Variables
             builder.Width(70);
             builder.ButtonText("Delete");
             builder.CellContentClickHandlerMethod((dyntext, cell, e) => {
-                string msgBoxText = string.Format("Do you really want to delete this dynamic text?\n(#{0}) {1}", dyntext.ID, dyntext.Label);
+                string msgBoxText = string.Format("Do you really want to delete this dynamic text?\n(#{0}) {1}", dyntext.ID, dyntext.Name);
                 var confirm = MessageBox.Show(msgBoxText, "Delete confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (confirm == DialogResult.Yes)
                     DynamicTextDatabase.Instance.Remove(dyntext);

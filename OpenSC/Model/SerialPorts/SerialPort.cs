@@ -33,7 +33,6 @@ namespace OpenSC.Model.SerialPorts
             DeInit();
             packetSchedulerThread.Abort();
             packetSchedulerThread = null;
-            NameChanged = null;
             ComPortNameChanged = null;
             InitializedChanged = null;
             BaudRateChanged = null;
@@ -48,25 +47,6 @@ namespace OpenSC.Model.SerialPorts
         protected override void validateIdForDatabase(int id)
         {
             if (!SerialPortDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<SerialPort, string> NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get => name;
-            set => setProperty(this, ref name, value, NameChanged, validator: ValidateName);
-        }
-
-        public void ValidateName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
         }
         #endregion

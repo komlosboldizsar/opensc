@@ -22,31 +22,13 @@ namespace OpenSC.Model.Routers
         public override void Removed()
         {
             base.Removed();
-            NameChanged = null;
+            // remove event subscriptions
         }
 
         #region ID validation
         protected override void validateIdForDatabase(int id)
         {
             if (!LabelsetDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<Labelset, string> NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-        
-        public string Name
-        {
-            get => name;
-            set => setProperty(this, ref name, value, NameChanged, validator: ValidateName);
-        }
-        public void ValidateName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
         }
         #endregion

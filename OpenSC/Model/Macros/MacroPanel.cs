@@ -27,25 +27,6 @@ namespace OpenSC.Model.Macros
         }
         #endregion
 
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<MacroPanel, string> NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get => name;
-            set => setProperty(this, ref name, value, NameChanged, validator: ValidateName);
-        }
-
-        public void ValidateName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException();
-        }
-        #endregion
-
         #region Property: Width
         public event PropertyChangedTwoValuesDelegate<MacroPanel, int> SizeWChanged;
 

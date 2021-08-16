@@ -35,7 +35,7 @@ namespace OpenSC.Model.Signals
                 register();
         }
 
-        private void signalNameChangedHandler(ExternalSignal signal, string oldName, string newName)
+        private void signalNameChangedHandler(IModel signal, string oldName, string newName)
             => updateDescription();
 
         private void signalTallyChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState, List<object> recursionChain)

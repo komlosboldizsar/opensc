@@ -11,7 +11,6 @@ namespace OpenSC.Model.Streams
         public override void Removed()
         {
             base.Removed();
-            NameChanged = null;
             StateChanged = null;
             ViewerCountChanged = null;
         }
@@ -22,25 +21,6 @@ namespace OpenSC.Model.Streams
         {
             if (!StreamDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
-        }
-        #endregion
-
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<Stream, string> NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get => name;
-            set => setProperty(this, ref name, value, NameChanged, validator: ValidateName);
-        }
-
-        public void ValidateName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException();
         }
         #endregion
 

@@ -63,7 +63,7 @@ namespace OpenSC.GUI.Signals
             builder.ExternalUpdateEventSubscriberMethod((signal, updateInvoker) =>
             {
                 PropertyChangedTwoValuesDelegate<IModel, int> signalCategoryIdChangedHandler = (_category, oldCategory, newCategory) => updateInvoker();
-                PropertyChangedTwoValuesDelegate<ExternalSignalCategory, string> signalCategoryNameChangedHandler = (_category, oldName, newName) => updateInvoker();
+                PropertyChangedTwoValuesDelegate<IModel, string> signalCategoryNameChangedHandler = (_category, oldName, newName) => updateInvoker();
                 PropertyChangedTwoValuesDelegate<ExternalSignalCategory, Color> signalCategoryColorChangedHandler = (_category, oldColor, newColor) => updateInvoker();
                 if (signal.Category != null)
                 {

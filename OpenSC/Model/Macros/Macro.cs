@@ -48,25 +48,6 @@ namespace OpenSC.Model.Macros
         }
         #endregion
 
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<Macro, string> NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get => name;
-            set => setProperty(this, ref name, value, NameChanged, validator: ValidateName);
-        }
-
-        public void ValidateName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException();
-        }
-        #endregion
-
         #region Commands
         private ObservableList<MacroCommandWithArguments> commands = new ObservableList<MacroCommandWithArguments>();
 
@@ -141,7 +122,7 @@ namespace OpenSC.Model.Macros
 
         public void Run()
         {
-            string logMessage = string.Format("Macro #{0} ({1}) is executed externally or from another macro.", ID, name);
+            string logMessage = string.Format("Macro #{0} ({1}) is executed externally or from another macro.", ID, Name);
             LogDispatcher.I(LOG_TAG, logMessage);
             _run();
         }
@@ -150,7 +131,7 @@ namespace OpenSC.Model.Macros
         {
             if (CurrentStackDepth >= MaxStackDepthSetting.Value)
             {
-                string logMessage = string.Format("Can't execute #{0} ({1}) macro, because stack is full ({2}).", ID, name, CurrentStackDepth);
+                string logMessage = string.Format("Can't execute #{0} ({1}) macro, because stack is full ({2}).", ID, Name, CurrentStackDepth);
                 LogDispatcher.W(LOG_TAG, logMessage);
                 return;
             }
@@ -163,7 +144,7 @@ namespace OpenSC.Model.Macros
 
         public void Triggered(MacroTriggerWithArguments source)
         {
-            string logMessage = string.Format("Macro #{0} ({1}) triggered. Event: {2}.", ID, name, source.HumanReadable);
+            string logMessage = string.Format("Macro #{0} ({1}) triggered. Event: {2}.", ID, Name, source.HumanReadable);
             LogDispatcher.I(LOG_TAG, logMessage);
             _run();
         }

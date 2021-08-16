@@ -29,7 +29,7 @@ namespace OpenSC.Model.Routers
             register();
         }
 
-        private void routerNameChangedHandler(Router router, string oldName, string newName)
+        private void routerNameChangedHandler(IModel router, string oldName, string newName)
             => updateDescription();
 
         private void routerIdChangedHandler(IModel router, int oldValue, int newValue)

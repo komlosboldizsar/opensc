@@ -251,7 +251,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
             private void watchedRouterIdChanged(IModel router, int oldId, int newId)
                 => updateNameAndDescription();
 
-            private void watchedRouterNameChanged(Router router, string oldName, string newName)
+            private void watchedRouterNameChanged(IModel router, string oldName, string newName)
                 => updateDescription();
 
             private void watchedInputChanged(CrosspointBoolean crosspointBoolean, RouterInput oldValue, RouterInput newValue)

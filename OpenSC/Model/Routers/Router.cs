@@ -26,7 +26,6 @@ namespace OpenSC.Model.Routers
         public override void Removed()
         {
             base.Removed();
-            NameChanged = null;
             InputsChanged = null;
             OutputsChanged = null;
             StateChanged = null;
@@ -81,25 +80,6 @@ namespace OpenSC.Model.Routers
         protected override void validateIdForDatabase(int id)
         {
             if (!RouterDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<Router, string> NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get => name;
-            set => setProperty(this, ref name, value, NameChanged, validator: ValidateName);
-        }
-
-        public void ValidateName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
         }
         #endregion

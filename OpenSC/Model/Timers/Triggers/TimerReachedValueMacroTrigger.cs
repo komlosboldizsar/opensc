@@ -21,7 +21,7 @@ namespace OpenSC.Model.Timers.Triggers
                 "The timer to observe.",
                 typeof(Timer),
                 (prev) => TimerDatabase.Instance.ToArray(),
-                timer => ((Timer)timer).Title);
+                timer => ((Timer)timer).Name);
             addArgument("Value",
                 "Time value the timers value is compared to.",
                 typeof(int),
@@ -94,7 +94,7 @@ namespace OpenSC.Model.Timers.Triggers
             if (timeValue < 0)
                 return HUMAN_READABLE_ERROR;
 
-            return string.Format("Value of timer #{0} ({1}) reaches {2}.", timer.ID, timer.Title, timeValue);
+            return string.Format("Value of timer #{0} ({1}) reaches {2}.", timer.ID, timer.Name, timeValue);
 
         }
 

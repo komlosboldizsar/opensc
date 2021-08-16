@@ -19,7 +19,6 @@ namespace OpenSC.Model.Signals.TallyCopying
         {
             base.Removed();
             Name = null;
-            NameChanged = null;
         }
 
         public override void TotallyRestored()
@@ -36,19 +35,6 @@ namespace OpenSC.Model.Signals.TallyCopying
         {
             if (!TallyCopyDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
-        }
-        #endregion
-
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<TallyCopy, string> NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get => name;
-            set => setProperty(this, ref name, value, NameChanged);
         }
         #endregion
 

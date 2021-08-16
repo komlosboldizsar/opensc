@@ -1,6 +1,7 @@
 ﻿using OpenSC.GUI.GeneralComponents.Tables;
 using OpenSC.GUI.Helpers.Converters;
 using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model;
 using OpenSC.Model.General;
 using OpenSC.Model.Routers;
 using OpenSC.Model.Signals;
@@ -370,7 +371,7 @@ namespace OpenSC.GUI.Routers
             #region Property: RouterName
             public string RouterName => Output.Router.Name;
 
-            private void Router_NameChanged(Router output, string oldName, string newName)
+            private void Router_NameChanged(IModel output, string oldName, string newName)
             {
                 PropertyChanged?.Invoke(nameof(RouterName));
             }

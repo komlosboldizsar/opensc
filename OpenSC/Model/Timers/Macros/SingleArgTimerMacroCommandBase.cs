@@ -79,7 +79,7 @@ namespace OpenSC.Model.Timers.Macros
             public object[] GetPossibilities(object[] previousArgumentValues)
                 => TimerDatabase.Instance.ToArray();
             public string GetStringForPossibility(object item)
-                => ((Timer)item).Title;
+                => ((Timer)item).Name;
 
             public Arg0(string description)
             {

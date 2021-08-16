@@ -23,7 +23,6 @@ namespace OpenSC.Model.Mixers
         public override void Removed()
         {
             base.Removed();
-            NameChanged = null;
             OnProgramInputChanged = null;
             OnProgramInputNameChanged = null;
             OnPreviewInputChanged = null;
@@ -40,25 +39,6 @@ namespace OpenSC.Model.Mixers
         protected override void validateIdForDatabase(int id)
         {
             if (!MixerDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<Mixer, string> NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get => name;
-            set => setProperty(this, ref name, value, NameChanged, validator: ValidateName);
-        }
-
-        public void ValidateName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
         }
         #endregion

@@ -20,19 +20,6 @@ namespace OpenSC.Model.Signals
         }
         #endregion
 
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<ExternalSignalCategory, string> NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get => name;
-            set => setProperty(this, ref name, value, NameChanged);
-        }
-        #endregion
-
         #region Property: Color
         public event PropertyChangedTwoValuesDelegate<ExternalSignalCategory, Color> ColorChanged;
 

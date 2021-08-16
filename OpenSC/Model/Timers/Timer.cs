@@ -16,7 +16,6 @@ namespace OpenSC.Model.Timers
         public override void Removed()
         {
             base.Removed();
-            TitleChanged = null;
             SecondsChanged = null;
             CountdownSecondsChanged = null;
             RunningStateChanged = null;
@@ -34,26 +33,6 @@ namespace OpenSC.Model.Timers
         protected override void validateIdForDatabase(int id)
         {
             if (!TimerDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
-        #region Property: Title
-        public event PropertyChangedTwoValuesDelegate<Timer, string> TitleChanged;
-
-        [PersistAs("title")]
-        private string title = "Test";
-        public string Title
-        {
-            get => title;
-            set => setProperty(this, ref title, value, TitleChanged, validator: ValidateTitle);
-        }
-
-        public void ValidateTitle(string title)
-        {
-            if (title == null)
-                throw new ArgumentNullException();
-            if (title == string.Empty)
                 throw new ArgumentException();
         }
         #endregion

@@ -20,7 +20,6 @@ namespace OpenSC.Model.Variables
         public override void Removed()
         {
             base.Removed();
-            LabelChanged = null;
             CurrentTextChanged = null;
             substitutes.Clear();
             substituteValues.Clear();
@@ -30,25 +29,6 @@ namespace OpenSC.Model.Variables
         protected override void validateIdForDatabase(int id)
         {
             if (!DynamicTextDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
-        #region Property: Label
-        public event PropertyChangedTwoValuesDelegate<DynamicText, string> LabelChanged;
-
-        [PersistAs("label")]
-        private string label;
-
-        public string Label
-        {
-            get => label;
-            set => setProperty(this, ref label, value, LabelChanged, validator: ValidateLabel);
-        }
-
-        public void ValidateLabel(string label)
-        {
-            if (string.IsNullOrWhiteSpace(label))
                 throw new ArgumentException();
         }
         #endregion

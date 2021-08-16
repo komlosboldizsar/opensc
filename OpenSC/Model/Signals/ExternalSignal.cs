@@ -19,8 +19,6 @@ namespace OpenSC.Model.Signals
         public override void Removed()
         {
             base.Removed();
-            Name = null;
-            NameChanged = null;
             CategoryChanged = null;
             RegisteredSourceSignalNameChanged = null;
             SignalLabelChanged = null;
@@ -41,26 +39,16 @@ namespace OpenSC.Model.Signals
         }
         #endregion
 
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<ExternalSignal, string> NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
+        #region Name change
+        protected override void afterNameChange()
         {
-            get => name;
-            set
-            {
-                if (!setProperty(this, ref name, value, NameChanged))
-                    return;
-                SignalLabelChanged?.Invoke(this, SignalLabel);
-                RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
-                List<object> recursionChain = new List<object>();
-                recursionChain.Add(this);
-                RegisteredSourceSignalNameChanged?.Invoke(this, value, recursionChain);
-                RaisePropertyChanged(nameof(RegisteredSourceSignalName));
-            }
+            base.afterNameChange();
+            SignalLabelChanged?.Invoke(this, SignalLabel);
+            RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
+            List<object> recursionChain = new List<object>();
+            recursionChain.Add(this);
+            RegisteredSourceSignalNameChanged?.Invoke(this, Name, recursionChain);
+            RaisePropertyChanged(nameof(RegisteredSourceSignalName));
         }
         #endregion
 
@@ -83,8 +71,8 @@ namespace OpenSC.Model.Signals
         #endregion
 
         #region Property: RegisteredSourceSignalName
-        public string RegisteredSourceSignalName => name;
-        public string GetRegisteredSourceSignalName(List<object> recursionChain = null) => name;
+        public string RegisteredSourceSignalName => Name;
+        public string GetRegisteredSourceSignalName(List<object> recursionChain = null) => Name;
         public event RegisteredSourceSignalNameChangedDelegate RegisteredSourceSignalNameChanged;
         #endregion
 
