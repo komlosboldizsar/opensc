@@ -36,12 +36,12 @@ namespace OpenSC.Model.Macros
                     arguments.Add(argument);
                 }
             }
-            arguments.OrderBy(arg => arg.Index);
+            IEnumerable<IMacroCommandArgument> argumentsOrdered = arguments.OrderBy(arg => arg.Index);
             int i = 0;
-            foreach (IMacroCommandArgument argument in arguments)
+            foreach (IMacroCommandArgument argument in argumentsOrdered)
                 if (argument.Index != i++)
                     throw new Exception(); // ArgumentIndexMismatchException();
-            Arguments = arguments.ToArray();
+            Arguments = argumentsOrdered.ToArray();
         }
 
         public IMacroCommandArgument[] Arguments { get; private set; }
