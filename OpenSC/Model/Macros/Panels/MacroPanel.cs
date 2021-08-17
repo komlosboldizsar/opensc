@@ -59,7 +59,7 @@ namespace OpenSC.Model.Macros
         public ObservableList<MacroPanelElement> Elements => elements;
 
         [PersistAs("elements")]
-        [PersistAs("element", 1)]
+        [PersistAs(null, 1)]
         private MacroPanelElement[] _elements
         {
             get { return elements.ToArray(); }
