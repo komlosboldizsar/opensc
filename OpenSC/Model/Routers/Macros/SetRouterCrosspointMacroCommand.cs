@@ -8,156 +8,53 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers.Macros
 {
 
+    [MacroCommand("Routers.SetCrosspoint", "Set router crosspoint", "Set a single router crosspoint. Switch an output to a selected input.")]
     public class SetRouterCrosspointMacroCommand : MacroCommandBase
     {
 
-        public override string CommandCode => "Routers.SetCrosspoint";
-
-        public override string CommandName => "Set router crosspoint";
-
-        public override string Description => "Set a single router crosspoint. Switch an output to a selected input.";
-
-        public override IMacroCommandArgument[] Arguments => new IMacroCommandArgument[] {
-            new Arg0(),
-            new Arg1(),
-            new Arg2()
-        };
-
-        public override void Run(object[] argumentValues)
+        protected override void _run(object[] argumentValues)
         {
-
-            if (argumentValues.Length != Arguments.Length)
-                return;
-
             Router router = argumentValues[0] as Router;
             if (router == null)
                 return;
-
             RouterOutput output = argumentValues[1] as RouterOutput;
             if ((output == null) || (output.Router != router))
                 return;
-
             RouterInput input = argumentValues[2] as RouterInput;
             if ((input == null) || (input.Router != router))
                 return;
-
             output.RequestCrosspointUpdate(input);
-
         }
 
-        protected override string getArgumentKey(int index, object value)
+        [MacroCommandArgument(0, "Router", "The router that executes the crosspoint change.", typeof(Router), MacroArgumentKeyType.Integer)]
+        public class Arg0 : MacroCommandArgumentDatabaseItem<Router>
         {
-
-            if (index == 0) {
-                Router router = value as Router;
-                if (router == null)
-                    return "-1";
-                return router.ID.ToString();
-            }
-
-            if (index == 1)
-            {
-                RouterOutput routerOutput = value as RouterOutput;
-                if (routerOutput == null)
-                    return "-1";
-                return routerOutput.Index.ToString();
-            }
-
-            if (index == 2)
-            {
-                RouterInput routerInput = value as RouterInput;
-                if (routerInput == null)
-                    return "-1";
-                return routerInput.Index.ToString();
-            }
-
-            throw new ArgumentException();
-
+            public Arg0() : base(RouterDatabase.Instance)
+            { }
         }
 
-        public override object[] GetArgumentsByKeys(string[] keys)
+        [MacroCommandArgument(1, "Router output", "The router output that switches to an input.", typeof(RouterOutput), MacroArgumentKeyType.Integer)]
+        public class Arg1 : MacroCommandArgumentBase
         {
-
-            if (keys.Length != Arguments.Length)
-                return null;
-
-            if (!int.TryParse(keys[0], out int routerId))
-                return null;
-            if (!int.TryParse(keys[1], out int outputIndex))
-                return null;
-            if (!int.TryParse(keys[2], out int inputIndex))
-                return null;
-
-            Router router = RouterDatabase.Instance.GetTById(routerId);
-            if (router == null)
-                return null;
-
-            if ((router.Outputs.Count <= outputIndex) || (router.Inputs.Count <= inputIndex))
-                return null;
-
-            return new object[]
+            protected override object _getObjectByKey(string key, object[] previousArgumentObjects)
             {
-                router,
-                router.Outputs[outputIndex],
-                router.Inputs[inputIndex]
-            };
-
-        }
-
-        private static readonly object[] ARRAY_EMPTY = new object[] { };
-
-        public class Arg0 : IMacroCommandArgument
-        {
-            public string Name => "Router";
-            public string Description => "The router that executes the crosspoint change.";
-            public Type Type => typeof(Router);
-            public MacroArgumentKeyType KeyType => MacroArgumentKeyType.Integer;
-            public object[] GetPossibilities(object[] previousArgumentValues)
-                => RouterDatabase.Instance.ToArray();
-            public string GetStringForPossibility(object item)
-                => ((Router)item).Name;
-        }
-
-        public class Arg1 : IMacroCommandArgument
-        {
-            public string Name => "Router output";
-            public string Description => "The router output that switches to an input.";
-            public Type Type => typeof(RouterOutput);
-            public MacroArgumentKeyType KeyType => MacroArgumentKeyType.Integer;
-            public string GetStringForPossibility(object item)
-                => ((RouterOutput)item).Name;
-
-            public object[] GetPossibilities(object[] previousArgumentValues)
-            {
-                if (previousArgumentValues.Length < 1)
-                    return ARRAY_EMPTY;
-                Router router = previousArgumentValues[0] as Router;
-                if (router == null)
-                    return ARRAY_EMPTY;
-                return router.Outputs.ToArray();
+                if (!int.TryParse(key, out int keyInt))
+                    return null;
+                return (previousArgumentObjects[0] as Router)?.GetOutput(keyInt);
             }
-
+            protected override IEnumerable<object> _getPossibilities(object[] previousArgumentObjects) => (previousArgumentObjects[0] as Router)?.Outputs;
         }
 
-        public class Arg2 : IMacroCommandArgument
+        [MacroCommandArgument(2, "Router input", "The router input to switch to.", typeof(RouterInput), MacroArgumentKeyType.Integer)]
+        public class Arg2 : MacroCommandArgumentBase
         {
-            public string Name => "Router input";
-            public string Description => "The router input to switch to.";
-            public Type Type => typeof(RouterInput);
-            public MacroArgumentKeyType KeyType => MacroArgumentKeyType.Integer;
-            public string GetStringForPossibility(object item)
-                => ((RouterInput)item).Name;
-
-            public object[] GetPossibilities(object[] previousArgumentValues)
+            protected override object _getObjectByKey(string key, object[] previousArgumentObjects)
             {
-                if (previousArgumentValues.Length < 1)
-                    return ARRAY_EMPTY;
-                Router router = previousArgumentValues[0] as Router;
-                if (router == null)
-                    return ARRAY_EMPTY;
-                return router.Inputs.ToArray();
+                if (!int.TryParse(key, out int keyInt))
+                    return null;
+                return (previousArgumentObjects[0] as Router)?.GetInput(keyInt);
             }
-
+            protected override IEnumerable<object> _getPossibilities(object[] previousArgumentObjects) => (previousArgumentObjects[0] as Router)?.Inputs;
         }
 
     }

@@ -11,7 +11,7 @@ namespace OpenSC.Model.Macros
 
         public IMacroCommand Command { get; private set; }
 
-        public string CommandCode => Command?.CommandCode;
+        public string CommandCode => Command?.Code;
 
         public object[] ArgumentValues { get; private set; }
 

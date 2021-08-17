@@ -49,7 +49,7 @@ namespace OpenSC.GUI.Macros
             argumentNameLabel.Text = argument.Name;
             argumentDescriptionLabel.Text = argument.Description;
 
-            if (argument.Type == typeof(string))
+            if (argument.ObjectType == typeof(string))
             {
                 table.Controls.Remove(valueComboBox);
                 TextBox valueTextBox = new TextBox();
@@ -57,7 +57,7 @@ namespace OpenSC.GUI.Macros
                 valueTextBox.Dock = DockStyle.Top;
                 valueField = valueTextBox;
             }
-            else if (isNumericalType(argument.Type))
+            else if (isNumericalType(argument.ObjectType))
             {
 
                 table.Controls.Remove(valueComboBox);
@@ -65,7 +65,7 @@ namespace OpenSC.GUI.Macros
                 NumericUpDown valueNumericField = new NumericUpDown();
                 valueNumericField.Minimum = 0;
                 valueNumericField.Maximum = 99999;
-                bool isInt = (argument.Type == typeof(int));
+                bool isInt = (argument.ObjectType == typeof(int));
                 valueNumericField.DecimalPlaces = isInt ? 0 : 2;
                 valueNumericField.Increment = isInt ? 1 : (decimal)0.05;
 
@@ -89,7 +89,7 @@ namespace OpenSC.GUI.Macros
         {
             set
             {
-                if ((argument.Type == typeof(string)) || isNumericalType(argument.Type))
+                if ((argument.ObjectType == typeof(string)) || isNumericalType(argument.ObjectType))
                     return;
                 valueComboBox.CreateAdapterAsDataSource<object>(argument.GetPossibilities(value), item => argument.GetStringForPossibility(item), true, "-");
             }

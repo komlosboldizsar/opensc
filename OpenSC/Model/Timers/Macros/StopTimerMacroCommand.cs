@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.Macros;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,20 +8,17 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Timers.Macros
 {
 
-    public class StopTimerMacroCommand : SingleArgTimerMacroCommandBase
+    [MacroCommand("Timers.StopTimer", "Stop timer", "Stop/pause timer operation.")]
+    public class StopTimerMacroCommand : MacroCommandBase
     {
 
-        public override string CommandCode => "Timers.StopTimer";
-        public override string CommandName => "Stop timer";
-        public override string Description => "Stop/pause timer operation.";
+        protected override void _run(object[] argumentObjects) => (argumentObjects[0] as Timer)?.Stop();
 
-        public StopTimerMacroCommand()
-            : base("The timer to stop")
-        { }
-
-        protected override void _run(Timer timer)
+        [MacroCommandArgument(0, "Timer", "Timer to stop", typeof(Timer), MacroArgumentKeyType.Integer)]
+        public class Arg0 : MacroCommandArgumentDatabaseItem<Timer>
         {
-            timer.Stop();
+            public Arg0() : base(TimerDatabase.Instance)
+            { }
         }
 
     }

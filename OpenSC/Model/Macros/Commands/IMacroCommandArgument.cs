@@ -8,17 +8,14 @@ namespace OpenSC.Model.Macros
 {
     public interface IMacroCommandArgument
     {
+        int Index { get; }
         string Name { get; }
-
         string Description { get; }
-
-        Type Type { get; }
-
+        Type ObjectType { get; }
         MacroArgumentKeyType KeyType { get; }
-
-        object[] GetPossibilities(object[] previousArgumentValues);
-
+        object GetObjectByKey(string key, object[] previousArgumentObjects);
+        string GetKeyByObject(object obj);
+        IEnumerable<object> GetPossibilities(object[] previousArgumentObjects);
         string GetStringForPossibility(object item);
-
     }
 }

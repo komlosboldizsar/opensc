@@ -24,7 +24,7 @@ namespace OpenSC.Model.Macros
 
         public void RegisterCommand(IMacroCommand command)
         {
-            string commandCode = command.CommandCode;
+            string commandCode = command.Code;
             if (registeredCommands.ContainsKey(commandCode))
                 throw new Exception();
             registeredCommands[commandCode] = command;

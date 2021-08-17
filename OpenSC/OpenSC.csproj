@@ -538,6 +538,13 @@
     <Compile Include="Model\General\ObservableList.cs" />
     <Compile Include="Model\IDatabaseBase.cs" />
     <Compile Include="Model\IModel.cs" />
+    <Compile Include="Model\Macros\Commands\MacroCommandArgumentAttribute.cs" />
+    <Compile Include="Model\Macros\Commands\MacroCommandArgumentString.cs" />
+    <Compile Include="Model\Macros\Commands\MacroCommandArgumentInt.cs" />
+    <Compile Include="Model\Macros\Commands\MacroCommandArgumentDatabaseSubTypeItem.cs" />
+    <Compile Include="Model\Macros\Commands\MacroCommandArgumentDatabaseItem.cs" />
+    <Compile Include="Model\Macros\Commands\MacroCommandAttribue.cs" />
+    <Compile Include="Model\Macros\Commands\MacroCommandArgumentBase.cs" />
     <Compile Include="Model\Macros\Triggers\IMacroTriggerArgument.cs" />
     <Compile Include="Model\Macros\Triggers\IMacroTrigger.cs" />
     <Compile Include="Model\Macros\MacroArgumentKeyType.cs" />
@@ -704,7 +711,6 @@
     <Compile Include="Model\Timers\Macros\StopTimerMacroCommand.cs" />
     <Compile Include="Model\Timers\Macros\StartTimerMacroCommand.cs" />
     <Compile Include="Model\Timers\Macros\TimerMacroCommands.cs" />
-    <Compile Include="Model\Timers\Macros\SingleArgTimerMacroCommandBase.cs" />
     <Compile Include="Model\Timers\Triggers\TimerMacroTriggers.cs" />
     <Compile Include="Model\Timers\Triggers\TimerReachedValueMacroTrigger.cs" />
     <Compile Include="Model\TypeCodeAttribute.cs" />

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.Macros;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,14 +7,9 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Mixers.BlackMagicDesign.Macros
 {
+    [MacroCommand("Mixers.BMD.AutoTransition", "AUTO transition on a BMD mixer.", "Perform AUTO transition on a BlackMagic Design mixer.")]
     public class AutoTransitionMacroCommand : TransitionMacroCommandBase
     {
-        public override string CommandCode => "Mixers.BMD.AutoTransition";
-
-        public override string CommandName => "AUTO transition on a BMD mixer.";
-
-        public override string Description => "Perform AUTO transition on a BlackMagic Design mixer.";
-
         protected override void transition(BmdMixer mixer, int meBlockIndex)
         {
             try
@@ -25,6 +21,5 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign.Macros
                 // Do something...
             }
         }
-
     }
 }

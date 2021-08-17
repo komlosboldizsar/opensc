@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.Macros;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,20 +8,17 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Timers.Macros
 {
 
-    public class ResetTimerMacroCommand : SingleArgTimerMacroCommandBase
+    [MacroCommand("Timers.ResetTimer", "Reset timer", "Reset timer to zero or base value.")]
+    public class ResetTimerMacroCommand : MacroCommandBase
     {
 
-        public override string CommandCode => "Timers.ResetTimer";
-        public override string CommandName => "Reset timer";
-        public override string Description => "Reset timer to zero or base value.";
+        protected override void _run(object[] argumentObjects) => (argumentObjects[0] as Timer)?.Reset();
 
-        public ResetTimerMacroCommand()
-            : base("The timer to reset")
-        { }
-
-        protected override void _run(Timer timer)
+        [MacroCommandArgument(0, "Timer", "Timer to reset", typeof(Timer), MacroArgumentKeyType.Integer)]
+        public class Arg0 : MacroCommandArgumentDatabaseItem<Timer>
         {
-            timer.Reset();
+            public Arg0() : base(TimerDatabase.Instance)
+            { }
         }
 
     }

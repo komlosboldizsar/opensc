@@ -18,7 +18,7 @@ namespace OpenSC.Model.Macros
         public static string GetCode(this IMacroCommand command, IEnumerable<object> argumentValues)
         {
             StringBuilder code = new StringBuilder();
-            code.Append(command.CommandCode);
+            code.Append(command.Code);
             code.Append("(");
             string[] argKeys = command.GetArgumentKeys(argumentValues.ToArray());
             int argCount = command.Arguments.Length;

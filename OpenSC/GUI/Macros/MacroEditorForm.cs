@@ -366,7 +366,7 @@ namespace OpenSC.GUI.Macros
 
         private void loadCommands()
         {
-            selectCommandComboBox.CreateAdapterAsDataSource(MacroCommandRegister.Instance.RegisteredCommands, mc => string.Format("[{0}] {1}", mc.CommandCode, mc.CommandName), true, "-");
+            selectCommandComboBox.CreateAdapterAsDataSource(MacroCommandRegister.Instance.RegisteredCommands, mc => string.Format("[{0}] {1}", mc.Code, mc.Name), true, "-");
         }
 
         private List<MacroCommandWithArguments> getCommandsWAFromCode()

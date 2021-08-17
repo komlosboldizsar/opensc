@@ -8,48 +8,80 @@ namespace OpenSC.Model.Macros
 {
     abstract public class MacroCommandBase : IMacroCommand
     {
-        public abstract string CommandCode { get; }
 
-        public abstract string CommandName { get; }
+        public string Code { get; private set; }
+        public string Name { get; private set; }
+        public string Description { get; private set; }
 
-        public abstract string Description { get; }
-
-        public abstract IMacroCommandArgument[] Arguments { get; }
-
-        public virtual string[] GetArgumentKeys(object[] arguments)
+        public MacroCommandBase()
         {
-            List<string> argumentKeys = new List<string>();
+            MacroCommandAttribute myAttribute = GetType().GetAttribute<MacroCommandAttribute>();
+            if (myAttribute == null)
+                throw new Exception(); //NoMacroCommandAttributeException();
+            Code = myAttribute.Code;
+            Name = myAttribute.Name;
+            Description = myAttribute.Description;
+            lookupForArguments();
+        }
+
+        private void lookupForArguments()
+        {
+            List<IMacroCommandArgument> arguments = new List<IMacroCommandArgument>();
+            Type[] nestedTypes = GetType().GetNestedTypes();
+            foreach (Type nestedType in nestedTypes)
+            {
+                if (nestedType.IsSubclassOf(typeof(IMacroCommandArgument)))
+                {
+                    IMacroCommandArgument argument = (IMacroCommandArgument)Activator.CreateInstance(nestedType);
+                    arguments.Add(argument);
+                }
+            }
+            arguments.OrderBy(arg => arg.Index);
             int i = 0;
-            foreach (object argument in arguments)
-                argumentKeys.Add(getArgumentKey(i++, argument));
-            return argumentKeys.ToArray();
+            foreach (IMacroCommandArgument argument in arguments)
+                if (argument.Index != i++)
+                    throw new Exception(); // ArgumentIndexMismatchException();
+            Arguments = arguments.ToArray();
         }
 
-        protected virtual string getArgumentKey(int index, object value)
+        public IMacroCommandArgument[] Arguments { get; private set; }
+
+        public virtual string[] GetArgumentKeys(object[] argumentObjects)
         {
-            ModelBase argumentAsModel = value as ModelBase;
-            if (argumentAsModel != null)
-                return argumentAsModel.ID.ToString();
-            return value?.ToString();
+            string[] argumentKeys = new string[Arguments.Length];
+            int i = 0;
+            foreach (IMacroCommandArgument argument in Arguments)
+                argumentKeys[i] = argument.GetKeyByObject(argumentObjects[i++]);
+            return argumentKeys;
         }
 
-        public abstract object[] GetArgumentsByKeys(string[] keys);
+        public virtual object[] GetArgumentsByKeys(string[] argumentKeys)
+        {
+            object[] argumentObjects = new object[Arguments.Length];
+            int i = 0;
+            foreach (IMacroCommandArgument argument in Arguments)
+                argumentObjects[i] = argument.GetObjectByKey(argumentKeys[i++], argumentObjects);
+            return argumentObjects;
+        }
 
         public virtual MacroCommandWithArguments GetWithArgumentsByKeys(string[] argumentKeys)
-        {
-            return new MacroCommandWithArguments(this, argumentKeys, true);
-        }
+            => new MacroCommandWithArguments(this, argumentKeys, true);
 
         public virtual MacroCommandWithArguments GetWithArgumentsByKeysConvertImmediately(string[] argumentKeys)
-        {
-            return new MacroCommandWithArguments(this, GetArgumentsByKeys(argumentKeys));
-        }
+            => new MacroCommandWithArguments(this, GetArgumentsByKeys(argumentKeys));
 
         public virtual MacroCommandWithArguments GetWithArguments(object[] argumentValues)
+            => new MacroCommandWithArguments(this, argumentValues);
+
+        public virtual void Run(object[] argumentObjects)
         {
-            return new MacroCommandWithArguments(this, argumentValues);
+            if (argumentObjects.Length != Arguments.Length)
+                return;
+            _run(argumentObjects);
         }
-        public abstract void Run(object[] argumentValues);
+
+        protected virtual void _run(object[] argumentValues)
+        { }
 
     }
 }
