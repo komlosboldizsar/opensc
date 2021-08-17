@@ -57,7 +57,7 @@ namespace OpenSC.Model.Macros
         }
 
         [PersistAs("commands")]
-        [PersistAs("command", 1)]
+        [PersistAs(null, 1)]
         private MacroCommandWithArguments[] _commands
         {
             get { return commands.ToArray(); }
@@ -79,7 +79,7 @@ namespace OpenSC.Model.Macros
         }
 
         [PersistAs("triggers")]
-        [PersistAs("trigger", 1)]
+        [PersistAs(null, 1)]
         private MacroTriggerWithArguments[] _triggers
         {
             get { return triggers.ToArray(); }
