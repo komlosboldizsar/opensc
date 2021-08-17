@@ -42,7 +42,7 @@ namespace OpenSC.Model.Routers.Leitch
         }
 
         #region Property: Port
-        PropertyChangedTwoValuesDelegate<LeitchRouter, SerialPort> PortChanged;
+        public event PropertyChangedTwoValuesDelegate<LeitchRouter, SerialPort> PortChanged;
         
         [PersistAs("port")]
         private SerialPort port;

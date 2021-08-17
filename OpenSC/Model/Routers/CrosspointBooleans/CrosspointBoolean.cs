@@ -25,7 +25,6 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
         public override void Removed()
         {
             base.Removed();
-            NameChanged = null;
             WatchedInputChanged = null;
             WatchedOutputChanged = null;
         }
@@ -50,25 +49,6 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
         protected override void validateIdForDatabase(int id)
         {
             if (!CrosspointBooleanDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<CrosspointBoolean, string> NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get => name;
-            set => setProperty(this, ref name, value, NameChanged, validator: ValidateName);
-        }
-
-        public void ValidateName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
         }
         #endregion
@@ -230,7 +210,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
                 register();
             }
 
-            private void parentNameChanged(CrosspointBoolean crosspointBoolean, string oldName, string newName)
+            private void parentNameChanged(IModel crosspointBoolean, string oldName, string newName)
                 => updateDescription();
 
             private void watchedRouterChanged(CrosspointBoolean crosspointBoolean, Router oldValue, Router newValue)
