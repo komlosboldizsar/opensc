@@ -30,11 +30,13 @@ namespace OpenSC.Model.General
         private void OriginalList_ItemAdded(IEnumerable addedItems)
         {
             rebuildProxies();
+            ItemAdded?.Invoke(addedItems);
         }
 
         private void OriginalList_ItemRemoved(IEnumerable removedItems)
         {
             rebuildProxies();
+            ItemRemoved?.Invoke(removedItems);
         }
 
         private void OriginalList_ItemsChanged()
