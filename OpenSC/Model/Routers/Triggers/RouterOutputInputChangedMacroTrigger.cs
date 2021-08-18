@@ -30,6 +30,7 @@ namespace OpenSC.Model.Routers.Triggers
                     return null;
                 return (previousArgumentObjects[0] as Router)?.GetOutput(keyInt);
             }
+            public override string GetKeyByObject(object obj) => (obj as RouterOutput)?.Index.ToString();
             protected override IEnumerable<object> _getPossibilities(object[] previousArgumentObjects) => (previousArgumentObjects[0] as Router)?.Outputs;
         }
 

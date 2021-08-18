@@ -50,6 +50,7 @@ namespace OpenSC.Model.Routers.CrosspointStores.Macros
                     return null;
                 return (previousArgumentObjects[1] as Router)?.GetInput(keyInt);
             }
+            public override string GetKeyByObject(object obj) => (obj as RouterInput)?.Index.ToString();
             protected override IEnumerable<object> _getPossibilities(object[] previousArgumentObjects) => (previousArgumentObjects[1] as Router)?.Inputs;
         }
 
