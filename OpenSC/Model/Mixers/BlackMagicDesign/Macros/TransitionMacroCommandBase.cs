@@ -23,14 +23,14 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign.Macros
 
         protected abstract void transition(BmdMixer mixer, int meBlockIndex);
 
-        [MacroCommandArgument(0, "Mixer", "The BMD mixer that performs the transition.", typeof(BmdMixer), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(0, "Mixer", "The BMD mixer that performs the transition.")]
         public class Arg0 : MacroCommandArgumentDatabaseSubTypeItem<Mixer, BmdMixer>
         {
             public Arg0() : base(MixerDatabase.Instance)
             { }
         }
 
-        [MacroCommandArgument(1, "M/E block", "The index of the M/E block to perform the transition on. Index of first M/E block is 0.", typeof(int), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(1, "M/E block", "The index of the M/E block to perform the transition on. Index of first M/E block is 0.")]
         public class Arg1 : MacroCommandArgumentInt
         {
             public Arg1() : base(0, 3)

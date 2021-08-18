@@ -12,10 +12,10 @@ namespace OpenSC.Model.Macros
         public int Index { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
-        public Type ObjectType { get; private set; }
-        public MacroArgumentKeyType KeyType { get; private set; }
+        public Type ObjectType { get; protected set; }
+        public MacroArgumentKeyType KeyType { get; protected set; }
 
-        public MacroCommandArgumentBase()
+        public MacroCommandArgumentBase(Type objectType = null, MacroArgumentKeyType keyType = MacroArgumentKeyType.Integer)
         {
             MacroCommandArgumentAttribute myAttribute = GetType().GetAttribute<MacroCommandArgumentAttribute>();
             if (myAttribute == null)
@@ -23,8 +23,8 @@ namespace OpenSC.Model.Macros
             Index = myAttribute.Index;
             Name = myAttribute.Name;
             Description = myAttribute.Description;
-            ObjectType = myAttribute.ObjectType;
-            KeyType = myAttribute.KeyType;
+            ObjectType = objectType;
+            KeyType = keyType;
         }
         
         public virtual object GetObjectByKey(string key, object[] previousArgumentObjects)

@@ -21,7 +21,7 @@ namespace OpenSC.Model.UMDs.Macros
             umd.UseStaticText = false;
         }
 
-        [MacroCommandArgument(0, "UMD", "The UMD to change mode and text.", typeof(UMD), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(0, "UMD", "The UMD to change mode and text.")]
         public class Arg0 : MacroCommandArgumentDatabaseItem<UMD>
         {
             public Arg0() : base(UmdDatabase.Instance)

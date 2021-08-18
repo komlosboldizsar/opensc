@@ -12,7 +12,7 @@ namespace OpenSC.Model.Macros
         private int? min;
         private int? max;
 
-        public MacroCommandArgumentInt(int? min = 0, int? max = null) : base()
+        public MacroCommandArgumentInt(int? min = 0, int? max = null) : base(typeof(int), MacroArgumentKeyType.Integer)
         {
             this.min = min;
             this.max = max;

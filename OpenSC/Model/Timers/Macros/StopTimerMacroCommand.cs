@@ -14,7 +14,7 @@ namespace OpenSC.Model.Timers.Macros
 
         protected override void _run(object[] argumentObjects) => (argumentObjects[0] as Timer)?.Stop();
 
-        [MacroCommandArgument(0, "Timer", "Timer to stop", typeof(Timer), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(0, "Timer", "Timer to stop")]
         public class Arg0 : MacroCommandArgumentDatabaseItem<Timer>
         {
             public Arg0() : base(TimerDatabase.Instance)

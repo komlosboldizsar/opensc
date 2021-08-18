@@ -27,21 +27,21 @@ namespace OpenSC.Model.Routers.CrosspointStores.Macros
             crosspointStore.StoredOutput = output;
         }
 
-        [MacroCommandArgument(0, "Crosspoint store", "The crosspoint store to change the stored output.", typeof(CrosspointStore), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(0, "Crosspoint store", "The crosspoint store to change the stored output.")]
         public class Arg0 : MacroCommandArgumentDatabaseItem<CrosspointStore>
         {
             public Arg0() : base(CrosspointStoreDatabase.Instance)
             { }
         }
 
-        [MacroCommandArgument(1, "Router", "The router that contains the output to store.", typeof(Router), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(1, "Router", "The router that contains the output to store.")]
         public class Arg1 : MacroCommandArgumentDatabaseItem<Router>
         {
             public Arg1() : base(RouterDatabase.Instance)
             { }
         }
 
-        [MacroCommandArgument(2, "Router output", "The router output to change the crosspoint store's output to.", typeof(RouterOutput), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(2, "Router output", "The router output to change the crosspoint store's output to.")]
         public class Arg2 : MacroCommandArgumentBase
         {
             protected override object _getObjectByKey(string key, object[] previousArgumentObjects)

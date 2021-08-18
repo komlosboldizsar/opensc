@@ -8,6 +8,8 @@ namespace OpenSC.Model.Macros
 {
     public class MacroCommandArgumentString : MacroCommandArgumentBase
     {
+        public MacroCommandArgumentString() : base(typeof(string), MacroArgumentKeyType.String)
+        { }
         public override object GetObjectByKey(string key, object[] previousArgumentObjects) => key;
     }
 }

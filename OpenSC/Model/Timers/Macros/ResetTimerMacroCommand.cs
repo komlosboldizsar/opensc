@@ -14,7 +14,7 @@ namespace OpenSC.Model.Timers.Macros
 
         protected override void _run(object[] argumentObjects) => (argumentObjects[0] as Timer)?.Reset();
 
-        [MacroCommandArgument(0, "Timer", "Timer to reset", typeof(Timer), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(0, "Timer", "Timer to reset")]
         public class Arg0 : MacroCommandArgumentDatabaseItem<Timer>
         {
             public Arg0() : base(TimerDatabase.Instance)

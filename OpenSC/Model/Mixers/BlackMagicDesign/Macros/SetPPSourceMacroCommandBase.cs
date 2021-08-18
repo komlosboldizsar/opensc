@@ -25,7 +25,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign.Macros
 
         protected abstract void setSource(BmdMixer mixer, int meBlockIndex, int inputId);
 
-        [MacroCommandArgument(0, "Mixer", "The BMD mixer that switches source..", typeof(BmdMixer), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(0, "Mixer", "The BMD mixer that switches source.")]
         public class Arg0 : MacroCommandArgumentDatabaseSubTypeItem<Mixer, BmdMixer>
         {
             public Arg0() : base(MixerDatabase.Instance)
@@ -33,14 +33,14 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign.Macros
         }
 
 
-        [MacroCommandArgument(1, "M/E block", "The index of the M/E block to set the source on. Index of first M/E block is 0.", typeof(int), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(1, "M/E block", "The index of the M/E block to set the source on. Index of first M/E block is 0.")]
         public class Arg1 : MacroCommandArgumentInt
         {
             public Arg1() : base(0, 3)
             { }
         }
 
-        [MacroCommandArgument(2, "Input", "The ID of the input to switch to. Indexing of physical inputs start with 0. See BlackMagic Design manual for other details.", typeof(int), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(2, "Input", "The ID of the input to switch to. Indexing of physical inputs start with 0. See BlackMagic Design manual for other details.")]
         public class Arg2 : MacroCommandArgumentInt
         {
             public Arg2() : base(0, 99999)

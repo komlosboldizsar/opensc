@@ -15,7 +15,7 @@ namespace OpenSC.Model.Routers.CrosspointStores.Macros
 
         public override void Run(object[] argumentValues) => (argumentValues[0] as CrosspointStore)?.Take();
 
-        [MacroCommandArgument(0, "Crosspoint store", "The crosspoint store to take/fire.", typeof(CrosspointStore), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(0, "Crosspoint store", "The crosspoint store to take/fire.")]
         public class Arg0 : MacroCommandArgumentDatabaseItem<CrosspointStore>
         {
             public Arg0() : base(CrosspointStoreDatabase.Instance)

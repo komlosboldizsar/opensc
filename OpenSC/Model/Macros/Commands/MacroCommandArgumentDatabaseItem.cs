@@ -12,7 +12,7 @@ namespace OpenSC.Model.Macros
 
         private readonly DatabaseBase<TModel> database;
 
-        public MacroCommandArgumentDatabaseItem(DatabaseBase<TModel> database) : base()
+        public MacroCommandArgumentDatabaseItem(DatabaseBase<TModel> database) : base(typeof(TModel), MacroArgumentKeyType.Integer)
         {
             this.database = database;
         }

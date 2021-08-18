@@ -26,16 +26,18 @@ namespace OpenSC.Model.Routers.Macros
             output.RequestCrosspointUpdate(input);
         }
 
-        [MacroCommandArgument(0, "Router", "The router that executes the crosspoint change.", typeof(Router), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(0, "Router", "The router that executes the crosspoint change.")]
         public class Arg0 : MacroCommandArgumentDatabaseItem<Router>
         {
             public Arg0() : base(RouterDatabase.Instance)
             { }
         }
 
-        [MacroCommandArgument(1, "Router output", "The router output that switches to an input.", typeof(RouterOutput), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(1, "Router output", "The router output that switches to an input.")]
         public class Arg1 : MacroCommandArgumentBase
         {
+            public Arg1() : base(typeof(RouterOutput), MacroArgumentKeyType.Integer)
+            { }
             protected override object _getObjectByKey(string key, object[] previousArgumentObjects)
             {
                 if (!int.TryParse(key, out int keyInt))
@@ -45,9 +47,11 @@ namespace OpenSC.Model.Routers.Macros
             protected override IEnumerable<object> _getPossibilities(object[] previousArgumentObjects) => (previousArgumentObjects[0] as Router)?.Outputs;
         }
 
-        [MacroCommandArgument(2, "Router input", "The router input to switch to.", typeof(RouterInput), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(2, "Router input", "The router input to switch to.")]
         public class Arg2 : MacroCommandArgumentBase
         {
+            public Arg2() : base(typeof(RouterInput), MacroArgumentKeyType.Integer)
+            { }
             protected override object _getObjectByKey(string key, object[] previousArgumentObjects)
             {
                 if (!int.TryParse(key, out int keyInt))

@@ -14,7 +14,7 @@ namespace OpenSC.Model.Macros
 
         protected override void _run(object[] argumentValues) => (argumentValues[0] as Macro)?.Run();
 
-        [MacroCommandArgument(0, "Macro", "The macro to execute.", typeof(Macro), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(0, "Macro", "The macro to execute.")]
         public class Arg0 : MacroCommandArgumentDatabaseItem<Macro>
         {
             public Arg0() : base(MacroDatabase.Instance)

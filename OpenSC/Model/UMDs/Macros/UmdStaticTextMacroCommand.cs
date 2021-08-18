@@ -25,14 +25,14 @@ namespace OpenSC.Model.UMDs.Macros
             umd.UseStaticText = true;
         }
 
-        [MacroCommandArgument(0, "UMD", "The UMD to change mode and text.", typeof(UMD), MacroArgumentKeyType.Integer)]
+        [MacroCommandArgument(0, "UMD", "The UMD to change mode and text.")]
         public class Arg0 : MacroCommandArgumentDatabaseItem<UMD>
         {
             public Arg0() : base(UmdDatabase.Instance)
             { }
         }
 
-        [MacroCommandArgument(1, "Text", "Text to display on the UMD.", typeof(string), MacroArgumentKeyType.String)]
+        [MacroCommandArgument(1, "Text", "Text to display on the UMD.")]
         public class Arg1 : MacroCommandArgumentString
         { }
 
