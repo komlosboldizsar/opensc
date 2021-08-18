@@ -32,7 +32,7 @@ namespace OpenSC.Model.Macros
             Type[] nestedTypes = GetType().GetNestedTypes();
             foreach (Type nestedType in nestedTypes)
             {
-                if (nestedType.IsSubclassOf(typeof(IMacroTriggerArgument)))
+                if (typeof(IMacroTriggerArgument).IsAssignableFrom(nestedType))
                 {
                     IMacroTriggerArgument argument = (IMacroTriggerArgument)Activator.CreateInstance(nestedType);
                     arguments.Add(argument);
