@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Mixers.DynamicTextFunctions
 {
 
-    [DynamicTextFunction(nameof(MixerPreviewInputName), "The name of the input that is selected as program on the given mixer.")]
+    [DynamicTextFunction(nameof(MixerProgramInputName), "The name of the input that is selected as program on the given mixer.")]
     class MixerProgramInputName : DynamicTextFunctionBase<MixerProgramInputName.Substitute>
     {
 
