@@ -15,7 +15,6 @@ namespace OpenSC.Model
         #region Property: ID
         public event PropertyChangedTwoValuesDelegate<IModel, int> IdChanged;
 
-        [PersistAs("id")]
         private int id;
 
         public int ID
@@ -45,7 +44,7 @@ namespace OpenSC.Model
         public event PropertyChangedTwoValuesDelegate<IModel, string> NameChanged;
 
         [PersistAs("name")]
-        private string name;
+        protected string name;
 
         public string Name
         {
