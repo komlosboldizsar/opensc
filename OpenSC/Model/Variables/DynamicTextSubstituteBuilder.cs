@@ -357,7 +357,7 @@ namespace OpenSC.Model.Variables
             object[] convertedArguments = new object[forFunction.ArgumentCount];
             int i = 0;
             foreach (IDynamicTextFunctionArgument argument in forFunction.Arguments)
-                convertedArguments[i] = convertArgument(collectedArguments[i], argument.KeyType);
+                convertedArguments[i] = convertArgument(collectedArguments[i++], argument.KeyType);
             return convertedArguments;
         }
 
