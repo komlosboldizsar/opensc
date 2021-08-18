@@ -20,6 +20,7 @@ namespace OpenSC.Model.Macros
             MacroCommandArgumentAttribute myAttribute = GetType().GetAttribute<MacroCommandArgumentAttribute>();
             if (myAttribute == null)
                 throw new Exception(); //NoMacroCommandArgumentAttributeException();
+            Index = myAttribute.Index;
             Name = myAttribute.Name;
             Description = myAttribute.Description;
             ObjectType = myAttribute.ObjectType;
