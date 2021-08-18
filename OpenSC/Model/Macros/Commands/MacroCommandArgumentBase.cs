@@ -36,13 +36,6 @@ namespace OpenSC.Model.Macros
 
         protected virtual object _getObjectByKey(string key, object[] previousArgumentObjects) => null;
 
-        protected TModel _getObjectByKeyFromDatabase<TModel>(string key, DatabaseBase<TModel> database) where TModel : class, IModel
-        {
-            if (!int.TryParse(key, out int objectId))
-                return null;
-            return database.GetTById(objectId);
-        }
-
         public virtual string GetKeyByObject(object obj)
         {
             IModel objAsModel = obj as IModel;
