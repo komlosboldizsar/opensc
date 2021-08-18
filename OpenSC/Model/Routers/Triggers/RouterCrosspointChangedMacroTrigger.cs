@@ -8,67 +8,54 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers.Triggers
 {
 
-    class RouterCrosspointChangedMacroTrigger : MacroTriggerDefaultCallImplementations.AllArgumentsMatchStrict
+    [MacroTrigger("Routers.CrosspointChanged", "Crosspoint change on a router", "Observe all outputs for crosspoint change on a router.")]
+    class RouterCrosspointChangedMacroTrigger : MacroTriggerBase<RouterCrosspointChangedMacroTrigger.ActivationData>
     {
 
-        public RouterCrosspointChangedMacroTrigger()
-            : base("Routers.CrosspointChanged",
-                  "Crosspoint change on a router",
-                  "Observe all outputs for crosspoint change on a router.",
-                  humanReadable)
+        [MacroTriggerArgument(0, "Router", "The router to observe.")]
+        public class Arg0 : MacroTriggerArgumentDatabaseItem<Router>
         {
-            addArgument("Router",
-                "The router to observe.",
-                typeof(Router),
-                (prev) => RouterDatabase.Instance.ToArray(),
-                router => ((Router)router).Name);
+            public Arg0() : base(RouterDatabase.Instance)
+            { }
         }
-        protected override string getArgumentKey(int index, object value)
-        {
 
-            if (index == 0)
+        internal class ActivationData : MacroTriggerWithArgumentsActivationData
+        {
+            public Router Router { get; private set; }
+            public Router.CrosspointChangedDelegate RouterCrosspointChangedHandler { get; private set; }
+            public ActivationData(Router router, Router.CrosspointChangedDelegate routerCrosspointChangedHandler)
             {
-                Router router = value as Router;
-                if (router == null)
-                    return "-1";
-                return router.ID.ToString();
+                Router = router;
+                RouterCrosspointChangedHandler = routerCrosspointChangedHandler;
             }
-
-            throw new ArgumentException();
-
         }
 
-
-        public override object[] GetArgumentsByKeys(string[] keys)
+        protected override void _activate(MacroTriggerWithArguments triggerWithArguments)
         {
-
-            if (keys.Length != Arguments.Length)
-                return null;
-
-            if (!int.TryParse(keys[0], out int routerId))
-                return null;
-
-            Router router = RouterDatabase.Instance.GetTById(routerId);
+            object[] argumentObjects = triggerWithArguments.ArgumentObjects;
+            Router router = argumentObjects[0] as Router;
             if (router == null)
-                return null;
-
-            return new object[] { router };
-
+                return;
+            Router.CrosspointChangedDelegate routerCrosspointChangedHandler = (i, ov, nv) => {
+                triggerWithArguments.Fire();
+            };
+            router.CrosspointChanged += routerCrosspointChangedHandler;
+            ActivationData activationData = new ActivationData(router, routerCrosspointChangedHandler);
+            triggerWithArguments.Activated(activationData);
         }
 
-        private const string HUMAN_READABLE_ERROR = "???";
-
-        private static string humanReadable(object[] args)
+        protected override void _deactivate(MacroTriggerWithArguments triggerWithArguments, ActivationData activationData)
         {
-            if (args.Length < 1)
-                return HUMAN_READABLE_ERROR;
+            activationData.Router.CrosspointChanged -= activationData.RouterCrosspointChangedHandler;
+            triggerWithArguments.Deactivated();
+        }
 
-            Router router = args[0] as Router;
+        protected override string _humanReadable(object[] argumentObjects)
+        {
+            Router router = argumentObjects[0] as Router;
             if (router == null)
-                return HUMAN_READABLE_ERROR;
-
-            return string.Format("Source for any output changes on router #{0} ({1}).", router.ID, router.Name);
-
+                return null;
+            return string.Format("Source for any output changes on router [{0}].", router);
         }
 
     }

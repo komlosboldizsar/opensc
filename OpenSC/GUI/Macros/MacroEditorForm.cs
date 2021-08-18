@@ -576,7 +576,7 @@ namespace OpenSC.GUI.Macros
             }
             else
             {
-                editedTriggerWA.ArgumentValues = argumentValuesArr;
+                editedTriggerWA.ArgumentObjects = argumentValuesArr;
             }
 
             editTrigger(null);
@@ -613,7 +613,7 @@ namespace OpenSC.GUI.Macros
             addNewTriggerButton.Enabled = true;
             int i = 0;
             foreach (TriggerArgumentControl argControl in triggerArgumentControls)
-                argControl.ArgumentValue = triggerWA.ArgumentValues[i++];
+                argControl.ArgumentValue = triggerWA.ArgumentObjects[i++];
 
         }
 

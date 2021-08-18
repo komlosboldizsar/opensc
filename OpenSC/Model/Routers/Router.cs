@@ -203,12 +203,15 @@ namespace OpenSC.Model.Routers
 
         protected abstract void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input);
 
+        public delegate void CrosspointChangedDelegate(Router router, RouterOutput output, RouterInput newInput);
+        public event CrosspointChangedDelegate CrosspointChanged;
+
         protected void notifyCrosspointChanged(RouterOutput output, RouterInput input)
         {
             if (!outputs.Contains(output))
                 throw new ArgumentException();
             output.AssignSource(input);
-            RouterMacroTriggers.RouterCrosspointChanged.Call(this);
+            CrosspointChanged?.Invoke(this, output, input);
         }
 
         protected void notifyCrosspointChanged(int outputIndex, int inputIndex)

@@ -6,8 +6,27 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Macros
 {
+
     public class MacroTriggerWithArguments
     {
+
+        public MacroTriggerWithArguments(IMacroTrigger trigger, string[] argumentKeys, bool byKeys)
+        {
+            this.Trigger = trigger;
+            this.argumentKeys = argumentKeys;
+        }
+
+        public MacroTriggerWithArguments(IMacroTrigger trigger, object[] argumentValues)
+        {
+            this.Trigger = trigger;
+            this.argumentObjects = argumentValues;
+        }
+
+        public void Restored()
+        {
+            restoreArgumentObjects();
+            Activate();
+        }
 
         public IMacroTrigger Trigger { get; private set; }
 
@@ -15,58 +34,37 @@ namespace OpenSC.Model.Macros
 
         public Macro Macro { get; internal set; }
 
-        private object[] argumentValues;
-        public object[] ArgumentValues
+        private object[] argumentObjects;
+        public object[] ArgumentObjects
         {
-            get => argumentValues;
+            get => argumentObjects;
             set
             {
                 if (value.Length != Trigger.ArgumentCount)
                     throw new ArgumentException();
-                argumentValues = value;
+                argumentObjects = value;
             }
         }
 
         private string[] argumentKeys;
+        public string[] ArgumentKeys => Trigger.GetArgumentKeys(ArgumentObjects);
 
-        public string[] ArgumentKeys
-        {
-            get => Trigger.GetArgumentKeys(ArgumentValues);
-        }
-
-        public string HumanReadable => Trigger?.HumanReadable(ArgumentValues);
-
-        public MacroTriggerWithArguments(IMacroTrigger trigger, string[] argumentKeys, bool byKeys)
-        {
-            trigger.Register(this);
-            this.Trigger = trigger;
-            this.argumentKeys = argumentKeys;
-        }
-
-        public MacroTriggerWithArguments(IMacroTrigger trigger, object[] argumentValues)
-        {
-            trigger.Register(this);
-            this.Trigger = trigger;
-            this.argumentValues = argumentValues;
-        }
-
-        public void Restored()
-        {
-            restoreArgumentValues();
-        }
-
-        private void restoreArgumentValues()
+        private void restoreArgumentObjects()
         {
             if (argumentKeys != null)
-                argumentValues = Trigger.GetArgumentsByKeys(argumentKeys);
+                argumentObjects = Trigger.GetArgumentsByKeys(argumentKeys);
         }
 
-        public void Fire(IMacroTrigger sender)
-        {
-            if (sender != Trigger)
-                return;
-            Macro?.Triggered(this);
-        }
+        public void Activate() => Trigger?.Activate(this);
+        public void Dectivate() => Trigger?.Deactivate(this);
+        internal object ActivationData { get; private set; }
+        internal void Activated(MacroTriggerWithArgumentsActivationData activationData) => ActivationData = activationData;
+        internal void Deactivated() => ActivationData = null;
+
+        public string HumanReadable => Trigger?.HumanReadable(ArgumentObjects);
+
+        public void Fire() => Macro?.Run();
 
     }
+
 }

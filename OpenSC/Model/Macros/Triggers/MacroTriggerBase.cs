@@ -6,118 +6,113 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Macros
 {
-    abstract public class MacroTriggerBase : IMacroTrigger
+    abstract public class MacroTriggerBase<TActivationData> : IMacroTrigger
+        where TActivationData : MacroTriggerWithArgumentsActivationData
     {
+
         public string Code { get; protected set; }
-
         public string Name { get; protected set; }
-
         public string Description { get; protected set; }
 
-        public delegate string HumanReadableMethodDelegate(object[] argumentsValues);
-        private HumanReadableMethodDelegate humanReadableMethod;
-
-        public MacroTriggerBase(string code, string name, string description, HumanReadableMethodDelegate humanReadableMethod)
+        public MacroTriggerBase()
         {
-            this.Code = code;
-            this.Name = name;
-            this.Description = description;
-            this.humanReadableMethod = humanReadableMethod;
+            MacroTriggerAttribute myAttribute = GetType().GetAttribute<MacroTriggerAttribute>();
+            if (myAttribute == null)
+                throw new Exception(); //NoMacroTriggerAttributeException();
+            Code = myAttribute.Code;
+            Name = myAttribute.Name;
+            Description = myAttribute.Description;
+            lookupForArguments();
         }
 
         #region Arguments
-        public int ArgumentCount => arguments.Count;
-
-        public IMacroTriggerArgument[] Arguments => arguments.ToArray();
-
-        protected List<IMacroTriggerArgument> arguments = new List<IMacroTriggerArgument>();
-
-        public delegate object[] GetPossibilitiesMethodDelegate(object[] previousArgumentValues);
-
-        public delegate string GetStringForPossibilityMethodDelegate(object items);
-
-        protected void addArgument(string name, string description, Type type, GetPossibilitiesMethodDelegate getPossibilitiesMethod, GetStringForPossibilityMethodDelegate getStringForPossibilityMethod)
-            => arguments.Add(new ArgumentImplementation(arguments.Count, name, description, type, getPossibilitiesMethod, getStringForPossibilityMethod));
-
-        private class ArgumentImplementation : IMacroTriggerArgument
+        private void lookupForArguments()
         {
-
-            private int index;
-            
-            public string Name { get; private set; }
-
-            public string Description { get; private set; }
-
-            public Type Type { get; private set; }
-
-            private GetPossibilitiesMethodDelegate getPossibilitiesMethod;
-
-            private GetStringForPossibilityMethodDelegate getStringForPossibilityMethod;
-
-            public ArgumentImplementation(int index, string name, string description, Type type, GetPossibilitiesMethodDelegate getPossibilitiesMethod, GetStringForPossibilityMethodDelegate getStringForPossibilityMethod)
+            List<IMacroTriggerArgument> arguments = new List<IMacroTriggerArgument>();
+            Type[] nestedTypes = GetType().GetNestedTypes();
+            foreach (Type nestedType in nestedTypes)
             {
-                this.index = index;
-                this.Name = name;
-                this.Description = description;
-                this.Type = type;
-                this.getPossibilitiesMethod = getPossibilitiesMethod;
-                this.getStringForPossibilityMethod = getStringForPossibilityMethod;
+                if (nestedType.IsSubclassOf(typeof(IMacroTriggerArgument)))
+                {
+                    IMacroTriggerArgument argument = (IMacroTriggerArgument)Activator.CreateInstance(nestedType);
+                    arguments.Add(argument);
+                }
             }
-            public object[] GetPossibilities(object[] previousArgumentValues)
-                => getPossibilitiesMethod(previousArgumentValues);
-
-            public string GetStringForPossibility(object item)
-                => getStringForPossibilityMethod(item);
-
-        }
-        #endregion
-
-        public virtual string[] GetArgumentKeys(object[] arguments)
-        {
-            List<string> argumentKeys = new List<string>();
+            IEnumerable<IMacroTriggerArgument> argumentsOrdered = arguments.OrderBy(arg => arg.Index);
             int i = 0;
-            foreach (object argument in arguments)
-                argumentKeys.Add(getArgumentKey(i++, argument));
-            return argumentKeys.ToArray();
+            foreach (IMacroTriggerArgument argument in argumentsOrdered)
+                if (argument.Index != i++)
+                    throw new Exception(); // ArgumentIndexMismatchException();
+            Arguments = argumentsOrdered.ToArray();
         }
 
-        protected virtual string getArgumentKey(int index, object value)
+        public int ArgumentCount => Arguments.Length;
+
+        public IMacroTriggerArgument[] Arguments { get; private set; }
+
+        public virtual string[] GetArgumentKeys(object[] argumentObjects)
         {
-            ModelBase argumentAsModel = value as ModelBase;
-            if (argumentAsModel != null)
-                return argumentAsModel.ID.ToString();
-            return value?.ToString();
+            string[] argumentKeys = new string[Arguments.Length];
+            int i = 0;
+            foreach (IMacroTriggerArgument argument in Arguments)
+                argumentKeys[i] = argument.GetKeyByObject(argumentObjects[i++]);
+            return argumentKeys;
         }
 
-        public abstract object[] GetArgumentsByKeys(string[] keys);
+        public virtual object[] GetArgumentsByKeys(string[] argumentKeys)
+        {
+            object[] argumentObjects = new object[Arguments.Length];
+            int i = 0;
+            foreach (IMacroTriggerArgument argument in Arguments)
+                argumentObjects[i] = argument.GetObjectByKey(argumentKeys[i++], argumentObjects);
+            return argumentObjects;
+        }
 
         public virtual MacroTriggerWithArguments GetWithArgumentsByKeys(string[] argumentKeys)
-        {
-            return new MacroTriggerWithArguments(this, argumentKeys, true);
-        }
+            => new MacroTriggerWithArguments(this, argumentKeys, true);
 
         public virtual MacroTriggerWithArguments GetWithArguments(object[] argumentValues)
+            => new MacroTriggerWithArguments(this, argumentValues);
+        #endregion
+
+        #region Activation
+        public virtual void Activate(MacroTriggerWithArguments triggerWithArguments)
         {
-            return new MacroTriggerWithArguments(this, argumentValues);
+            if (triggerWithArguments.Trigger != this)
+                return;
+            if (triggerWithArguments.ArgumentObjects.Length != Arguments.Length)
+                return;
+            _activate(triggerWithArguments);
         }
 
-        protected List<MacroTriggerWithArguments> registeredTriggersWithArguments = new List<MacroTriggerWithArguments>();
-        
-        public virtual void Register(MacroTriggerWithArguments triggerWithArguments)
+        protected abstract void _activate(MacroTriggerWithArguments triggerWithArguments);
+
+        public virtual void Deactivate(MacroTriggerWithArguments triggerWithArguments)
         {
-            if (!registeredTriggersWithArguments.Contains(triggerWithArguments))
-                registeredTriggersWithArguments.Add(triggerWithArguments);
+            if (triggerWithArguments.Trigger != this)
+                return;
+            TActivationData activationData = triggerWithArguments.ActivationData as TActivationData;
+            if (activationData == null)
+                return;
+            _deactivate(triggerWithArguments, activationData);
         }
 
-        public virtual void Unregister(MacroTriggerWithArguments triggerWithArguments)
+        protected abstract void _deactivate(MacroTriggerWithArguments triggerWithArguments, TActivationData activationData);
+        #endregion
+
+        #region Human readable
+        private const string HUMAN_READABLE_ERROR = "???";
+
+        public virtual string HumanReadable(object[] argumentObjects)
         {
-            registeredTriggersWithArguments.Remove(triggerWithArguments);
+            if (argumentObjects.Length != Arguments.Length)
+                return HUMAN_READABLE_ERROR;
+            return _humanReadable(argumentObjects) ?? HUMAN_READABLE_ERROR;
         }
 
-        public abstract void Call(params object[] arguments);
-
-        public string HumanReadable(object[] argumentsValues)
-            => humanReadableMethod(argumentsValues);
+        protected abstract string _humanReadable(object[] argumentObjects);
+        #endregion
 
     }
+
 }

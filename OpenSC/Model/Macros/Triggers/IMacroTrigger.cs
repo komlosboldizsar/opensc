@@ -14,14 +14,13 @@ namespace OpenSC.Model.Macros
         string Description { get; }
         int ArgumentCount { get; }
         IMacroTriggerArgument[] Arguments { get; }
-        MacroTriggerWithArguments GetWithArgumentsByKeys(string[] argumentKeys);
-        MacroTriggerWithArguments GetWithArguments(object[] argumentValues);
         object[] GetArgumentsByKeys(string[] argumentKeys);
-        string[] GetArgumentKeys(object[] argumentsValues);
-        void Register(MacroTriggerWithArguments triggerWithArguments);
-        void Unregister(MacroTriggerWithArguments triggerWithArguments);
-        void Call(params object[] arguments);
-        string HumanReadable(object[] argumentsValues);
+        string[] GetArgumentKeys(object[] argumentObjects);
+        MacroTriggerWithArguments GetWithArgumentsByKeys(string[] argumentKeys);
+        MacroTriggerWithArguments GetWithArguments(object[] argumentObjects);
+        void Activate(MacroTriggerWithArguments triggerWithArguments);
+        void Deactivate(MacroTriggerWithArguments triggerWithArguments);
+        string HumanReadable(object[] argumentObjects);
     }
 
 }

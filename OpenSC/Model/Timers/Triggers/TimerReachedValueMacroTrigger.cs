@@ -8,94 +8,68 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Timers.Triggers
 {
 
-    class TimerReachedValueMacroTrigger : MacroTriggerDefaultCallImplementations.AllArgumentsMatchStrict
+    [MacroTrigger("Timers.TimerReachedValue", "Timer reached time value", "Compare the time value of a timer to a specified value, and fire trigger when they are equal.")]
+    class TimerReachedValueMacroTrigger : MacroTriggerBase<TimerReachedValueMacroTrigger.ActivationData>
     {
 
-        public TimerReachedValueMacroTrigger()
-            : base("Timers.TimerReachedValue",
-                  "Timer reached time value",
-                  "Compare the time value of a timer to a specified value, and fire trigger when they are equal.",
-                  humanReadable)
+        [MacroTriggerArgument(0, "Timer", "The timer to observe.")]
+        public class Arg0 : MacroTriggerArgumentDatabaseItem<Timer>
         {
-            addArgument("Timer",
-                "The timer to observe.",
-                typeof(Timer),
-                (prev) => TimerDatabase.Instance.ToArray(),
-                timer => ((Timer)timer).Name);
-            addArgument("Value",
-                "Time value the timers value is compared to.",
-                typeof(int),
-                null,
-                null);
+            public Arg0() : base (TimerDatabase.Instance)
+            { }
         }
 
-        private static readonly object[] ARRAY_EMPTY = new object[] { };
-
-        protected override string getArgumentKey(int index, object value)
+        [MacroTriggerArgument(1, "Value", "Time value the timers value is compared to.")]
+        public class Arg1 : MacroTriggerArgumentInt
         {
+            public Arg1() : base()
+            { }
+        }
 
-            if (index == 0)
+        internal class ActivationData : MacroTriggerWithArgumentsActivationData
+        {
+            public Timer Timer { get; private set; }
+            public PropertyChangedTwoValuesDelegate<Timer, int> TimerSecondsChangedHandler { get; private set; }
+            public ActivationData(Timer timer, PropertyChangedTwoValuesDelegate<Timer, int> timerSecondsChangedHandler)
             {
-                Timer timer = value as Timer;
-                if (timer == null)
-                    return "-1";
-                return timer.ID.ToString();
+                Timer = timer;
+                TimerSecondsChangedHandler = timerSecondsChangedHandler;
             }
-
-            if (index == 1)
-            {
-                if (value == null)
-                    return "-1";
-                if (!int.TryParse(value.ToString(), out int intValue))
-                    return "-1";
-                return intValue.ToString();
-            }
-
-            throw new ArgumentException();
-
         }
 
-
-        public override object[] GetArgumentsByKeys(string[] keys)
+        protected override void _activate(MacroTriggerWithArguments triggerWithArguments)
         {
-
-            if (keys.Length != Arguments.Length)
-                return null;
-
-            if (!int.TryParse(keys[0], out int timerId))
-                return null;
-            if (!int.TryParse(keys[1], out int timeValue))
-                return null;
-
-            Timer timer = TimerDatabase.Instance.GetTById(timerId);
+            object[] argumentObjects = triggerWithArguments.ArgumentObjects;
+            Timer timer = argumentObjects[0] as Timer;
             if (timer == null)
-                return null;
-
-            return new object[]
-            {
-                timer,
-                timeValue
-            };
-
-        }
-
-        private const string HUMAN_READABLE_ERROR = "???";
-
-        private static string humanReadable(object[] args)
-        {
-            if (args.Length < 2)
-                return HUMAN_READABLE_ERROR;
-
-            Timer timer = args[0] as Timer;
-            if (timer == null)
-                return HUMAN_READABLE_ERROR;
-
-            int timeValue = (int)args[1];
+                return;
+            int timeValue = (int)argumentObjects[1];
             if (timeValue < 0)
-                return HUMAN_READABLE_ERROR;
+                return;
+            PropertyChangedTwoValuesDelegate<Timer, int> timerSecondsChangedHandler = (i, ov, nv) => {
+                if (nv == timeValue)
+                    triggerWithArguments.Fire();
+            };
+            timer.SecondsChanged += timerSecondsChangedHandler;
+            ActivationData activationData = new ActivationData(timer, timerSecondsChangedHandler);
+            triggerWithArguments.Activated(activationData);
+        }
 
-            return string.Format("Value of timer #{0} ({1}) reaches {2}.", timer.ID, timer.Name, timeValue);
+        protected override void _deactivate(MacroTriggerWithArguments triggerWithArguments, ActivationData activationData)
+        {
+            activationData.Timer.SecondsChanged -= activationData.TimerSecondsChangedHandler;
+            triggerWithArguments.Deactivated();
+        }
 
+        protected override string _humanReadable(object[] argumentObjects)
+        {
+            Timer timer = argumentObjects[0] as Timer;
+            if (timer == null)
+                return null;
+            int timeValue = (int)argumentObjects[1];
+            if (timeValue < 0)
+                return null;
+            return string.Format("Value of timer [{0}] reaches {1}.", timer.ToString(), timeValue);
         }
 
     }

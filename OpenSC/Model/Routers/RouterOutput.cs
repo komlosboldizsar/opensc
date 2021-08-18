@@ -129,7 +129,6 @@ namespace OpenSC.Model.Routers
                     sourceRouterInput.Index);
             LogDispatcher.I(Router.LOG_TAG, logMessage);
             CurrentInputChanged?.Invoke(this, source as RouterInput);
-            RouterMacroTriggers.RouterOutputSourceChanged.Call(Router, this);
         }
 
         public void RequestCrosspointUpdate(RouterInput input)

@@ -49,7 +49,6 @@ namespace OpenSC.Model.Timers
                 if (!setProperty(this, ref seconds, value, SecondsChanged, validator: ValidateSeconds))
                     return;
                 RaisePropertyChanged(nameof(TimeSpan));
-                TimerMacroTriggers.TimerReachedValue.Call(this, seconds);
             }
         }
 
