@@ -45,6 +45,27 @@ namespace BMD.Switcher
 
         }
 
+        public static List<IBMDSwitcherMixEffectBlock> GetAllMixEffectBlocks(this IBMDSwitcher switcher)
+        {
+
+            IBMDSwitcherMixEffectBlockIterator mixEffectBlockIterator = switcher.GetMixEffectBlockIterator();
+            if (mixEffectBlockIterator == null)
+                return null;
+
+            List<IBMDSwitcherMixEffectBlock> mixEffectBlocks = new List<IBMDSwitcherMixEffectBlock>();
+            IBMDSwitcherMixEffectBlock mixEffectBlock;
+            mixEffectBlockIterator.Next(out mixEffectBlock);
+            while (mixEffectBlock != null)
+            {
+                mixEffectBlocks.Add(mixEffectBlock);
+                mixEffectBlockIterator.Next(out mixEffectBlock);
+            }
+
+            return mixEffectBlocks;
+
+        }
+
     }
 
 }
+;

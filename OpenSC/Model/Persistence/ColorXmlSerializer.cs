@@ -21,7 +21,7 @@ namespace OpenSC.Model.Persistence
         private const string ATTRIBUTE_GREEN = "g";
         private const string ATTRIBUTE_BLUE = "b";
 
-        public object DeserializeItem(XmlNode serializedItem)
+        public object DeserializeItem(XmlNode serializedItem, object parentItem)
         {
             if (serializedItem.LocalName != XML_TAG_NAME)
                 return Color.Black;
@@ -34,7 +34,7 @@ namespace OpenSC.Model.Persistence
             return Color.FromArgb(a, r, g, b);
         }
 
-        public XElement SerializeItem(object item)
+        public XElement SerializeItem(object item, object parentItem)
         {
             Color color = (item is Color) ? (Color)item : Color.Black;
             XElement xmlElement = new XElement(XML_TAG_NAME);

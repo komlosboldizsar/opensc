@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Mixers
 {
 
-    public class MixerInput : ISignalTallySource, INotifyPropertyChanged
+    public class MixerInput : SystemObjectBase, ISignalTallySender, INotifyPropertyChanged
     {
 
         public MixerInput()
@@ -30,26 +30,6 @@ namespace OpenSC.Model.Mixers
             createBooleans();
         }
 
-        private string name;
-
-        public string Name
-        {
-            get { return name; }
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException();
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                PropertyChanged?.Invoke(nameof(Name));
-            }
-        }
-
-        public delegate void InputNameChangedDelegate(MixerInput input, string oldName, string newName);
-        public event InputNameChangedDelegate NameChanged;
 
         public Mixer Mixer { get; internal set; }
 
@@ -59,81 +39,87 @@ namespace OpenSC.Model.Mixers
                 return;
         }
 
+        #region Property: Name
+        public event PropertyChangedTwoValuesDelegate<MixerInput, string> NameChanged;
+
+        private string name;
+
+        public string Name
+        {
+            get => name;
+            set
+            {
+                ValidateName(value);
+                setProperty(this, ref name, value, NameChanged);
+            }
+        }
+
+        public void ValidateName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException();
+        }
+        #endregion
+
         #region Property: Index
+        public event PropertyChangedTwoValuesDelegate<MixerInput, int> IndexChanged;
+
         private int index;
 
         public int Index
         {
-            get { return index; }
-            set {
-                if (value == index)
-                    return;
-                int oldIndex = index;
-                index = value;
-                IndexChanged?.Invoke(this, oldIndex, value);
-                PropertyChanged?.Invoke(nameof(Index));
-            }
+            get => index;
+            set => setProperty(this, ref index, value, IndexChanged);
         }
-
-        public delegate void IndexChangedDelegate(MixerInput input, int oldIndex, int newIndex);
-        public event IndexChangedDelegate IndexChanged;
         #endregion
 
         #region Property: Source
-        private ISignal source;
+        public event PropertyChangedTwoValuesDelegate<MixerInput, ISignalSourceRegistered> SourceChanged;
 
-        public ISignal Source
+        private ISignalSourceRegistered source;
+
+        public ISignalSourceRegistered Source
         {
-            get { return source; }
+            get => source;
             set
             {
-
-                if (value == source)
-                    return;
-
-                if(source != null)
-                {
-                    source.SignalLabelChanged -= signalLabelChangedHandler;
-                    source.IsTalliedFrom(this, SignalTallyType.Red, false);
-                    source.IsTalliedFrom(this, SignalTallyType.Green, false);
-                }
-
-                ISignal oldSource = source;
-                source = value;
-
-                SourceChanged?.Invoke(this, oldSource, value);
-                PropertyChanged?.Invoke(nameof(Source));
-
+                List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
+                recursionChain.Add(this);
+                BeforeChangePropertyDelegate<ISignalSourceRegistered> beforeChangeDelegate = (ov, nv) => {
+                    if (ov != null)
+                    {
+                        ov.SignalLabelChanged -= signalLabelChangedHandler;
+                        ov.RedTally.Revoke(recursionChain);
+                        ov.YellowTally.Revoke(recursionChain);
+                        ov.GreenTally.Revoke(recursionChain);
+                    }
+                };
+                AfterChangePropertyDelegate<ISignalSourceRegistered> afterChangeDelegate = (ov, nv) => {
+                    if (nv != null)
+                    {
+                        nv.SignalLabelChanged += signalLabelChangedHandler;
+                        if (RedTally)
+                            nv.RedTally.Give(recursionChain);
+                        /* if (YellowTally)
+                            nv.YellowTally.Give(recursionChain); */
+                        if (GreenTally)
+                            nv.GreenTally.Give(recursionChain);
+                    }
+                };
+                setProperty(this, ref source, value, SourceChanged, beforeChangeDelegate, afterChangeDelegate);
                 SourceSignalLabelChanged?.Invoke(this, source?.SignalLabel);
-                PropertyChanged?.Invoke(nameof(SourceName));
-
-                if (source != null)
-                {
-                    source.SignalLabelChanged += signalLabelChangedHandler;
-                    source.IsTalliedFrom(this, SignalTallyType.Red, RedTally);
-                    source.IsTalliedFrom(this, SignalTallyType.Green, GreenTally);
-                }
-
+                RaisePropertyChanged(nameof(SourceName));
             }
         }
-
-        public delegate void SourceChangedDelegate(MixerInput input, ISignal oldSource, ISignal newSource);
-        public event SourceChangedDelegate SourceChanged;
         #endregion
 
         #region Property: SourceName
-        public string SourceName
-        {
-            get => source.SignalLabel;
-        }
+        public string SourceName => source.SignalLabel;
 
-        private void signalLabelChangedHandler(ISignal signal, string newLabel)
-        {
-            SourceSignalLabelChanged?.Invoke(this, newLabel);
-        }
+        private void signalLabelChangedHandler(ISignalSource signal, string newLabel)
+            => SourceSignalLabelChanged?.Invoke(this, newLabel);
 
-        public delegate void SourceSignalLabelChangedDelegate(MixerInput input, string newName);
-        public SourceSignalLabelChangedDelegate SourceSignalLabelChanged;
+        public PropertyChangedOneValueDelegate<MixerInput, string> SourceSignalLabelChanged;
         #endregion
 
         // "Temp foreign key"
@@ -145,7 +131,7 @@ namespace OpenSC.Model.Mixers
                 Source = SignalRegister.Instance.GetSignalByUniqueId(_sourceSignalUniqueId);
         }
 
-        public delegate void TallyChangedDelegate(MixerInput input, bool newState);
+        public event PropertyChangedOneValueDelegate<MixerInput, bool> RedTallyChanged;
 
         private bool redTally;
 
@@ -154,15 +140,18 @@ namespace OpenSC.Model.Mixers
             get => redTally;
             set
             {
-                if (value == redTally)
+                if (!setProperty(this, ref redTally, value, RedTallyChanged))
                     return;
-                redTally = value;
-                RedTallyChanged?.Invoke(this, value);
-                source?.IsTalliedFrom(this, SignalTallyType.Red, value);
+                List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
+                recursionChain.Add(this);
+                if (value)
+                    source?.RedTally.Give(recursionChain);
+                else
+                    source?.RedTally.Revoke(recursionChain);
             }
         }
 
-        public event TallyChangedDelegate RedTallyChanged;
+        public event PropertyChangedOneValueDelegate<MixerInput, bool> GreenTallyChanged;
 
         private bool greenTally;
 
@@ -171,15 +160,17 @@ namespace OpenSC.Model.Mixers
             get => greenTally;
             set
             {
-                if (value == greenTally)
+                if (!setProperty(this, ref greenTally, value, GreenTallyChanged))
                     return;
-                greenTally = value;
-                GreenTallyChanged?.Invoke(this, value);
-                source?.IsTalliedFrom(this, SignalTallyType.Green, value);
+                List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
+                recursionChain.Add(this);
+                if (value)
+                    source?.RedTally.Give(recursionChain);
+                else
+                    source?.RedTally.Revoke(recursionChain);
+
             }
         }
-
-        public event TallyChangedDelegate GreenTallyChanged;
 
         #region Tally booleans
         private IBoolean redTallyBoolean = null;
@@ -208,9 +199,7 @@ namespace OpenSC.Model.Mixers
         }
         #endregion
 
-        #region Implementation of INotifyPropertyChanged
-        public event PropertyChangedDelegate PropertyChanged;
-        #endregion
+        string ISignalTallySender.Label => string.Format("Mixer [#{0} ({1})], input [#{2} ({3})]", Mixer.ID, Mixer.Name, Index, Name);
 
     }
 

@@ -2,8 +2,11 @@
 using OpenSC.GUI.Timers;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
+using OpenSC.Model.Macros;
 using OpenSC.Model.Timers;
 using OpenSC.Model.Timers.DynamicTextFunctions;
+using OpenSC.Model.Timers.Macros;
+using OpenSC.Model.Timers.Triggers;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
@@ -65,7 +68,8 @@ namespace OpenSC.Modules.Timers
 
         public void RegisterMacroCommandsAndTriggers()
         {
-
+            MacroCommandRegister.Instance.RegisterCommandCollection(TimerMacroCommands.Instance);
+            MacroTriggerRegister.Instance.RegisterTriggerCollection(TimerMacroTriggers.Instance);
         }
 
     }

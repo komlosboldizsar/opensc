@@ -9,13 +9,6 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Routers.BlackMagicDesign
 {
-
-    public delegate void BmdVideohubIpAddressChangingDelegate(BmdVideohub router, string oldIpAddress, string newIpAddress);
-    public delegate void BmdVideohubIpAddressChangedDelegate(BmdVideohub router, string oldIpAddress, string newIpAddress);
-
-    public delegate void BmdVideohubConnectionStateChangingDelegate(BmdVideohub router, bool oldState, bool newState);
-    public delegate void BmdVideohubConnectionStateChangedDelegate(BmdVideohub router, bool oldState, bool newState);
-
     public delegate void BmdVideohubAutoReconnectChangingDelegate(BmdVideohub router, bool oldSetting, bool newSetting);
     public delegate void BmdVideohubAutoReconnectChangedDelegate(BmdVideohub router, bool oldSetting, bool newSetting);
 
@@ -31,9 +24,9 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             initVideohub();
         }
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
-            base.Restored();
+            base.RestoredOwnFields();
             initVideohub();
             startAutoReconnectThread();
         }
@@ -49,128 +42,82 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             videohub = null;
 
             IpAddressChanged = null;
-            IpAddressChanging = null;
             ConnectionStateChanged = null;
-            ConnectionStateChanging = null;
             AutoReconnectChanged = null;
-            AutoReconnectChanging = null;
 
             autoReconnectThread?.Abort();
             autoReconnectThread = null;
 
         }
 
-        public void Connect()
-        {
-            videohub.Connect();
-        }
+        public void Connect() => videohub.Connect();
+        public void Disconnect() => videohub.Disconnect();
 
-        public void Disconnect()
-        {
-            videohub.Disconnect();
-        }
-
-        public event BmdVideohubIpAddressChangingDelegate IpAddressChanging;
-        public event BmdVideohubIpAddressChangedDelegate IpAddressChanged;
+        #region Property: IpAddress
+        public event PropertyChangedTwoValuesDelegate<BmdVideohub, string> IpAddressChanged;
 
         [PersistAs("ip_address")]
         private string ipAddress;
 
         public string IpAddress
         {
-            get { return ipAddress; }
-            set
-            {
-                ValidateIpAddress(ipAddress);
-                if (value == ipAddress)
-                    return;
-                string oldIpAddress = ipAddress;
-                IpAddressChanging?.Invoke(this, oldIpAddress, value);
-                ipAddress = value;
-                videohub.IpAddress = value;
-                IpAddressChanged?.Invoke(this, oldIpAddress, value);
-                RaisePropertyChanged(nameof(IpAddress));
-            }
+            get => ipAddress;
+            set => setProperty(this, ref ipAddress, value, IpAddressChanged,
+                null, (ov, nv) => { videohub.IpAddress = nv; }, ValidateIpAddress);
         }
 
         public void ValidateIpAddress(string ipAddress)
         {
             // ... throw new ArgumentException();
         }
+        #endregion
 
-        public event BmdVideohubConnectionStateChangingDelegate ConnectionStateChanging;
-        public event BmdVideohubConnectionStateChangedDelegate ConnectionStateChanged;
+        #region Property: Connected
+        public event PropertyChangedTwoValuesDelegate<BmdVideohub, bool> ConnectionStateChanged;
 
         private bool connected;
 
         public bool Connected
         {
-            get { return connected; }
+            get => connected;
             set
             {
-
-                if (value == connected)
-                    return;
-                bool oldState = connected;
-                ConnectionStateChanging?.Invoke(this, oldState, value);
-                connected = value;
-                ConnectionStateChanged?.Invoke(this, oldState, value);
-                RaisePropertyChanged(nameof(Connected));
-
-                if (value)
+                AfterChangePropertyDelegate<bool> afterChangeDelegate = (ov, nv) =>
                 {
-
-                    // State
-                    State = RouterState.Ok;
-                    StateString = "connected";
-
-                    // Lo
-                    string logMessage = string.Format("Connected to a BlackMagic Design router/videohub (ID: {0}) with IP {1}.",
-                        ID,
-                        IpAddress);
-                    LogDispatcher.I(LOG_TAG, logMessage);
-
-                }
-                else
-                {
-
-                    // State
-                    State = RouterState.Warning;
-                    StateString = "disconnected";
-
-                    // Log
-                    string logMessage = string.Format("Disconnected from a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}.",
-                        ID,
-                        IpAddress);
-                    LogDispatcher.I(LOG_TAG, logMessage);
-
-                }
-
+                    if (nv)
+                    {
+                        State = RouterState.Ok;
+                        StateString = "connected";
+                        string logMessage = string.Format("Connected to a BlackMagic Design router/videohub (ID: {0}) with IP {1}.", ID, IpAddress);
+                        LogDispatcher.I(LOG_TAG, logMessage);
+                    }
+                    else
+                    {
+                        State = RouterState.Warning;
+                        StateString = "disconnected";
+                        string logMessage = string.Format("Disconnected from a BlackMagic Design mixer/switcher (ID: {0}) with IP {1}.", ID, IpAddress);
+                        LogDispatcher.I(LOG_TAG, logMessage);
+                    }
+                };
+                setProperty(this, ref connected, value, ConnectionStateChanged, null, afterChangeDelegate);
             }
         }
+        #endregion
 
         #region Auto reconnect
-        public event BmdVideohubAutoReconnectChangingDelegate AutoReconnectChanging;
-        public event BmdVideohubAutoReconnectChangedDelegate AutoReconnectChanged;
+        public event PropertyChangedTwoValuesDelegate<BmdVideohub, bool> AutoReconnectChanged;
 
         [PersistAs("auto_reconnect")]
         private bool autoReconnect;
 
         public bool AutoReconnect
         {
-            get { return autoReconnect; }
-            set
-            {
-                if (value == autoReconnect)
-                    return;
-                bool oldValue = autoReconnect;
-                AutoReconnectChanging?.Invoke(this, oldValue, value);
-                autoReconnect = value;
-                AutoReconnectChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(AutoReconnect));
-            }
+            get => autoReconnect;
+            set => setProperty(this, ref autoReconnect, value, AutoReconnectChanged);
         }
+        #endregion
 
+        #region Auto reconnect thread
         private const int RECONNECT_TRY_INTERVAL = 10000;
 
         private Thread autoReconnectThread = null;
@@ -211,35 +158,83 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             videohub = new BMD.Videohub.BlackMagicVideohub(ipAddress);
             videohub.ConnectionStateChanged += connectionStateChangedHandler;
             videohub.CrosspointChanged += crosspointChangedHandler;
+            videohub.LockChanged += lockChangedHandler;
         }
 
         private void connectionStateChangedHandler(bool state)
         {
             Connected = state;
+            if (Connected)
+                queryAllStates();
         }
 
         private void crosspointChangedHandler(int output, int? input)
         {
-            if ((output < Outputs.Count) && (input != null) && (input < Inputs.Count))
-                Outputs[output].Crosspoint = Inputs[(int)input];
+            if (input == null)
+                return;
+            try
+            {
+                notifyCrosspointChanged(output, (int)input);
+            }
+            catch { }
         }
 
-        protected override bool setCrosspoint(RouterOutput output, RouterInput input)
+        private void lockChangedHandler(int output, BMD.Videohub.BlackMagicVideohub.LockState state)
+            => notifyLockChanged(output, RouterOutputLockType.Lock, LOCK_STATE_TRANSLATIONS[state]);
+
+        private static readonly Dictionary<BMD.Videohub.BlackMagicVideohub.LockState, RouterOutputLockState> LOCK_STATE_TRANSLATIONS
+            = new Dictionary<BMD.Videohub.BlackMagicVideohub.LockState, RouterOutputLockState>()
+            {
+                { BMD.Videohub.BlackMagicVideohub.LockState.Unlocked, RouterOutputLockState.Clear },
+                { BMD.Videohub.BlackMagicVideohub.LockState.Owned, RouterOutputLockState.LockedLocal },
+                { BMD.Videohub.BlackMagicVideohub.LockState.Taken, RouterOutputLockState.LockedRemote }
+            };
+
+        protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)
         {
             try
             {
                 videohub.SetCrosspoint(output.Index, input.Index);
-                return true;
             }
             catch (ArgumentOutOfRangeException)
             { }
-            return false;
         }
 
-        protected override void updateAllCrosspoints()
+        protected override void queryAllStates()
         {
-            //
+            videohub.QueryAllCrosspoints();
+            videohub.QueryAllLockStates();
         }
+
+        protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
+        {
+            if (lockType != RouterOutputLockType.Lock)
+                return; // supporting only locks
+            switch (lockOperationType)
+            {
+                case RouterOutputLockOperationType.Lock:
+                    videohub.SetLockState(output.Index, true);
+                    break;
+                case RouterOutputLockOperationType.Unlock:
+                    videohub.SetLockState(output.Index, false);
+                    break;
+                case RouterOutputLockOperationType.ForceUnlock:
+                    videohub.SetLockState(output.Index, false); // TODO
+                    break;
+            }
+        }
+
+        #region Input and output instantiation
+        public override RouterInput CreateInput(string name, int index) => new RouterInput(name, this, index);
+        public override RouterOutput CreateOutput(string name, int index) => new RouterOutput(name, this, index);
+
+        private static readonly Dictionary<Type, string> OUTPUT_TYPES = new Dictionary<Type, string>()
+        {
+            {  typeof(BmdVideohubOutput), "bmd" }
+        };
+
+        protected override Dictionary<Type, string> OutputTypesDictionaryGetter() => OUTPUT_TYPES;
+        #endregion
 
     }
 

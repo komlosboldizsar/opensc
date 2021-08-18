@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
 
-    public class SignalRegister : IObservableList<ISignal>
+    public class SignalRegister : IObservableList<ISignalSourceRegistered>
     {
 
         #region Singleton
@@ -19,47 +19,55 @@ namespace OpenSC.Model.Signals
         { }
         #endregion
 
-        private List<ISignal> registeredSignals = new List<ISignal>();
+        #region Store and access signals
+        private List<ISignalSourceRegistered> registeredSignals = new List<ISignalSourceRegistered>();
 
-        public ISignal this[int index] => registeredSignals[index];
+        public ISignalSourceRegistered this[int index] => registeredSignals[index];
 
+        public ISignalSourceRegistered GetSignalByUniqueId(string uniqueId)
+        {
+            foreach (ISignalSourceRegistered signal in registeredSignals)
+                if (signal.SignalUniqueId == uniqueId)
+                    return signal;
+            return null;
+        }
+        #endregion
+
+        #region IObservableList implementation
         public int Count => registeredSignals.Count;
 
         public event ObservableListItemAddedDelegate ItemAdded;
         public event ObservableListItemRemovedDelegate ItemRemoved;
         public event ObservableListItemsChangedDelegate ItemsChanged;
+        #endregion
 
-        public IEnumerator<ISignal> GetEnumerator()
+        #region IEnumberable implementation
+        public IEnumerator<ISignalSourceRegistered> GetEnumerator()
             => registeredSignals.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()
             => registeredSignals.GetEnumerator();
+        #endregion
 
-        public void RegisterSignal(ISignal signal)
+        #region Register-unregister
+        public void RegisterSignal(ISignalSourceRegistered signal)
         {
             if (registeredSignals.Contains(signal))
                 return;
             registeredSignals.Add(signal);
-            ItemAdded?.Invoke();
+            ItemAdded?.Invoke(new object[] { signal });
             ItemsChanged?.Invoke();
         }
 
-        public void UnregisterSignal(ISignal signal)
+        public void UnregisterSignal(ISignalSourceRegistered signal)
         {
             if (!registeredSignals.Contains(signal))
                 return;
             registeredSignals.Remove(signal);
-            ItemRemoved?.Invoke();
+            ItemRemoved?.Invoke(new object[] { signal });
             ItemsChanged?.Invoke();
         }
-
-        public ISignal GetSignalByUniqueId(string uniqueId)
-        {
-            foreach (ISignal signal in registeredSignals)
-                if (signal.SignalUniqueId == uniqueId)
-                    return signal;
-            return null;
-        }
+        #endregion
         
     }
 

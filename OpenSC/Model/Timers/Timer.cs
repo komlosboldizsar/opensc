@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.Persistence;
+using OpenSC.Model.Timers.Triggers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +12,10 @@ namespace OpenSC.Model.Timers
     public class Timer : ModelBase
     {
 
-        public override void Restored()
-        { }
-
+        #region Persistence, instantiation
         public override void Removed()
         {
             base.Removed();
-            IdChanged = null;
-            TitleChanged = null;
             SecondsChanged = null;
             CountdownSecondsChanged = null;
             RunningStateChanged = null;
@@ -30,98 +27,54 @@ namespace OpenSC.Model.Timers
             ReachedZero = null;
             innerTimer?.Dispose();
         }
+        #endregion
 
-        public delegate void IdChangedDelegate(Timer timer, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
-
-        public int id = 0;
-
-        public override int ID
+        #region ID validation
+        protected override void validateIdForDatabase(int id)
         {
-            get { return id; }
-            set
-            {
-                ValidateId(value);
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
-            }
-        }
-
-        public void ValidateId(int id)
-        {
-            if (id <= 0)
-                throw new ArgumentException();
             if (!TimerDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
+        #endregion
 
-        public delegate void TitleChangedDelegate(Timer timer, string oldTitle, string newTitle);
-        public event TitleChangedDelegate TitleChanged;
-
-        [PersistAs("title")]
-        private string title = "Test";
-        public string Title
-        {
-            get { return title; }
-            set
-            {
-                ValidateTitle(value);
-                string oldTitle = title;
-                title = value;
-                TitleChanged?.Invoke(this, oldTitle, value);
-                RaisePropertyChanged(nameof(Title));
-            }
-        }
-
-        public void ValidateTitle(string title)
-        {
-            if (title == null)
-                throw new ArgumentNullException();
-            if (title == string.Empty)
-                throw new ArgumentException();
-        }
-
-        public delegate void SecondsChangedDelegate(Timer timer, int oldValue, int newValue);
-        public event SecondsChangedDelegate SecondsChanged;
+        #region Property: Seconds, TimeSpan
+        public event PropertyChangedTwoValuesDelegate<Timer, int> SecondsChanged;
 
         private int seconds = 0;
         public int Seconds
         {
-            get { return seconds; }
-            set {
-                if (value < 0)
-                    throw new ArgumentException();
-                int oldValue = seconds;
-                seconds = value;
-                SecondsChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(Seconds));
+            get => seconds;
+            set
+            {
+                if (!setProperty(this, ref seconds, value, SecondsChanged, validator: ValidateSeconds))
+                    return;
+                RaisePropertyChanged(nameof(TimeSpan));
+                TimerMacroTriggers.TimerReachedValue.Call(this, seconds);
             }
+        }
+
+        public void ValidateSeconds(int seconds)
+        {
+            if (seconds < 0)
+                throw new ArgumentException();
         }
 
         public TimeSpan TimeSpan
         {
-            get { return TimeSpan.FromSeconds(seconds); }
-            set { Seconds = (int)value.TotalSeconds; }
+            get => TimeSpan.FromSeconds(seconds);
+            set => Seconds = (int)value.TotalSeconds;
         }
+        #endregion
 
-        public delegate void CountdownSecondsChangedDelegate(Timer timer, int oldValue, int newValue);
-        public event CountdownSecondsChangedDelegate CountdownSecondsChanged;
+        #region Property: CountdownSeconds
+        public event PropertyChangedTwoValuesDelegate<Timer, int> CountdownSecondsChanged;
 
         [PersistAs("countdown_seconds")]
         private int countdownSeconds = 5;
         public int CountdownSeconds
         {
-            get { return countdownSeconds; }
-            set
-            {
-                
-                int oldValue = countdownSeconds;
-                countdownSeconds = value;
-                CountdownSecondsChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(CountdownSeconds));
-            }
+            get => countdownSeconds;
+            set => setProperty(this, ref countdownSeconds, value, CountdownSecondsChanged, validator: ValidateCountdownSeconds);
         }
 
         public void ValidateCountdownSeconds(int value)
@@ -129,92 +82,100 @@ namespace OpenSC.Model.Timers
             if (value < 0)
                 throw new ArgumentException();
         }
+        #endregion
 
-        public delegate void RunningStateChangedDelegate(Timer timer, bool oldState, bool newState);
-        public event RunningStateChangedDelegate RunningStateChanged;
-
-        public delegate void StartedDelegate(Timer timer);
-        public event StartedDelegate Started;
-
-        public delegate void StoppedDelegate(Timer timer);
-        public event StoppedDelegate Stopped;
-
-        public delegate void ResetedDelegate(Timer timer);
-        public event ResetedDelegate Reseted;
+        #region Property: Running
+        public event PropertyChangedTwoValuesDelegate<Timer, bool> RunningStateChanged;
 
         private bool running = false;
         public bool Running
         {
-            get { return running; }
+            get => running;
             private set
             {
-
-                bool oldValue = running;
-                running = value;
-
-                RunningStateChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(Running));
+                if (!setProperty(this, ref running, value, RunningStateChanged))
+                    return;
                 if (value == true)
-                {
                     Started?.Invoke(this);
-                }
                 else
-                {
                     Stopped?.Invoke(this);
-                }
                 OperationsChanged?.Invoke(this);
-
             }
         }
-    
-        public delegate void OperationsChangedDelegate(Timer timer);
-        public event OperationsChangedDelegate OperationsChanged;
+        #endregion
 
-        public bool CanStart
-        {
-            get => (mode != TimerMode.Clock) && !Running;
-        }
-
-        public bool CanStop
-        {
-            get => (mode != TimerMode.Clock) && Running;
-        }
-
-        public bool CanReset
-        {
-            get => mode != TimerMode.Clock;
-        }
-
-        public delegate void ModeChangedDelegate(Timer timer, TimerMode oldMode, TimerMode newMode);
-        public event ModeChangedDelegate ModeChanged;
+        #region Propety: Mode
+        public event PropertyChangedTwoValuesDelegate<Timer, TimerMode> ModeChanged;
 
         [PersistAs("mode")]
         private TimerMode mode = TimerMode.Backwards;
-        
+
         public TimerMode Mode
         {
-            get { return mode; }
+            get => mode;
             set
             {
-                TimerMode oldValue = mode;
-                mode = value;
-                if (oldValue != value)
-                {
+                AfterChangePropertyDelegate<TimerMode> afterChangeDelegate = (ov, nv) => {
                     Running = false;
-                    if (value == TimerMode.Backwards)
+                    if (nv == TimerMode.Backwards)
                         Seconds = CountdownSeconds;
-                    else if (value == TimerMode.Forwards)
+                    else if (nv == TimerMode.Forwards)
                         Seconds = 0;
-                }
-                ModeChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(Mode));
+                };
+                setProperty(this, ref mode, value, ModeChanged, null, afterChangeDelegate);
                 OperationsChanged?.Invoke(this);
             }
         }
+        #endregion
 
-        public delegate void BackwardsTimerReachedZeroDelegate(Timer sender);
-        public event BackwardsTimerReachedZeroDelegate ReachedZero;
+        #region State events
+        public event PropertyChangedNoValueDelegate<Timer> Started;
+        public event PropertyChangedNoValueDelegate<Timer> Stopped;
+        public event PropertyChangedNoValueDelegate<Timer> Reseted;
+        public event PropertyChangedNoValueDelegate<Timer> ReachedZero;
+        #endregion
 
+        #region Possible operations
+        public event PropertyChangedNoValueDelegate<Timer> OperationsChanged;
+
+        public bool CanStart => ((mode != TimerMode.Clock) && !Running);
+        public bool CanStop => ((mode != TimerMode.Clock) && Running);
+        public bool CanReset => (mode != TimerMode.Clock);
+        #endregion
+
+        #region Operations
+        public void Start()
+        {
+            Running = true;
+            resetInnerTimer();
+        }
+
+        public void Stop()
+        {
+            Running = false;
+        }
+
+        public void Reset()
+        {
+            switch (mode)
+            {
+                case TimerMode.Forwards:
+                    Seconds = 0;
+                    break;
+                case TimerMode.Backwards:
+                    Seconds = CountdownSeconds;
+                    break;
+                case TimerMode.Clock:
+                    // Do nothing
+                    break;
+            }
+            firstReachedZeroEvent = true;
+            Reseted?.Invoke(this);
+            resetInnerTimer();
+        }
+        #endregion
+
+        #region Timer
         private System.Timers.Timer innerTimer;
 
         public Timer()
@@ -255,47 +216,12 @@ namespace OpenSC.Model.Timers
 
         }
 
-        public void Start()
-        {
-            Running = true;
-            resetInnerTimer();
-        }
-
-        public void Stop()
-        {
-            Running = false;
-        }
-
-        public void Reset()
-        {
-            switch (mode)
-            {
-                case TimerMode.Forwards:
-                    Seconds = 0;
-                    break;
-                case TimerMode.Backwards:
-                    Seconds = CountdownSeconds;
-                    break;
-                case TimerMode.Clock:
-                    // Do nothing
-                    break;
-            }
-            firstReachedZeroEvent = true;
-            Reseted?.Invoke(this);
-            resetInnerTimer();
-        }
-
         private void resetInnerTimer()
         {
             innerTimer.Stop();
             innerTimer.Start();
         }
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            TimerDatabase.Instance.ItemUpdated(this);
-        }
+        #endregion
 
     }
 }

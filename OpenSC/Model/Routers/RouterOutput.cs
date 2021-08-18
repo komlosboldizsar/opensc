@@ -1,5 +1,6 @@
 ﻿using OpenSC.Logger;
 using OpenSC.Model.General;
+using OpenSC.Model.Routers.Triggers;
 using OpenSC.Model.Signals;
 using OpenSC.Model.Variables;
 using System;
@@ -12,27 +13,37 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public class RouterOutput : ISignal, INotifyPropertyChanged
+    public class RouterOutput : SignalForwarder, ISignalSourceRegistered, INotifyPropertyChanged
     {
 
-        public RouterOutput()
-        { }
+        public RouterOutput() : base()
+        {
+            this.CurrentSourceChanged += currentSourceChangedHandler;
+        }
 
         public RouterOutput(string name, Router router, int index)
+            : base()
         {
             this.name = name;
             this.Router = router;
             this.Index = index;
-            createBooleans();
+            this.CurrentSourceChanged += currentSourceChangedHandler;
             registerAsSignal();
         }
 
         public void Restored()
         {
-            createBooleans();
             registerAsSignal();
+            createTallyBooleans();
         }
 
+        public virtual void TotallyRestored()
+        { }
+
+        public delegate void RemovedDelegate(RouterOutput routerOutput);
+        public event RemovedDelegate Removed;
+
+        #region Property: Name
         private string name;
 
         public string Name
@@ -49,382 +60,216 @@ namespace OpenSC.Model.Routers
                 NameChanged?.Invoke(this, oldName, value);
                 PropertyChanged?.Invoke(nameof(Name));
                 SignalLabelChanged?.Invoke(this, getSignalLabel());
-                PropertyChanged?.Invoke(nameof(ISignal.SignalLabel));
+                PropertyChanged?.Invoke(nameof(ISignalSourceRegistered.SignalLabel));
             }
         }
 
         public delegate void NameChangedDelegate(RouterOutput output, string oldName, string newName);
         public event NameChangedDelegate NameChanged;
+        #endregion
 
-        public Router Router { get; internal set; }
+        #region Property: Router
+        public Router Router { get; private set; }
+
+        internal void AssignParentRouter(Router router)
+        {
+            if (Router != null)
+                return;
+            Router = router;
+        }
 
         public void RemovedFromRouter(Router router)
         {
             if (router != Router)
                 return;
-            removeBooleans();
+            Router = null;
             unregisterAsSignal();
+            Removed?.Invoke(this);
         }
+        #endregion
 
+        #region Property: Index
         private int index;
 
         public int Index
         {
-            get { return index; }
-            internal set
+            get => index;
+            set
             {
                 if (value == index)
                     return;
-                int oldIndex = index;
+                int oldValue = index;
                 index = value;
-                IndexChanged?.Invoke(this, oldIndex, value);
+                IndexChanged?.Invoke(this, oldValue, value);
                 PropertyChanged?.Invoke(nameof(Index));
                 SignalLabelChanged?.Invoke(this, getSignalLabel());
-                PropertyChanged?.Invoke(nameof(ISignal.SignalLabel));
+                PropertyChanged?.Invoke(nameof(ISignalSourceRegistered.SignalLabel));
+                SignalUniqueIdChanged?.Invoke(this, SignalUniqueId);
+                PropertyChanged?.Invoke(nameof(ISignalSourceRegistered.SignalUniqueId));
             }
         }
 
-
-        public delegate void IndexChangedDelegate(RouterOutput output, int oldIndex, int newIndex);
+        public delegate void IndexChangedDelegate(RouterOutput input, int oldIndex, int newIndex);
         public event IndexChangedDelegate IndexChanged;
-
-        private RouterInput crosspoint;
-
-        public RouterInput Crosspoint
+        #endregion
+        
+        #region Source assignment
+        public override void AssignSource(ISignalSource source) // when source already changed
         {
-            get { return crosspoint; }
-            internal set
-            {
-
-                removeIndirectTalliesFromSource(crosspoint?.Source);
-                unsubscribeCrosspointEvents();
-
-                crosspoint = value;
-
-                string logMessage = string.Format("Router crosspoint updated. Router ID: {0}, destination: {1}, source: {2}.",
+            RouterInput sourceRouterInput = source as RouterInput;
+            if (sourceRouterInput == null)
+                return;
+            if (sourceRouterInput.Router != Router)
+                throw new ArgumentException();
+            base.AssignSource(source);
+            string logMessage = string.Format("Router crosspoint updated. Router: [(#{0}) {1}], destination: #{2}, source: #{3}.",
                     Router.ID,
+                    Router.Name,
                     Index,
-                    value.Index);
-                LogDispatcher.I(Router.LOG_TAG, logMessage);
-
-                CrosspointChanged?.Invoke(this, value);
-                subscribeCrosspointEvents();
-                sendIndirectTalliesToSource(crosspoint?.Source);
-
-                fireChangeEventsAtCrosspointChange();
-
-            }
+                    sourceRouterInput.Index);
+            LogDispatcher.I(Router.LOG_TAG, logMessage);
+            CurrentInputChanged?.Invoke(this, source as RouterInput);
+            RouterMacroTriggers.RouterOutputSourceChanged.Call(Router, this);
         }
 
-        public delegate void CrosspointChangedDelegate(RouterOutput output, RouterInput newInput);
-        public event CrosspointChangedDelegate CrosspointChanged;
-
-        private void subscribeCrosspointEvents()
+        public void RequestCrosspointUpdate(RouterInput input)
         {
-            if (crosspoint == null)
-                return;
-            crosspoint.SourceNameChanged += crosspointSourceNameChangedHandler;
-            crosspoint.SourceChanging += crosspointSourceChangingHandler;
-            crosspoint.SourceChanged += crosspointSourceChangedHandler;
-            crosspoint.RedTallyChanged += crosspointRedTallyChangedHandler;
-            crosspoint.GreenTallyChanged += crosspointGreenTallyChangedHandler;
+            Router?.RequestCrosspointUpdate(this, input);
         }
+        #endregion
 
-        private void unsubscribeCrosspointEvents()
-        {
-            if (crosspoint == null)
-                return;
-            crosspoint.SourceNameChanged -= crosspointSourceNameChangedHandler;
-            crosspoint.SourceChanging -= crosspointSourceChangingHandler;
-            crosspoint.SourceChanged -= crosspointSourceChangedHandler;
-            crosspoint.RedTallyChanged -= crosspointRedTallyChangedHandler;
-            crosspoint.GreenTallyChanged -= crosspointGreenTallyChangedHandler;
-        }
+        #region Property: CurrentInput
+        public RouterInput CurrentInput => CurrentSource as RouterInput;
 
-        private void fireChangeEventsAtCrosspointChange()
-        {
-            if(crosspoint == null)
-            {
-                SourceSignalNameChanged?.Invoke(this, null);
-                RedTallyChanged?.Invoke(this, false, false);
-                GreenTallyChanged?.Invoke(this, false, false);
-            }
-            else
-            {
-                SourceSignalNameChanged?.Invoke(this, crosspoint.SourceSignalName);
-                RedTallyChanged?.Invoke(this, false, crosspoint.RedTally);
-                GreenTallyChanged?.Invoke(this, false, crosspoint.GreenTally);
-            }
-        }
+        public delegate void CurrentInputChangedDelegate(RouterOutput output, RouterInput newInput);
+        public event CurrentInputChangedDelegate CurrentInputChanged;
 
-        private void crosspointSourceChangedHandler(RouterInput input, ISignal oldSource, ISignal newSource)
-        {
-            sendIndirectTalliesToSource(newSource);
-        }
-
-        private void crosspointSourceChangingHandler(RouterInput input, ISignal oldSource, ISignal newSource)
-        {
-            removeIndirectTalliesFromSource(oldSource);
-        }
-
-        private void crosspointSourceNameChangedHandler(RouterInput input, string newName)
-        {
-            SourceSignalNameChanged?.Invoke(this, newName);
-        }
-
-        private void crosspointRedTallyChangedHandler(RouterInput input, bool newState)
-        {
-            RedTallyChanged?.Invoke(this, false, newState);
-        }
-
-        private void crosspointGreenTallyChangedHandler(RouterInput input, bool newState)
-        {
-            GreenTallyChanged?.Invoke(this, false, newState);
-        }
-
-        public string InputName
-        {
-            get => crosspoint?.Name;
-        }
-
-        #region Property: SourceSignalName
-        public string SourceSignalName
-        {
-            get => GetSourceSignalName();
-        }
-
-        public string GetSourceSignalName(List<object> recursionChain = null)
-        {
-            if (crosspoint == null)
-                return null;
-            if (recursionChain == null)
-                recursionChain = new List<object>();
-            if (recursionChain.Contains(this))
-                return "(cyclic tieline)";
-            recursionChain.Add(this);
-            return crosspoint.GetSourceSignalName(recursionChain);
-        }
-
-        public event SourceSignalNameChangedDelegate SourceSignalNameChanged;
+        private void currentSourceChangedHandler(ISignalDestination signalDestination, ISignalSource newSource)
+            => CurrentInputChanged?.Invoke(this, newSource as RouterInput);
         #endregion
 
         #region Property: SignalLabel
-        string ISignal.SignalLabel
+        string ISignalSourceRegistered.SignalLabel
             => getSignalLabel();
 
         private string getSignalLabel()
-            => string.Format("[#{2}) {3}] output of router [(#{0}) {1}]", Router.ID, Router.Name, (Index + 1), Name);
+            => string.Format("[(#{2}) {3}] output of router [(#{0}) {1}]", Router.ID, Router.Name, (Index + 1), Name);
 
-        public event SignalLabelChangedDelegate SignalLabelChanged;
+        public event PropertyChangedOneValueDelegate<ISignalSourceRegistered, string> SignalLabelChanged;
         #endregion
 
-        #region Tallies
-        public bool RedTally =>
-            GetRedTally();
-
-        public bool GreenTally =>
-            GetGreenTally();
-
+        #region Property: SignalUniqueId
         public string SignalUniqueId
             => string.Format("router.{0}.output.{1}", Router.ID, (Index + 1));
 
-        public bool GetRedTally(List<object> recursionChain = null)
-        {
-            if (crosspoint == null)
-                return false;
-            if (recursionChain == null)
-                recursionChain = new List<object>();
-            if (recursionChain.Contains(this))
-                return false;
-            recursionChain.Add(this);
-            return crosspoint.GetRedTally(recursionChain);
-        }
-
-        public bool GetGreenTally(List<object> recursionChain = null)
-        {
-            if (crosspoint == null)
-                return false;
-            if (recursionChain == null)
-                recursionChain = new List<object>();
-            if (recursionChain.Contains(this))
-                return false;
-            recursionChain.Add(this);
-            return crosspoint.GetGreenTally(recursionChain);
-        }
-
-        public event SignalTallyChangedDelegate RedTallyChanged;
-        public event SignalTallyChangedDelegate GreenTallyChanged;
+        public event PropertyChangedOneValueDelegate<ISignalSourceRegistered, string> SignalUniqueIdChanged;
         #endregion
 
-        #region Tally booleans
-        private IBoolean redTallyBoolean = null;
-        private IBoolean greenTallyBoolean = null;
+        #region Property: LocksSupported, LockState
+        public virtual bool LocksSupported => true;
+        public virtual bool LockOwnerKnown => true;
 
-        private void createBooleans()
-        {
-            redTallyBoolean = new TallyBoolean(this, TallyBoolean.TallyColor.Red);
-            greenTallyBoolean = new TallyBoolean(this, TallyBoolean.TallyColor.Green);
-            BooleanRegister.Instance.RegisterBoolean(redTallyBoolean);
-            BooleanRegister.Instance.RegisterBoolean(greenTallyBoolean);
-        }
+        private RouterOutputLockState lockState;
 
-        private void removeBooleans()
+        public RouterOutputLockState LockState
         {
-            if (redTallyBoolean != null)
+            get => lockState;
+            protected set
             {
-                BooleanRegister.Instance.UnregisterBoolean(redTallyBoolean);
-                redTallyBoolean = null;
-            }
-            if (greenTallyBoolean != null)
-            {
-                BooleanRegister.Instance.UnregisterBoolean(greenTallyBoolean);
-                greenTallyBoolean = null;
+                if (value == lockState)
+                    return;
+                RouterOutputLockState oldValue = value;
+                lockState = value;
+                LockStateChanged?.Invoke(this, oldValue, value);
+                PropertyChanged?.Invoke(nameof(LockState));
             }
         }
 
-        private class TallyBoolean : BooleanBase
+        public delegate void LockStateChangedDelegate(RouterOutput output, RouterOutputLockState oldLockState, RouterOutputLockState newLockState);
+        public event LockStateChangedDelegate LockStateChanged;
+
+        internal void LockStateUpdateFromRouter(RouterOutputLockState newState)
+            => LockState = newState;
+
+        public void RequestLock()
         {
+            if ((LockState == RouterOutputLockState.Locked) || (LockState == RouterOutputLockState.LockedLocal))
+                return;
+            if (ProtectState != RouterOutputLockState.Clear)
+                throw new Exception("This output is locked! You must force unprotect before locking.");
+            if (LockState == RouterOutputLockState.LockedRemote)
+                throw new Exception("This output is already locked by another user! You must force unlock before.");
+            Router.RequestLockOperation(this, RouterOutputLockType.Lock, RouterOutputLockOperationType.Lock);
+        }
 
-            private RouterOutput output;
+        public void RequestUnlock()
+        {
+            if (LockState == RouterOutputLockState.Clear)
+                return;
+            if (LockState == RouterOutputLockState.LockedRemote)
+                throw new Exception("This output is locked by another user! You must use the force unlock function.");
+            Router.RequestLockOperation(this, RouterOutputLockType.Lock, RouterOutputLockOperationType.Unlock);
+        }
 
-            private TallyColor color;
-
-            public TallyBoolean(RouterOutput output, TallyColor color) :
-                base(getName(output, color), getColor(color), getDescription(output, color))
-            {
-                this.output = output;
-                this.color = color;
-                output.IndexChanged += indexChangedHandler;
-                output.NameChanged += nameChangedHandler;
-                output.Router.IdChanged += routerIdChangedHandler;
-                output.Router.NameChanged += routerNameChangedHandler;
-                switch (color)
-                {
-                    case TallyColor.Red:
-                        CurrentState = output.RedTally;
-                        output.RedTallyChanged += tallyChangedHandler;
-                        break;
-                    case TallyColor.Green:
-                        CurrentState = output.GreenTally;
-                        output.GreenTallyChanged += tallyChangedHandler;
-                        break;
-                }
-            }
-
-            public void Update()
-            {
-                Name = getName(output, color);
-                Description = getDescription(output, color);
-            }
-
-            private void tallyChangedHandler(ISignal output, bool oldState, bool newState)
-            {
-                CurrentState = newState;
-            }
-
-            private void indexChangedHandler(RouterOutput output, int oldIndex, int newIndex)
-            {
-                Name = getName(output, color);
-                Description = getDescription(output, color);
-            }
-
-            private void nameChangedHandler(RouterOutput output, string oldName, string newName)
-            {
-                Description = getDescription(output, color);
-            }
-            private void routerIdChangedHandler(Router router, int oldValue, int newValue)
-            {
-                Name = getName(output, color);
-                Description = getDescription(output, color);
-            }
-
-            private void routerNameChangedHandler(Router router, string oldName, string newName)
-            {
-                Description = getDescription(output, color);
-            }
-
-            private static string getName(RouterOutput output, TallyColor color)
-                => string.Format("router.{0}.output.{1}.{2}tally", output.Router.ID, (output.Index + 1), getColorString(color));
-
-            private static Color getColor(TallyColor color)
-            {
-                switch (color)
-                {
-                    case TallyColor.Red:
-                        return Color.Red;
-                    case TallyColor.Green:
-                        return Color.Green;
-                }
-                return Color.White;
-            }
-
-            private static string getDescription(RouterOutput output, TallyColor color)
-                => string.Format("The signal switched to the [(#{2}) {3}] output of router [(#{0}) {1}] has {4} tally.",
-                    output.Router.ID, output.Router.Name,
-                    (output.Index + 1), output.Name,
-                    getColorString(color));
-
-            private static string getColorString(TallyColor color)
-            {
-                switch (color)
-                {
-                    case TallyColor.Red:
-                        return "red";
-                    case TallyColor.Green:
-                        return "green";
-                }
-                return "unknown";
-            }
-
-            public enum TallyColor
-            {
-                Red,
-                Green
-            }
-
+        public void RequestForceUnlock()
+        {
+            if (LockState == RouterOutputLockState.Clear)
+                return;
+            Router.RequestLockOperation(this, RouterOutputLockType.Lock, RouterOutputLockOperationType.ForceUnlock);
         }
         #endregion
 
-        #region IsTalliedFrom()
-        private List<ISignalTallySource> redTallySources = new List<ISignalTallySource>();
-        private List<ISignalTallySource> greenTallySources = new List<ISignalTallySource>();
+        #region Property: ProtectsSupported, ProtectState
+        public virtual bool ProtectsSupported => false;
+        public virtual bool ProtectOwnerKnown => true;
 
-        public void IsTalliedFrom(ISignalTallySource source, SignalTallyType type, bool isTallied)
-        {
-            List<ISignalTallySource> tallySourceList = getTallySourceListByType(type);
-            if (isTallied && !tallySourceList.Contains(source))
-                tallySourceList.Add(source);
-            if (!isTallied && tallySourceList.Contains(source))
-                tallySourceList.Remove(source);
-            crosspoint?.Source?.IsTalliedFrom(source, type, isTallied);
-        }
+        private RouterOutputLockState protectState;
 
-        private List<ISignalTallySource> getTallySourceListByType(SignalTallyType type)
+        public RouterOutputLockState ProtectState
         {
-            switch (type)
+            get => protectState;
+            protected set
             {
-                case SignalTallyType.Red:
-                    return redTallySources;
-                case SignalTallyType.Green:
-                    return greenTallySources;
+                if (value == protectState)
+                    return;
+                RouterOutputLockState oldValue = value;
+                protectState = value;
+                ProtectStateChanged?.Invoke(this, oldValue, value);
+                PropertyChanged?.Invoke(nameof(ProtectState));
             }
-            return null;
         }
 
-        private void sendIndirectTalliesToSource(ISignal source)
+        public delegate void ProtectStateChangedDelegate(RouterOutput output, RouterOutputLockState oldProtectState, RouterOutputLockState newProtectState);
+        public event ProtectStateChangedDelegate ProtectStateChanged;
+
+        internal void ProtectStateUpdateFromRouter(RouterOutputLockState newState)
+            => ProtectState = newState;
+
+        public void RequestProtect()
         {
-            if (source == null)
+            if ((ProtectState == RouterOutputLockState.Locked) || (ProtectState == RouterOutputLockState.LockedLocal))
                 return;
-            redTallySources.ForEach(tallySource => source.IsTalliedFrom(tallySource, SignalTallyType.Red, true));
-            greenTallySources.ForEach(tallySource => source.IsTalliedFrom(tallySource, SignalTallyType.Green, true));
+            if (LockState != RouterOutputLockState.Clear)
+                throw new Exception("This output is locked! You must force unlock before protecting.");
+            if (ProtectState == RouterOutputLockState.LockedRemote)
+                throw new Exception("This output is already protected by another user! You must force unprotect before.");
+            Router.RequestLockOperation(this, RouterOutputLockType.Protect, RouterOutputLockOperationType.Lock);
         }
 
-        private void removeIndirectTalliesFromSource(ISignal source)
+        public void RequestUnprotect()
         {
-            if (source == null)
+            if (ProtectState == RouterOutputLockState.Clear)
                 return;
-            redTallySources.ForEach(tallySource => source.IsTalliedFrom(tallySource, SignalTallyType.Red, false));
-            greenTallySources.ForEach(tallySource => source.IsTalliedFrom(tallySource, SignalTallyType.Green, false));
+            if (ProtectState == RouterOutputLockState.LockedRemote)
+                throw new Exception("This output is protected by another user! You must use the force unprotect function.");
+            Router.RequestLockOperation(this, RouterOutputLockType.Protect, RouterOutputLockOperationType.Unlock);
+        }
+
+        public void RequestForceUnprotect()
+        {
+            if (ProtectState == RouterOutputLockState.Clear)
+                return;
+            Router.RequestLockOperation(this, RouterOutputLockType.Protect, RouterOutputLockOperationType.ForceUnlock);
         }
         #endregion
 
@@ -441,6 +286,19 @@ namespace OpenSC.Model.Routers
         private void unregisterAsSignal()
         {
             SignalRegister.Instance.UnregisterSignal(this);
+        }
+        #endregion
+
+        #region Tally booleans
+        private RouterOutputTallyBoolean redTallyBoolean = null;
+        private RouterOutputTallyBoolean yellowTallyBoolean = null;
+        private RouterOutputTallyBoolean greenTallyBoolean = null;
+
+        private void createTallyBooleans()
+        {
+            redTallyBoolean = new RouterOutputTallyBoolean(this, RedTally, SignalTallyColor.Red);
+            yellowTallyBoolean = new RouterOutputTallyBoolean(this, YellowTally, SignalTallyColor.Yellow);
+            greenTallyBoolean = new RouterOutputTallyBoolean(this, GreenTally, SignalTallyColor.Green);
         }
         #endregion
 

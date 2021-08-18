@@ -41,7 +41,7 @@ namespace OpenSC.GUI.Timers
             {
                 this.timer = timer;
                 HeaderText = HEADER_TEXT_EDIT;
-                Text = string.Format(TITLE_EDIT, timer.ID, timer.Title);
+                Text = string.Format(TITLE_EDIT, timer.ID, timer.Name);
             }
 
         }
@@ -57,7 +57,7 @@ namespace OpenSC.GUI.Timers
         private void loadTimer()
         {
             idNumericField.Value = (addingNew ? TimerDatabase.Instance.NextValidId() : timer.ID);
-            titleTextBox.Text = timer.Title;
+            titleTextBox.Text = timer.Name;
             modeForwardsRadio.Checked = (timer.Mode == Model.Timers.TimerMode.Forwards);
             modeBackwardsRadio.Checked = (timer.Mode == Model.Timers.TimerMode.Backwards);
             modeClockRadio.Checked = (timer.Mode == Model.Timers.TimerMode.Clock);
@@ -70,7 +70,7 @@ namespace OpenSC.GUI.Timers
             try
             {
                 timer.ValidateId((int)idNumericField.Value);
-                timer.ValidateTitle(titleTextBox.Text);
+                timer.ValidateName(titleTextBox.Text);
                 timer.ValidateCountdownSeconds((int)countdownStartNumericField.Value);
             }
             catch (Exception e)
@@ -81,7 +81,7 @@ namespace OpenSC.GUI.Timers
 
             timer.StartUpdate();
             timer.ID = (int)idNumericField.Value;
-            timer.Title = titleTextBox.Text;
+            timer.Name = titleTextBox.Text;
             timer.Mode = getMode();
             timer.CountdownSeconds = (int)countdownStartNumericField.Value;
             timer.EndUpdate();
@@ -94,7 +94,7 @@ namespace OpenSC.GUI.Timers
                 
             }
 
-            Text = string.Format(TITLE_EDIT, timer.ID, timer.Title);
+            Text = string.Format(TITLE_EDIT, timer.ID, timer.Name);
 
             return true;
 

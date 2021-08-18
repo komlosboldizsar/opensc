@@ -9,22 +9,28 @@ namespace OpenSC.Model.Routers
     class RouterOutputXmlSerializer : IValueXmlSerializer
     {
 
-        public Type Type => typeof(RouterOutput);
+        public virtual Type Type => typeof(RouterOutput);
 
-        private const string TAG_NAME = "router_output";
+        private const string TAG_NAME = "output";
+        private const string ATTRIBUTE_INDEX = "index";
         private const string ATTRIBUTE_NAME = "name";
 
-        public object DeserializeItem(XmlNode serializedItem)
+        public virtual object DeserializeItem(XmlNode serializedItem, object parentItem)
         {
+
+            Router parentRouter = parentItem as Router;
+
             if (serializedItem.LocalName != TAG_NAME)
                 return null;
-            return new RouterOutput()
-            {
-                Name = serializedItem.Attributes[ATTRIBUTE_NAME]?.Value,
-            };
+            if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_INDEX]?.Value, out int index))
+                index = 0;
+
+            RouterOutput restoredOutput = parentRouter.CreateOutput(serializedItem.Attributes[ATTRIBUTE_NAME]?.Value, index);
+            return restoredOutput;
+
         }
 
-        public XElement SerializeItem(object item)
+        public virtual XElement SerializeItem(object item, object parentItem)
         {
 
             RouterOutput output = item as RouterOutput;
@@ -32,6 +38,7 @@ namespace OpenSC.Model.Routers
                 return null;
 
             XElement xmlElement = new XElement(TAG_NAME);
+            xmlElement.SetAttributeValue(ATTRIBUTE_INDEX, output.Index);
             xmlElement.SetAttributeValue(ATTRIBUTE_NAME, output.Name);
             return xmlElement;
 

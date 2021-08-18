@@ -13,7 +13,7 @@ namespace OpenSC.Model.Routers
         public Labelset()
         { }
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
             updateLabelLabelsetAssociations();
             notifyLabelsRestored();
@@ -21,65 +21,14 @@ namespace OpenSC.Model.Routers
 
         public override void Removed()
         {
-
             base.Removed();
-
-            IdChanged = null;
-            NameChanged = null;
-
+            // remove event subscriptions
         }
 
-        #region Property: ID
-        public delegate void IdChangedDelegate(Labelset labelset, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
-
-        public int id = 0;
-        public override int ID
+        #region ID validation
+        protected override void validateIdForDatabase(int id)
         {
-            get { return id; }
-            set
-            {
-                ValidateId(value);
-                if (value == id)
-                    return;
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
-            }
-        }
-        public void ValidateId(int id)
-        {
-            if (id <= 0)
-                throw new ArgumentException();
             if (!LabelsetDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
-        #region Property: Name
-        public delegate void NameChangedDelegate(Labelset labelset, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-        public string Name
-        {
-            get { return name; }
-            set
-            {
-                ValidateName(value);
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
-            }
-        }
-        public void ValidateName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
         }
         #endregion
@@ -153,12 +102,6 @@ namespace OpenSC.Model.Routers
             LabelTextChanged?.Invoke(this, label.RouterInput, oldText, newText);
         }
         #endregion
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            LabelsetDatabase.Instance.ItemUpdated(this);
-        }
 
     }
 

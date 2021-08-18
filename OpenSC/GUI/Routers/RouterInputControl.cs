@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using OpenSC.Model.Routers;
+using OpenSC.Model.Signals;
 
 namespace OpenSC.GUI.Routers
 {
@@ -29,19 +30,19 @@ namespace OpenSC.GUI.Routers
             this.Input = input;
             this.containerForm = containerForm;
             button.Text = input.Name;
-            label.Text = ((input.SourceSignalName != null) ? input.SourceSignalName : "-");
+            label.Text = ((input.RegisteredSourceSignalName != null) ? input.RegisteredSourceSignalName : "-");
         }
 
         private void RouterInputControl_Load(object sender, EventArgs e)
         {
             if (Input != null)
             {
-                Input.SourceNameChanged += sourceNameChangedHandler;
+                Input.RegisteredSourceSignalNameChanged += sourceNameChangedHandler;
                 Input.NameChanged += nameChangedHandler;
             }
         }
 
-        private void sourceNameChangedHandler(RouterInput input, string newName)
+        private void sourceNameChangedHandler(ISignalSource input, string newName, List<object> recursionChain)
         {
             label.Text = ((newName != null) ? newName : "-");
         }

@@ -19,47 +19,11 @@ namespace OpenSC.Model.Streams
     class YoutubeStream: Stream
     {
 
-        private const string LOG_TAG = "Stream/YouTube";
-
-        public static readonly Setting<string> ApiKeySetting = new Setting<string>(
-            "streams.youtubestream.apikey",
-            "Streams",
-            "YouTube API key",
-            "Get this from Google Developer Console!"
-        );
-
-        private const string API_URL = "https://www.googleapis.com/youtube/v3/videos?id={0}&part=liveStreamingDetails&key={1}";
-
-        [PersistAs("video_id")]
-        private string videoId;
-
-        public string VideoId
-        {
-            get { return videoId; }
-            set { videoId = value; }
-        }
-
-        [PersistAs("refresh_rate")]
-        private int refreshRate = 5;
-
-        public int RefreshRate
-        {
-            get { return refreshRate; }
-            set
-            {
-                if ((value < 1) || (value > 30))
-                    throw new ArgumentOutOfRangeException();
-                refreshRate = value;
-            }
-        }
-
+        #region Persistence, instantiation
         public YoutubeStream()
         {
             createAndStartUpdaterThread();
         }
-
-        public override void Restored()
-        { }
 
         public override void Removed()
         {
@@ -67,7 +31,56 @@ namespace OpenSC.Model.Streams
             updaterThread.Abort();
             updaterThread = null;
         }
+        #endregion
 
+        #region Constants
+        private const string LOG_TAG = "Stream/YouTube";
+
+        private const string API_URL = "https://www.googleapis.com/youtube/v3/videos?id={0}&part=liveStreamingDetails&key={1}";
+        #endregion
+
+        #region Settings
+        public static readonly Setting<string> ApiKeySetting = new Setting<string>(
+            "streams.youtubestream.apikey",
+            "Streams",
+            "YouTube API key",
+            "Get this from Google Developer Console!"
+        );
+        #endregion
+
+        #region Property: VideoId
+        public event PropertyChangedTwoValuesDelegate<YoutubeStream, string> VideoIdChanged;
+
+        [PersistAs("video_id")]
+        private string videoId;
+
+        public string VideoId
+        {
+            get => videoId;
+            set => setProperty(this, ref videoId, value, VideoIdChanged);
+        }
+        #endregion
+
+        #region Property: RefreshRate
+        public event PropertyChangedTwoValuesDelegate<YoutubeStream, int> RefreshRateChanged;
+
+        [PersistAs("refresh_rate")]
+        private int refreshRate = 5;
+
+        public int RefreshRate
+        {
+            get => refreshRate;
+            set => setProperty(this, ref refreshRate, value, RefreshRateChanged, validator: ValidateRefreshRate);
+        }
+
+        public void ValidateRefreshRate(int refreshRate)
+        {
+            if ((refreshRate < 1) || (refreshRate > 30))
+                throw new ArgumentOutOfRangeException();
+        }
+        #endregion
+
+        #region Viewer count update: periodic thread
         private void createAndStartUpdaterThread()
         {
             updaterThread = new Thread(updaterThreadMethod)
@@ -87,7 +100,9 @@ namespace OpenSC.Model.Streams
                 Thread.Sleep(refreshRate * 1000);
             }
         }
+        #endregion
 
+        #region Viewer count update: HTTP request and response processing
         private void doHttpRequest()
         {
             try
@@ -123,6 +138,7 @@ namespace OpenSC.Model.Streams
                 int totalResults = json["pageInfo"]["totalResults"].ToObject<int>();
                 if (totalResults == 0) {
                     State = StreamState.Unknown;
+                    ViewerCount = null;
                     return;
                 }
 
@@ -133,6 +149,7 @@ namespace OpenSC.Model.Streams
                 if (!string.IsNullOrEmpty(actualEndTime))
                 {
                     State = StreamState.Ended;
+                    ViewerCount = null;
                     return;
                 }
 
@@ -143,7 +160,7 @@ namespace OpenSC.Model.Streams
                     if (int.TryParse(liveStreamingDetails["concurrentViewers"]?.ToString(), out int viewerCount))
                         ViewerCount = viewerCount;
                     else
-                        ViewerCount = 0;
+                        ViewerCount = null;
                     return;
                 }
 
@@ -151,10 +168,12 @@ namespace OpenSC.Model.Streams
                 if (!string.IsNullOrEmpty(scheduledStartTime))
                 {
                     State = StreamState.NotStarted;
+                    ViewerCount = null;
                     return;
                 }
 
                 State = StreamState.Unknown;
+                ViewerCount = null;
 
             }
             catch (Exception ex)
@@ -167,6 +186,7 @@ namespace OpenSC.Model.Streams
             }
             
         }
+        #endregion
 
     }
 }

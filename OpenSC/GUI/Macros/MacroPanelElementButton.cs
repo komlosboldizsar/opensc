@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using OpenSC.Model.Macros;
+using OpenSC.Model;
 
 namespace OpenSC.GUI.Macros
 {
@@ -31,7 +32,7 @@ namespace OpenSC.GUI.Macros
             }
         }
 
-        private void Macro_NameChanged(Macro text, string oldName, string newName)
+        private void Macro_NameChanged(IModel text, string oldName, string newName)
         {
             if (!ShowLabel)
                 button.Text = newName;

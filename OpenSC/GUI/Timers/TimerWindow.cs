@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model;
 using OpenSC.Model.Timers;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace OpenSC.GUI.Timers
 
             this.timer = timer;
             timer.SecondsChanged += timerSecondsChangedHandler;
-            timer.TitleChanged += timerTitleChangedHandler;
+            timer.NameChanged += timerNameChangedHandler;
             timer.IdChanged += timerIdChangedHandler;
             timer.RunningStateChanged += timerRunningStateChangedHandler;
             timer.ModeChanged += timerModeChangedHandler;
@@ -92,14 +93,14 @@ namespace OpenSC.GUI.Timers
             blinking = false;
         }
 
-        private void timerIdChangedHandler(Model.Timers.Timer timer, int oldValue, int newValue)
+        private void timerIdChangedHandler(IModel timer, int oldValue, int newValue)
         {
             if (timer != this.timer)
                 return;
             updateWindowTitle();
         }
 
-        private void timerTitleChangedHandler(Model.Timers.Timer timer, string oldTitle, string newTitle)
+        private void timerNameChangedHandler(IModel timer, string oldTitle, string newTitle)
         {
             if (timer != this.timer)
                 return;
@@ -118,7 +119,7 @@ namespace OpenSC.GUI.Timers
         {
             string newTitle = "(no timer associated)";
             if (timer != null)
-                newTitle = timer.Title;
+                newTitle = timer.Name;
             titleLabel.Text = newTitle;
         }
 
@@ -127,7 +128,7 @@ namespace OpenSC.GUI.Timers
             string newTitle = "no timer associated";
             int newId = 0;
             if (timer != null) {
-                newTitle = timer.Title;
+                newTitle = timer.Name;
                 newId = timer.ID;
             }
             this.Text = string.Format("Timer: (#{0}) {1}", newId, newTitle);

@@ -88,8 +88,10 @@ namespace OpenSC.Model
             AddedItem?.Invoke(this, item);
             ChangedItems?.Invoke(this);
 
-            ItemAdded?.Invoke();
+            ItemAdded?.Invoke(new object[] { item });
             ItemsChanged?.Invoke();
+
+            item.ModelAfterUpdate += itemAfterUpdateHandler;
 
             Save();
 
@@ -118,8 +120,10 @@ namespace OpenSC.Model
             RemovedItem?.Invoke(this, item);
             ChangedItems?.Invoke(this);
 
-            ItemRemoved?.Invoke();
+            ItemRemoved?.Invoke(new object[] { item });
             ItemsChanged?.Invoke();
+
+            item.ModelAfterUpdate -= itemAfterUpdateHandler;
 
             Save();
 
@@ -131,6 +135,9 @@ namespace OpenSC.Model
 
         protected virtual void afterRemove(T item)
         { }
+
+        private void itemAfterUpdateHandler(IModel model)
+            => ItemUpdated(model as T);
 
         public void ItemUpdated(T item)
         {
@@ -191,6 +198,8 @@ namespace OpenSC.Model
             if (loadedItems != null)
             {
                 items = loadedItems;
+                foreach (T item in items.Values)
+                    item.ModelAfterUpdate += itemAfterUpdateHandler;
                 LogDispatcher.I(SPECIFIC_LOG_TAG, "Loaded from file.");
                 afterLoad();
                 ChangedItems?.Invoke(this);
@@ -204,10 +213,28 @@ namespace OpenSC.Model
             persister.BuildRelationsByForeignKeys(ref items);
         }
 
-        public void NotifyItemsRestored()
+        public void NotifyItemsRestoredOwnFields()
         {
             foreach (T item in items.Values)
-                item.Restored();
+                item.RestoredOwnFields();
+        }
+
+        public void NotifyItemsRestoredBasicRelations()
+        {
+            foreach (T item in items.Values)
+                item.RestoredBasicRelations();
+        }
+
+        public void RequestRestoreCustomRelations()
+        {
+            foreach (T item in items.Values)
+                item.RestoreCustomRelations();
+        }
+
+        public void NotifyItemsTotallyRestored()
+        {
+            foreach (T item in items.Values)
+                item.TotallyRestored();
         }
 
         public IEnumerator GetEnumerator()

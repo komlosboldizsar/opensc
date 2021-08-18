@@ -53,34 +53,32 @@ namespace OpenSC.Model.Routers.DynamicTextFunctions
                 }
                 this.router = router;
 
-                if (router.Outputs.Count < outputIndex)
-                {
-                    CurrentValue = "?";
+                output = router.GetOutput(outputIndex);
+                if (output == null)
                     return;
-                }
-                output = router.Outputs[outputIndex-1];
+                output.CurrentInputChanged += currentInputChangedHandler;
 
-                currentInput = output.Crosspoint;
-                output.CrosspointChanged += crosspointChangedHandler;
-                CurrentValue = output.InputName;
-                if (output.Crosspoint != null)
-                    output.Crosspoint.NameChanged += crosspointNameChangedHandler;
+                currentInput = output.CurrentInput;
+                if (currentInput == null)
+                    return;
+                CurrentValue = output.CurrentInput.Name;
+                currentInput.NameChanged += nameChangedHandler;
 
             }
 
-            private void crosspointNameChangedHandler(RouterInput input, string oldName, string newName)
+            private void nameChangedHandler(RouterInput input, string oldName, string newName)
             {
                 CurrentValue = newName;
             }
 
-            private void crosspointChangedHandler(RouterOutput output, RouterInput newInput)
+            private void currentInputChangedHandler(RouterOutput output, RouterInput newInput)
             {
                 if (currentInput != null)
-                    currentInput.NameChanged -= crosspointNameChangedHandler;
+                    currentInput.NameChanged -= nameChangedHandler;
                 currentInput = newInput;
                 if (currentInput != null)
-                    currentInput.NameChanged += crosspointNameChangedHandler;
-                CurrentValue = output.InputName;
+                    currentInput.NameChanged += nameChangedHandler;
+                CurrentValue = currentInput.Name;
             }
 
         }

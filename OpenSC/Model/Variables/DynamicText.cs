@@ -11,104 +11,53 @@ namespace OpenSC.Model.Variables
     public class DynamicText : ModelBase
     {
 
-        public override void Restored()
+        public override void TotallyRestored()
         {
+            base.TotallyRestored();
             formulaUpdated();
         }
 
         public override void Removed()
         {
             base.Removed();
-            IdChanged = null;
-            LabelChanged = null;
             CurrentTextChanged = null;
             substitutes.Clear();
             substituteValues.Clear();
         }
 
-        public delegate void IdChangedDelegate(DynamicText text, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
-
-        public int id = 0;
-
-        public override int ID
+        #region ID validation
+        protected override void validateIdForDatabase(int id)
         {
-            get { return id; }
-            set
-            {
-                ValidateId(value);
-                if (value == id)
-                    return;
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
-            }
-        }
-
-        public void ValidateId(int id)
-        {
-            if (id <= 0)
-                throw new ArgumentException();
             if (!DynamicTextDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
+        #endregion
 
-        public delegate void LabelChangedDelegate(DynamicText text, string oldLabel, string newLabel);
-        public event LabelChangedDelegate LabelChanged;
+        #region Property: CurrentText
+        public event PropertyChangedTwoValuesDelegate<DynamicText, string> CurrentTextChanged;
 
-        [PersistAs("label")]
-        private string label;
-
-        public string Label
-        {
-            get { return label; }
-            set
-            {
-                ValidateLabel(value);
-                if (value == label)
-                    return;
-                string oldLabel = label;
-                label = value;
-                LabelChanged?.Invoke(this, oldLabel, value);
-                RaisePropertyChanged(nameof(Label));
-            }
-        }
-
-        public void ValidateLabel(string label)
-        {
-            if (string.IsNullOrWhiteSpace(label))
-                throw new ArgumentException();
-        }
-
-        public delegate void CurrentTextChangedDelegate(DynamicText text, string oldText, string newText);
-        public event CurrentTextChangedDelegate CurrentTextChanged;
-
-        private string currentText;
+        private string currentText = "";
 
         public string CurrentText
         {
-            get { return currentText; }
-            private set
-            {
-                if (value == currentText)
-                    return;
-                string oldValue = currentText;
-                currentText = value;
-                CurrentTextChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(CurrentText));
-            }
+            get => currentText;
+            private set => setProperty(this, ref currentText, value, CurrentTextChanged);
         }
+        #endregion
+
+        #region Property: Formula
+        public event PropertyChangedTwoValuesDelegate<DynamicText, string> FormulaChanged;
 
         [PersistAs("formula")]
         private string formula;
 
         public string Formula
         {
-            get { return formula; }
+            get => formula;
             set
             {
-                formula = value;
+                if (!setProperty(this, ref formula, value, FormulaChanged))
+                    return;
                 formulaUpdated();
             }
         }
@@ -125,6 +74,7 @@ namespace OpenSC.Model.Variables
                 CurrentText = string.Format("Syntax error in formula at character position {0}.", ex.Position);
             }
         }
+        #endregion
 
         private List<IDynamicTextFunctionSubstitute> substitutes = new List<IDynamicTextFunctionSubstitute>();
 
@@ -167,12 +117,6 @@ namespace OpenSC.Model.Variables
         {
             updateAllParts();
             buildCurrentValueFromParts();
-        }
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            DynamicTextDatabase.Instance.ItemUpdated(this);
         }
 
     }

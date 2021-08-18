@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Settings
 {
 
-    class Setting<T>: ISetting
+    public class Setting<T>: ISetting
     {
 
         private const string LOG_TAG = "Settings";
@@ -23,18 +23,17 @@ namespace OpenSC.Model.Settings
         }
 
         public string Key { get; private set; }
-
         public string Category { get; private set; }
-
         public string HumanReadableTitle { get; private set; }
-
         public string HumanReadableDescription { get; private set; }
+        public Type Type { get; } = typeof(T);
 
+        #region Value properties
         public event SettingValueChangedDelegate ValueChanged;
 
         private T value;
 
-        public T Value {
+        public virtual T Value {
             get { return value; }
             set
             {
@@ -52,8 +51,7 @@ namespace OpenSC.Model.Settings
             get { return value; }
             set { Value = (T)value; }
         }
-
-        public Type Type { get; } = typeof(T);
+        #endregion
 
     }
 

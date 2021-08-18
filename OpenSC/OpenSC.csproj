@@ -89,6 +89,12 @@
     <Compile Include="GUI\GeneralComponents\Tables\DataGridViewSmallIconCell.cs" />
     <Compile Include="GUI\Helpers\ResizableControls.cs" />
     <Compile Include="GUI\Helpers\DraggableControls.cs" />
+    <Compile Include="GUI\Macros\TriggerArgumentControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Macros\TriggerArgumentControl.Designer.cs">
+      <DependentUpon>TriggerArgumentControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Macros\CommandArgumentControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -185,6 +191,48 @@
     <Compile Include="GUI\Menus\MenuItem.cs" />
     <Compile Include="GUI\Menus\MenuManager.cs" />
     <Compile Include="GUI\Menus\SeparatorMenuItem.cs" />
+    <Compile Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanEditorForm.Designer.cs">
+      <DependentUpon>CrosspointBooleanEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanList.Designer.cs">
+      <DependentUpon>CrosspointBooleanList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Routers\CrosspointStores\CrosspointStoreEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\CrosspointStores\CrosspointStoreEditorForm.Designer.cs">
+      <DependentUpon>CrosspointStoreEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Routers\CrosspointStores\CrosspointStoreList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\CrosspointStores\CrosspointStoreList.Designer.cs">
+      <DependentUpon>CrosspointStoreList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Routers\Mirrors\RouterMirrorList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\Mirrors\RouterMirrorList.Designer.cs">
+      <DependentUpon>RouterMirrorList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Routers\Mirrors\RouterMirrorEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\Mirrors\RouterMirrorEditorForm.Designer.cs">
+      <DependentUpon>RouterMirrorEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Routers\VirtualLeitchRouterEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\VirtualLeitchRouterEditorForm.Designer.cs">
+      <DependentUpon>VirtualLeitchRouterEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Routers\LeitchRouterEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -285,11 +333,29 @@
     <Compile Include="GUI\Settings\SettingsWindow.Designer.cs">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Settings\IntSettingEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Settings\IntSettingEditor.Designer.cs">
+      <DependentUpon>IntSettingEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Settings\StringSettingEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GUI\Settings\StringSettingEditor.Designer.cs">
       <DependentUpon>StringSettingEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Signals\BooleanTally\BooleanTallyEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Signals\BooleanTally\BooleanTallyEditorForm.Designer.cs">
+      <DependentUpon>BooleanTallyEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Signals\BooleanTally\BooleanTallyList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Signals\BooleanTally\BooleanTallyList.Designer.cs">
+      <DependentUpon>BooleanTallyList.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Signals\ExternalSignalEditorForm.cs">
       <SubType>Form</SubType>
@@ -303,6 +369,7 @@
     <Compile Include="GUI\Signals\ExternalSignalCategoryList.Designer.cs">
       <DependentUpon>ExternalSignalCategoryList.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Signals\Helpers\SignalTallyHelpers.cs" />
     <Compile Include="GUI\Signals\SignalList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -320,6 +387,18 @@
     </Compile>
     <Compile Include="GUI\Signals\ExternalSignalCategoryEditorForm.Designer.cs">
       <DependentUpon>ExternalSignalCategoryEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Signals\TallyCopy\TallyCopyEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Signals\TallyCopy\TallyCopyEditorForm.Designer.cs">
+      <DependentUpon>TallyCopyEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Signals\TallyCopy\TallyCopyList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Signals\TallyCopy\TallyCopyList.Designer.cs">
+      <DependentUpon>TallyCopyList.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\SplashScreen.cs">
       <SubType>Form</SubType>
@@ -454,13 +533,22 @@
     <Compile Include="Model\General\INotifyPropertyChanged.cs" />
     <Compile Include="Model\General\IObservableList.cs" />
     <Compile Include="Model\General\IObservableListTyped.cs" />
+    <Compile Include="Model\General\MultilevelPropertyChangeObserver.cs" />
     <Compile Include="Model\General\ObservableProxyList.cs" />
     <Compile Include="Model\General\ObservableList.cs" />
     <Compile Include="Model\IDatabaseBase.cs" />
     <Compile Include="Model\IModel.cs" />
+    <Compile Include="Model\Macros\IMacroTriggerArgument.cs" />
+    <Compile Include="Model\Macros\IMacroTrigger.cs" />
     <Compile Include="Model\Macros\MacroArgumentKeyType.cs" />
     <Compile Include="Model\Macros\MacroCodeInterpreter.cs" />
     <Compile Include="Model\Macros\MacroCodeTokenizer.cs" />
+    <Compile Include="Model\Macros\MacroOscServer.cs" />
+    <Compile Include="Model\Macros\MacroTriggerBase.cs" />
+    <Compile Include="Model\Macros\MacroTriggerDefaultCallImplementations.cs" />
+    <Compile Include="Model\Macros\MacroTriggerWithArgumentsXmlSerializer.cs" />
+    <Compile Include="Model\Macros\MacroTriggerRegister.cs" />
+    <Compile Include="Model\Macros\MacroTriggerWithArguments.cs" />
     <Compile Include="Model\Macros\MacroCommandWithArgumentsToCodeSerializer.cs" />
     <Compile Include="Model\Macros\MacroPanelElementXmlSerializer.cs" />
     <Compile Include="Model\Macros\MacroPanelDatabase.cs" />
@@ -475,8 +563,16 @@
     <Compile Include="Model\Macros\MacroPanelElement.cs" />
     <Compile Include="Model\Macros\MacrosManager.cs" />
     <Compile Include="Model\Macros\MacroCommandWithArgumentsXmlSerializer.cs" />
+    <Compile Include="Model\Macros\RunMacroMacroCommand.cs" />
     <Compile Include="Model\MasterDatabase.cs" />
     <Compile Include="Model\Mixers\BlackMagicDesign\BmdMixer.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\SetProgramSourceMacroCommand.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\SetPreviewSourceMacroCommand.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\CutTransitionMacroCommand.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\AutoTransitionMacroCommand.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\BmdMixerMacroCommands.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\SetPPSourceMacroCommandBase.cs" />
+    <Compile Include="Model\Mixers\BlackMagicDesign\Macros\TransitionMacroCommandBase.cs" />
     <Compile Include="Model\Mixers\DynamicTextFunctions\MixerPreviewInputName.cs" />
     <Compile Include="Model\Mixers\DynamicTextFunctions\MixerProgramInputName.cs" />
     <Compile Include="Model\Mixers\Mixer.cs" />
@@ -491,58 +587,127 @@
     <Compile Include="Model\Persistence\DatabasePersister.cs" />
     <Compile Include="Model\Persistence\IValueXmlSerializer.cs" />
     <Compile Include="Model\Persistence\LookupInAttribute.cs" />
+    <Compile Include="Model\Persistence\PolymorphFieldAttribute.cs" />
+    <Compile Include="Model\Persistence\PersistSubclassAttribute.cs" />
     <Compile Include="Model\Persistence\PersistAsAttribute.cs" />
     <Compile Include="Model\Persistence\PolymorphDatabaseAttribute.cs" />
     <Compile Include="Model\Persistence\TempForeignKeyAttribute.cs" />
     <Compile Include="Model\Persistence\ITypeNameConverter.cs" />
     <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
     <Compile Include="Model\Persistence\XmlTagNamesAttribute.cs" />
+    <Compile Include="Model\Routers\AutoPathSearcher.cs" />
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohub.cs" />
+    <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohubOutput.cs" />
+    <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohubOutputXmlSerializer.cs" />
+    <Compile Include="Model\Routers\CrosspointBooleans\CrosspointBoolean.cs" />
+    <Compile Include="Model\Routers\CrosspointBooleans\CrosspointBooleanDatabase.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputLabel.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputName.cs" />
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputSource.cs" />
+    <Compile Include="Model\Routers\RouterOutputTallyBoolean.cs" />
     <Compile Include="Model\Routers\Label.cs" />
     <Compile Include="Model\Routers\Labelset.cs" />
     <Compile Include="Model\Routers\LabelsetDatabase.cs" />
     <Compile Include="Model\Routers\LabelXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Leitch\LeitchRouterOutput.cs" />
+    <Compile Include="Model\Routers\Leitch\LeitchRouterOutputXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Leitch\VirtualLeitchRouterOutputXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Leitch\VirtualLeitchRouter.cs" />
     <Compile Include="Model\Routers\Leitch\LeitchRouter.cs" />
+    <Compile Include="Model\Routers\Leitch\VirtualLeitchRouterOutput.cs" />
+    <Compile Include="Model\Routers\Macros\RouterMacroCommands.cs" />
     <Compile Include="Model\Routers\Macros\SetRouterCrosspointMacroCommand.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorAssociation.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorAssociationXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorDatabase.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirror.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorInputAssociation.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorOutputAssociationXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorInputAssociationXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorOutputAssociation.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorSide.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorSideHelpers.cs" />
+    <Compile Include="Model\Routers\Mirrors\RouterMirrorSynchronizationMode.cs" />
     <Compile Include="Model\Routers\Router.cs" />
     <Compile Include="Model\Routers\RouterDatabase.cs" />
     <Compile Include="Model\Routers\RouterInput.cs" />
     <Compile Include="Model\Routers\RouterInputXmlSerializer.cs" />
+    <Compile Include="Model\Routers\RouterOutputLockMethodType.cs" />
+    <Compile Include="Model\Routers\RouterOutputLockState.cs" />
     <Compile Include="Model\Routers\RouterOutput.cs" />
+    <Compile Include="Model\Routers\RouterOutputLockType.cs" />
     <Compile Include="Model\Routers\RouterOutputXmlSerializer.cs" />
     <Compile Include="Model\Routers\RouterState.cs" />
     <Compile Include="Model\Routers\RouterTypeNameConverter.cs" />
+    <Compile Include="Model\Routers\Triggers\RouterCrosspointChangedMacroTrigger.cs" />
+    <Compile Include="Model\Routers\Triggers\RouterOutputSourceChangedMacroTrigger.cs" />
+    <Compile Include="Model\Routers\Triggers\RouterMacroTriggers.cs" />
+    <Compile Include="Model\Routers\Virtual\VirtualRouterOutputXmlSerializer.cs" />
+    <Compile Include="Model\Routers\Virtual\VirtualRouterOutput.cs" />
     <Compile Include="Model\Routers\Virtual\VirtualRouter.cs" />
+    <Compile Include="Model\Routers\CrosspointStores\CrosspointStore.cs" />
+    <Compile Include="Model\Routers\CrosspointStores\CrosspointStoreDatabase.cs" />
     <Compile Include="Model\SerialPorts\SerialPort.cs" />
     <Compile Include="Model\SerialPorts\SerialPortsManager.cs" />
     <Compile Include="Model\SerialPorts\SerialPortDatabase.cs" />
     <Compile Include="Model\Settings\Converters\BoolConverter.cs" />
     <Compile Include="Model\Settings\Converters\ColorConverter.cs" />
+    <Compile Include="Model\Settings\Converters\DoubleConverter.cs" />
+    <Compile Include="Model\Settings\Converters\DecimalConverter.cs" />
+    <Compile Include="Model\Settings\Converters\FloatConverter.cs" />
     <Compile Include="Model\Settings\Converters\IntConverter.cs" />
     <Compile Include="Model\Settings\Converters\ISettingValueConverter.cs" />
     <Compile Include="Model\Settings\ISetting.cs" />
+    <Compile Include="Model\Settings\IntSetting.cs" />
     <Compile Include="Model\Settings\Setting.cs" />
     <Compile Include="Model\Settings\SettingsManager.cs" />
     <Compile Include="Model\Settings\Converters\SettingValueConverterAttribute.cs" />
-    <Compile Include="Model\Signals\ISignal.cs" />
-    <Compile Include="Model\Signals\ISignalTallySource.cs" />
+    <Compile Include="Model\Signals\BidirectionalPassthroughSignalTally.cs" />
+    <Compile Include="Model\Signals\BooleanTally\BooleanTallyDatabase.cs" />
+    <Compile Include="Model\Signals\BooleanTally\BooleanTally.cs" />
+    <Compile Include="Model\Signals\IBidirectionalSignalTally.cs" />
+    <Compile Include="Model\Signals\ISignalDestination.cs" />
+    <Compile Include="Model\Signals\ISignalSourceRegistered.cs" />
+    <Compile Include="Model\Signals\ISignalSource.cs" />
+    <Compile Include="Model\Signals\ISignalSourceTallyHelper.cs" />
+    <Compile Include="Model\Signals\ISignalTallyState.cs" />
     <Compile Include="Model\Signals\ExternalSignalCategory.cs" />
     <Compile Include="Model\Signals\ExternalSignal.cs" />
     <Compile Include="Model\Signals\ExternalSignalDatabases.cs" />
+    <Compile Include="Model\Signals\ISignalTallyReceiver.cs" />
+    <Compile Include="Model\Signals\ISignalTallySender.cs" />
+    <Compile Include="Model\Signals\ISignalTallyStateOrReceiver.cs" />
+    <Compile Include="Model\Signals\PassthroughSignalTallyState.cs" />
+    <Compile Include="Model\Signals\PassthroughSignalTallyReceiver.cs" />
+    <Compile Include="Model\Signals\RecursionChainHelpers.cs" />
+    <Compile Include="Model\Signals\SignalForwarder.cs" />
     <Compile Include="Model\Signals\SignalRegister.cs" />
     <Compile Include="Model\Signals\SignalsManager.cs" />
-    <Compile Include="Model\Signals\SignalTallyType.cs" />
+    <Compile Include="Model\Signals\ExternalSignalTally.cs" />
+    <Compile Include="Model\Signals\ExternalSignalTallyBoolean.cs" />
+    <Compile Include="Model\Signals\SignalTallyBoolean.cs" />
+    <Compile Include="Model\Signals\SignalTallyColor.cs" />
+    <Compile Include="Model\Signals\TallyCopy\TallyCopyDatabase.cs" />
+    <Compile Include="Model\Signals\TallyCopy\TallyCopy.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamStateTranslated.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamState.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamViewerCount.cs" />
+    <Compile Include="Model\SystemObjectBase.cs" />
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerHhMmSs.cs" />
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerTotalMinutes.cs" />
     <Compile Include="Model\Timers\DynamicTextFunctions\TimerTotalSeconds.cs" />
+    <Compile Include="Model\Timers\Macros\ResetTimerMacroCommand.cs" />
+    <Compile Include="Model\Timers\Macros\StopTimerMacroCommand.cs" />
+    <Compile Include="Model\Timers\Macros\StartTimerMacroCommand.cs" />
+    <Compile Include="Model\Timers\Macros\TimerMacroCommands.cs" />
+    <Compile Include="Model\Timers\Macros\SingleArgTimerMacroCommandBase.cs" />
+    <Compile Include="Model\Timers\Triggers\TimerMacroTriggers.cs" />
+    <Compile Include="Model\Timers\Triggers\TimerReachedValueMacroTrigger.cs" />
     <Compile Include="Model\TypeCodeAttribute.cs" />
     <Compile Include="Model\TypeLabelAttribute.cs" />
+    <Compile Include="Model\UMDs\Macros\UmdMacroCommands.cs" />
+    <Compile Include="Model\UMDs\Macros\UmdDynamicTextMacroCommand.cs" />
+    <Compile Include="Model\UMDs\Macros\UmdStaticTextMacroCommand.cs" />
     <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1T.cs" />
     <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1TType.cs" />
     <Compile Include="Model\Variables\BooleanBase.cs" />
@@ -618,6 +783,9 @@
     <EmbeddedResource Include="GUI\GeneralComponents\RichTextBoxWithBar.resx">
       <DependentUpon>RichTextBoxWithBar.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Macros\TriggerArgumentControl.resx">
+      <DependentUpon>TriggerArgumentControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Macros\CommandArgumentControl.resx">
       <DependentUpon>CommandArgumentControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -650,6 +818,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Mixers\MixerEditorFormBase.resx">
       <DependentUpon>MixerEditorFormBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanEditorForm.resx">
+      <DependentUpon>CrosspointBooleanEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanList.resx">
+      <DependentUpon>CrosspointBooleanList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\Mirrors\RouterMirrorList.resx">
+      <DependentUpon>RouterMirrorList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\Mirrors\RouterMirrorEditorForm.resx">
+      <DependentUpon>RouterMirrorEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\VirtualLeitchRouterEditorForm.resx">
+      <DependentUpon>VirtualLeitchRouterEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\LeitchRouterEditorForm.resx">
       <DependentUpon>LeitchRouterEditorForm.cs</DependentUpon>
@@ -684,6 +867,12 @@
     <EmbeddedResource Include="GUI\Routers\RouterList.resx">
       <DependentUpon>RouterList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\CrosspointStores\CrosspointStoreEditorForm.resx">
+      <DependentUpon>CrosspointStoreEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Routers\CrosspointStores\CrosspointStoreList.resx">
+      <DependentUpon>CrosspointStoreList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Routers\RouterEditorFormBase.resx">
       <DependentUpon>RouterEditorFormBase.cs</DependentUpon>
     </EmbeddedResource>
@@ -699,8 +888,17 @@
     <EmbeddedResource Include="GUI\Settings\SettingsWindow.resx">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Settings\IntSettingEditor.resx">
+      <DependentUpon>IntSettingEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Settings\StringSettingEditor.resx">
       <DependentUpon>StringSettingEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Signals\BooleanTally\BooleanTallyEditorForm.resx">
+      <DependentUpon>BooleanTallyEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Signals\BooleanTally\BooleanTallyList.resx">
+      <DependentUpon>BooleanTallyList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Signals\ExternalSignalEditorForm.resx">
       <DependentUpon>ExternalSignalEditorForm.cs</DependentUpon>
@@ -716,6 +914,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Signals\ExternalSignalCategoryEditorForm.resx">
       <DependentUpon>ExternalSignalCategoryEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Signals\TallyCopy\TallyCopyEditorForm.resx">
+      <DependentUpon>TallyCopyEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Signals\TallyCopy\TallyCopyList.resx">
+      <DependentUpon>TallyCopyList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\SplashScreen.resx">
       <DependentUpon>SplashScreen.cs</DependentUpon>

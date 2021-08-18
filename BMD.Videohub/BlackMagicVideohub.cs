@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BMD.Videohub
 {
@@ -58,6 +59,7 @@ namespace BMD.Videohub
                     return;
                 outputCount = value;
                 crosspoints = new int?[outputCount];
+                locks = new LockState?[outputCount];
                 OutputCountChanged?.Invoke(outputCount);
             }
         }
@@ -161,6 +163,16 @@ namespace BMD.Videohub
             return crosspoints[output];
         }
 
+        public void QueryAllCrosspoints()
+        {
+            if (!Connected)
+                return;
+            if (pendingCrosspointChangeRequest != null)
+                return;
+            socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_ROUTING);
+            socketReceiver.SendLine("");
+        }
+
         public delegate void CrosspointChangedDelegate(int output, int? input);
         public event CrosspointChangedDelegate CrosspointChanged;
 
@@ -177,6 +189,73 @@ namespace BMD.Videohub
         {
             public int Destination;
             public int Source;
+        }
+        #endregion
+
+        #region Locks
+        private LockState?[] locks = null;
+
+        LockChangeRequest pendingLockChangeRequest = null;
+
+        public void SetLockState(int output, bool state)
+        {
+
+            if (!Connected)
+                throw new NotConnectedException();
+            if ((output < 0) || (output >= OutputCount))
+                throw new ArgumentOutOfRangeException();
+
+            pendingLockChangeRequest = new LockChangeRequest()
+            {
+                Destination = output,
+                State = state
+            };
+
+            socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_LOCKS);
+            socketReceiver.SendLine(string.Format("{0} {1}", output, state ? 'O' : 'U'));
+            socketReceiver.SendLine("");
+
+        }
+
+        public LockState? GetLockState(int output)
+        {
+            if ((output < 0) || (output >= OutputCount))
+                throw new ArgumentOutOfRangeException();
+            return locks[output];
+        }
+
+        public enum LockState
+        {
+            Unlocked,
+            Owned,
+            Taken
+        }
+
+        public void QueryAllLockStates()
+        {
+            if (!Connected)
+                return;
+            if (pendingCrosspointChangeRequest != null)
+                return;
+            socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_LOCKS);
+            socketReceiver.SendLine("");
+        }
+
+        public delegate void LockChangedDelegate(int output, LockState state);
+        public event LockChangedDelegate LockChanged;
+
+        private void updateLockState(int output, LockState state)
+        {
+            if (output >= outputCount)
+                return;
+            locks[output] = state;
+            LockChanged?.Invoke(output, state);
+        }
+
+        private class LockChangeRequest
+        {
+            public int Destination;
+            public bool State;
         }
         #endregion
 
@@ -209,6 +288,7 @@ namespace BMD.Videohub
         #region Protocol implementation
         private const string BLOCK_START_VIDEOHUB_DEVICE = "VIDEOHUB DEVICE:";
         private const string BLOCK_START_VIDEO_OUTPUT_ROUTING = "VIDEO OUTPUT ROUTING:";
+        private const string BLOCK_START_VIDEO_OUTPUT_LOCKS = "VIDEO OUTPUT LOCKS:";
         private const string ACK = "ACK";
 
         private const string VHD_KEY_DEVICE_PRESENT = "Device present";
@@ -231,6 +311,9 @@ namespace BMD.Videohub
                 case BlockType.VideoOutputRouting:
                     processLineAtBlockVideoOutputRouting(line);
                     break;
+                case BlockType.VideoOutputLocks:
+                    processLineAtBlockVideoOutputLocks(line);
+                    break;
             }
         }
 
@@ -246,6 +329,12 @@ namespace BMD.Videohub
             if (line == BLOCK_START_VIDEO_OUTPUT_ROUTING)
             {
                 currentBlockType = BlockType.VideoOutputRouting;
+                return;
+            }
+
+            if (line == BLOCK_START_VIDEO_OUTPUT_LOCKS)
+            {
+                currentBlockType = BlockType.VideoOutputLocks;
                 return;
             }
 
@@ -309,11 +398,31 @@ namespace BMD.Videohub
 
         }
 
+        private void processLineAtBlockVideoOutputLocks(string line)
+        {
+            if (line == string.Empty)
+            {
+                currentBlockType = BlockType.Unknown;
+                return;
+            }
+            string[] parts = line.Split(' ');
+            if ((parts.Length == 2) && int.TryParse(parts[0], out int dst) && LOCK_STATE_LETTERS.TryGetValue(parts[1], out LockState state))
+                updateLockState(dst, state);
+        }
+
+        private static readonly Dictionary<string, LockState> LOCK_STATE_LETTERS = new Dictionary<string, LockState>()
+        {
+            { "U", LockState.Unlocked },
+            { "O", LockState.Owned },
+            { "L", LockState.Taken },
+        };
+
         private enum BlockType
         {
             Unknown,
             VideohubDevice,
-            VideoOutputRouting
+            VideoOutputRouting,
+            VideoOutputLocks
         }
         #endregion
 

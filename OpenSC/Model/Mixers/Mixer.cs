@@ -15,18 +15,14 @@ namespace OpenSC.Model.Mixers
         public Mixer()
         { }
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
             restoreInputs();
         }
 
         public override void Removed()
         {
-
             base.Removed();
-
-            IdChanged = null;
-            NameChanged = null;
             OnProgramInputChanged = null;
             OnProgramInputNameChanged = null;
             OnPreviewInputChanged = null;
@@ -34,217 +30,114 @@ namespace OpenSC.Model.Mixers
             StateChanged = null;
             StateStringChanged = null;
             InputsChanged = null;
-
             inputs.ForEach(i => i.RemovedFromMixer(this));
             inputs.Clear();
-
         }
 
-        #region Property: ID
-        public delegate void IdChangedDelegate(Mixer mixer, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
+        #region ID validation
 
-        public int id = 0;
-
-        public override int ID
+        protected override void validateIdForDatabase(int id)
         {
-            get { return id; }
-            set
-            {
-                ValidateId(value);
-                if (value == id)
-                    return;
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
-            }
-        }
-
-        public void ValidateId(int id)
-        {
-            if (id <= 0)
-                throw new ArgumentException();
             if (!MixerDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
         #endregion
 
-        #region Property: Name
-        public delegate void NameChangedDelegate(Mixer mixer, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get { return name; }
-            set
-            {
-                ValidateName(value);
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
-            }
-        }
-
-        public void ValidateName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException();
-        }
-        #endregion
-
         #region Property: OnProgramInput, OnProgramInputName
-        public delegate void OnProgramInputChangedDelegate(Mixer mixer, MixerInput oldInput, MixerInput newInput);
-        public event OnProgramInputChangedDelegate OnProgramInputChanged;
-
-        public delegate void OnProgramInputNameChangedDelegate(Mixer mixer, string newName);
-        public event OnProgramInputNameChangedDelegate OnProgramInputNameChanged;
+        public event PropertyChangedTwoValuesDelegate<Mixer, MixerInput> OnProgramInputChanged;
+        public event PropertyChangedOneValueDelegate<Mixer, string> OnProgramInputNameChanged;
 
         private MixerInput onProgramInput;
 
         public MixerInput OnProgramInput
         {
-            get { return onProgramInput; }
+            get => onProgramInput;
             protected set
             {
-
-                if (value == onProgramInput)
+                BeforeChangePropertyDelegate<MixerInput> beforeChangeDelegate = (ov, nv) => {
+                    if (ov != null)
+                        ov.NameChanged -= onProgramInputNameChangedHandler;
+                };
+                AfterChangePropertyDelegate<MixerInput> afterChangeDelegate = (ov, nv) => {
+                    if (nv != null)
+                        nv.NameChanged += onProgramInputNameChangedHandler;
+                };
+                if (!setProperty(this, ref onProgramInput, value, OnProgramInputChanged, beforeChangeDelegate, afterChangeDelegate))
                     return;
-                MixerInput oldInput = onProgramInput;
-
-                if (onProgramInput != null)
-                    onProgramInput.NameChanged -= onProgramInputNameChangedHandler;
-
-                onProgramInput = value;
-
-                OnProgramInputChanged?.Invoke(this, oldInput, value);
-                RaisePropertyChanged(nameof(OnProgramInputName));
-
                 OnProgramInputNameChanged?.Invoke(this, onProgramInput?.Name);
-                RaisePropertyChanged(nameof(OnProgramInput));
-
-                if (onProgramInput != null)
-                    onProgramInput.NameChanged += onProgramInputNameChangedHandler;
-
+                RaisePropertyChanged(nameof(OnProgramInputName));
             }
         }
 
-        public string OnProgramInputName
-        {
-            get => onProgramInput?.Name;
-        }
+        public string OnProgramInputName => onProgramInput?.Name;
 
         private void onProgramInputNameChangedHandler(MixerInput input, string oldName, string newName)
-        {
-            OnProgramInputNameChanged?.Invoke(this, newName);
-        }
+            => OnProgramInputNameChanged?.Invoke(this, newName);
         #endregion
 
         #region Property: OnPreviewInput, OnPreviewInputName
-        public delegate void OnPreviewInputChangedDelegate(Mixer mixer, MixerInput oldInput, MixerInput newInput);
-        public event OnPreviewInputChangedDelegate OnPreviewInputChanged;
-
-        public delegate void OnPreviewInputNameChangedDelegate(Mixer mixer, string newName);
-        public event OnPreviewInputNameChangedDelegate OnPreviewInputNameChanged;
+        public event PropertyChangedTwoValuesDelegate<Mixer, MixerInput> OnPreviewInputChanged;
+        public event PropertyChangedOneValueDelegate<Mixer, string> OnPreviewInputNameChanged;
 
         private MixerInput onPreviewInput;
 
         public MixerInput OnPreviewInput
         {
-            get { return onPreviewInput; }
+            get => onPreviewInput;
             protected set
             {
-
-                if (value == onPreviewInput)
+                BeforeChangePropertyDelegate<MixerInput> beforeChangeDelegate = (ov, nv) => {
+                    if (ov != null)
+                        ov.NameChanged -= onPreviewInputNameChangedHandler;
+                };
+                AfterChangePropertyDelegate<MixerInput> afterChangeDelegate = (ov, nv) => {
+                    if (nv != null)
+                        nv.NameChanged += onPreviewInputNameChangedHandler;
+                };
+                if (!setProperty(this, ref onPreviewInput, value, OnPreviewInputChanged, beforeChangeDelegate, afterChangeDelegate))
                     return;
-                MixerInput oldInput = onPreviewInput;
-
-                if (onPreviewInput != null)
-                    onPreviewInput.NameChanged -= onPreviewInputNameChangedHandler;
-
-                onPreviewInput = value;
-
-                OnPreviewInputChanged?.Invoke(this, oldInput, value);
-                RaisePropertyChanged(nameof(OnPreviewInputName));
-
                 OnPreviewInputNameChanged?.Invoke(this, onPreviewInput?.Name);
                 RaisePropertyChanged(nameof(OnPreviewInput));
-
-                if (onPreviewInput != null)
-                    onPreviewInput.NameChanged += onPreviewInputNameChangedHandler;
-
             }
         }
 
-        public string OnPreviewInputName
-        {
-            get => onPreviewInput?.Name;
-        }
+        public string OnPreviewInputName => onPreviewInput?.Name;
 
         private void onPreviewInputNameChangedHandler(MixerInput input, string oldName, string newName)
-        {
-            OnPreviewInputNameChanged?.Invoke(this, newName);
-        }
+            => OnPreviewInputNameChanged?.Invoke(this, newName);
         #endregion
 
         #region Property: State
-        public delegate void StateChangedDelegate(Mixer mixer, MixerState oldState, MixerState newState);
-        public event StateChangedDelegate StateChanged;
+        public event PropertyChangedTwoValuesDelegate<Mixer, MixerState> StateChanged;
         
         private MixerState state = MixerState.Unknown;
 
         public MixerState State
         {
-            get { return state; }
-            protected set
-            {
-                if (value == state)
-                    return;
-                MixerState oldState = state;
-                state = value;
-                StateChanged?.Invoke(this, oldState, value);
-                RaisePropertyChanged(nameof(State));
-            }
+            get => state;
+            protected set => setProperty(this, ref state, value, StateChanged);
         }
         #endregion
 
         #region Property: StateString
-        public delegate void StateStringChangedDelegate(Mixer mixer, string oldStateString, string newStateString);
-        public event StateStringChangedDelegate StateStringChanged;
+        public event PropertyChangedTwoValuesDelegate<Mixer, string> StateStringChanged;
 
         private string stateString = "?";
 
         public string StateString
         {
-            get { return stateString; }
-            protected set
-            {
-                if (value == stateString)
-                    return;
-                string oldStateString = stateString;
-                stateString = value;
-                StateStringChanged?.Invoke(this, oldStateString, value);
-                RaisePropertyChanged(nameof(StateString));
-            }
+            get => stateString;
+            protected set => setProperty(this, ref stateString, value, StateStringChanged);
         }
         #endregion
 
         #region Inputs
         private ObservableList<MixerInput> inputs = new ObservableList<MixerInput>();
 
-        public ObservableList<MixerInput> Inputs
-        {
-            get { return inputs; }
-        }
+        public ObservableList<MixerInput> Inputs => inputs;
 
         [PersistAs("inputs")]
-        [PersistAs("input", 1)]
+        [PersistAs(null, 1)]
         private MixerInput[] _inputs
         {
             get { return inputs.ToArray(); }
@@ -285,15 +178,8 @@ namespace OpenSC.Model.Mixers
                 input.Restored();
         }
 
-        public delegate void InputsChangedDelegate(Mixer mixer);
-        public event InputsChangedDelegate InputsChanged;
+        public event PropertyChangedNoValueDelegate<Mixer> InputsChanged;
         #endregion
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            MixerDatabase.Instance.ItemUpdated(this);
-        }
 
     }
 

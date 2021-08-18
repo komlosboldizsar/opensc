@@ -62,9 +62,9 @@ namespace OpenSC.GUI.Signals
             });
             builder.ExternalUpdateEventSubscriberMethod((signal, updateInvoker) =>
             {
-                ExternalSignalCategory.IdChangedDelegate signalCategoryIdChangedHandler = (_category, oldCategory, newCategory) => updateInvoker();
-                ExternalSignalCategory.NameChangedDelegate signalCategoryNameChangedHandler = (_category, oldName, newName) => updateInvoker();
-                ExternalSignalCategory.ColorChangedDelegate signalCategoryColorChangedHandler = (_category, oldColor, newColor) => updateInvoker();
+                PropertyChangedTwoValuesDelegate<IModel, int> signalCategoryIdChangedHandler = (_category, oldCategory, newCategory) => updateInvoker();
+                PropertyChangedTwoValuesDelegate<IModel, string> signalCategoryNameChangedHandler = (_category, oldName, newName) => updateInvoker();
+                PropertyChangedTwoValuesDelegate<ExternalSignalCategory, Color> signalCategoryColorChangedHandler = (_category, oldColor, newColor) => updateInvoker();
                 if (signal.Category != null)
                 {
                     signal.Category.IdChanged += signalCategoryIdChangedHandler;
@@ -92,20 +92,29 @@ namespace OpenSC.GUI.Signals
             // Column: red tally
             builder = GetColumnDescriptorBuilderForTable<ExternalSignal>();
             builder.Type(DataGridViewColumnType.TextBox);
-            builder.Header("TR");
+            builder.Header("T(R)");
             builder.Width(50);
-            builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.RedTally ? Color.Red : Color.LightGray); });
-            builder.AddChangeEvent(nameof(ExternalSignal.RedTally));
+            builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.RedTally.State ? Color.Red : Color.LightGray); });
+            builder.AddMultilevelChangeEvent(nameof(ExternalSignal.RedTally), nameof(IBidirectionalSignalTally.State));
+            builder.BuildAndAdd();
+
+            // Column: yellow tally
+            builder = GetColumnDescriptorBuilderForTable<ExternalSignal>();
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.Header("T(Y)");
+            builder.Width(50);
+            builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.YellowTally.State ? Color.Gold : Color.LightGray); });
+            builder.AddMultilevelChangeEvent(nameof(ExternalSignal.YellowTally), nameof(IBidirectionalSignalTally.State));
             builder.BuildAndAdd();
 
             // Column: green tally
             builder = GetColumnDescriptorBuilderForTable<ExternalSignal>();
             builder.Type(DataGridViewColumnType.TextBox);
-            builder.Header("TG");
+            builder.Header("T(G)");
             builder.Width(50);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
-            builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.GreenTally ? Color.ForestGreen : Color.LightGray); });
-            builder.AddChangeEvent(nameof(ExternalSignal.GreenTally));
+            builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.GreenTally.State ? Color.ForestGreen : Color.LightGray); });
+            builder.AddMultilevelChangeEvent(nameof(ExternalSignal.GreenTally), nameof(IBidirectionalSignalTally.State));
             builder.BuildAndAdd();
 
             // Column: edit button

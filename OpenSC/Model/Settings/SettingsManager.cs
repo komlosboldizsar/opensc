@@ -13,14 +13,14 @@ namespace OpenSC.Model.Settings
     class SettingsManager
     {
 
+        #region Singleton
         public static SettingsManager Instance { get; } = new SettingsManager();
+        private SettingsManager() { }
+        #endregion
 
+        #region Settings store
         private Dictionary<string, ISetting> registeredSettings = new Dictionary<string, ISetting>();
-
-        public IReadOnlyList<ISetting> RegisteredSettings
-        {
-            get => registeredSettings.Values.ToList();
-        }
+        public IReadOnlyList<ISetting> RegisteredSettings => registeredSettings.Values.ToList();
 
         public void RegisterSetting(ISetting setting)
         {
@@ -37,7 +37,9 @@ namespace OpenSC.Model.Settings
             if(!loadingSettings)
                 SaveSettings();
         }
+        #endregion
 
+        #region Serialization
         private const string SETTINGS_FILE_PATH = "settings.xml";
 
         private const string ROOT_TAG = "settings";
@@ -136,11 +138,16 @@ namespace OpenSC.Model.Settings
             { }
 
         }
+        #endregion
 
+        #region Converters
         private static ISettingValueConverter[] knownConverters = new ISettingValueConverter[]
         {
             new BoolConverter(),
             new IntConverter(),
+            new DecimalConverter(),
+            new FloatConverter(),
+            new DoubleConverter(),
             new ColorConverter()
         };
 
@@ -179,6 +186,8 @@ namespace OpenSC.Model.Settings
                 return null;
             return converter;
         }
+        #endregion
 
     }
+
 }

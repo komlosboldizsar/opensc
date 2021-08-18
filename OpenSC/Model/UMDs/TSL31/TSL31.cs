@@ -16,6 +16,9 @@ namespace OpenSC.Model.UMDs.TSL31
 
         public override IUMDType Type => new TSL31Type();
 
+        #region Property: Port
+        public event PropertyChangedTwoValuesDelegate<TSL31, SerialPort> PortChanged;
+
         [PersistAs("port")]
         private SerialPort port;
 
@@ -26,22 +29,29 @@ namespace OpenSC.Model.UMDs.TSL31
 
         public SerialPort Port
         {
-            get { return port; }
-            set { port = value; }
+            get => port;
+            set => setProperty(this, ref port, value, PortChanged);
         }
+        #endregion
 
-        private int address;
+        #region Property: Address
+        public event PropertyChangedTwoValuesDelegate<TSL31, int> AddressChanged;
+
+        [PersistAs("address")]
+        private int address = 1;
 
         public int Address
         {
-            get { return address; }
-            set
-            {
-                if (value < 0 || value > 126)
-                    throw new ArgumentOutOfRangeException();
-                address = value;
-            }
+            get => address;
+            set => setProperty(this, ref address, value, AddressChanged, validator: ValidateAddress);
         }
+
+        public void ValidateAddress(int address)
+        {
+            if ((address < 0) || (address > 126))
+                throw new ArgumentOutOfRangeException();
+        }
+        #endregion
 
         public override Color[] TallyColors
         {

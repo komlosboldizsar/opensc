@@ -63,7 +63,7 @@ namespace OpenSC.Model.Variables
                 throw new NameIsAlreadyUsedException(name);
 
             registeredBooleans.Add(name, boolean);
-            ItemAdded?.Invoke();
+            ItemAdded?.Invoke(new object[] { boolean });
             ItemsChanged?.Invoke();
 
         }
@@ -75,10 +75,10 @@ namespace OpenSC.Model.Variables
 
         public void UnregisterBoolean(string name)
         {
-            if (!registeredBooleans.ContainsKey(name))
+            if (!registeredBooleans.TryGetValue(name, out IBoolean removedBoolean))
                 return;
             registeredBooleans.Remove(name);
-            ItemRemoved?.Invoke();
+            ItemRemoved?.Invoke(new object[] { removedBoolean });
             ItemsChanged?.Invoke();
         }
 

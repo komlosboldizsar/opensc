@@ -43,6 +43,8 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
         {
             if (ContainsNull)
                 proxyList.Add(new ItemProxy(null, nullLabel));
+            if (boundCollection == null)
+                return;
             foreach (T item in boundCollection)
                 proxyList.Add(new ItemProxy(item, toStringFunction(item)));
         }

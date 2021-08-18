@@ -4,8 +4,21 @@ using System.Drawing;
 namespace OpenSC.Model.Variables
 {
 
-    public class BooleanBase : IBoolean, INotifyPropertyChanged
+    public class BooleanBase : SystemObjectBase, IBoolean, INotifyPropertyChanged
     {
+
+        public BooleanBase()
+        { }
+
+        public BooleanBase(string name, Color color, string description = "")
+        {
+            this.name = name;
+            this.color = color;
+            this.description = description;
+        }
+
+        #region Property: Name
+        public event PropertyChangedTwoValuesDelegate<IBoolean, string> NameChanged;
 
         private string name;
 
@@ -16,65 +29,67 @@ namespace OpenSC.Model.Variables
             {
                 if (!BooleanRegister.Instance.CanNameUsedForBoolean(this, value))
                     return;
-                if (value == name)
+                if (!setProperty(this, ref name, value, NameChanged))
                     return;
-                name = value;
-                NameChanged?.Invoke(this, name);
-                PropertyChanged?.Invoke(nameof(Name));
-                BooleanRegister.Instance.BooleanNameChanged(this);
+                if (Registered)
+                    BooleanRegister.Instance.BooleanNameChanged(this);
             }
         }
+        #endregion
 
-        public event BooleanNameChangedDelegate NameChanged;
+        #region Property: Color
+        public event PropertyChangedTwoValuesDelegate<IBoolean, Color> ColorChanged;
 
-        private readonly Color color;
+        private Color color;
 
-        public Color Color { get => color; }
+        public Color Color
+        {
+            get => color;
+            set => setProperty(this, ref color, value, ColorChanged);
+        }
+        #endregion
+
+        #region Property: Description
+        public event PropertyChangedTwoValuesDelegate<IBoolean, string> DescriptionChanged;
 
         private string description;
 
         public string Description
         {
             get => description;
-            set
-            {
-                if (value == description)
-                    return;
-                description = value;
-                DescriptionChanged?.Invoke(this, description);
-                PropertyChanged?.Invoke(nameof(Description));
-            }
+            set => setProperty(this, ref description, value, DescriptionChanged);
         }
+        #endregion
 
-        public event BooleanDescriptionChangedDelegate DescriptionChanged;
-
-        public BooleanBase(string name, Color color, string description = "")
-        {
-            this.name = name;
-            this.color = color;
-            this.description = description;
-        }
+        #region Property: CurrentState
+        public event PropertyChangedTwoValuesDelegate<IBoolean, bool> StateChanged;
 
         private bool currentState;
 
         public bool CurrentState
         {
-            get { return currentState; }
-            protected set
-            {
-                if (value == currentState)
-                    return;
-                currentState = value;
-                StateChanged?.Invoke(this, currentState);
-                PropertyChanged?.Invoke(nameof(CurrentState));
-            }
+            get => currentState;
+            protected set => setProperty(this, ref currentState, value, StateChanged);
+        }
+        #endregion
+
+        protected void register()
+        {
+            if (Registered)
+                return;
+            BooleanRegister.Instance.RegisterBoolean(this);
+            Registered = true;
         }
 
-        public event BooleanStateChangedDelegate StateChanged;
+        protected void unregister()
+        {
+            if (!Registered)
+                return;
+            BooleanRegister.Instance.UnregisterBoolean(this);
+            Registered = false;
+        }
 
-        #region Implementation of INotifyPropertyChanged
-        public event PropertyChangedDelegate PropertyChanged;
-        #endregion
+        protected bool Registered { get; private set; }
 
     }
 

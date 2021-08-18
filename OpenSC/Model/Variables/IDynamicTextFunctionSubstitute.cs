@@ -7,11 +7,9 @@ namespace OpenSC.Model.Variables
 
     public interface IDynamicTextFunctionSubstitute
     {
-
         string CurrentValue { get; }
 
         event DynamicTextFunctionSubstituteValueChanged ValueChanged;
-
     }
 
 }

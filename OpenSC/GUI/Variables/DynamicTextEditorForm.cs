@@ -23,8 +23,8 @@ namespace OpenSC.GUI.Variables
             set
             {
                 addingNew = value;
-                Text = string.Format((value ? TITLE_NEW : TITLE_EDIT), dyntext?.ID, dyntext?.Label);
-                HeaderText = string.Format((value ? HEADER_TEXT_NEW : HEADER_TEXT_EDIT), dyntext?.ID, dyntext?.Label);
+                Text = string.Format((value ? TITLE_NEW : TITLE_EDIT), dyntext?.ID, dyntext?.Name);
+                HeaderText = string.Format((value ? HEADER_TEXT_NEW : HEADER_TEXT_EDIT), dyntext?.ID, dyntext?.Name);
             }
         }
 
@@ -46,7 +46,7 @@ namespace OpenSC.GUI.Variables
             if (dyntext == null)
                 return;
             idNumericField.Value = (addingNew ? DynamicTextDatabase.Instance.NextValidId() : dyntext.ID);
-            labelTextBox.Text = dyntext.Label;
+            labelTextBox.Text = dyntext.Name;
             formulaTextBox.Text = dyntext.Formula;
             currentTextTextBox.Text = dyntext.CurrentText;
         }
@@ -81,7 +81,7 @@ namespace OpenSC.GUI.Variables
             if (dyntext == null)
                 return;
             dyntext.ValidateId((int)idNumericField.Value);
-            dyntext.ValidateLabel(labelTextBox.Text);
+            dyntext.ValidateName(labelTextBox.Text);
         }
 
         protected virtual void writeFields()
@@ -89,7 +89,7 @@ namespace OpenSC.GUI.Variables
             if (dyntext == null)
                 return;
             dyntext.ID = (int)idNumericField.Value;
-            dyntext.Label = labelTextBox.Text;
+            dyntext.Name = labelTextBox.Text;
             dyntext.Formula = formulaTextBox.Text;
         }
 

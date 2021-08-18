@@ -12,81 +12,51 @@ namespace OpenSC.Model.Macros
     public class MacroPanel : ModelBase
     {
 
-        public override void Restored()
+        public override void RestoredOwnFields()
         {
-            base.Restored();
+            base.RestoredOwnFields();
             foreach (MacroPanelElement element in elements)
                 element.Restored();
         }
 
-        public delegate void IdChangedDelegate(MacroPanel panel, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
-
-        public int id = 0;
-
-        public override int ID
+        #region ID validation
+        protected override void validateIdForDatabase(int id)
         {
-            get { return id; }
-            set
-            {
-                ValidateId(value);
-                if (value == id)
-                    return;
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
-            }
-        }
-
-        public void ValidateId(int id)
-        {
-            if (id <= 0)
-                throw new ArgumentException();
             if (!MacroPanelDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
+        #endregion
 
-        public delegate void NameChangedDelegate(MacroPanel panel, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get { return name; }
-            set
-            {
-                ValidateName(value);
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
-            }
-        }
-
-        public void ValidateName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException();
-        }
+        #region Property: Width
+        public event PropertyChangedTwoValuesDelegate<MacroPanel, int> SizeWChanged;
 
         [PersistAs("width")]
-        public int SizeW { get; set; }
+        private int width;
+
+        public int SizeW
+        {
+            get => width;
+            set => setProperty(this, ref width, value, SizeWChanged);
+        }
+        #endregion
+
+        #region Property: Height
+        public event PropertyChangedTwoValuesDelegate<MacroPanel, int> SizeHChanged;
 
         [PersistAs("height")]
-        public int SizeH { get; set; }
+        private int height;
+
+        public int SizeH
+        {
+            get => height;
+            set => setProperty(this, ref height, value, SizeHChanged);
+        }
+        #endregion
 
         #region Elements
         private ObservableList<MacroPanelElement> elements = new ObservableList<MacroPanelElement>();
 
-        public ObservableList<MacroPanelElement> Elements
-        {
-            get { return elements; }
-        }
+        public ObservableList<MacroPanelElement> Elements => elements;
 
         [PersistAs("elements")]
         [PersistAs("element", 1)]

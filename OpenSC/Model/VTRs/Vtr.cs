@@ -11,185 +11,107 @@ namespace OpenSC.Model.VTRs
     public class Vtr : ModelBase
     {
 
-        public override void Restored()
-        { }
-
+        #region Persistence, instantiation
         public override void Removed()
         {
-
             base.Removed();
-
-            IdChanged = null;
-            NameChanged = null;
             TitleChanged = null;
             StateChanged = null;
             SecondsFullChanged = null;
             SecondsElapsedChanged = null;
             SecondsRemainingChanged = null;
-
         }
+        #endregion
 
-        public delegate void IdChangedDelegate(Vtr vtr, int oldValue, int newValue);
-        public event IdChangedDelegate IdChanged;
-
-        public int id = 0;
-
-        public override int ID
+        #region ID validation
+        protected override void validateIdForDatabase(int id)
         {
-            get { return id; }
-            set
-            {
-                ValidateId(value);
-                int oldValue = id;
-                id = value;
-                IdChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(ID));
-            }
-        }
-
-        public void ValidateId(int id)
-        {
-            if (id <= 0)
-                throw new ArgumentException();
             if (!VtrDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
         }
+        #endregion
 
-        public delegate void NameChangedDelegate(Vtr vtr, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get { return name; }
-            set
-            {
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                RaisePropertyChanged(nameof(Name));
-            }
-        }
-
-        public delegate void TitleChangedDelegate(Vtr vtr, string oldTitle, string newTitle);
-        public event TitleChangedDelegate TitleChanged;
+        #region Property: Title
+        public event PropertyChangedTwoValuesDelegate<Vtr, string> TitleChanged;
 
         private string title;
 
         public string Title
         {
-            get { return title; }
-            protected set
-            {
-                if (value == title)
-                    return;
-                string oldTitle = title;
-                title = value;
-                TitleChanged?.Invoke(this, oldTitle, value);
-                RaisePropertyChanged(nameof(Title));
-            }
+            get => title;
+            protected set => setProperty(this, ref title, value, TitleChanged);
         }
+        #endregion
 
-        public delegate void StateChangedDelegate(Vtr vtr, VtrState oldState, VtrState newState);
-        public event StateChangedDelegate StateChanged;
+        #region Property: State
+        public event PropertyChangedTwoValuesDelegate<Vtr, VtrState> StateChanged;
 
         private VtrState state = VtrState.Stopped;
 
         public VtrState State
         {
-            get { return state; }
-            protected set
-            {
-                if (value == state)
-                    return;
-                VtrState oldState = state;
-                state = value;
-                StateChanged?.Invoke(this, oldState, value);
-                RaisePropertyChanged(nameof(State));
-            }
+            get => state;
+            protected set => setProperty(this, ref state, value, StateChanged);
         }
+        #endregion
 
-        public delegate void SecondsFullChangedDelegate(Vtr vtr, int oldValue, int newValue);
-        public event SecondsFullChangedDelegate SecondsFullChanged;
+        #region Property: SecondsFull, TimeFull
+        public event PropertyChangedTwoValuesDelegate<Vtr, int> SecondsFullChanged;
 
         private int secondsFull;
 
         public int SecondsFull
         {
-            get { return secondsFull; }
+            get => secondsFull;
             protected set
             {
-                if (value == secondsFull)
+                if (!setProperty(this, ref secondsFull, value, SecondsFullChanged))
                     return;
-                int oldValue = secondsFull;
-                secondsFull = value;
-                SecondsFullChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(SecondsFull));
+                RaisePropertyChanged(nameof(TimeFull));
             }
         }
 
-        public TimeSpan TimeFull
-        {
-            get { return TimeSpan.FromSeconds(secondsFull); }
-        }
+        public TimeSpan TimeFull => TimeSpan.FromSeconds(secondsFull);
+        #endregion
 
-        public delegate void SecondsElapsedChangedDelegate(Vtr vtr, int oldValue, int newValue);
-        public event SecondsElapsedChangedDelegate SecondsElapsedChanged;
+        #region Property: SecondsElapsed, TimeElapsed
+        public event PropertyChangedTwoValuesDelegate<Vtr, int> SecondsElapsedChanged;
 
         private int secondsElapsed;
 
         public int SecondsElapsed
         {
-            get { return secondsElapsed; }
+            get => secondsElapsed;
             protected set
             {
-                if (value == secondsElapsed)
+                if (!setProperty(this, ref secondsElapsed, value, SecondsElapsedChanged))
                     return;
-                int oldValue = secondsElapsed;
-                secondsElapsed = value;
-                SecondsElapsedChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(SecondsElapsed));
+                RaisePropertyChanged(nameof(TimeElapsed));
             }
         }
 
-        public TimeSpan TimeElapsed
-        {
-            get { return TimeSpan.FromSeconds(secondsElapsed); }
-        }
-        
-        public delegate void SecondsRemainingChangedDelegate(Vtr vtr, int oldValue, int newValue);
-        public event SecondsRemainingChangedDelegate SecondsRemainingChanged;
+        public TimeSpan TimeElapsed => TimeSpan.FromSeconds(secondsElapsed);
+        #endregion
+
+        #region Property: SecondsRemaining, TimeRemaining
+        public event PropertyChangedTwoValuesDelegate<Vtr, int> SecondsRemainingChanged;
 
         private int secondsRemaining;
 
         public int SecondsRemaining
         {
-            get { return secondsRemaining; }
+            get => secondsRemaining;
             protected set
             {
-                if (value == secondsRemaining)
+                if (!setProperty(this, ref secondsRemaining, value, SecondsRemainingChanged))
                     return;
-                int oldValue = secondsRemaining;
-                secondsRemaining = value;
-                SecondsRemainingChanged?.Invoke(this, oldValue, value);
-                RaisePropertyChanged(nameof(SecondsRemaining));
+                RaisePropertyChanged(nameof(TimeRemaining));
             }
         }
 
-        public TimeSpan TimeRemaining
-        {
-            get { return TimeSpan.FromSeconds(secondsRemaining); }
-        }
-
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            VtrDatabase.Instance.ItemUpdated(this);
-        }
+        public TimeSpan TimeRemaining => TimeSpan.FromSeconds(secondsRemaining);
+        #endregion
 
     }
+
 }

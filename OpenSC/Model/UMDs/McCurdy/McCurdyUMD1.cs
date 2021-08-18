@@ -24,6 +24,9 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         public override IUMDType Type => new McCurdyUMD1Type();
 
+        #region Property: Port
+        public event PropertyChangedTwoValuesDelegate<McCurdyUMD1, SerialPort> PortChanged;
+
         [PersistAs("port")]
         private SerialPort port;
 
@@ -34,23 +37,29 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         public SerialPort Port
         {
-            get { return port; }
-            set { port = value; }
+            get => port;
+            set => setProperty(this, ref port, value, PortChanged);
         }
+        #endregion
+
+        #region Property: Address
+        public event PropertyChangedTwoValuesDelegate<McCurdyUMD1, int> AddressChanged;
 
         [PersistAs("address")]
         private int address = 1;
 
         public int Address
         {
-            get { return address; }
-            set
-            {
-                if (value <= 0 || value > 255)
-                    throw new ArgumentOutOfRangeException();
-                address = value;
-            }
+            get => address;
+            set => setProperty(this, ref address, value, AddressChanged, validator: ValidateAddress);
         }
+
+        public void ValidateAddress(int address)
+        {
+            if ((address <= 0) || (address > 255))
+                throw new ArgumentOutOfRangeException();
+        }
+        #endregion
 
         public override Color[] TallyColors
         {
@@ -74,7 +83,8 @@ namespace OpenSC.Model.UMDs.McCurdy
         protected virtual string getTextToSend()
         {
             string replaced = currentText.Replace('1', (char)0x7E);
-            return string.Format("%{0}D{1}%Z", address, replaced); // TODO: %-s
+            replaced = replaced.Replace("%", "%%");
+            return string.Format("%{0}D{1}%Z", address, replaced);
         }
 
         private void updateCurrentText()
@@ -339,9 +349,9 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         }
 
-        public override void Restored()
+        public override void RestoreCustomRelations()
         {
-            base.Restored();
+            base.RestoreCustomRelations();
             DynamicText[] restoredDynamicTextSources = dynamicTextSources;
             dynamicTextSources = new DynamicText[] { null, null, null };
             for (int i = 0; i < 3; i++)

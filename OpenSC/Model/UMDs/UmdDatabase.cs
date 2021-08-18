@@ -11,11 +11,8 @@ namespace OpenSC.Model.UMDs
     [XmlTagNames("umds", "umd")]
     class UmdDatabase: DatabaseBase<UMD>
     {
-
         public static UmdDatabase Instance { get; } = new UmdDatabase();
-
         public const string DBNAME = "umds";
-
     }
 
 }

@@ -12,12 +12,12 @@ namespace OpenSC.Model.Mixers
 
         public Type Type => typeof(MixerInput);
 
-        private const string TAG_NAME = "mixer_input";
+        private const string TAG_NAME = "input";
         private const string ATTRIBUTE_NAME = "name";
         private const string ATTRIBUTE_INDEX = "index";
         private const string ATTRIBUTE_SOURCE = "source";
 
-        public object DeserializeItem(XmlNode serializedItem)
+        public object DeserializeItem(XmlNode serializedItem, object parentItem)
         {
 
             if (serializedItem.LocalName != TAG_NAME)
@@ -38,7 +38,7 @@ namespace OpenSC.Model.Mixers
 
         }
 
-        public XElement SerializeItem(object item)
+        public XElement SerializeItem(object item, object parentItem)
         {
 
             MixerInput input = item as MixerInput;
