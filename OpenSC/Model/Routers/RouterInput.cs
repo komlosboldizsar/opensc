@@ -15,8 +15,7 @@ namespace OpenSC.Model.Routers
         public RouterInput() : base()
         { }
 
-        public RouterInput(string name, Router router, int index)
-            : base()
+        public RouterInput(string name, Router router, int index) : base()
         {
             this.name = name;
             this.Router = router;
@@ -178,6 +177,10 @@ namespace OpenSC.Model.Routers
 
         #region Implementation of INotifyPropertyChanged
         public event PropertyChangedDelegate PropertyChanged;
+        #endregion
+
+        #region ToString()
+        public override string ToString() => string.Format("(#{0}) {1}", index, name);
         #endregion
 
     }

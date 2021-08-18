@@ -276,6 +276,10 @@ namespace OpenSC.Model.Routers
         public event PropertyChangedDelegate PropertyChanged;
         #endregion
 
+        #region ToString()
+        public override string ToString() => string.Format("(#{0}) {1}", index, name);
+        #endregion
+
         #region Signals
         private void registerAsSignal()
         {
