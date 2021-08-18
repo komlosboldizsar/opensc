@@ -8,70 +8,60 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.VTRs.DynamicTextFunctions
 {
 
-    class VtrStateTranslated : VtrState
+    [DynamicTextFunction(nameof(VtrStateTranslated), "The state of a VTR with the given translations.")]
+    class VtrStateTranslated : DynamicTextFunctionBase<VtrStateTranslated.Substitute>
     {
-        public override string FunctionName => nameof(VtrStateTranslated);
 
-        public override string Description => "The state of a VTR with the given translations.";
-
-        public override int ParameterCount => 7;
-
-        public override DynamicTextFunctionArgumentType[] ArgumentTypes => new DynamicTextFunctionArgumentType[]
+        [DynamicTextFunctionArgument(0, "ID of the VTR.")]
+        public class Arg0 : DynamicTextFunctionArgumentDatabaseItem<Vtr>
         {
-            DynamicTextFunctionArgumentType.Integer,
-            DynamicTextFunctionArgumentType.String,
-            DynamicTextFunctionArgumentType.String,
-            DynamicTextFunctionArgumentType.String,
-            DynamicTextFunctionArgumentType.String,
-            DynamicTextFunctionArgumentType.String,
-            DynamicTextFunctionArgumentType.String
-        };
-
-        public override string[] ArgumentDescriptions => new string[]
-        {
-            "ID of the VTR.",
-            "Translation for state 'stopped'.",
-            "Translation for state 'paused'.",
-            "Translation for state 'playing'.",
-            "Translation for state 'rewinding'.",
-            "Translation for state 'fastforwarding'.",
-            "Translation for state 'recording'."
-        };
-
-        public override IDynamicTextFunctionSubstitute GetSubstitute(object[] arguments)
-        {
-            Vtr vtr = VtrDatabase.Instance.GetTById((int)arguments[0]);
-            Substitute substitute = new Substitute(
-                vtr,
-                arguments[1].ToString(),
-                arguments[2].ToString(),
-                arguments[3].ToString(),
-                arguments[1].ToString(),
-                arguments[5].ToString(),
-                arguments[6].ToString()
-            );
-            substitute.UpdateAfterConstruct();
-            return substitute;
+            public Arg0() : base(VtrDatabase.Instance)
+            { }
         }
 
-        protected new class Substitute : VtrState.Substitute
+        [DynamicTextFunctionArgument(1, "Translation for state 'stopped'.")]
+        public class Arg1 : DynamicTextFunctionArgumentString
+        { }
+
+        [DynamicTextFunctionArgument(2, "Translation for state 'paused'.")]
+        public class Arg2 : DynamicTextFunctionArgumentString
+        { }
+
+        [DynamicTextFunctionArgument(3, "Translation for state 'playing'.")]
+        public class Arg3 : DynamicTextFunctionArgumentString
+        { }
+
+        [DynamicTextFunctionArgument(4, "Translation for state 'rewinding'.")]
+        public class Arg4 : DynamicTextFunctionArgumentString
+        { }
+
+        [DynamicTextFunctionArgument(5, "Translation for state 'fastforwarding'.")]
+        public class Arg5 : DynamicTextFunctionArgumentString
+        { }
+
+        [DynamicTextFunctionArgument(6, "Translation for state 'recording'.")]
+        public class Arg6 : DynamicTextFunctionArgumentString
+        { }
+
+        public class Substitute : VtrState.Substitute
         {
 
-            private readonly string translationForStopped;
-            private readonly string translationForPaused;
-            private readonly string translationForPlaying;
-            private readonly string translationForRewinding;
-            private readonly string translationForFastForwarding;
-            private readonly string translationForRecording;
+            private string translationForStopped;
+            private string translationForPaused;
+            private string translationForPlaying;
+            private string translationForRewinding;
+            private string translationForFastForwarding;
+            private string translationForRecording;
 
-            public Substitute(Vtr vtr, string translationForStopped, string translationForPaused, string translationForPlaying, string translationForRewinding, string translationForFastForwarding, string translationForRecording) : base(vtr)
+            public override void Init(object[] argumentObjects)
             {
-                this.translationForStopped = translationForStopped;
-                this.translationForPaused = translationForPaused;
-                this.translationForPlaying = translationForPlaying;
-                this.translationForRewinding = translationForRewinding;
-                this.translationForFastForwarding = translationForFastForwarding;
-                this.translationForRecording = translationForRecording;
+                translationForStopped = (string)argumentObjects[1];
+                translationForPaused = (string)argumentObjects[2];
+                translationForPlaying = (string)argumentObjects[3];
+                translationForRewinding = (string)argumentObjects[4];
+                translationForFastForwarding = (string)argumentObjects[5];
+                translationForRecording = (string)argumentObjects[6];
+                base.Init(argumentObjects);
             }
 
             protected override string convertStateToString(VTRs.VtrState state)

@@ -9,75 +9,70 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers.DynamicTextFunctions
 {
 
-    class RouterOutputInputName : IDynamicTextFunction
+    [DynamicTextFunction(nameof(RouterOutputInputName), "The name of the input that is connected to the given output of a router.")]
+    class RouterOutputInputName : DynamicTextFunctionBase<RouterOutputInputName.Substitute>
     {
 
-        public string FunctionName => nameof(RouterOutputInputName);
-
-        public string Description => "The name of the input that is connected to the given output of a router.";
-
-        public int ParameterCount => 2;
-
-        public DynamicTextFunctionArgumentType[] ArgumentTypes => new DynamicTextFunctionArgumentType[]
+        [DynamicTextFunctionArgument(0, "ID of the router.")]
+        public class Arg0 : DynamicTextFunctionArgumentDatabaseItem<Router>
         {
-            DynamicTextFunctionArgumentType.Integer,
-            DynamicTextFunctionArgumentType.Integer,
-        };
+            public Arg0() : base(RouterDatabase.Instance)
+            { }
+        }
 
-        public string[] ArgumentDescriptions => new string[]
+        [DynamicTextFunctionArgument(1, "Index of the output.")]
+        public class Arg1 : DynamicTextFunctionArgumentBase
         {
-            "ID of the router.",
-            "Index of the output."
-        };
-
-        public IDynamicTextFunctionSubstitute GetSubstitute(object[] arguments)
-        {
-            Router router = RouterDatabase.Instance.GetTById((int)arguments[0]);
-            return new Substitute(router, (int)arguments[1]);
+            public Arg1() : base(typeof(RouterOutput), DynamicTextFunctionArgumentType.Integer)
+            { }
+            protected override object _getObjectByKey(object key, object[] previousArgumentObjects)
+                => (previousArgumentObjects[0] as Router)?.GetOutput((int)key);
         }
 
         public class Substitute : DynamicTextFunctionSubstituteBase
         {
 
-            private Router router;
-            private RouterOutput output;
             private RouterInput currentInput;
 
-            public Substitute(Router router, int outputIndex)
+            public override void Init(object[] argumentObjects)
             {
 
+                Router router = argumentObjects[0] as Router;
                 if (router == null)
                 {
                     CurrentValue = "?";
                     return;
                 }
-                this.router = router;
 
-                output = router.GetOutput(outputIndex);
+                RouterOutput output = router.GetOutput((int)argumentObjects[1]);
                 if (output == null)
+                {
+                    CurrentValue = "?";
                     return;
+                }
                 output.CurrentInputChanged += currentInputChangedHandler;
 
                 currentInput = output.CurrentInput;
                 if (currentInput == null)
+                {
+                    CurrentValue = "?";
                     return;
+                }
                 CurrentValue = output.CurrentInput.Name;
-                currentInput.NameChanged += nameChangedHandler;
+                currentInput.NameChanged += currentInputNameChangedHandler;
 
             }
 
-            private void nameChangedHandler(RouterInput input, string oldName, string newName)
-            {
-                CurrentValue = newName;
-            }
+            private void currentInputNameChangedHandler(RouterInput input, string oldName, string newName)
+                => CurrentValue = newName;
 
             private void currentInputChangedHandler(RouterOutput output, RouterInput newInput)
             {
                 if (currentInput != null)
-                    currentInput.NameChanged -= nameChangedHandler;
+                    currentInput.NameChanged -= currentInputNameChangedHandler;
                 currentInput = newInput;
                 if (currentInput != null)
-                    currentInput.NameChanged += nameChangedHandler;
+                    currentInput.NameChanged += currentInputNameChangedHandler;
                 CurrentValue = currentInput.Name;
             }
 

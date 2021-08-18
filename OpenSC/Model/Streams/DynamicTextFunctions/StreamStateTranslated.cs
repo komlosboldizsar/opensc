@@ -8,65 +8,54 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Streams.DynamicTextFunctions
 {
 
-    class StreamStateTranslated : StreamState
+    [DynamicTextFunction(nameof(StreamStateTranslated), "The state of a stream with the given translations.")]
+    class StreamStateTranslated : DynamicTextFunctionBase<StreamStateTranslated.Substitute>
     {
-        public override string FunctionName => nameof(StreamStateTranslated);
 
-        public override string Description => "The state of a stream with the given translations.";
-
-        public override int ParameterCount => 6;
-
-        public override DynamicTextFunctionArgumentType[] ArgumentTypes => new DynamicTextFunctionArgumentType[]
+        [DynamicTextFunctionArgument(0, "ID of the stream.")]
+        public class Arg0 : DynamicTextFunctionArgumentDatabaseItem<Stream>
         {
-            DynamicTextFunctionArgumentType.Integer,
-            DynamicTextFunctionArgumentType.String,
-            DynamicTextFunctionArgumentType.String,
-            DynamicTextFunctionArgumentType.String,
-            DynamicTextFunctionArgumentType.String,
-            DynamicTextFunctionArgumentType.String
-        };
-
-        public override string[] ArgumentDescriptions => new string[]
-        {
-            "ID of the stream.",
-            "Translation for state 'unknown'.",
-            "Translation for state 'not running'.",
-            "Translation for state 'not started'.",
-            "Translation for state 'running'.",
-            "Translation for state 'ended'."
-        };
-
-        public override IDynamicTextFunctionSubstitute GetSubstitute(object[] arguments)
-        {
-            Stream stream = StreamDatabase.Instance.GetTById((int)arguments[0]);
-            Substitute substitute = new Substitute(
-                stream,
-                arguments[1].ToString(),
-                arguments[2].ToString(),
-                arguments[3].ToString(),
-                arguments[1].ToString(),
-                arguments[5].ToString()
-            );
-            substitute.UpdateAfterConstruct();
-            return substitute;
+            public Arg0() : base(StreamDatabase.Instance)
+            { }
         }
 
-        protected new class Substitute : StreamState.Substitute
+        [DynamicTextFunctionArgument(1, "Translation for state 'unknown'.")]
+        public class Arg1 : DynamicTextFunctionArgumentString
+        { }
+
+        [DynamicTextFunctionArgument(2, "Translation for state 'not running'.")]
+        public class Arg2 : DynamicTextFunctionArgumentString
+        { }
+
+        [DynamicTextFunctionArgument(3, "Translation for state 'not started'.")]
+        public class Arg3 : DynamicTextFunctionArgumentString
+        { }
+
+        [DynamicTextFunctionArgument(4, "Translation for state 'running'.")]
+        public class Arg4 : DynamicTextFunctionArgumentString
+        { }
+
+        [DynamicTextFunctionArgument(5, "Translation for state 'ended'.")]
+        public class Arg5 : DynamicTextFunctionArgumentString
+        { }
+
+        public class Substitute : StreamState.Substitute
         {
 
-            private readonly string translationForUnknown;
-            private readonly string translationForNotRunning;
-            private readonly string translationForNotStarted;
-            private readonly string translationForRunning;
-            private readonly string translationForEnded;
+            private string translationForUnknown;
+            private string translationForNotRunning;
+            private string translationForNotStarted;
+            private string translationForRunning;
+            private string translationForEnded;
 
-            public Substitute(Stream stream, string translationForUnknown, string translationForNotRunning, string translationForNotStarted, string translationForRunning, string translationForEnded) : base(stream)
+            public override void Init(object[] argumentObjects)
             {
-                this.translationForUnknown = translationForUnknown;
-                this.translationForNotRunning = translationForNotRunning;
-                this.translationForNotStarted = translationForNotStarted;
-                this.translationForRunning = translationForRunning;
-                this.translationForEnded = translationForEnded;
+                translationForUnknown = (string)argumentObjects[1];
+                translationForNotRunning = (string)argumentObjects[2];
+                translationForNotStarted = (string)argumentObjects[3];
+                translationForRunning = (string)argumentObjects[4];
+                translationForEnded = (string)argumentObjects[5];
+                base.Init(argumentObjects);
             }
 
             protected override string convertStateToString(Streams.StreamState state)

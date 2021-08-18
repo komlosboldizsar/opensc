@@ -7,69 +7,38 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Timers.DynamicTextFunctions
 {
-    public class TimerTotalSeconds : IDynamicTextFunction
+
+    [DynamicTextFunction(nameof(TimerTotalSeconds), "Total elapsed/remaining seconds of a timer.")]
+    public class TimerTotalSeconds : DynamicTextFunctionBase<TimerTotalSeconds.Substitute>
     {
-        public string FunctionName => nameof(TimerTotalSeconds);
 
-        public string Description => "Total elapsed/remaining seconds of a timer.";
-
-        public int ParameterCount => 1;
-
-        public DynamicTextFunctionArgumentType[] ArgumentTypes => new DynamicTextFunctionArgumentType[]
+        [DynamicTextFunctionArgument(0, "ID of the timer.")]
+        public class Arg0 : DynamicTextFunctionArgumentDatabaseItem<Timer>
         {
-            DynamicTextFunctionArgumentType.Integer
-        };
-
-        public string[] ArgumentDescriptions => new string[]
-        {
-            "ID of the timer."
-        };
-
-        public IDynamicTextFunctionSubstitute GetSubstitute(object[] arguments)
-        {
-            Timer timer = TimerDatabase.Instance.GetTById((int)arguments[0]);
-            return new Substitute(timer);
+            public Arg0() : base(TimerDatabase.Instance)
+            { }
         }
 
-        public class Substitute: IDynamicTextFunctionSubstitute
+        public class Substitute : DynamicTextFunctionSubstituteBase
         {
 
-            private Timer timer;
-
-            public Substitute(Timer timer)
+            public override void Init(object[] argumentObjects)
             {
+                Timer timer = argumentObjects[0] as Timer;
                 if (timer == null)
                 {
                     CurrentValue = "?";
                     return;
                 }
-                this.timer = timer;
                 timer.SecondsChanged += timerSecondsChangedHandler;
                 CurrentValue = timer.Seconds.ToString();
             }
 
             private void timerSecondsChangedHandler(Timer timer, int oldValue, int newValue)
-            {
-                CurrentValue = newValue.ToString();
-            }
-
-            private string currentValue;
-
-            public string CurrentValue
-            {
-                get { return currentValue; }
-                private set
-                {
-                    if (value == currentValue)
-                        return;
-                    currentValue = value;
-                    ValueChanged?.Invoke(this);
-                }
-            }
-
-            public event DynamicTextFunctionSubstituteValueChanged ValueChanged;
+                => CurrentValue = newValue.ToString();
 
         }
 
     }
+
 }

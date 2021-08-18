@@ -10,55 +10,45 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers.DynamicTextFunctions
 {
 
-    class RouterOutputSource : IDynamicTextFunction
+    [DynamicTextFunction(nameof(RouterOutputSource), "The name of the source that is connected to the given output of a router.")]
+    class RouterOutputSource : DynamicTextFunctionBase<RouterOutputSource.Substitute>
     {
 
-        public string FunctionName => nameof(RouterOutputSource);
-
-        public string Description => "The name of the source that is connected to the given output of a router.";
-
-        public int ParameterCount => 2;
-
-        public DynamicTextFunctionArgumentType[] ArgumentTypes => new DynamicTextFunctionArgumentType[]
+        [DynamicTextFunctionArgument(0, "ID of the router.")]
+        public class Arg0 : DynamicTextFunctionArgumentDatabaseItem<Router>
         {
-            DynamicTextFunctionArgumentType.Integer,
-            DynamicTextFunctionArgumentType.Integer,
-        };
+            public Arg0() : base(RouterDatabase.Instance)
+            { }
+        }
 
-        public string[] ArgumentDescriptions => new string[]
+        [DynamicTextFunctionArgument(1, "Index of the output.")]
+        public class Arg1 : DynamicTextFunctionArgumentBase
         {
-            "ID of the router.",
-            "Index of the output."
-        };
-
-        public IDynamicTextFunctionSubstitute GetSubstitute(object[] arguments)
-        {
-            Router router = RouterDatabase.Instance.GetTById((int)arguments[0]);
-            return new Substitute(router, (int)arguments[1]);
+            public Arg1() : base(typeof(RouterOutput), DynamicTextFunctionArgumentType.Integer)
+            { }
+            protected override object _getObjectByKey(object key, object[] previousArgumentObjects)
+                => (previousArgumentObjects[0] as Router)?.GetOutput((int)key);
         }
 
         public class Substitute : DynamicTextFunctionSubstituteBase
         {
 
-            private Router router;
-            private RouterOutput output;
-
-            public Substitute(Router router, int outputIndex)
+            public override void Init(object[] argumentObjects)
             {
 
+                Router router = argumentObjects[0] as Router;
                 if (router == null)
                 {
                     CurrentValue = "?";
                     return;
                 }
-                this.router = router;
 
-                if (router.Outputs.Count < outputIndex)
+                RouterOutput output = router.GetOutput((int)argumentObjects[1]);
+                if (output == null)
                 {
                     CurrentValue = "?";
                     return;
                 }
-                output = router.Outputs[outputIndex-1];
 
                 output.RegisteredSourceSignalNameChanged += outputSourceSignalNameChangedHandler;
                 CurrentValue = output.RegisteredSourceSignalName;
@@ -66,9 +56,7 @@ namespace OpenSC.Model.Routers.DynamicTextFunctions
             }
 
             private void outputSourceSignalNameChangedHandler(ISignalSource inputSource, string newName, List<object> recursionChain)
-            {
-                CurrentValue = newName;
-            }
+                => CurrentValue = newName;
 
         }
 

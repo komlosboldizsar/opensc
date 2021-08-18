@@ -5,11 +5,10 @@ namespace OpenSC.Model.Variables
 
     public interface IDynamicTextFunction
     {
-        string FunctionName { get; }
+        string Name { get; }
         string Description { get; }
-        int ParameterCount { get; }
-        DynamicTextFunctionArgumentType[] ArgumentTypes { get; }
-        string[] ArgumentDescriptions { get; } 
+        int ArgumentCount { get; }
+        IDynamicTextFunctionArgument[] Arguments { get; }
         IDynamicTextFunctionSubstitute GetSubstitute(object[] arguments);
     }
 
