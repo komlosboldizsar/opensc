@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Variables
 {
-    public class DynamicTextFunctionSubstituteBase: IDynamicTextFunctionSubstitute
+    public abstract class DynamicTextFunctionSubstituteBase: IDynamicTextFunctionSubstitute
     {
 
-        private string currentValue;
+        private string currentValue = "?";
 
         public string CurrentValue
         {
@@ -24,6 +24,8 @@ namespace OpenSC.Model.Variables
         }
 
         public event DynamicTextFunctionSubstituteValueChanged ValueChanged;
+
+        public abstract void Init(object[] argumentObjects);
 
     }
 }

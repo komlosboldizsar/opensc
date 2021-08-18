@@ -21,7 +21,6 @@ namespace OpenSC.Model.Signals.BooleanTallies
         {
             base.Removed();
             Name = null;
-            NameChanged = null;
         }
 
         public override void TotallyRestored()
@@ -37,19 +36,6 @@ namespace OpenSC.Model.Signals.BooleanTallies
         {
             if (!BooleanTallyDatabase.Instance.CanIdBeUsedForItem(id, this))
                 throw new ArgumentException();
-        }
-        #endregion
-
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<BooleanTally, string> NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get => name;
-            set => setProperty(this, ref name, value, NameChanged);
         }
         #endregion
 

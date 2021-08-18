@@ -8,56 +8,34 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Streams.DynamicTextFunctions
 {
 
-    class StreamState : IDynamicTextFunction
+    [DynamicTextFunction(nameof(StreamState), "The state of a stream.")]
+    class StreamState : DynamicTextFunctionBase<StreamState.Substitute>
     {
-        public virtual string FunctionName => nameof(StreamState);
 
-        public virtual string Description => "The state of a stream.";
-
-        public virtual int ParameterCount => 1;
-
-        public virtual DynamicTextFunctionArgumentType[] ArgumentTypes => new DynamicTextFunctionArgumentType[]
+        [DynamicTextFunctionArgument(0, "ID of the stream.")]
+        public class Arg0 : DynamicTextFunctionArgumentDatabaseItem<Stream>
         {
-            DynamicTextFunctionArgumentType.Integer
-        };
-
-        public virtual string[] ArgumentDescriptions => new string[]
-        {
-            "ID of the stream."
-        };
-
-        public virtual IDynamicTextFunctionSubstitute GetSubstitute(object[] arguments)
-        {
-            Stream stream = StreamDatabase.Instance.GetTById((int)arguments[0]);
-            Substitute substitute = new Substitute(stream);
-            substitute.UpdateAfterConstruct();
-            return substitute;
+            public Arg0() : base(StreamDatabase.Instance)
+            { }
         }
 
-        protected class Substitute : DynamicTextFunctionSubstituteBase
+        public class Substitute : DynamicTextFunctionSubstituteBase
         {
 
-            private Stream stream;
-
-            public Substitute(Stream stream)
+            public override void Init(object[] argumentObjects)
             {
-                if (stream == null) {
+                Stream stream = argumentObjects[0] as Stream;
+                if (stream == null)
+                {
                     CurrentValue = "?";
                     return;
                 }
-                this.stream = stream;
                 stream.StateChanged += streamStateChangedHandler;
-            }
-
-            public void UpdateAfterConstruct()
-            {
                 CurrentValue = convertStateToString(stream.State);
             }
 
             private void streamStateChangedHandler(Stream stream, Streams.StreamState oldState, Streams.StreamState newState)
-            {
-                CurrentValue = convertStateToString(newState);
-            }
+                => CurrentValue = convertStateToString(newState);
 
             protected virtual string convertStateToString(Streams.StreamState state)
             {

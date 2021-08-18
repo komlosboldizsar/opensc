@@ -24,7 +24,7 @@ namespace OpenSC.Model.Variables
 
         public void RegisterFunction(IDynamicTextFunction function)
         {
-            string functionName = function.FunctionName;
+            string functionName = function.Name;
             if (registeredFunctions.ContainsKey(functionName))
                 throw new Exception();
             registeredFunctions[functionName] = function;

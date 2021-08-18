@@ -7,50 +7,34 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Streams.DynamicTextFunctions
 {
-    class StreamViewerCount : IDynamicTextFunction
+
+    [DynamicTextFunction(nameof(StreamViewerCount), "Total count of viewers of a stream.")]
+    class StreamViewerCount : DynamicTextFunctionBase<StreamViewerCount.Substitute>
     {
-        public string FunctionName => nameof(StreamViewerCount);
 
-        public string Description => "Total count of viewers of a stream.";
-
-        public int ParameterCount => 1;
-
-        public DynamicTextFunctionArgumentType[] ArgumentTypes => new DynamicTextFunctionArgumentType[]
+        [DynamicTextFunctionArgument(0, "ID of the stream.")]
+        public class Arg0 : DynamicTextFunctionArgumentDatabaseItem<Stream>
         {
-            DynamicTextFunctionArgumentType.Integer
-        };
-
-        public string[] ArgumentDescriptions => new string[]
-        {
-            "ID of the stream."
-        };
-
-        public IDynamicTextFunctionSubstitute GetSubstitute(object[] arguments)
-        {
-            Stream stream = StreamDatabase.Instance.GetTById((int)arguments[0]);
-            return new Substitute(stream);
+            public Arg0() : base(StreamDatabase.Instance)
+            { }
         }
 
         public class Substitute : DynamicTextFunctionSubstituteBase
         {
 
-            private Stream stream;
-
-            public Substitute(Stream stream)
+            public override void Init(object[] argumentObjects)
             {
-                if (stream == null) {
+                Stream stream = argumentObjects[0] as Stream;
+                if (stream == null)
+                {
                     CurrentValue = "?";
                     return;
                 }
-                this.stream = stream;
                 stream.ViewerCountChanged += streamViewerCountChangedHandler;
                 CurrentValue = stream.ViewerCount?.ToString() ?? "?";
             }
 
-            private void streamViewerCountChangedHandler(Stream stream, int? oldCount, int? newCount)
-            {
-                CurrentValue = newCount?.ToString() ?? "?";
-            }
+            private void streamViewerCountChangedHandler(Stream stream, int? oldCount, int? newCount) => CurrentValue = newCount?.ToString() ?? "?";
 
         }
 

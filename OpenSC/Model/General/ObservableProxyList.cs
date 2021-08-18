@@ -30,17 +30,16 @@ namespace OpenSC.Model.General
         private void OriginalList_ItemAdded(IEnumerable addedItems)
         {
             rebuildProxies();
+            ItemAdded?.Invoke(addedItems);
         }
 
         private void OriginalList_ItemRemoved(IEnumerable removedItems)
         {
             rebuildProxies();
+            ItemRemoved?.Invoke(removedItems);
         }
 
-        private void OriginalList_ItemsChanged()
-        {
-            rebuildProxies();
-        }
+        private void OriginalList_ItemsChanged() => rebuildProxies();
 
         private void rebuildProxies()
         {
@@ -54,18 +53,9 @@ namespace OpenSC.Model.General
         public event ObservableListItemRemovedDelegate ItemRemoved;
         public event ObservableListItemsChangedDelegate ItemsChanged;
 
-        public IEnumerator<TProxy> GetEnumerator()
-        {
-            return proxyList.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return proxyList.GetEnumerator();
-        }
-
+        public IEnumerator<TProxy> GetEnumerator() => proxyList.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => proxyList.GetEnumerator();
         public int Count => proxyList.Count;
-
         public TProxy this[int index] => proxyList[index];
 
     }

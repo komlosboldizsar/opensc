@@ -9,47 +9,57 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers.DynamicTextFunctions
 {
 
-    class RouterOutputInputLabel : IDynamicTextFunction
+    [DynamicTextFunction(nameof(RouterOutputInputLabel), "The label associated with the input that is connected to the given output of a router.")]
+    class RouterOutputInputLabel : DynamicTextFunctionBase<RouterOutputInputLabel.Substitute>
     {
 
-        public string FunctionName => nameof(RouterOutputInputLabel);
-
-        public string Description => "The label associated with the input that is connected to the given output of a router.";
-
-        public int ParameterCount => 3;
-
-        public DynamicTextFunctionArgumentType[] ArgumentTypes => new DynamicTextFunctionArgumentType[]
+        [DynamicTextFunctionArgument(0, "ID of the router.")]
+        public class Arg0 : DynamicTextFunctionArgumentDatabaseItem<Router>
         {
-            DynamicTextFunctionArgumentType.Integer,
-            DynamicTextFunctionArgumentType.Integer,
-            DynamicTextFunctionArgumentType.Integer
-        };
+            public Arg0() : base(RouterDatabase.Instance)
+            { }
+        }
 
-        public string[] ArgumentDescriptions => new string[]
+        [DynamicTextFunctionArgument(1, "Index of the output.")]
+        public class Arg1 : DynamicTextFunctionArgumentBase
         {
-            "ID of the router.",
-            "Index of the output.",
-            "ID of the labelset."
-        };
+            public Arg1() : base(typeof(RouterOutput), DynamicTextFunctionArgumentType.Integer)
+            { }
+            protected override object _getObjectByKey(object key, object[] previousArgumentObjects)
+                => (previousArgumentObjects[0] as Router)?.GetOutput((int)key);
+        }
 
-        public IDynamicTextFunctionSubstitute GetSubstitute(object[] arguments)
+        [DynamicTextFunctionArgument(2, "ID of the labelset.")]
+        public class Arg2 : DynamicTextFunctionArgumentDatabaseItem<Labelset>
         {
-            Router router = RouterDatabase.Instance.GetTById((int)arguments[0]);
-            Labelset labelset = LabelsetDatabase.Instance.GetTById((int)arguments[2]);
-            return new Substitute(router, (int)arguments[1], labelset);
+            public Arg2() : base(LabelsetDatabase.Instance)
+            { }
         }
 
         public class Substitute : DynamicTextFunctionSubstituteBase
         {
 
-            private Router router;
-            private RouterOutput output;
             private RouterInput currentInput;
             private Labelset labelset;
 
-            public Substitute(Router router, int outputIndex, Labelset labelset)
+            public override void Init(object[] argumentObjects)
             {
 
+                Router router = argumentObjects[0] as Router;
+                if (router == null)
+                {
+                    CurrentValue = "?";
+                    return;
+                }
+
+                RouterOutput output = router.GetOutput((int)argumentObjects[1]);
+                if (output == null)
+                {
+                    CurrentValue = "?";
+                    return;
+                }
+
+                Labelset labelset = argumentObjects[2] as Labelset;
                 if (labelset == null)
                 {
                     CurrentValue = "?";
@@ -57,24 +67,16 @@ namespace OpenSC.Model.Routers.DynamicTextFunctions
                 }
                 this.labelset = labelset;
 
-                if (router == null)
+                output.CurrentInputChanged += currentInputChangedHandler;
+                labelset.LabelTextChanged += labelsetLabelChanged;
+
+                currentInput = output.CurrentInput;
+                if (currentInput == null)
                 {
                     CurrentValue = "?";
                     return;
                 }
-                this.router = router;
-
-                output = router.GetOutput(outputIndex);
-                if (output == null)
-                    return;
-                output.CurrentInputChanged += currentInputChangedHandler;
-
-                currentInput = output.CurrentInput;
-                if (currentInput == null)
-                    return;
-
                 CurrentValue = labelset.GetText(currentInput);
-                labelset.LabelTextChanged += labelsetLabelChanged;
 
             }
 

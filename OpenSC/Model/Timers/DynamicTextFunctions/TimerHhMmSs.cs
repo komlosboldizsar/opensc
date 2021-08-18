@@ -7,68 +7,54 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Timers.DynamicTextFunctions
 {
-    public class TimerHhMmSs : IDynamicTextFunction
+
+    [DynamicTextFunction(nameof(TimerHhMmSs), "HH:MM::SS format of elapsed/remaining time of a timer.")]
+    public class TimerHhMmSs : DynamicTextFunctionBase<TimerHhMmSs.Substitute>
     {
-        public string FunctionName => nameof(TimerHhMmSs);
 
-        public string Description => "HH:MM::SS format of elapsed/remaining time of a timer.";
-
-        public int ParameterCount => 2;
-
-        public DynamicTextFunctionArgumentType[] ArgumentTypes => new DynamicTextFunctionArgumentType[]
+        [DynamicTextFunctionArgument(0, "ID of the timer.")]
+        public class Arg0 : DynamicTextFunctionArgumentDatabaseItem<Timer>
         {
-            DynamicTextFunctionArgumentType.Integer,
-            DynamicTextFunctionArgumentType.Integer
-        };
-
-        public string[] ArgumentDescriptions => new string[]
-        {
-            "ID of the timer.",
-            "Spaces around colons in formatted time string."
-        };
-
-        public IDynamicTextFunctionSubstitute GetSubstitute(object[] arguments)
-        {
-            Timer timer = TimerDatabase.Instance.GetTById((int)arguments[0]);
-            return new Substitute(timer, (int)arguments[1]);
+            public Arg0() : base(TimerDatabase.Instance)
+            { }
         }
 
-        public class Substitute: DynamicTextFunctionSubstituteBase
+        [DynamicTextFunctionArgument(1, "Spaces around colons in formatted time string.")]
+        public class Arg1 : DynamicTextFunctionArgumentInt
+        {
+            public Arg1() : base(0, 7)
+            { }
+        }
+
+        public class Substitute : DynamicTextFunctionSubstituteBase
         {
 
-            private readonly Timer timer;
-            private readonly string colonReplacementWithSpaces;
+            private Timer timer;
+            private string colonReplacementWithSpaces;
 
-            public Substitute(Timer timer, int spacesAround)
+            public override void Init(object[] argumentObjects)
             {
-
-                spacesAround = (spacesAround >= 0) ? spacesAround : 0;
-                colonReplacementWithSpaces = string.Format("{0}:{0}", new string(' ', spacesAround));
-
+                colonReplacementWithSpaces = string.Format("{0}:{0}", new string(' ', (int)argumentObjects[1]));
+                timer = argumentObjects[0] as Timer;
                 if (timer == null)
                 {
                     CurrentValue = "??:??:??".Replace(":", colonReplacementWithSpaces);
                     return;
                 }
-                this.timer = timer;
-
                 timer.SecondsChanged += timerSecondsChangedHandler;
                 updateValue();
-
             }
 
-            private void timerSecondsChangedHandler(Timer timer, int oldValue, int newValue)
-            {
-                updateValue();
-            }
+            private void timerSecondsChangedHandler(Timer timer, int oldValue, int newValue) => updateValue();
 
             private void updateValue()
             {
                 string timeString = timer.TimeSpan.ToString(@"hh\:mm\:ss");
                 CurrentValue = timeString.Replace(":", colonReplacementWithSpaces);
             }
-            
+
         }
 
     }
+
 }

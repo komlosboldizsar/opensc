@@ -30,6 +30,7 @@ namespace OpenSC.Modules.VTRs
             DynamicTextFunctionRegister.Instance.RegisterFunction(new Model.VTRs.DynamicTextFunctions.VtrElapsedTimeHhMmSs());
             DynamicTextFunctionRegister.Instance.RegisterFunction(new Model.VTRs.DynamicTextFunctions.VtrState());
             DynamicTextFunctionRegister.Instance.RegisterFunction(new Model.VTRs.DynamicTextFunctions.VtrStateTranslated());
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new Model.VTRs.DynamicTextFunctions.VtrTitle());
         }
 
         public void RegisterDatabasePersisterSerializers()

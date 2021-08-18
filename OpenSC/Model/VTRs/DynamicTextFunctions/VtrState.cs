@@ -8,56 +8,34 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.VTRs.DynamicTextFunctions
 {
 
-    class VtrState : IDynamicTextFunction
+    [DynamicTextFunction(nameof(VtrState), "The state of a VTR.")]
+    class VtrState : DynamicTextFunctionBase<VtrState.Substitute>
     {
-        public virtual string FunctionName => nameof(VtrState);
 
-        public virtual string Description => "The state of a VTR.";
-
-        public virtual int ParameterCount => 1;
-
-        public virtual DynamicTextFunctionArgumentType[] ArgumentTypes => new DynamicTextFunctionArgumentType[]
+        [DynamicTextFunctionArgument(0, "ID of the VTR.")]
+        public class Arg0 : DynamicTextFunctionArgumentDatabaseItem<Vtr>
         {
-            DynamicTextFunctionArgumentType.Integer
-        };
-
-        public virtual string[] ArgumentDescriptions => new string[]
-        {
-            "ID of the VTR."
-        };
-
-        public virtual IDynamicTextFunctionSubstitute GetSubstitute(object[] arguments)
-        {
-            Vtr vtr = VtrDatabase.Instance.GetTById((int)arguments[0]);
-            Substitute substitute = new Substitute(vtr);
-            substitute.UpdateAfterConstruct();
-            return substitute;
+            public Arg0() : base(VtrDatabase.Instance)
+            { }
         }
 
-        protected class Substitute : DynamicTextFunctionSubstituteBase
+        public class Substitute : DynamicTextFunctionSubstituteBase
         {
 
-            private readonly Vtr vtr;
-
-            public Substitute(Vtr vtr)
+            public override void Init(object[] argumentObjects)
             {
-                if (vtr == null) {
+                Vtr vtr = argumentObjects[0] as Vtr;
+                if (vtr == null)
+                {
                     CurrentValue = "?";
                     return;
                 }
-                this.vtr = vtr;
                 vtr.StateChanged += vtrStateChangedHandler;
-            }
-
-            public void UpdateAfterConstruct()
-            {
                 CurrentValue = convertStateToString(vtr.State);
             }
 
             private void vtrStateChangedHandler(Vtr vtr, VTRs.VtrState oldState, VTRs.VtrState newState)
-            {
-                CurrentValue = convertStateToString(newState);
-            }
+                => CurrentValue = convertStateToString(newState);
 
             protected virtual string convertStateToString(VTRs.VtrState state)
             {

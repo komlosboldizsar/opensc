@@ -23,7 +23,6 @@ namespace OpenSC.Model.Routers.CrosspointStores
         public override void Removed()
         {
             base.Removed();
-            NameChanged = null;
             StoredInputChanged = null;
             StoredOutputChanged = null;
             ClearInputAfterTakeChanged = null;
@@ -44,25 +43,6 @@ namespace OpenSC.Model.Routers.CrosspointStores
         protected override void validateIdForDatabase(int id)
         {
             if (!CrosspointStoreDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<CrosspointStore, string> NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get => name;
-            set => setProperty(this, ref name, value, NameChanged, validator: ValidateName);
-        }
-
-        public void ValidateName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
         }
         #endregion

@@ -7,60 +7,45 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.VTRs.DynamicTextFunctions
 {
-    class VtrRemainingTimeHhMmSs : IDynamicTextFunction
+
+    [DynamicTextFunction(nameof(VtrRemainingTimeHhMmSs), "HH:MM:SS format of  remaining time of a playout on a VTR.")]
+    class VtrRemainingTimeHhMmSs : DynamicTextFunctionBase<VtrRemainingTimeHhMmSs.Substitute>
     {
-        public string FunctionName => nameof(VtrRemainingTimeHhMmSs);
 
-        public string Description => "HH:MM:SS format of remaining time of a playout on a VTR.";
-
-        public int ParameterCount => 2;
-
-        public DynamicTextFunctionArgumentType[] ArgumentTypes => new DynamicTextFunctionArgumentType[]
+        [DynamicTextFunctionArgument(0, "ID of the VTR.")]
+        public class Arg0 : DynamicTextFunctionArgumentDatabaseItem<Vtr>
         {
-            DynamicTextFunctionArgumentType.Integer,
-            DynamicTextFunctionArgumentType.Integer
-        };
+            public Arg0() : base(VtrDatabase.Instance)
+            { }
+        }
 
-        public string[] ArgumentDescriptions => new string[]
+        [DynamicTextFunctionArgument(1, "Spaces around colons in formatted time string.")]
+        public class Arg1 : DynamicTextFunctionArgumentInt
         {
-            "ID of the VTR.",
-            "Spaces around colons in formatted time string."
-        };
-
-        public IDynamicTextFunctionSubstitute GetSubstitute(object[] arguments)
-        {
-            Vtr vtr = VtrDatabase.Instance.GetTById((int)arguments[0]);
-            return new Substitute(vtr, (int)arguments[1]);
+            public Arg1() : base(0, 7)
+            { }
         }
 
         public class Substitute : DynamicTextFunctionSubstituteBase
         {
 
-            private readonly Vtr vtr;
-            private readonly string colonReplacementWithSpaces;
+            private Vtr vtr;
+            private string colonReplacementWithSpaces;
 
-            public Substitute(Vtr vtr, int spacesAround)
+            public override void Init(object[] argumentObjects)
             {
-
-                spacesAround = (spacesAround >= 0) ? spacesAround : 0;
-                colonReplacementWithSpaces = string.Format("{0}:{0}", new string(' ', spacesAround));
-
+                colonReplacementWithSpaces = string.Format("{0}:{0}", new string(' ', (int)argumentObjects[1]));
+                vtr = argumentObjects[0] as Vtr;
                 if (vtr == null)
                 {
                     CurrentValue = "??:??:??".Replace(":", colonReplacementWithSpaces);
                     return;
                 }
-                this.vtr = vtr;
-
                 vtr.SecondsRemainingChanged += vtrSecondsRemainingChangedHandler;
                 updateValue();
-
             }
 
-            private void vtrSecondsRemainingChangedHandler(Vtr vtr, int oldValue, int newValue)
-            {
-                updateValue();
-            }
+            private void vtrSecondsRemainingChangedHandler(Vtr vtr, int oldValue, int newValue) => updateValue();
 
             private void updateValue()
             {

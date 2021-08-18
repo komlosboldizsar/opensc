@@ -352,16 +352,13 @@ namespace OpenSC.Model.Variables
 
         private object[] convertArguments(IDynamicTextFunction forFunction)
         {
-
-            if (forFunction.ParameterCount != collectedArguments.Count)
+            if (forFunction.ArgumentCount != collectedArguments.Count)
                 throw new ArgumentCountMismatchException();
-
-            List<object> convertedArguments = new List<object>();
-            for (int i = 0; i < forFunction.ParameterCount; i++)
-                convertedArguments.Add(convertArgument(collectedArguments[i], forFunction.ArgumentTypes[i]));
-
-            return convertedArguments.ToArray();
-
+            object[] convertedArguments = new object[forFunction.ArgumentCount];
+            int i = 0;
+            foreach (IDynamicTextFunctionArgument argument in forFunction.Arguments)
+                convertedArguments[i] = convertArgument(collectedArguments[i], argument.KeyType);
+            return convertedArguments;
         }
 
         private object convertArgument(IArgument collectedArgument, DynamicTextFunctionArgumentType requiredType)
@@ -533,9 +530,13 @@ namespace OpenSC.Model.Variables
                 CurrentValue = text;
             }
 
+            public void Init(object[] argumentObjects)
+            { }
+
             public string CurrentValue { get; private set; }
 
-            public event DynamicTextFunctionSubstituteValueChanged ValueChanged {
+            public event DynamicTextFunctionSubstituteValueChanged ValueChanged
+            {
                 add { }
                 remove { }
             }

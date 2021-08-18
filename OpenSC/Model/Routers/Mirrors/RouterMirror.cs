@@ -23,7 +23,6 @@ namespace OpenSC.Model.Routers.Mirrors
         public override void Removed()
         {
             base.Removed();
-            NameChanged = null;
             ClearInputAssociations();
             ClearOutputAssociations();
         }
@@ -63,29 +62,6 @@ namespace OpenSC.Model.Routers.Mirrors
         protected override void validateIdForDatabase(int id)
         {
             if (!RouterMirrorDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<RouterMirror, string> NameChanged;
-
-        [PersistAs("name")]
-        private string name;
-
-        public string Name
-        {
-            get { return name; }
-            set
-            {
-                ValidateName(value);
-                setProperty(this, ref name, value, NameChanged);
-            }
-        }
-
-        public void ValidateName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException();
         }
         #endregion

@@ -9,55 +9,33 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Mixers.DynamicTextFunctions
 {
 
-    class MixerPreviewInputName : IDynamicTextFunction
+    [DynamicTextFunction(nameof(MixerPreviewInputName), "The name of the input that is selected as preview on the given mixer.")]
+    class MixerPreviewInputName : DynamicTextFunctionBase<MixerPreviewInputName.Substitute>
     {
 
-        public string FunctionName => nameof(MixerPreviewInputName);
-
-        public string Description => "The name of the input that is selected as preview on the given mixer.";
-
-        public int ParameterCount => 1;
-
-        public DynamicTextFunctionArgumentType[] ArgumentTypes => new DynamicTextFunctionArgumentType[]
+        [DynamicTextFunctionArgument(0, "ID of the mixer.")]
+        public class Arg0 : DynamicTextFunctionArgumentDatabaseItem<Router>
         {
-            DynamicTextFunctionArgumentType.Integer
-        };
-
-        public string[] ArgumentDescriptions => new string[]
-        {
-            "ID of the mixer."
-        };
-
-        public IDynamicTextFunctionSubstitute GetSubstitute(object[] arguments)
-        {
-            Mixer mixer = MixerDatabase.Instance.GetTById((int)arguments[0]);
-            return new Substitute(mixer);
+            public Arg0() : base(RouterDatabase.Instance)
+            { }
         }
 
         public class Substitute : DynamicTextFunctionSubstituteBase
         {
 
-            private Mixer mixer;
-
-            public Substitute(Mixer mixer)
+            public override void Init(object[] argumentObjects)
             {
-
+                Mixer mixer = argumentObjects[0] as Mixer;
                 if (mixer == null)
                 {
                     CurrentValue = "?";
                     return;
                 }
-                this.mixer = mixer;
-
                 mixer.OnPreviewInputNameChanged += onPreviewInputNameChangedHandler;
                 CurrentValue = mixer.OnPreviewInputName;
-
             }
 
-            private void onPreviewInputNameChangedHandler(Mixer mixer, string newName)
-            {
-                CurrentValue = newName;
-            }
+            private void onPreviewInputNameChangedHandler(Mixer mixer, string newName) => CurrentValue = newName;
 
         }
 
