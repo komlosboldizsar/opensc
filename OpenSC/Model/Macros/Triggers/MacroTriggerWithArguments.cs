@@ -20,13 +20,12 @@ namespace OpenSC.Model.Macros
         {
             this.Trigger = trigger;
             this.argumentObjects = argumentValues;
-        }
-
-        public void Restored()
-        {
-            restoreArgumentObjects();
             Activate();
         }
+
+        public void RestoreCustomRelations() => restoreArgumentObjects();
+
+        public void TotallyRestored() => Activate();
 
         public IMacroTrigger Trigger { get; private set; }
 

@@ -29,15 +29,24 @@ namespace OpenSC.Model.Macros
         public override void RestoredOwnFields()
         {
             base.RestoredOwnFields();
-            foreach (MacroCommandWithArguments command in commands)
-            {
-                command.Restored();
-            }
             foreach (MacroTriggerWithArguments trigger in triggers)
-            {
-                trigger.Restored();
                 trigger.Macro = this;
-            }
+        }
+
+        public override void RestoreCustomRelations()
+        {
+            base.RestoreCustomRelations();
+            foreach (MacroCommandWithArguments command in commands)
+                command.RestoreCustomRelations();
+            foreach (MacroTriggerWithArguments trigger in triggers)
+                trigger.RestoreCustomRelations();
+        }
+
+        public override void TotallyRestored()
+        {
+            base.TotallyRestored();
+            foreach (MacroTriggerWithArguments trigger in triggers)
+                trigger.RestoreCustomRelations();
         }
 
         #region ID validation
