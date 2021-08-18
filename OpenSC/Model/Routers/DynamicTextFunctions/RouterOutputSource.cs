@@ -43,7 +43,7 @@ namespace OpenSC.Model.Routers.DynamicTextFunctions
                     return;
                 }
 
-                RouterOutput output = router.GetOutput((int)argumentObjects[1]);
+                RouterOutput output = argumentObjects[1] as RouterOutput;
                 if (output == null)
                 {
                     CurrentValue = "?";
