@@ -31,6 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Bespoke.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bespoke.Common.1.0.0\lib\net45\Bespoke.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Bespoke.Osc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bespoke.Osc.1.0.0\lib\net45\Bespoke.Osc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,14 +52,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bespoke.Common.Osc\Bespoke.Common.Osc.csproj">
-      <Project>{35d30dcb-74d1-40a2-9d22-40e1394ffc09}</Project>
-      <Name>Bespoke.Common.Osc</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Bespoke.Common\Bespoke.Common.csproj">
-      <Project>{f8a1578f-bebe-4bbe-ab11-a0496bdb746a}</Project>
-      <Name>Bespoke.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
       <Project>{16a6beec-548d-4a77-9fe6-8df8d5333219}</Project>
       <Name>opensc-core-model</Name>
@@ -62,6 +60,9 @@
       <Project>{9723e8aa-94af-473f-b495-b88013df5157}</Project>
       <Name>opensc-vtrs-model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

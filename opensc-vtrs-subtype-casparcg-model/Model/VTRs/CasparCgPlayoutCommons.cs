@@ -1,4 +1,4 @@
-﻿using Bespoke.Common.Osc;
+﻿using Bespoke.Osc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +23,7 @@ namespace OpenSC.Model.VTRs
 
         #region Common OSC listener
         private const int OSC_PORT = 5253;
-        private OscServer oscServer = new OscServer(TransportType.Udp, IPAddress.Any, OSC_PORT);
+        private OscServer oscServer = new OscServer(Bespoke.Common.Net.TransportType.Udp, IPAddress.Any, OSC_PORT);
 
         private void initOscServer()
         {

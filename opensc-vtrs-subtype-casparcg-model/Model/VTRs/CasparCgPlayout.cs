@@ -1,4 +1,4 @@
-﻿using Bespoke.Common.Osc;
+﻿using Bespoke.Osc;
 using OpenSC.Logger;
 using OpenSC.Model.Persistence;
 using System;

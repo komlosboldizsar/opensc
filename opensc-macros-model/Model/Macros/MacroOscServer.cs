@@ -1,4 +1,4 @@
-﻿using Bespoke.Common.Osc;
+﻿using Bespoke.Osc;
 using OpenSC.Logger;
 using OpenSC.Model.Settings;
 using System;
@@ -42,7 +42,7 @@ namespace OpenSC.Model.Macros
         {
             if (oscServer == null)
             {
-                oscServer = new OscServer(TransportType.Udp, IPAddress.Any, PortSetting.Value);
+                oscServer = new OscServer(Bespoke.Common.Net.TransportType.Udp, IPAddress.Any, PortSetting.Value);
                 oscServer.Start();
                 oscServer.BundleReceived += oscBundleReceived;
                 PortSetting.ValueChanged += PortSetting_ValueChanged;
