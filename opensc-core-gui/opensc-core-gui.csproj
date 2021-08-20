@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E30563FD-DE1F-4AB5-86DD-72165B84EB85}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OpenSC</RootNamespace>
+    <AssemblyName>opensc-gui-core</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GUI\ChildWindowBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ChildWindowBase.Designer.cs">
+      <DependentUpon>ChildWindowBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ChildWindowWithTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ChildWindowWithTable.Designer.cs">
+      <DependentUpon>ChildWindowWithTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ChildWindowWithTitle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ChildWindowWithTitle.Designer.cs">
+      <DependentUpon>ChildWindowWithTitle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ChildWindowWithTitleTwoParts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ChildWindowWithTitleTwoParts.Designer.cs">
+      <DependentUpon>ChildWindowWithTitleTwoParts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\GeneralComponents\DropDowns\ComboBoxAdapter.cs" />
+    <Compile Include="GUI\GeneralComponents\DropDowns\ComboBoxAdapterFactory.cs" />
+    <Compile Include="GUI\GeneralComponents\DropDowns\ComboBoxAdapterHelpers.cs" />
+    <Compile Include="GUI\GeneralComponents\DropDowns\EnumComboBoxAdapter.cs" />
+    <Compile Include="GUI\GeneralComponents\DropDowns\EnumComboBoxAdapterFactory.cs" />
+    <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapter.cs" />
+    <Compile Include="GUI\GeneralComponents\DropDowns\IComboBoxAdapterFactory.cs" />
+    <Compile Include="GUI\GeneralComponents\GrowLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\GeneralComponents\Menus\CustomMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\GeneralComponents\Menus\CustomToolStripMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\GeneralComponents\RichTextBoxWithBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\GeneralComponents\RichTextBoxWithBar.Designer.cs">
+      <DependentUpon>RichTextBoxWithBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\GeneralComponents\SplitButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridViewColumnDescriptor.cs" />
+    <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridViewColumnDescriptorBuilder.cs" />
+    <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridViewComboBoxItem.cs" />
+    <Compile Include="GUI\GeneralComponents\Tables\CustomDataGridViewRow.cs" />
+    <Compile Include="GUI\GeneralComponents\Tables\DataGridViewColumnType.cs" />
+    <Compile Include="GUI\GeneralComponents\Tables\DataGridViewDisableButtonCell.cs" />
+    <Compile Include="GUI\GeneralComponents\Tables\DataGridViewImageButtonCell.cs" />
+    <Compile Include="GUI\GeneralComponents\Tables\DataGridViewSmallIconCell.cs" />
+    <Compile Include="GUI\Helpers\Converters\EnumConverter.cs" />
+    <Compile Include="GUI\Helpers\Converters\EnumToBitmapConverter.cs" />
+    <Compile Include="GUI\Helpers\Converters\EnumToStringConverter.cs" />
+    <Compile Include="GUI\Helpers\DraggableControls.cs" />
+    <Compile Include="GUI\Helpers\ResizableControls.cs" />
+    <Compile Include="GUI\IModelEditorForm.cs" />
+    <Compile Include="GUI\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Menus\MenuItem.cs" />
+    <Compile Include="GUI\Menus\MenuManager.cs" />
+    <Compile Include="GUI\Menus\SeparatorMenuItem.cs" />
+    <Compile Include="GUI\ModelEditorFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ModelEditorFormBase.Designer.cs">
+      <DependentUpon>ModelEditorFormBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ModelEditorFormTypeRegister.cs" />
+    <Compile Include="GUI\Settings\IntSettingEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Settings\IntSettingEditor.Designer.cs">
+      <DependentUpon>IntSettingEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Settings\ISettingEditorControl.cs" />
+    <Compile Include="GUI\Settings\SettingEditorBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Settings\SettingEditorBase.Designer.cs">
+      <DependentUpon>SettingEditorBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Settings\SettingEditorControlTypeAttribute.cs" />
+    <Compile Include="GUI\Settings\SettingEditorTypeRegister.cs" />
+    <Compile Include="GUI\Settings\SettingsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Settings\SettingsWindow.Designer.cs">
+      <DependentUpon>SettingsWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Settings\StringSettingEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Settings\StringSettingEditor.Designer.cs">
+      <DependentUpon>StringSettingEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SplashScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SplashScreen.Designer.cs">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\WorkspaceManager\IPersistableWindow.cs" />
+    <Compile Include="GUI\WorkspaceManager\ValueConverters\BoolConverter.cs" />
+    <Compile Include="GUI\WorkspaceManager\ValueConverters\ColorConverter.cs" />
+    <Compile Include="GUI\WorkspaceManager\ValueConverters\ConverterTypeAttribute.cs" />
+    <Compile Include="GUI\WorkspaceManager\ValueConverters\IntConverter.cs" />
+    <Compile Include="GUI\WorkspaceManager\ValueConverters\IValueConverter.cs" />
+    <Compile Include="GUI\WorkspaceManager\ValueConverters\ValueConverter.cs" />
+    <Compile Include="GUI\WorkspaceManager\WindowManager.cs" />
+    <Compile Include="GUI\WorkspaceManager\WindowPersister.cs" />
+    <Compile Include="GUI\WorkspaceManager\WindowTypeNameAttribute.cs" />
+    <Compile Include="GUI\WorkspaceManager\WindowTypeRegister.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\GeneralIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralIcons.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GUI\ChildWindowBase.resx">
+      <DependentUpon>ChildWindowBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ChildWindowWithTable.resx">
+      <DependentUpon>ChildWindowWithTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ChildWindowWithTitle.resx">
+      <DependentUpon>ChildWindowWithTitle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ChildWindowWithTitleTwoParts.resx">
+      <DependentUpon>ChildWindowWithTitleTwoParts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\GeneralComponents\RichTextBoxWithBar.resx">
+      <DependentUpon>RichTextBoxWithBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ModelEditorFormBase.resx">
+      <DependentUpon>ModelEditorFormBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Settings\IntSettingEditor.resx">
+      <DependentUpon>IntSettingEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Settings\SettingEditorBase.resx">
+      <DependentUpon>SettingEditorBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Settings\SettingsWindow.resx">
+      <DependentUpon>SettingsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Settings\StringSettingEditor.resx">
+      <DependentUpon>StringSettingEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SplashScreen.resx">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\GeneralIcons.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralIcons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\general\16_reset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\general\16_tick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\gui\32_tile_horizontally.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\gui\32_tile_vertically.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\solid\solid_black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\solid\solid_blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\solid\solid_green.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\solid\solid_orange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\solid\solid_purple.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\solid\solid_red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\solid\solid_yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\empty_transparent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
+      <Project>{16a6beec-548d-4a77-9fe6-8df8d5333219}</Project>
+      <Name>opensc-core-model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -209,7 +209,7 @@ namespace OpenSC.GUI.Timers
 
         private static readonly Bitmap STATE_IMAGE_RUNNING = Properties.Resources._16_timer_running;
         private static readonly Bitmap STATE_IMAGE_STOPPED = Properties.Resources._16_timer_stopped;
-        private static readonly Bitmap STATE_IMAGE_NOTSHOWN = Properties.Resources.empty_transparent;
+        private static readonly Bitmap STATE_IMAGE_NOTSHOWN = Properties.GeneralIcons.empty_transparent;
 
         private void addTimerButton_Click(object sender, EventArgs e)
         {

@@ -19,7 +19,7 @@ namespace OpenSC.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -57,16 +57,6 @@ namespace OpenSC.Properties {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap _16_reset {
-            get {
-                object obj = ResourceManager.GetObject("_16_reset", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -116,16 +106,6 @@ namespace OpenSC.Properties {
         internal static System.Drawing.Bitmap _16_stream_unknown {
             get {
                 object obj = ResourceManager.GetObject("_16_stream_unknown", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap _16_tick {
-            get {
-                object obj = ResourceManager.GetObject("_16_tick", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -256,106 +236,6 @@ namespace OpenSC.Properties {
         internal static System.Drawing.Bitmap _16_vtr_stopped {
             get {
                 object obj = ResourceManager.GetObject("_16_vtr_stopped", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap _32_tile_horizontally {
-            get {
-                object obj = ResourceManager.GetObject("32_tile_horizontally", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap _32_tile_vertically {
-            get {
-                object obj = ResourceManager.GetObject("32_tile_vertically", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap empty_transparent {
-            get {
-                object obj = ResourceManager.GetObject("empty_transparent", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap solid_black {
-            get {
-                object obj = ResourceManager.GetObject("solid_black", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap solid_blue {
-            get {
-                object obj = ResourceManager.GetObject("solid_blue", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap solid_green {
-            get {
-                object obj = ResourceManager.GetObject("solid_green", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap solid_orange {
-            get {
-                object obj = ResourceManager.GetObject("solid_orange", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap solid_purple {
-            get {
-                object obj = ResourceManager.GetObject("solid_purple", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap solid_red {
-            get {
-                object obj = ResourceManager.GetObject("solid_red", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap solid_yellow {
-            get {
-                object obj = ResourceManager.GetObject("solid_yellow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
