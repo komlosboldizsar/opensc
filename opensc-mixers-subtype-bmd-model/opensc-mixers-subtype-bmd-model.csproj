@@ -45,13 +45,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BMD.Switcher\BMD.Switcher.csproj">
-      <Project>{a9cee499-cf5c-419a-8cf0-66f20596b820}</Project>
-      <Name>BMD.Switcher</Name>
-    </ProjectReference>
     <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
       <Project>{16a6beec-548d-4a77-9fe6-8df8d5333219}</Project>
       <Name>opensc-core-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-library-bmdswitcher\opensc-library-bmdswitcher.csproj">
+      <Project>{a9cee499-cf5c-419a-8cf0-66f20596b820}</Project>
+      <Name>opensc-library-bmdswitcher</Name>
     </ProjectReference>
     <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj">
       <Project>{7c649008-6a05-4c3d-ac08-b5a85ab72e09}</Project>

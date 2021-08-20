@@ -47,7 +47,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BMD.Videohub\BMD.Videohub.csproj">
+    <ProjectReference Include="..\opensc-library-bmdvideohub\opensc-library-bmdvideohub.csproj">
       <Project>{eadc56a4-b18d-4742-9855-c5142e90aa19}</Project>
       <Name>BMD.Videohub</Name>
     </ProjectReference>

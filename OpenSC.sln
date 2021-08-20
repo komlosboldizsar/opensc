@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenSC", "OpenSC\OpenSC.csproj", "{E871723E-7268-47CE-AE58-75A18AC93F63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMD.Videohub", "BMD.Videohub\BMD.Videohub.csproj", "{EADC56A4-B18D-4742-9855-C5142E90AA19}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-library-bmdvideohub", "opensc-library-bmdvideohub\opensc-library-bmdvideohub.csproj", "{EADC56A4-B18D-4742-9855-C5142E90AA19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMD.Switcher", "BMD.Switcher\BMD.Switcher.csproj", "{A9CEE499-CF5C-419A-8CF0-66F20596B820}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-library-bmdswitcher", "opensc-library-bmdswitcher\opensc-library-bmdswitcher.csproj", "{A9CEE499-CF5C-419A-8CF0-66F20596B820}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadHelpers", "ThreadHelpers\ThreadHelpers.csproj", "{398DE4A8-DFBF-4130-83AC-EF37DA249587}"
 EndProject
