@@ -46,354 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GUI\Macros\TriggerArgumentControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GUI\Macros\TriggerArgumentControl.Designer.cs">
-      <DependentUpon>TriggerArgumentControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Macros\CommandArgumentControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GUI\Macros\CommandArgumentControl.Designer.cs">
-      <DependentUpon>CommandArgumentControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroPanelForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroPanelForm.Designer.cs">
-      <DependentUpon>MacroPanelForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroPanelEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroPanelEditorForm.Designer.cs">
-      <DependentUpon>MacroPanelEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroPanelList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroPanelList.Designer.cs">
-      <DependentUpon>MacroPanelList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroList.Designer.cs">
-      <DependentUpon>MacroList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroEditorForm.Designer.cs">
-      <DependentUpon>MacroEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroPanelElementButton.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroPanelElementButton.Designer.cs">
-      <DependentUpon>MacroPanelElementButton.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Mixers\BmdMixerEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Mixers\BmdMixerEditorForm.Designer.cs">
-      <DependentUpon>BmdMixerEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Mixers\MixerEditorFormTypeRegister.cs" />
-    <Compile Include="GUI\Mixers\MixerList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Mixers\MixerList.Designer.cs">
-      <DependentUpon>MixerList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Mixers\MixerEditorFormBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Mixers\MixerEditorFormBase.Designer.cs">
-      <DependentUpon>MixerEditorFormBase.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanEditorForm.Designer.cs">
-      <DependentUpon>CrosspointBooleanEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanList.Designer.cs">
-      <DependentUpon>CrosspointBooleanList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\CrosspointStores\CrosspointStoreEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\CrosspointStores\CrosspointStoreEditorForm.Designer.cs">
-      <DependentUpon>CrosspointStoreEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\CrosspointStores\CrosspointStoreList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\CrosspointStores\CrosspointStoreList.Designer.cs">
-      <DependentUpon>CrosspointStoreList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\Mirrors\RouterMirrorList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\Mirrors\RouterMirrorList.Designer.cs">
-      <DependentUpon>RouterMirrorList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\Mirrors\RouterMirrorEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\Mirrors\RouterMirrorEditorForm.Designer.cs">
-      <DependentUpon>RouterMirrorEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\VirtualLeitchRouterEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\VirtualLeitchRouterEditorForm.Designer.cs">
-      <DependentUpon>VirtualLeitchRouterEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\LeitchRouterEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\LeitchRouterEditorForm.Designer.cs">
-      <DependentUpon>LeitchRouterEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterControlTableForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterControlTableForm.Designer.cs">
-      <DependentUpon>RouterControlTableForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterControlForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterControlForm.Designer.cs">
-      <DependentUpon>RouterControlForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\LabelsetList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\LabelsetList.Designer.cs">
-      <DependentUpon>LabelsetList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\LabelsetEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\LabelsetEditorForm.Designer.cs">
-      <DependentUpon>LabelsetEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterOutputControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterOutputControl.Designer.cs">
-      <DependentUpon>RouterOutputControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterInputControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterInputControl.Designer.cs">
-      <DependentUpon>RouterInputControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterInputOutputControlBase.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterInputOutputControlBase.Designer.cs">
-      <DependentUpon>RouterInputOutputControlBase.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\BmdVideohubEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\BmdVideohubEditorForm.Designer.cs">
-      <DependentUpon>BmdVideohubEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\VirtualRouterEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\VirtualRouterEditorForm.Designer.cs">
-      <DependentUpon>VirtualRouterEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterEditorFormTypeRegister.cs" />
-    <Compile Include="GUI\Routers\RouterList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterList.Designer.cs">
-      <DependentUpon>RouterList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterEditorFormBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Routers\RouterEditorFormBase.Designer.cs">
-      <DependentUpon>RouterEditorFormBase.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SerialPorts\SerialPortList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SerialPorts\SerialPortList.Designer.cs">
-      <DependentUpon>SerialPortList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\SerialPorts\SerialPortEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\SerialPorts\SerialPortEditorForm.Designer.cs">
-      <DependentUpon>SerialPortEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Signals\BooleanTally\BooleanTallyEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Signals\BooleanTally\BooleanTallyEditorForm.Designer.cs">
-      <DependentUpon>BooleanTallyEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Signals\BooleanTally\BooleanTallyList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Signals\BooleanTally\BooleanTallyList.Designer.cs">
-      <DependentUpon>BooleanTallyList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Signals\ExternalSignalEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Signals\ExternalSignalEditorForm.Designer.cs">
-      <DependentUpon>ExternalSignalEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Signals\ExternalSignalCategoryList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Signals\ExternalSignalCategoryList.Designer.cs">
-      <DependentUpon>ExternalSignalCategoryList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Signals\Helpers\SignalTallyHelpers.cs" />
-    <Compile Include="GUI\Signals\SignalList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Signals\SignalList.Designer.cs">
-      <DependentUpon>SignalList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Signals\ExternalSignalList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Signals\ExternalSignalList.Designer.cs">
-      <DependentUpon>ExternalSignalList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Signals\ExternalSignalCategoryEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Signals\ExternalSignalCategoryEditorForm.Designer.cs">
-      <DependentUpon>ExternalSignalCategoryEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Signals\TallyCopy\TallyCopyEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Signals\TallyCopy\TallyCopyEditorForm.Designer.cs">
-      <DependentUpon>TallyCopyEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Signals\TallyCopy\TallyCopyList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Signals\TallyCopy\TallyCopyList.Designer.cs">
-      <DependentUpon>TallyCopyList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Streams\StreamEditorFormBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Streams\StreamEditorFormBase.Designer.cs">
-      <DependentUpon>StreamEditorFormBase.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Streams\StreamList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Streams\StreamList.Designer.cs">
-      <DependentUpon>StreamList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Streams\StreamEditorFormTypeRegister.cs" />
-    <Compile Include="GUI\Streams\YoutubeStreamEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Streams\YoutubeStreamEditorForm.Designer.cs">
-      <DependentUpon>YoutubeStreamEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Timers\TimerEditWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Timers\TimerEditWindow.Designer.cs">
-      <DependentUpon>TimerEditWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Timers\TimerList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Timers\TimerList.Designer.cs">
-      <DependentUpon>TimerList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\UMDs\McCurdyUmd1TEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\UMDs\McCurdyUmd1TEditorForm.Designer.cs">
-      <DependentUpon>McCurdyUmd1TEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\UMDs\Tsl31UmdEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\UMDs\Tsl31UmdEditorForm.Designer.cs">
-      <DependentUpon>Tsl31UmdEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\UMDs\McCurdyUmd1EditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\UMDs\McCurdyUmd1EditorForm.Designer.cs">
-      <DependentUpon>McCurdyUmd1EditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\UMDs\UmdEditorFormBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\UMDs\UmdEditorFormBase.Designer.cs">
-      <DependentUpon>UmdEditorFormBase.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\UMDs\UmdEditorFormTypeRegister.cs" />
-    <Compile Include="GUI\UMDs\UmdList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\UMDs\UmdList.Designer.cs">
-      <DependentUpon>UmdList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Variables\BooleanList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Variables\BooleanList.Designer.cs">
-      <DependentUpon>BooleanList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Variables\DynamicTextList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Variables\DynamicTextList.Designer.cs">
-      <DependentUpon>DynamicTextList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Variables\DynamicTextEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Variables\DynamicTextEditorForm.Designer.cs">
-      <DependentUpon>DynamicTextEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\VTRs\CasparCgPlayoutEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\VTRs\CasparCgPlayoutEditorForm.Designer.cs">
-      <DependentUpon>CasparCgPlayoutEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\VTRs\VtrEditorFormBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\VTRs\VtrEditorFormBase.Designer.cs">
-      <DependentUpon>VtrEditorFormBase.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\VTRs\VtrEditorFormTypeRegister.cs" />
-    <Compile Include="GUI\VTRs\VtrList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\VTRs\VtrList.Designer.cs">
-      <DependentUpon>VtrList.cs</DependentUpon>
-    </Compile>
     <Compile Include="Modules\MacrosManager.cs" />
     <Compile Include="Modules\SerialPortsManager.cs" />
     <Compile Include="Modules\SignalsManager.cs" />
@@ -408,178 +60,7 @@
     <Compile Include="Modules\UMDs\UmdsModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GUI\Timers\TimerWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Timers\TimerWindow.Designer.cs">
-      <DependentUpon>TimerWindow.cs</DependentUpon>
-    </Compile>
     <Compile Include="StartupController.cs" />
-    <EmbeddedResource Include="GUI\Macros\TriggerArgumentControl.resx">
-      <DependentUpon>TriggerArgumentControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Macros\CommandArgumentControl.resx">
-      <DependentUpon>CommandArgumentControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Macros\MacroPanelForm.resx">
-      <DependentUpon>MacroPanelForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Macros\MacroPanelEditorForm.resx">
-      <DependentUpon>MacroPanelEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Macros\MacroPanelList.resx">
-      <DependentUpon>MacroPanelList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Macros\MacroList.resx">
-      <DependentUpon>MacroList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Macros\MacroEditorForm.resx">
-      <DependentUpon>MacroEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Macros\MacroPanelElementButton.resx">
-      <DependentUpon>MacroPanelElementButton.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Mixers\BmdMixerEditorForm.resx">
-      <DependentUpon>BmdMixerEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Mixers\MixerList.resx">
-      <DependentUpon>MixerList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Mixers\MixerEditorFormBase.resx">
-      <DependentUpon>MixerEditorFormBase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanEditorForm.resx">
-      <DependentUpon>CrosspointBooleanEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanList.resx">
-      <DependentUpon>CrosspointBooleanList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\Mirrors\RouterMirrorList.resx">
-      <DependentUpon>RouterMirrorList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\Mirrors\RouterMirrorEditorForm.resx">
-      <DependentUpon>RouterMirrorEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\VirtualLeitchRouterEditorForm.resx">
-      <DependentUpon>VirtualLeitchRouterEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\LeitchRouterEditorForm.resx">
-      <DependentUpon>LeitchRouterEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\RouterControlTableForm.resx">
-      <DependentUpon>RouterControlTableForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\RouterControlForm.resx">
-      <DependentUpon>RouterControlForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\LabelsetList.resx">
-      <DependentUpon>LabelsetList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\LabelsetEditorForm.resx">
-      <DependentUpon>LabelsetEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\RouterOutputControl.resx">
-      <DependentUpon>RouterOutputControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\RouterInputControl.resx">
-      <DependentUpon>RouterInputControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\RouterInputOutputControlBase.resx">
-      <DependentUpon>RouterInputOutputControlBase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\BmdVideohubEditorForm.resx">
-      <DependentUpon>BmdVideohubEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\VirtualRouterEditorForm.resx">
-      <DependentUpon>VirtualRouterEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\RouterList.resx">
-      <DependentUpon>RouterList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\CrosspointStores\CrosspointStoreEditorForm.resx">
-      <DependentUpon>CrosspointStoreEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\CrosspointStores\CrosspointStoreList.resx">
-      <DependentUpon>CrosspointStoreList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Routers\RouterEditorFormBase.resx">
-      <DependentUpon>RouterEditorFormBase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\SerialPorts\SerialPortList.resx">
-      <DependentUpon>SerialPortList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\SerialPorts\SerialPortEditorForm.resx">
-      <DependentUpon>SerialPortEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Signals\BooleanTally\BooleanTallyEditorForm.resx">
-      <DependentUpon>BooleanTallyEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Signals\BooleanTally\BooleanTallyList.resx">
-      <DependentUpon>BooleanTallyList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Signals\ExternalSignalEditorForm.resx">
-      <DependentUpon>ExternalSignalEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Signals\ExternalSignalCategoryList.resx">
-      <DependentUpon>ExternalSignalCategoryList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Signals\SignalList.resx">
-      <DependentUpon>SignalList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Signals\ExternalSignalList.resx">
-      <DependentUpon>ExternalSignalList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Signals\ExternalSignalCategoryEditorForm.resx">
-      <DependentUpon>ExternalSignalCategoryEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Signals\TallyCopy\TallyCopyEditorForm.resx">
-      <DependentUpon>TallyCopyEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Signals\TallyCopy\TallyCopyList.resx">
-      <DependentUpon>TallyCopyList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Streams\StreamEditorFormBase.resx">
-      <DependentUpon>StreamEditorFormBase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Streams\StreamList.resx">
-      <DependentUpon>StreamList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Streams\YoutubeStreamEditorForm.resx">
-      <DependentUpon>YoutubeStreamEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Timers\TimerEditWindow.resx">
-      <DependentUpon>TimerEditWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Timers\TimerList.resx">
-      <DependentUpon>TimerList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\UMDs\McCurdyUmd1EditorForm.resx">
-      <DependentUpon>McCurdyUmd1EditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\UMDs\UmdEditorFormBase.resx">
-      <DependentUpon>UmdEditorFormBase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\UMDs\UmdList.resx">
-      <DependentUpon>UmdList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Variables\BooleanList.resx">
-      <DependentUpon>BooleanList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Variables\DynamicTextList.resx">
-      <DependentUpon>DynamicTextList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Variables\DynamicTextEditorForm.resx">
-      <DependentUpon>DynamicTextEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\VTRs\CasparCgPlayoutEditorForm.resx">
-      <DependentUpon>CasparCgPlayoutEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\VTRs\VtrEditorFormBase.resx">
-      <DependentUpon>VtrEditorFormBase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\VTRs\VtrList.resx">
-      <DependentUpon>VtrList.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -590,9 +71,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="GUI\Timers\TimerWindow.resx">
-      <DependentUpon>TimerWindow.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -736,9 +214,17 @@
     <None Include="Resources\16_tick2.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\opensc-booleans-gui\opensc-booleans-gui.csproj">
+      <Project>{96957886-f262-4491-b03c-f3f90e7b07f6}</Project>
+      <Name>opensc-booleans-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-booleans-model\opensc-booleans-model.csproj">
       <Project>{469f1d25-f30d-40f3-b2f9-1005dd37b684}</Project>
       <Name>opensc-booleans-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-booleantallies-gui\opensc-booleantallies-gui.csproj">
+      <Project>{f49083e5-0939-4e43-84cf-50882a5cb3de}</Project>
+      <Name>opensc-booleantallies-gui</Name>
     </ProjectReference>
     <ProjectReference Include="..\opensc-booleantallies-model\opensc-booleantallies-model.csproj">
       <Project>{0fba1a41-b393-4c8f-8f10-b81268f4b1ef}</Project>
@@ -752,6 +238,10 @@
       <Project>{16a6beec-548d-4a77-9fe6-8df8d5333219}</Project>
       <Name>opensc-core-model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\opensc-crosspointbooleans-gui\opensc-crosspointbooleans-gui.csproj">
+      <Project>{ad75c376-387a-461f-b09e-f4ddabe13f8a}</Project>
+      <Name>opensc-crosspointbooleans-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-crosspointbooleans-model\opensc-crosspointbooleans-model.csproj">
       <Project>{00d0e325-4e7c-4740-819d-73b075834e8e}</Project>
       <Name>opensc-crosspointbooleans-model</Name>
@@ -760,9 +250,17 @@
       <Project>{983ec3e0-4718-42f4-aaa6-e3f041be6e92}</Project>
       <Name>opensc-crosspointstores-bridge-macros</Name>
     </ProjectReference>
+    <ProjectReference Include="..\opensc-crosspointstores-gui\opensc-crosspointstores-gui.csproj">
+      <Project>{9e88848d-0dd2-471a-9165-aa2440328d39}</Project>
+      <Name>opensc-crosspointstores-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-crosspointstores-model\opensc-crosspointstores-model.csproj">
       <Project>{2e95f8f6-c638-46d2-aae2-f6add93f45b2}</Project>
       <Name>opensc-crosspointstores-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-dynamictexts-gui\opensc-dynamictexts-gui.csproj">
+      <Project>{b20f0a6a-4087-4413-9a07-25f24aed8132}</Project>
+      <Name>opensc-dynamictexts-gui</Name>
     </ProjectReference>
     <ProjectReference Include="..\opensc-dynamictexts-model\opensc-dynamictexts-model.csproj">
       <Project>{7cfdf83f-4856-4e36-a489-2058415dde2f}</Project>
@@ -772,13 +270,33 @@
       <Project>{3811fe57-70ec-49e0-9a4b-5661deda9e68}</Project>
       <Name>opensc-labelsets-bridge-dynamictexts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\opensc-labelsets-gui\opensc-labelsets-gui.csproj">
+      <Project>{042c648b-52bb-4bfc-8808-c3dfe7500462}</Project>
+      <Name>opensc-labelsets-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-labelsets-model\opensc-labelsets-model.csproj">
       <Project>{f2e2f38a-e5ed-4a7a-b962-2bf5fbf81721}</Project>
       <Name>opensc-labelsets-model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\opensc-library-bmdswitcher\opensc-library-bmdswitcher.csproj">
+      <Project>{a9cee499-cf5c-419a-8cf0-66f20596b820}</Project>
+      <Name>opensc-library-bmdswitcher</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-library-bmdvideohub\opensc-library-bmdvideohub.csproj">
+      <Project>{eadc56a4-b18d-4742-9855-c5142e90aa19}</Project>
+      <Name>opensc-library-bmdvideohub</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-macropanels-gui\opensc-macropanels-gui.csproj">
+      <Project>{4c933149-ad48-4cca-b19e-0ffaf8c3d8bf}</Project>
+      <Name>opensc-macropanels-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-macropanels-model\opensc-macropanels-model.csproj">
       <Project>{86fac337-c6eb-431e-9e72-5d18851eaa26}</Project>
       <Name>opensc-macropanels-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-macros-gui\opensc-macros-gui.csproj">
+      <Project>{46639a6b-0837-4f93-b447-77989fc1b839}</Project>
+      <Name>opensc-macros-gui</Name>
     </ProjectReference>
     <ProjectReference Include="..\opensc-macros-model\opensc-macros-model.csproj">
       <Project>{66652ce7-c94d-4c8f-8b21-203665cb2762}</Project>
@@ -788,6 +306,10 @@
       <Project>{a922fc15-e578-4c4d-895c-c308dfd6b82b}</Project>
       <Name>opensc-mixers-bridge-dynamictexts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\opensc-mixers-gui\opensc-mixers-gui.csproj">
+      <Project>{5d448050-d12a-47ff-aeec-70c1bb7da5d2}</Project>
+      <Name>opensc-mixers-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj">
       <Project>{7c649008-6a05-4c3d-ac08-b5a85ab72e09}</Project>
       <Name>opensc-mixers-model</Name>
@@ -796,9 +318,17 @@
       <Project>{d6ce2117-2213-48df-89ca-38be4e7d2608}</Project>
       <Name>opensc-mixers-subtype-bmd-bridge-macros</Name>
     </ProjectReference>
+    <ProjectReference Include="..\opensc-mixers-subtype-bmd-gui\opensc-mixers-subtype-bmd-gui.csproj">
+      <Project>{63a756d8-f014-4a92-bdef-4cdac4917412}</Project>
+      <Name>opensc-mixers-subtype-bmd-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-mixers-subtype-bmd-model\opensc-mixers-subtype-bmd-model.csproj">
       <Project>{672a67f3-aced-47e5-ac9e-455f77e68da1}</Project>
       <Name>opensc-mixers-subtype-bmd-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routermirrors-gui\opensc-routermirrors-gui.csproj">
+      <Project>{106eacdc-c757-4f04-983c-7554b3e51911}</Project>
+      <Name>opensc-routermirrors-gui</Name>
     </ProjectReference>
     <ProjectReference Include="..\opensc-routermirrors-model\opensc-routermirrors-model.csproj">
       <Project>{a636cd79-602a-4a38-ab5e-68e3dcf74409}</Project>
@@ -812,29 +342,57 @@
       <Project>{61687a85-4aa2-411e-b1aa-652b93d149c6}</Project>
       <Name>opensc-routers-bridge-macros</Name>
     </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-gui\opensc-routers-gui.csproj">
+      <Project>{3e4820ac-0807-45a8-bf1f-917af17fe891}</Project>
+      <Name>opensc-routers-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj">
       <Project>{b579ff80-0001-44b8-9363-4ebeb4ef6117}</Project>
       <Name>opensc-routers-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-subtype-bmd-gui\opensc-routers-subtype-bmd-gui.csproj">
+      <Project>{6083d1a9-96e2-4149-a4fe-bbec078e3f3d}</Project>
+      <Name>opensc-routers-subtype-bmd-gui</Name>
     </ProjectReference>
     <ProjectReference Include="..\opensc-routers-subtype-bmd-model\opensc-routers-subtype-bmd-model.csproj">
       <Project>{15ea01c2-2967-4002-be9a-71e537cbd7f0}</Project>
       <Name>opensc-routers-subtype-bmd-model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-subtype-leitch-gui\opensc-routers-subtype-leitch-gui.csproj">
+      <Project>{5df50051-5f9f-444c-ba55-bc093a9958a5}</Project>
+      <Name>opensc-routers-subtype-leitch-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-routers-subtype-leitch-model\opensc-routers-subtype-leitch-model.csproj">
       <Project>{96c94dc6-74a1-4e3b-ab22-522b89a4c205}</Project>
       <Name>opensc-routers-subtype-leitch-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-subtype-virtual-gui\opensc-routers-subtype-virtual-gui.csproj">
+      <Project>{4f059898-42b6-4313-92c5-398a5822d450}</Project>
+      <Name>opensc-routers-subtype-virtual-gui</Name>
     </ProjectReference>
     <ProjectReference Include="..\opensc-routers-subtype-virtual-model\opensc-routers-subtype-virtual-model.csproj">
       <Project>{a2f05b74-2903-4912-b52a-16f9c4b76ff3}</Project>
       <Name>opensc-routers-subtype-virtual-model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-subtype-virtualleitch-gui\opensc-routers-subtype-virtualleitch-gui.csproj">
+      <Project>{127a4ae9-d71f-412f-84de-7e774db187d7}</Project>
+      <Name>opensc-routers-subtype-virtualleitch-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-routers-subtype-virtualleitch-model\opensc-routers-subtype-virtualleitch-model.csproj">
       <Project>{5db0c22d-e2fb-4d85-b6b0-56a95e31e41d}</Project>
       <Name>opensc-routers-subtype-virtualleitch-model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\opensc-serialports-gui\opensc-serialports-gui.csproj">
+      <Project>{86c047f6-275b-48fc-9ccb-1f672d9b579f}</Project>
+      <Name>opensc-serialports-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-serialports-model\opensc-serialports-model.csproj">
       <Project>{3c15c5f6-e564-4b1b-ab76-c6295fc518c0}</Project>
       <Name>opensc-serialports-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-signals-gui\opensc-signals-gui.csproj">
+      <Project>{36fb1dc4-79c7-4323-af29-4831c0d427f6}</Project>
+      <Name>opensc-signals-gui</Name>
     </ProjectReference>
     <ProjectReference Include="..\opensc-signals-model\opensc-signals-model.csproj">
       <Project>{fdcf0da0-9336-4a72-bd61-1aaf396940af}</Project>
@@ -844,9 +402,25 @@
       <Project>{c3968358-f075-4cfe-9885-21fb23a83d8b}</Project>
       <Name>opensc-streams-bridge-dynamictexts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\opensc-streams-gui\opensc-streams-gui.csproj">
+      <Project>{79118814-f2e2-473e-88d3-a94fee4acb68}</Project>
+      <Name>opensc-streams-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-streams-model\opensc-streams-model.csproj">
       <Project>{76853b46-32a4-415d-92e2-57feb4600e87}</Project>
       <Name>opensc-streams-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-streams-subtype-youtube-gui\opensc-streams-subtype-youtube-gui.csproj">
+      <Project>{7a3f9835-7188-4a40-9070-8dd9a96b97cb}</Project>
+      <Name>opensc-streams-subtype-youtube-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-streams-subtype-youtube-model\opensc-streams-subtype-youtube-model.csproj">
+      <Project>{721e4551-5188-404b-b8c5-6b78b6381615}</Project>
+      <Name>opensc-streams-subtype-youtube-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-tallycopying-gui\opensc-tallycopying-gui.csproj">
+      <Project>{dfac8f60-4e30-4173-bbdb-0581d2e40cac}</Project>
+      <Name>opensc-tallycopying-gui</Name>
     </ProjectReference>
     <ProjectReference Include="..\opensc-tallycopying-model\opensc-tallycopying-model.csproj">
       <Project>{21147445-db1a-417c-b38d-d43c5e599589}</Project>
@@ -860,6 +434,10 @@
       <Project>{32516067-0d7c-432d-bef6-079d6230c549}</Project>
       <Name>opensc-timers-bridge-macros</Name>
     </ProjectReference>
+    <ProjectReference Include="..\opensc-timers-gui\opensc-timers-gui.csproj">
+      <Project>{46ede88a-1256-4f43-ae4e-ed854266f92c}</Project>
+      <Name>opensc-timers-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-timers-model\opensc-timers-model.csproj">
       <Project>{543a1330-ccb4-4e18-903a-c58d3c007816}</Project>
       <Name>opensc-timers-model</Name>
@@ -868,13 +446,25 @@
       <Project>{540d7dfa-f636-47ce-bc3a-59dc9cd93125}</Project>
       <Name>opensc-umds-bridge-macros</Name>
     </ProjectReference>
+    <ProjectReference Include="..\opensc-umds-gui\opensc-umds-gui.csproj">
+      <Project>{35bd5a02-e363-4a04-9c1e-0f885ca7ea64}</Project>
+      <Name>opensc-umds-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-umds-model\opensc-umds-model.csproj">
       <Project>{8c0e0945-f7d0-4d41-9776-f5cfb7de4e84}</Project>
       <Name>opensc-umds-model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\opensc-umds-subtype-mccurdy-gui\opensc-umds-subtype-mccurdy-gui.csproj">
+      <Project>{2e1372d7-44ff-4635-b9e3-355d8d75f053}</Project>
+      <Name>opensc-umds-subtype-mccurdy-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-umds-subtype-mccurdy-model\opensc-umds-subtype-mccurdy-model.csproj">
       <Project>{e5cb27c4-db49-4ba8-9a06-1c375d459740}</Project>
       <Name>opensc-umds-subtype-mccurdy-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-umds-subtype-tsl31-gui\opensc-umds-subtype-tsl31-gui.csproj">
+      <Project>{8fa9f2b1-42d2-4af3-abc5-534ccb70c541}</Project>
+      <Name>opensc-umds-subtype-tsl31-gui</Name>
     </ProjectReference>
     <ProjectReference Include="..\opensc-umds-subtype-tsl31-model\opensc-umds-subtype-tsl31-model.csproj">
       <Project>{e3d21c47-275f-4997-aa4e-6e33ed6c16c7}</Project>
@@ -884,9 +474,17 @@
       <Project>{bca57ee2-904a-4a98-99d5-179b06a4836a}</Project>
       <Name>opensc-vtrs-bridge-dynamictexts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\opensc-vtrs-gui\opensc-vtrs-gui.csproj">
+      <Project>{3cbb7170-9903-47a7-bb5a-47dfd2514005}</Project>
+      <Name>opensc-vtrs-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-vtrs-model\opensc-vtrs-model.csproj">
       <Project>{9723e8aa-94af-473f-b495-b88013df5157}</Project>
       <Name>opensc-vtrs-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-vtrs-subtype-casparcg-gui\opensc-vtrs-subtype-casparcg-gui.csproj">
+      <Project>{909cfe52-7d3c-43dc-a2a8-33285989c56a}</Project>
+      <Name>opensc-vtrs-subtype-casparcg-gui</Name>
     </ProjectReference>
     <ProjectReference Include="..\opensc-vtrs-subtype-casparcg-model\opensc-vtrs-subtype-casparcg-model.csproj">
       <Project>{949544bc-4682-42ed-9152-6dfd85e9f46e}</Project>

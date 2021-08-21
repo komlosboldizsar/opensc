@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{76853B46-32A4-415D-92E2-57FEB4600E87}</ProjectGuid>
+    <ProjectGuid>{721E4551-5188-404B-B8C5-6B78B6381615}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenSC</RootNamespace>
-    <AssemblyName>opensc-streams-model</AssemblyName>
+    <AssemblyName>opensc-streams-subtype-youtube-model</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,17 +44,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Streams\Stream.cs" />
-    <Compile Include="Model\Streams\StreamDatabase.cs" />
-    <Compile Include="Model\Streams\StreamState.cs" />
-    <Compile Include="Model\Streams\StreamTypeNameConverter.cs" />
+    <Compile Include="Model\Streams\YoutubeStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
-      <Project>{16a6beec-548d-4a77-9fe6-8df8d5333219}</Project>
+      <Project>{16A6BEEC-548D-4A77-9FE6-8DF8D5333219}</Project>
       <Name>opensc-core-model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\opensc-streams-model\opensc-streams-model.csproj">
+      <Project>{76853b46-32a4-415d-92e2-57feb4600e87}</Project>
+      <Name>opensc-streams-model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

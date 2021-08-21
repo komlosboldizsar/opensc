@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{76853B46-32A4-415D-92E2-57FEB4600E87}</ProjectGuid>
+    <ProjectGuid>{4F059898-42B6-4313-92C5-398A5822D450}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenSC</RootNamespace>
-    <AssemblyName>opensc-streams-model</AssemblyName>
+    <AssemblyName>opensc-routers-subtype-virtual-gui</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -33,6 +33,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,16 +43,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Streams\Stream.cs" />
-    <Compile Include="Model\Streams\StreamDatabase.cs" />
-    <Compile Include="Model\Streams\StreamState.cs" />
-    <Compile Include="Model\Streams\StreamTypeNameConverter.cs" />
+    <Compile Include="GUI\Routers\VirtualRouterEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Routers\VirtualRouterEditorForm.Designer.cs">
+      <DependentUpon>VirtualRouterEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
+    <EmbeddedResource Include="GUI\Routers\VirtualRouterEditorForm.resx">
+      <DependentUpon>VirtualRouterEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj">
+      <Project>{e30563fd-de1f-4ab5-86dd-72165b84eb85}</Project>
+      <Name>opensc-core-gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
       <Project>{16a6beec-548d-4a77-9fe6-8df8d5333219}</Project>
       <Name>opensc-core-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-gui\opensc-routers-gui.csproj">
+      <Project>{3e4820ac-0807-45a8-bf1f-917af17fe891}</Project>
+      <Name>opensc-routers-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj">
+      <Project>{b579ff80-0001-44b8-9363-4ebeb4ef6117}</Project>
+      <Name>opensc-routers-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-subtype-virtual-model\opensc-routers-subtype-virtual-model.csproj">
+      <Project>{a2f05b74-2903-4912-b52a-16f9c4b76ff3}</Project>
+      <Name>opensc-routers-subtype-virtual-model</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
