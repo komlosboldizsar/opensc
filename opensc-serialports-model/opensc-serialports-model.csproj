@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Model\SerialPorts\SerialPort.cs" />
     <Compile Include="Model\SerialPorts\SerialPortDatabase.cs" />
+    <Compile Include="Modules\SerialportsModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

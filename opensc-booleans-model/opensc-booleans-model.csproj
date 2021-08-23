@@ -45,6 +45,7 @@
     <Compile Include="Model\Variables\BooleanBase.cs" />
     <Compile Include="Model\Variables\BooleanRegister.cs" />
     <Compile Include="Model\Variables\IBoolean.cs" />
+    <Compile Include="Modules\BooleansModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

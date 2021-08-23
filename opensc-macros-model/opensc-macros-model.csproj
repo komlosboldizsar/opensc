@@ -83,6 +83,7 @@
     <Compile Include="Model\Macros\Triggers\MacroTriggerWithArguments.cs" />
     <Compile Include="Model\Macros\Triggers\MacroTriggerWithArgumentsActivationData.cs" />
     <Compile Include="Model\Macros\Triggers\MacroTriggerWithArgumentsXmlSerializer.cs" />
+    <Compile Include="Modules\MacrosModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

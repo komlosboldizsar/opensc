@@ -44,6 +44,7 @@
     <Compile Include="Model\Timers\Timer.cs" />
     <Compile Include="Model\Timers\TimerDatabase.cs" />
     <Compile Include="Model\Timers\TimerMode.cs" />
+    <Compile Include="Modules\TimersModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

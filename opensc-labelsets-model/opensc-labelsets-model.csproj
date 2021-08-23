@@ -45,6 +45,7 @@
     <Compile Include="Model\Routers\Labelset.cs" />
     <Compile Include="Model\Routers\LabelsetDatabase.cs" />
     <Compile Include="Model\Routers\LabelXmlSerializer.cs" />
+    <Compile Include="Modules\LabelsetsModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

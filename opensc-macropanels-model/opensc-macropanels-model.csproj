@@ -46,6 +46,7 @@
     <Compile Include="Model\Macros\Panels\MacroPanelDatabase.cs" />
     <Compile Include="Model\Macros\Panels\MacroPanelElement.cs" />
     <Compile Include="Model\Macros\Panels\MacroPanelElementXmlSerializer.cs" />
+    <Compile Include="Modules\MacropanelsModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -49,6 +49,7 @@
     <Compile Include="Model\Mixers\MixerInputXmlSerializer.cs" />
     <Compile Include="Model\Mixers\MixerState.cs" />
     <Compile Include="Model\Mixers\MixerTypeNameConverter.cs" />
+    <Compile Include="Modules\MixersModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -54,6 +54,7 @@
     <Compile Include="Model\Routers\RouterOutputXmlSerializer.cs" />
     <Compile Include="Model\Routers\RouterState.cs" />
     <Compile Include="Model\Routers\RouterTypeNameConverter.cs" />
+    <Compile Include="Modules\RoutersModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

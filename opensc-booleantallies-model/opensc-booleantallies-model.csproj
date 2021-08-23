@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Model\Signals\BooleanTally\BooleanTally.cs" />
     <Compile Include="Model\Signals\BooleanTally\BooleanTallyDatabase.cs" />
+    <Compile Include="Modules\BooleantalliesModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

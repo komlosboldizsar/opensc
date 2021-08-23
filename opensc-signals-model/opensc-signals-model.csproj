@@ -64,6 +64,7 @@
     <Compile Include="Model\Signals\SignalRegister.cs" />
     <Compile Include="Model\Signals\SignalTallyBoolean.cs" />
     <Compile Include="Model\Signals\SignalTallyColor.cs" />
+    <Compile Include="Modules\SignalsModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

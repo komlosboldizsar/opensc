@@ -45,6 +45,7 @@
     <Compile Include="Model\Streams\StreamDatabase.cs" />
     <Compile Include="Model\Streams\StreamState.cs" />
     <Compile Include="Model\Streams\StreamTypeNameConverter.cs" />
+    <Compile Include="Modules\StreamsModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

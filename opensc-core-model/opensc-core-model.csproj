@@ -87,6 +87,10 @@
     <Compile Include="Model\SystemObjectBase.cs" />
     <Compile Include="Model\TypeCodeAttribute.cs" />
     <Compile Include="Model\TypeLabelAttribute.cs" />
+    <Compile Include="Modules\ModelModuleBase.cs" />
+    <Compile Include="Modules\DependsOnModuleAttribute.cs" />
+    <Compile Include="Modules\IModule.cs" />
+    <Compile Include="Modules\ModuleAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

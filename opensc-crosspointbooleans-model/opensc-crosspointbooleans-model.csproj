@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Model\Routers\CrosspointBooleans\CrosspointBoolean.cs" />
     <Compile Include="Model\Routers\CrosspointBooleans\CrosspointBooleanDatabase.cs" />
+    <Compile Include="Modules\CrosspointbooleansModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Model\Routers\CrosspointStores\CrosspointStore.cs" />
     <Compile Include="Model\Routers\CrosspointStores\CrosspointStoreDatabase.cs" />
+    <Compile Include="Modules\CrosspointstoresModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

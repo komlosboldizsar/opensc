@@ -52,6 +52,7 @@
     <Compile Include="Model\Routers\Mirrors\RouterMirrorSide.cs" />
     <Compile Include="Model\Routers\Mirrors\RouterMirrorSideHelpers.cs" />
     <Compile Include="Model\Routers\Mirrors\RouterMirrorSynchronizationMode.cs" />
+    <Compile Include="Modules\RoutermirrorsModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

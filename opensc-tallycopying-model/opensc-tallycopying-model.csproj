@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Model\Signals\TallyCopy\TallyCopy.cs" />
     <Compile Include="Model\Signals\TallyCopy\TallyCopyDatabase.cs" />
+    <Compile Include="Modules\TallycopyingModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
