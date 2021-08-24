@@ -6,7 +6,7 @@ namespace OpenSC.Modules
     public abstract class ModelModuleBase : IModule
     {
 
-        public void Initialize()
+        public virtual void Initialize()
         {
             registerDatabases();
         }

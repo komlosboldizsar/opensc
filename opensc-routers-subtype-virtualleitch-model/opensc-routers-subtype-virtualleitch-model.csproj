@@ -44,6 +44,7 @@
     <Compile Include="Model\Routers\Leitch\VirtualLeitchRouter.cs" />
     <Compile Include="Model\Routers\Leitch\VirtualLeitchRouterOutput.cs" />
     <Compile Include="Model\Routers\Leitch\VirtualLeitchRouterOutputXmlSerializer.cs" />
+    <Compile Include="Modules\RoutersSubtypeVirtualleitchModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

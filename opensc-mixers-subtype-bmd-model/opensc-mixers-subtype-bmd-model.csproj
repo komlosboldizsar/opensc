@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Mixers\BlackMagicDesign\BmdMixer.cs" />
+    <Compile Include="Modules\MixersSubtypeBmdModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

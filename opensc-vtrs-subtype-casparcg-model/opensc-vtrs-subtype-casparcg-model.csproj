@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Model\VTRs\CasparCgPlayout.cs" />
     <Compile Include="Model\VTRs\CasparCgPlayoutCommons.cs" />
+    <Compile Include="Modules\VtrsSubtypeCasparcgModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

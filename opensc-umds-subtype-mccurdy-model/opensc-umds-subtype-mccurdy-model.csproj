@@ -48,6 +48,7 @@
     <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1TType.cs" />
     <Compile Include="Model\UMDs\McCurdy\McCurdyUMD1Type.cs" />
     <Compile Include="Model\UMDs\McCurdy\TextAlignment.cs" />
+    <Compile Include="Modules\UmdsSubtypeMccurdyModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

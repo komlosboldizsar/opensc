@@ -6,8 +6,8 @@ namespace OpenSC.Modules
 {
 
     [Module("mixers-subtype-bmd-bridge-macros", "Mixers / BlackMagic Design ATEM (bridge to macros)", "TODO")]
-    [DependsOnModule(typeof(MixersSubtypeBmdModule))]
-    public class MixersSubtypeBmdBridgeMacrosModule : MacrosBridgeModuleBase<MixersSubtypeBmdModule>
+    [DependsOnModule(typeof(MixersSubtypeBmdModelModule))]
+    public class MixersSubtypeBmdBridgeMacrosModule : MacrosBridgeModuleBase<MixersSubtypeBmdModelModule>
     {
 
         protected override void registerMacroCommands()

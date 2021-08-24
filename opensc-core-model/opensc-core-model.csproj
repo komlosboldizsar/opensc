@@ -87,6 +87,7 @@
     <Compile Include="Model\SystemObjectBase.cs" />
     <Compile Include="Model\TypeCodeAttribute.cs" />
     <Compile Include="Model\TypeLabelAttribute.cs" />
+    <Compile Include="Modules\SubtypeModelModuleBase.cs" />
     <Compile Include="Modules\BridgeModuleBase.cs" />
     <Compile Include="Modules\ModelModuleBase.cs" />
     <Compile Include="Modules\DependsOnModuleAttribute.cs" />

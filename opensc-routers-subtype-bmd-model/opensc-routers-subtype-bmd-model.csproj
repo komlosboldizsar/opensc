@@ -44,6 +44,7 @@
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohub.cs" />
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohubOutput.cs" />
     <Compile Include="Model\Routers\BlackMagicDesign\BmdVideohubOutputXmlSerializer.cs" />
+    <Compile Include="Modules\RoutersSubtypeBmdModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
