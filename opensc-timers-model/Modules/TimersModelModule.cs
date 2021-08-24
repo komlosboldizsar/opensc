@@ -5,7 +5,7 @@ namespace OpenSC.Modules
 {
 
     [Module("timers-model", "Timers (model)", "TODO")]
-    public class TimersModelModule : ModelModuleBase
+    public class TimersModelModule : BasetypeModuleBase
     {
 
         protected override void registerDatabases()

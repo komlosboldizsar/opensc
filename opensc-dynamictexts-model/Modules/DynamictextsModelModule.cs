@@ -5,7 +5,7 @@ namespace OpenSC.Modules
 {
 
     [Module("dynamictexts-model", "Dynamic texts (model)", "TODO")]
-    public class DynamictextsModelModule : ModelModuleBase
+    public class DynamictextsModelModule : BasetypeModuleBase
     {
 
         protected override void registerDatabases()

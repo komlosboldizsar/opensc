@@ -15,9 +15,6 @@ namespace OpenSC.Modules
 
         protected abstract void registerModelTypes();
 
-        protected override void registerDatabases()
-        { /* TODO */ }
-
     }
 
 }

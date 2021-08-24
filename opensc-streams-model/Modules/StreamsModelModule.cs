@@ -5,7 +5,7 @@ namespace OpenSC.Modules
 {
 
     [Module("streams-model", "Streams (model)", "TODO")]
-    public class StreamsModelModule : ModelModuleBase
+    public class StreamsModelModule : BasetypeModuleBase
     {
 
         protected override void registerDatabases()

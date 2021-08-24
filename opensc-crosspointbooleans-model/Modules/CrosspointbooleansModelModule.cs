@@ -7,7 +7,7 @@ namespace OpenSC.Modules
     [Module("crosspointbooleans-model", "Crosspoint booleans (model)", "TODO")]
     [DependsOnModule(typeof(RoutersModelModule))]
     [DependsOnModule(typeof(BooleansModelModule))]
-    public class CrosspointbooleansModelModule : ModelModuleBase
+    public class CrosspointbooleansModelModule : BasetypeModuleBase
     {
 
         protected override void registerDatabases()

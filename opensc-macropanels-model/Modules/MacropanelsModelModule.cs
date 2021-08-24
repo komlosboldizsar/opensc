@@ -6,7 +6,7 @@ namespace OpenSC.Modules
 
     [Module("macropanels-model", "Macro panels (model)", "TODO")]
     [DependsOnModule(typeof(MacropanelsModelModule))]
-    public class MacropanelsModelModule : ModelModuleBase
+    public class MacropanelsModelModule : BasetypeModuleBase
     {
 
         protected override void registerDatabases()

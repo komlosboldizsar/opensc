@@ -5,7 +5,7 @@ namespace OpenSC.Modules
 {
 
     [Module("umds-model", "UMDs (model)", "TODO")]
-    public class UmdsModelModule : ModelModuleBase
+    public class UmdsModelModule : BasetypeModuleBase
     {
 
         protected override void registerDatabases()

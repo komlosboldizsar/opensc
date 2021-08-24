@@ -6,7 +6,7 @@ namespace OpenSC.Modules
 
     [Module("crosspointstores-model", "Crosspoint stores (model)", "TODO")]
     [DependsOnModule(typeof(RoutersModelModule))]
-    public class CrosspointstoresModelModule : ModelModuleBase
+    public class CrosspointstoresModelModule : BasetypeModuleBase
     {
 
         protected override void registerDatabases()

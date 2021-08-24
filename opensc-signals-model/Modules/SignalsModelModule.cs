@@ -5,7 +5,7 @@ namespace OpenSC.Modules
 
     [Module("signals-model", "Signals (model)", "TODO")]
     [DependsOnModule(typeof(BooleansModelModule))]
-    public class SignalsModelModule : ModelModuleBase
+    public class SignalsModelModule : BasetypeModuleBase
     {
 
         protected override void registerDatabases()

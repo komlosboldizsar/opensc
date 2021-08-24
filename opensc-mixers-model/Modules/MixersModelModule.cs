@@ -6,7 +6,7 @@ namespace OpenSC.Modules
 
     [Module("mixers-model", "Mixers (model)", "TODO")]
     [DependsOnModule(typeof(SignalsModelModule))]
-    public class MixersModelModule : ModelModuleBase
+    public class MixersModelModule : BasetypeModuleBase
     {
 
         protected override void registerDatabases()

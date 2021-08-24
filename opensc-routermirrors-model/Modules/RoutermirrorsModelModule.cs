@@ -6,7 +6,7 @@ namespace OpenSC.Modules
 
     [Module("routermirrors-model", "Router mirrors (model)", "TODO")]
     [DependsOnModule(typeof(RoutersModelModule))]
-    public class RoutermirrorsModelModule : ModelModuleBase
+    public class RoutermirrorsModelModule : BasetypeModuleBase
     {
 
         protected override void registerDatabases()

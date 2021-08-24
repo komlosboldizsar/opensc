@@ -7,11 +7,7 @@ namespace OpenSC.Modules
     {
 
         public virtual void Initialize()
-        {
-            registerDatabases();
-        }
-
-        protected abstract void registerDatabases();
+        { }
 
     }
 

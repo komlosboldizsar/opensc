@@ -6,7 +6,7 @@ namespace OpenSC.Modules
 
     [Module("tallycopying-model", "Tally copying model", "TODO")]
     [DependsOnModule(typeof(SignalsModelModule))]
-    public class TallycopyingModelModule : ModelModuleBase
+    public class TallycopyingModelModule : BasetypeModuleBase
     {
 
         protected override void registerDatabases()

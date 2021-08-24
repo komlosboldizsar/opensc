@@ -5,15 +5,10 @@ namespace OpenSC.Modules
 {
 
     [Module("macros-model", "Macros (model)", "TODO")]
-    public class MacrosModelModule : IModule
+    public class MacrosModelModule : BasetypeModuleBase
     {
 
-        public void Initialize()
-        {
-            registerDatabases();
-        }
-
-        private void registerDatabases()
+        protected override void registerDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(MacroDatabase));
         }

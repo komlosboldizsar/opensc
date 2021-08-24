@@ -5,7 +5,7 @@ namespace OpenSC.Modules
 {
 
     [Module("vtrs-model", "VTRs (model)", "TODO")]
-    public class VtrsModelModule : ModelModuleBase
+    public class VtrsModelModule : BasetypeModuleBase
     {
 
         protected override void registerDatabases()

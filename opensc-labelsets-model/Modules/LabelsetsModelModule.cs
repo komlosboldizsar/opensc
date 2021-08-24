@@ -6,7 +6,7 @@ namespace OpenSC.Modules
 
     [Module("labelsets-model", "Labelsets (model)", "TODO")]
     [DependsOnModule(typeof(RoutersModelModule))]
-    public class LabelsetsModelModule : ModelModuleBase
+    public class LabelsetsModelModule : BasetypeModuleBase
     {
 
         protected override void registerDatabases()
