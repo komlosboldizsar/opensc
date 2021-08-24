@@ -47,6 +47,7 @@
     <Compile Include="Model\Timers\Macros\TimerMacroCommands.cs" />
     <Compile Include="Model\Timers\Triggers\TimerMacroTriggers.cs" />
     <Compile Include="Model\Timers\Triggers\TimerReachedValueMacroTrigger.cs" />
+    <Compile Include="Modules\TimersBridgeMacrosModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

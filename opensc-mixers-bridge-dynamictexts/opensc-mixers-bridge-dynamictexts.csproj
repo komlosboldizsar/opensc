@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Model\Mixers\DynamicTextFunctions\MixerPreviewInputName.cs" />
     <Compile Include="Model\Mixers\DynamicTextFunctions\MixerProgramInputName.cs" />
+    <Compile Include="Modules\MixersBridgeDynamictextsModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

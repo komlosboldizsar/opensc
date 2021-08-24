@@ -46,6 +46,7 @@
     <Compile Include="Model\Routers\Triggers\RouterCrosspointChangedMacroTrigger.cs" />
     <Compile Include="Model\Routers\Triggers\RouterMacroTriggers.cs" />
     <Compile Include="Model\Routers\Triggers\RouterOutputInputChangedMacroTrigger.cs" />
+    <Compile Include="Modules\RoutersBridgeMacrosModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -57,6 +57,7 @@
     <Compile Include="Model\Variables\IDynamicTextFunction.cs" />
     <Compile Include="Model\Variables\IDynamicTextFunctionArgument.cs" />
     <Compile Include="Model\Variables\IDynamicTextFunctionSubstitute.cs" />
+    <Compile Include="Modules\DynamictextsBridgeModuleBase.cs" />
     <Compile Include="Modules\DynamictextsModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

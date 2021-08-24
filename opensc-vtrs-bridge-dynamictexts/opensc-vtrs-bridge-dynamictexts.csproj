@@ -46,6 +46,7 @@
     <Compile Include="Model\VTRs\DynamicTextFunctions\VtrState.cs" />
     <Compile Include="Model\VTRs\DynamicTextFunctions\VtrStateTranslated.cs" />
     <Compile Include="Model\VTRs\DynamicTextFunctions\VtrTitle.cs" />
+    <Compile Include="Modules\VtrsBridgeDynamictextsModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

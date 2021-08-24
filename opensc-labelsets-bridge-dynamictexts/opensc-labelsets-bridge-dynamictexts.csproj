@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Routers\DynamicTextFunctions\RouterOutputInputLabel.cs" />
+    <Compile Include="Modules\LabelsetsBridgeDynamictextsModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -44,6 +44,7 @@
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamState.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamStateTranslated.cs" />
     <Compile Include="Model\Streams\DynamicTextFunctions\StreamViewerCount.cs" />
+    <Compile Include="Modules\StreamsBridgeDynamictextsModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

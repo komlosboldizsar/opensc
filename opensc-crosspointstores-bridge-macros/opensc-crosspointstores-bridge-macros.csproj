@@ -45,6 +45,7 @@
     <Compile Include="Model\Routers\CrosspointStores\Macros\SetCrosspointStoreInputMacroCommand.cs" />
     <Compile Include="Model\Routers\CrosspointStores\Macros\SetCrosspointStoreOutputMacroCommand.cs" />
     <Compile Include="Model\Routers\CrosspointStores\Macros\TakeCrosspointStoreMacroCommand.cs" />
+    <Compile Include="Modules\CrosspointstoresBridgeMacrosModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

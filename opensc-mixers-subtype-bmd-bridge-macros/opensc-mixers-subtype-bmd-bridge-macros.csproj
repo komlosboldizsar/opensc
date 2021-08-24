@@ -48,6 +48,7 @@
     <Compile Include="Model\Mixers\BlackMagicDesign\Macros\SetPreviewSourceMacroCommand.cs" />
     <Compile Include="Model\Mixers\BlackMagicDesign\Macros\SetProgramSourceMacroCommand.cs" />
     <Compile Include="Model\Mixers\BlackMagicDesign\Macros\TransitionMacroCommandBase.cs" />
+    <Compile Include="Modules\MixersSubtypeBmdBridgeMacrosModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

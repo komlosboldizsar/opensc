@@ -44,6 +44,7 @@
     <Compile Include="Model\UMDs\Macros\UmdDynamicTextMacroCommand.cs" />
     <Compile Include="Model\UMDs\Macros\UmdMacroCommands.cs" />
     <Compile Include="Model\UMDs\Macros\UmdStaticTextMacroCommand.cs" />
+    <Compile Include="Modules\UmdsBridgeMacrosModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
