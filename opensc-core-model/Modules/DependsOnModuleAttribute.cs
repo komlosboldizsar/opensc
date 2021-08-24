@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Modules
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
     public class DependsOnModuleAttribute : Attribute
     {
         public Type Module { get; private set; }
