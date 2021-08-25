@@ -74,6 +74,7 @@
     <Compile Include="GUI\Signals\SignalList.Designer.cs">
       <DependentUpon>SignalList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\SignalsGuiModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

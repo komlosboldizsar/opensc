@@ -61,6 +61,7 @@
     <Compile Include="GUI\Timers\TimerWindow.Designer.cs">
       <DependentUpon>TimerWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\TimersGuiModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Icons.Designer.cs">
       <AutoGen>True</AutoGen>

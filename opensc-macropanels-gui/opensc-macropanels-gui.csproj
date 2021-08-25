@@ -67,6 +67,7 @@
     <Compile Include="GUI\Macros\MacroPanelList.Designer.cs">
       <DependentUpon>MacroPanelList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\MacropanelsGuiModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

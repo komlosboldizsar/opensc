@@ -55,6 +55,7 @@
     <Compile Include="GUI\Routers\CrosspointStores\CrosspointStoreList.Designer.cs">
       <DependentUpon>CrosspointStoreList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\CrosspointstoresGuiModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

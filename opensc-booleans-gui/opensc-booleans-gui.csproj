@@ -49,6 +49,7 @@
     <Compile Include="GUI\Variables\BooleanList.Designer.cs">
       <DependentUpon>BooleanList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\BooleansGuiModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

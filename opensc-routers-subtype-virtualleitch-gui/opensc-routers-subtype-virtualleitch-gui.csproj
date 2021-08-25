@@ -49,6 +49,7 @@
     <Compile Include="GUI\Routers\VirtualLeitchRouterEditorForm.Designer.cs">
       <DependentUpon>VirtualLeitchRouterEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\RoutersSubtypeVirtualleitchGuiModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -67,6 +67,7 @@
     <Compile Include="GUI\Macros\TriggerArgumentControl.Designer.cs">
       <DependentUpon>TriggerArgumentControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\MacrosGuiModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -55,6 +55,7 @@
     <Compile Include="GUI\Routers\CrosspointBooleans\CrosspointBooleanList.Designer.cs">
       <DependentUpon>CrosspointBooleanList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\CrosspointbooleansGuiModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

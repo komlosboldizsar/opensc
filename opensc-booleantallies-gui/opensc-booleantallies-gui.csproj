@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Modules\BooleantalliesGuiModule.cs" />
     <Compile Include="GUI\Signals\BooleanTally\BooleanTallyEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>

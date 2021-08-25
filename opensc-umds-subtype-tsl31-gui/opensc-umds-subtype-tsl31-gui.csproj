@@ -49,6 +49,7 @@
     <Compile Include="GUI\UMDs\Tsl31UmdEditorForm.Designer.cs">
       <DependentUpon>Tsl31UmdEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\UmdsSubtypeTsl31GuiModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,31 +1,14 @@
-﻿using OpenSC.GUI.Menus;
-using OpenSC.GUI.Variables;
-using OpenSC.GUI.WorkspaceManager;
-
-namespace OpenSC.Modules
+﻿namespace OpenSC.Modules
 {
 
-    [Module("dynamictexts-gui", "Dynamictexts GUI", "TODO")]
+    [Module("dynamictexts-gui", "Dynamic texts (GUI)", "TODO")]
     [DependsOnModule(typeof(DynamictextsModelModule))]
-    public class DynamictextsGuiModule : IModule
+    public class DynamictextsGuiModule : BasetypeGuiModuleBase<DynamictextsModelModule>
     {
 
-        public void Initialize()
+        protected override void registerPersistableWindowTypes()
         {
-            registerWindowTypes();
-            registerMenus();
-        }
-
-        private void registerWindowTypes()
-        {
-            WindowTypeRegister.RegisterWindowType(typeof(DynamicTextList));
-        }
-
-        private void registerMenus()
-        {
-            var variablesMenu = MenuManager.Instance.TopMenu["Variables"];
-            var dynamicTextsMenu = variablesMenu["Dynamic texts"];
-            dynamicTextsMenu.ClickHandler = (menu, tag) => new DynamicTextList().ShowAsChild();
+            // TODO: register DynamicTextList
         }
 
     }

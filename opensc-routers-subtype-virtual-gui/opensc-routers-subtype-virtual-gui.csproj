@@ -49,6 +49,7 @@
     <Compile Include="GUI\Routers\VirtualRouterEditorForm.Designer.cs">
       <DependentUpon>VirtualRouterEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\RoutersSubtypeVirtualGuiModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -49,6 +49,7 @@
     <Compile Include="GUI\Mixers\BmdMixerEditorForm.Designer.cs">
       <DependentUpon>BmdMixerEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\MixersSubtypeBmdGuiModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -49,6 +49,7 @@
     <Compile Include="GUI\VTRs\CasparCgPlayoutEditorForm.Designer.cs">
       <DependentUpon>CasparCgPlayoutEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\VtrsSubtypeCasparcgGuiModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

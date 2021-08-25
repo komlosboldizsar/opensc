@@ -56,6 +56,7 @@
     <Compile Include="GUI\Mixers\MixerList.Designer.cs">
       <DependentUpon>MixerList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\MixersGuiModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

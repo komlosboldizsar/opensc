@@ -55,6 +55,7 @@
     <Compile Include="GUI\UMDs\McCurdyUmd1TEditorForm.Designer.cs">
       <DependentUpon>McCurdyUmd1TEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\UmdsSubtypeMccurdyGuiModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

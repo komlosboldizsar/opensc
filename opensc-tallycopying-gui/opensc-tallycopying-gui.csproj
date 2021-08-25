@@ -55,6 +55,7 @@
     <Compile Include="GUI\Signals\TallyCopy\TallyCopyList.Designer.cs">
       <DependentUpon>TallyCopyList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\TallycopyingGuiModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

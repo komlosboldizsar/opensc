@@ -55,6 +55,7 @@
     <Compile Include="GUI\SerialPorts\SerialPortList.Designer.cs">
       <DependentUpon>SerialPortList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\SerialportsGuiModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
