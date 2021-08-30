@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.Signals.TallyCopying;
+﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.Signals.TallyCopying;
 using OpenSC.GUI.WorkspaceManager;
 
 namespace OpenSC.Modules
@@ -12,6 +13,13 @@ namespace OpenSC.Modules
         protected override void registerPersistableWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType<TallyCopyList>();
+        }
+
+        protected override void registerMenus()
+        {
+            var signalsMenu = MenuManager.Instance.TopMenu["Signals"];
+            var tallyCopiesSubMenu = signalsMenu["Tally copies"];
+            tallyCopiesSubMenu.ClickHandler = (menu, tag) => new TallyCopyList().ShowAsChild();
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.Streams;
+﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.Streams;
 using OpenSC.GUI.WorkspaceManager;
 
 namespace OpenSC.Modules
@@ -12,6 +13,12 @@ namespace OpenSC.Modules
         protected override void registerPersistableWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType<StreamList>();
+        }
+
+        protected override void registerMenus()
+        {
+            var streamsMenu = MenuManager.Instance.TopMenu["Streams"]["Stream list"];
+            streamsMenu.ClickHandler = (menu, tag) => new StreamList().ShowAsChild();
         }
 
     }

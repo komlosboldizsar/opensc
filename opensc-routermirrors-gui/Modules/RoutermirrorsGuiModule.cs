@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.Routers.Mirrors;
+﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.Routers.Mirrors;
 using OpenSC.GUI.WorkspaceManager;
 
 namespace OpenSC.Modules
@@ -12,6 +13,13 @@ namespace OpenSC.Modules
         protected override void registerPersistableWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType<RouterMirrorList>();
+        }
+
+        protected override void registerMenus()
+        {
+            var routersMenu = MenuManager.Instance.TopMenu["Routers"];
+            var routerMirrorsListMenu = routersMenu["Router mirrors list"];
+            routerMirrorsListMenu.ClickHandler = (menu, tag) => new RouterMirrorList().ShowAsChild();
         }
 
     }

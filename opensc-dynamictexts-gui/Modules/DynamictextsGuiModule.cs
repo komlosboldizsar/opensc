@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.Variables;
+﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.Variables;
 using OpenSC.GUI.WorkspaceManager;
 
 namespace OpenSC.Modules
@@ -12,6 +13,13 @@ namespace OpenSC.Modules
         protected override void registerPersistableWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType<DynamicTextList>();
+        }
+
+        protected override void registerMenus()
+        {
+            var variablesMenu = MenuManager.Instance.TopMenu["Variables"];
+            var dynamicTextsMenu = variablesMenu["Dynamic texts"];
+            dynamicTextsMenu.ClickHandler = (menu, tag) => new DynamicTextList().ShowAsChild();
         }
 
     }

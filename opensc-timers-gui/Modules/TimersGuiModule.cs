@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.Timers;
+﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.Timers;
 using OpenSC.GUI.WorkspaceManager;
 
 namespace OpenSC.Modules
@@ -12,6 +13,12 @@ namespace OpenSC.Modules
         protected override void registerPersistableWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType<TimerList>();
+        }
+
+        protected override void registerMenus()
+        {
+            var timersMenu = MenuManager.Instance.TopMenu["Timers"]["Timer list"];
+            timersMenu.ClickHandler = (menu, tag) => new TimerList().ShowAsChild();
         }
 
     }

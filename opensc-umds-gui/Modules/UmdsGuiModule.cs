@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.UMDs;
+﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.UMDs;
 using OpenSC.GUI.WorkspaceManager;
 
 namespace OpenSC.Modules
@@ -12,6 +13,12 @@ namespace OpenSC.Modules
         protected override void registerPersistableWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType<UmdList>();
+        }
+
+        protected override void registerMenus()
+        {
+            var umdsMenu = MenuManager.Instance.TopMenu["UMD"]["UMD list"];
+            umdsMenu.ClickHandler = (menu, tag) => new UmdList().ShowAsChild();
         }
 
     }

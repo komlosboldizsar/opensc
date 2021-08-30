@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.Mixers;
+﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.Mixers;
 using OpenSC.GUI.WorkspaceManager;
 
 namespace OpenSC.Modules
@@ -12,6 +13,13 @@ namespace OpenSC.Modules
         protected override void registerPersistableWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType<MixerList>();
+        }
+
+        protected override void registerMenus()
+        {
+            var mixersMenu = MenuManager.Instance.TopMenu["Mixers"];
+            var mixersListMenu = mixersMenu["Mixers list"];
+            mixersListMenu.ClickHandler = (menu, tag) => new MixerList().ShowAsChild();
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.Macros;
+using OpenSC.GUI.Menus;
 using OpenSC.GUI.WorkspaceManager;
 
 namespace OpenSC.Modules
@@ -12,6 +13,13 @@ namespace OpenSC.Modules
         protected override void registerPersistableWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType<MacroPanelList>();
+        }
+
+        protected override void registerMenus()
+        {
+            var macrosMenu = MenuManager.Instance.TopMenu["Macros"];
+            var listMacroPanelsMenu = macrosMenu["Macro panels list"];
+            listMacroPanelsMenu.ClickHandler = (menu, tag) => new MacroPanelList().ShowAsChild();
         }
 
     }

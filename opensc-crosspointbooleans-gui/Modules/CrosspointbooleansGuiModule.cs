@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.Routers.CrosspointBooleans;
+﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.Routers.CrosspointBooleans;
 using OpenSC.GUI.WorkspaceManager;
 
 namespace OpenSC.Modules
@@ -12,6 +13,13 @@ namespace OpenSC.Modules
         protected override void registerPersistableWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType<CrosspointBooleanList>();
+        }
+
+        protected override void registerMenus()
+        {
+            var routersMenu = MenuManager.Instance.TopMenu["Routers"];
+            var crosspointBooleansListMenu = routersMenu["Crosspoint boolean list"];
+            crosspointBooleansListMenu.ClickHandler = (menu, tag) => new CrosspointBooleanList().ShowAsChild();
         }
 
     }

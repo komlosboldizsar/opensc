@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.Routers.CrosspointStores;
+﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.Routers.CrosspointStores;
 using OpenSC.GUI.WorkspaceManager;
 
 namespace OpenSC.Modules
@@ -12,6 +13,13 @@ namespace OpenSC.Modules
         protected override void registerPersistableWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType<CrosspointStoreList>();
+        }
+
+        protected override void registerMenus()
+        {
+            var routersMenu = MenuManager.Instance.TopMenu["Routers"];
+            var crosspointStoresListMenu = routersMenu["Crosspoint store list"];
+            crosspointStoresListMenu.ClickHandler = (menu, tag) => new CrosspointStoreList().ShowAsChild();
         }
 
     }

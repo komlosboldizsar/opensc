@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.Signals.BooleanTallies;
+﻿using OpenSC.GUI.Menus;
+using OpenSC.GUI.Signals.BooleanTallies;
 using OpenSC.GUI.WorkspaceManager;
 
 namespace OpenSC.Modules
@@ -12,6 +13,13 @@ namespace OpenSC.Modules
         protected override void registerPersistableWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType<BooleanTallyList>();
+        }
+
+        protected override void registerMenus()
+        {
+            var signalsMenu = MenuManager.Instance.TopMenu["Signals"];
+            var booleanTalliesSubMenu = signalsMenu["Boolean tallies"];
+            booleanTalliesSubMenu.ClickHandler = (menu, tag) => new BooleanTallyList().ShowAsChild();
         }
 
     }
