@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,23 +12,16 @@ namespace OpenSC.GUI.WorkspaceManager
 
         private static Dictionary<string, Type> registeredTypes = new Dictionary<string, Type>();
 
-        public static void RegisterWindowType(Type windowType)
+        public static void RegisterWindowType<TWindow>()
+            where TWindow : IPersistableWindow
         {
-
-            if (!windowType.GetInterfaces().Contains(typeof(IPersistableWindow)))
-                throw new Exception();
-
-            object[] foundAttributes = windowType.GetCustomAttributes(typeof(WindowTypeNameAttribute), true);
-            if (foundAttributes.Length == 0)
-                throw new Exception();
-            WindowTypeNameAttribute typeNameAttribute = foundAttributes[0] as WindowTypeNameAttribute;
+            Type windowType = typeof(TWindow);
+            WindowTypeNameAttribute typeNameAttribute = windowType.GetAttribute<WindowTypeNameAttribute>();
             if (typeNameAttribute == null)
                 throw new Exception();
-
             string typeName = typeNameAttribute.TypeName;
             if (!registeredTypes.ContainsKey(typeName))
                 registeredTypes.Add(typeName, windowType);
-
         }
 
         public static string GetTypeNameForWindow(IPersistableWindow window)

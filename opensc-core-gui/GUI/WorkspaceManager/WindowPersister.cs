@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace OpenSC.GUI.WorkspaceManager
 {
-    class WindowPersister
+    public class WindowPersister
     {
 
         private const string WORKSPACE_FILE_PATH = "workspace.xml";
