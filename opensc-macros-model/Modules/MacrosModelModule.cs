@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model;
 using OpenSC.Model.Macros;
+using OpenSC.Model.Settings;
 
 namespace OpenSC.Modules
 {
@@ -11,6 +12,13 @@ namespace OpenSC.Modules
         protected override void registerDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(MacroDatabase));
+        }
+
+        protected override void registerSettings()
+        {
+            base.registerSettings();
+            SettingsManager.Instance.RegisterSetting(Macro.MaxStackDepthSetting);
+            SettingsManager.Instance.RegisterSetting(MacroOscServer.PortSetting);
         }
 
     }

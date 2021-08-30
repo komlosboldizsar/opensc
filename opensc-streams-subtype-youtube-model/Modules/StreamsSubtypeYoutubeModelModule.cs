@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Streams;
+﻿using OpenSC.Model.Settings;
+using OpenSC.Model.Streams;
 
 namespace OpenSC.Modules
 {
@@ -11,6 +12,12 @@ namespace OpenSC.Modules
         protected override void registerModelTypes()
         {
             StreamTypeRegister.Instance.RegisterType<YoutubeStream>();
+        }
+
+        protected override void registerSettings()
+        {
+            base.registerSettings();
+            SettingsManager.Instance.RegisterSetting(YoutubeStream.ApiKeySetting);
         }
 
     }

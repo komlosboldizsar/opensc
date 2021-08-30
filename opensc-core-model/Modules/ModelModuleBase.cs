@@ -7,6 +7,11 @@ namespace OpenSC.Modules
     {
 
         public virtual void Initialize()
+        {
+            registerSettings();
+        }
+
+        protected virtual void registerSettings()
         { }
 
     }

@@ -1,6 +1,7 @@
 ﻿using OpenSC.Model;
 using OpenSC.Model.Routers;
 using OpenSC.Model.Routers.Leitch;
+using OpenSC.Model.Settings;
 
 namespace OpenSC.Modules
 {
@@ -13,6 +14,12 @@ namespace OpenSC.Modules
         protected override void registerModelTypes()
         {
             RouterTypeRegister.Instance.RegisterType<VirtualLeitchRouter>();
+        }
+
+        protected override void registerSettings()
+        {
+            base.registerSettings();
+            SettingsManager.Instance.RegisterSetting(VirtualLeitchRouter.PanelIdSetting);
         }
 
     }
