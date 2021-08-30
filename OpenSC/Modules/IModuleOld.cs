@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Modules
 {
-    interface IModule
+    interface IModuleOld
     {
         void ProgramStarted();
         void MainWindowOpened();

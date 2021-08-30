@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Modules.Streams
 {
-    class StreamsModule: IModule
+    class StreamsModule: IModuleOld
     {
 
         public void ProgramStarted()

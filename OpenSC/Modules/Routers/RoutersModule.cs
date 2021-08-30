@@ -31,7 +31,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Modules.Routers
 {
 
-    class RoutersModule : IModule
+    class RoutersModule : IModuleOld
     {
 
         public void MainWindowOpened()

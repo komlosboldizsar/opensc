@@ -15,7 +15,7 @@ using OpenSC.Model.Mixers.BlackMagicDesign.Macros;
 namespace OpenSC.Modules.Mixers
 {
 
-    class MixersModule : IModule
+    class MixersModule : IModuleOld
     {
 
         public void MainWindowOpened()

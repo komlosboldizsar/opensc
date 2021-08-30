@@ -17,7 +17,6 @@ namespace OpenSC.Model.Variables
         public static void RegisterWindowTypes()
         {
             WindowTypeRegister.RegisterWindowType(typeof(DynamicTextList));
-            WindowTypeRegister.RegisterWindowType(typeof(BooleanList));
         }
 
         public static void RegisterMenus()

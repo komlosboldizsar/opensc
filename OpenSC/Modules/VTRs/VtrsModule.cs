@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Modules.VTRs
 {
-    class VtrsModule : IModule
+    class VtrsModule : IModuleOld
     {
         public void MainWindowOpened()
         {

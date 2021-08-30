@@ -46,11 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Modules\IModuleOld.cs" />
     <Compile Include="Modules\MacrosManager.cs" />
     <Compile Include="Modules\SerialPortsManager.cs" />
     <Compile Include="Modules\SignalsManager.cs" />
     <Compile Include="Modules\VariablesManager.cs" />
-    <Compile Include="Modules\IModule.cs" />
     <Compile Include="Modules\Mixers\MixersModule.cs" />
     <Compile Include="Modules\ModuleManager.cs" />
     <Compile Include="Modules\VTRs\VtrsModule.cs" />

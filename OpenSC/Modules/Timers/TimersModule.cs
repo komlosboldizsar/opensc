@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Modules.Timers
 {
-    class TimersModule : IModule
+    class TimersModule : IModuleOld
     {
 
         public void ProgramStarted()

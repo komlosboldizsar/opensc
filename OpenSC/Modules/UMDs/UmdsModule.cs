@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Modules.UMDs
 {
-    class UmdsModule : IModule
+    class UmdsModule : IModuleOld
     {
 
         public void MainWindowOpened()
