@@ -125,7 +125,7 @@
       <DependentUpon>ModelEditorFormBase.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\ModelEditorFormTypeRegister.cs" />
-    <Compile Include="Modules\SubtypeGuiModelModuleBase .cs" />
+    <Compile Include="Modules\SubtypeGuiModelModuleBase.cs" />
     <Compile Include="Modules\BasetypeGuiModelModuleBase.cs" />
     <Compile Include="Modules\GuiModuleBase.cs" />
     <Compile Include="GUI\Settings\IntSettingEditor.cs">
