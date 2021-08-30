@@ -1,4 +1,6 @@
 ﻿using OpenSC.Model;
+using OpenSC.Model.Routers;
+using OpenSC.Model.Routers.Virtual;
 
 namespace OpenSC.Modules
 {
@@ -10,7 +12,7 @@ namespace OpenSC.Modules
 
         protected override void registerModelTypes()
         {
-           // TODO : register VirtualRouter
+            RouterTypeRegister.Instance.RegisterType<VirtualRouter>();
         }
 
     }

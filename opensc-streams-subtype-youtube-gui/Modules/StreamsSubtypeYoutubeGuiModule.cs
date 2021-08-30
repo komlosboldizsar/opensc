@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.Streams;
+using OpenSC.Model.Streams;
+
+namespace OpenSC.Modules
 {
 
     [Module("streams-subtype-youtube-gui", "Streams / YouTube (GUI)", "TODO")]
@@ -11,7 +14,7 @@
 
         protected override void registerSubtypeEditorWindowTypes()
         {
-            // TODO: register YoutubeStreammEditorFor for YoutubeStream
+            StreamEditorFormTypeRegister.Instance.RegisterFormType<YoutubeStream, YoutubeStreamEditorForm>();
         }
 
     }

@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.Routers;
+using OpenSC.Model.Routers.Virtual;
+
+namespace OpenSC.Modules
 {
 
     [Module("routers-subtype-virtual-gui", "Routers / Virtual (GUI)", "TODO")]
@@ -11,7 +14,7 @@
 
         protected override void registerSubtypeEditorWindowTypes()
         {
-            // TODO: register VirtualRouterEditorForm for VirtualRouter
+            RouterEditorFormTypeRegister.Instance.RegisterFormType<VirtualRouter, VirtualRouterEditorForm>();
         }
 
     }

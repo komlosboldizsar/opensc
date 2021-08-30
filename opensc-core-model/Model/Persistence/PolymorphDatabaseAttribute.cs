@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OpenSC.Model.Persistence
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class PolymorphDatabaseAttribute: Attribute
+    public class PolymorphDatabaseAttribute : Attribute
     {
+        public IModelTypeRegister TypeRegister { get; private set; }
 
-        private Type converter;
-
-        public ITypeNameConverter Converter
+        public PolymorphDatabaseAttribute(Type typeRegisterType)
         {
-            get => (ITypeNameConverter) converter.GetConstructors()[0].Invoke(new object[] { });
+            PropertyInfo propertyInfo = typeRegisterType.GetProperty(INSTANCE_VARIABLE_NAME, INSTANCE_VARIABLE_LOOKUP_BINDING_FLAGS);
+            if (propertyInfo == null)
+                return;
+            this.TypeRegister = (IModelTypeRegister)propertyInfo.GetValue(null);
         }
 
-        public PolymorphDatabaseAttribute(Type Converter)
-        {
-            this.converter = Converter;
-        }
-
+        private const string INSTANCE_VARIABLE_NAME = "Instance";
+        private const BindingFlags INSTANCE_VARIABLE_LOOKUP_BINDING_FLAGS = BindingFlags.Static | BindingFlags.Public;
     }
 }

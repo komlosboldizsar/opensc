@@ -9,7 +9,7 @@ namespace OpenSC.Model.Mixers
 {
 
     [DatabaseName(MixerDatabase.DBNAME)]
-    [PolymorphDatabase(typeof(MixerTypeNameConverter))]
+    [PolymorphDatabase(typeof(MixerTypeRegister))]
     [XmlTagNames("mixers", "mixer")]
     public class MixerDatabase : DatabaseBase<Mixer>
     {

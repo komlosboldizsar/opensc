@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
     [DatabaseName(RouterDatabase.DBNAME)]
-    [PolymorphDatabase(typeof(RouterTypeNameConverter))]
+    [PolymorphDatabase(typeof(RouterTypeRegister))]
     [XmlTagNames("routers", "router")]
     public class RouterDatabase : DatabaseBase<Router>
     {

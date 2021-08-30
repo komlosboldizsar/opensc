@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.Mixers;
+using OpenSC.Model.Mixers.BlackMagicDesign;
+
+namespace OpenSC.Modules
 {
 
     [Module("mixers-subtype-bmd-gui", "Mixers / BlackMagic Design ATEM (GUI)", "TODO")]
@@ -11,7 +14,7 @@
 
         protected override void registerSubtypeEditorWindowTypes()
         {
-            // TODO: register BmdMixerEditorForm for BmdMixer
+            MixerEditorFormTypeRegister.Instance.RegisterFormType<BmdMixer, BmdMixerEditorForm>();
         }
 
     }

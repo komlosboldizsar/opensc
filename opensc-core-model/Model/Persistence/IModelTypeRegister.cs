@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Persistence
 {
-    public interface ITypeNameConverter
+    public interface IModelTypeRegister
     {
         string ConvertTypeToString(Type type);
         Type ConvertStringToType(string typeLabel);

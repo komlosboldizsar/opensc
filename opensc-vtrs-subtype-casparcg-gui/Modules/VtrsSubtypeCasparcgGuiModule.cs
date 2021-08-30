@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.VTRs;
+using OpenSC.Model.VTRs;
+
+namespace OpenSC.Modules
 {
 
     [Module("routers-subtype-bmd-gui", "VTRs / CasparCG (GUI)", "TODO")]
@@ -11,7 +14,7 @@
 
         protected override void registerSubtypeEditorWindowTypes()
         {
-            // TODO: register CasparCgPlayoutEditorForm for CasparCgPlayout
+            VtrEditorFormTypeRegister.Instance.RegisterFormType<CasparCgPlayout, CasparCgPlayoutEditorForm>();
         }
 
     }

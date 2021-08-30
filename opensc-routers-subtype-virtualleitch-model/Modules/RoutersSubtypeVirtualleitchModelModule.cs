@@ -1,4 +1,6 @@
 ﻿using OpenSC.Model;
+using OpenSC.Model.Routers;
+using OpenSC.Model.Routers.Leitch;
 
 namespace OpenSC.Modules
 {
@@ -10,7 +12,7 @@ namespace OpenSC.Modules
 
         protected override void registerModelTypes()
         {
-           // TODO : register VirtualLeitchRouter
+            RouterTypeRegister.Instance.RegisterType<VirtualLeitchRouter>();
         }
 
     }

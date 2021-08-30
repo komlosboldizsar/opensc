@@ -1,4 +1,6 @@
 ﻿using OpenSC.Model;
+using OpenSC.Model.UMDs;
+using OpenSC.Model.UMDs.McCurdy;
 
 namespace OpenSC.Modules
 {
@@ -10,8 +12,8 @@ namespace OpenSC.Modules
 
         protected override void registerModelTypes()
         {
-           // TODO : register McCurdyUMD1
-           // TODO : register McCurdyUMD1T
+            UmdTypeRegister.Instance.RegisterType<McCurdyUMD1>();
+            UmdTypeRegister.Instance.RegisterType<McCurdyUMD1T>();
         }
 
     }

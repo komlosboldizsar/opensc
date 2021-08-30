@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.Routers;
+using OpenSC.Model.Routers.BlackMagicDesign;
+
+namespace OpenSC.Modules
 {
 
     [Module("routers-subtype-bmd-gui", "Routers / BlackMagic Design Videohub (GUI)", "TODO")]
@@ -11,7 +14,7 @@
 
         protected override void registerSubtypeEditorWindowTypes()
         {
-            // TODO: register BmdRouterEditorForm for BmdRouter
+            RouterEditorFormTypeRegister.Instance.RegisterFormType<BmdVideohub, BmdVideohubEditorForm>();
         }
 
     }

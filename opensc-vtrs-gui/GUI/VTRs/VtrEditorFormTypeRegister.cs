@@ -2,8 +2,9 @@
 
 namespace OpenSC.GUI.VTRs
 {
-    public class VtrEditorFormTypeRegister: ModelEditorFormTypeRegister<Vtr>
+    public class VtrEditorFormTypeRegister : ModelEditorFormTypeRegister<Vtr>
     {
-        public static VtrEditorFormTypeRegister Instance { get; } = new VtrEditorFormTypeRegister();
+        public static ModelEditorFormTypeRegister<Vtr> Instance { get; } = new VtrEditorFormTypeRegister();
+        private VtrEditorFormTypeRegister() { }
     }
 }

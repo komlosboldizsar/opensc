@@ -1,4 +1,4 @@
-﻿using OpenSC.Model;
+﻿using OpenSC.Model.Streams;
 
 namespace OpenSC.Modules
 {
@@ -10,7 +10,7 @@ namespace OpenSC.Modules
 
         protected override void registerModelTypes()
         {
-           // TODO : register YoutubeStream
+            StreamTypeRegister.Instance.RegisterType<YoutubeStream>();
         }
 
     }

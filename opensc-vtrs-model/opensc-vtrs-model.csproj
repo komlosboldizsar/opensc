@@ -41,10 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\VTRs\VtrTypeRegister.cs" />
     <Compile Include="Model\VTRs\Vtr.cs" />
     <Compile Include="Model\VTRs\VtrDatabase.cs" />
     <Compile Include="Model\VTRs\VtrState.cs" />
-    <Compile Include="Model\VTRs\VtrTypeNameConverter.cs" />
     <Compile Include="Modules\VtrsModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

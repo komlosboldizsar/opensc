@@ -1,4 +1,5 @@
-﻿using OpenSC.Model;
+﻿using OpenSC.Model.Routers;
+using OpenSC.Model.Routers.BlackMagicDesign;
 
 namespace OpenSC.Modules
 {
@@ -10,7 +11,7 @@ namespace OpenSC.Modules
 
         protected override void registerModelTypes()
         {
-           // TODO : register BmdVideohub
+            RouterTypeRegister.Instance.RegisterType<BmdVideohub>();
         }
 
     }

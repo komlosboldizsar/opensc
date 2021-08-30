@@ -19,7 +19,7 @@ namespace OpenSC.Model.Persistence
         private IDatabaseBase database;
 
         private bool isPolymorph = false;
-        private ITypeNameConverter typeNameConverter;
+        private IModelTypeRegister typeRegister;
 
         private string rootTag = "root";
         private string itemTag = "item";
@@ -37,7 +37,7 @@ namespace OpenSC.Model.Persistence
             if (polymorphAttr != null)
             {
                 isPolymorph = true;
-                typeNameConverter = polymorphAttr.Converter;
+                typeRegister = polymorphAttr.TypeRegister;
             }
 
             XmlTagNamesAttribute tagNameAttr = database.GetType().GetCustomAttribute<XmlTagNamesAttribute>();
@@ -116,7 +116,7 @@ namespace OpenSC.Model.Persistence
 
             xmlElement.SetAttributeValue(ATTRIBUTE_ID, item.ID);
             if (isPolymorph)
-                xmlElement.SetAttributeValue(ATTRIBUTE_TYPE, typeNameConverter.ConvertTypeToString(itemType));
+                xmlElement.SetAttributeValue(ATTRIBUTE_TYPE, typeRegister.ConvertTypeToString(itemType));
 
             // Get fields
             foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
@@ -263,7 +263,7 @@ namespace OpenSC.Model.Persistence
             if (isPolymorph)
             {
                 string typeStr = xmlElement.Attributes[ATTRIBUTE_TYPE]?.Value;
-                type = typeNameConverter.ConvertStringToType(typeStr);
+                type = typeRegister.ConvertStringToType(typeStr);
                 if (type == null)
                     return null;
             }

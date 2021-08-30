@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.UMDs;
+using OpenSC.Model.UMDs.TSL31;
+
+namespace OpenSC.Modules
 {
 
     [Module("umds-subtype-tsl31-gui", "UMDs / TSL 3.1 (GUI)", "TODO")]
@@ -11,7 +14,7 @@
 
         protected override void registerSubtypeEditorWindowTypes()
         {
-            // TODO: register Tsl31EditorForm for TSL31
+            UmdEditorFormTypeRegister.Instance.RegisterFormType<TSL31, Tsl31UmdEditorForm>();
         }
 
     }

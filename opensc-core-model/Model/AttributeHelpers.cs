@@ -16,9 +16,6 @@ namespace OpenSC.Model
         public static string GetTypeLabel(this Type type)
             => type.GetAttribute<TypeLabelAttribute>()?.Label;
 
-        public static string GetTypeCode(this Type type)
-            => type.GetAttribute<TypeCodeAttribute>()?.Code;
-
         public static string GetName(this IDatabaseBase database)
             => database.GetType().GetAttribute<DatabaseNameAttribute>()?.Name;
 

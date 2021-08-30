@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Streams
 {
     [DatabaseName(StreamDatabase.DBNAME)]
-    [PolymorphDatabase(typeof(StreamTypeNameConverter))]
+    [PolymorphDatabase(typeof(StreamTypeRegister))]
     [XmlTagNames("streams", "stream")]
     public class StreamDatabase : DatabaseBase<Stream>
     {

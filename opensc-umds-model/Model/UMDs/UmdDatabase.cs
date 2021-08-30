@@ -7,7 +7,7 @@ namespace OpenSC.Model.UMDs
 {
 
     [DatabaseName(UmdDatabase.DBNAME)]
-    [PolymorphDatabase(typeof(UmdTypeNameConverter))]
+    [PolymorphDatabase(typeof(UmdTypeRegister))]
     [XmlTagNames("umds", "umd")]
     public class UmdDatabase: DatabaseBase<UMD>
     {

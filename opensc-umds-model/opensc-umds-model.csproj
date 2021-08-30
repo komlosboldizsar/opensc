@@ -43,9 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\UMDs\IUMDType.cs" />
+    <Compile Include="Model\UMDs\UmdTypeRegister.cs" />
     <Compile Include="Model\UMDs\UMD.cs" />
     <Compile Include="Model\UMDs\UmdDatabase.cs" />
-    <Compile Include="Model\UMDs\UmdTypeNameConverter.cs" />
     <Compile Include="Modules\UmdsModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

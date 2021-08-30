@@ -9,37 +9,29 @@ using System.Windows.Forms;
 namespace OpenSC.GUI
 {
 
-    public class ModelEditorFormTypeRegister<TModelBase>
-        where TModelBase : IModel
+    public class ModelEditorFormTypeRegister<TModelBasetype>
+        where TModelBasetype : class, IModel
     {
 
-        private Dictionary<Type, IModelEditorForm<TModelBase>> registeredTypes = new Dictionary<Type, IModelEditorForm<TModelBase>>();
+        private Dictionary<Type, IModelEditorForm<TModelBasetype>> registeredTypes = new Dictionary<Type, IModelEditorForm<TModelBasetype>>();
 
-        public IReadOnlyList<Type> RegisteredTypes
+        public List<Type> RegisteredTypes => registeredTypes.Keys.ToList();
+
+        public void RegisterFormType<TModelSubtype, TForm>()
+            where TModelSubtype : TModelBasetype
+            where TForm: IModelEditorForm<TModelBasetype>, new()
         {
-            get { return registeredTypes.Keys.ToList(); }
+            registeredTypes.Add(typeof(TModelSubtype), new TForm());
         }
 
-        public void RegisterFormType<TModel, TForm>()
-            where TModel: TModelBase
-            where TForm: IModelEditorForm<TModelBase>, new()
-        {
-            registeredTypes.Add(typeof(TModel), new TForm());
-        }
+        public IModelEditorForm<TModelBasetype> GetFormForModel(TModelBasetype modelInstance)
+            => GetFormForType(modelInstance.GetType(), modelInstance);
 
-        public IModelEditorForm<TModelBase> GetFormForModel(TModelBase modelInstance)
+        public IModelEditorForm<TModelBasetype> GetFormForType(Type type, TModelBasetype modelInstance = null)
         {
-            Type modelType = modelInstance.GetType();
-            if (!registeredTypes.TryGetValue(modelType, out IModelEditorForm<TModelBase> foundForm))
+            if (!registeredTypes.TryGetValue(type, out IModelEditorForm<TModelBasetype> foundForm))
                 return null;
             return foundForm.GetInstance(modelInstance);
-        }
-
-        public IModelEditorForm<TModelBase> GetFormForType(Type type)
-        {
-            if (!registeredTypes.TryGetValue(type, out IModelEditorForm<TModelBase> foundForm))
-                return null;
-            return foundForm.GetInstance(default(TModelBase));
         }
 
     }

@@ -53,7 +53,7 @@
     <Compile Include="Model\Routers\RouterOutputTallyBoolean.cs" />
     <Compile Include="Model\Routers\RouterOutputXmlSerializer.cs" />
     <Compile Include="Model\Routers\RouterState.cs" />
-    <Compile Include="Model\Routers\RouterTypeNameConverter.cs" />
+    <Compile Include="Model\Routers\RouterTypeRegister.cs" />
     <Compile Include="Modules\RoutersModelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

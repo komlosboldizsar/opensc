@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.UMDs;
+using OpenSC.Model.UMDs.McCurdy;
+
+namespace OpenSC.Modules
 {
 
     [Module("umds-subtype-mccurdy-gui", "UMDs / McCurdy and McCurdy with tally (GUI)", "TODO")]
@@ -11,8 +14,8 @@
 
         protected override void registerSubtypeEditorWindowTypes()
         {
-            // TODO: register McCurdyUmd1EditorForm for McCurdyUMD1
-            // TODO: register McCurdyUmd1TEditorForm for McCurdyUMD1T
+            UmdEditorFormTypeRegister.Instance.RegisterFormType<McCurdyUMD1, McCurdyUmd1EditorForm>();
+            UmdEditorFormTypeRegister.Instance.RegisterFormType<McCurdyUMD1T, McCurdyUmd1TEditorForm>();
         }
 
     }

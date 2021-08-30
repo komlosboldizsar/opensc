@@ -62,7 +62,7 @@
     <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Model\Persistence\ColorXmlSerializer.cs" />
     <Compile Include="Model\Persistence\DatabasePersister.cs" />
-    <Compile Include="Model\Persistence\ITypeNameConverter.cs" />
+    <Compile Include="Model\Persistence\IModelTypeRegister.cs" />
     <Compile Include="Model\Persistence\IValueXmlSerializer.cs" />
     <Compile Include="Model\Persistence\LookupInAttribute.cs" />
     <Compile Include="Model\Persistence\PersistAsAttribute.cs" />
@@ -70,7 +70,7 @@
     <Compile Include="Model\Persistence\PolymorphDatabaseAttribute.cs" />
     <Compile Include="Model\Persistence\PolymorphFieldAttribute.cs" />
     <Compile Include="Model\Persistence\TempForeignKeyAttribute.cs" />
-    <Compile Include="Model\Persistence\TypeNameConverterBase.cs" />
+    <Compile Include="Model\Persistence\ModelTypeRegisterBase.cs" />
     <Compile Include="Model\Persistence\XmlTagNamesAttribute.cs" />
     <Compile Include="Model\Settings\Converters\BoolConverter.cs" />
     <Compile Include="Model\Settings\Converters\ColorConverter.cs" />

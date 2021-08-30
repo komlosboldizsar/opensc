@@ -1,4 +1,6 @@
 ﻿using OpenSC.Model;
+using OpenSC.Model.Mixers;
+using OpenSC.Model.Mixers.BlackMagicDesign;
 
 namespace OpenSC.Modules
 {
@@ -10,7 +12,7 @@ namespace OpenSC.Modules
 
         protected override void registerModelTypes()
         {
-           // TODO : register BmdVideohub
+            MixerTypeRegister.Instance.RegisterType<BmdMixer>();
         }
 
     }
