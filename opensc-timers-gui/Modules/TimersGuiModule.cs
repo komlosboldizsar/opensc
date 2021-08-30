@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.Timers;
+using OpenSC.GUI.WorkspaceManager;
+
+namespace OpenSC.Modules
 {
 
     [Module("timers-gui", "Timers (GUI)", "TODO")]
@@ -8,7 +11,7 @@
 
         protected override void registerPersistableWindowTypes()
         {
-            // TODO: register TimerList
+            WindowTypeRegister.RegisterWindowType<TimerList>();
         }
 
     }

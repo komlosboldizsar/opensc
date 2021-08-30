@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.Routers.Mirrors;
+using OpenSC.GUI.WorkspaceManager;
+
+namespace OpenSC.Modules
 {
 
     [Module("routermirrors-gui", "Router mirrors (GUI)", "TODO")]
@@ -8,7 +11,7 @@
 
         protected override void registerPersistableWindowTypes()
         {
-            // TODO: register RouterMirrorList
+            WindowTypeRegister.RegisterWindowType<RouterMirrorList>();
         }
 
     }

@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.Mixers;
+using OpenSC.GUI.WorkspaceManager;
+
+namespace OpenSC.Modules
 {
 
     [Module("mixers-gui", "Mixers (GUI)", "TODO")]
@@ -8,7 +11,7 @@
 
         protected override void registerPersistableWindowTypes()
         {
-            // TODO: register MixerList
+            WindowTypeRegister.RegisterWindowType<MixerList>();
         }
 
     }

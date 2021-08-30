@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.VTRs;
+using OpenSC.GUI.WorkspaceManager;
+
+namespace OpenSC.Modules
 {
 
     [Module("vtrs-gui", "VTRs (GUI)", "TODO")]
@@ -8,7 +11,7 @@
 
         protected override void registerPersistableWindowTypes()
         {
-            // TODO: register VtrList
+            WindowTypeRegister.RegisterWindowType<VtrList>();
         }
 
     }

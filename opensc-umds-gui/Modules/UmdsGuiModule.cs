@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.UMDs;
+using OpenSC.GUI.WorkspaceManager;
+
+namespace OpenSC.Modules
 {
 
     [Module("umds-gui", "UMDs (GUI)", "TODO")]
@@ -8,7 +11,7 @@
 
         protected override void registerPersistableWindowTypes()
         {
-            // TODO: register UmdList
+            WindowTypeRegister.RegisterWindowType<UmdList>();
         }
 
     }

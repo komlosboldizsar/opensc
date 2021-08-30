@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.Signals.TallyCopying;
+using OpenSC.GUI.WorkspaceManager;
+
+namespace OpenSC.Modules
 {
 
     [Module("tallycopying-gui", "Tally copying (GUI)", "TODO")]
@@ -8,7 +11,7 @@
 
         protected override void registerPersistableWindowTypes()
         {
-            // TODO: register TallyCopyList
+            WindowTypeRegister.RegisterWindowType<TallyCopyList>();
         }
 
     }

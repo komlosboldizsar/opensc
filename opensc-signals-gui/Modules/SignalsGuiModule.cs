@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.Signals;
+using OpenSC.GUI.WorkspaceManager;
+
+namespace OpenSC.Modules
 {
 
     [Module("signals-gui", "Signals (GUI)", "TODO")]
@@ -8,9 +11,9 @@
 
         protected override void registerPersistableWindowTypes()
         {
-            // TODO: register SignalList
-            // TODO: register ExternalSignalList
-            // TODO: register ExternalSignalCategoryList
+            WindowTypeRegister.RegisterWindowType<SignalList>();
+            WindowTypeRegister.RegisterWindowType<ExternalSignalList>();
+            WindowTypeRegister.RegisterWindowType<ExternalSignalCategoryList>();
         }
 
     }

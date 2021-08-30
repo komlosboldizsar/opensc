@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.Routers;
+using OpenSC.GUI.WorkspaceManager;
+
+namespace OpenSC.Modules
 {
 
     [Module("routers-gui", "Routers (GUI)", "TODO")]
@@ -8,8 +11,9 @@
 
         protected override void registerPersistableWindowTypes()
         {
-            // TODO: register RouterList
-            // TODO: register Router controller forms
+            WindowTypeRegister.RegisterWindowType<RouterList>();
+            WindowTypeRegister.RegisterWindowType<RouterControlForm>();
+            WindowTypeRegister.RegisterWindowType<RouterControlTableForm>();
         }
 
     }

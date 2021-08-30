@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.Routers.CrosspointStores;
+using OpenSC.GUI.WorkspaceManager;
+
+namespace OpenSC.Modules
 {
 
     [Module("crosspointstores-gui", "Crosspoint stores (GUI)", "TODO")]
@@ -8,7 +11,7 @@
 
         protected override void registerPersistableWindowTypes()
         {
-            // TODO: register CrosspointStoreList
+            WindowTypeRegister.RegisterWindowType<CrosspointStoreList>();
         }
 
     }

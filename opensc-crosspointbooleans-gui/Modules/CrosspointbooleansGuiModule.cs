@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.Routers.CrosspointBooleans;
+using OpenSC.GUI.WorkspaceManager;
+
+namespace OpenSC.Modules
 {
 
     [Module("crosspointbooleans-gui", "Crosspoint booleans (GUI)", "TODO")]
@@ -8,7 +11,7 @@
 
         protected override void registerPersistableWindowTypes()
         {
-            // TODO: register CrosspointBooleanList
+            WindowTypeRegister.RegisterWindowType<CrosspointBooleanList>();
         }
 
     }

@@ -1,4 +1,7 @@
-﻿namespace OpenSC.Modules
+﻿using OpenSC.GUI.Signals.BooleanTallies;
+using OpenSC.GUI.WorkspaceManager;
+
+namespace OpenSC.Modules
 {
 
     [Module("booleantallies-gui", "Boolean tallies (GUI)", "TODO")]
@@ -8,7 +11,7 @@
 
         protected override void registerPersistableWindowTypes()
         {
-            // TODO: register BooleanTallyList
+            WindowTypeRegister.RegisterWindowType<BooleanTallyList>();
         }
 
     }
