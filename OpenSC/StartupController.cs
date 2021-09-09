@@ -60,8 +60,6 @@ namespace OpenSC
 
         private static void InitSettings()
         {
-            Status = "Registering settings...";
-            ModuleManager.RegisterSettings();
             Status = "Loading settings...";
             SettingsManager.Instance.LoadSettings();
             Status = "Settings loaded.";
@@ -81,16 +79,6 @@ namespace OpenSC
 
         private static void InitDatabases()
         {
-            
-            // Register databases
-            Status = "Registering databases...";
-            MacrosManager.RegisterDatabases();
-            VariablesManager.RegisterDatabases();
-            SignalsManager.RegisterDatabases();
-            SerialPortsManager.RegisterDatabases();
-            ModuleManager.RegisterDatabasePersisterSerializers();
-            ModuleManager.RegisterDatabases();
-
             // Load
             Status = "Loading databases...";
             MasterDatabase.Instance.LoadEverything();
