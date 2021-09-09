@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model;
+using OpenSC.Model.Persistence;
 using OpenSC.Model.Routers;
 using OpenSC.Model.Routers.Virtual;
 
@@ -13,6 +14,11 @@ namespace OpenSC.Modules
         protected override void registerModelTypes()
         {
             RouterTypeRegister.Instance.RegisterType<VirtualRouter>();
+        }
+
+        protected override void registerSerializers()
+        {
+            DatabasePersister<Router>.RegisterSerializer(new VirtualRouterOutputXmlSerializer());
         }
 
     }

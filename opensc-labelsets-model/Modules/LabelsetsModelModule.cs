@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model;
+using OpenSC.Model.Persistence;
 using OpenSC.Model.Routers;
 
 namespace OpenSC.Modules
@@ -12,6 +13,11 @@ namespace OpenSC.Modules
         protected override void registerDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(LabelsetDatabase));
+        }
+
+        protected override void registerSerializers()
+        {
+            DatabasePersister<Labelset>.RegisterSerializer(new LabelXmlSerializer());
         }
 
     }

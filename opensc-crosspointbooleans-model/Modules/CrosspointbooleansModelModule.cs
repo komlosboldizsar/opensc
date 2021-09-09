@@ -15,6 +15,9 @@ namespace OpenSC.Modules
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(CrosspointBooleanDatabase));
         }
 
+        protected override void registerSerializers()
+        { }
+
     }
 
 }

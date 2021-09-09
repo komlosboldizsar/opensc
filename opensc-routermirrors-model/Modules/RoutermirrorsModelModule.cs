@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model;
+using OpenSC.Model.Persistence;
 using OpenSC.Model.Routers.Mirrors;
 
 namespace OpenSC.Modules
@@ -12,6 +13,12 @@ namespace OpenSC.Modules
         protected override void registerDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(RouterMirrorDatabase));
+        }
+
+        protected override void registerSerializers()
+        {
+            DatabasePersister<RouterMirror>.RegisterSerializer(new RouterMirrorInputAssociationXmlSerializer());
+            DatabasePersister<RouterMirror>.RegisterSerializer(new RouterMirrorOutputAssociationXmlSerializer());
         }
 
     }

@@ -8,8 +8,11 @@ namespace OpenSC.Modules
 
         public virtual void Initialize()
         {
+            registerSerializers();
             registerSettings();
         }
+
+        protected abstract void registerSerializers();
 
         protected virtual void registerSettings()
         { }

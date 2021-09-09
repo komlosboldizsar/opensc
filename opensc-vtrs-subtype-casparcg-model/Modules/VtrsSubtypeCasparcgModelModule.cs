@@ -14,6 +14,9 @@ namespace OpenSC.Modules
             VtrTypeRegister.Instance.RegisterType<CasparCgPlayout>();
         }
 
+        protected override void registerSerializers()
+        { }
+
     }
 
 }

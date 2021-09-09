@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model;
 using OpenSC.Model.Mixers;
+using OpenSC.Model.Persistence;
 
 namespace OpenSC.Modules
 {
@@ -12,6 +13,11 @@ namespace OpenSC.Modules
         protected override void registerDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(MixerDatabase));
+        }
+
+        protected override void registerSerializers()
+        {
+            DatabasePersister<Mixer>.RegisterSerializer(new MixerInputXmlSerializer());
         }
 
     }

@@ -15,6 +15,9 @@ namespace OpenSC.Modules
             UmdTypeRegister.Instance.RegisterType<TSL31>();
         }
 
+        protected override void registerSerializers()
+        { }
+
     }
 
 }

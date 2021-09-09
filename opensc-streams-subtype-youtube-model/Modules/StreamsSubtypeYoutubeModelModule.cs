@@ -14,6 +14,9 @@ namespace OpenSC.Modules
             StreamTypeRegister.Instance.RegisterType<YoutubeStream>();
         }
 
+        protected override void registerSerializers()
+        { }
+
         protected override void registerSettings()
         {
             base.registerSettings();

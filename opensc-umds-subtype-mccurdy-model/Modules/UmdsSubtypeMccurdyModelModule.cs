@@ -16,6 +16,9 @@ namespace OpenSC.Modules
             UmdTypeRegister.Instance.RegisterType<McCurdyUMD1T>();
         }
 
+        protected override void registerSerializers()
+        { }
+
     }
 
 }

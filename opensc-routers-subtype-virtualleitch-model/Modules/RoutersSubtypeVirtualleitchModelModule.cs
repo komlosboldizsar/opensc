@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model;
+using OpenSC.Model.Persistence;
 using OpenSC.Model.Routers;
 using OpenSC.Model.Routers.Leitch;
 using OpenSC.Model.Settings;
@@ -14,6 +15,11 @@ namespace OpenSC.Modules
         protected override void registerModelTypes()
         {
             RouterTypeRegister.Instance.RegisterType<VirtualLeitchRouter>();
+        }
+
+        protected override void registerSerializers()
+        {
+            DatabasePersister<Router>.RegisterSerializer(new VirtualLeitchRouterOutputXmlSerializer());
         }
 
         protected override void registerSettings()

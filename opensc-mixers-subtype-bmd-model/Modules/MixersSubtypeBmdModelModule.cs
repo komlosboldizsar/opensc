@@ -15,6 +15,9 @@ namespace OpenSC.Modules
             MixerTypeRegister.Instance.RegisterType<BmdMixer>();
         }
 
+        protected override void registerSerializers()
+        { }
+
     }
 
 }

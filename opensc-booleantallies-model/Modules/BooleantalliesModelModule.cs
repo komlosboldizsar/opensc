@@ -14,6 +14,9 @@ namespace OpenSC.Modules
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(BooleanTallyDatabase));
         }
 
+        protected override void registerSerializers()
+        { }
+
     }
 
 }

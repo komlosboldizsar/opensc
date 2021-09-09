@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model;
 using OpenSC.Model.Macros;
+using OpenSC.Model.Persistence;
 using OpenSC.Model.Settings;
 
 namespace OpenSC.Modules
@@ -12,6 +13,12 @@ namespace OpenSC.Modules
         protected override void registerDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(MacroDatabase));
+        }
+
+        protected override void registerSerializers()
+        {
+            DatabasePersister<Macro>.RegisterSerializer(new MacroCommandWithArgumentsXmlSerializer());
+            DatabasePersister<Macro>.RegisterSerializer(new MacroTriggerWithArgumentsXmlSerializer());
         }
 
         protected override void registerSettings()

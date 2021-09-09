@@ -13,6 +13,9 @@ namespace OpenSC.Modules
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(TimerDatabase));
         }
 
+        protected override void registerSerializers()
+        { }
+
     }
 
 }

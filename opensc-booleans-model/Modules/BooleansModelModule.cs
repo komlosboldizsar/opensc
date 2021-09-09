@@ -10,6 +10,9 @@ namespace OpenSC.Modules
         protected override void registerDatabases()
         { }
 
+        protected override void registerSerializers()
+        { }
+
     }
 
 }

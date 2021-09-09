@@ -14,6 +14,9 @@ namespace OpenSC.Modules
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(Model.Signals.ExternalSignalDatabases.ExternalSignalCategoryDatabase));
         }
 
+        protected override void registerSerializers()
+        { }
+
     }
 
 }

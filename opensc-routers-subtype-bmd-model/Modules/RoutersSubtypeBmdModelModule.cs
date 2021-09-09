@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Routers;
+﻿using OpenSC.Model.Persistence;
+using OpenSC.Model.Routers;
 using OpenSC.Model.Routers.BlackMagicDesign;
 
 namespace OpenSC.Modules
@@ -12,6 +13,11 @@ namespace OpenSC.Modules
         protected override void registerModelTypes()
         {
             RouterTypeRegister.Instance.RegisterType<BmdVideohub>();
+        }
+
+        protected override void registerSerializers()
+        {
+            DatabasePersister<Router>.RegisterSerializer(new BmdVideohubOutputXmlSerializer());
         }
 
     }
