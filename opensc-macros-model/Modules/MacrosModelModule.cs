@@ -10,6 +10,12 @@ namespace OpenSC.Modules
     public class MacrosModelModule : BasetypeModuleBase
     {
 
+        public override void Initialize()
+        {
+            base.Initialize();
+            MacroOscServer.Instance.Start();
+        }
+
         protected override void registerDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(MacroDatabase));
