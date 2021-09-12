@@ -4,7 +4,6 @@ using OpenSC.GUI.WorkspaceManager;
 
 namespace OpenSC.Modules
 {
-
     [Module("booleans-gui", "Booleans (GUI)", "TODO")]
     [DependsOnModule(typeof(BooleansModelModule))]
     public class BooleansGuiModule : BasetypeGuiModuleBase<BooleansModelModule>

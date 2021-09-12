@@ -4,7 +4,7 @@ using OpenSC.Model.VTRs;
 namespace OpenSC.Modules
 {
 
-    [Module("routers-subtype-bmd-gui", "VTRs / CasparCG (GUI)", "TODO")]
+    [Module("vtrs-subtype-casparcg-gui", "VTRs / CasparCG (GUI)", "TODO")]
     [DependsOnModule(typeof(VtrsSubtypeCasparcgModelModule))]
     public class VtrsSubtypeCasparcgGuiModule : SubtypeGuiModuleBase<VtrsSubtypeCasparcgModelModule>
     {

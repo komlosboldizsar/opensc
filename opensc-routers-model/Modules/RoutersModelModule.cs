@@ -12,7 +12,7 @@ namespace OpenSC.Modules
 
         protected override void registerDatabases()
         {
-            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(RoutersModelModule));
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(RouterDatabase));
         }
 
         protected override void registerSerializers()
