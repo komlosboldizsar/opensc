@@ -9,7 +9,9 @@ using OpenSC.Model.Variables;
 using OpenSC.Modules;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,85 +41,16 @@ namespace OpenSC
 
         private const string LOG_TAG = "StartupController";
 
-        public static void ProgramStarted()
+        public static void Init()
         {
-            InitSettings();
-            InitModules();
-            InitDatabases();
-        }
-
-        public static void GuiInitializable()
-        {
-            Status = "Initializing GUI...";
-            InitGUI();
-            InitMenus();
-        }
-
-        public static void MainWindowOpened()
-        {
-            ModuleManager.MainWindowOpened();
-        }
-
-        private static void InitSettings()
-        {
-            Status = "Loading settings...";
+            ModuleLoader loader = new ModuleLoader();
+            loader.LoadModules();
             SettingsManager.Instance.LoadSettings();
-            Status = "Settings loaded.";
-        }
-
-        private static void InitModules()
-        {
-            Status = "Initializing module manager...";
-            ModuleManager.Init();
-            Status = "Registering model types...";
-            ModuleManager.RegisterModelTypes();
-            Status = "Registering dynamic text functions...";
-            ModuleManager.RegisterDynamicTextFunctions();
-            Status = "Registering macro commands and triggers...";
-            ModuleManager.RegisterMacroCommandsAndTriggers();
-        }
-
-        private static void InitDatabases()
-        {
-            // Load
-            Status = "Loading databases...";
             MasterDatabase.Instance.LoadEverything();
-            Status = "Databases loaded.";
-
-            // Log
-            LogDispatcher.I(LOG_TAG, "Databases initialized and loaded.");
-
-        }
-
-        private static void InitGUI()
-        {
-
-            // Register window types
-            Status = "Registering window types...";
-            VariablesManager.RegisterWindowTypes();
-            MacrosManager.RegisterWindowTypes();
-            SignalsManager.RegisterWindowTypes();
-            SerialPortsManager.RegisterWindowTypes();
-            ModuleManager.RegisterWindowTypes();
-
-            // Init window manager
-            Status = "Initializing window manager...";
             WindowManager.Instance.Init();
-
-            // Log
-            LogDispatcher.I(LOG_TAG, "Workspace and window manager initialized.");
-
         }
 
-        private static void InitMenus()
-        {
-            Status = "Registering menus...";
-            VariablesManager.RegisterMenus();
-            MacrosManager.RegisterMenus();
-            SignalsManager.RegisterMenus();
-            SerialPortsManager.RegisterMenus();
-            ModuleManager.RegisterMenus();
-        }
+        
 
     }
 

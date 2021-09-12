@@ -50,8 +50,9 @@ namespace OpenSC
 
             // Start components
             StartupController.StatusChanged += startupControllerStatusChangedHandler;
-            StartupController.ProgramStarted();
-            StartupController.GuiInitializable();
+            //StartupController.ProgramStarted();
+            //StartupController.GuiInitializable();
+            StartupController.Init();
 
             // Main message loop
             GUI.MainForm.Instance.Load += mainFormOpenedHandler;
@@ -68,7 +69,7 @@ namespace OpenSC
         private static void mainFormOpenedHandler(object sender, EventArgs e)
         {
             LogDispatcher.I(LOG_TAG, "Main form opened.");
-            StartupController.MainWindowOpened();
+            //StartupController.MainWindowOpened();
             splashScreen.Status = "Program started.";
             splashScreen.Close();
         }
