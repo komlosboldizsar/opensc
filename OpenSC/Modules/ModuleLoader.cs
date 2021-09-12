@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Logger;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace OpenSC.Modules
 
     class ModuleLoader
     {
+
+        private const string LOG_TAG = "ModuleLoader";
 
         public void LoadModules()
         {
@@ -54,6 +57,7 @@ namespace OpenSC.Modules
                         ModuleData moduleData = new ModuleData()
                         {
                             Name = moduleAttribute.Name,
+                            Path = fileInfo.FullName,
                             Assembly = assembly,
                             Instance = moduleDescriptor,
                             Type = moduleDescriptorTypeInfo.AsType()
@@ -61,6 +65,7 @@ namespace OpenSC.Modules
                         loadedModules.Add(moduleData);
                         loadedModulesByName.Add(moduleData.Name, moduleData);
                         loadedModulesByType.Add(moduleData.Type, moduleData);
+                        LogDispatcher.I(LOG_TAG, "Found module [{0}] in [{1}].", moduleData.Name, moduleData.Path);
                     }
                 }
             }
@@ -141,8 +146,13 @@ namespace OpenSC.Modules
         private void initModules()
         {
             foreach (ModuleData moduleData in loadedModules)
+            {
                 if (moduleData.ToInit)
+                {
                     moduleData.Instance.Initialize();
+                    LogDispatcher.I(LOG_TAG, "Initializing module [{0}]...", moduleData.Name);
+                }
+            }
         }
 
         private void moduleDependencyMissing(ModuleData moduleData)
@@ -155,6 +165,7 @@ namespace OpenSC.Modules
         private class ModuleData
         {
             public string Name;
+            public string Path;
             public Assembly Assembly;
             public Type Type;
             public IModule Instance;

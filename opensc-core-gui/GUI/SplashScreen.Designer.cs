@@ -37,7 +37,7 @@
             // titleLabel
             // 
             this.titleLabel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.titleLabel.Font = new System.Drawing.Font("DSEG14 Classic", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.titleLabel.ForeColor = System.Drawing.Color.White;
             this.titleLabel.Location = new System.Drawing.Point(0, 0);
             this.titleLabel.Name = "titleLabel";
@@ -72,6 +72,7 @@
             this.borderPanel.Name = "borderPanel";
             this.borderPanel.Size = new System.Drawing.Size(463, 162);
             this.borderPanel.TabIndex = 2;
+            this.borderPanel.UseWaitCursor = true;
             // 
             // SplashScreen
             // 
@@ -87,6 +88,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SplashScreen";
             this.UseWaitCursor = true;
+            this.Load += new System.EventHandler(this.SplashScreen_Load);
             this.borderPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 

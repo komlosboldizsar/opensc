@@ -21,36 +21,22 @@ namespace OpenSC
     internal class StartupController
     {
 
-        #region Property: Status
-        public delegate void StatusChangedDelegate(string status);
-        public static event StatusChangedDelegate StatusChanged;
-
-        private static string status;
-
-        public static string Status
-        {
-            get => status;
-            set
-            {
-                status = value;
-                LogDispatcher.I(LOG_TAG, value);
-                StatusChanged?.Invoke(value);
-            }
-        }
-        #endregion
-
         private const string LOG_TAG = "StartupController";
 
         public static void Init()
         {
             ModuleLoader loader = new ModuleLoader();
             loader.LoadModules();
+            log("Loading settings...");
             SettingsManager.Instance.LoadSettings();
+            log("Loading databases...");
             MasterDatabase.Instance.LoadEverything();
+            log("Loading workspace...");
             WindowManager.Instance.Init();
+            log("Ready.");
         }
 
-        
+        private static void log(string message) => LogDispatcher.I(LOG_TAG, message);
 
     }
 

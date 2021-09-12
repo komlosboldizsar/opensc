@@ -1,16 +1,6 @@
-﻿using OpenSC.GUI.WorkspaceManager;
-using OpenSC.Logger;
-using OpenSC.Model;
-using OpenSC.Model.Settings;
-using OpenSC.Model.Signals;
-using OpenSC.Model.Variables;
-using OpenSC.Modules;
+﻿using OpenSC.Logger;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace OpenSC
@@ -42,16 +32,13 @@ namespace OpenSC
             // Splash screen
             splashScreen = new GUI.SplashScreen();
             splashScreen.Show();
-            splashScreen.Status = "Initializing components...";
+            LogDispatcher.I(LOG_TAG, "Initializing components...");
             Application.DoEvents();
 
             // Thread helpers init
             ThreadHelpers.InvokeHelper.Init();
 
             // Start components
-            StartupController.StatusChanged += startupControllerStatusChangedHandler;
-            //StartupController.ProgramStarted();
-            //StartupController.GuiInitializable();
             StartupController.Init();
 
             // Main message loop
@@ -60,17 +47,9 @@ namespace OpenSC
 
         }
 
-        private static void startupControllerStatusChangedHandler(string status)
-        {
-            splashScreen.Status = status;
-            Application.DoEvents();
-        }
-
         private static void mainFormOpenedHandler(object sender, EventArgs e)
         {
             LogDispatcher.I(LOG_TAG, "Main form opened.");
-            //StartupController.MainWindowOpened();
-            splashScreen.Status = "Program started.";
             splashScreen.Close();
         }
 

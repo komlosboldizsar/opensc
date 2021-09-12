@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Logger;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,7 +12,7 @@ using System.Windows.Forms;
 namespace OpenSC.GUI
 {
 
-    public partial class SplashScreen : Form
+    public partial class SplashScreen : Form, ILogReceiver
     {
 
         public SplashScreen()
@@ -19,10 +20,24 @@ namespace OpenSC.GUI
             InitializeComponent();
         }
 
+        private void SplashScreen_Load(object sender, EventArgs e)
+        {
+            LogDispatcher.Subscribe(this, LogMessageType.Info);
+        }
+
+        public void ReceiveLogMessage(LogMessageType messageType, DateTime timestamp, string tag, string message)
+        {
+            Status = message;
+        }
+
         public string Status
         {
             get => statusLabel.Text;
-            set => statusLabel.Text = value;
+            set
+            {
+                statusLabel.Text = value;
+                Application.DoEvents();
+            }
         }
 
     }
