@@ -32,15 +32,10 @@ namespace OpenSC.GUI
 
         private const string LOG_TAG = "MainForm";
 
-        public MainForm()
-        {
-            InitializeComponent();
-        }
+        public MainForm() => InitializeComponent();
 
         private void clockUpdateTimer_Tick(object sender, EventArgs e)
-        {
-            statusStripClock.Text = DateTime.Now.ToString("yyyy. MM. dd. HH:mm:ss");
-        }
+            => statusStripClock.Text = DateTime.Now.ToString("yyyy. MM. dd. HH:mm:ss");
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -64,10 +59,7 @@ namespace OpenSC.GUI
         }
 
         #region Size and position change event handlers
-        private void mainFormSizeChangedHandler(Size size)
-        {
-            Size = size;
-        }
+        private void mainFormSizeChangedHandler(Size size) => Size = size;
 
         private void mainFormPositionChangedHandler(Point position)
         {
@@ -90,9 +82,7 @@ namespace OpenSC.GUI
         #endregion
 
         private void mdiChildActivateHandler(object sender, EventArgs e)
-        {
-            WindowManager.Instance.ActiveWindow = ActiveMdiChild;
-        }
+            => WindowManager.Instance.ActiveWindow = ActiveMdiChild;
 
         private void activeWindowChangedHandler(Form window)
         {
@@ -123,9 +113,7 @@ namespace OpenSC.GUI
         }
 
         private void windowsMenuItemClickHandler(object sender, EventArgs e)
-        {
-            ((sender as ToolStripMenuItem)?.Tag as ChildWindowBase)?.Focus();
-        }
+            => ((sender as ToolStripMenuItem)?.Tag as ChildWindowBase)?.Focus();
 
         private void arrangeWindowsMenuItemClickHandler(object sender, EventArgs e)
         {
@@ -151,13 +139,10 @@ namespace OpenSC.GUI
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            MasterDatabase.Instance.SaveEverything();
-        }
+            => MasterDatabase.Instance.SaveEverything();
 
         private void globalSettingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SettingsWindow.Instance.ShowAsChild();
-        }
+            => SettingsWindow.Instance.ShowAsChild();
+
     }
 }

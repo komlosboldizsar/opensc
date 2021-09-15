@@ -18,25 +18,20 @@ namespace OpenSC.Modules
             WindowTypeRegister.RegisterWindowType<RouterControlTableForm>();
         }
 
+        public const string TOPMENUGROUP_ID = MenuManager.GROUP_ID_MODULES;
+        public const string TOPMENU_LABEL = "Routers";
+        public const string MENUGROUP_ID = MenuManager.GROUP_ID_BASE;
+        public const int MENUGROUP_WEIGHT = MenuManager.GROUP_WEIGHT_BASE;
+        public const string SUBMENU_ROUTERS_LABEL = "Router list";
+        public const string SUBMENU_ALLCROSSPOINTS_LABEL = "All crosspoints";
+
         protected override void registerMenus()
         {
-            var routersMenu = MenuManager.Instance.TopMenu["Routers"];
-
-            var routersListMenu = routersMenu["Routers list"];
-            routersListMenu.ClickHandler = (menu, tag) => new RouterList().ShowAsChild();
-
-            var allCrosspointsMenu = routersMenu["All crosspoints"];
-            allCrosspointsMenu.ClickHandler = (menu, tag) => new RouterControlTableForm(RouterDatabase.Instance).ShowAsChild();
-
-            /* routersMenu.AddSeparator("sep3");
-
-            MenuItem.MenuClickHandler routerCrosspointsSubMenuClickHandler = (menu, tag) => new RouterControlTableForm((Router)tag).ShowAsChild();
-            foreach (Router router in RouterDatabase.Instance.ItemsAsList)
-            {
-                string menuId = string.Format("router-{0}", router.ID);
-                var routerCrosspointsSubMenu = routersMenu.AddChild(menuId, router.Name, null, router, routerCrosspointsSubMenuClickHandler);
-            } */ // TODO: After databases loaded
-
+            MenuItem topMenu = MenuManager.Instance.TopMenu[TOPMENUGROUP_ID][TOPMENU_LABEL];
+            MenuItemGroup menuGroup = topMenu[MENUGROUP_ID];
+            menuGroup.Weight = MENUGROUP_WEIGHT;
+            menuGroup[SUBMENU_ROUTERS_LABEL].ClickHandler = (menu, tag) => new RouterList().ShowAsChild();
+            menuGroup[SUBMENU_ALLCROSSPOINTS_LABEL].ClickHandler = (menu, tag) => new RouterControlTableForm(RouterDatabase.Instance).ShowAsChild();
         }
 
     }

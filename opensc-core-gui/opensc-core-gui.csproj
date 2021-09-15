@@ -83,6 +83,8 @@
     <Compile Include="GUI\GeneralComponents\Menus\CustomToolStripMenuItem.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GUI\GeneralComponents\Menus\IManageableCustomMenu.cs" />
+    <Compile Include="GUI\GeneralComponents\Menus\MenuItemManager.cs" />
     <Compile Include="GUI\GeneralComponents\RichTextBoxWithBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -115,9 +117,9 @@
     <Compile Include="GUI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Menus\MenuItemGroup.cs" />
     <Compile Include="GUI\Menus\MenuItem.cs" />
     <Compile Include="GUI\Menus\MenuManager.cs" />
-    <Compile Include="GUI\Menus\SeparatorMenuItem.cs" />
     <Compile Include="GUI\ModelEditorFormBase.cs">
       <SubType>Form</SubType>
     </Compile>

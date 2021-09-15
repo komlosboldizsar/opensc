@@ -15,11 +15,18 @@ namespace OpenSC.Modules
             WindowTypeRegister.RegisterWindowType<RouterMirrorList>();
         }
 
+        public const string TOPMENUGROUP_ID = MenuManager.GROUP_ID_MODULES;
+        public const string TOPMENU_LABEL = "Routers";
+        public const string MENUGROUP_ID = "routermirrors";
+        public const int MENUGROUP_WEIGHT = MenuManager.GROUP_WEIGHT_BASE + 10;
+        public const string SUBMENU_LABEL = "Router mirror list";
+
         protected override void registerMenus()
         {
-            var routersMenu = MenuManager.Instance.TopMenu["Routers"];
-            var routerMirrorsListMenu = routersMenu["Router mirrors list"];
-            routerMirrorsListMenu.ClickHandler = (menu, tag) => new RouterMirrorList().ShowAsChild();
+            MenuItem topMenu = MenuManager.Instance.TopMenu[TOPMENUGROUP_ID][TOPMENU_LABEL];
+            MenuItemGroup menuGroup = topMenu[MENUGROUP_ID];
+            menuGroup.Weight = MENUGROUP_WEIGHT;
+            menuGroup[SUBMENU_LABEL].ClickHandler = (menu, tag) => new RouterMirrorList().ShowAsChild();
         }
 
     }

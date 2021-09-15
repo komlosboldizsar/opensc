@@ -15,11 +15,18 @@ namespace OpenSC.Modules
             WindowTypeRegister.RegisterWindowType<SerialPortList>();
         }
 
+        public const string TOPMENUGROUP_ID = MenuManager.GROUP_ID_MODULES;
+        public const string TOPMENU_LABEL = "Serial ports";
+        public const string MENUGROUP_ID = MenuManager.GROUP_ID_BASE;
+        public const int MENUGROUP_WEIGHT = MenuManager.GROUP_WEIGHT_BASE;
+        public const string SUBMENU_LABEL = "Serial port list";
+
         protected override void registerMenus()
         {
-            var portsMenu = MenuManager.Instance.TopMenu["Ports"];
-            var serialPortsMenu = portsMenu["Serial ports"];
-            serialPortsMenu.ClickHandler = (menu, tag) => new SerialPortList().ShowAsChild();
+            MenuItem topMenu = MenuManager.Instance.TopMenu[TOPMENUGROUP_ID][TOPMENU_LABEL];
+            MenuItemGroup menuGroup = topMenu[MENUGROUP_ID];
+            menuGroup.Weight = MENUGROUP_WEIGHT;
+            menuGroup[SUBMENU_LABEL].ClickHandler = (menu, tag) => new SerialPortList().ShowAsChild();
         }
 
     }

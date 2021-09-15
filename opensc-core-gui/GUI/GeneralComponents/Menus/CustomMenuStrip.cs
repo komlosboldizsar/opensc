@@ -1,37 +1,35 @@
 ﻿using OpenSC.GUI.Menus;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenSC.GUI.GeneralComponents.Menus
 {
-    public class CustomMenuStrip: System.Windows.Forms.MenuStrip
+    public class CustomMenuStrip : System.Windows.Forms.MenuStrip, IManageableCustomMenu
     {
+
+        public System.Windows.Forms.ToolStripItemCollection DropDownItems => Items;
 
         private MenuItem associatedMenuItem;
 
         public MenuItem AssociatedMenuItem
         {
-            get { return associatedMenuItem; }
+            get => associatedMenuItem;
             set
             {
                 if (value == associatedMenuItem)
                     return;
-                unsubscribeModelEvents();
-                removeDynamicChildren();
+                MenuItem oldAssociatedMenuItem = associatedMenuItem;
                 associatedMenuItem = value;
-                subscribeModelEvents();
-                createChildren();
+                AssociatedMenuItemChanged?.Invoke(oldAssociatedMenuItem, associatedMenuItem);
             }
         }
+
+        public event AssociatedMenuItemChangedDelegate AssociatedMenuItemChanged;
 
         private int dynamicChildrenInsertPosition;
 
         public int DynamicChildrenInsertPosition
         {
-            get { return dynamicChildrenInsertPosition; }
+            get => dynamicChildrenInsertPosition;
             set
             {
                 if (value < 0)
@@ -40,68 +38,14 @@ namespace OpenSC.GUI.GeneralComponents.Menus
             }
         }
 
+        public int StartPosition => DynamicChildrenInsertPosition;
+
+        private MenuItemManager manager;
+
         public CustomMenuStrip()
         {
-            subscribeModelEvents();
-            createChildren();
+            manager = new MenuItemManager(this);
         }
-
-        private void subscribeModelEvents()
-        {
-            if (associatedMenuItem == null)
-                return;
-            associatedMenuItem.ChildAdded += childAddedHandler;
-            associatedMenuItem.ChildRemoved += childRemovedHandler;
-        }
-        private void unsubscribeModelEvents()
-        {
-            if (associatedMenuItem == null)
-                return;
-            associatedMenuItem.ChildAdded -= childAddedHandler;
-            associatedMenuItem.ChildRemoved -= childRemovedHandler;
-        }
-
-        private void createChildren()
-        {
-            if (associatedMenuItem == null)
-                return;
-            foreach (MenuItem menuItem in associatedMenuItem.Children)
-                addChild(menuItem);
-        }
-
-        private void removeDynamicChildren()
-        {
-            for (int i = Items.Count - 1; i >= 0; i--)
-                if (Items[i] is CustomToolStripMenuItem)
-                    Items.RemoveAt(i);
-            dynamicChildren = 0;
-        }
-
-        int dynamicChildren = 0;
-
-        private void addChild(MenuItem associatedMenuItem)
-        {
-            // UNSAFE: separators?
-            System.Windows.Forms.ToolStripItem myChild = new CustomToolStripMenuItem(associatedMenuItem);
-            Items.Insert(dynamicChildrenInsertPosition + dynamicChildren, myChild);
-            dynamicChildren++;
-        }
-
-        private void removeChild(MenuItem associatedMenuItem)
-        {
-            for (int i = Items.Count - 1; i >= 0; i--)
-            {
-                CustomToolStripMenuItem customMenuItem = Items[i] as CustomToolStripMenuItem;
-                if ((customMenuItem != null) && (customMenuItem.AssociatedMenuItem == associatedMenuItem))
-                    Items.RemoveAt(i);
-            }
-        }
-
-        private void childAddedHandler(MenuItem parent, MenuItem child, string id)
-            => addChild(child);
-
-        private void childRemovedHandler(MenuItem parent, MenuItem child, string id)
-            => removeChild(child);
 
     }
 }

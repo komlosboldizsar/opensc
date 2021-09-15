@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenSC.GUI.Menus
 {
     public class MenuItem
     {
 
-        public MenuItem(string text, Bitmap image, object tag, MenuClickHandler clickHandler)
+        public MenuItem(MenuItemGroup parentGroup, string text, Bitmap image, object tag, MenuClickHandler clickHandler)
         {
+            this.ParentGroup = parentGroup;
             this.text = text;
             this.image = image;
             this.tag = tag;
             this.clickHandler = clickHandler;
         }
 
-        public MenuItem this[string id]
-        {
-            get { return GetChild(id, true); }
-        }
+        public MenuItemGroup this[string id] => GetGroup(id, true);
+        public MenuItemGroup ParentGroup { get; private set; }
 
+        #region Property: Text
         public delegate void TextChangedDelegate(MenuItem menuItem, string oldText, string newText);
         public event TextChangedDelegate TextChanged;
 
@@ -40,7 +37,9 @@ namespace OpenSC.GUI.Menus
                 TextChanged?.Invoke(this, oldText, value);
             }
         }
+        #endregion
 
+        #region Property: Image
         public delegate void ImageChangedDelegate(MenuItem menuItem, Bitmap oldImage, Bitmap newImage);
         public event ImageChangedDelegate ImageChanged;
 
@@ -58,7 +57,9 @@ namespace OpenSC.GUI.Menus
                 ImageChanged?.Invoke(this, oldImage, value);
             }
         }
+        #endregion
 
+        #region Property: Tag
         public delegate void TagChangedDelegate(MenuItem menuItem, object oldTag, object newTag);
         public event TagChangedDelegate TagChanged;
 
@@ -76,72 +77,82 @@ namespace OpenSC.GUI.Menus
                 TagChanged?.Invoke(this, oldTag, value);
             }
         }
+        #endregion
 
+        #region Property: Weight
+        public delegate void WeightChangedDelegate(MenuItem menuItem, int oldWeight, int newWeight);
+        public event WeightChangedDelegate WeightChanged;
+
+        private int weight = 50;
+
+        public int Weight
+        {
+            get { return weight; }
+            set
+            {
+                int oldWeight = weight;
+                if (oldWeight == value)
+                    return;
+                weight = value;
+                WeightChanged?.Invoke(this, oldWeight, value);
+            }
+        }
+        #endregion
+
+        #region Click handler
         public delegate void MenuClickHandler(MenuItem menuItem, object tag);
-
         private MenuClickHandler clickHandler;
 
         public MenuClickHandler ClickHandler
         {
-            get { return clickHandler; }
-            set { clickHandler = value; }
+            get => clickHandler;
+            set => clickHandler = value;
         }
 
-        public void HandleClick()
+        public void HandleClick() => clickHandler?.Invoke(this, tag);
+        #endregion
+
+        #region Groups
+        private Dictionary<string, MenuItemGroup> groups = new Dictionary<string, MenuItemGroup>();
+        public IReadOnlyList<MenuItemGroup> Groups => groups.Values.ToList();
+
+        public delegate void GroupAddedDelegate(MenuItem menu, MenuItemGroup group, string id);
+        public delegate void GroupRemovedDelegate(MenuItem menu, MenuItemGroup group, string id);
+        public delegate void GroupChangedDelegate(MenuItem menu);
+
+        public event GroupAddedDelegate GroupAdded;
+        public event GroupRemovedDelegate GroupRemoved;
+        public event GroupChangedDelegate MenuChanged;
+
+        public MenuItemGroup GetGroup(string id, bool createIfNotExist = true)
         {
-            clickHandler?.Invoke(this, tag);
-        }
-
-        #region Children
-        private Dictionary<string, MenuItem> children = new Dictionary<string, MenuItem>();
-
-        public IReadOnlyList<MenuItem> Children
-        {
-            get => children.Values.ToList();
-        }
-
-        public delegate void ChildAddedDelegate(MenuItem parent, MenuItem child, string id);
-        public delegate void ChildRemovedDelegate(MenuItem parent, MenuItem child, string id);
-        public delegate void ChildrenChangedDelegate(MenuItem menuItem);
-
-        public event ChildAddedDelegate ChildAdded;
-        public event ChildRemovedDelegate ChildRemoved;
-        public event ChildrenChangedDelegate ChildrenChanged;
-
-        public MenuItem GetChild(string id, bool createIfNotExist = true)
-        {
-            if (!children.TryGetValue(id, out MenuItem child))
-                child = AddChild(id, id, null, null, null);
+            if (!groups.TryGetValue(id, out MenuItemGroup child))
+                child = AddGroup(id, id, null, null, null);
             return child;
         }
 
-        public MenuItem AddChild(string id, string text, Bitmap image, object tag, MenuClickHandler clickHandler)
+        public MenuItemGroup AddGroup(string id, string text, Bitmap image, object tag, MenuClickHandler clickHandler)
         {
-            MenuItem child = new MenuItem(text, image, tag, clickHandler);
-            addChild(id, child);
-            return child;
+            MenuItemGroup group = new MenuItemGroup();
+            addGroup(id, group);
+            return group;
         }
 
-        public void AddSeparator(string id)
+        private void addGroup(string id, MenuItemGroup newMenuItem)
         {
-            addChild(id, new SeparatorMenuItem());
+            groups.Add(id, newMenuItem);
+            GroupAdded?.Invoke(this, newMenuItem, id);
+            MenuChanged?.Invoke(this);
         }
 
-        private void addChild(string id, MenuItem newMenuItem)
+        public MenuItemGroup RemoveGroup(string id)
         {
-            children.Add(id, newMenuItem);
-            ChildAdded?.Invoke(this, newMenuItem, id);
-            ChildrenChanged?.Invoke(this);
-        }
-
-        public MenuItem RemoveChild(string id)
-        {
-            if (!children.TryGetValue(id, out MenuItem childToRemove))
+            if (!groups.TryGetValue(id, out MenuItemGroup groupToRemove))
                 return null;
-            children.Remove(id);
-            ChildRemoved?.Invoke(this, childToRemove, id);
-            ChildrenChanged?.Invoke(this);
-            return childToRemove;
+            groups.Remove(id);
+            GroupRemoved?.Invoke(this, groupToRemove, id);
+            MenuChanged?.Invoke(this);
+            return groupToRemove;
         }
         #endregion
 

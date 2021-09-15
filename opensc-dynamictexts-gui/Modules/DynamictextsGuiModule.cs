@@ -15,11 +15,18 @@ namespace OpenSC.Modules
             WindowTypeRegister.RegisterWindowType<DynamicTextList>();
         }
 
+        public const string TOPMENUGROUP_ID = MenuManager.GROUP_ID_MODULES;
+        public const string TOPMENU_LABEL = "Variables";
+        public const string MENUGROUP_ID = "dynamictexts";
+        public const int MENUGROUP_WEIGHT = MenuManager.GROUP_WEIGHT_BASE;
+        public const string SUBMENU_LABEL = "Dynamic text list";
+
         protected override void registerMenus()
         {
-            var variablesMenu = MenuManager.Instance.TopMenu["Variables"];
-            var dynamicTextsMenu = variablesMenu["Dynamic texts"];
-            dynamicTextsMenu.ClickHandler = (menu, tag) => new DynamicTextList().ShowAsChild();
+            MenuItem topMenu = MenuManager.Instance.TopMenu[TOPMENUGROUP_ID][TOPMENU_LABEL];
+            MenuItemGroup menuGroup = topMenu[MENUGROUP_ID];
+            menuGroup.Weight = MENUGROUP_WEIGHT;
+            menuGroup[SUBMENU_LABEL].ClickHandler = (menu, tag) => new DynamicTextList().ShowAsChild();
         }
 
     }

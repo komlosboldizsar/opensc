@@ -15,11 +15,18 @@ namespace OpenSC.Modules
             WindowTypeRegister.RegisterWindowType<MacroPanelList>();
         }
 
+        public const string TOPMENUGROUP_ID = MenuManager.GROUP_ID_MODULES;
+        public const string TOPMENU_LABEL = "Macros";
+        public const string MENUGROUP_ID = "macropanels";
+        public const int MENUGROUP_WEIGHT = MenuManager.GROUP_WEIGHT_BASE + 5;
+        public const string SUBMENU_LABEL = "Macro panel list";
+
         protected override void registerMenus()
         {
-            var macrosMenu = MenuManager.Instance.TopMenu["Macros"];
-            var listMacroPanelsMenu = macrosMenu["Macro panels list"];
-            listMacroPanelsMenu.ClickHandler = (menu, tag) => new MacroPanelList().ShowAsChild();
+            MenuItem topMenu = MenuManager.Instance.TopMenu[TOPMENUGROUP_ID][TOPMENU_LABEL];
+            MenuItemGroup menuGroup = topMenu[MENUGROUP_ID];
+            menuGroup.Weight = MENUGROUP_WEIGHT;
+            menuGroup[SUBMENU_LABEL].ClickHandler = (menu, tag) => new MacroPanelList().ShowAsChild();
         }
 
     }

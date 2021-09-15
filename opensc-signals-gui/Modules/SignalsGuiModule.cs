@@ -17,15 +17,22 @@ namespace OpenSC.Modules
             WindowTypeRegister.RegisterWindowType<ExternalSignalCategoryList>();
         }
 
+        public const string TOPMENUGROUP_ID = MenuManager.GROUP_ID_MODULES;
+        public const string TOPMENU_LABEL = "Signals";
+        public const string MENUGROUP_ID = MenuManager.GROUP_ID_BASE;
+        public const int MENUGROUP_WEIGHT = MenuManager.GROUP_WEIGHT_BASE;
+        public const string SUBMENU_SIGNALLIST_LABEL = "All signals";
+        public const string SUBMENU_EXTERNALSIGNALLIST_LABEL = "External signals";
+        public const string SUBMENU_EXTERNALSIGNALCATEGORYLIST_LABEL = "External signal categories";
+
         protected override void registerMenus()
         {
-            var signalsMenu = MenuManager.Instance.TopMenu["Signals"];
-            var allSignalsSubMenu = signalsMenu["All signals"];
-            allSignalsSubMenu.ClickHandler = (menu, tag) => new SignalList().ShowAsChild();
-            var externalSignalsSubMenu = signalsMenu["External signals"];
-            externalSignalsSubMenu.ClickHandler = (menu, tag) => new ExternalSignalList().ShowAsChild();
-            var externalCategoriesSubMenu = signalsMenu["External categories"];
-            externalCategoriesSubMenu.ClickHandler = (menu, tag) => new ExternalSignalCategoryList().ShowAsChild();
+            MenuItem topMenu = MenuManager.Instance.TopMenu[TOPMENUGROUP_ID][TOPMENU_LABEL];
+            MenuItemGroup menuGroup = topMenu[MENUGROUP_ID];
+            menuGroup.Weight = MENUGROUP_WEIGHT;
+            menuGroup[SUBMENU_SIGNALLIST_LABEL].ClickHandler = (menu, tag) => new SignalList().ShowAsChild();
+            menuGroup[SUBMENU_EXTERNALSIGNALLIST_LABEL].ClickHandler = (menu, tag) => new ExternalSignalList().ShowAsChild();
+            menuGroup[SUBMENU_EXTERNALSIGNALCATEGORYLIST_LABEL].ClickHandler = (menu, tag) => new ExternalSignalCategoryList().ShowAsChild();
         }
 
     }

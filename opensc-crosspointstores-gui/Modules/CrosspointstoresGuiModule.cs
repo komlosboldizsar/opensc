@@ -15,11 +15,18 @@ namespace OpenSC.Modules
             WindowTypeRegister.RegisterWindowType<CrosspointStoreList>();
         }
 
+        public const string TOPMENUGROUP_ID = MenuManager.GROUP_ID_MODULES;
+        public const string TOPMENU_LABEL = "Routers";
+        public const string MENUGROUP_ID = "crosspointstores";
+        public const int MENUGROUP_WEIGHT = MenuManager.GROUP_WEIGHT_BASE + 10;
+        public const string SUBMENU_LABEL = "Crosspoint store list";
+
         protected override void registerMenus()
         {
-            var routersMenu = MenuManager.Instance.TopMenu["Routers"];
-            var crosspointStoresListMenu = routersMenu["Crosspoint store list"];
-            crosspointStoresListMenu.ClickHandler = (menu, tag) => new CrosspointStoreList().ShowAsChild();
+            MenuItem topMenu = MenuManager.Instance.TopMenu[TOPMENUGROUP_ID][TOPMENU_LABEL];
+            MenuItemGroup menuGroup = topMenu[MENUGROUP_ID];
+            menuGroup.Weight = MENUGROUP_WEIGHT;
+            menuGroup[SUBMENU_LABEL].ClickHandler = (menu, tag) => new CrosspointStoreList().ShowAsChild();
         }
 
     }

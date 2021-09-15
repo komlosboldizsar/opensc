@@ -1,30 +1,29 @@
 ﻿using OpenSC.GUI.Menus;
 using System;
+using System.Linq;
 
 namespace OpenSC.GUI.GeneralComponents.Menus
 {
-    public class CustomToolStripMenuItem: System.Windows.Forms.ToolStripMenuItem
+
+    public class CustomToolStripMenuItem : System.Windows.Forms.ToolStripMenuItem, IManageableCustomMenu
     {
 
         public MenuItem AssociatedMenuItem { get; private set; }
+        public event AssociatedMenuItemChangedDelegate AssociatedMenuItemChanged;
+        public int StartPosition { get; } = 0;
+        private MenuItemManager manager;
 
         public CustomToolStripMenuItem(MenuItem associatedMenuItem)
         {
-
-            this.AssociatedMenuItem = associatedMenuItem;
-
-            subscribeModelEvents();
+            AssociatedMenuItem = associatedMenuItem;
+            manager = new MenuItemManager(this);
+            subscribePropertyChangeEvents();
             updateProperties();
-            createChildren();
-
             Click += clickHandler;
-
         }
 
-        private void subscribeModelEvents()
+        private void subscribePropertyChangeEvents()
         {
-            AssociatedMenuItem.ChildAdded += childAddedHandler;
-            AssociatedMenuItem.ChildRemoved += childRemovedHandler;
             AssociatedMenuItem.TextChanged += textChangedHandler;
             AssociatedMenuItem.ImageChanged += imageChangedHandler;
             AssociatedMenuItem.TagChanged += tagChangedHandler;
@@ -37,50 +36,11 @@ namespace OpenSC.GUI.GeneralComponents.Menus
             Tag = AssociatedMenuItem.Tag;
         }
 
-        private void createChildren()
-        {
-            foreach (MenuItem menuItem in AssociatedMenuItem.Children)
-                addChild(menuItem);
-        }
-
-        private void addChild(MenuItem associatedMenuItem)
-        {
-            System.Windows.Forms.ToolStripItem myChild;
-            if (associatedMenuItem is SeparatorMenuItem)
-                myChild = new System.Windows.Forms.ToolStripSeparator();
-            else
-                myChild = new CustomToolStripMenuItem(associatedMenuItem);
-            DropDownItems.Add(myChild);
-        }
-
-        private void removeChild(MenuItem associatedMenuItem)
-        {
-            for (int i = DropDownItems.Count - 1; i >= 0; i--) {
-                CustomToolStripMenuItem customMenuItem = DropDownItems[i] as CustomToolStripMenuItem;
-                if ((customMenuItem != null) && (customMenuItem.AssociatedMenuItem == associatedMenuItem))
-                    DropDownItems.RemoveAt(i);                    
-            }
-        }
-
-        private void textChangedHandler(MenuItem menuItem, string oldText, string newText)
-            => Text = newText;
-
-        private void imageChangedHandler(MenuItem menuItem, System.Drawing.Bitmap oldImage, System.Drawing.Bitmap newImage)
-            => Image = newImage;
-
-        private void tagChangedHandler(MenuItem menuItem, object oldTag, object newTag)
-            => Tag = newTag;
-
-        private void childAddedHandler(MenuItem parent, MenuItem child, string id)
-            => addChild(child);
-
-        private void childRemovedHandler(MenuItem parent, MenuItem child, string id)
-            => removeChild(child);
-
-        private void clickHandler(object sender, EventArgs e)
-        {
-            AssociatedMenuItem?.HandleClick();
-        }
+        private void textChangedHandler(MenuItem menuItem, string oldText, string newText) => Text = newText;
+        private void imageChangedHandler(MenuItem menuItem, System.Drawing.Bitmap oldImage, System.Drawing.Bitmap newImage) => Image = newImage;
+        private void tagChangedHandler(MenuItem menuItem, object oldTag, object newTag) => Tag = newTag;
+        private void clickHandler(object sender, EventArgs e) => AssociatedMenuItem?.HandleClick();
 
     }
+
 }
