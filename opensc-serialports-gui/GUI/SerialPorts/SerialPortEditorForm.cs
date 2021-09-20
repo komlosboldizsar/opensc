@@ -6,8 +6,11 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.SerialPorts
 {
 
-    public partial class SerialPortEditorForm : ModelEditorFormBase
+    public partial class SerialPortEditorForm : ModelEditorFormBase, IModelEditorForm<SerialPort>
     {
+
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as SerialPort);
+        public IModelEditorForm<SerialPort> GetInstanceT(SerialPort modelInstance) => new SerialPortEditorForm(modelInstance);
 
         private const string TITLE_NEW = "New serial port";
         private const string TITLE_EDIT = "Edit serial port: (#{0}) {1}";

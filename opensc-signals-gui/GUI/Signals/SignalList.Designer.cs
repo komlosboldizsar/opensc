@@ -28,25 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.topPanelInner = new System.Windows.Forms.Panel();
-            this.topPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // topPanel
-            // 
-            this.topPanel.Controls.Add(this.topPanelInner);
-            // 
-            // topPanelInner
-            // 
-            this.topPanelInner.AutoSize = true;
-            this.topPanelInner.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.topPanelInner.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.topPanelInner.Location = new System.Drawing.Point(0, 0);
-            this.topPanelInner.Name = "topPanelInner";
-            this.topPanelInner.Padding = new System.Windows.Forms.Padding(10);
-            this.topPanelInner.Size = new System.Drawing.Size(800, 20);
-            this.topPanelInner.TabIndex = 0;
             // 
             // SignalList
             // 
@@ -57,8 +40,6 @@
             this.HeaderText = "List of signals";
             this.Name = "SignalList";
             this.Text = "List of signals";
-            this.topPanel.ResumeLayout(false);
-            this.topPanel.PerformLayout();
             this.mainContainer.ResumeLayout(false);
             this.mainContainer.PerformLayout();
             this.ResumeLayout(false);
@@ -66,7 +47,5 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel topPanelInner;
     }
 }

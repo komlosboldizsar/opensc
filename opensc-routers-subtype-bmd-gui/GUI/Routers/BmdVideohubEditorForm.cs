@@ -8,6 +8,9 @@ namespace OpenSC.GUI.Routers
     public partial class BmdVideohubEditorForm : RouterEditorFormBase, IModelEditorForm<Router>
     {
 
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Router);
+        public IModelEditorForm<Router> GetInstanceT(Router modelInstance) => new BmdVideohubEditorForm(modelInstance);
+
         public BmdVideohubEditorForm() : base()
         {
             InitializeComponent();
@@ -21,12 +24,7 @@ namespace OpenSC.GUI.Routers
             else if (!(router is BmdVideohub))
                 throw new ArgumentException();
         }
-
-        public IModelEditorForm<Router> GetInstance(Router modelInstance)
-        {
-            return new BmdVideohubEditorForm(modelInstance);
-        }
-
+        
         protected override void loadData()
         {
             base.loadData();

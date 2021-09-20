@@ -10,5 +10,6 @@ namespace OpenSC.Model.Persistence
     {
         string ConvertTypeToString(Type type);
         Type ConvertStringToType(string typeLabel);
+        IEnumerable<Type> RegisteredTypes { get; }
     }
 }

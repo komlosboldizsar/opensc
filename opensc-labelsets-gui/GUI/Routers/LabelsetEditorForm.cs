@@ -10,8 +10,12 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.Routers
 {
 
-    public partial class LabelsetEditorForm : ModelEditorFormBase
+    public partial class LabelsetEditorForm : ModelEditorFormBase, IModelEditorForm<Labelset>
     {
+
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Labelset);
+        public IModelEditorForm<Labelset> GetInstanceT(Labelset modelInstance) => new LabelsetEditorForm(modelInstance);
+
 
         private const string TITLE_NEW = "New labelset";
         private const string TITLE_EDIT = "Edit labelset: (#{0}) {1}";

@@ -8,6 +8,9 @@ namespace OpenSC.GUI.UMDs
     public partial class Tsl31UmdEditorForm : UmdEditorFormBase, IModelEditorForm<UMD>
     {
 
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as UMD);
+        public IModelEditorForm<UMD> GetInstanceT(UMD modelInstance) => new Tsl31UmdEditorForm(modelInstance);
+
         public Tsl31UmdEditorForm(): base()
         {
             InitializeComponent();
@@ -20,11 +23,6 @@ namespace OpenSC.GUI.UMDs
                 this.umd = new TSL31();
             else if (!(umd is TSL31))
                 throw new ArgumentException();
-        }
-
-        public IModelEditorForm<UMD> GetInstance(UMD modelInstance)
-        {
-            return new Tsl31UmdEditorForm(modelInstance);
         }
 
         protected override void loadData()

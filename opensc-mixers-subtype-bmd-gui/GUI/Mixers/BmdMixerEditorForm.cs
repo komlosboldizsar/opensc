@@ -8,6 +8,9 @@ namespace OpenSC.GUI.Mixers
     public partial class BmdMixerEditorForm : MixerEditorFormBase, IModelEditorForm<Mixer>
     {
 
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Mixer);
+        public IModelEditorForm<Mixer> GetInstanceT(Mixer modelInstance) => new BmdMixerEditorForm(modelInstance);
+
         public BmdMixerEditorForm() : base()
         {
             InitializeComponent();
@@ -20,11 +23,6 @@ namespace OpenSC.GUI.Mixers
                 this.mixer = new BmdMixer();
             else if (!(mixer is BmdMixer))
                 throw new ArgumentException();
-        }
-
-        public IModelEditorForm<Mixer> GetInstance(Mixer modelInstance)
-        {
-            return new BmdMixerEditorForm(modelInstance);
         }
 
         protected override void loadData()

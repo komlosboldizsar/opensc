@@ -8,10 +8,15 @@ using System.Threading.Tasks;
 namespace OpenSC.GUI
 {
 
-    public interface IModelEditorForm<TModel>
+    public interface IModelEditorForm
+    {
+        IModelEditorForm GetInstance(object modelInstance);
+    }
+
+    public interface IModelEditorForm<TModel> : IModelEditorForm
         where TModel : class, IModel
     {
-        IModelEditorForm<TModel> GetInstance(TModel modelInstance);
+        IModelEditorForm<TModel> GetInstanceT(TModel modelInstance);
     }
 
 }

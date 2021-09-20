@@ -9,23 +9,17 @@ namespace OpenSC.GUI.Variables
 {
 
     [WindowTypeName("variables.booleanlist")]
-    public partial class BooleanList : ChildWindowWithTable
+    public partial class BooleanList : ItemListFormBase
     {
 
-        public BooleanList()
+        protected override string SubjectSingular { get; } = "boolean";
+        protected override string SubjectPlural { get; } = "booleans";
+
+        protected override IItemListFormBaseManager createManager()
+            => new ItemListFormBaseManager<IBoolean>(this, BooleanRegister.Instance, baseColumnCreator);
+
+        private void baseColumnCreator(CustomDataGridView<IBoolean> table, ItemListFormBaseManager<IBoolean>.ColumnDescriptorBuilderGetterDelegate builderGetterMethod)
         {
-            InitializeComponent();
-            initializeTable();
-        }
-
-        private readonly Color OFF_COLOR = Color.White;
-
-        private CustomDataGridView<IBoolean> table;
-
-        private void initializeTable()
-        {
-
-            table = CreateTable<IBoolean>();
 
             CustomDataGridViewColumnDescriptorBuilder<IBoolean> builder;
 
@@ -34,26 +28,24 @@ namespace OpenSC.GUI.Variables
             stateColumnStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
             // Column: name
-            builder = GetColumnDescriptorBuilderForTable<IBoolean>();
+            builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Name");
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.Width(220);
             builder.UpdaterMethod((boolean, cell) => { cell.Value = boolean.Name; });
             builder.AddChangeEvent(nameof(IBoolean.Name));
-            builder.BuildAndAdd();
 
             // Column: description
-            builder = GetColumnDescriptorBuilderForTable<IBoolean>();
+            builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Description");
             builder.Width(450);
             builder.UpdaterMethod((boolean, cell) => { cell.Value = boolean.Description; });
             builder.AddChangeEvent(nameof(IBoolean.Description));
-            builder.BuildAndAdd();
 
             // Column: state
-            builder = GetColumnDescriptorBuilderForTable<IBoolean>();
+            builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("State");
             builder.CellStyle(stateColumnStyle);
@@ -64,12 +56,10 @@ namespace OpenSC.GUI.Variables
                 cell.Style.BackColor = booleanCurrentState ? boolean.Color : OFF_COLOR;
             });
             builder.AddChangeEvent(nameof(IBoolean.CurrentState));
-            builder.BuildAndAdd();
-
-            // Bind database
-            table.BoundCollection = BooleanRegister.Instance;
 
         }
+
+        private static readonly Color OFF_COLOR = Color.White;
 
     }
 

@@ -8,8 +8,11 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.Signals.BooleanTallies
 {
 
-    public partial class BooleanTallyEditorForm : ModelEditorFormBase
+    public partial class BooleanTallyEditorForm : ModelEditorFormBase, IModelEditorForm<BooleanTally>
     {
+
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as BooleanTally);
+        public IModelEditorForm<BooleanTally> GetInstanceT(BooleanTally modelInstance) => new BooleanTallyEditorForm(modelInstance);
 
         private const string TITLE_NEW = "New boolean tally";
         private const string TITLE_EDIT = "Edit boolean tally: (#{0}) {1}";

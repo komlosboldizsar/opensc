@@ -7,8 +7,11 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.Signals.TallyCopying
 {
 
-    public partial class TallyCopyEditorForm : ModelEditorFormBase
+    public partial class TallyCopyEditorForm : ModelEditorFormBase, IModelEditorForm<TallyCopy>
     {
+
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as TallyCopy);
+        public IModelEditorForm<TallyCopy> GetInstanceT(TallyCopy modelInstance) => new TallyCopyEditorForm(modelInstance);
 
         private const string TITLE_NEW = "New tally copy";
         private const string TITLE_EDIT = "Edit tally copy: (#{0}) {1}";

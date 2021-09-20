@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace OpenSC.GUI
 {
 
-    public class ModelEditorFormTypeRegister<TModelBasetype>
+    public class ModelEditorFormTypeRegister<TModelBasetype> : IModelEditorFormTypeRegister
         where TModelBasetype : class, IModel
     {
 
@@ -24,14 +24,14 @@ namespace OpenSC.GUI
             registeredTypes.Add(typeof(TModelSubtype), new TForm());
         }
 
-        public IModelEditorForm<TModelBasetype> GetFormForModel(TModelBasetype modelInstance)
+        public IModelEditorForm GetFormForModel(IModel modelInstance)
             => GetFormForType(modelInstance.GetType(), modelInstance);
 
-        public IModelEditorForm<TModelBasetype> GetFormForType(Type type, TModelBasetype modelInstance = null)
+        public IModelEditorForm GetFormForType(Type type, IModel modelInstance = null)
         {
             if (!registeredTypes.TryGetValue(type, out IModelEditorForm<TModelBasetype> foundForm))
                 return null;
-            return foundForm.GetInstance(modelInstance);
+            return foundForm.GetInstanceT(modelInstance as TModelBasetype);
         }
 
     }

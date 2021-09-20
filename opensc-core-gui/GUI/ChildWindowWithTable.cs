@@ -15,10 +15,7 @@ namespace OpenSC.GUI
     public partial class ChildWindowWithTable : ChildWindowWithTitleTwoParts
     {
 
-        public ChildWindowWithTable()
-        {
-            InitializeComponent();
-        }
+        public ChildWindowWithTable() => InitializeComponent();
 
         public CustomDataGridView<T> CreateTable<T>()
             where T: class
@@ -29,18 +26,6 @@ namespace OpenSC.GUI
             customTable.Dock = DockStyle.Fill;
             this._table = customTable;
             return customTable;
-        }
-
-        protected static CustomDataGridViewColumnDescriptorBuilder<T> GetColumnDescriptorBuilder<T>()
-            where T: class
-        {
-            return new CustomDataGridViewColumnDescriptorBuilder<T>();
-        }
-
-        protected CustomDataGridViewColumnDescriptorBuilder<T> GetColumnDescriptorBuilderForTable<T>()
-            where T : class
-        {
-            return new CustomDataGridViewColumnDescriptorBuilder<T>((CustomDataGridView<T>)_table);
         }
 
         protected const int DEFAULT_DIVIDER_WIDTH = 3;

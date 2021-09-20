@@ -1,6 +1,6 @@
-﻿namespace OpenSC.GUI.Variables
+﻿namespace OpenSC.GUI
 {
-    partial class BooleanList
+    partial class ItemListFormBase
     {
         /// <summary>
         /// Required designer variable.
@@ -28,30 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.addableItemTypesMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mainContainer.SuspendLayout();
             this.SuspendLayout();
             // 
-            // topPanel
+            // addableItemTypesMenu
             // 
-            this.topPanel.Size = new System.Drawing.Size(1238, 54);
+            this.addableItemTypesMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.addableItemTypesMenu.Name = "addableVtrTypesMenu";
+            this.addableItemTypesMenu.Size = new System.Drawing.Size(61, 4);
             // 
-            // bottomPanel
-            // 
-            this.bottomPanel.Size = new System.Drawing.Size(1238, 340);
-            // 
-            // mainContainer
-            // 
-            this.mainContainer.Size = new System.Drawing.Size(1238, 394);
-            // 
-            // BooleanList
+            // ItemListFormBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1238, 450);
-            this.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.HeaderText = "List of booleans";
-            this.Name = "BooleanList";
-            this.Text = "List of booleans";
+            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.HeaderText = "List of subjects";
+            this.Name = "ItemListFormBase";
+            this.Text = "List of subjects";
+            this.Load += new System.EventHandler(this.ItemListFormBase_Load);
+            this.Controls.SetChildIndex(this.mainContainer, 0);
             this.mainContainer.ResumeLayout(false);
             this.mainContainer.PerformLayout();
             this.ResumeLayout(false);
@@ -59,5 +56,6 @@
         }
 
         #endregion
+        private System.Windows.Forms.ContextMenuStrip addableItemTypesMenu;
     }
 }

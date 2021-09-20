@@ -14,74 +14,54 @@ namespace OpenSC.GUI.Routers.Mirrors
 {
 
     [WindowTypeName("routers.mirrorlist")]
-    public partial class RouterMirrorList : ChildWindowWithTable
+    public partial class RouterMirrorList : ModelListFormBase
     {
 
-        public RouterMirrorList()
+        protected override string SubjectSingular { get; } = "router mirror";
+        protected override string SubjectPlural { get; } = "router mirrors";
+
+        protected override IModelEditorForm ModelEditorForm { get; } = new RouterMirrorEditorForm();
+
+        protected override IItemListFormBaseManager createManager()
+            => new ModelListFormBaseManager<RouterMirror>(this, RouterMirrorDatabase.Instance, baseColumnCreator);
+
+        private void baseColumnCreator(CustomDataGridView<RouterMirror> table, ItemListFormBaseManager<RouterMirror>.ColumnDescriptorBuilderGetterDelegate builderGetterMethod)
         {
-            InitializeComponent();
-            initializeTable();
-        }
-
-        private CustomDataGridView<RouterMirror> table;
-
-        private void initializeTable()
-        {
-
-            table = CreateTable<RouterMirror>();
 
             CustomDataGridViewColumnDescriptorBuilder<RouterMirror> builder;
 
-            // Column: ID
-            builder = GetColumnDescriptorBuilderForTable<RouterMirror>();
-            builder.Type(DataGridViewColumnType.TextBox);
-            builder.Header("ID");
-            builder.Width(30);
-            builder.UpdaterMethod((routerMirror, cell) => { cell.Value = string.Format("#{0}", routerMirror.ID); });
-            builder.AddChangeEvent(nameof(RouterMirror.ID));
-            builder.BuildAndAdd();
-
-            // Column: name
-            builder = GetColumnDescriptorBuilderForTable<RouterMirror>();
-            builder.Type(DataGridViewColumnType.TextBox);
-            builder.Header("Name");
-            builder.Width(150);
-            builder.CellStyle(BOLD_TEXT_CELL_STYLE);
-            builder.UpdaterMethod((routerMirror, cell) => { cell.Value = routerMirror.Name; });
-            builder.AddChangeEvent(nameof(RouterMirror.Name));
-            builder.BuildAndAdd();
+            // Column: ID, name
+            idColumnCreator(table, builderGetterMethod);
+            nameColumnCreator(table, builderGetterMethod);
 
             // Column: router A
-            builder = GetColumnDescriptorBuilderForTable<RouterMirror>();
+            builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Router A");
             builder.Width(150);
             builder.UpdaterMethod((routerMirror, cell) => routerRefCellUpdaterMethod(routerMirror, cell, RouterMirrorSide.SideA));
             builder.AddChangeEvent(nameof(RouterMirror.RouterA));
-            builder.BuildAndAdd();
 
             // Column: router B
-            builder = GetColumnDescriptorBuilderForTable<RouterMirror>();
+            builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Router B");
             builder.Width(150);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((routerMirror, cell) => routerRefCellUpdaterMethod(routerMirror, cell, RouterMirrorSide.SideB));
             builder.AddChangeEvent(nameof(RouterMirror.RouterB));
-            builder.BuildAndAdd();
 
             // Column: sync A->B button
-            builder = GetColumnDescriptorBuilderForTable<RouterMirror>();
+            builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.DisableButton);
             builder.Header("Sync A→B");
             builder.Width(70);
             builder.ButtonText("Sync A→B");
             builder.UpdaterMethod(syncButtonUpdaterMethod);
             builder.CellContentClickHandlerMethod((routerMirror, cell, e) => syncButtonClickMethod(routerMirror, RouterMirrorSide.SideA));
-            builder.BuildAndAdd();
 
             // Column: sync B->A button
-            builder = GetColumnDescriptorBuilderForTable<RouterMirror>();
+            builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.DisableButton);
             builder.Header("Sync B→A");
             builder.Width(70);
@@ -89,37 +69,10 @@ namespace OpenSC.GUI.Routers.Mirrors
             builder.ButtonText("Sync B→A");
             builder.UpdaterMethod(syncButtonUpdaterMethod);
             builder.CellContentClickHandlerMethod((routerMirror, cell, e) => syncButtonClickMethod(routerMirror, RouterMirrorSide.SideB));
-            builder.BuildAndAdd();
 
-            // Column: edit button
-            builder = GetColumnDescriptorBuilderForTable<RouterMirror>();
-            builder.Type(DataGridViewColumnType.Button);
-            builder.Header("Edit");
-            builder.Width(70);
-            builder.ButtonText("Edit");
-            builder.CellContentClickHandlerMethod((routerMirror, cell, e) => {
-                var editWindow = new RouterMirrorEditorForm(routerMirror);
-                editWindow?.ShowAsChild();
-            });
-            builder.BuildAndAdd();
-
-            // Column: delete button
-            builder = GetColumnDescriptorBuilderForTable<RouterMirror>();
-            builder.Type(DataGridViewColumnType.Button);
-            builder.Header("Delete");
-            builder.Width(70);
-            builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
-            builder.ButtonText("Delete");
-            builder.CellContentClickHandlerMethod((routerMirror, cell, e) => {
-                string msgBoxText = string.Format("Do you really want to delete this router mirror?\n(#{0}) {1}", routerMirror.ID, routerMirror.Name);
-                var confirm = MessageBox.Show(msgBoxText, "Delete confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (confirm == DialogResult.Yes)
-                    RouterMirrorDatabase.Instance.Remove(routerMirror);
-            });
-            builder.BuildAndAdd();
-
-            // Bind database
-            table.BoundCollection = RouterMirrorDatabase.Instance;
+            // Column: edit, delete
+            editButtonColumnCreator(table, builderGetterMethod);
+            deleteButtonColumnCreator(table, builderGetterMethod);
 
         }
 
@@ -147,12 +100,6 @@ namespace OpenSC.GUI.Routers.Mirrors
                 sourceRouter.ID, sourceRouter.Name, destinationRouter.ID, destinationRouter.Name);
             if (MessageBox.Show(messageBoxText, "Router synchronization", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 routerMirror.Synchronize(sourceSide);
-        }
-
-        private void addRouterMirrorButton_Click(object sender, EventArgs e)
-        {
-            var editWindow = new RouterMirrorEditorForm(null);
-            editWindow.ShowAsChild();
         }
 
     }

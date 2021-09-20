@@ -12,8 +12,11 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.Macros
 {
 
-    public partial class MacroEditorForm : ModelEditorFormBase
+    public partial class MacroEditorForm : ModelEditorFormBase, IModelEditorForm<Macro>
     {
+
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Macro);
+        public IModelEditorForm<Macro> GetInstanceT(Macro modelInstance) => new MacroEditorForm(modelInstance);
 
         private const string TITLE_NEW = "New macro";
         private const string TITLE_EDIT = "Edit macro: (#{0}) {1}";

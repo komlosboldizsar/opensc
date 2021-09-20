@@ -15,6 +15,9 @@ namespace OpenSC.GUI.UMDs
     public partial class McCurdyUmd1TEditorForm : McCurdyUmd1EditorForm
     {
 
+        public new IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as UMD);
+        public new IModelEditorForm<UMD> GetInstanceT(UMD modelInstance) => new McCurdyUmd1TEditorForm(modelInstance);
+
         public McCurdyUmd1TEditorForm() : base()
         {
             InitializeComponent();
@@ -32,10 +35,6 @@ namespace OpenSC.GUI.UMDs
 
         }
 
-        public override IModelEditorForm<UMD> GetInstance(UMD modelInstance)
-        {
-            return new McCurdyUmd1TEditorForm(modelInstance);
-        }
-
     }
+
 }

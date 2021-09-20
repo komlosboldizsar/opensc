@@ -9,8 +9,11 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.Macros
 {
 
-    public partial class MacroPanelEditorForm : ModelEditorFormBase
+    public partial class MacroPanelEditorForm : ModelEditorFormBase, IModelEditorForm<MacroPanel>
     {
+
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as MacroPanel);
+        public IModelEditorForm<MacroPanel> GetInstanceT(MacroPanel modelInstance) => new MacroPanelEditorForm(modelInstance);
 
         private const string TITLE_NEW = "New macro panel";
         private const string TITLE_EDIT = "Edit macro panel: (#{0}) {1}";

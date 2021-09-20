@@ -10,45 +10,28 @@ namespace OpenSC.GUI.Routers.CrosspointBooleans
 {
 
     [WindowTypeName("routers.crosspointbooleanlist")]
-    public partial class CrosspointBooleanList : ChildWindowWithTable
+    public partial class CrosspointBooleanList : ModelListFormBase
     {
 
-        public CrosspointBooleanList()
+        protected override string SubjectSingular { get; } = "crosspoint boolean";
+        protected override string SubjectPlural { get; } = "crosspoint booleans";
+
+        protected override IModelEditorForm ModelEditorForm { get; } = new CrosspointBooleanEditorForm();
+
+        protected override IItemListFormBaseManager createManager()
+            => new ModelListFormBaseManager<CrosspointBoolean>(this, CrosspointBooleanDatabase.Instance, baseColumnCreator);
+
+        private void baseColumnCreator(CustomDataGridView<CrosspointBoolean> table, ItemListFormBaseManager<CrosspointBoolean>.ColumnDescriptorBuilderGetterDelegate builderGetterMethod)
         {
-            InitializeComponent();
-            initializeTable();
-        }
-
-        private CustomDataGridView<CrosspointBoolean> table;
-
-        private void initializeTable()
-        {
-
-            table = CreateTable<CrosspointBoolean>();
 
             CustomDataGridViewColumnDescriptorBuilder<CrosspointBoolean> builder;
 
-            // Column: ID
-            builder = GetColumnDescriptorBuilderForTable<CrosspointBoolean>();
-            builder.Type(DataGridViewColumnType.TextBox);
-            builder.Header("ID");
-            builder.Width(30);
-            builder.UpdaterMethod((crosspointBoolean, cell) => { cell.Value = string.Format("#{0}", crosspointBoolean.ID); });
-            builder.AddChangeEvent(nameof(CrosspointBoolean.ID));
-            builder.BuildAndAdd();
-
-            // Column: name
-            builder = GetColumnDescriptorBuilderForTable<CrosspointBoolean>();
-            builder.Type(DataGridViewColumnType.TextBox);
-            builder.Header("Name");
-            builder.Width(150);
-            builder.CellStyle(BOLD_TEXT_CELL_STYLE);
-            builder.UpdaterMethod((crosspointBoolean, cell) => { cell.Value = crosspointBoolean.Name; });
-            builder.AddChangeEvent(nameof(CrosspointBoolean.Name));
-            builder.BuildAndAdd();
+            // Column: ID, name
+            idColumnCreator(table, builderGetterMethod);
+            nameColumnCreator(table, builderGetterMethod);
 
             // Column: router
-            builder = GetColumnDescriptorBuilderForTable<CrosspointBoolean>();
+            builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Router");
             builder.Width(150);
@@ -62,10 +45,9 @@ namespace OpenSC.GUI.Routers.CrosspointBooleans
             });
             builder.AddMultilevelChangeEvent(nameof(CrosspointBoolean.WatchedRouter), nameof(Router.ID));
             builder.AddMultilevelChangeEvent(nameof(CrosspointBoolean.WatchedRouter), nameof(Router.Name));
-            builder.BuildAndAdd();
 
             // Column: output
-            builder = GetColumnDescriptorBuilderForTable<CrosspointBoolean>();
+            builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Output");
             builder.Width(150);
@@ -79,10 +61,9 @@ namespace OpenSC.GUI.Routers.CrosspointBooleans
             });
             builder.AddMultilevelChangeEvent(nameof(CrosspointBoolean.WatchedOutput), nameof(RouterOutput.Index));
             builder.AddMultilevelChangeEvent(nameof(CrosspointBoolean.WatchedOutput), nameof(RouterOutput.Name));
-            builder.BuildAndAdd();
 
             // Column: input
-            builder = GetColumnDescriptorBuilderForTable<CrosspointBoolean>();
+            builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Input");
             builder.Width(150);
@@ -97,44 +78,11 @@ namespace OpenSC.GUI.Routers.CrosspointBooleans
             });
             builder.AddMultilevelChangeEvent(nameof(CrosspointBoolean.WatchedInput), nameof(RouterInput.Index));
             builder.AddMultilevelChangeEvent(nameof(CrosspointBoolean.WatchedInput), nameof(RouterInput.Name));
-            builder.BuildAndAdd();
 
-            // Column: edit button
-            builder = GetColumnDescriptorBuilderForTable<CrosspointBoolean>();
-            builder.Type(DataGridViewColumnType.Button);
-            builder.Header("Edit");
-            builder.Width(70);
-            builder.ButtonText("Edit");
-            builder.CellContentClickHandlerMethod((crosspointBoolean, cell, e) => {
-                var editWindow = new CrosspointBooleanEditorForm(crosspointBoolean);
-                editWindow.ShowAsChild();
-            });
-            builder.BuildAndAdd();
+            // Column: edit, delete
+            editButtonColumnCreator(table, builderGetterMethod);
+            deleteButtonColumnCreator(table, builderGetterMethod);
 
-            // Column: delete button
-            builder = GetColumnDescriptorBuilderForTable<CrosspointBoolean>();
-            builder.Type(DataGridViewColumnType.Button);
-            builder.Header("Delete");
-            builder.Width(70);
-            builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
-            builder.ButtonText("Delete");
-            builder.CellContentClickHandlerMethod((crosspointBoolean, cell, e) => {
-                string msgBoxText = string.Format("Do you really want to delete this crosspoint boolean?\n(#{0}) {1}", crosspointBoolean.ID, crosspointBoolean.Name);
-                var confirm = MessageBox.Show(msgBoxText, "Delete confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (confirm == DialogResult.Yes)
-                    CrosspointBooleanDatabase.Instance.Remove(crosspointBoolean);
-            });
-            builder.BuildAndAdd();
-
-            // Bind database
-            table.BoundCollection = CrosspointBooleanDatabase.Instance;
-
-        }
-
-        private void addCrosspointBooleanButton_Click(object sender, EventArgs e)
-        {
-            var editWindow = new CrosspointBooleanEditorForm(null);
-            editWindow.ShowAsChild();
         }
 
     }

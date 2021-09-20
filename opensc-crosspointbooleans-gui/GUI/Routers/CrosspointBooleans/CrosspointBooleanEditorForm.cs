@@ -8,8 +8,11 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.Routers.CrosspointBooleans
 {
 
-    public partial class CrosspointBooleanEditorForm : ModelEditorFormBase
+    public partial class CrosspointBooleanEditorForm : ModelEditorFormBase, IModelEditorForm<CrosspointBoolean>
     {
+
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as CrosspointBoolean);
+        public IModelEditorForm<CrosspointBoolean> GetInstanceT(CrosspointBoolean modelInstance) => new CrosspointBooleanEditorForm(modelInstance);
 
         private const string TITLE_NEW = "New crosspoint boolean";
         private const string TITLE_EDIT = "Edit crosspoint boolean: (#{0}) {1}";

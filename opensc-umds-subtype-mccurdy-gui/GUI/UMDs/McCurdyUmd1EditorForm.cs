@@ -14,6 +14,9 @@ namespace OpenSC.GUI.UMDs
     public partial class McCurdyUmd1EditorForm : UmdEditorFormBase, IModelEditorForm<UMD>
     {
 
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as UMD);
+        public IModelEditorForm<UMD> GetInstanceT(UMD modelInstance) => new McCurdyUmd1EditorForm(modelInstance);
+
         public McCurdyUmd1EditorForm(): base()
         {
             InitializeComponent();
@@ -32,11 +35,6 @@ namespace OpenSC.GUI.UMDs
             fillControlArrays();
             initDropDowns();
 
-        }
-
-        public virtual IModelEditorForm<UMD> GetInstance(UMD modelInstance)
-        {
-            return new McCurdyUmd1EditorForm(modelInstance);
         }
 
         private const int MAX_COLUMN_COUNT = 3;

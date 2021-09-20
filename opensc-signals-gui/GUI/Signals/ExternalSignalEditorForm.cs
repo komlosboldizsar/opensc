@@ -6,8 +6,11 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.Signals
 {
 
-    public partial class ExternalSignalEditorForm : ModelEditorFormBase
+    public partial class ExternalSignalEditorForm : ModelEditorFormBase, IModelEditorForm<ExternalSignal>
     {
+
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as ExternalSignal);
+        public IModelEditorForm<ExternalSignal> GetInstanceT(ExternalSignal modelInstance) => new ExternalSignalEditorForm(modelInstance);
 
         private const string TITLE_NEW = "New external signal";
         private const string TITLE_EDIT = "Edit external signal: (#{0}) {1}";

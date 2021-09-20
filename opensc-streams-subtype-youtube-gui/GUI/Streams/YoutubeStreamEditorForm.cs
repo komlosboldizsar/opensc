@@ -14,6 +14,9 @@ namespace OpenSC.GUI.Streams
     public partial class YoutubeStreamEditorForm : StreamEditorFormBase, IModelEditorForm<Stream>
     {
 
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Stream);
+        public IModelEditorForm<Stream> GetInstanceT(Stream modelInstance) => new YoutubeStreamEditorForm(modelInstance);
+
         public YoutubeStreamEditorForm(): base()
         {
             InitializeComponent();
@@ -26,11 +29,6 @@ namespace OpenSC.GUI.Streams
                 this.stream = new YoutubeStream();
             else if (!(stream is YoutubeStream))
                 throw new ArgumentException();
-        }
-
-        public IModelEditorForm<Stream> GetInstance(Stream modelInstance)
-        {
-            return new YoutubeStreamEditorForm(modelInstance);
         }
 
         protected override void loadData()

@@ -4,6 +4,7 @@ using OpenSC.GUI.Helpers.Converters;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
 using OpenSC.Model.Mixers;
+using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,22 +14,20 @@ namespace OpenSC.GUI.Mixers
 {
 
     [WindowTypeName("mixers.mixerlist")]
-    public partial class MixerList : ChildWindowWithTable
+    public partial class MixerList : ModelListFormBase
     {
 
-        public MixerList()
+        protected override string SubjectSingular { get; } = "mixer";
+        protected override string SubjectPlural { get; } = "mixers";
+
+        protected override IModelTypeRegister TypeRegister { get; } = MixerTypeRegister.Instance;
+        protected override IModelEditorFormTypeRegister EditorFormTypeRegister { get; } = MixerEditorFormTypeRegister.Instance;
+
+        protected override IItemListFormBaseManager createManager()
+            => Manager = new ModelListFormBaseManager<Mixer>(this, MixerDatabase.Instance, baseColumnCreator);
+
+        private void baseColumnCreator(CustomDataGridView<Mixer> table, ItemListFormBaseManager<Mixer>.ColumnDescriptorBuilderGetterDelegate builderGetterMethod)
         {
-            InitializeComponent();
-            initializeTable();
-            loadAddableMixerTypes();
-        }
-
-        private CustomDataGridView<Mixer> table;
-
-        private void initializeTable()
-        {
-
-            table = CreateTable<Mixer>();
 
             CustomDataGridViewColumnDescriptorBuilder<Mixer> builder;
 
@@ -39,27 +38,12 @@ namespace OpenSC.GUI.Mixers
             DataGridViewCellStyle onPreviewColumnCellStyle = table.DefaultCellStyle.Clone();
             onPreviewColumnCellStyle.ForeColor = Color.ForestGreen;
 
-            // Column: ID
-            builder = GetColumnDescriptorBuilderForTable<Mixer>();
-            builder.Type(DataGridViewColumnType.TextBox);
-            builder.Header("ID");
-            builder.Width(30);
-            builder.UpdaterMethod((mixer, cell) => { cell.Value = string.Format("#{0}", mixer.ID); });
-            builder.AddChangeEvent(nameof(Mixer.ID));
-            builder.BuildAndAdd();
+            // Column: ID, name
+            idColumnCreator(table, builderGetterMethod);
+            nameColumnCreator(table, builderGetterMethod);
 
-            // Column: name
-            builder = GetColumnDescriptorBuilderForTable<Mixer>();
-            builder.Type(DataGridViewColumnType.TextBox);
-            builder.Header("Name");
-            builder.Width(150);
-            builder.CellStyle(BOLD_TEXT_CELL_STYLE);
-            builder.UpdaterMethod((mixer, cell) => { cell.Value = mixer.Name; });
-            builder.AddChangeEvent(nameof(Mixer.Name));
-            builder.BuildAndAdd();
-
-            // Column: name
-            builder = GetColumnDescriptorBuilderForTable<Mixer>();
+            // Column: state
+            builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("State");
             builder.Width(100);
@@ -70,29 +54,26 @@ namespace OpenSC.GUI.Mixers
             });
             builder.AddChangeEvent(nameof(Mixer.State));
             builder.AddChangeEvent(nameof(Mixer.StateString));
-            builder.BuildAndAdd();
 
             // Column: inputs
-            builder = GetColumnDescriptorBuilderForTable<Mixer>();
+            builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Inputs");
             builder.Width(50);
             builder.UpdaterMethod((mixer, cell) => { cell.Value = mixer.Inputs.Count; });
             builder.AddChangeEvent(nameof(Mixer.Inputs));
-            builder.BuildAndAdd();
 
             // Column: program
-            builder = GetColumnDescriptorBuilderForTable<Mixer>();
+            builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Program");
             builder.Width(110);
             builder.CellStyle(onProgramColumnCellStyle);
             builder.UpdaterMethod((mixer, cell) => { cell.Value = (mixer.OnProgramInputName ?? "-"); });
             builder.AddChangeEvent(nameof(Mixer.OnProgramInputName));
-            builder.BuildAndAdd();
 
-            // Column: program
-            builder = GetColumnDescriptorBuilderForTable<Mixer>();
+            // Column: preview
+            builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Preview");
             builder.Width(110);
@@ -100,60 +81,11 @@ namespace OpenSC.GUI.Mixers
             builder.CellStyle(onPreviewColumnCellStyle);
             builder.UpdaterMethod((mixer, cell) => { cell.Value = (mixer.OnPreviewInputName ?? "-"); });
             builder.AddChangeEvent(nameof(Mixer.OnPreviewInputName));
-            builder.BuildAndAdd();
 
-            // Column: edit button
-            builder = GetColumnDescriptorBuilderForTable<Mixer>();
-            builder.Type(DataGridViewColumnType.Button);
-            builder.Header("Edit");
-            builder.Width(70);
-            builder.ButtonText("Edit");
-            builder.CellContentClickHandlerMethod((mixer, cell, e) => {
-                var editWindow = MixerEditorFormTypeRegister.Instance.GetFormForModel(mixer) as ChildWindowBase;
-                editWindow?.ShowAsChild();
-            });
-            builder.BuildAndAdd();
+            // Column: edit, delete
+            editButtonColumnCreator(table, builderGetterMethod);
+            deleteButtonColumnCreator(table, builderGetterMethod);
 
-            // Column: delete button
-            builder = GetColumnDescriptorBuilderForTable<Mixer>();
-            builder.Type(DataGridViewColumnType.Button);
-            builder.Header("Delete");
-            builder.Width(70);
-            builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
-            builder.ButtonText("Delete");
-            builder.CellContentClickHandlerMethod((mixer, cell, e) => {
-                string msgBoxText = string.Format("Do you really want to delete this mixer?\n(#{0}) {1}", mixer.ID, mixer.Name);
-                var confirm = MessageBox.Show(msgBoxText, "Delete confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (confirm == DialogResult.Yes)
-                    MixerDatabase.Instance.Remove(mixer);
-            });
-            builder.BuildAndAdd();
-
-            // Bind database
-            table.BoundCollection = MixerDatabase.Instance;
-
-        }
-        
-        private void loadAddableMixerTypes()
-        {
-            foreach (Type type in MixerEditorFormTypeRegister.Instance.RegisteredTypes)
-            {
-                string label = type.GetTypeLabel();
-                ToolStripMenuItem contextMenuItem = new ToolStripMenuItem(label)
-                {
-                    Tag = type
-                };
-                contextMenuItem.Click += addMixerMenuItemClick;
-                addableMixerTypesMenu.Items.Add(contextMenuItem);
-            }
-        }
-
-        private static void addMixerMenuItemClick(object sender, EventArgs e)
-        {
-            ToolStripMenuItem typedSender = sender as ToolStripMenuItem;
-            Type newMixerType = typedSender?.Tag as Type;
-            IModelEditorForm<Mixer> editorForm = MixerEditorFormTypeRegister.Instance.GetFormForType(newMixerType);
-            (editorForm as ChildWindowBase)?.ShowAsChild();
         }
 
         private static readonly EnumConverter<MixerState, Color> stateColorConverter = new EnumConverter<MixerState, Color>(null)

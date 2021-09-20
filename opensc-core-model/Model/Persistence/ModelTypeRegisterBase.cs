@@ -12,6 +12,8 @@ namespace OpenSC.Model.Persistence
 
         private Dictionary<string, Type> registeredTypes = new Dictionary<string, Type>();
 
+        public IEnumerable<Type> RegisteredTypes => registeredTypes.Values;
+
         public Type ConvertStringToType(string typeLabel)
         {
             if (!registeredTypes.TryGetValue(typeLabel, out Type foundType))

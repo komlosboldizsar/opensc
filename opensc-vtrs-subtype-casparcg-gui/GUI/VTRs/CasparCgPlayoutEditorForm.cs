@@ -15,6 +15,9 @@ namespace OpenSC.GUI.VTRs
     public partial class CasparCgPlayoutEditorForm : VtrEditorFormBase, IModelEditorForm<Vtr>
     {
 
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Vtr);
+        public IModelEditorForm<Vtr> GetInstanceT(Vtr modelInstance) => new CasparCgPlayoutEditorForm(modelInstance);
+
         public CasparCgPlayoutEditorForm() : base()
         {
             InitializeComponent();
@@ -27,11 +30,6 @@ namespace OpenSC.GUI.VTRs
                 this.vtr = new CasparCgPlayout();
             else if (!(vtr is CasparCgPlayout))
                 throw new ArgumentException();
-        }
-
-        public IModelEditorForm<Vtr> GetInstance(Vtr modelInstance)
-        {
-            return new CasparCgPlayoutEditorForm(modelInstance);
         }
 
         protected override void loadData()

@@ -14,8 +14,11 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.Routers.Mirrors
 {
 
-    public partial class RouterMirrorEditorForm : ModelEditorFormBase
+    public partial class RouterMirrorEditorForm : ModelEditorFormBase, IModelEditorForm<RouterMirror>
     {
+
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as RouterMirror);
+        public IModelEditorForm<RouterMirror> GetInstanceT(RouterMirror modelInstance) => new RouterMirrorEditorForm(modelInstance);
 
         private const string TITLE_NEW = "New router mirror";
         private const string TITLE_EDIT = "Edit router mirror: (#{0}) {1}";

@@ -7,8 +7,11 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.Routers.CrosspointStores
 {
 
-    public partial class CrosspointStoreEditorForm : ModelEditorFormBase
+    public partial class CrosspointStoreEditorForm : ModelEditorFormBase, IModelEditorForm<CrosspointStore>
     {
+
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as CrosspointStore);
+        public IModelEditorForm<CrosspointStore> GetInstanceT(CrosspointStore modelInstance) => new CrosspointStoreEditorForm(modelInstance);
 
         private const string TITLE_NEW = "New crosspoint store";
         private const string TITLE_EDIT = "Edit crosspoint store: (#{0}) {1}";

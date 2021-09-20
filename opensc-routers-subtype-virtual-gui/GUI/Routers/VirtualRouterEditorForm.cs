@@ -16,6 +16,9 @@ namespace OpenSC.GUI.Routers
     public partial class VirtualRouterEditorForm : RouterEditorFormBase, IModelEditorForm<Router>
     {
 
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Router);
+        public IModelEditorForm<Router> GetInstanceT(Router modelInstance) => new VirtualRouterEditorForm(modelInstance);
+
         public VirtualRouterEditorForm() : base()
         {
             InitializeComponent();
@@ -28,11 +31,6 @@ namespace OpenSC.GUI.Routers
                 this.router = new VirtualRouter();
             else if (!(router is VirtualRouter))
                 throw new ArgumentException();
-        }
-
-        public IModelEditorForm<Router> GetInstance(Router modelInstance)
-        {
-            return new VirtualRouterEditorForm(modelInstance);
         }
 
         protected override void loadData()

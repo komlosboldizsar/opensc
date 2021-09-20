@@ -28,45 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.topPanelInner = new System.Windows.Forms.Panel();
-            this.addTimerButton = new System.Windows.Forms.Button();
-            this.topPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
-            this.topPanelInner.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // topPanel
-            // 
-            this.topPanel.Controls.Add(this.topPanelInner);
-            this.topPanel.Size = new System.Drawing.Size(800, 54);
-            // 
-            // bottomPanel
-            // 
-            this.bottomPanel.Location = new System.Drawing.Point(0, 54);
-            this.bottomPanel.Size = new System.Drawing.Size(800, 340);
-            // 
-            // topPanelInner
-            // 
-            this.topPanelInner.AutoSize = true;
-            this.topPanelInner.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.topPanelInner.Controls.Add(this.addTimerButton);
-            this.topPanelInner.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.topPanelInner.Location = new System.Drawing.Point(0, 0);
-            this.topPanelInner.Name = "topPanelInner";
-            this.topPanelInner.Padding = new System.Windows.Forms.Padding(10);
-            this.topPanelInner.Size = new System.Drawing.Size(800, 54);
-            this.topPanelInner.TabIndex = 0;
-            // 
-            // addTimerButton
-            // 
-            this.addTimerButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.addTimerButton.Location = new System.Drawing.Point(650, 13);
-            this.addTimerButton.Name = "addTimerButton";
-            this.addTimerButton.Size = new System.Drawing.Size(137, 28);
-            this.addTimerButton.TabIndex = 0;
-            this.addTimerButton.Text = "Add timer";
-            this.addTimerButton.UseVisualStyleBackColor = true;
-            this.addTimerButton.Click += new System.EventHandler(this.addTimerButton_Click);
             // 
             // TimerList
             // 
@@ -75,18 +38,12 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Name = "TimerList";
             this.Text = "List of timers";
-            this.topPanel.ResumeLayout(false);
-            this.topPanel.PerformLayout();
             this.mainContainer.ResumeLayout(false);
             this.mainContainer.PerformLayout();
-            this.topPanelInner.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel topPanelInner;
-        private System.Windows.Forms.Button addTimerButton;
     }
 }

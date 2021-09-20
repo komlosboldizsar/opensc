@@ -4,8 +4,11 @@ using System.Windows.Forms;
 
 namespace OpenSC.GUI.Variables
 {
-    public partial class DynamicTextEditorForm : ModelEditorFormBase
+    public partial class DynamicTextEditorForm : ModelEditorFormBase, IModelEditorForm<DynamicText>
     {
+
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as DynamicText);
+        public IModelEditorForm<DynamicText> GetInstanceT(DynamicText modelInstance) => new DynamicTextEditorForm(modelInstance);
 
         private const string TITLE_NEW = "New dynamic text";
         private const string TITLE_EDIT = "Edit dynamic text: (#{0}) {1}";

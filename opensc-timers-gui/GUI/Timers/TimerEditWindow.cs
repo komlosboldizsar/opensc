@@ -13,8 +13,11 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.Timers
 {
     [WindowTypeName("timers.timereditwindow")]
-    public partial class TimerEditWindow : ChildWindowWithTitle
+    public partial class TimerEditWindow : ChildWindowWithTitle, IModelEditorForm<Model.Timers.Timer>
     {
+
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Model.Timers.Timer);
+        public IModelEditorForm<Model.Timers.Timer> GetInstanceT(Model.Timers.Timer modelInstance) => new TimerEditWindow(modelInstance);
 
         private const string TITLE_NEW = "New timer";
         private const string TITLE_EDIT = "Edit timer: (#{0}) {1}";

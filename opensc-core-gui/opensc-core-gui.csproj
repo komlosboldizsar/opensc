@@ -111,6 +111,15 @@
     <Compile Include="GUI\Helpers\DraggableControls.cs" />
     <Compile Include="GUI\Helpers\ResizableControls.cs" />
     <Compile Include="GUI\IModelEditorForm.cs" />
+    <Compile Include="GUI\IModelEditorFormTypeRegister.cs" />
+    <Compile Include="GUI\ModelListFormBaseManager.cs" />
+    <Compile Include="GUI\ModelListFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ModelListFormBase.Designer.cs">
+      <DependentUpon>ModelListFormBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ItemListFormBaseManager.cs" />
     <Compile Include="GUI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,6 +129,12 @@
     <Compile Include="GUI\Menus\MenuItemGroup.cs" />
     <Compile Include="GUI\Menus\MenuItem.cs" />
     <Compile Include="GUI\Menus\MenuManager.cs" />
+    <Compile Include="GUI\ItemListFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ItemListFormBase.Designer.cs">
+      <DependentUpon>ItemListFormBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ModelEditorFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -197,8 +212,14 @@
     <EmbeddedResource Include="GUI\GeneralComponents\RichTextBoxWithBar.resx">
       <DependentUpon>RichTextBoxWithBar.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ModelListFormBase.resx">
+      <DependentUpon>ModelListFormBase.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ItemListFormBase.resx">
+      <DependentUpon>ItemListFormBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ModelEditorFormBase.resx">
       <DependentUpon>ModelEditorFormBase.cs</DependentUpon>

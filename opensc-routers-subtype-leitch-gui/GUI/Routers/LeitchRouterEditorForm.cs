@@ -10,6 +10,9 @@ namespace OpenSC.GUI.Routers
     public partial class LeitchRouterEditorForm : RouterEditorFormBase, IModelEditorForm<Router>
     {
 
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Router);
+        public IModelEditorForm<Router> GetInstanceT(Router modelInstance) => new LeitchRouterEditorForm(modelInstance);
+
         public LeitchRouterEditorForm() : base()
         {
             InitializeComponent();
@@ -23,11 +26,6 @@ namespace OpenSC.GUI.Routers
             else if (!(router is LeitchRouter))
                 throw new ArgumentException();
             initDropDowns();
-        }
-
-        public IModelEditorForm<Router> GetInstance(Router modelInstance)
-        {
-            return new LeitchRouterEditorForm(modelInstance);
         }
 
         protected override void loadData()
