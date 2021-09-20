@@ -13,28 +13,47 @@ namespace OpenSC.GUI.GeneralComponents
     // https://stackoverflow.com/a/27173509
     public class SplitButton : Button
     {
+
         [DefaultValue(null), Browsable(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public ContextMenuStrip Menu { get; set; }
 
-        [DefaultValue(20), Browsable(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        public int SplitWidth { get; set; }
+        private int splitWidth = 20;
 
-        public SplitButton()
+        [DefaultValue(20), Browsable(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public int SplitWidth
         {
-            SplitWidth = 20;
+            get => splitWidth;
+            set
+            {
+                splitWidth = value;
+                recalculateBasePadding();
+            }
         }
+
+        private Padding shownPadding = Padding.Empty;
+
+        public new Padding Padding
+        {
+            get => shownPadding;
+            set
+            {
+                shownPadding = value;
+                recalculateBasePadding();
+            }
+        }
+
+        private void recalculateBasePadding()
+            => base.Padding = new Padding(shownPadding.Left, shownPadding.Top, shownPadding.Right + SplitWidth, shownPadding.Bottom);
 
         protected override void OnMouseDown(MouseEventArgs mevent)
         {
             var splitRect = new Rectangle(this.Width - this.SplitWidth, 0, this.SplitWidth, this.Height);
 
             // Figure out if the button click was on the button itself or the menu split
-            if (Menu != null &&
-                mevent.Button == MouseButtons.Left &&
-                splitRect.Contains(mevent.Location))
+            if (Menu != null && mevent.Button == MouseButtons.Left && splitRect.Contains(mevent.Location))
             {
                 Menu.Show(this, 0, this.Height);    // Shows menu under button
-                                                    //Menu.Show(this, mevent.Location); // Shows menu at click location
+                //Menu.Show(this, mevent.Location); // Shows menu at click location
             }
             else
             {
@@ -45,7 +64,6 @@ namespace OpenSC.GUI.GeneralComponents
         protected override void OnPaint(PaintEventArgs pevent)
         {
             base.OnPaint(pevent);
-
             if (this.Menu != null && this.SplitWidth > 0)
             {
                 // Draw the arrow glyph on the right side of the button
