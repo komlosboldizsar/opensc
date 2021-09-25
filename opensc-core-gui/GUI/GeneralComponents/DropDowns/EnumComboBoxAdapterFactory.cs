@@ -13,17 +13,10 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
         Dictionary<T, string> translations;
 
         public EnumComboBoxAdapterFactory(Dictionary<T, string> translations = null)
-        {
-            this.translations = translations;
-        }
+            => this.translations = translations;
 
-        public EnumComboBoxAdapter<T> GetOneTyped()
-        {
-            return new EnumComboBoxAdapter<T>(translations);
-        }
-
-        public IComboBoxAdapter GetOne()
-            => GetOneTyped();
+        public EnumComboBoxAdapter<T> GetOneT() => new EnumComboBoxAdapter<T>(translations);
+        public IComboBoxAdapter GetOne() => GetOneT();
 
     }
 

@@ -16,39 +16,27 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
 
         private Dictionary<T, string> translations;
         private string nullTranslation;
-
         private const string DEFAULT_NULL_TRANSLATION = "(null)";
 
-        private List<IItemProxy> proxyList = new List<IItemProxy>();
-
         public bool ContainsNull => (Nullable.GetUnderlyingType(givenType) != null);
+
+        private List<IItemProxy> proxyList = new List<IItemProxy>();
 
         public bool ContainsListCollection => false;
 
         public EnumComboBoxAdapter(Dictionary<T, string> translations = null, string nullTranslation = "")
         {
-
             this.givenType = typeof(T);
             Type _enumType = Nullable.GetUnderlyingType(this.givenType);
             this.enumType = (_enumType != null) ? _enumType : givenType;
             if (!enumType.IsEnum && !Nullable.GetUnderlyingType(enumType).IsEnum)
                 throw new ArgumentException();
-
-            if (translations == null)
-                this.translations = new Dictionary<T, string>();
-            else
-                this.translations = translations;
-
+            this.translations = translations ?? new Dictionary<T, string>();
             this.nullTranslation = nullTranslation;
-
             createProxyList();
-
         }
 
-        public IList GetList()
-        {
-            return proxyList;
-        }
+        public IList GetList() =>  proxyList;
 
         private void createProxyList()
         {
@@ -62,10 +50,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
             }
         }
 
-        public object Clone()
-        {
-            return new EnumComboBoxAdapter<T>(translations);
-        }
+        public object Clone() => new EnumComboBoxAdapter<T>(translations);
 
         private interface IItemProxy
         {
@@ -91,10 +76,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
             public string Label { get; private set; }
             public object Value => null;
             public override string ToString() => Label;
-            public NullItemProxy(string label)
-            {
-                Label = label;
-            }
+            public NullItemProxy(string label) => Label = label;
         }
 
     }

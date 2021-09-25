@@ -24,13 +24,11 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
             this.nullLabel = nullLabel;
         }
 
-        public ComboBoxAdapter<T> GetOneTyped()
-        {
-            return new ComboBoxAdapter<T>(elements, toStringFunction, containsNull, nullLabel);
-        }
+        public ComboBoxAdapter<T> GetOneT()
+            => new ComboBoxAdapter<T>(elements, toStringFunction, containsNull, nullLabel);
 
         public IComboBoxAdapter GetOne()
-            => GetOneTyped();
+            => GetOneT();
 
     }
 

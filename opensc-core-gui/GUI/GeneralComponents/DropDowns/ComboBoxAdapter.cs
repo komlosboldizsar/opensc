@@ -20,7 +20,6 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
         ToStringFunctionDelegate toStringFunction;
 
         public bool ContainsNull { get; private set; }
-
         private string nullLabel;
 
         public bool ContainsListCollection => false;
@@ -28,16 +27,13 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
         public ComboBoxAdapter(IEnumerable<T> elements, ToStringFunctionDelegate toStringFunction, bool containsNull = false, string nullLabel = "")
         {
             this.boundCollection = elements; 
-            this.toStringFunction = toStringFunction;
+            this.toStringFunction = toStringFunction ?? (o => o.ToString());
             this.ContainsNull = containsNull;
             this.nullLabel = nullLabel;
             createProxyList();
         }
 
-        public IList GetList()
-        {
-            return proxyList;
-        }
+        public IList GetList() => proxyList;
 
         private void createProxyList()
         {
@@ -50,15 +46,12 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
         }
 
         public object Clone()
-        {
-            return new ComboBoxAdapter<T>(boundCollection, toStringFunction, ContainsNull, nullLabel);
-        }
+            => new ComboBoxAdapter<T>(boundCollection, toStringFunction, ContainsNull, nullLabel);
 
         private class ItemProxy
         {
 
             public T Value { get; private set; }
-
             public string Label { get; private set; }
 
             public ItemProxy(T value, string label)
@@ -67,8 +60,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
                 Label = label;
             }
 
-            public override string ToString()
-                => Label;
+            public override string ToString() => Label;
 
         }
 
