@@ -16,91 +16,40 @@ namespace OpenSC.GUI.Routers
         public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Labelset);
         public IModelEditorForm<Labelset> GetInstanceT(Labelset modelInstance) => new LabelsetEditorForm(modelInstance);
 
+        public LabelsetEditorForm() : base() => InitializeComponent();
+        public LabelsetEditorForm(Labelset labelset) : base(labelset) => InitializeComponent();
 
-        private const string TITLE_NEW = "New labelset";
-        private const string TITLE_EDIT = "Edit labelset: (#{0}) {1}";
-
-        private const string HEADER_TEXT_NEW = "New labelset";
-        private const string HEADER_TEXT_EDIT = "Edit labelset";
-
-        protected Labelset labelset;
+        protected override IModelEditorFormDataManager createManager()
+            => new ModelEditorFormDataManager<Labelset, Labelset>(this, LabelsetDatabase.Instance);
 
         protected LabelsetProxy labelsetProxy;
 
-        private bool addingNew = false;
-
-        protected bool AddingNew
-        {
-            get { return addingNew; }
-            set
-            {
-                addingNew = value;
-                Text = string.Format((value ? TITLE_NEW : TITLE_EDIT), labelset?.ID, labelset?.Name);
-                HeaderText = string.Format((value ? HEADER_TEXT_NEW : HEADER_TEXT_EDIT), labelset?.ID, labelset?.Name);
-            }
-        }
-
-        public LabelsetEditorForm()
-        {
-            InitializeComponent();
-        }
-
-        public LabelsetEditorForm(Labelset labelset)
-        {
-            InitializeComponent();
-            this.labelset = (labelset != null) ? labelset : new Labelset();
-            AddingNew = (this.labelset == null);
-        }
-
         protected override void loadData()
         {
+            base.loadData();
+            Labelset labelset = (Labelset)EditedModel;
             if (labelset == null)
                 return;
             labelsetProxy = new LabelsetProxy(labelset);
-            idNumericField.Value = (addingNew ? LabelsetDatabase.Instance.NextValidId() : labelset.ID);
-            nameTextBox.Text = labelset.Name;
             initLabelsTable();
         }
 
-        protected sealed override bool saveData()
+        protected override void validateFields()
         {
-
-            try
-            {
-                validateFields();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            labelset.StartUpdate();
-            writeFields();
-            labelset.EndUpdate();
-
-            if (addingNew)
-                LabelsetDatabase.Instance.Add(labelset);
-            AddingNew = false;
-
-            return true;
-
-        }
-
-        protected virtual void validateFields()
-        {
+            base.validateFields();
+            Labelset labelset = (Labelset)EditedModel;
             if (labelset == null)
                 return;
             labelset.ValidateId((int)idNumericField.Value);
             // TODO: validate name
         }
 
-        protected virtual void writeFields()
+        protected override void writeFields()
         {
+            base.writeFields();
+            Labelset labelset = (Labelset)EditedModel;
             if (labelset == null)
                 return;
-            labelset.ID = (int)idNumericField.Value;
-            labelset.Name = nameTextBox.Text;
         }
 
         private CustomDataGridView<LabelProxy> labelsTableCDGV;
@@ -169,9 +118,7 @@ namespace OpenSC.GUI.Routers
 
         private CustomDataGridViewColumnDescriptorBuilder<T> getColumnDescriptorBuilderForTable<T>(CustomDataGridView<T> table)
             where T : class
-        {
-             return new CustomDataGridViewColumnDescriptorBuilder<T>(table);
-        }
+            => new CustomDataGridViewColumnDescriptorBuilder<T>(table);
 
         protected class LabelProxy : Model.General.INotifyPropertyChanged
         {
@@ -187,8 +134,8 @@ namespace OpenSC.GUI.Routers
             }
             public string Text
             {
-                get { return labelset.GetText(RouterInput); }
-                set { labelset.SetText(RouterInput, value); }
+                get => labelset.GetText(RouterInput);
+                set => labelset.SetText(RouterInput, value);
             }
 
             public void TextChanged() => PropertyChanged?.Invoke(nameof(LabelProxy.Text));

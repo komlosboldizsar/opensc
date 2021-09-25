@@ -28,12 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.basicDataTable = new System.Windows.Forms.TableLayoutPanel();
             this.idLabel = new System.Windows.Forms.Label();
-            this.labelLabel = new System.Windows.Forms.Label();
             this.idNumericField = new System.Windows.Forms.NumericUpDown();
-            this.labelTextBox = new System.Windows.Forms.TextBox();
-            this.basicDataGroupBox = new System.Windows.Forms.GroupBox();
             this.contentGroupBox = new System.Windows.Forms.GroupBox();
             this.contentTable = new System.Windows.Forms.TableLayoutPanel();
             this.formulaLabel = new System.Windows.Forms.Label();
@@ -42,9 +38,7 @@
             this.currentTextTextBox = new System.Windows.Forms.TextBox();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
-            this.basicDataTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).BeginInit();
-            this.basicDataGroupBox.SuspendLayout();
             this.contentGroupBox.SuspendLayout();
             this.contentTable.SuspendLayout();
             this.SuspendLayout();
@@ -52,35 +46,15 @@
             // customElementsPanel
             // 
             this.customElementsPanel.Controls.Add(this.contentGroupBox);
-            this.customElementsPanel.Controls.Add(this.basicDataGroupBox);
             this.customElementsPanel.Location = new System.Drawing.Point(10, 10);
             this.customElementsPanel.Padding = new System.Windows.Forms.Padding(0);
             this.customElementsPanel.Size = new System.Drawing.Size(489, 289);
+            this.customElementsPanel.Controls.SetChildIndex(this.contentGroupBox, 0);
             // 
             // mainContainer
             // 
             this.mainContainer.Padding = new System.Windows.Forms.Padding(10);
             this.mainContainer.Size = new System.Drawing.Size(509, 378);
-            // 
-            // basicDataTable
-            // 
-            this.basicDataTable.AutoSize = true;
-            this.basicDataTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.basicDataTable.ColumnCount = 2;
-            this.basicDataTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.basicDataTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.basicDataTable.Controls.Add(this.idLabel, 0, 0);
-            this.basicDataTable.Controls.Add(this.labelLabel, 0, 1);
-            this.basicDataTable.Controls.Add(this.idNumericField, 1, 0);
-            this.basicDataTable.Controls.Add(this.labelTextBox, 1, 1);
-            this.basicDataTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.basicDataTable.Location = new System.Drawing.Point(8, 19);
-            this.basicDataTable.Name = "basicDataTable";
-            this.basicDataTable.RowCount = 2;
-            this.basicDataTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.basicDataTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.basicDataTable.Size = new System.Drawing.Size(473, 56);
-            this.basicDataTable.TabIndex = 0;
             // 
             // idLabel
             // 
@@ -94,18 +68,6 @@
             this.idLabel.Text = "ID";
             this.idLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // labelLabel
-            // 
-            this.labelLabel.AutoSize = true;
-            this.labelLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.labelLabel.Location = new System.Drawing.Point(3, 28);
-            this.labelLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.labelLabel.Name = "labelLabel";
-            this.labelLabel.Size = new System.Drawing.Size(43, 28);
-            this.labelLabel.TabIndex = 1;
-            this.labelLabel.Text = "Label";
-            this.labelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // idNumericField
             // 
             this.idNumericField.Location = new System.Drawing.Point(64, 3);
@@ -113,36 +75,13 @@
             this.idNumericField.Size = new System.Drawing.Size(120, 22);
             this.idNumericField.TabIndex = 2;
             // 
-            // labelTextBox
-            // 
-            this.labelTextBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.labelTextBox.Location = new System.Drawing.Point(64, 31);
-            this.labelTextBox.Name = "labelTextBox";
-            this.labelTextBox.Size = new System.Drawing.Size(406, 22);
-            this.labelTextBox.TabIndex = 3;
-            // 
-            // basicDataGroupBox
-            // 
-            this.basicDataGroupBox.AutoSize = true;
-            this.basicDataGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.basicDataGroupBox.Controls.Add(this.basicDataTable);
-            this.basicDataGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.basicDataGroupBox.Location = new System.Drawing.Point(0, 0);
-            this.basicDataGroupBox.Margin = new System.Windows.Forms.Padding(10);
-            this.basicDataGroupBox.Name = "basicDataGroupBox";
-            this.basicDataGroupBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 8);
-            this.basicDataGroupBox.Size = new System.Drawing.Size(489, 83);
-            this.basicDataGroupBox.TabIndex = 1;
-            this.basicDataGroupBox.TabStop = false;
-            this.basicDataGroupBox.Text = "Base data";
-            // 
             // contentGroupBox
             // 
             this.contentGroupBox.AutoSize = true;
             this.contentGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.contentGroupBox.Controls.Add(this.contentTable);
             this.contentGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.contentGroupBox.Location = new System.Drawing.Point(0, 83);
+            this.contentGroupBox.Location = new System.Drawing.Point(0, 55);
             this.contentGroupBox.Margin = new System.Windows.Forms.Padding(10);
             this.contentGroupBox.Name = "contentGroupBox";
             this.contentGroupBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 8);
@@ -223,15 +162,12 @@
             this.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.MinimumSize = new System.Drawing.Size(500, 440);
             this.Name = "DynamicTextEditorForm";
-            this.Text = "Edit dynamic text";
+            this.SubjectPlural = "dynamic texts";
+            this.SubjectSingular = "dynamic text";
             this.customElementsPanel.ResumeLayout(false);
             this.customElementsPanel.PerformLayout();
             this.mainContainer.ResumeLayout(false);
-            this.basicDataTable.ResumeLayout(false);
-            this.basicDataTable.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).EndInit();
-            this.basicDataGroupBox.ResumeLayout(false);
-            this.basicDataGroupBox.PerformLayout();
             this.contentGroupBox.ResumeLayout(false);
             this.contentGroupBox.PerformLayout();
             this.contentTable.ResumeLayout(false);
@@ -241,18 +177,13 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.GroupBox basicDataGroupBox;
-        private System.Windows.Forms.TableLayoutPanel basicDataTable;
-        private System.Windows.Forms.Label idLabel;
-        private System.Windows.Forms.Label labelLabel;
-        private System.Windows.Forms.NumericUpDown idNumericField;
-        private System.Windows.Forms.TextBox labelTextBox;
         private System.Windows.Forms.GroupBox contentGroupBox;
         private System.Windows.Forms.TableLayoutPanel contentTable;
         private System.Windows.Forms.Label currentTextLabel;
         private System.Windows.Forms.Label formulaLabel;
         private System.Windows.Forms.TextBox formulaTextBox;
         private System.Windows.Forms.TextBox currentTextTextBox;
+        private System.Windows.Forms.Label idLabel;
+        private System.Windows.Forms.NumericUpDown idNumericField;
     }
 }

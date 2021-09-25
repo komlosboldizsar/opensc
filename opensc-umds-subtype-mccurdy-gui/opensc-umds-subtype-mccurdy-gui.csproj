@@ -62,6 +62,9 @@
     <EmbeddedResource Include="GUI\UMDs\McCurdyUmd1EditorForm.resx">
       <DependentUpon>McCurdyUmd1EditorForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\UMDs\McCurdyUmd1TEditorForm.resx">
+      <DependentUpon>McCurdyUmd1TEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj">

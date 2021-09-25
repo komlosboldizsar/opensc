@@ -17,24 +17,22 @@ namespace OpenSC.GUI.Streams
         public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Stream);
         public IModelEditorForm<Stream> GetInstanceT(Stream modelInstance) => new YoutubeStreamEditorForm(modelInstance);
 
-        public YoutubeStreamEditorForm(): base()
+        public YoutubeStreamEditorForm() : base() => InitializeComponent();
+
+        public YoutubeStreamEditorForm(Stream stream) : base(stream)
         {
             InitializeComponent();
+            if ((stream != null) && !(stream is YoutubeStream))
+                throw new ArgumentException($"Type of stream should be {nameof(YoutubeStream)}.", nameof(stream));
         }
 
-        public YoutubeStreamEditorForm(Stream stream): base(stream)
-        {
-            InitializeComponent();
-            if (stream == null)
-                this.stream = new YoutubeStream();
-            else if (!(stream is YoutubeStream))
-                throw new ArgumentException();
-        }
+        protected override IModelEditorFormDataManager createManager()
+            => new ModelEditorFormDataManager<Stream, YoutubeStream>(this, StreamDatabase.Instance);
 
         protected override void loadData()
         {
             base.loadData();
-            YoutubeStream youtubeStream = stream as YoutubeStream;
+            YoutubeStream youtubeStream = (YoutubeStream)EditedModel;
             if (youtubeStream == null)
                 return;
             videoIdTextBox.Text = youtubeStream.VideoId;
@@ -43,7 +41,7 @@ namespace OpenSC.GUI.Streams
         protected override void writeFields()
         {
             base.writeFields();
-            YoutubeStream youtubeStream = stream as YoutubeStream;
+            YoutubeStream youtubeStream = (YoutubeStream)EditedModel;
             if (youtubeStream == null)
                 return;
             youtubeStream.VideoId = videoIdTextBox.Text;
@@ -52,10 +50,9 @@ namespace OpenSC.GUI.Streams
         protected override void validateFields()
         {
             base.validateFields();
-            YoutubeStream youtubeStream = stream as YoutubeStream;
+            YoutubeStream youtubeStream = (YoutubeStream)EditedModel;
             if (youtubeStream == null)
                 return;
-            // TODO: Validation
         }
 
     }

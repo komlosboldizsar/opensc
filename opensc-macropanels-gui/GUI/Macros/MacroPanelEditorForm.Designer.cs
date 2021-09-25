@@ -62,14 +62,12 @@
             this.elementOperationsPanel = new System.Windows.Forms.Panel();
             this.elementOperationsGroupBox = new System.Windows.Forms.GroupBox();
             this.addElementButton = new System.Windows.Forms.Button();
-            this.baseDataPanel = new System.Windows.Forms.Panel();
-            this.baseDataGroupBox = new System.Windows.Forms.GroupBox();
-            this.baseDataTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.idLabel = new System.Windows.Forms.Label();
             this.nameLabel = new System.Windows.Forms.Label();
             this.nameTextBox = new System.Windows.Forms.TextBox();
             this.idNumericField = new System.Windows.Forms.NumericUpDown();
             this.colorPickerDialog = new System.Windows.Forms.ColorDialog();
+            this.spacerPanel1 = new System.Windows.Forms.Panel();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.editorPanel.SuspendLayout();
@@ -86,9 +84,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.elementSizeHNumericField)).BeginInit();
             this.elementOperationsPanel.SuspendLayout();
             this.elementOperationsGroupBox.SuspendLayout();
-            this.baseDataPanel.SuspendLayout();
-            this.baseDataGroupBox.SuspendLayout();
-            this.baseDataTableLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).BeginInit();
             this.SuspendLayout();
             // 
@@ -96,7 +91,11 @@
             // 
             this.customElementsPanel.Controls.Add(this.elementsPanel);
             this.customElementsPanel.Controls.Add(this.editorPanel);
+            this.customElementsPanel.Controls.Add(this.spacerPanel1);
             this.customElementsPanel.Size = new System.Drawing.Size(1186, 599);
+            this.customElementsPanel.Controls.SetChildIndex(this.spacerPanel1, 0);
+            this.customElementsPanel.Controls.SetChildIndex(this.editorPanel, 0);
+            this.customElementsPanel.Controls.SetChildIndex(this.elementsPanel, 0);
             // 
             // mainContainer
             // 
@@ -106,21 +105,20 @@
             // 
             this.elementsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.elementsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.elementsPanel.Location = new System.Drawing.Point(10, 10);
+            this.elementsPanel.Location = new System.Drawing.Point(10, 99);
             this.elementsPanel.Name = "elementsPanel";
-            this.elementsPanel.Size = new System.Drawing.Size(886, 589);
+            this.elementsPanel.Size = new System.Drawing.Size(886, 500);
             this.elementsPanel.TabIndex = 0;
             // 
             // editorPanel
             // 
             this.editorPanel.Controls.Add(this.elementDataPanel);
             this.editorPanel.Controls.Add(this.elementOperationsPanel);
-            this.editorPanel.Controls.Add(this.baseDataPanel);
             this.editorPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.editorPanel.Location = new System.Drawing.Point(896, 10);
+            this.editorPanel.Location = new System.Drawing.Point(896, 99);
             this.editorPanel.Name = "editorPanel";
             this.editorPanel.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.editorPanel.Size = new System.Drawing.Size(280, 589);
+            this.editorPanel.Size = new System.Drawing.Size(280, 500);
             this.editorPanel.TabIndex = 1;
             // 
             // elementDataPanel
@@ -129,7 +127,7 @@
             this.elementDataPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.elementDataPanel.Controls.Add(this.elementDataGroupBox);
             this.elementDataPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.elementDataPanel.Location = new System.Drawing.Point(10, 179);
+            this.elementDataPanel.Location = new System.Drawing.Point(10, 85);
             this.elementDataPanel.Name = "elementDataPanel";
             this.elementDataPanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
             this.elementDataPanel.Size = new System.Drawing.Size(270, 336);
@@ -496,7 +494,7 @@
             this.elementOperationsPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.elementOperationsPanel.Controls.Add(this.elementOperationsGroupBox);
             this.elementOperationsPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.elementOperationsPanel.Location = new System.Drawing.Point(10, 94);
+            this.elementOperationsPanel.Location = new System.Drawing.Point(10, 0);
             this.elementOperationsPanel.Name = "elementOperationsPanel";
             this.elementOperationsPanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
             this.elementOperationsPanel.Size = new System.Drawing.Size(270, 85);
@@ -526,52 +524,6 @@
             this.addElementButton.Text = "Add new";
             this.addElementButton.UseVisualStyleBackColor = true;
             this.addElementButton.Click += new System.EventHandler(this.addElementButton_Click);
-            // 
-            // baseDataPanel
-            // 
-            this.baseDataPanel.AutoSize = true;
-            this.baseDataPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.baseDataPanel.Controls.Add(this.baseDataGroupBox);
-            this.baseDataPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.baseDataPanel.Location = new System.Drawing.Point(10, 0);
-            this.baseDataPanel.Name = "baseDataPanel";
-            this.baseDataPanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
-            this.baseDataPanel.Size = new System.Drawing.Size(270, 94);
-            this.baseDataPanel.TabIndex = 1;
-            // 
-            // baseDataGroupBox
-            // 
-            this.baseDataGroupBox.AutoSize = true;
-            this.baseDataGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.baseDataGroupBox.Controls.Add(this.baseDataTableLayout);
-            this.baseDataGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.baseDataGroupBox.Location = new System.Drawing.Point(0, 0);
-            this.baseDataGroupBox.Name = "baseDataGroupBox";
-            this.baseDataGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.baseDataGroupBox.Size = new System.Drawing.Size(270, 87);
-            this.baseDataGroupBox.TabIndex = 0;
-            this.baseDataGroupBox.TabStop = false;
-            this.baseDataGroupBox.Text = "Base data";
-            // 
-            // baseDataTableLayout
-            // 
-            this.baseDataTableLayout.AutoSize = true;
-            this.baseDataTableLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.baseDataTableLayout.ColumnCount = 2;
-            this.baseDataTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.baseDataTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.baseDataTableLayout.Controls.Add(this.idLabel, 0, 0);
-            this.baseDataTableLayout.Controls.Add(this.nameLabel, 0, 1);
-            this.baseDataTableLayout.Controls.Add(this.nameTextBox, 1, 1);
-            this.baseDataTableLayout.Controls.Add(this.idNumericField, 1, 0);
-            this.baseDataTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.baseDataTableLayout.Location = new System.Drawing.Point(8, 23);
-            this.baseDataTableLayout.Name = "baseDataTableLayout";
-            this.baseDataTableLayout.RowCount = 2;
-            this.baseDataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.baseDataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.baseDataTableLayout.Size = new System.Drawing.Size(254, 56);
-            this.baseDataTableLayout.TabIndex = 0;
             // 
             // idLabel
             // 
@@ -612,6 +564,17 @@
             this.idNumericField.Size = new System.Drawing.Size(120, 22);
             this.idNumericField.TabIndex = 3;
             // 
+            // spacerPanel1
+            // 
+            this.spacerPanel1.AutoSize = true;
+            this.spacerPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.spacerPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.spacerPanel1.Location = new System.Drawing.Point(10, 93);
+            this.spacerPanel1.Name = "spacerPanel1";
+            this.spacerPanel1.Padding = new System.Windows.Forms.Padding(3);
+            this.spacerPanel1.Size = new System.Drawing.Size(1166, 6);
+            this.spacerPanel1.TabIndex = 0;
+            // 
             // MacroPanelEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -619,14 +582,17 @@
             this.ClientSize = new System.Drawing.Size(1186, 724);
             this.DeleteButtonVisible = true;
             this.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.HeaderText = "Edit macro panel";
+            this.HeaderText = "New macro panel";
             this.MinimumSize = new System.Drawing.Size(1000, 600);
             this.Name = "MacroPanelEditorForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
-            this.Text = "Edit macro panel";
+            this.SubjectPlural = "macro panels";
+            this.SubjectSingular = "macro panel";
+            this.Text = "New macro panel";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MacroPanelForm_FormClosing);
             this.Load += new System.EventHandler(this.MacroPanelForm_Load);
             this.customElementsPanel.ResumeLayout(false);
+            this.customElementsPanel.PerformLayout();
             this.mainContainer.ResumeLayout(false);
             this.editorPanel.ResumeLayout(false);
             this.editorPanel.PerformLayout();
@@ -647,12 +613,6 @@
             this.elementOperationsPanel.ResumeLayout(false);
             this.elementOperationsPanel.PerformLayout();
             this.elementOperationsGroupBox.ResumeLayout(false);
-            this.baseDataPanel.ResumeLayout(false);
-            this.baseDataPanel.PerformLayout();
-            this.baseDataGroupBox.ResumeLayout(false);
-            this.baseDataGroupBox.PerformLayout();
-            this.baseDataTableLayout.ResumeLayout(false);
-            this.baseDataTableLayout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).EndInit();
             this.ResumeLayout(false);
 
@@ -667,13 +627,6 @@
         private System.Windows.Forms.TableLayoutPanel elementDataTableLayout;
         private System.Windows.Forms.Label elementMacroLabel;
         private System.Windows.Forms.Label elementLabelLabel;
-        private System.Windows.Forms.Panel baseDataPanel;
-        private System.Windows.Forms.GroupBox baseDataGroupBox;
-        private System.Windows.Forms.TableLayoutPanel baseDataTableLayout;
-        private System.Windows.Forms.Label idLabel;
-        private System.Windows.Forms.Label nameLabel;
-        private System.Windows.Forms.TextBox nameTextBox;
-        private System.Windows.Forms.NumericUpDown idNumericField;
         private System.Windows.Forms.ComboBox elementMacroDropDown;
         private System.Windows.Forms.Label elementBackgroundLabel;
         private System.Windows.Forms.Label elementForegroundLabel;
@@ -702,5 +655,10 @@
         private System.Windows.Forms.Label elementPosXLabel;
         private System.Windows.Forms.Label elementPosYLabel;
         private System.Windows.Forms.Label elementSizeWLabel;
+        private System.Windows.Forms.Label idLabel;
+        private System.Windows.Forms.Label nameLabel;
+        private System.Windows.Forms.TextBox nameTextBox;
+        private System.Windows.Forms.NumericUpDown idNumericField;
+        private System.Windows.Forms.Panel spacerPanel1;
     }
 }

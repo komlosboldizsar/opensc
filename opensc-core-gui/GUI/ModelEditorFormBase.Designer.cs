@@ -34,8 +34,18 @@
             this.deleteButton = new System.Windows.Forms.Button();
             this.buttonsPanel = new System.Windows.Forms.Panel();
             this.customElementsPanel = new System.Windows.Forms.Panel();
+            this.identifiersGroupBox = new System.Windows.Forms.GroupBox();
+            this.identifiersTable = new System.Windows.Forms.TableLayoutPanel();
+            this.idLabel = new System.Windows.Forms.Label();
+            this.nameLabel = new System.Windows.Forms.Label();
+            this.idNumericField = new System.Windows.Forms.NumericUpDown();
+            this.nameTextBox = new System.Windows.Forms.TextBox();
             this.mainContainer.SuspendLayout();
             this.buttonsPanel.SuspendLayout();
+            this.customElementsPanel.SuspendLayout();
+            this.identifiersGroupBox.SuspendLayout();
+            this.identifiersTable.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).BeginInit();
             this.SuspendLayout();
             // 
             // mainContainer
@@ -106,12 +116,87 @@
             // customElementsPanel
             // 
             this.customElementsPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.customElementsPanel.Controls.Add(this.identifiersGroupBox);
             this.customElementsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.customElementsPanel.Location = new System.Drawing.Point(0, 0);
             this.customElementsPanel.Name = "customElementsPanel";
             this.customElementsPanel.Padding = new System.Windows.Forms.Padding(10, 10, 10, 0);
             this.customElementsPanel.Size = new System.Drawing.Size(518, 268);
             this.customElementsPanel.TabIndex = 9;
+            // 
+            // identifiersGroupBox
+            // 
+            this.identifiersGroupBox.AutoSize = true;
+            this.identifiersGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.identifiersGroupBox.Controls.Add(this.identifiersTable);
+            this.identifiersGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.identifiersGroupBox.Location = new System.Drawing.Point(10, 10);
+            this.identifiersGroupBox.Margin = new System.Windows.Forms.Padding(10);
+            this.identifiersGroupBox.Name = "identifiersGroupBox";
+            this.identifiersGroupBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 8);
+            this.identifiersGroupBox.Size = new System.Drawing.Size(498, 83);
+            this.identifiersGroupBox.TabIndex = 2;
+            this.identifiersGroupBox.TabStop = false;
+            this.identifiersGroupBox.Text = "Identifiers";
+            // 
+            // identifiersTable
+            // 
+            this.identifiersTable.AutoSize = true;
+            this.identifiersTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.identifiersTable.ColumnCount = 2;
+            this.identifiersTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.identifiersTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.identifiersTable.Controls.Add(this.idLabel, 0, 0);
+            this.identifiersTable.Controls.Add(this.nameLabel, 0, 1);
+            this.identifiersTable.Controls.Add(this.idNumericField, 1, 0);
+            this.identifiersTable.Controls.Add(this.nameTextBox, 1, 1);
+            this.identifiersTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.identifiersTable.Location = new System.Drawing.Point(8, 19);
+            this.identifiersTable.Name = "identifiersTable";
+            this.identifiersTable.RowCount = 2;
+            this.identifiersTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.identifiersTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.identifiersTable.Size = new System.Drawing.Size(482, 56);
+            this.identifiersTable.TabIndex = 0;
+            // 
+            // idLabel
+            // 
+            this.idLabel.AutoSize = true;
+            this.idLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.idLabel.Location = new System.Drawing.Point(3, 0);
+            this.idLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.idLabel.Name = "idLabel";
+            this.idLabel.Size = new System.Drawing.Size(21, 28);
+            this.idLabel.TabIndex = 0;
+            this.idLabel.Text = "ID";
+            this.idLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // nameLabel
+            // 
+            this.nameLabel.AutoSize = true;
+            this.nameLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.nameLabel.Location = new System.Drawing.Point(3, 28);
+            this.nameLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.nameLabel.Name = "nameLabel";
+            this.nameLabel.Size = new System.Drawing.Size(45, 28);
+            this.nameLabel.TabIndex = 1;
+            this.nameLabel.Text = "Name";
+            this.nameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // idNumericField
+            // 
+            this.idNumericField.Location = new System.Drawing.Point(66, 3);
+            this.idNumericField.Name = "idNumericField";
+            this.idNumericField.Size = new System.Drawing.Size(120, 22);
+            this.idNumericField.TabIndex = 2;
+            // 
+            // nameTextBox
+            // 
+            this.nameTextBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.nameTextBox.Location = new System.Drawing.Point(66, 31);
+            this.nameTextBox.Name = "nameTextBox";
+            this.nameTextBox.Size = new System.Drawing.Size(413, 22);
+            this.nameTextBox.TabIndex = 3;
             // 
             // ModelEditorFormBase
             // 
@@ -122,9 +207,16 @@
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(500, 200);
             this.Name = "ModelEditorFormBase";
-            this.Text = "Edit something";
+            this.Text = "";
             this.mainContainer.ResumeLayout(false);
             this.buttonsPanel.ResumeLayout(false);
+            this.customElementsPanel.ResumeLayout(false);
+            this.customElementsPanel.PerformLayout();
+            this.identifiersGroupBox.ResumeLayout(false);
+            this.identifiersGroupBox.PerformLayout();
+            this.identifiersTable.ResumeLayout(false);
+            this.identifiersTable.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -136,5 +228,11 @@
         private System.Windows.Forms.Button deleteButton;
         protected System.Windows.Forms.Panel customElementsPanel;
         private System.Windows.Forms.Panel buttonsPanel;
+        private System.Windows.Forms.GroupBox identifiersGroupBox;
+        private System.Windows.Forms.TableLayoutPanel identifiersTable;
+        private System.Windows.Forms.Label idLabel;
+        private System.Windows.Forms.Label nameLabel;
+        private System.Windows.Forms.NumericUpDown idNumericField;
+        protected System.Windows.Forms.TextBox nameTextBox;
     }
 }

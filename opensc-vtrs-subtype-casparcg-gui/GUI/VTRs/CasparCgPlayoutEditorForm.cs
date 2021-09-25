@@ -18,49 +18,46 @@ namespace OpenSC.GUI.VTRs
         public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Vtr);
         public IModelEditorForm<Vtr> GetInstanceT(Vtr modelInstance) => new CasparCgPlayoutEditorForm(modelInstance);
 
-        public CasparCgPlayoutEditorForm() : base()
-        {
-            InitializeComponent();
-        }
+        public CasparCgPlayoutEditorForm() : base() => InitializeComponent();
 
         public CasparCgPlayoutEditorForm(Vtr vtr) : base(vtr)
         {
             InitializeComponent();
-            if (vtr == null)
-                this.vtr = new CasparCgPlayout();
-            else if (!(vtr is CasparCgPlayout))
-                throw new ArgumentException();
+            if ((vtr != null) && !(vtr is CasparCgPlayout))
+                throw new ArgumentException($"Type of VTR should be {nameof(CasparCgPlayout)}.", nameof(vtr));
         }
+
+        protected override IModelEditorFormDataManager createManager()
+            => new ModelEditorFormDataManager<Vtr, CasparCgPlayout>(this, VtrDatabase.Instance);
 
         protected override void loadData()
         {
             base.loadData();
-            CasparCgPlayout casparVtr = vtr as CasparCgPlayout;
-            if (casparVtr == null)
+            CasparCgPlayout casparCgPlayout = (CasparCgPlayout)EditedModel;
+            if (casparCgPlayout == null)
                 return;
-            ipTextBox.Text = casparVtr.ListenedIp;
-            channelNumericField.Value = casparVtr.WatchedChannel;
-            layerNumericField.Value = casparVtr.WatchedLayer;
+            ipTextBox.Text = casparCgPlayout.ListenedIp;
+            channelNumericField.Value = casparCgPlayout.WatchedChannel;
+            layerNumericField.Value = casparCgPlayout.WatchedLayer;
         }
 
         protected override void writeFields()
         {
             base.writeFields();
-            CasparCgPlayout casparVtr = vtr as CasparCgPlayout;
-            if (casparVtr == null)
+            CasparCgPlayout casparCgPlayout = (CasparCgPlayout)EditedModel;
+            if (casparCgPlayout == null)
                 return;
-            casparVtr.ListenedIp = ipTextBox.Text;
-            casparVtr.WatchedChannel = Convert.ToInt32(channelNumericField.Value);
-            casparVtr.WatchedLayer = Convert.ToInt32(layerNumericField.Value);
+            casparCgPlayout.ListenedIp = ipTextBox.Text;
+            casparCgPlayout.WatchedChannel = (int)channelNumericField.Value;
+            casparCgPlayout.WatchedLayer = (int)layerNumericField.Value;
         }
 
         protected override void validateFields()
         {
             base.validateFields();
-            CasparCgPlayout casparVtr = vtr as CasparCgPlayout;
-            if (casparVtr == null)
+            CasparCgPlayout casparCgPlayout = (CasparCgPlayout)EditedModel;
+            if (casparCgPlayout == null)
                 return;
-            // TODO: Validation
         }
 
     }

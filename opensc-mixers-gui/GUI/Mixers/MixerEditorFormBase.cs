@@ -13,76 +13,22 @@ namespace OpenSC.GUI.Mixers
     public partial class MixerEditorFormBase : ModelEditorFormBase
     {
 
-        private const string TITLE_NEW = "New router";
-        private const string TITLE_EDIT = "Edit router: (#{0}) {1}";
-
-        private const string HEADER_TEXT_NEW = "New router";
-        private const string HEADER_TEXT_EDIT = "Edit router";
-
-        protected Mixer mixer;
-
-        private bool addingNew = false;
-
-        protected bool AddingNew
-        {
-            get { return addingNew; }
-            set
-            {
-                addingNew = value;
-                Text = string.Format((value ? TITLE_NEW : TITLE_EDIT), mixer?.ID, mixer?.Name);
-                HeaderText = string.Format((value ? HEADER_TEXT_NEW : HEADER_TEXT_EDIT), mixer?.ID, mixer?.Name);
-            }
-        }
-
-        public MixerEditorFormBase()
-        {
-            InitializeComponent();
-        }
-
-        public MixerEditorFormBase(Mixer mixer)
-        {
-            InitializeComponent();
-            AddingNew = (mixer == null);
-            if (mixer != null)
-                this.mixer = mixer;
-        }
+        public MixerEditorFormBase() => InitializeComponent();
+        public MixerEditorFormBase(Mixer mixer) : base(mixer) => InitializeComponent();
 
         protected override void loadData()
         {
+            base.loadData();
+            Mixer mixer = (Mixer)EditedModel;
             if (mixer == null)
                 return;
-            idNumericField.Value = (addingNew ? MixerDatabase.Instance.NextValidId() : mixer.ID);
-            nameTextBox.Text = mixer.Name;
             initInputsTable();
         }
 
-        protected sealed override bool saveData()
+        protected override void validateFields()
         {
-
-            try
-            {
-                validateFields();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            mixer.StartUpdate();
-            writeFields();
-            mixer.EndUpdate();
-
-            if (addingNew)
-                MixerDatabase.Instance.Add(mixer);
-            AddingNew = false;
-
-            return true;
-
-        }
-
-        protected virtual void validateFields()
-        {
+            base.validateFields();
+            Mixer mixer = (Mixer)EditedModel;
             if (mixer == null)
                 return;
             mixer.ValidateId((int)idNumericField.Value);
@@ -90,12 +36,12 @@ namespace OpenSC.GUI.Mixers
             // TODO: validate name
         }
 
-        protected virtual void writeFields()
+        protected override void writeFields()
         {
+            base.writeFields();
+            Mixer mixer = (Mixer)EditedModel;
             if (mixer == null)
                 return;
-            mixer.ID = (int)idNumericField.Value;
-            mixer.Name = nameTextBox.Text;
         }
 
         private CustomDataGridView<MixerInput> inputsTableCDGV;
@@ -103,6 +49,7 @@ namespace OpenSC.GUI.Mixers
         private void initInputsTable()
         {
 
+            Mixer mixer = (Mixer)EditedModel;
             inputsTableCDGV = createTable<MixerInput>(inputsTableContainerPanel, ref this.inputsTable);
             CustomDataGridViewColumnDescriptorBuilder<MixerInput> builder;
 
@@ -209,15 +156,10 @@ namespace OpenSC.GUI.Mixers
         {
             public SourceDropDownItem(ISignalSourceRegistered value) : base(value)
             { }
-
-            public override string ToString()
-                => Value.SignalLabel;
+            public override string ToString() => Value.SignalLabel;
         }
 
-        private void addInputButton_Click(object sender, EventArgs e)
-        {
-            mixer.AddInput();
-        }
+        private void addInputButton_Click(object sender, EventArgs e) => ((Mixer)EditedModel).AddInput();
 
     }
 

@@ -13,89 +13,34 @@ namespace OpenSC.GUI.Routers
     public partial class RouterEditorFormBase : ModelEditorFormBase
     {
 
-        private const string TITLE_NEW = "New router";
-        private const string TITLE_EDIT = "Edit router: (#{0}) {1}";
-
-        private const string HEADER_TEXT_NEW = "New router";
-        private const string HEADER_TEXT_EDIT = "Edit router";
-
-        protected Router router;
-
-        private bool addingNew = false;
-
-        protected bool AddingNew
-        {
-            get { return addingNew; }
-            set
-            {
-                addingNew = value;
-                Text = string.Format((value ? TITLE_NEW : TITLE_EDIT), router?.ID, router?.Name);
-                HeaderText = string.Format((value ? HEADER_TEXT_NEW : HEADER_TEXT_EDIT), router?.ID, router?.Name);
-            }
-        }
-
-        public RouterEditorFormBase()
-        {
-            InitializeComponent();
-        }
-
-        public RouterEditorFormBase(Router router)
-        {
-            InitializeComponent();
-            AddingNew = (router == null);
-            if (router != null)
-                this.router = router;
-        }
+        public RouterEditorFormBase() : base() => InitializeComponent();
+        public RouterEditorFormBase(Router router) : base(router) => InitializeComponent();
 
         protected override void loadData()
         {
+            base.loadData();
+            Router router = (Router)EditedModel;
             if (router == null)
                 return;
-            idNumericField.Value = (addingNew ? RouterDatabase.Instance.NextValidId() : router.ID);
-            nameTextBox.Text = router.Name;
             initInputsTable();
             initOutputsTable();
         }
 
-        protected sealed override bool saveData()
+        protected override void validateFields()
         {
-
-            try
-            {
-                validateFields();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            router.StartUpdate();
-            writeFields();
-            router.EndUpdate();
-
-            if (addingNew)
-                RouterDatabase.Instance.Add(router);
-            AddingNew = false;
-
-            return true;
-
-        }
-
-        protected virtual void validateFields()
-        {
+            base.validateFields();
+            Router router = (Router)EditedModel;
             if (router == null)
                 return;
             router.ValidateId((int)idNumericField.Value);
-            // TODO: validate name
         }
 
-        protected virtual void writeFields()
+        protected override void writeFields()
         {
+            base.writeFields();
+            Router router = (Router)EditedModel;
             if (router == null)
                 return;
-            router.ID = (int)idNumericField.Value;
-            router.Name = nameTextBox.Text;
         }
 
         private static readonly Color CELL_COST_BACK_IS_TIELINE = Color.White;
@@ -106,6 +51,7 @@ namespace OpenSC.GUI.Routers
         private void initInputsTable()
         {
 
+            Router router = (Router)EditedModel;
             inputsTableCDGV = createTable<RouterInput>(inputsTableContainerPanel, ref this.inputsTable);
             CustomDataGridViewColumnDescriptorBuilder<RouterInput> builder;
 
@@ -254,6 +200,7 @@ namespace OpenSC.GUI.Routers
         private void initOutputsTable()
         {
 
+            Router router = (Router)EditedModel;
             outputsTableCDGV = createTable<RouterOutput>(outputsTableContainerPanel, ref this.outputsTable);
             CustomDataGridViewColumnDescriptorBuilder<RouterOutput> builder;
 
@@ -336,18 +283,13 @@ namespace OpenSC.GUI.Routers
 
         private CustomDataGridViewColumnDescriptorBuilder<T> getColumnDescriptorBuilderForTable<T>(CustomDataGridView<T> table)
             where T : class
-        {
-             return new CustomDataGridViewColumnDescriptorBuilder<T>(table);
-        }
+            => new CustomDataGridViewColumnDescriptorBuilder<T>(table);
 
         private class SourceDropDownItem: CustomDataGridViewComboBoxItem<ISignalSourceRegistered>
         {
             public SourceDropDownItem(ISignalSourceRegistered value) : base(value)
             { }
-
-            public override string ToString()
-                => Value.SignalLabel;
-
+            public override string ToString() => Value.SignalLabel;
         }
 
         private CustomDataGridViewComboBoxItem<ISignalSourceRegistered>[] getAllSources()
@@ -359,15 +301,8 @@ namespace OpenSC.GUI.Routers
             return sourceList.ToArray();
         }
 
-        private void addInputButton_Click(object sender, EventArgs e)
-        {
-            router.AddInput();
-        }
-
-        private void addOutputButton_Click(object sender, EventArgs e)
-        {
-            router.AddOutput();
-        }
+        private void addInputButton_Click(object sender, EventArgs e) => ((Router)EditedModel).AddInput();
+        private void addOutputButton_Click(object sender, EventArgs e) => ((Router)EditedModel).AddOutput();
 
     }
 

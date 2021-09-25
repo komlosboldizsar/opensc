@@ -11,45 +11,40 @@ namespace OpenSC.GUI.UMDs
         public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as UMD);
         public IModelEditorForm<UMD> GetInstanceT(UMD modelInstance) => new Tsl31UmdEditorForm(modelInstance);
 
-        public Tsl31UmdEditorForm(): base()
-        {
-            InitializeComponent();
-        }
+        public Tsl31UmdEditorForm(): base() => InitializeComponent();
 
         public Tsl31UmdEditorForm(UMD umd) : base(umd)
         {
             InitializeComponent();
-            if (umd == null)
-                this.umd = new TSL31();
-            else if (!(umd is TSL31))
-                throw new ArgumentException();
+            if ((umd != null) && !(umd is TSL31))
+                throw new ArgumentException($"Type of UMD should be {nameof(TSL31)}.", nameof(umd));
         }
+
+        protected override IModelEditorFormDataManager createManager()
+            => new ModelEditorFormDataManager<UMD, TSL31>(this, UmdDatabase.Instance);
 
         protected override void loadData()
         {
             base.loadData();
-            TSL31 tsl31Umd = umd as TSL31;
-            if (tsl31Umd == null)
+            TSL31 tsl31 = (TSL31)EditedModel;
+            if (tsl31 == null)
                 return;
-            //videoIdTextBox.Text = youtubeStream.VideoId;
         }
 
         protected override void writeFields()
         {
             base.writeFields();
-            TSL31 tsl31Umd = umd as TSL31;
-            if (tsl31Umd == null)
+            TSL31 tsl31 = (TSL31)EditedModel;
+            if (tsl31 == null)
                 return;
-            //youtubeStream.VideoId = videoIdTextBox.Text;
         }
 
         protected override void validateFields()
         {
             base.validateFields();
-            TSL31 tsl31Umd = umd as TSL31;
-            if (tsl31Umd == null)
+            TSL31 tsl31 = (TSL31)EditedModel;
+            if (tsl31 == null)
                 return;
-            // TODO: Validation
         }
 
     }

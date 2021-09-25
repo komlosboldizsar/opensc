@@ -14,91 +14,46 @@ namespace OpenSC.GUI.Routers.CrosspointBooleans
         public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as CrosspointBoolean);
         public IModelEditorForm<CrosspointBoolean> GetInstanceT(CrosspointBoolean modelInstance) => new CrosspointBooleanEditorForm(modelInstance);
 
-        private const string TITLE_NEW = "New crosspoint boolean";
-        private const string TITLE_EDIT = "Edit crosspoint boolean: (#{0}) {1}";
-
-        private const string HEADER_TEXT_NEW = "New crosspoint boolean";
-        private const string HEADER_TEXT_EDIT = "Edit crosspoint boolean";
-
-        protected CrosspointBoolean crosspointBoolean;
-
-        bool addingNew = false;
-
-        protected bool AddingNew
-        {
-            get { return addingNew; }
-            set
-            {
-                addingNew = value;
-                Text = string.Format((value ? TITLE_NEW : TITLE_EDIT), crosspointBoolean?.ID, crosspointBoolean?.Name);
-                HeaderText = string.Format((value ? HEADER_TEXT_NEW : HEADER_TEXT_EDIT), crosspointBoolean?.ID, crosspointBoolean?.Name);
-            }
-        }
-
-        public CrosspointBooleanEditorForm()
-        {
-            InitializeComponent();
-        }
+        public CrosspointBooleanEditorForm() : base() => InitializeComponent();
 
         public CrosspointBooleanEditorForm(CrosspointBoolean crosspointBoolean)
+            : base(crosspointBoolean)
         {
             InitializeComponent();
             initRouterDropDown();
             routerDropDown.SelectedIndexChanged += selectedRouterChanged;
-            AddingNew = (crosspointBoolean == null);
-            this.crosspointBoolean = (crosspointBoolean != null) ? crosspointBoolean : new CrosspointBoolean();
         }
+
+        protected override IModelEditorFormDataManager createManager()
+            => new ModelEditorFormDataManager<CrosspointBoolean, CrosspointBoolean>(this, CrosspointBooleanDatabase.Instance);
 
         protected override void loadData()
         {
+            base.loadData();
+            CrosspointBoolean crosspointBoolean = ((CrosspointBoolean)EditedModel);
             if (crosspointBoolean == null)
                 return;
-            idNumericField.Value = (addingNew ? CrosspointBooleanDatabase.Instance.NextValidId() : crosspointBoolean.ID);
-            nameTextBox.Text = crosspointBoolean.Name;
             routerDropDown.SelectByValue(crosspointBoolean.WatchedRouter);
             routerInputDropDown.SelectByValue(crosspointBoolean.WatchedInput);
             routerOutputDropDown.SelectByValue(crosspointBoolean.WatchedOutput);
         }
 
-        protected sealed override bool saveData()
+        protected override void validateFields()
         {
-
-            try
-            {
-                validateFields();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            crosspointBoolean.StartUpdate();
-            writeFields();
-            crosspointBoolean.EndUpdate();
-
-            if (addingNew)
-                CrosspointBooleanDatabase.Instance.Add(crosspointBoolean);
-            AddingNew = false;
-
-            return true;
-
-        }
-
-        protected virtual void validateFields()
-        {
+            base.validateFields();
+            CrosspointBoolean crosspointBoolean = ((CrosspointBoolean)EditedModel);
             if (crosspointBoolean == null)
                 return;
             crosspointBoolean.ValidateId((int)idNumericField.Value);
             //category.ValidateName(nameTextBox.Text);
         }
 
-        protected virtual void writeFields()
+        protected override void writeFields()
         {
+            base.writeFields();
+            CrosspointBoolean crosspointBoolean = ((CrosspointBoolean)EditedModel);
             if (crosspointBoolean == null)
                 return;
-            crosspointBoolean.ID = (int)idNumericField.Value;
-            crosspointBoolean.Name = nameTextBox.Text;
             crosspointBoolean.WatchedInput = routerInputDropDown.SelectedValue as RouterInput;
             crosspointBoolean.WatchedOutput = routerOutputDropDown.SelectedValue as RouterOutput;
         }

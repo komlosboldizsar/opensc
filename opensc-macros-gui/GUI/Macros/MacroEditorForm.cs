@@ -18,78 +18,27 @@ namespace OpenSC.GUI.Macros
         public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Macro);
         public IModelEditorForm<Macro> GetInstanceT(Macro modelInstance) => new MacroEditorForm(modelInstance);
 
-        private const string TITLE_NEW = "New macro";
-        private const string TITLE_EDIT = "Edit macro: (#{0}) {1}";
+        public MacroEditorForm() : base() => InitializeComponent();
+        public MacroEditorForm(Macro macro) : base(macro) => InitializeComponent();
 
-        private const string HEADER_TEXT_NEW = "New macro";
-        private const string HEADER_TEXT_EDIT = "Edit macro";
-
-        protected Macro macro;
-
-        private bool addingNew = false;
-
-        protected bool AddingNew
-        {
-            get { return addingNew; }
-            set
-            {
-                addingNew = value;
-                Text = string.Format((value ? TITLE_NEW : TITLE_EDIT), macro?.ID, macro?.Name);
-                HeaderText = string.Format((value ? HEADER_TEXT_NEW : HEADER_TEXT_EDIT), macro?.ID, macro?.Name);
-            }
-        }
-
-        public MacroEditorForm()
-        {
-            InitializeComponent();
-        }
-
-        public MacroEditorForm(Macro macro)
-        {
-            InitializeComponent();
-            this.macro = (macro != null) ? macro : new Macro();
-            AddingNew = (macro == null);
-        }
+        protected override IModelEditorFormDataManager createManager()
+            => new ModelEditorFormDataManager<Macro, Macro>(this, MacroDatabase.Instance);
 
         protected override void loadData()
         {
+            base.loadData();
+            Macro macro = (Macro)EditedModel;
             if (macro == null)
                 return;
-            idNumericField.Value = (addingNew ? MacroDatabase.Instance.NextValidId() : macro.ID);
-            nameTextBox.Text = macro.Name;
             loadCode();
             initTriggerCollectionProxies();
             macroTriggersCollectionProxy.Clear();
             macroTriggersCollectionProxy.AddRange(macro.Triggers);
         }
-
-        protected sealed override bool saveData()
+        protected override void validateFields()
         {
-
-            try
-            {
-                validateFields();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            macro.StartUpdate();
-            writeFields();
-            macro.EndUpdate();
-
-            if (addingNew)
-                MacroDatabase.Instance.Add(macro);
-            AddingNew = false;
-
-            return true;
-
-        }
-
-        protected virtual void validateFields()
-        {
+            base.validateFields();
+            Macro macro = (Macro)EditedModel;
             if (macro == null)
                 return;
             macro.ValidateId((int)idNumericField.Value);
@@ -97,12 +46,12 @@ namespace OpenSC.GUI.Macros
             validateCode();
         }
 
-        protected virtual void writeFields()
+        protected override void writeFields()
         {
+            base.writeFields();
+            Macro macro = (Macro)EditedModel;
             if (macro == null)
                 return;
-            macro.ID = (int)idNumericField.Value;
-            macro.Name = nameTextBox.Text;
             macro.Commands.Clear();
             foreach (MacroCommandWithArguments commandWithArgument in getCommandsWAFromCode())
                 macro.Commands.Add(commandWithArgument);
@@ -121,9 +70,7 @@ namespace OpenSC.GUI.Macros
 
         #region Commands
         private void initCommandsEditor()
-        {
-            commandsEditorTextBox.TextBox.TextChanged += commandsEditorTextBox_TextChanged;
-        }
+            => commandsEditorTextBox.TextBox.TextChanged += commandsEditorTextBox_TextChanged;
 
         private bool noInterpretOnTextChange = false;
 
@@ -160,17 +107,13 @@ namespace OpenSC.GUI.Macros
 
         private void interpretLine(int lineIndex)
         {
-
             if (lineIndex < 0)
                 return;
-
             string line = commandsEditorTextBox.TextBox.Lines[lineIndex];
             MacroCodeInterpreter interpreter = new MacroCodeInterpreter();
             interpreter.Formula = line;
-
             syntaxHighlightLine(lineIndex, interpreter.Tokens, interpreter.HasSyntaxError, interpreter.SyntaxErrorPosition);
             showPointForLine(lineIndex, interpreter);
-
         }
 
         private void syntaxHighlightLine(int lineIndex, IReadOnlyList<MacroCodeTokenizer.Token> tokens, bool hasSyntaxError, int syntaxErrorPosition)
@@ -366,9 +309,7 @@ namespace OpenSC.GUI.Macros
         }
 
         private void loadCommands()
-        {
-            selectCommandComboBox.CreateAdapterAsDataSource(MacroCommandRegister.Instance.RegisteredCommands, mc => string.Format("[{0}] {1}", mc.Code, mc.Name), true, "-");
-        }
+            => selectCommandComboBox.CreateAdapterAsDataSource(MacroCommandRegister.Instance.RegisteredCommands, mc => string.Format("[{0}] {1}", mc.Code, mc.Name), true, "-");
 
         private List<MacroCommandWithArguments> getCommandsWAFromCode()
         {
@@ -414,7 +355,7 @@ namespace OpenSC.GUI.Macros
         private void loadCode()
         {
             noInterpretOnTextChange = true;
-            commandsEditorTextBox.TextBox.Text = getCodeFromCommandsWA(macro.Commands);
+            commandsEditorTextBox.TextBox.Text = getCodeFromCommandsWA(((Macro)EditedModel).Commands);
             noInterpretOnTextChange = false;
             interpretAllLines();
         }
@@ -506,9 +447,7 @@ namespace OpenSC.GUI.Macros
 
         private CustomDataGridViewColumnDescriptorBuilder<T> getColumnDescriptorBuilderForTable<T>(CustomDataGridView<T> table)
             where T : class
-        {
-             return new CustomDataGridViewColumnDescriptorBuilder<T>(table);
-        }
+            => new CustomDataGridViewColumnDescriptorBuilder<T>(table);
 
         private ObservableList<MacroTriggerWithArguments> macroTriggersCollectionProxy;
         private IObservableList<MacroTriggerWithArgumentsProxy> macroTriggersProxyCollection;
@@ -529,9 +468,7 @@ namespace OpenSC.GUI.Macros
             public string HumanReadable => Trigger.HumanReadable;
 
             public MacroTriggerWithArgumentsProxy(MacroTriggerWithArguments original)
-            {
-                Trigger = original;
-            }
+                => Trigger = original;
 
             private bool editing = false;
             public bool Editing
@@ -588,7 +525,6 @@ namespace OpenSC.GUI.Macros
             => editTrigger(null);
 
         private const string BUTTON_TEXT_ADD_TRIGGER = "Add trigger";
-
         private const string BUTTON_TEXT_SAVE_TRIGGER = "Save trigger";
 
         private void editTrigger(MacroTriggerWithArguments triggerWA)
@@ -683,10 +619,7 @@ namespace OpenSC.GUI.Macros
         }
 
         private void loadTriggers()
-        {
-            selectTriggerComboBox.CreateAdapterAsDataSource(MacroTriggerRegister.Instance.RegisteredTriggers, mt => string.Format("[{0}] {1}", mt.Code, mt.Name), true, "-");
-        }
-
+            => selectTriggerComboBox.CreateAdapterAsDataSource(MacroTriggerRegister.Instance.RegisteredTriggers, mt => string.Format("[{0}] {1}", mt.Code, mt.Name), true, "-");
         #endregion
 
     }

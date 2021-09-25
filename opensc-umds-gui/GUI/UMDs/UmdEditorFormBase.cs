@@ -10,107 +10,48 @@ namespace OpenSC.GUI.UMDs
     public partial class UmdEditorFormBase : ModelEditorFormBase
     {
 
-        private const string TITLE_NEW = "New UMD";
-        private const string TITLE_EDIT = "Edit UMD: (#{0}) {1}";
+        public UmdEditorFormBase() : base() => InitializeComponent();
 
-        private const string HEADER_TEXT_NEW = "New UMD";
-        private const string HEADER_TEXT_EDIT = "Edit UMD";
-
-        protected UMD umd;
-
-        bool addingNew = false;
-
-        protected bool AddingNew
-        {
-            get { return addingNew; }
-            set
-            {
-                addingNew = value;
-                Text = string.Format((value ? TITLE_NEW : TITLE_EDIT), umd?.ID, umd?.Name);
-                HeaderText = string.Format((value ? HEADER_TEXT_NEW : HEADER_TEXT_EDIT), umd?.ID, umd?.Name);
-            }
-        }
-
-        public UmdEditorFormBase()
+        public UmdEditorFormBase(UMD umd) : base(umd)
         {
             InitializeComponent();
-        }
-
-        public UmdEditorFormBase(UMD umd)
-        {
-            InitializeComponent();
-            AddingNew = (umd == null);
-            if (umd != null) { 
-                this.umd = umd;
-                umd.CurrentTextChanged += umdCurrentTextChangedHandler;
-            }
+            umd.CurrentTextChanged += umdCurrentTextChangedHandler;
         }
 
         protected override void loadData()
         {
-
+            base.loadData();
+            UMD umd = (UMD)EditedModel;
             if (umd == null)
                 return;
-
-            idNumericField.Value = (addingNew ? UmdDatabase.Instance.NextValidId() : umd.ID);
-            nameTextBox.Text = umd.Name;
             currentTextTextBox.Text = umd.CurrentText;
             staticTextTextBox.Text = umd.StaticText;
             useStaticTextCheckBox.Checked = umd.UseStaticText;
-
             createTallySourceSettingTab();
             for (int i = 0; i < umd.Type.TallyCount; i++)
                 tallySourceDropDowns[i]?.SelectByValue(umd.GetTallySource(i));
-
         }
 
-        protected sealed override bool saveData()
+        protected override void validateFields()
         {
-
-            try
-            {
-                validateFields();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            umd.StartUpdate();
-            writeFields();
-            umd.EndUpdate();
-
-            if (addingNew)
-                UmdDatabase.Instance.Add(umd);
-            AddingNew = false;
-
-            return true;
-
-        }
-
-        protected virtual void validateFields()
-        {
+            base.validateFields();
+            UMD umd = (UMD)EditedModel;
             if (umd == null)
                 return;
             umd.ValidateId((int)idNumericField.Value);
             umd.ValidateName(nameTextBox.Text);
         }
 
-        protected virtual void writeFields()
+        protected override void writeFields()
         {
-
+            base.writeFields();
+            UMD umd = (UMD)EditedModel;
             if (umd == null)
                 return;
-
-            umd.ID = (int)idNumericField.Value;
-            umd.Name = nameTextBox.Text;
             umd.StaticText = staticTextTextBox.Text;
             umd.UseStaticText = useStaticTextCheckBox.Checked;
-
             for (int i = 0; i < umd.Type.TallyCount; i++)
                 umd.SetTallySource(i, tallySourceDropDowns[i]?.SelectedValue as IBoolean);
-
         }
 
         private void umdCurrentTextChangedHandler(UMD umd, string oldText, string newText)
@@ -127,6 +68,7 @@ namespace OpenSC.GUI.UMDs
 
         private void createTallySourceSettingTab()
         {
+            UMD umd = (UMD)EditedModel;
             talliesTable.Controls.Clear();
             if (umd.Type.TallyCount == 0)
                 mainTabControl.TabPages.Remove(talliesTabPage);

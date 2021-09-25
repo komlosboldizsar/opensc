@@ -11,100 +11,52 @@ namespace OpenSC.GUI.Signals
 
         public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as ExternalSignal);
         public IModelEditorForm<ExternalSignal> GetInstanceT(ExternalSignal modelInstance) => new ExternalSignalEditorForm(modelInstance);
+        
+        public ExternalSignalEditorForm() : base() => InitializeComponent();
 
-        private const string TITLE_NEW = "New external signal";
-        private const string TITLE_EDIT = "Edit external signal: (#{0}) {1}";
-
-        private const string HEADER_TEXT_NEW = "New external signal";
-        private const string HEADER_TEXT_EDIT = "Edit external signal";
-
-        protected ExternalSignal signal;
-
-        bool addingNew = false;
-
-        protected bool AddingNew
-        {
-            get { return addingNew; }
-            set
-            {
-                addingNew = value;
-                Text = string.Format((value ? TITLE_NEW : TITLE_EDIT), signal?.ID, signal?.Name);
-                HeaderText = string.Format((value ? HEADER_TEXT_NEW : HEADER_TEXT_EDIT), signal?.ID, signal?.Name);
-            }
-        }
-
-        public ExternalSignalEditorForm()
-        {
-            InitializeComponent();
-        }
-
-        public ExternalSignalEditorForm(ExternalSignal signal)
+        public ExternalSignalEditorForm(ExternalSignal externalSignal) : base(externalSignal)
         {
             InitializeComponent();
             initCategoryDropDown();
-            AddingNew = (signal == null);
-            this.signal = (signal != null) ? signal : new ExternalSignal();
         }
+
+        protected override IModelEditorFormDataManager createManager()
+            => new ModelEditorFormDataManager<ExternalSignal, ExternalSignal>(this, ExternalSignalDatabases.Signals);
 
         protected override void loadData()
         {
-            if (signal == null)
+            base.loadData();
+            ExternalSignal externalSignal = (ExternalSignal)EditedModel;
+            if (externalSignal == null)
                 return;
-            idNumericField.Value = (addingNew ? ExternalSignalDatabases.Signals.NextValidId() : signal.ID);
-            nameTextBox.Text = signal.Name;
-            categoryDropDown.SelectByValue(signal.Category);
+            categoryDropDown.SelectByValue(externalSignal.Category);
         }
 
-        protected sealed override bool saveData()
+        protected override void validateFields()
         {
-
-            try
-            {
-                validateFields();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            signal.StartUpdate();
-            writeFields();
-            signal.EndUpdate();
-
-            if (addingNew)
-                ExternalSignalDatabases.Signals.Add(signal);
-            AddingNew = false;
-
-            return true;
-
+            base.validateFields();
+            ExternalSignal externalSignal = (ExternalSignal)EditedModel;
+            if (externalSignal == null)
+                return;
+            externalSignal.ValidateId((int)idNumericField.Value);
+            //externalSignal.ValidateName(nameTextBox.Text);
         }
 
-        protected virtual void validateFields()
+        protected override void writeFields()
         {
-            if (signal == null)
+            base.writeFields();
+            ExternalSignal externalSignal = (ExternalSignal)EditedModel;
+            if (externalSignal == null)
                 return;
-            signal.ValidateId((int)idNumericField.Value);
-            //category.ValidateName(nameTextBox.Text);
-        }
-
-        protected virtual void writeFields()
-        {
-            if (signal == null)
-                return;
-            signal.ID = (int)idNumericField.Value;
-            signal.Name = nameTextBox.Text;
-            signal.Category = categoryDropDown.SelectedValue as ExternalSignalCategory;
+            externalSignal.Category = categoryDropDown.SelectedValue as ExternalSignalCategory;
         }
 
         private void initCategoryDropDown()
-        {
-            categoryDropDown.CreateAdapterAsDataSource<ExternalSignalCategory>(
-                ExternalSignalDatabases.Categories.ItemsAsList,
+            => categoryDropDown.CreateAdapterAsDataSource<ExternalSignalCategory>(
+                ExternalSignalDatabases.Categories,
                 category => string.Format("(#{0}) {1}", category.ID, category.Name),
                 true,
                 "(not associated)");
-        }
 
     }
 

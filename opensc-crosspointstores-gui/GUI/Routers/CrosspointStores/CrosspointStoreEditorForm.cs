@@ -13,42 +13,20 @@ namespace OpenSC.GUI.Routers.CrosspointStores
         public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as CrosspointStore);
         public IModelEditorForm<CrosspointStore> GetInstanceT(CrosspointStore modelInstance) => new CrosspointStoreEditorForm(modelInstance);
 
-        private const string TITLE_NEW = "New crosspoint store";
-        private const string TITLE_EDIT = "Edit crosspoint store: (#{0}) {1}";
-
-        private const string HEADER_TEXT_NEW = "New crosspoint store";
-        private const string HEADER_TEXT_EDIT = "Edit crosspoint store";
-
-        protected CrosspointStore crosspointStore;
-
-        bool addingNew = false;
-
-        protected bool AddingNew
-        {
-            get { return addingNew; }
-            set
-            {
-                addingNew = value;
-                Text = string.Format((value ? TITLE_NEW : TITLE_EDIT), crosspointStore?.ID, crosspointStore?.Name);
-                HeaderText = string.Format((value ? HEADER_TEXT_NEW : HEADER_TEXT_EDIT), crosspointStore?.ID, crosspointStore?.Name);
-            }
-        }
-
-        public CrosspointStoreEditorForm()
-        {
-            InitializeComponent();
-        }
+        public CrosspointStoreEditorForm() : base() => InitializeComponent();
 
         public CrosspointStoreEditorForm(CrosspointStore crosspointStore)
+            : base(crosspointStore)
         {
             InitializeComponent();
             initRouterDropDown(routerInputRouterDropDown);
             initRouterDropDown(routerOutputRouterDropDown);
             routerInputRouterDropDown.SelectedIndexChanged += selectedRouterForInputChanged;
             routerOutputRouterDropDown.SelectedIndexChanged += selectedRouterForOutputChanged;
-            AddingNew = (crosspointStore == null);
-            this.crosspointStore = (crosspointStore != null) ? crosspointStore : new CrosspointStore();
         }
+
+        protected override IModelEditorFormDataManager createManager()
+            => new ModelEditorFormDataManager<CrosspointStore, CrosspointStore>(this, CrosspointStoreDatabase.Instance);
 
         private void selectedRouterForInputChanged(object sender, EventArgs e)
             => updateRouterInputDropDown(routerInputRouterDropDown.SelectedValue as Router);
@@ -58,10 +36,10 @@ namespace OpenSC.GUI.Routers.CrosspointStores
 
         protected override void loadData()
         {
+            base.loadData();
+            CrosspointStore crosspointStore = (CrosspointStore)EditedModel;
             if (crosspointStore == null)
                 return;
-            idNumericField.Value = (addingNew ? CrosspointStoreDatabase.Instance.NextValidId() : crosspointStore.ID);
-            nameTextBox.Text = crosspointStore.Name;
             routerInputRouterDropDown.SelectByValue(crosspointStore.StoredInput?.Router);
             routerInputInputDropDown.SelectByValue(crosspointStore.StoredInput);
             routerOutputRouterDropDown.SelectByValue(crosspointStore.StoredOutput?.Router);
@@ -72,45 +50,22 @@ namespace OpenSC.GUI.Routers.CrosspointStores
             importInputAfterOutputSetCheckbox.Checked = crosspointStore.ImportInputAfterOutputSet;
         }
 
-        protected sealed override bool saveData()
+        protected override void validateFields()
         {
-
-            try
-            {
-                validateFields();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            crosspointStore.StartUpdate();
-            writeFields();
-            crosspointStore.EndUpdate();
-
-            if (addingNew)
-                CrosspointStoreDatabase.Instance.Add(crosspointStore);
-            AddingNew = false;
-
-            return true;
-
-        }
-
-        protected virtual void validateFields()
-        {
+            base.loadData();
+            CrosspointStore crosspointStore = (CrosspointStore)EditedModel;
             if (crosspointStore == null)
                 return;
             crosspointStore.ValidateId((int)idNumericField.Value);
             //category.ValidateName(nameTextBox.Text);
         }
 
-        protected virtual void writeFields()
+        protected override void writeFields()
         {
+            base.writeFields();
+            CrosspointStore crosspointStore = (CrosspointStore)EditedModel;
             if (crosspointStore == null)
                 return;
-            crosspointStore.ID = (int)idNumericField.Value;
-            crosspointStore.Name = nameTextBox.Text;
             crosspointStore.StoredInput = routerInputInputDropDown.SelectedValue as RouterInput;
             crosspointStore.StoredOutput = routerOutputOutputDropDown.SelectedValue as RouterOutput;
             crosspointStore.Autotake = autotakeAfterOutputSetCheckbox.Checked;

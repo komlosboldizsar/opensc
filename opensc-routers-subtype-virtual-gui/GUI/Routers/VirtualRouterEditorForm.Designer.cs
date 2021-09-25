@@ -35,23 +35,10 @@
             // 
             this.baseDataTabPage.Size = new System.Drawing.Size(1054, 389);
             // 
-            // inputsButtonsPanel
-            // 
-            this.inputsButtonsPanel.Location = new System.Drawing.Point(3, 342);
-            this.inputsButtonsPanel.Size = new System.Drawing.Size(1148, 44);
-            // 
             // outputsButtonsPanel
             // 
             this.outputsButtonsPanel.Location = new System.Drawing.Point(3, 342);
-            this.outputsButtonsPanel.Size = new System.Drawing.Size(1148, 44);
-            // 
-            // customElementsPanel
-            // 
-            this.customElementsPanel.Size = new System.Drawing.Size(1082, 428);
-            // 
-            // mainContainer
-            // 
-            this.mainContainer.Size = new System.Drawing.Size(1082, 497);
+            this.outputsButtonsPanel.Size = new System.Drawing.Size(1048, 44);
             // 
             // VirtualRouterEditorForm
             // 
@@ -60,7 +47,6 @@
             this.ClientSize = new System.Drawing.Size(1082, 553);
             this.DeleteButtonVisible = true;
             this.Name = "VirtualRouterEditorForm";
-            this.Text = "VirtualRouterEditorForm";
             this.mainContainer.ResumeLayout(false);
             this.ResumeLayout(false);
 

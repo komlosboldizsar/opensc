@@ -28,12 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.basicDataTable = new System.Windows.Forms.TableLayoutPanel();
             this.idLabel = new System.Windows.Forms.Label();
             this.nameLabel = new System.Windows.Forms.Label();
             this.idNumericField = new System.Windows.Forms.NumericUpDown();
             this.nameTextBox = new System.Windows.Forms.TextBox();
-            this.basicDataGroupBox = new System.Windows.Forms.GroupBox();
             this.routerInputGroupBox = new System.Windows.Forms.GroupBox();
             this.routerInputTable = new System.Windows.Forms.TableLayoutPanel();
             this.routerInputInputLabel = new System.Windows.Forms.Label();
@@ -48,19 +46,17 @@
             this.routerOutputRouterDropDown = new System.Windows.Forms.ComboBox();
             this.modeLabel = new System.Windows.Forms.GroupBox();
             this.modeTable = new System.Windows.Forms.TableLayoutPanel();
+            this.importInputAfterOutputSetLabel = new System.Windows.Forms.Label();
+            this.importInputAfterOutputSetCheckbox = new System.Windows.Forms.CheckBox();
             this.clearOutputAfterTakeLabel = new System.Windows.Forms.Label();
             this.clearInputAfterTakeCheckbox = new System.Windows.Forms.CheckBox();
             this.clearInputAfterTakeLabel = new System.Windows.Forms.Label();
             this.autotakeAfterOutputSetLabel = new System.Windows.Forms.Label();
             this.autotakeAfterOutputSetCheckbox = new System.Windows.Forms.CheckBox();
             this.clearOutputAfterTakeCheckbox = new System.Windows.Forms.CheckBox();
-            this.importInputAfterOutputSetCheckbox = new System.Windows.Forms.CheckBox();
-            this.importInputAfterOutputSetLabel = new System.Windows.Forms.Label();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
-            this.basicDataTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).BeginInit();
-            this.basicDataGroupBox.SuspendLayout();
             this.routerInputGroupBox.SuspendLayout();
             this.routerInputTable.SuspendLayout();
             this.routerOutputGroupBox.SuspendLayout();
@@ -74,35 +70,17 @@
             this.customElementsPanel.Controls.Add(this.modeLabel);
             this.customElementsPanel.Controls.Add(this.routerOutputGroupBox);
             this.customElementsPanel.Controls.Add(this.routerInputGroupBox);
-            this.customElementsPanel.Controls.Add(this.basicDataGroupBox);
             this.customElementsPanel.Location = new System.Drawing.Point(10, 10);
             this.customElementsPanel.Padding = new System.Windows.Forms.Padding(0);
             this.customElementsPanel.Size = new System.Drawing.Size(489, 406);
+            this.customElementsPanel.Controls.SetChildIndex(this.routerInputGroupBox, 0);
+            this.customElementsPanel.Controls.SetChildIndex(this.routerOutputGroupBox, 0);
+            this.customElementsPanel.Controls.SetChildIndex(this.modeLabel, 0);
             // 
             // mainContainer
             // 
             this.mainContainer.Padding = new System.Windows.Forms.Padding(10);
             this.mainContainer.Size = new System.Drawing.Size(509, 495);
-            // 
-            // basicDataTable
-            // 
-            this.basicDataTable.AutoSize = true;
-            this.basicDataTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.basicDataTable.ColumnCount = 2;
-            this.basicDataTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.basicDataTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.basicDataTable.Controls.Add(this.idLabel, 0, 0);
-            this.basicDataTable.Controls.Add(this.nameLabel, 0, 1);
-            this.basicDataTable.Controls.Add(this.idNumericField, 1, 0);
-            this.basicDataTable.Controls.Add(this.nameTextBox, 1, 1);
-            this.basicDataTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.basicDataTable.Location = new System.Drawing.Point(8, 19);
-            this.basicDataTable.Name = "basicDataTable";
-            this.basicDataTable.RowCount = 2;
-            this.basicDataTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.basicDataTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.basicDataTable.Size = new System.Drawing.Size(473, 56);
-            this.basicDataTable.TabIndex = 0;
             // 
             // idLabel
             // 
@@ -143,28 +121,13 @@
             this.nameTextBox.Size = new System.Drawing.Size(404, 22);
             this.nameTextBox.TabIndex = 3;
             // 
-            // basicDataGroupBox
-            // 
-            this.basicDataGroupBox.AutoSize = true;
-            this.basicDataGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.basicDataGroupBox.Controls.Add(this.basicDataTable);
-            this.basicDataGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.basicDataGroupBox.Location = new System.Drawing.Point(0, 0);
-            this.basicDataGroupBox.Margin = new System.Windows.Forms.Padding(10);
-            this.basicDataGroupBox.Name = "basicDataGroupBox";
-            this.basicDataGroupBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 8);
-            this.basicDataGroupBox.Size = new System.Drawing.Size(489, 83);
-            this.basicDataGroupBox.TabIndex = 1;
-            this.basicDataGroupBox.TabStop = false;
-            this.basicDataGroupBox.Text = "Base data";
-            // 
             // routerInputGroupBox
             // 
             this.routerInputGroupBox.AutoSize = true;
             this.routerInputGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.routerInputGroupBox.Controls.Add(this.routerInputTable);
             this.routerInputGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.routerInputGroupBox.Location = new System.Drawing.Point(0, 83);
+            this.routerInputGroupBox.Location = new System.Drawing.Point(0, 27);
             this.routerInputGroupBox.Margin = new System.Windows.Forms.Padding(10);
             this.routerInputGroupBox.Name = "routerInputGroupBox";
             this.routerInputGroupBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 8);
@@ -241,7 +204,7 @@
             this.routerOutputGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.routerOutputGroupBox.Controls.Add(this.routerOutputTable);
             this.routerOutputGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.routerOutputGroupBox.Location = new System.Drawing.Point(0, 170);
+            this.routerOutputGroupBox.Location = new System.Drawing.Point(0, 114);
             this.routerOutputGroupBox.Margin = new System.Windows.Forms.Padding(10);
             this.routerOutputGroupBox.Name = "routerOutputGroupBox";
             this.routerOutputGroupBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 8);
@@ -318,7 +281,7 @@
             this.modeLabel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.modeLabel.Controls.Add(this.modeTable);
             this.modeLabel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.modeLabel.Location = new System.Drawing.Point(0, 257);
+            this.modeLabel.Location = new System.Drawing.Point(0, 201);
             this.modeLabel.Margin = new System.Windows.Forms.Padding(10);
             this.modeLabel.Name = "modeLabel";
             this.modeLabel.Padding = new System.Windows.Forms.Padding(8, 4, 8, 8);
@@ -352,6 +315,27 @@
             this.modeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.modeTable.Size = new System.Drawing.Size(473, 92);
             this.modeTable.TabIndex = 0;
+            // 
+            // importInputAfterOutputSetLabel
+            // 
+            this.importInputAfterOutputSetLabel.AutoSize = true;
+            this.importInputAfterOutputSetLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.importInputAfterOutputSetLabel.Location = new System.Drawing.Point(3, 69);
+            this.importInputAfterOutputSetLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.importInputAfterOutputSetLabel.Name = "importInputAfterOutputSetLabel";
+            this.importInputAfterOutputSetLabel.Size = new System.Drawing.Size(182, 23);
+            this.importInputAfterOutputSetLabel.TabIndex = 8;
+            this.importInputAfterOutputSetLabel.Text = "Import input after output set";
+            this.importInputAfterOutputSetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // importInputAfterOutputSetCheckbox
+            // 
+            this.importInputAfterOutputSetCheckbox.AutoSize = true;
+            this.importInputAfterOutputSetCheckbox.Location = new System.Drawing.Point(203, 72);
+            this.importInputAfterOutputSetCheckbox.Name = "importInputAfterOutputSetCheckbox";
+            this.importInputAfterOutputSetCheckbox.Size = new System.Drawing.Size(18, 17);
+            this.importInputAfterOutputSetCheckbox.TabIndex = 7;
+            this.importInputAfterOutputSetCheckbox.UseVisualStyleBackColor = true;
             // 
             // clearOutputAfterTakeLabel
             // 
@@ -416,27 +400,6 @@
             this.clearOutputAfterTakeCheckbox.TabIndex = 5;
             this.clearOutputAfterTakeCheckbox.UseVisualStyleBackColor = true;
             // 
-            // importInputAfterOutputSetCheckbox
-            // 
-            this.importInputAfterOutputSetCheckbox.AutoSize = true;
-            this.importInputAfterOutputSetCheckbox.Location = new System.Drawing.Point(203, 72);
-            this.importInputAfterOutputSetCheckbox.Name = "importInputAfterOutputSetCheckbox";
-            this.importInputAfterOutputSetCheckbox.Size = new System.Drawing.Size(18, 17);
-            this.importInputAfterOutputSetCheckbox.TabIndex = 7;
-            this.importInputAfterOutputSetCheckbox.UseVisualStyleBackColor = true;
-            // 
-            // importInputAfterOutputSetLabel
-            // 
-            this.importInputAfterOutputSetLabel.AutoSize = true;
-            this.importInputAfterOutputSetLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.importInputAfterOutputSetLabel.Location = new System.Drawing.Point(3, 69);
-            this.importInputAfterOutputSetLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.importInputAfterOutputSetLabel.Name = "importInputAfterOutputSetLabel";
-            this.importInputAfterOutputSetLabel.Size = new System.Drawing.Size(182, 23);
-            this.importInputAfterOutputSetLabel.TabIndex = 8;
-            this.importInputAfterOutputSetLabel.Text = "Import input after output set";
-            this.importInputAfterOutputSetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // CrosspointStoreEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -444,18 +407,16 @@
             this.ClientSize = new System.Drawing.Size(509, 551);
             this.DeleteButtonVisible = true;
             this.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.HeaderText = "Edit crosspoint store";
+            this.HeaderText = "New crosspoint store";
             this.MinimumSize = new System.Drawing.Size(500, 440);
             this.Name = "CrosspointStoreEditorForm";
-            this.Text = "Edit crosspoint store";
+            this.SubjectPlural = "crosspoint stores";
+            this.SubjectSingular = "crosspoint store";
+            this.Text = "New crosspoint store";
             this.customElementsPanel.ResumeLayout(false);
             this.customElementsPanel.PerformLayout();
             this.mainContainer.ResumeLayout(false);
-            this.basicDataTable.ResumeLayout(false);
-            this.basicDataTable.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).EndInit();
-            this.basicDataGroupBox.ResumeLayout(false);
-            this.basicDataGroupBox.PerformLayout();
             this.routerInputGroupBox.ResumeLayout(false);
             this.routerInputGroupBox.PerformLayout();
             this.routerInputTable.ResumeLayout(false);
@@ -473,13 +434,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.GroupBox basicDataGroupBox;
-        private System.Windows.Forms.TableLayoutPanel basicDataTable;
-        private System.Windows.Forms.Label idLabel;
-        private System.Windows.Forms.Label nameLabel;
-        private System.Windows.Forms.NumericUpDown idNumericField;
-        private System.Windows.Forms.TextBox nameTextBox;
         private System.Windows.Forms.GroupBox routerInputGroupBox;
         private System.Windows.Forms.TableLayoutPanel routerInputTable;
         private System.Windows.Forms.Label routerInputRouterLabel;
@@ -502,5 +456,9 @@
         private System.Windows.Forms.Label clearOutputAfterTakeLabel;
         private System.Windows.Forms.Label importInputAfterOutputSetLabel;
         private System.Windows.Forms.CheckBox importInputAfterOutputSetCheckbox;
+        private System.Windows.Forms.Label idLabel;
+        private System.Windows.Forms.Label nameLabel;
+        private System.Windows.Forms.NumericUpDown idNumericField;
+        private System.Windows.Forms.TextBox nameTextBox;
     }
 }

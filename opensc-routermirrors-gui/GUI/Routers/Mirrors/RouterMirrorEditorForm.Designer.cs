@@ -28,9 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.baseDataPanel = new System.Windows.Forms.Panel();
-            this.baseDataGroupBox = new System.Windows.Forms.GroupBox();
-            this.baseDataTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.idLabel = new System.Windows.Forms.Label();
             this.nameLabel = new System.Windows.Forms.Label();
             this.nameTextBox = new System.Windows.Forms.TextBox();
@@ -63,9 +60,6 @@
             this.clearOutputAssociations = new System.Windows.Forms.Button();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
-            this.baseDataPanel.SuspendLayout();
-            this.baseDataGroupBox.SuspendLayout();
-            this.baseDataTableLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).BeginInit();
             this.tabControl.SuspendLayout();
             this.baseDataTabPage.SuspendLayout();
@@ -89,56 +83,11 @@
             // 
             this.customElementsPanel.Controls.Add(this.tabControl);
             this.customElementsPanel.Size = new System.Drawing.Size(1082, 428);
+            this.customElementsPanel.Controls.SetChildIndex(this.tabControl, 0);
             // 
             // mainContainer
             // 
             this.mainContainer.Size = new System.Drawing.Size(1082, 497);
-            // 
-            // baseDataPanel
-            // 
-            this.baseDataPanel.AutoSize = true;
-            this.baseDataPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.baseDataPanel.Controls.Add(this.baseDataGroupBox);
-            this.baseDataPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.baseDataPanel.Location = new System.Drawing.Point(3, 3);
-            this.baseDataPanel.Name = "baseDataPanel";
-            this.baseDataPanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
-            this.baseDataPanel.Size = new System.Drawing.Size(1048, 94);
-            this.baseDataPanel.TabIndex = 0;
-            // 
-            // baseDataGroupBox
-            // 
-            this.baseDataGroupBox.AutoSize = true;
-            this.baseDataGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.baseDataGroupBox.Controls.Add(this.baseDataTableLayout);
-            this.baseDataGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.baseDataGroupBox.Location = new System.Drawing.Point(0, 0);
-            this.baseDataGroupBox.Name = "baseDataGroupBox";
-            this.baseDataGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.baseDataGroupBox.Size = new System.Drawing.Size(1048, 87);
-            this.baseDataGroupBox.TabIndex = 0;
-            this.baseDataGroupBox.TabStop = false;
-            this.baseDataGroupBox.Text = "Base data";
-            // 
-            // baseDataTableLayout
-            // 
-            this.baseDataTableLayout.AutoSize = true;
-            this.baseDataTableLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.baseDataTableLayout.ColumnCount = 2;
-            this.baseDataTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.baseDataTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.baseDataTableLayout.Controls.Add(this.idLabel, 0, 0);
-            this.baseDataTableLayout.Controls.Add(this.nameLabel, 0, 1);
-            this.baseDataTableLayout.Controls.Add(this.nameTextBox, 1, 1);
-            this.baseDataTableLayout.Controls.Add(this.idNumericField, 1, 0);
-            this.baseDataTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.baseDataTableLayout.Location = new System.Drawing.Point(8, 23);
-            this.baseDataTableLayout.Name = "baseDataTableLayout";
-            this.baseDataTableLayout.RowCount = 2;
-            this.baseDataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.baseDataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.baseDataTableLayout.Size = new System.Drawing.Size(1032, 56);
-            this.baseDataTableLayout.TabIndex = 0;
             // 
             // idLabel
             // 
@@ -185,10 +134,10 @@
             this.tabControl.Controls.Add(this.inputsTabPage);
             this.tabControl.Controls.Add(this.outputsTabPage);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(10, 10);
+            this.tabControl.Location = new System.Drawing.Point(10, 93);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1062, 418);
+            this.tabControl.Size = new System.Drawing.Size(1062, 335);
             this.tabControl.TabIndex = 1;
             // 
             // baseDataTabPage
@@ -196,11 +145,10 @@
             this.baseDataTabPage.BackColor = System.Drawing.SystemColors.Control;
             this.baseDataTabPage.Controls.Add(this.synchronizationPanel);
             this.baseDataTabPage.Controls.Add(this.routerSelectPanel);
-            this.baseDataTabPage.Controls.Add(this.baseDataPanel);
             this.baseDataTabPage.Location = new System.Drawing.Point(4, 25);
             this.baseDataTabPage.Name = "baseDataTabPage";
             this.baseDataTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.baseDataTabPage.Size = new System.Drawing.Size(1054, 389);
+            this.baseDataTabPage.Size = new System.Drawing.Size(1054, 306);
             this.baseDataTabPage.TabIndex = 0;
             this.baseDataTabPage.Text = "Base data";
             // 
@@ -209,7 +157,7 @@
             this.synchronizationPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.synchronizationPanel.Controls.Add(this.synchronizationGroupBox);
             this.synchronizationPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.synchronizationPanel.Location = new System.Drawing.Point(3, 197);
+            this.synchronizationPanel.Location = new System.Drawing.Point(3, 103);
             this.synchronizationPanel.Name = "synchronizationPanel";
             this.synchronizationPanel.Size = new System.Drawing.Size(1048, 100);
             this.synchronizationPanel.TabIndex = 3;
@@ -273,7 +221,7 @@
             this.routerSelectPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.routerSelectPanel.Controls.Add(this.routerSelectGroupBox);
             this.routerSelectPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.routerSelectPanel.Location = new System.Drawing.Point(3, 97);
+            this.routerSelectPanel.Location = new System.Drawing.Point(3, 3);
             this.routerSelectPanel.Name = "routerSelectPanel";
             this.routerSelectPanel.Size = new System.Drawing.Size(1048, 100);
             this.routerSelectPanel.TabIndex = 2;
@@ -364,7 +312,7 @@
             this.inputsTabPage.Location = new System.Drawing.Point(4, 25);
             this.inputsTabPage.Name = "inputsTabPage";
             this.inputsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.inputsTabPage.Size = new System.Drawing.Size(490, 229);
+            this.inputsTabPage.Size = new System.Drawing.Size(490, 146);
             this.inputsTabPage.TabIndex = 1;
             this.inputsTabPage.Text = "Inputs";
             // 
@@ -374,7 +322,7 @@
             this.inputsTableContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inputsTableContainerPanel.Location = new System.Drawing.Point(3, 3);
             this.inputsTableContainerPanel.Name = "inputsTableContainerPanel";
-            this.inputsTableContainerPanel.Size = new System.Drawing.Size(484, 179);
+            this.inputsTableContainerPanel.Size = new System.Drawing.Size(484, 96);
             this.inputsTableContainerPanel.TabIndex = 2;
             // 
             // inputAssociationsTable
@@ -388,7 +336,7 @@
             this.inputAssociationsTable.ReadOnly = true;
             this.inputAssociationsTable.RowHeadersWidth = 51;
             this.inputAssociationsTable.RowTemplate.Height = 24;
-            this.inputAssociationsTable.Size = new System.Drawing.Size(484, 179);
+            this.inputAssociationsTable.Size = new System.Drawing.Size(484, 96);
             this.inputAssociationsTable.TabIndex = 0;
             // 
             // inputsButtonsPanel
@@ -396,7 +344,7 @@
             this.inputsButtonsPanel.Controls.Add(this.set11InputAssociationsButton);
             this.inputsButtonsPanel.Controls.Add(this.clearInputAssociationsButton);
             this.inputsButtonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.inputsButtonsPanel.Location = new System.Drawing.Point(3, 182);
+            this.inputsButtonsPanel.Location = new System.Drawing.Point(3, 99);
             this.inputsButtonsPanel.Name = "inputsButtonsPanel";
             this.inputsButtonsPanel.Size = new System.Drawing.Size(484, 44);
             this.inputsButtonsPanel.TabIndex = 1;
@@ -431,7 +379,7 @@
             this.outputsTabPage.Location = new System.Drawing.Point(4, 25);
             this.outputsTabPage.Name = "outputsTabPage";
             this.outputsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.outputsTabPage.Size = new System.Drawing.Size(1054, 389);
+            this.outputsTabPage.Size = new System.Drawing.Size(490, 146);
             this.outputsTabPage.TabIndex = 2;
             this.outputsTabPage.Text = "Outputs";
             // 
@@ -441,7 +389,7 @@
             this.outputsTableContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.outputsTableContainerPanel.Location = new System.Drawing.Point(3, 3);
             this.outputsTableContainerPanel.Name = "outputsTableContainerPanel";
-            this.outputsTableContainerPanel.Size = new System.Drawing.Size(1048, 339);
+            this.outputsTableContainerPanel.Size = new System.Drawing.Size(484, 96);
             this.outputsTableContainerPanel.TabIndex = 2;
             // 
             // outputAssociationsTable
@@ -455,7 +403,7 @@
             this.outputAssociationsTable.ReadOnly = true;
             this.outputAssociationsTable.RowHeadersWidth = 51;
             this.outputAssociationsTable.RowTemplate.Height = 24;
-            this.outputAssociationsTable.Size = new System.Drawing.Size(1048, 339);
+            this.outputAssociationsTable.Size = new System.Drawing.Size(484, 96);
             this.outputAssociationsTable.TabIndex = 0;
             // 
             // outputsButtonsPanel
@@ -463,9 +411,9 @@
             this.outputsButtonsPanel.Controls.Add(this.set11OutputAssociationsButton);
             this.outputsButtonsPanel.Controls.Add(this.clearOutputAssociations);
             this.outputsButtonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.outputsButtonsPanel.Location = new System.Drawing.Point(3, 342);
+            this.outputsButtonsPanel.Location = new System.Drawing.Point(3, 99);
             this.outputsButtonsPanel.Name = "outputsButtonsPanel";
-            this.outputsButtonsPanel.Size = new System.Drawing.Size(1048, 44);
+            this.outputsButtonsPanel.Size = new System.Drawing.Size(484, 44);
             this.outputsButtonsPanel.TabIndex = 1;
             // 
             // set11OutputAssociationsButton
@@ -496,22 +444,18 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1082, 553);
             this.DeleteButtonVisible = true;
-            this.HeaderText = "Edit router mirror";
+            this.HeaderText = "New router mirror";
             this.MinimumSize = new System.Drawing.Size(1000, 600);
             this.Name = "RouterMirrorEditorForm";
-            this.Text = "Edit router mirror";
+            this.SubjectPlural = "router mirrors";
+            this.SubjectSingular = "router mirror";
+            this.Text = "New router mirror";
             this.customElementsPanel.ResumeLayout(false);
+            this.customElementsPanel.PerformLayout();
             this.mainContainer.ResumeLayout(false);
-            this.baseDataPanel.ResumeLayout(false);
-            this.baseDataPanel.PerformLayout();
-            this.baseDataGroupBox.ResumeLayout(false);
-            this.baseDataGroupBox.PerformLayout();
-            this.baseDataTableLayout.ResumeLayout(false);
-            this.baseDataTableLayout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).EndInit();
             this.tabControl.ResumeLayout(false);
             this.baseDataTabPage.ResumeLayout(false);
-            this.baseDataTabPage.PerformLayout();
             this.synchronizationPanel.ResumeLayout(false);
             this.synchronizationPanel.PerformLayout();
             this.synchronizationGroupBox.ResumeLayout(false);
@@ -537,9 +481,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel baseDataPanel;
-        private System.Windows.Forms.GroupBox baseDataGroupBox;
         private System.Windows.Forms.Label idLabel;
         private System.Windows.Forms.Label nameLabel;
         private System.Windows.Forms.TextBox nameTextBox;
@@ -568,7 +509,6 @@
         private System.Windows.Forms.TableLayoutPanel synchronizationTableLayout;
         private System.Windows.Forms.Label synchronizationBaseLabel;
         private System.Windows.Forms.ComboBox synchronizationModeDropDown;
-        private System.Windows.Forms.TableLayoutPanel baseDataTableLayout;
         private System.Windows.Forms.Button set11InputAssociationsButton;
         private System.Windows.Forms.Button set11OutputAssociationsButton;
     }

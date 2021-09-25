@@ -9,123 +9,63 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Timer = OpenSC.Model.Timers.Timer;
 
 namespace OpenSC.GUI.Timers
 {
     [WindowTypeName("timers.timereditwindow")]
-    public partial class TimerEditWindow : ChildWindowWithTitle, IModelEditorForm<Model.Timers.Timer>
+    public partial class TimerEditWindow : ModelEditorFormBase, IModelEditorForm<Timer>
     {
 
         public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Model.Timers.Timer);
         public IModelEditorForm<Model.Timers.Timer> GetInstanceT(Model.Timers.Timer modelInstance) => new TimerEditWindow(modelInstance);
 
-        private const string TITLE_NEW = "New timer";
-        private const string TITLE_EDIT = "Edit timer: (#{0}) {1}";
+        public TimerEditWindow() : base() => InitializeComponent();
+        public TimerEditWindow(Timer timer) : base(timer) => InitializeComponent();
 
-        private const string HEADER_TEXT_NEW = "New timer";
-        private const string HEADER_TEXT_EDIT = "Edit timer";
+        protected override IModelEditorFormDataManager createManager()
+           => new ModelEditorFormDataManager<Timer, Timer>(this, TimerDatabase.Instance);
 
-        private Model.Timers.Timer timer;
-        bool addingNew = false;
-
-        public TimerEditWindow(Model.Timers.Timer timer)
+        protected override void loadData()
         {
-
-            InitializeComponent();
-
+            base.loadData();
+            Timer timer = (Timer)EditedModel;
             if (timer == null)
-            {
-                this.timer = new Model.Timers.Timer();
-                addingNew = true;
-                HeaderText = HEADER_TEXT_NEW;
-                Text = string.Format(TITLE_NEW, 0, "");
-            }
-            else
-            {
-                this.timer = timer;
-                HeaderText = HEADER_TEXT_EDIT;
-                Text = string.Format(TITLE_EDIT, timer.ID, timer.Name);
-            }
-
-        }
-
-        public TimerEditWindow()
-        { }
-
-        private void TimerEditWindow_Load(object sender, EventArgs e)
-        {
-            loadTimer();
-        }
-
-        private void loadTimer()
-        {
-            idNumericField.Value = (addingNew ? TimerDatabase.Instance.NextValidId() : timer.ID);
-            titleTextBox.Text = timer.Name;
-            modeForwardsRadio.Checked = (timer.Mode == Model.Timers.TimerMode.Forwards);
-            modeBackwardsRadio.Checked = (timer.Mode == Model.Timers.TimerMode.Backwards);
-            modeClockRadio.Checked = (timer.Mode == Model.Timers.TimerMode.Clock);
+                return;
+            modeForwardsRadio.Checked = (timer.Mode == TimerMode.Forwards);
+            modeBackwardsRadio.Checked = (timer.Mode == TimerMode.Backwards);
+            modeClockRadio.Checked = (timer.Mode == TimerMode.Clock);
             countdownStartNumericField.Value = timer.CountdownSeconds;
         }
 
-        private bool saveTimer()
+        protected override void validateFields()
         {
+            base.validateFields();
+            Timer timer = (Timer)EditedModel;
+            if (timer == null)
+                return;
+            timer.ValidateId((int)idNumericField.Value);
+            timer.ValidateName(nameTextBox.Text);
+            timer.ValidateCountdownSeconds((int)countdownStartNumericField.Value);
+        }
 
-            try
-            {
-                timer.ValidateId((int)idNumericField.Value);
-                timer.ValidateName(titleTextBox.Text);
-                timer.ValidateCountdownSeconds((int)countdownStartNumericField.Value);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            timer.StartUpdate();
-            timer.ID = (int)idNumericField.Value;
-            timer.Name = titleTextBox.Text;
+        protected override void writeFields()
+        {
+            base.writeFields();
+            Timer timer = (Timer)EditedModel;
+            if (timer == null)
+                return;
             timer.Mode = getMode();
             timer.CountdownSeconds = (int)countdownStartNumericField.Value;
-            timer.EndUpdate();
-
-            if (addingNew)
-            {
-                TimerDatabase.Instance.Add(timer);
-                addingNew = false;
-                HeaderText = HEADER_TEXT_EDIT;
-                
-            }
-
-            Text = string.Format(TITLE_EDIT, timer.ID, timer.Name);
-
-            return true;
-
         }
 
-        private Model.Timers.TimerMode getMode()
+        private TimerMode getMode()
         {
             if (modeForwardsRadio.Checked)
-                return Model.Timers.TimerMode.Forwards;
+                return TimerMode.Forwards;
             if (modeBackwardsRadio.Checked)
-                return Model.Timers.TimerMode.Backwards;
-            return Model.Timers.TimerMode.Clock;
-        }
-
-        private void saveAndCloseButton_Click(object sender, EventArgs e)
-        {
-            if (saveTimer())
-                Close();
-        }
-
-        private void saveButton_Click(object sender, EventArgs e)
-        {
-            saveTimer();
-        }
-
-        private void cancelButton_Click(object sender, EventArgs e)
-        {
-            Close();
+                return TimerMode.Backwards;
+            return TimerMode.Clock;
         }
 
     }

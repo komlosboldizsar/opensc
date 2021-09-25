@@ -15,88 +15,39 @@ namespace OpenSC.GUI.Macros
         public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as MacroPanel);
         public IModelEditorForm<MacroPanel> GetInstanceT(MacroPanel modelInstance) => new MacroPanelEditorForm(modelInstance);
 
-        private const string TITLE_NEW = "New macro panel";
-        private const string TITLE_EDIT = "Edit macro panel: (#{0}) {1}";
+        public MacroPanelEditorForm() : base() => InitializeComponent();
+        public MacroPanelEditorForm(MacroPanel macroPanel) : base(macroPanel) => InitializeComponent();
 
-        private const string HEADER_TEXT_NEW = "New macro panel";
-        private const string HEADER_TEXT_EDIT = "Edit macro panel";
-
-        protected MacroPanel macroPanel;
-
-        private bool addingNew = false;
-
-        protected bool AddingNew
-        {
-            get { return addingNew; }
-            set
-            {
-                addingNew = value;
-                Text = string.Format((value ? TITLE_NEW : TITLE_EDIT), macroPanel?.ID, macroPanel?.Name);
-                HeaderText = string.Format((value ? HEADER_TEXT_NEW : HEADER_TEXT_EDIT), macroPanel?.ID, macroPanel?.Name);
-            }
-        }
-
-        public MacroPanelEditorForm()
-        {
-            InitializeComponent();
-        }
-
-        public MacroPanelEditorForm(MacroPanel macroPanel)
-        {
-            InitializeComponent();
-            this.macroPanel = (macroPanel != null) ? macroPanel : new MacroPanel();
-            AddingNew = (macroPanel == null);
-        }
+        protected override IModelEditorFormDataManager createManager()
+            => new ModelEditorFormDataManager<MacroPanel, MacroPanel>(this, MacroPanelDatabase.Instance);
 
         protected override void loadData()
         {
+            base.loadData();
+            MacroPanel macroPanel = (MacroPanel)EditedModel;
             if (macroPanel == null)
                 return;
-            idNumericField.Value = (addingNew ? MacroPanelDatabase.Instance.NextValidId() : macroPanel.ID);
-            nameTextBox.Text = macroPanel.Name;
             resizeElementsPanel();
             loadElements();
             SelectedElement = null;
         }
-        protected sealed override bool saveData()
+
+        protected override void validateFields()
         {
-
-            try
-            {
-                validateFields();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            macroPanel.StartUpdate();
-            writeFields();
-            macroPanel.EndUpdate();
-
-            if (addingNew)
-                MacroPanelDatabase.Instance.Add(macroPanel);
-            AddingNew = false;
-
-            return true;
-
-        }
-
-        protected virtual void validateFields()
-        {
+            base.validateFields();
+            MacroPanel macroPanel = (MacroPanel)EditedModel;
             if (macroPanel == null)
                 return;
             macroPanel.ValidateId((int)idNumericField.Value);
             macroPanel.ValidateName(nameTextBox.Text);
         }
 
-        protected virtual void writeFields()
+        protected override void writeFields()
         {
+            base.writeFields();
+            MacroPanel macroPanel = (MacroPanel)EditedModel;
             if (macroPanel == null)
                 return;
-            macroPanel.ID = (int)idNumericField.Value;
-            macroPanel.Name = nameTextBox.Text;
             macroPanel.SizeW = elementsPanel.Width;
             macroPanel.SizeH = elementsPanel.Height;
             saveElements();
@@ -142,7 +93,7 @@ namespace OpenSC.GUI.Macros
         {
             elements.Clear();
             elementsPanel.Controls.Clear();
-            foreach (MacroPanelElement element in macroPanel.Elements)
+            foreach (MacroPanelElement element in ((MacroPanel)EditedModel).Elements)
                 addButtonForElement(element);
         }
         private void saveElements()
@@ -153,7 +104,7 @@ namespace OpenSC.GUI.Macros
 
         private void addElement()
         {
-            MacroPanelElement element = macroPanel.AddElement();
+            MacroPanelElement element = ((MacroPanel)EditedModel).AddElement();
             element.SizeW = DEFAULT_ELEMENT_WIDTH;
             element.SizeH = DEFAULT_ELEMENT_HEIGHT;
             MacroPanelElementButton elementButton = addButtonForElement(element);
@@ -163,7 +114,7 @@ namespace OpenSC.GUI.Macros
         private void removeElement(MacroPanelElementButton elementButton)
         {
             MacroPanelElement element = elementButton.Element;
-            macroPanel.RemoveElement(element);
+            ((MacroPanel)EditedModel).RemoveElement(element);
             elements.Remove(element);
             elementsPanel.Controls.Remove(elementButton);
             if (SelectedElement == elementButton)
@@ -206,11 +157,7 @@ namespace OpenSC.GUI.Macros
         #endregion
 
         #region Edit panel handlers, etc.
-
-        private void addElementButton_Click(object sender, EventArgs e)
-        {
-            addElement();
-        }
+        private void addElementButton_Click(object sender, EventArgs e) => addElement();
 
         private void removeSelectedElementButton_Click(object sender, EventArgs e)
         {
@@ -293,9 +240,7 @@ namespace OpenSC.GUI.Macros
         #endregion
 
         private void loadMacros()
-        {
-            elementMacroDropDown.CreateAdapterAsDataSource(MacroDatabase.Instance, m => m.Name, true, "-");
-        }
+            => elementMacroDropDown.CreateAdapterAsDataSource(MacroDatabase.Instance, m => m.Name, true, "-");
 
         private void MacroPanelForm_Load(object sender, EventArgs e)
         {
@@ -304,17 +249,14 @@ namespace OpenSC.GUI.Macros
         }
 
         private void MacroPanelForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            MacroDatabase.Instance.ChangedItems -= MacroDatabase_ChangedItems;
-        }
+            => MacroDatabase.Instance.ChangedItems -= MacroDatabase_ChangedItems;
 
         private void MacroDatabase_ChangedItems(Model.DatabaseBase<Macro> database)
-        {
-            loadMacros();
-        }
+            => loadMacros();
 
         private void resizeElementsPanel()
         {
+            MacroPanel macroPanel = (MacroPanel)EditedModel;
             Size elementsPanelOriginalSize = elementsPanel.Size;
             Size elementsPanelNewSize = new Size(macroPanel.SizeW, macroPanel.SizeH);
             Size difference = elementsPanelNewSize - elementsPanelOriginalSize;

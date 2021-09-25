@@ -17,25 +17,19 @@ namespace OpenSC.GUI.UMDs
         public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as UMD);
         public IModelEditorForm<UMD> GetInstanceT(UMD modelInstance) => new McCurdyUmd1EditorForm(modelInstance);
 
-        public McCurdyUmd1EditorForm(): base()
-        {
-            InitializeComponent();
-        }
+        public McCurdyUmd1EditorForm() : base() => InitializeComponent();
 
         public McCurdyUmd1EditorForm(UMD umd) : base(umd)
         {
-
             InitializeComponent();
-
-            if (umd == null)
-                this.umd = new McCurdyUMD1();
-            else if (!(umd is McCurdyUMD1))
-                throw new ArgumentException();
-
+            if ((umd != null) && !(umd is McCurdyUMD1))
+                throw new ArgumentException($"Type of UMD should be {nameof(McCurdyUMD1)}.", nameof(umd));
             fillControlArrays();
             initDropDowns();
-
         }
+
+        protected override IModelEditorFormDataManager createManager()
+            => new ModelEditorFormDataManager<UMD, McCurdyUMD1>(this, UmdDatabase.Instance);
 
         private const int MAX_COLUMN_COUNT = 3;
 
@@ -49,80 +43,65 @@ namespace OpenSC.GUI.UMDs
 
         protected override void loadData()
         {
-
             base.loadData();
-            McCurdyUMD1 mcCurdyUmd = umd as McCurdyUMD1;
-            if (mcCurdyUmd == null)
+            McCurdyUMD1 mcCurdyUmd1 = (McCurdyUMD1)EditedModel;
+            if (mcCurdyUmd1 == null)
                 return;
-
-            portDropDown.SelectByValue(mcCurdyUmd.Port);
-            addressNumericField.Value = mcCurdyUmd.Address;
-
-            columnCount = convertColumnCountEnumToInt(mcCurdyUmd.ColumnCount);
-            useSeparatorBarCheckBox.Checked = mcCurdyUmd.UseSeparators;
-
+            portDropDown.SelectByValue(mcCurdyUmd1.Port);
+            addressNumericField.Value = mcCurdyUmd1.Address;
+            columnCount = convertColumnCountEnumToInt(mcCurdyUmd1.ColumnCount);
+            useSeparatorBarCheckBox.Checked = mcCurdyUmd1.UseSeparators;
             for (int i = 0; i < MAX_COLUMN_COUNT; i++)
             {
-                columnDynamicTextSourceDropDowns[i].SelectByValue(mcCurdyUmd.GetDynamicTextSource(i));
-                columnAlignmentDropDowns[i].SelectByValue(mcCurdyUmd.TextAlignment[i]);
+                columnDynamicTextSourceDropDowns[i].SelectByValue(mcCurdyUmd1.GetDynamicTextSource(i));
+                columnAlignmentDropDowns[i].SelectByValue(mcCurdyUmd1.TextAlignment[i]);
                 if(i < MAX_COLUMN_COUNT - 1)
-                    columnWidthNumericFields[i].Value = mcCurdyUmd.ColumnWidths[i];
+                    columnWidthNumericFields[i].Value = mcCurdyUmd1.ColumnWidths[i];
             }
-
             updateColumnWidths();
-
-
         }
 
         protected override void writeFields()
         {
-
             base.writeFields();
-            McCurdyUMD1 mcCurdyUmd = umd as McCurdyUMD1;
-            if (mcCurdyUmd == null)
+            McCurdyUMD1 mcCurdyUmd1 = (McCurdyUMD1)EditedModel;
+            if (mcCurdyUmd1 == null)
                 return;
-
-            mcCurdyUmd.Port = portDropDown.SelectedValue as SerialPort;
-            mcCurdyUmd.Address = (int)addressNumericField.Value;
-
-            mcCurdyUmd.ColumnCount = convertIntToColumnCountEnum(columnCount);
-            mcCurdyUmd.UseSeparators = useSeparatorBarCheckBox.Checked;
-
+            mcCurdyUmd1.Port = portDropDown.SelectedValue as SerialPort;
+            mcCurdyUmd1.Address = (int)addressNumericField.Value;
+            mcCurdyUmd1.ColumnCount = convertIntToColumnCountEnum(columnCount);
+            mcCurdyUmd1.UseSeparators = useSeparatorBarCheckBox.Checked;
             TextAlignment[] alignments = new TextAlignment[MAX_COLUMN_COUNT];
             int[] widths = new int[MAX_COLUMN_COUNT - 1];
             for (int i = 0; i < 3; i++)
             {
-                mcCurdyUmd.SetDynamicTextSource(i, columnDynamicTextSourceDropDowns[i].SelectedValue as DynamicText);
+                mcCurdyUmd1.SetDynamicTextSource(i, columnDynamicTextSourceDropDowns[i].SelectedValue as DynamicText);
                 alignments[i] = (TextAlignment)columnAlignmentDropDowns[i].SelectedValue;
                 if (i < MAX_COLUMN_COUNT - 1)
                     widths[i] = (int)columnWidthNumericFields[i].Value;
             }
-            mcCurdyUmd.TextAlignment = alignments;
-            mcCurdyUmd.ColumnWidths = widths;
-            
+            mcCurdyUmd1.TextAlignment = alignments;
+            mcCurdyUmd1.ColumnWidths = widths;
         }
 
         protected override void validateFields()
         {
             base.validateFields();
-            McCurdyUMD1 mcCurdyUmd = umd as McCurdyUMD1;
-            if (mcCurdyUmd == null)
+            McCurdyUMD1 mcCurdyUmd1 = (McCurdyUMD1)EditedModel;
+            if (mcCurdyUmd1 == null)
                 return;
-            // TODO: Validation
         }
 
         private int _columnCount;
 
         private int columnCount
         {
-            get { return _columnCount; }
+            get => _columnCount;
             set
             {
-
                 if (value == _columnCount)
                     return;
                 _columnCount = value;
-
                 for (int i = 0; i < MAX_COLUMN_COUNT; i++)
                 {
                     columnWidthNumericFields[i].Visible
@@ -133,10 +112,8 @@ namespace OpenSC.GUI.UMDs
                     columnWidthNumericFields[i].Enabled = (i < (value - 1));
                     columnCountRadioButtons[i].Checked = (value == (i + 1));
                 }
-
                 updateColumnWidths();
                 useSeparatorBarLabel.Visible = useSeparatorBarCheckBox.Visible = (value > 1);
-
             }
         }
 
@@ -173,15 +150,12 @@ namespace OpenSC.GUI.UMDs
 
         private void initDropDowns()
         {
-
             // Ports
             portDropDown.CreateAdapterAsDataSource(SerialPortDatabase.Instance, port => port.Name, true, "(not connected)");
-
             // Dynamic text sources
             IComboBoxAdapterFactory dynamicTextAdapterFactory = new ComboBoxAdapterFactory<DynamicText>(DynamicTextDatabase.Instance.ItemsAsList, dt => dt.Name, true, "(empty)");
             for (int i = 0; i < MAX_COLUMN_COUNT; i++)
                 columnDynamicTextSourceDropDowns[i].GetAdapterFromFactoryAsDataSource(dynamicTextAdapterFactory);
-
             // Dynamic text alignments
             Dictionary<TextAlignment, string> textAlignmentTranslations = new Dictionary<TextAlignment, string>()
             {
@@ -190,10 +164,8 @@ namespace OpenSC.GUI.UMDs
                 { TextAlignment.Right, "right" }
             };
             IComboBoxAdapterFactory textAlignmentsAdapterFactory = new EnumComboBoxAdapterFactory<TextAlignment>(textAlignmentTranslations);
-
             for (int i = 0; i < MAX_COLUMN_COUNT; i++)
                 columnAlignmentDropDowns[i].GetAdapterFromFactoryAsDataSource(textAlignmentsAdapterFactory);
-
         }
 
         private void fillControlArrays()
@@ -237,7 +209,7 @@ namespace OpenSC.GUI.UMDs
 
         private void updateColumnWidths()
         {
-            int totalColumnWidth = (umd as McCurdyUMD1).TotalWidth;
+            int totalColumnWidth = ((McCurdyUMD1)EditedModel).TotalWidth;
             if (useSeparatorBarCheckBox.Checked)
                 totalColumnWidth -= 11 * (columnCount - 1);
             for (int i = 0; i < columnCount - 1; i++)
@@ -247,10 +219,8 @@ namespace OpenSC.GUI.UMDs
             columnWidthNumericFields[columnCount - 1].Value = totalColumnWidth;
         }
 
-        private void useSeparatorBarCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            updateColumnWidths();
-        }
+        private void useSeparatorBarCheckBox_CheckedChanged(object sender, EventArgs e) => updateColumnWidths();
+
     }
 
 }

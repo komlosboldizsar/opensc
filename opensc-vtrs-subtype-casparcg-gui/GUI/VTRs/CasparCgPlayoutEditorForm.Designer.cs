@@ -34,9 +34,9 @@
             this.ipLabel = new System.Windows.Forms.Label();
             this.channelLabel = new System.Windows.Forms.Label();
             this.layerLabel = new System.Windows.Forms.Label();
+            this.ipTextBox = new System.Windows.Forms.TextBox();
             this.channelNumericField = new System.Windows.Forms.NumericUpDown();
             this.layerNumericField = new System.Windows.Forms.NumericUpDown();
-            this.ipTextBox = new System.Windows.Forms.TextBox();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.casparCgPanel.SuspendLayout();
@@ -62,7 +62,7 @@
             this.casparCgPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.casparCgPanel.Controls.Add(this.casparCgGroupBox);
             this.casparCgPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.casparCgPanel.Location = new System.Drawing.Point(10, 104);
+            this.casparCgPanel.Location = new System.Drawing.Point(10, 187);
             this.casparCgPanel.Name = "casparCgPanel";
             this.casparCgPanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
             this.casparCgPanel.Size = new System.Drawing.Size(485, 122);
@@ -141,6 +141,14 @@
             this.layerLabel.Text = "Layer:";
             this.layerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // ipTextBox
+            // 
+            this.ipTextBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ipTextBox.Location = new System.Drawing.Point(107, 3);
+            this.ipTextBox.Name = "ipTextBox";
+            this.ipTextBox.Size = new System.Drawing.Size(359, 22);
+            this.ipTextBox.TabIndex = 3;
+            // 
             // channelNumericField
             // 
             this.channelNumericField.Location = new System.Drawing.Point(107, 31);
@@ -180,14 +188,6 @@
             0,
             0});
             // 
-            // ipTextBox
-            // 
-            this.ipTextBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ipTextBox.Location = new System.Drawing.Point(107, 3);
-            this.ipTextBox.Name = "ipTextBox";
-            this.ipTextBox.Size = new System.Drawing.Size(359, 22);
-            this.ipTextBox.TabIndex = 3;
-            // 
             // CasparCgPlayoutEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -195,7 +195,6 @@
             this.ClientSize = new System.Drawing.Size(505, 450);
             this.DeleteButtonVisible = true;
             this.Name = "CasparCgPlayoutEditorForm";
-            this.Text = "CasparCgPlayoutEditorForm";
             this.customElementsPanel.ResumeLayout(false);
             this.customElementsPanel.PerformLayout();
             this.mainContainer.ResumeLayout(false);

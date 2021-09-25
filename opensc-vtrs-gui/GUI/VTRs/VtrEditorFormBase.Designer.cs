@@ -28,75 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.baseDataPanel = new System.Windows.Forms.Panel();
-            this.baseDataGroupBox = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.idLabel = new System.Windows.Forms.Label();
             this.nameLabel = new System.Windows.Forms.Label();
             this.nameTextBox = new System.Windows.Forms.TextBox();
             this.idNumericField = new System.Windows.Forms.NumericUpDown();
-            this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
-            this.baseDataPanel.SuspendLayout();
-            this.baseDataGroupBox.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).BeginInit();
             this.SuspendLayout();
             // 
             // customElementsPanel
             // 
-            this.customElementsPanel.Controls.Add(this.baseDataPanel);
             this.customElementsPanel.Size = new System.Drawing.Size(482, 325);
             // 
             // mainContainer
             // 
             this.mainContainer.Size = new System.Drawing.Size(482, 394);
-            // 
-            // baseDataPanel
-            // 
-            this.baseDataPanel.AutoSize = true;
-            this.baseDataPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.baseDataPanel.Controls.Add(this.baseDataGroupBox);
-            this.baseDataPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.baseDataPanel.Location = new System.Drawing.Point(10, 10);
-            this.baseDataPanel.Name = "baseDataPanel";
-            this.baseDataPanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
-            this.baseDataPanel.Size = new System.Drawing.Size(462, 94);
-            this.baseDataPanel.TabIndex = 0;
-            // 
-            // baseDataGroupBox
-            // 
-            this.baseDataGroupBox.AutoSize = true;
-            this.baseDataGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.baseDataGroupBox.Controls.Add(this.tableLayoutPanel1);
-            this.baseDataGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.baseDataGroupBox.Location = new System.Drawing.Point(0, 0);
-            this.baseDataGroupBox.Name = "baseDataGroupBox";
-            this.baseDataGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.baseDataGroupBox.Size = new System.Drawing.Size(462, 87);
-            this.baseDataGroupBox.TabIndex = 0;
-            this.baseDataGroupBox.TabStop = false;
-            this.baseDataGroupBox.Text = "Base data";
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.AutoSize = true;
-            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.idLabel, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.nameLabel, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.nameTextBox, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.idNumericField, 1, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(8, 23);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(446, 56);
-            this.tableLayoutPanel1.TabIndex = 0;
             // 
             // idLabel
             // 
@@ -143,17 +89,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(482, 450);
             this.DeleteButtonVisible = true;
+            this.HeaderText = "New VTR";
             this.Name = "VtrEditorFormBase";
-            this.Text = "VtrEditorFormBase";
-            this.customElementsPanel.ResumeLayout(false);
-            this.customElementsPanel.PerformLayout();
+            this.SubjectPlural = "VTRs";
+            this.SubjectSingular = "VTR";
+            this.Text = "New VTR";
             this.mainContainer.ResumeLayout(false);
-            this.baseDataPanel.ResumeLayout(false);
-            this.baseDataPanel.PerformLayout();
-            this.baseDataGroupBox.ResumeLayout(false);
-            this.baseDataGroupBox.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).EndInit();
             this.ResumeLayout(false);
 
@@ -161,9 +102,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel baseDataPanel;
-        private System.Windows.Forms.GroupBox baseDataGroupBox;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label idLabel;
         private System.Windows.Forms.Label nameLabel;
         private System.Windows.Forms.TextBox nameTextBox;

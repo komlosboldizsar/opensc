@@ -4,108 +4,64 @@ using System.Windows.Forms;
 
 namespace OpenSC.GUI.Variables
 {
+
     public partial class DynamicTextEditorForm : ModelEditorFormBase, IModelEditorForm<DynamicText>
     {
 
         public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as DynamicText);
         public IModelEditorForm<DynamicText> GetInstanceT(DynamicText modelInstance) => new DynamicTextEditorForm(modelInstance);
 
-        private const string TITLE_NEW = "New dynamic text";
-        private const string TITLE_EDIT = "Edit dynamic text: (#{0}) {1}";
+        public DynamicTextEditorForm() : base() => InitializeComponent();
 
-        private const string HEADER_TEXT_NEW = "New dynamic text";
-        private const string HEADER_TEXT_EDIT = "Edit dynamic text";
-
-        protected DynamicText dyntext;
-
-        bool addingNew = false;
-
-        protected bool AddingNew
-        {
-            get { return addingNew; }
-            set
-            {
-                addingNew = value;
-                Text = string.Format((value ? TITLE_NEW : TITLE_EDIT), dyntext?.ID, dyntext?.Name);
-                HeaderText = string.Format((value ? HEADER_TEXT_NEW : HEADER_TEXT_EDIT), dyntext?.ID, dyntext?.Name);
-            }
-        }
-
-        public DynamicTextEditorForm()
+        public DynamicTextEditorForm(DynamicText dynamicText) : base(dynamicText)
         {
             InitializeComponent();
+            dynamicText.CurrentTextChanged += dynamicTextCurrentTextChangedHandler;
         }
 
-        public DynamicTextEditorForm(DynamicText dyntext)
-        {
-            InitializeComponent();
-            AddingNew = (dyntext == null);
-            this.dyntext = (dyntext != null) ? dyntext : new DynamicText();
-            this.dyntext.CurrentTextChanged += dynamicTextCurrentTextChangedHandler;
-        }
+        protected override IModelEditorFormDataManager createManager()
+            => new ModelEditorFormDataManager<DynamicText, DynamicText>(this, DynamicTextDatabase.Instance);
 
         protected override void loadData()
         {
-            if (dyntext == null)
+            base.loadData();
+            DynamicText dynamicText = (DynamicText)EditedModel;
+            if (dynamicText == null)
                 return;
-            idNumericField.Value = (addingNew ? DynamicTextDatabase.Instance.NextValidId() : dyntext.ID);
-            labelTextBox.Text = dyntext.Name;
-            formulaTextBox.Text = dyntext.Formula;
-            currentTextTextBox.Text = dyntext.CurrentText;
+            formulaTextBox.Text = dynamicText.Formula;
+            currentTextTextBox.Text = dynamicText.CurrentText;
         }
 
-        protected sealed override bool saveData()
+        protected override void validateFields()
         {
-
-            try
-            {
-                validateFields();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            dyntext.StartUpdate();
-            writeFields();
-            dyntext.EndUpdate();
-
-            if (addingNew)
-                DynamicTextDatabase.Instance.Add(dyntext);
-            AddingNew = false;
-
-            return true;
-
-        }
-
-        protected virtual void validateFields()
-        {
-            if (dyntext == null)
+            base.validateFields();
+            DynamicText dynamicText = (DynamicText)EditedModel;
+            if (dynamicText == null)
                 return;
-            dyntext.ValidateId((int)idNumericField.Value);
-            dyntext.ValidateName(labelTextBox.Text);
+            dynamicText.ValidateId((int)idNumericField.Value);
+            //dynamicText.ValidateName(nameTextBox.Text);
         }
 
-        protected virtual void writeFields()
+        protected override void writeFields()
         {
-            if (dyntext == null)
+            base.writeFields();
+            DynamicText dynamicText = (DynamicText)EditedModel;
+            if (dynamicText == null)
                 return;
-            dyntext.ID = (int)idNumericField.Value;
-            dyntext.Name = labelTextBox.Text;
-            dyntext.Formula = formulaTextBox.Text;
+            dynamicText.Formula = formulaTextBox.Text;
         }
 
-        private void dynamicTextCurrentTextChangedHandler(DynamicText dyntext, string oldText, string newText)
+        private void dynamicTextCurrentTextChangedHandler(DynamicText dynamicText, string oldText, string newText)
         {
             if (InvokeRequired)
             {
-                Invoke(new Action(() => dynamicTextCurrentTextChangedHandler(dyntext, oldText, newText)));
+                Invoke(new Action(() => dynamicTextCurrentTextChangedHandler(dynamicText, oldText, newText)));
                 return;
             }
-            if (dyntext == this.dyntext)
+            if (dynamicText == EditedModel)
                 currentTextTextBox.Text = newText;
         }
 
     }
+
 }

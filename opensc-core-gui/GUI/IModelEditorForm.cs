@@ -11,6 +11,7 @@ namespace OpenSC.GUI
     public interface IModelEditorForm
     {
         IModelEditorForm GetInstance(object modelInstance);
+        IModel EditedModel { get; }
     }
 
     public interface IModelEditorForm<TModel> : IModelEditorForm

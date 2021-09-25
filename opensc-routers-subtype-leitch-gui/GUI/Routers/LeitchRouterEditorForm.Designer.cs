@@ -31,9 +31,9 @@
             this.connectionPanel = new System.Windows.Forms.Panel();
             this.connectionGroupBox = new System.Windows.Forms.GroupBox();
             this.connectionTable = new System.Windows.Forms.TableLayoutPanel();
+            this.levelLabel = new System.Windows.Forms.Label();
             this.portLabel = new System.Windows.Forms.Label();
             this.levelNumericField = new System.Windows.Forms.NumericUpDown();
-            this.levelLabel = new System.Windows.Forms.Label();
             this.portDropDown = new System.Windows.Forms.ComboBox();
             this.baseDataTabPage.SuspendLayout();
             this.mainContainer.SuspendLayout();
@@ -46,17 +46,21 @@
             // baseDataTabPage
             // 
             this.baseDataTabPage.Controls.Add(this.connectionPanel);
+            this.baseDataTabPage.Size = new System.Drawing.Size(954, 389);
             this.baseDataTabPage.Controls.SetChildIndex(this.connectionPanel, 0);
-            // 
-            // inputsButtonsPanel
-            // 
-            this.inputsButtonsPanel.Location = new System.Drawing.Point(3, 342);
-            this.inputsButtonsPanel.Size = new System.Drawing.Size(948, 44);
             // 
             // outputsButtonsPanel
             // 
             this.outputsButtonsPanel.Location = new System.Drawing.Point(3, 342);
-            this.outputsButtonsPanel.Size = new System.Drawing.Size(948, 44);
+            this.outputsButtonsPanel.Size = new System.Drawing.Size(1048, 44);
+            // 
+            // customElementsPanel
+            // 
+            this.customElementsPanel.Size = new System.Drawing.Size(982, 428);
+            // 
+            // mainContainer
+            // 
+            this.mainContainer.Size = new System.Drawing.Size(982, 497);
             // 
             // connectionPanel
             // 
@@ -67,7 +71,7 @@
             this.connectionPanel.Location = new System.Drawing.Point(3, 97);
             this.connectionPanel.Name = "connectionPanel";
             this.connectionPanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
-            this.connectionPanel.Size = new System.Drawing.Size(948, 97);
+            this.connectionPanel.Size = new System.Drawing.Size(948, 96);
             this.connectionPanel.TabIndex = 2;
             // 
             // connectionGroupBox
@@ -79,7 +83,7 @@
             this.connectionGroupBox.Location = new System.Drawing.Point(0, 0);
             this.connectionGroupBox.Name = "connectionGroupBox";
             this.connectionGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.connectionGroupBox.Size = new System.Drawing.Size(948, 90);
+            this.connectionGroupBox.Size = new System.Drawing.Size(948, 89);
             this.connectionGroupBox.TabIndex = 0;
             this.connectionGroupBox.TabStop = false;
             this.connectionGroupBox.Text = "Connection";
@@ -101,8 +105,20 @@
             this.connectionTable.RowCount = 2;
             this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.connectionTable.Size = new System.Drawing.Size(932, 59);
+            this.connectionTable.Size = new System.Drawing.Size(932, 58);
             this.connectionTable.TabIndex = 0;
+            // 
+            // levelLabel
+            // 
+            this.levelLabel.AutoSize = true;
+            this.levelLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.levelLabel.Location = new System.Drawing.Point(3, 30);
+            this.levelLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.levelLabel.Name = "levelLabel";
+            this.levelLabel.Size = new System.Drawing.Size(46, 28);
+            this.levelLabel.TabIndex = 3;
+            this.levelLabel.Text = "Level:";
+            this.levelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // portLabel
             // 
@@ -111,14 +127,14 @@
             this.portLabel.Location = new System.Drawing.Point(3, 0);
             this.portLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.portLabel.Name = "portLabel";
-            this.portLabel.Size = new System.Drawing.Size(38, 31);
+            this.portLabel.Size = new System.Drawing.Size(38, 30);
             this.portLabel.TabIndex = 0;
             this.portLabel.Text = "Port:";
             this.portLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // levelNumericField
             // 
-            this.levelNumericField.Location = new System.Drawing.Point(67, 34);
+            this.levelNumericField.Location = new System.Drawing.Point(67, 33);
             this.levelNumericField.Maximum = new decimal(new int[] {
             9,
             0,
@@ -127,18 +143,6 @@
             this.levelNumericField.Name = "levelNumericField";
             this.levelNumericField.Size = new System.Drawing.Size(120, 22);
             this.levelNumericField.TabIndex = 2;
-            // 
-            // levelLabel
-            // 
-            this.levelLabel.AutoSize = true;
-            this.levelLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.levelLabel.Location = new System.Drawing.Point(3, 31);
-            this.levelLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.levelLabel.Name = "levelLabel";
-            this.levelLabel.Size = new System.Drawing.Size(46, 28);
-            this.levelLabel.TabIndex = 3;
-            this.levelLabel.Text = "Level:";
-            this.levelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // portDropDown
             // 
@@ -156,7 +160,6 @@
             this.ClientSize = new System.Drawing.Size(982, 553);
             this.DeleteButtonVisible = true;
             this.Name = "LeitchRouterEditorForm";
-            this.Text = "BmdVideohubEditorForm";
             this.baseDataTabPage.ResumeLayout(false);
             this.baseDataTabPage.PerformLayout();
             this.mainContainer.ResumeLayout(false);

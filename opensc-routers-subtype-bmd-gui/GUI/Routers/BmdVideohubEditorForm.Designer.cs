@@ -52,6 +52,11 @@
             this.baseDataTabPage.Size = new System.Drawing.Size(954, 389);
             this.baseDataTabPage.Controls.SetChildIndex(this.connectionPanel, 0);
             // 
+            // outputsButtonsPanel
+            // 
+            this.outputsButtonsPanel.Location = new System.Drawing.Point(3, 342);
+            this.outputsButtonsPanel.Size = new System.Drawing.Size(1048, 44);
+            // 
             // customElementsPanel
             // 
             this.customElementsPanel.Size = new System.Drawing.Size(982, 428);
@@ -187,9 +192,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(982, 553);
             this.DeleteButtonVisible = true;
-            this.MinimumSize = new System.Drawing.Size(1000, 600);
             this.Name = "BmdVideohubEditorForm";
-            this.Text = "BmdVideohubEditorForm";
             this.baseDataTabPage.ResumeLayout(false);
             this.baseDataTabPage.PerformLayout();
             this.mainContainer.ResumeLayout(false);

@@ -112,6 +112,7 @@
     <Compile Include="GUI\Helpers\ResizableControls.cs" />
     <Compile Include="GUI\IModelEditorForm.cs" />
     <Compile Include="GUI\IModelEditorFormTypeRegister.cs" />
+    <Compile Include="GUI\ModelEditorFormDataManager.cs" />
     <Compile Include="GUI\ModelListFormBaseManager.cs" />
     <Compile Include="GUI\ModelListFormBase.cs">
       <SubType>Form</SubType>

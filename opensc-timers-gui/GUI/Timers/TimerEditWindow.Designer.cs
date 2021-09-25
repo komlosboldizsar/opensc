@@ -28,12 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.basicDataTable = new System.Windows.Forms.TableLayoutPanel();
             this.idLabel = new System.Windows.Forms.Label();
-            this.titleLabel = new System.Windows.Forms.Label();
             this.idNumericField = new System.Windows.Forms.NumericUpDown();
-            this.titleTextBox = new System.Windows.Forms.TextBox();
-            this.basicDataGroupBox = new System.Windows.Forms.GroupBox();
             this.operationGroupBox = new System.Windows.Forms.GroupBox();
             this.modeTable = new System.Windows.Forms.TableLayoutPanel();
             this.modeLabel = new System.Windows.Forms.Label();
@@ -46,45 +42,33 @@
             this.saveAndCloseButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
+            this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
-            this.basicDataTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).BeginInit();
-            this.basicDataGroupBox.SuspendLayout();
             this.operationGroupBox.SuspendLayout();
             this.modeTable.SuspendLayout();
             this.modeOptionTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.countdownStartNumericField)).BeginInit();
             this.SuspendLayout();
             // 
+            // customElementsPanel
+            // 
+            this.customElementsPanel.Controls.Add(this.operationGroupBox);
+            this.customElementsPanel.Location = new System.Drawing.Point(10, 10);
+            this.customElementsPanel.Size = new System.Drawing.Size(462, 248);
+            this.customElementsPanel.Controls.SetChildIndex(this.operationGroupBox, 0);
+            // 
             // mainContainer
             // 
             this.mainContainer.Controls.Add(this.saveButton);
             this.mainContainer.Controls.Add(this.cancelButton);
             this.mainContainer.Controls.Add(this.saveAndCloseButton);
-            this.mainContainer.Controls.Add(this.operationGroupBox);
-            this.mainContainer.Controls.Add(this.basicDataGroupBox);
             this.mainContainer.Padding = new System.Windows.Forms.Padding(10);
             this.mainContainer.Size = new System.Drawing.Size(482, 337);
-            // 
-            // basicDataTable
-            // 
-            this.basicDataTable.AutoSize = true;
-            this.basicDataTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.basicDataTable.ColumnCount = 2;
-            this.basicDataTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.basicDataTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.basicDataTable.Controls.Add(this.idLabel, 0, 0);
-            this.basicDataTable.Controls.Add(this.titleLabel, 0, 1);
-            this.basicDataTable.Controls.Add(this.idNumericField, 1, 0);
-            this.basicDataTable.Controls.Add(this.titleTextBox, 1, 1);
-            this.basicDataTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.basicDataTable.Location = new System.Drawing.Point(8, 19);
-            this.basicDataTable.Name = "basicDataTable";
-            this.basicDataTable.RowCount = 2;
-            this.basicDataTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.basicDataTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.basicDataTable.Size = new System.Drawing.Size(446, 56);
-            this.basicDataTable.TabIndex = 0;
+            this.mainContainer.Controls.SetChildIndex(this.saveAndCloseButton, 0);
+            this.mainContainer.Controls.SetChildIndex(this.cancelButton, 0);
+            this.mainContainer.Controls.SetChildIndex(this.saveButton, 0);
+            this.mainContainer.Controls.SetChildIndex(this.customElementsPanel, 0);
             // 
             // idLabel
             // 
@@ -98,18 +82,6 @@
             this.idLabel.Text = "ID";
             this.idLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // titleLabel
-            // 
-            this.titleLabel.AutoSize = true;
-            this.titleLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.titleLabel.Location = new System.Drawing.Point(3, 28);
-            this.titleLabel.Margin = new System.Windows.Forms.Padding(3, 0, 20, 0);
-            this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(35, 28);
-            this.titleLabel.TabIndex = 1;
-            this.titleLabel.Text = "Title";
-            this.titleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // idNumericField
             // 
             this.idNumericField.Location = new System.Drawing.Point(61, 3);
@@ -117,40 +89,17 @@
             this.idNumericField.Size = new System.Drawing.Size(120, 22);
             this.idNumericField.TabIndex = 2;
             // 
-            // titleTextBox
-            // 
-            this.titleTextBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.titleTextBox.Location = new System.Drawing.Point(61, 31);
-            this.titleTextBox.Name = "titleTextBox";
-            this.titleTextBox.Size = new System.Drawing.Size(382, 22);
-            this.titleTextBox.TabIndex = 3;
-            // 
-            // basicDataGroupBox
-            // 
-            this.basicDataGroupBox.AutoSize = true;
-            this.basicDataGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.basicDataGroupBox.Controls.Add(this.basicDataTable);
-            this.basicDataGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.basicDataGroupBox.Location = new System.Drawing.Point(10, 10);
-            this.basicDataGroupBox.Margin = new System.Windows.Forms.Padding(10);
-            this.basicDataGroupBox.Name = "basicDataGroupBox";
-            this.basicDataGroupBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 8);
-            this.basicDataGroupBox.Size = new System.Drawing.Size(462, 83);
-            this.basicDataGroupBox.TabIndex = 1;
-            this.basicDataGroupBox.TabStop = false;
-            this.basicDataGroupBox.Text = "Basic data";
-            // 
             // operationGroupBox
             // 
             this.operationGroupBox.AutoSize = true;
             this.operationGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.operationGroupBox.Controls.Add(this.modeTable);
             this.operationGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.operationGroupBox.Location = new System.Drawing.Point(10, 93);
+            this.operationGroupBox.Location = new System.Drawing.Point(10, 65);
             this.operationGroupBox.Margin = new System.Windows.Forms.Padding(10);
             this.operationGroupBox.Name = "operationGroupBox";
             this.operationGroupBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 8);
-            this.operationGroupBox.Size = new System.Drawing.Size(462, 142);
+            this.operationGroupBox.Size = new System.Drawing.Size(442, 142);
             this.operationGroupBox.TabIndex = 2;
             this.operationGroupBox.TabStop = false;
             this.operationGroupBox.Text = "Operation";
@@ -172,7 +121,7 @@
             this.modeTable.RowCount = 2;
             this.modeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.modeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.modeTable.Size = new System.Drawing.Size(446, 115);
+            this.modeTable.Size = new System.Drawing.Size(426, 115);
             this.modeTable.TabIndex = 0;
             // 
             // modeLabel
@@ -215,7 +164,7 @@
             this.modeOptionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.modeOptionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.modeOptionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.modeOptionTable.Size = new System.Drawing.Size(307, 81);
+            this.modeOptionTable.Size = new System.Drawing.Size(287, 81);
             this.modeOptionTable.TabIndex = 2;
             // 
             // modeForwardsRadio
@@ -268,7 +217,6 @@
             this.saveAndCloseButton.TabIndex = 3;
             this.saveAndCloseButton.Text = "Save and close";
             this.saveAndCloseButton.UseVisualStyleBackColor = true;
-            this.saveAndCloseButton.Click += new System.EventHandler(this.saveAndCloseButton_Click);
             // 
             // cancelButton
             // 
@@ -279,7 +227,6 @@
             this.cancelButton.TabIndex = 4;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // saveButton
             // 
@@ -290,25 +237,23 @@
             this.saveButton.TabIndex = 5;
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
-            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // TimerEditWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(482, 393);
-            this.MaximizeBox = false;
+            this.DeleteButtonVisible = true;
+            this.HeaderText = "New timer";
             this.MinimumSize = new System.Drawing.Size(500, 440);
             this.Name = "TimerEditWindow";
-            this.Text = "Edit timer";
-            this.Load += new System.EventHandler(this.TimerEditWindow_Load);
+            this.SubjectPlural = "timers";
+            this.SubjectSingular = "timer";
+            this.Text = "New timer";
+            this.customElementsPanel.ResumeLayout(false);
+            this.customElementsPanel.PerformLayout();
             this.mainContainer.ResumeLayout(false);
-            this.mainContainer.PerformLayout();
-            this.basicDataTable.ResumeLayout(false);
-            this.basicDataTable.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).EndInit();
-            this.basicDataGroupBox.ResumeLayout(false);
-            this.basicDataGroupBox.PerformLayout();
             this.operationGroupBox.ResumeLayout(false);
             this.operationGroupBox.PerformLayout();
             this.modeTable.ResumeLayout(false);
@@ -321,13 +266,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.GroupBox basicDataGroupBox;
-        private System.Windows.Forms.TableLayoutPanel basicDataTable;
-        private System.Windows.Forms.Label idLabel;
-        private System.Windows.Forms.Label titleLabel;
-        private System.Windows.Forms.NumericUpDown idNumericField;
-        private System.Windows.Forms.TextBox titleTextBox;
         private System.Windows.Forms.GroupBox operationGroupBox;
         private System.Windows.Forms.TableLayoutPanel modeTable;
         private System.Windows.Forms.Label modeLabel;
@@ -340,5 +278,7 @@
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button saveAndCloseButton;
         private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.Label idLabel;
+        private System.Windows.Forms.NumericUpDown idNumericField;
     }
 }

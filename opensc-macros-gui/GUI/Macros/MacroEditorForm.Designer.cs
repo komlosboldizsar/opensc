@@ -28,15 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.baseDataPanel = new System.Windows.Forms.Panel();
-            this.baseDataGroupBox = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.idLabel = new System.Windows.Forms.Label();
             this.nameLabel = new System.Windows.Forms.Label();
             this.nameTextBox = new System.Windows.Forms.TextBox();
             this.idNumericField = new System.Windows.Forms.NumericUpDown();
             this.tabControl = new System.Windows.Forms.TabControl();
-            this.baseDataTabPage = new System.Windows.Forms.TabPage();
             this.commandsTabPage = new System.Windows.Forms.TabPage();
             this.commandsEditorContainerPanel = new System.Windows.Forms.Panel();
             this.commandsEditorTextBox = new OpenSC.GUI.GeneralComponents.RichTextBoxWithBar();
@@ -72,14 +68,11 @@
             this.triggerDescriptionTextBox = new System.Windows.Forms.TextBox();
             this.distanceHolder2 = new System.Windows.Forms.Panel();
             this.selectTriggerComboBox = new System.Windows.Forms.ComboBox();
+            this.spacerPanel1 = new System.Windows.Forms.Panel();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
-            this.baseDataPanel.SuspendLayout();
-            this.baseDataGroupBox.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).BeginInit();
             this.tabControl.SuspendLayout();
-            this.baseDataTabPage.SuspendLayout();
             this.commandsTabPage.SuspendLayout();
             this.commandsEditorContainerPanel.SuspendLayout();
             this.addCommandPanel.SuspendLayout();
@@ -104,57 +97,14 @@
             // customElementsPanel
             // 
             this.customElementsPanel.Controls.Add(this.tabControl);
+            this.customElementsPanel.Controls.Add(this.spacerPanel1);
             this.customElementsPanel.Size = new System.Drawing.Size(1482, 504);
+            this.customElementsPanel.Controls.SetChildIndex(this.spacerPanel1, 0);
+            this.customElementsPanel.Controls.SetChildIndex(this.tabControl, 0);
             // 
             // mainContainer
             // 
             this.mainContainer.Size = new System.Drawing.Size(1482, 573);
-            // 
-            // baseDataPanel
-            // 
-            this.baseDataPanel.AutoSize = true;
-            this.baseDataPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.baseDataPanel.Controls.Add(this.baseDataGroupBox);
-            this.baseDataPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.baseDataPanel.Location = new System.Drawing.Point(3, 3);
-            this.baseDataPanel.Name = "baseDataPanel";
-            this.baseDataPanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
-            this.baseDataPanel.Size = new System.Drawing.Size(1448, 94);
-            this.baseDataPanel.TabIndex = 0;
-            // 
-            // baseDataGroupBox
-            // 
-            this.baseDataGroupBox.AutoSize = true;
-            this.baseDataGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.baseDataGroupBox.Controls.Add(this.tableLayoutPanel1);
-            this.baseDataGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.baseDataGroupBox.Location = new System.Drawing.Point(0, 0);
-            this.baseDataGroupBox.Name = "baseDataGroupBox";
-            this.baseDataGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.baseDataGroupBox.Size = new System.Drawing.Size(1448, 87);
-            this.baseDataGroupBox.TabIndex = 0;
-            this.baseDataGroupBox.TabStop = false;
-            this.baseDataGroupBox.Text = "Base data";
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.AutoSize = true;
-            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.idLabel, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.nameLabel, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.nameTextBox, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.idNumericField, 1, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(8, 23);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1432, 56);
-            this.tableLayoutPanel1.TabIndex = 0;
             // 
             // idLabel
             // 
@@ -197,26 +147,14 @@
             // 
             // tabControl
             // 
-            this.tabControl.Controls.Add(this.baseDataTabPage);
             this.tabControl.Controls.Add(this.commandsTabPage);
             this.tabControl.Controls.Add(this.triggersTabPage);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(10, 10);
+            this.tabControl.Location = new System.Drawing.Point(10, 99);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1462, 494);
+            this.tabControl.Size = new System.Drawing.Size(1462, 405);
             this.tabControl.TabIndex = 1;
-            // 
-            // baseDataTabPage
-            // 
-            this.baseDataTabPage.BackColor = System.Drawing.SystemColors.Control;
-            this.baseDataTabPage.Controls.Add(this.baseDataPanel);
-            this.baseDataTabPage.Location = new System.Drawing.Point(4, 25);
-            this.baseDataTabPage.Name = "baseDataTabPage";
-            this.baseDataTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.baseDataTabPage.Size = new System.Drawing.Size(1454, 465);
-            this.baseDataTabPage.TabIndex = 0;
-            this.baseDataTabPage.Text = "Base data";
             // 
             // commandsTabPage
             // 
@@ -226,7 +164,7 @@
             this.commandsTabPage.Location = new System.Drawing.Point(4, 25);
             this.commandsTabPage.Name = "commandsTabPage";
             this.commandsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.commandsTabPage.Size = new System.Drawing.Size(490, 229);
+            this.commandsTabPage.Size = new System.Drawing.Size(1454, 382);
             this.commandsTabPage.TabIndex = 1;
             this.commandsTabPage.Text = "Commands";
             // 
@@ -236,20 +174,20 @@
             this.commandsEditorContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commandsEditorContainerPanel.Location = new System.Drawing.Point(3, 3);
             this.commandsEditorContainerPanel.Name = "commandsEditorContainerPanel";
-            this.commandsEditorContainerPanel.Size = new System.Drawing.Size(0, 223);
+            this.commandsEditorContainerPanel.Size = new System.Drawing.Size(940, 376);
             this.commandsEditorContainerPanel.TabIndex = 2;
             // 
             // commandsEditorTextBox
             // 
             this.commandsEditorTextBox.AutoSize = true;
-            this.commandsEditorTextBox.BarWidth = 32;
+            this.commandsEditorTextBox.BarWidth = 40;
             this.commandsEditorTextBox.CircleSize = 16;
             this.commandsEditorTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commandsEditorTextBox.Font = new System.Drawing.Font("Consolas", 10.1F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.commandsEditorTextBox.Location = new System.Drawing.Point(0, 0);
             this.commandsEditorTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.commandsEditorTextBox.Name = "commandsEditorTextBox";
-            this.commandsEditorTextBox.Size = new System.Drawing.Size(0, 223);
+            this.commandsEditorTextBox.Size = new System.Drawing.Size(940, 376);
             this.commandsEditorTextBox.TabIndex = 0;
             this.commandsEditorTextBox.TextChanged += new System.EventHandler(this.commandsEditorTextBox_TextChanged);
             // 
@@ -259,10 +197,10 @@
             this.addCommandPanel.Controls.Add(this.addCommandButtonsPanel);
             this.addCommandPanel.Controls.Add(this.selectCommandPanel);
             this.addCommandPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.addCommandPanel.Location = new System.Drawing.Point(-21, 3);
+            this.addCommandPanel.Location = new System.Drawing.Point(943, 3);
             this.addCommandPanel.Name = "addCommandPanel";
             this.addCommandPanel.Padding = new System.Windows.Forms.Padding(10);
-            this.addCommandPanel.Size = new System.Drawing.Size(508, 223);
+            this.addCommandPanel.Size = new System.Drawing.Size(508, 376);
             this.addCommandPanel.TabIndex = 1;
             // 
             // commandArgumentsContainer
@@ -274,7 +212,7 @@
             this.commandArgumentsContainer.Location = new System.Drawing.Point(10, 152);
             this.commandArgumentsContainer.Name = "commandArgumentsContainer";
             this.commandArgumentsContainer.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
-            this.commandArgumentsContainer.Size = new System.Drawing.Size(488, 20);
+            this.commandArgumentsContainer.Size = new System.Drawing.Size(488, 173);
             this.commandArgumentsContainer.TabIndex = 7;
             // 
             // commandArgumentsGroupBox
@@ -286,7 +224,7 @@
             this.commandArgumentsGroupBox.Location = new System.Drawing.Point(0, 0);
             this.commandArgumentsGroupBox.Name = "commandArgumentsGroupBox";
             this.commandArgumentsGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.commandArgumentsGroupBox.Size = new System.Drawing.Size(488, 13);
+            this.commandArgumentsGroupBox.Size = new System.Drawing.Size(488, 166);
             this.commandArgumentsGroupBox.TabIndex = 0;
             this.commandArgumentsGroupBox.TabStop = false;
             this.commandArgumentsGroupBox.Text = "Arguments";
@@ -301,7 +239,7 @@
             this.commandArgumentsPanel.Location = new System.Drawing.Point(8, 23);
             this.commandArgumentsPanel.Name = "commandArgumentsPanel";
             this.commandArgumentsPanel.Padding = new System.Windows.Forms.Padding(0, 0, 5, 0);
-            this.commandArgumentsPanel.Size = new System.Drawing.Size(472, 0);
+            this.commandArgumentsPanel.Size = new System.Drawing.Size(472, 135);
             this.commandArgumentsPanel.TabIndex = 0;
             // 
             // commandArgumentControl3
@@ -311,7 +249,7 @@
             this.commandArgumentControl3.Location = new System.Drawing.Point(0, 208);
             this.commandArgumentControl3.Name = "commandArgumentControl3";
             this.commandArgumentControl3.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.commandArgumentControl3.Size = new System.Drawing.Size(467, 104);
+            this.commandArgumentControl3.Size = new System.Drawing.Size(446, 104);
             this.commandArgumentControl3.TabIndex = 2;
             // 
             // commandArgumentControl2
@@ -321,7 +259,7 @@
             this.commandArgumentControl2.Location = new System.Drawing.Point(0, 104);
             this.commandArgumentControl2.Name = "commandArgumentControl2";
             this.commandArgumentControl2.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.commandArgumentControl2.Size = new System.Drawing.Size(467, 104);
+            this.commandArgumentControl2.Size = new System.Drawing.Size(446, 104);
             this.commandArgumentControl2.TabIndex = 1;
             // 
             // commandArgumentControl1
@@ -331,14 +269,14 @@
             this.commandArgumentControl1.Location = new System.Drawing.Point(0, 0);
             this.commandArgumentControl1.Name = "commandArgumentControl1";
             this.commandArgumentControl1.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.commandArgumentControl1.Size = new System.Drawing.Size(467, 104);
+            this.commandArgumentControl1.Size = new System.Drawing.Size(446, 104);
             this.commandArgumentControl1.TabIndex = 0;
             // 
             // addCommandButtonsPanel
             // 
             this.addCommandButtonsPanel.Controls.Add(this.addCommandButton);
             this.addCommandButtonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.addCommandButtonsPanel.Location = new System.Drawing.Point(10, 172);
+            this.addCommandButtonsPanel.Location = new System.Drawing.Point(10, 325);
             this.addCommandButtonsPanel.Name = "addCommandButtonsPanel";
             this.addCommandButtonsPanel.Size = new System.Drawing.Size(488, 41);
             this.addCommandButtonsPanel.TabIndex = 8;
@@ -422,7 +360,7 @@
             this.triggersTabPage.Location = new System.Drawing.Point(4, 25);
             this.triggersTabPage.Name = "triggersTabPage";
             this.triggersTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.triggersTabPage.Size = new System.Drawing.Size(1454, 465);
+            this.triggersTabPage.Size = new System.Drawing.Size(1454, 376);
             this.triggersTabPage.TabIndex = 2;
             this.triggersTabPage.Text = "Triggers";
             // 
@@ -432,7 +370,7 @@
             this.triggersTableContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.triggersTableContainerPanel.Location = new System.Drawing.Point(3, 3);
             this.triggersTableContainerPanel.Name = "triggersTableContainerPanel";
-            this.triggersTableContainerPanel.Size = new System.Drawing.Size(940, 459);
+            this.triggersTableContainerPanel.Size = new System.Drawing.Size(940, 370);
             this.triggersTableContainerPanel.TabIndex = 2;
             // 
             // triggersTable
@@ -443,7 +381,7 @@
             this.triggersTable.Name = "triggersTable";
             this.triggersTable.RowHeadersWidth = 51;
             this.triggersTable.RowTemplate.Height = 24;
-            this.triggersTable.Size = new System.Drawing.Size(940, 459);
+            this.triggersTable.Size = new System.Drawing.Size(940, 370);
             this.triggersTable.TabIndex = 0;
             // 
             // addTriggerPanel
@@ -455,7 +393,7 @@
             this.addTriggerPanel.Location = new System.Drawing.Point(943, 3);
             this.addTriggerPanel.Name = "addTriggerPanel";
             this.addTriggerPanel.Padding = new System.Windows.Forms.Padding(10);
-            this.addTriggerPanel.Size = new System.Drawing.Size(508, 459);
+            this.addTriggerPanel.Size = new System.Drawing.Size(508, 370);
             this.addTriggerPanel.TabIndex = 1;
             // 
             // triggerArgumentsContainer
@@ -467,7 +405,7 @@
             this.triggerArgumentsContainer.Location = new System.Drawing.Point(10, 152);
             this.triggerArgumentsContainer.Name = "triggerArgumentsContainer";
             this.triggerArgumentsContainer.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
-            this.triggerArgumentsContainer.Size = new System.Drawing.Size(488, 256);
+            this.triggerArgumentsContainer.Size = new System.Drawing.Size(488, 167);
             this.triggerArgumentsContainer.TabIndex = 7;
             // 
             // triggerArgumentsGroupBox
@@ -479,7 +417,7 @@
             this.triggerArgumentsGroupBox.Location = new System.Drawing.Point(0, 0);
             this.triggerArgumentsGroupBox.Name = "triggerArgumentsGroupBox";
             this.triggerArgumentsGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.triggerArgumentsGroupBox.Size = new System.Drawing.Size(488, 249);
+            this.triggerArgumentsGroupBox.Size = new System.Drawing.Size(488, 160);
             this.triggerArgumentsGroupBox.TabIndex = 0;
             this.triggerArgumentsGroupBox.TabStop = false;
             this.triggerArgumentsGroupBox.Text = "Arguments";
@@ -494,7 +432,7 @@
             this.triggerArgumentsPanel.Location = new System.Drawing.Point(8, 23);
             this.triggerArgumentsPanel.Name = "triggerArgumentsPanel";
             this.triggerArgumentsPanel.Padding = new System.Windows.Forms.Padding(0, 0, 5, 0);
-            this.triggerArgumentsPanel.Size = new System.Drawing.Size(472, 218);
+            this.triggerArgumentsPanel.Size = new System.Drawing.Size(472, 129);
             this.triggerArgumentsPanel.TabIndex = 0;
             // 
             // triggerArgumentControl3
@@ -535,7 +473,7 @@
             this.addTriggerButtonsPanel.Controls.Add(this.addNewTriggerButton);
             this.addTriggerButtonsPanel.Controls.Add(this.addOrSaveTriggerButton);
             this.addTriggerButtonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.addTriggerButtonsPanel.Location = new System.Drawing.Point(10, 408);
+            this.addTriggerButtonsPanel.Location = new System.Drawing.Point(10, 319);
             this.addTriggerButtonsPanel.Name = "addTriggerButtonsPanel";
             this.addTriggerButtonsPanel.Size = new System.Drawing.Size(488, 41);
             this.addTriggerButtonsPanel.TabIndex = 8;
@@ -622,6 +560,17 @@
             this.selectTriggerComboBox.TabIndex = 1;
             this.selectTriggerComboBox.SelectedIndexChanged += new System.EventHandler(this.selectTriggerComboBox_SelectedIndexChanged);
             // 
+            // spacerPanel1
+            // 
+            this.spacerPanel1.AutoSize = true;
+            this.spacerPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.spacerPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.spacerPanel1.Location = new System.Drawing.Point(10, 93);
+            this.spacerPanel1.Name = "spacerPanel1";
+            this.spacerPanel1.Padding = new System.Windows.Forms.Padding(3);
+            this.spacerPanel1.Size = new System.Drawing.Size(1462, 6);
+            this.spacerPanel1.TabIndex = 1;
+            // 
             // MacroEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -629,23 +578,18 @@
             this.ClientSize = new System.Drawing.Size(1482, 629);
             this.DeleteButtonVisible = true;
             this.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.HeaderText = "Edit macro";
+            this.HeaderText = "New macro";
             this.MinimumSize = new System.Drawing.Size(1500, 600);
             this.Name = "MacroEditorForm";
-            this.Text = "Edit macro";
+            this.SubjectPlural = "macros";
+            this.SubjectSingular = "macro";
+            this.Text = "New macro";
             this.Load += new System.EventHandler(this.MacroEditorForm_Load);
             this.customElementsPanel.ResumeLayout(false);
+            this.customElementsPanel.PerformLayout();
             this.mainContainer.ResumeLayout(false);
-            this.baseDataPanel.ResumeLayout(false);
-            this.baseDataPanel.PerformLayout();
-            this.baseDataGroupBox.ResumeLayout(false);
-            this.baseDataGroupBox.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).EndInit();
             this.tabControl.ResumeLayout(false);
-            this.baseDataTabPage.ResumeLayout(false);
-            this.baseDataTabPage.PerformLayout();
             this.commandsTabPage.ResumeLayout(false);
             this.commandsEditorContainerPanel.ResumeLayout(false);
             this.commandsEditorContainerPanel.PerformLayout();
@@ -681,19 +625,10 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel baseDataPanel;
-        private System.Windows.Forms.GroupBox baseDataGroupBox;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Label idLabel;
-        private System.Windows.Forms.Label nameLabel;
-        private System.Windows.Forms.TextBox nameTextBox;
-        private System.Windows.Forms.NumericUpDown idNumericField;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage commandsTabPage;
         private System.Windows.Forms.Button addCommandButton;
         private System.Windows.Forms.Panel commandsEditorContainerPanel;
-        protected System.Windows.Forms.TabPage baseDataTabPage;
         protected System.Windows.Forms.Panel addCommandPanel;
         private GeneralComponents.RichTextBoxWithBar commandsEditorTextBox;
         private System.Windows.Forms.Panel commandArgumentsContainer;
@@ -726,5 +661,10 @@
         private TriggerArgumentControl triggerArgumentControl2;
         private TriggerArgumentControl triggerArgumentControl1;
         private System.Windows.Forms.Button addNewTriggerButton;
+        private System.Windows.Forms.Label idLabel;
+        private System.Windows.Forms.Label nameLabel;
+        private System.Windows.Forms.TextBox nameTextBox;
+        private System.Windows.Forms.NumericUpDown idNumericField;
+        private System.Windows.Forms.Panel spacerPanel1;
     }
 }

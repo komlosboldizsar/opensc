@@ -20,48 +20,52 @@ namespace OpenSC.GUI.Routers.Mirrors
         public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as RouterMirror);
         public IModelEditorForm<RouterMirror> GetInstanceT(RouterMirror modelInstance) => new RouterMirrorEditorForm(modelInstance);
 
-        private const string TITLE_NEW = "New router mirror";
-        private const string TITLE_EDIT = "Edit router mirror: (#{0}) {1}";
-
-        private const string HEADER_TEXT_NEW = "New router mirror";
-        private const string HEADER_TEXT_EDIT = "Edit router mirror";
-
-        protected RouterMirror routerMirror;
-
-        private bool addingNew = false;
-
-        protected bool AddingNew
-        {
-            get { return addingNew; }
-            set
-            {
-                addingNew = value;
-                Text = string.Format((value ? TITLE_NEW : TITLE_EDIT), routerMirror?.ID, routerMirror?.Name);
-                HeaderText = string.Format((value ? HEADER_TEXT_NEW : HEADER_TEXT_EDIT), routerMirror?.ID, routerMirror?.Name);
-            }
-        }
-
-        public RouterMirrorEditorForm() => InitializeComponent();
+        public RouterMirrorEditorForm() : base() => InitializeComponent();
 
         public RouterMirrorEditorForm(RouterMirror routerMirror)
+            : base(routerMirror)
         {
             InitializeComponent();
-            AddingNew = (routerMirror == null);
-            this.routerMirror = (routerMirror != null) ? routerMirror : new RouterMirror();
             initDropDowns();
         }
 
+        protected override IModelEditorFormDataManager createManager()
+            => new ModelEditorFormDataManager<RouterMirror, RouterMirror>(this, RouterMirrorDatabase.Instance);
+
         protected override void loadData()
         {
+            base.loadData();
+            RouterMirror routerMirror = (RouterMirror)EditedModel;
             if (routerMirror == null)
                 return;
-            idNumericField.Value = (addingNew ? RouterMirrorDatabase.Instance.NextValidId() : routerMirror.ID);
-            nameTextBox.Text = routerMirror.Name;
             routerAdropDown.SelectByValue(routerMirror.RouterA);
             routerBdropDown.SelectByValue(routerMirror.RouterB);
             synchronizationModeDropDown.SelectByValue(routerMirror.SynchronizationMode);
             loadAssociations<RouterInput, RouterInputProxy, RouterMirrorInputAssociation>(routerMirror.InputAssociations, routerInputProxies);
             loadAssociations<RouterOutput, RouterOutputProxy, RouterMirrorOutputAssociation>(routerMirror.OutputAssociations, routerOutputProxies);
+        }
+
+        protected override void validateFields()
+        {
+            base.validateFields();
+            RouterMirror routerMirror = (RouterMirror)EditedModel;
+            if (routerMirror == null)
+                return;
+            routerMirror.ValidateId((int)idNumericField.Value);
+            // TODO: validate name
+        }
+
+        protected override void writeFields()
+        {
+            base.writeFields();
+            RouterMirror routerMirror = (RouterMirror)EditedModel;
+            if (routerMirror == null)
+                return;
+            routerMirror.RouterA = routerA;
+            routerMirror.RouterB = routerB;
+            routerMirror.SynchronizationMode = (RouterMirrorSynchronizationMode)synchronizationModeDropDown.SelectedValue;
+            saveAssociations<RouterInput, RouterInputProxy>(routerInputProxies, (() => routerMirror.ClearInputAssociations()), ((ea, eb) => routerMirror.AddInputAssociation(ea, eb)));
+            saveAssociations<RouterOutput, RouterOutputProxy>(routerOutputProxies, (() => routerMirror.ClearOutputAssociations()), ((ea, eb) => routerMirror.AddOutputAssociation(ea, eb)));
         }
 
         private void loadAssociations<TAssociated, TProxy, TAssociation>(IEnumerable<TAssociation> associationCollection, IEnumerable<TProxy> proxyCollection)
@@ -79,56 +83,7 @@ namespace OpenSC.GUI.Routers.Mirrors
             }
         }
 
-        protected sealed override bool saveData()
-        {
-
-            try
-            {
-                validateFields();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            routerMirror.StartUpdate();
-            writeFields();
-            routerMirror.EndUpdate();
-
-            if (AddingNew)
-                RouterMirrorDatabase.Instance.Add(routerMirror);
-            AddingNew = false;
-
-            return true;
-
-        }
-
-        protected virtual void validateFields()
-        {
-            if (routerMirror == null)
-                return;
-            routerMirror.ValidateId((int)idNumericField.Value);
-            // TODO: validate name
-        }
-
-        protected virtual void writeFields()
-        {
-            if (routerMirror == null)
-                return;
-            routerMirror.ID = (int)idNumericField.Value;
-            routerMirror.Name = nameTextBox.Text;
-            routerMirror.RouterA = RouterA;
-            routerMirror.RouterB = RouterB;
-            routerMirror.SynchronizationMode = (RouterMirrorSynchronizationMode)synchronizationModeDropDown.SelectedValue;
-            saveAssociations<RouterInput, RouterInputProxy>(routerInputProxies, (() => routerMirror.ClearInputAssociations()), ((ea, eb) => routerMirror.AddInputAssociation(ea, eb)));
-            saveAssociations<RouterOutput, RouterOutputProxy>(routerOutputProxies, (() => routerMirror.ClearOutputAssociations()), ((ea, eb) => routerMirror.AddOutputAssociation(ea, eb)));
-        }
-
-        private void saveAssociations<TAssociated, TProxy>(
-            IEnumerable<TProxy> proxyCollection,
-            Action clearAssociationsMethod,
-            Action<TAssociated, TAssociated> addAssociationMethod)
+        private void saveAssociations<TAssociated, TProxy>(IEnumerable<TProxy> proxyCollection, Action clearAssociationsMethod, Action<TAssociated, TAssociated> addAssociationMethod)
             where TAssociated : class, Model.General.INotifyPropertyChanged
             where TProxy : RouterIOProxy<TAssociated>
         {
@@ -167,13 +122,13 @@ namespace OpenSC.GUI.Routers.Mirrors
         private void initInputAssociationTable() => initAssociationsTable<RouterInput, RouterInputProxy>(
                 ref inputAssociationsTableCDGV, ref this.inputAssociationsTable,
                 ref inputsTableContainerPanel, ref routerInputProxies,
-                RouterA?.Inputs, RouterB?.Inputs,
+                routerA?.Inputs, routerB?.Inputs,
                 (ri => ri.Name), (ri => ri.Index));
 
         private void initOutputAssociationTable() => initAssociationsTable<RouterOutput, RouterOutputProxy>(
                 ref outputAssociationsTableCDGV, ref this.outputAssociationsTable,
                 ref outputsTableContainerPanel, ref routerOutputProxies,
-                RouterA?.Outputs, RouterB?.Outputs,
+                routerA?.Outputs, routerB?.Outputs,
                 (ro => ro.Name), (ro => ro.Index));
 
         #region Create and handle association table
@@ -307,8 +262,7 @@ namespace OpenSC.GUI.Routers.Mirrors
             { }
 
             public event PropertyChangedDelegate PropertyChanged;
-            private void handlePropertyChanged(string propertyName)
-                => PropertyChanged?.Invoke(propertyName);
+            private void handlePropertyChanged(string propertyName) => PropertyChanged?.Invoke(propertyName);
 
         }
 
@@ -375,14 +329,14 @@ namespace OpenSC.GUI.Routers.Mirrors
         }
 
         private void set11InputAssociationsButton_Click(object sender, EventArgs e)
-            => set11Associations<RouterInput, RouterInputProxy>(routerInputProxies, RouterB.Inputs);
+            => set11Associations<RouterInput, RouterInputProxy>(routerInputProxies, routerB.Inputs);
 
         private void set11OutputAssociationsButton_Click(object sender, EventArgs e)
-            => set11Associations<RouterOutput, RouterOutputProxy>(routerOutputProxies, RouterB.Outputs);
+            => set11Associations<RouterOutput, RouterOutputProxy>(routerOutputProxies, routerB.Outputs);
         #endregion
 
-        private Router RouterA => routerAdropDown.SelectedValue as Router;
-        private Router RouterB => routerBdropDown.SelectedValue as Router;
+        private Router routerA => routerAdropDown.SelectedValue as Router;
+        private Router routerB => routerBdropDown.SelectedValue as Router;
 
     }
 

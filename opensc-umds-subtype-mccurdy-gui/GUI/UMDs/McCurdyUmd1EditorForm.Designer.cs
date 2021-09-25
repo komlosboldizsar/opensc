@@ -64,7 +64,6 @@
             this.portDropDown = new System.Windows.Forms.ComboBox();
             this.addressNumericField = new System.Windows.Forms.NumericUpDown();
             this.mainTabControl.SuspendLayout();
-            this.tabPage1.SuspendLayout();
             this.dynamicDataTabPage.SuspendLayout();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
@@ -90,9 +89,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.connectionGroupBox);
-            this.tabPage1.Size = new System.Drawing.Size(767, 480);
-            this.tabPage1.Controls.SetChildIndex(this.connectionGroupBox, 0);
+            this.baseDataTabPage.Size = new System.Drawing.Size(767, 480);
             // 
             // dynamicDataTabPage
             // 
@@ -328,7 +325,7 @@
             this.dynamicSourcesGroupBox.Margin = new System.Windows.Forms.Padding(10);
             this.dynamicSourcesGroupBox.Name = "dynamicSourcesGroupBox";
             this.dynamicSourcesGroupBox.Padding = new System.Windows.Forms.Padding(8, 8, 4, 8);
-            this.dynamicSourcesGroupBox.Size = new System.Drawing.Size(475, 140);
+            this.dynamicSourcesGroupBox.Size = new System.Drawing.Size(475, 143);
             this.dynamicSourcesGroupBox.TabIndex = 1;
             this.dynamicSourcesGroupBox.TabStop = false;
             this.dynamicSourcesGroupBox.Text = "Text sources";
@@ -353,17 +350,17 @@
             this.dynamicSourcesTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.dynamicSourcesTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.dynamicSourcesTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.dynamicSourcesTable.Size = new System.Drawing.Size(463, 109);
+            this.dynamicSourcesTable.Size = new System.Drawing.Size(463, 112);
             this.dynamicSourcesTable.TabIndex = 0;
             // 
             // column3DynamicTextLabel
             // 
             this.column3DynamicTextLabel.AutoSize = true;
             this.column3DynamicTextLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.column3DynamicTextLabel.Location = new System.Drawing.Point(3, 73);
+            this.column3DynamicTextLabel.Location = new System.Drawing.Point(3, 75);
             this.column3DynamicTextLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.column3DynamicTextLabel.Name = "column3DynamicTextLabel";
-            this.column3DynamicTextLabel.Size = new System.Drawing.Size(75, 36);
+            this.column3DynamicTextLabel.Size = new System.Drawing.Size(75, 37);
             this.column3DynamicTextLabel.TabIndex = 6;
             this.column3DynamicTextLabel.Text = "Column #3";
             this.column3DynamicTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -372,10 +369,10 @@
             // 
             this.column2DynamicTextLabel.AutoSize = true;
             this.column2DynamicTextLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.column2DynamicTextLabel.Location = new System.Drawing.Point(3, 37);
+            this.column2DynamicTextLabel.Location = new System.Drawing.Point(3, 38);
             this.column2DynamicTextLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.column2DynamicTextLabel.Name = "column2DynamicTextLabel";
-            this.column2DynamicTextLabel.Size = new System.Drawing.Size(75, 36);
+            this.column2DynamicTextLabel.Size = new System.Drawing.Size(75, 37);
             this.column2DynamicTextLabel.TabIndex = 5;
             this.column2DynamicTextLabel.Text = "Column #2";
             this.column2DynamicTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -400,7 +397,7 @@
             this.column1DynamicDataPanel.Controls.Add(this.column1AlignmentDropDown);
             this.column1DynamicDataPanel.Location = new System.Drawing.Point(96, 3);
             this.column1DynamicDataPanel.Name = "column1DynamicDataPanel";
-            this.column1DynamicDataPanel.Size = new System.Drawing.Size(364, 31);
+            this.column1DynamicDataPanel.Size = new System.Drawing.Size(364, 32);
             this.column1DynamicDataPanel.TabIndex = 3;
             // 
             // column1DynamicTextSourceDropDown
@@ -427,9 +424,9 @@
             this.column2DynamicDataPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.column2DynamicDataPanel.Controls.Add(this.column2DynamicTextSourceDropDown);
             this.column2DynamicDataPanel.Controls.Add(this.column2AlignmentDropDown);
-            this.column2DynamicDataPanel.Location = new System.Drawing.Point(96, 40);
+            this.column2DynamicDataPanel.Location = new System.Drawing.Point(96, 41);
             this.column2DynamicDataPanel.Name = "column2DynamicDataPanel";
-            this.column2DynamicDataPanel.Size = new System.Drawing.Size(364, 30);
+            this.column2DynamicDataPanel.Size = new System.Drawing.Size(364, 31);
             this.column2DynamicDataPanel.TabIndex = 2;
             // 
             // column2DynamicTextSourceDropDown
@@ -438,7 +435,7 @@
             this.column2DynamicTextSourceDropDown.FormattingEnabled = true;
             this.column2DynamicTextSourceDropDown.Location = new System.Drawing.Point(3, 3);
             this.column2DynamicTextSourceDropDown.Name = "column2DynamicTextSourceDropDown";
-            this.column2DynamicTextSourceDropDown.Size = new System.Drawing.Size(274, 24);
+            this.column2DynamicTextSourceDropDown.Size = new System.Drawing.Size(274, 25);
             this.column2DynamicTextSourceDropDown.TabIndex = 8;
             // 
             // column2AlignmentDropDown
@@ -447,7 +444,7 @@
             this.column2AlignmentDropDown.FormattingEnabled = true;
             this.column2AlignmentDropDown.Location = new System.Drawing.Point(283, 3);
             this.column2AlignmentDropDown.Name = "column2AlignmentDropDown";
-            this.column2AlignmentDropDown.Size = new System.Drawing.Size(121, 24);
+            this.column2AlignmentDropDown.Size = new System.Drawing.Size(121, 25);
             this.column2AlignmentDropDown.TabIndex = 9;
             // 
             // column3DynamicDataPanel
@@ -456,9 +453,9 @@
             this.column3DynamicDataPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.column3DynamicDataPanel.Controls.Add(this.column3DynamicTextSourceDropDown);
             this.column3DynamicDataPanel.Controls.Add(this.column3AlignmentDropDown);
-            this.column3DynamicDataPanel.Location = new System.Drawing.Point(96, 76);
+            this.column3DynamicDataPanel.Location = new System.Drawing.Point(96, 78);
             this.column3DynamicDataPanel.Name = "column3DynamicDataPanel";
-            this.column3DynamicDataPanel.Size = new System.Drawing.Size(364, 30);
+            this.column3DynamicDataPanel.Size = new System.Drawing.Size(364, 31);
             this.column3DynamicDataPanel.TabIndex = 11;
             // 
             // column3DynamicTextSourceDropDown
@@ -467,7 +464,7 @@
             this.column3DynamicTextSourceDropDown.FormattingEnabled = true;
             this.column3DynamicTextSourceDropDown.Location = new System.Drawing.Point(3, 3);
             this.column3DynamicTextSourceDropDown.Name = "column3DynamicTextSourceDropDown";
-            this.column3DynamicTextSourceDropDown.Size = new System.Drawing.Size(274, 24);
+            this.column3DynamicTextSourceDropDown.Size = new System.Drawing.Size(274, 25);
             this.column3DynamicTextSourceDropDown.TabIndex = 7;
             // 
             // column3AlignmentDropDown
@@ -476,7 +473,7 @@
             this.column3AlignmentDropDown.FormattingEnabled = true;
             this.column3AlignmentDropDown.Location = new System.Drawing.Point(283, 3);
             this.column3AlignmentDropDown.Name = "column3AlignmentDropDown";
-            this.column3AlignmentDropDown.Size = new System.Drawing.Size(121, 24);
+            this.column3AlignmentDropDown.Size = new System.Drawing.Size(121, 25);
             this.column3AlignmentDropDown.TabIndex = 8;
             // 
             // connectionGroupBox
@@ -576,13 +573,11 @@
             this.ClientSize = new System.Drawing.Size(795, 654);
             this.DeleteButtonVisible = true;
             this.Name = "McCurdyUmd1EditorForm";
-            this.Text = "McCurdyUmd1EditorForm";
             this.mainTabControl.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             this.dynamicDataTabPage.ResumeLayout(false);
             this.dynamicDataTabPage.PerformLayout();
             this.customElementsPanel.ResumeLayout(false);
+            this.customElementsPanel.PerformLayout();
             this.mainContainer.ResumeLayout(false);
             this.layoutGroupBox.ResumeLayout(false);
             this.layoutGroupBox.PerformLayout();

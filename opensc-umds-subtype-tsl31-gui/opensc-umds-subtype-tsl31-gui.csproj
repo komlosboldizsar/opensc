@@ -74,5 +74,10 @@
       <Name>opensc-umds-subtype-tsl31-model</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GUI\UMDs\Tsl31UmdEditorForm.resx">
+      <DependentUpon>Tsl31UmdEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
