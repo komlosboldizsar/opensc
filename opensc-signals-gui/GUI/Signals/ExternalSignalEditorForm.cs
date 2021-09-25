@@ -52,11 +52,7 @@ namespace OpenSC.GUI.Signals
         }
 
         private void initCategoryDropDown()
-            => categoryDropDown.CreateAdapterAsDataSource<ExternalSignalCategory>(
-                ExternalSignalDatabases.Categories,
-                category => string.Format("(#{0}) {1}", category.ID, category.Name),
-                true,
-                "(not associated)");
+            => categoryDropDown.CreateAdapterAsDataSource(ExternalSignalDatabases.Categories, null, true, "(not associated)");
 
     }
 

@@ -62,7 +62,7 @@ namespace OpenSC.GUI.SerialPorts
         private void initDropDowns()
         {
             string[] availableSerialPorts = System.IO.Ports.SerialPort.GetPortNames();
-            portNameDropDown.CreateAdapterAsDataSource(availableSerialPorts, port => port, true, "(not connected)");
+            portNameDropDown.CreateAdapterAsDataSource(availableSerialPorts, null, true, "(not connected)");
             stopBitsDropDown.SetAdapterAsDataSource(new EnumComboBoxAdapter<System.IO.Ports.StopBits>());
             parityDropDowm.SetAdapterAsDataSource(new EnumComboBoxAdapter<System.IO.Ports.Parity>());
         }

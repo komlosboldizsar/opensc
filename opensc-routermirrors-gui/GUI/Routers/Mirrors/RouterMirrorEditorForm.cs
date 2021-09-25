@@ -96,8 +96,8 @@ namespace OpenSC.GUI.Routers.Mirrors
         private void initDropDowns()
         {
             // Routers
-            routerAdropDown.CreateAdapterAsDataSource(RouterDatabase.Instance, router => router.Name, true, "(not associated)");
-            routerBdropDown.CreateAdapterAsDataSource(RouterDatabase.Instance, router => router.Name, true, "(not associated)");
+            routerAdropDown.CreateAdapterAsDataSource(RouterDatabase.Instance, null, true, "(not associated)");
+            routerBdropDown.CreateAdapterAsDataSource(RouterDatabase.Instance, null, true, "(not associated)");
             routerAdropDown.SelectedIndexChanged += selectedRouterChangedHandler;
             routerBdropDown.SelectedIndexChanged += selectedRouterChangedHandler;
             // Synchronization mode

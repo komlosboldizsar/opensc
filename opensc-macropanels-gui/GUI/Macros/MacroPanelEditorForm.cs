@@ -240,7 +240,7 @@ namespace OpenSC.GUI.Macros
         #endregion
 
         private void loadMacros()
-            => elementMacroDropDown.CreateAdapterAsDataSource(MacroDatabase.Instance, m => m.Name, true, "-");
+            => elementMacroDropDown.CreateAdapterAsDataSource(MacroDatabase.Instance, null, true, "-");
 
         private void MacroPanelForm_Load(object sender, EventArgs e)
         {

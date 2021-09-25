@@ -59,11 +59,7 @@ namespace OpenSC.GUI.Routers.CrosspointBooleans
         }
 
         private void initRouterDropDown()
-            => routerDropDown.CreateAdapterAsDataSource<Router>(
-                RouterDatabase.Instance,
-                router => string.Format("(#{0}) {1}", router.ID, router.Name),
-                true,
-                "(not associated)");
+            => routerDropDown.CreateAdapterAsDataSource<Router>(RouterDatabase.Instance, null, true, "(not associated)");
 
         private void updateRouterInputDropDown()
             => routerInputDropDown.CreateAdapterAsDataSource<RouterInput>(
@@ -78,6 +74,7 @@ namespace OpenSC.GUI.Routers.CrosspointBooleans
                 routerOutput => string.Format("(#{0}) {1}", routerOutput.Index, routerOutput.Name),
                 true,
                 "(not associated)");
+
         private void selectedRouterChanged(object sender, EventArgs e)
         {
             updateRouterInputDropDown();

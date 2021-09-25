@@ -75,11 +75,7 @@ namespace OpenSC.GUI.Routers.CrosspointStores
         }
 
         private void initRouterDropDown(ComboBox dropDown)
-            => dropDown.CreateAdapterAsDataSource<Router>(
-                RouterDatabase.Instance,
-                router => string.Format("(#{0}) {1}", router.ID, router.Name),
-                true,
-                "(not associated)");
+            => dropDown.CreateAdapterAsDataSource(RouterDatabase.Instance, null, true, "(not associated)");
 
         private void updateRouterInputDropDown(Router router)
         {
