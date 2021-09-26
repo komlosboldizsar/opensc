@@ -31,7 +31,7 @@ namespace OpenSC.Model.SerialPorts
         {
             base.Removed();
             DeInit();
-            packetSchedulerThread.Abort();
+            packetSchedulerThreadWorking = false;
             packetSchedulerThread = null;
             ComPortNameChanged = null;
             InitializedChanged = null;
@@ -191,6 +191,7 @@ namespace OpenSC.Model.SerialPorts
         private List<Packet> packetFifo = new List<Packet>();
         private ManualResetEvent packetFifoNotEmpty = new ManualResetEvent(false);
         private Thread packetSchedulerThread;
+        private bool packetSchedulerThreadWorking = false;
 
         private void createAndStartPacketSchedulerThread()
         {
@@ -198,12 +199,13 @@ namespace OpenSC.Model.SerialPorts
             {
                 IsBackground = true
             };
+            packetSchedulerThreadWorking = true;
             packetSchedulerThread.Start();
         }
 
         private void packetSchedulerThreadMethod()
         {
-            while (true)
+            while (packetSchedulerThreadWorking)
             {
                 packetFifoNotEmpty.WaitOne();
                 lock (packetFifo)

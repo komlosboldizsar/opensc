@@ -9,9 +9,13 @@ namespace OpenSC.GUI.GeneralComponents.Menus
     {
 
         public MenuItem AssociatedMenuItem { get; private set; }
+#pragma warning disable CS0067
         public event AssociatedMenuItemChangedDelegate AssociatedMenuItemChanged;
+#pragma warning restore CS0067
         public int StartPosition { get; } = 0;
-        private MenuItemManager manager;
+#pragma warning disable IDE0052
+        private readonly MenuItemManager manager;
+#pragma warning restore IDE0052
 
         public CustomToolStripMenuItem(MenuItem associatedMenuItem)
         {

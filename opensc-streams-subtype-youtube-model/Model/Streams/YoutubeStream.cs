@@ -28,7 +28,8 @@ namespace OpenSC.Model.Streams
         public override void Removed()
         {
             base.Removed();
-            updaterThread.Abort();
+            updaterThreadWorking = false;
+            updaterThread.Interrupt();
             updaterThread = null;
         }
         #endregion
@@ -87,14 +88,16 @@ namespace OpenSC.Model.Streams
             {
                 IsBackground = true
             };
+            updaterThreadWorking = true;
             updaterThread.Start();
         }
 
         private Thread updaterThread;
+        private bool updaterThreadWorking = false;
 
         private void updaterThreadMethod()
         {
-            while (true)
+            while (updaterThreadWorking)
             {
                 doHttpRequest();
                 Thread.Sleep(refreshRate * 1000);

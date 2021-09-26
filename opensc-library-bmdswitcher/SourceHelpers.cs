@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace BMD.Switcher
             IntPtr inputIteratorPtr;
             Guid inputIteratorIID = typeof(IBMDSwitcherInputIterator).GUID;
             switcher.CreateIterator(ref inputIteratorIID, out inputIteratorPtr);
-            if (inputIteratorPtr != null)
+            if (inputIteratorPtr != IntPtr.Zero)
                 inputIterator = (IBMDSwitcherInputIterator)Marshal.GetObjectForIUnknown(inputIteratorPtr);
             return inputIterator;
         }

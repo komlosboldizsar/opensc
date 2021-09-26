@@ -48,7 +48,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             //disposeInputMonitors();
             disposeMixEffectBlockMonitor();
 
-            autoReconnectThread?.Abort();
+            autoReconnectThreadWorking = false;
             autoReconnectThread = null;
 
         }
@@ -178,6 +178,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         private const int RECONNECT_TRY_INTERVAL = 10000;
 
         private Thread autoReconnectThread = null;
+        private bool autoReconnectThreadWorking = false;
 
         private void startAutoReconnectThread()
         {
@@ -185,6 +186,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             {
                 IsBackground = true
             };
+            autoReconnectThreadWorking = true;
             autoReconnectThread.Start();
         }
 
@@ -196,7 +198,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
 
             if (autoReconnect && !connectionState)
                 Connect();
-            while (autoReconnect && !connectionState)
+            while (autoReconnectThreadWorking && autoReconnect && !connectionState)
             {
                 Thread.Sleep(RECONNECT_TRY_INTERVAL);
                 if (autoReconnect && !connectionState)

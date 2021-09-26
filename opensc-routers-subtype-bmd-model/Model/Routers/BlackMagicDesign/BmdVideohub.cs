@@ -45,7 +45,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             ConnectionStateChanged = null;
             AutoReconnectChanged = null;
 
-            autoReconnectThread?.Abort();
+            autoReconnectThreadWorking = false;
             autoReconnectThread = null;
 
         }
@@ -121,6 +121,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         private const int RECONNECT_TRY_INTERVAL = 10000;
 
         private Thread autoReconnectThread = null;
+        private bool autoReconnectThreadWorking = false;
 
         private void startAutoReconnectThread()
         {
@@ -128,6 +129,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             {
                 IsBackground = true
             };
+            autoReconnectThreadWorking = true;
             autoReconnectThread.Start();
         }
 
@@ -141,7 +143,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
 
             if (autoReconnect && !connected)
                 Connect();
-            while(autoReconnect && !connected)
+            while(autoReconnectThreadWorking && autoReconnect && !connected)
             {
                 Thread.Sleep(RECONNECT_TRY_INTERVAL);
                 if (autoReconnect && !connected)

@@ -657,7 +657,6 @@
         private System.Windows.Forms.Label elementSizeWLabel;
         private System.Windows.Forms.Label idLabel;
         private System.Windows.Forms.Label nameLabel;
-        private System.Windows.Forms.TextBox nameTextBox;
         private System.Windows.Forms.NumericUpDown idNumericField;
         private System.Windows.Forms.Panel spacerPanel1;
     }

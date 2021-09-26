@@ -35,6 +35,8 @@ namespace OpenSC.Model.Signals
         {
             SignalLabelChanged?.Invoke(this, SignalLabel);
             RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
+            SignalUniqueIdChanged?.Invoke(this, SignalUniqueId);
+            RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalUniqueId));
         }
         #endregion
 
@@ -76,7 +78,9 @@ namespace OpenSC.Model.Signals
         #endregion
 
         #region Property: RegisteredSourceSignal
+#pragma warning disable CS0067 // The event is never used
         public event RegisteredSourceSignalChangedDelegate RegisteredSourceSignalChanged;
+#pragma warning restore CS0067
         public ISignalSourceRegistered RegisteredSourceSignal => this;
         public ISignalSourceRegistered GetRegisteredSourceSignal(List<object> recursionChain = null) => this;
         #endregion
