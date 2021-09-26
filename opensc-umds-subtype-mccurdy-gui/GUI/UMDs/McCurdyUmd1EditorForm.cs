@@ -125,27 +125,22 @@ namespace OpenSC.GUI.UMDs
         }
 
         private int convertColumnCountEnumToInt(ColumnCount columnCount)
-        {
-            switch (columnCount)
+            => columnCount switch
             {
-                default:
-                case ColumnCount.One:
-                    return 1;
-                case ColumnCount.Two:
-                    return 2;
-                case ColumnCount.Three:
-                    return 3;
-            }
-        }
+                ColumnCount.One => 1,
+                ColumnCount.Two => 2,
+                ColumnCount.Three => 3,
+                _ => throw new ArgumentException("Column count must be between 1 and 3!", nameof(columnCount))
+            };
 
         private ColumnCount convertIntToColumnCountEnum(int columnCount)
-        {
-            if (columnCount == 2)
-                return ColumnCount.Two;
-            if (columnCount == 3)
-                return ColumnCount.Three;
-            return ColumnCount.One;
-        }
+            => columnCount switch
+            {
+                1 => ColumnCount.One,
+                2 => ColumnCount.Two,
+                3 => ColumnCount.Three,
+                _ => throw new ArgumentException("Column count must be between 1 and 3!", nameof(columnCount))
+            };
 
 
         private void initDropDowns()
