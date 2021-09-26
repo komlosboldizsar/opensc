@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E871723E-7268-47CE-AE58-75A18AC93F63}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>OpenSC</RootNamespace>
+    <AssemblyName>OpenSC</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Modules\ModuleLoader.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StartupController.cs" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-booleans-gui\opensc-booleans-gui.csproj">
+      <Project>{96957886-f262-4491-b03c-f3f90e7b07f6}</Project>
+      <Name>opensc-booleans-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-booleans-model\opensc-booleans-model.csproj">
+      <Project>{469f1d25-f30d-40f3-b2f9-1005dd37b684}</Project>
+      <Name>opensc-booleans-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-booleantallies-gui\opensc-booleantallies-gui.csproj">
+      <Project>{f49083e5-0939-4e43-84cf-50882a5cb3de}</Project>
+      <Name>opensc-booleantallies-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-booleantallies-model\opensc-booleantallies-model.csproj">
+      <Project>{0fba1a41-b393-4c8f-8f10-b81268f4b1ef}</Project>
+      <Name>opensc-booleantallies-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj">
+      <Project>{e30563fd-de1f-4ab5-86dd-72165b84eb85}</Project>
+      <Name>opensc-core-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
+      <Project>{16a6beec-548d-4a77-9fe6-8df8d5333219}</Project>
+      <Name>opensc-core-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-crosspointbooleans-gui\opensc-crosspointbooleans-gui.csproj">
+      <Project>{ad75c376-387a-461f-b09e-f4ddabe13f8a}</Project>
+      <Name>opensc-crosspointbooleans-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-crosspointbooleans-model\opensc-crosspointbooleans-model.csproj">
+      <Project>{00d0e325-4e7c-4740-819d-73b075834e8e}</Project>
+      <Name>opensc-crosspointbooleans-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-crosspointstores-bridge-macros\opensc-crosspointstores-bridge-macros.csproj">
+      <Project>{983ec3e0-4718-42f4-aaa6-e3f041be6e92}</Project>
+      <Name>opensc-crosspointstores-bridge-macros</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-crosspointstores-gui\opensc-crosspointstores-gui.csproj">
+      <Project>{9e88848d-0dd2-471a-9165-aa2440328d39}</Project>
+      <Name>opensc-crosspointstores-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-crosspointstores-model\opensc-crosspointstores-model.csproj">
+      <Project>{2e95f8f6-c638-46d2-aae2-f6add93f45b2}</Project>
+      <Name>opensc-crosspointstores-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-dynamictexts-gui\opensc-dynamictexts-gui.csproj">
+      <Project>{b20f0a6a-4087-4413-9a07-25f24aed8132}</Project>
+      <Name>opensc-dynamictexts-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-dynamictexts-model\opensc-dynamictexts-model.csproj">
+      <Project>{7cfdf83f-4856-4e36-a489-2058415dde2f}</Project>
+      <Name>opensc-dynamictexts-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-labelsets-bridge-dynamictexts\opensc-labelsets-bridge-dynamictexts.csproj">
+      <Project>{3811fe57-70ec-49e0-9a4b-5661deda9e68}</Project>
+      <Name>opensc-labelsets-bridge-dynamictexts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-labelsets-gui\opensc-labelsets-gui.csproj">
+      <Project>{042c648b-52bb-4bfc-8808-c3dfe7500462}</Project>
+      <Name>opensc-labelsets-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-labelsets-model\opensc-labelsets-model.csproj">
+      <Project>{f2e2f38a-e5ed-4a7a-b962-2bf5fbf81721}</Project>
+      <Name>opensc-labelsets-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-library-bmdswitcher\opensc-library-bmdswitcher.csproj">
+      <Project>{a9cee499-cf5c-419a-8cf0-66f20596b820}</Project>
+      <Name>opensc-library-bmdswitcher</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-library-bmdvideohub\opensc-library-bmdvideohub.csproj">
+      <Project>{eadc56a4-b18d-4742-9855-c5142e90aa19}</Project>
+      <Name>opensc-library-bmdvideohub</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-macropanels-gui\opensc-macropanels-gui.csproj">
+      <Project>{4c933149-ad48-4cca-b19e-0ffaf8c3d8bf}</Project>
+      <Name>opensc-macropanels-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-macropanels-model\opensc-macropanels-model.csproj">
+      <Project>{86fac337-c6eb-431e-9e72-5d18851eaa26}</Project>
+      <Name>opensc-macropanels-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-macros-gui\opensc-macros-gui.csproj">
+      <Project>{46639a6b-0837-4f93-b447-77989fc1b839}</Project>
+      <Name>opensc-macros-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-macros-model\opensc-macros-model.csproj">
+      <Project>{66652ce7-c94d-4c8f-8b21-203665cb2762}</Project>
+      <Name>opensc-macros-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-mixers-bridge-dynamictexts\opensc-mixers-bridge-dynamictexts.csproj">
+      <Project>{a922fc15-e578-4c4d-895c-c308dfd6b82b}</Project>
+      <Name>opensc-mixers-bridge-dynamictexts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-mixers-gui\opensc-mixers-gui.csproj">
+      <Project>{5d448050-d12a-47ff-aeec-70c1bb7da5d2}</Project>
+      <Name>opensc-mixers-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj">
+      <Project>{7c649008-6a05-4c3d-ac08-b5a85ab72e09}</Project>
+      <Name>opensc-mixers-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-mixers-subtype-bmd-bridge-macros\opensc-mixers-subtype-bmd-bridge-macros.csproj">
+      <Project>{d6ce2117-2213-48df-89ca-38be4e7d2608}</Project>
+      <Name>opensc-mixers-subtype-bmd-bridge-macros</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-mixers-subtype-bmd-gui\opensc-mixers-subtype-bmd-gui.csproj">
+      <Project>{63a756d8-f014-4a92-bdef-4cdac4917412}</Project>
+      <Name>opensc-mixers-subtype-bmd-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-mixers-subtype-bmd-model\opensc-mixers-subtype-bmd-model.csproj">
+      <Project>{672a67f3-aced-47e5-ac9e-455f77e68da1}</Project>
+      <Name>opensc-mixers-subtype-bmd-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routermirrors-gui\opensc-routermirrors-gui.csproj">
+      <Project>{106eacdc-c757-4f04-983c-7554b3e51911}</Project>
+      <Name>opensc-routermirrors-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routermirrors-model\opensc-routermirrors-model.csproj">
+      <Project>{a636cd79-602a-4a38-ab5e-68e3dcf74409}</Project>
+      <Name>opensc-routermirrors-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-bridge-dynamictexts\opensc-routers-bridge-dynamictexts.csproj">
+      <Project>{15b4bea2-3e1f-4acf-8707-d6dbe8b5314e}</Project>
+      <Name>opensc-routers-bridge-dynamictexts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-bridge-macros\opensc-routers-bridge-macros.csproj">
+      <Project>{61687a85-4aa2-411e-b1aa-652b93d149c6}</Project>
+      <Name>opensc-routers-bridge-macros</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-gui\opensc-routers-gui.csproj">
+      <Project>{3e4820ac-0807-45a8-bf1f-917af17fe891}</Project>
+      <Name>opensc-routers-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj">
+      <Project>{b579ff80-0001-44b8-9363-4ebeb4ef6117}</Project>
+      <Name>opensc-routers-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-subtype-bmd-gui\opensc-routers-subtype-bmd-gui.csproj">
+      <Project>{6083d1a9-96e2-4149-a4fe-bbec078e3f3d}</Project>
+      <Name>opensc-routers-subtype-bmd-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-subtype-bmd-model\opensc-routers-subtype-bmd-model.csproj">
+      <Project>{15ea01c2-2967-4002-be9a-71e537cbd7f0}</Project>
+      <Name>opensc-routers-subtype-bmd-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-subtype-leitch-gui\opensc-routers-subtype-leitch-gui.csproj">
+      <Project>{5df50051-5f9f-444c-ba55-bc093a9958a5}</Project>
+      <Name>opensc-routers-subtype-leitch-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-subtype-leitch-model\opensc-routers-subtype-leitch-model.csproj">
+      <Project>{96c94dc6-74a1-4e3b-ab22-522b89a4c205}</Project>
+      <Name>opensc-routers-subtype-leitch-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-subtype-virtual-gui\opensc-routers-subtype-virtual-gui.csproj">
+      <Project>{4f059898-42b6-4313-92c5-398a5822d450}</Project>
+      <Name>opensc-routers-subtype-virtual-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-subtype-virtual-model\opensc-routers-subtype-virtual-model.csproj">
+      <Project>{a2f05b74-2903-4912-b52a-16f9c4b76ff3}</Project>
+      <Name>opensc-routers-subtype-virtual-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-subtype-virtualleitch-gui\opensc-routers-subtype-virtualleitch-gui.csproj">
+      <Project>{127a4ae9-d71f-412f-84de-7e774db187d7}</Project>
+      <Name>opensc-routers-subtype-virtualleitch-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-routers-subtype-virtualleitch-model\opensc-routers-subtype-virtualleitch-model.csproj">
+      <Project>{5db0c22d-e2fb-4d85-b6b0-56a95e31e41d}</Project>
+      <Name>opensc-routers-subtype-virtualleitch-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-serialports-gui\opensc-serialports-gui.csproj">
+      <Project>{86c047f6-275b-48fc-9ccb-1f672d9b579f}</Project>
+      <Name>opensc-serialports-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-serialports-model\opensc-serialports-model.csproj">
+      <Project>{3c15c5f6-e564-4b1b-ab76-c6295fc518c0}</Project>
+      <Name>opensc-serialports-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-signals-gui\opensc-signals-gui.csproj">
+      <Project>{36fb1dc4-79c7-4323-af29-4831c0d427f6}</Project>
+      <Name>opensc-signals-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-signals-model\opensc-signals-model.csproj">
+      <Project>{fdcf0da0-9336-4a72-bd61-1aaf396940af}</Project>
+      <Name>opensc-signals-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-streams-bridge-dynamictexts\opensc-streams-bridge-dynamictexts.csproj">
+      <Project>{c3968358-f075-4cfe-9885-21fb23a83d8b}</Project>
+      <Name>opensc-streams-bridge-dynamictexts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-streams-gui\opensc-streams-gui.csproj">
+      <Project>{79118814-f2e2-473e-88d3-a94fee4acb68}</Project>
+      <Name>opensc-streams-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-streams-model\opensc-streams-model.csproj">
+      <Project>{76853b46-32a4-415d-92e2-57feb4600e87}</Project>
+      <Name>opensc-streams-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-streams-subtype-youtube-gui\opensc-streams-subtype-youtube-gui.csproj">
+      <Project>{7a3f9835-7188-4a40-9070-8dd9a96b97cb}</Project>
+      <Name>opensc-streams-subtype-youtube-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-streams-subtype-youtube-model\opensc-streams-subtype-youtube-model.csproj">
+      <Project>{721e4551-5188-404b-b8c5-6b78b6381615}</Project>
+      <Name>opensc-streams-subtype-youtube-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-tallycopying-gui\opensc-tallycopying-gui.csproj">
+      <Project>{dfac8f60-4e30-4173-bbdb-0581d2e40cac}</Project>
+      <Name>opensc-tallycopying-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-tallycopying-model\opensc-tallycopying-model.csproj">
+      <Project>{21147445-db1a-417c-b38d-d43c5e599589}</Project>
+      <Name>opensc-tallycopying-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-timers-bridge-dynamictexts\opensc-timers-bridge-dynamictexts.csproj">
+      <Project>{0a97ca9b-290a-4bcc-9df8-103c02b1af29}</Project>
+      <Name>opensc-timers-bridge-dynamictexts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-timers-bridge-macros\opensc-timers-bridge-macros.csproj">
+      <Project>{32516067-0d7c-432d-bef6-079d6230c549}</Project>
+      <Name>opensc-timers-bridge-macros</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-timers-gui\opensc-timers-gui.csproj">
+      <Project>{46ede88a-1256-4f43-ae4e-ed854266f92c}</Project>
+      <Name>opensc-timers-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-timers-model\opensc-timers-model.csproj">
+      <Project>{543a1330-ccb4-4e18-903a-c58d3c007816}</Project>
+      <Name>opensc-timers-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-umds-bridge-macros\opensc-umds-bridge-macros.csproj">
+      <Project>{540d7dfa-f636-47ce-bc3a-59dc9cd93125}</Project>
+      <Name>opensc-umds-bridge-macros</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-umds-gui\opensc-umds-gui.csproj">
+      <Project>{35bd5a02-e363-4a04-9c1e-0f885ca7ea64}</Project>
+      <Name>opensc-umds-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-umds-model\opensc-umds-model.csproj">
+      <Project>{8c0e0945-f7d0-4d41-9776-f5cfb7de4e84}</Project>
+      <Name>opensc-umds-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-umds-subtype-mccurdy-gui\opensc-umds-subtype-mccurdy-gui.csproj">
+      <Project>{2e1372d7-44ff-4635-b9e3-355d8d75f053}</Project>
+      <Name>opensc-umds-subtype-mccurdy-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-umds-subtype-mccurdy-model\opensc-umds-subtype-mccurdy-model.csproj">
+      <Project>{e5cb27c4-db49-4ba8-9a06-1c375d459740}</Project>
+      <Name>opensc-umds-subtype-mccurdy-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-umds-subtype-tsl31-gui\opensc-umds-subtype-tsl31-gui.csproj">
+      <Project>{8fa9f2b1-42d2-4af3-abc5-534ccb70c541}</Project>
+      <Name>opensc-umds-subtype-tsl31-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-umds-subtype-tsl31-model\opensc-umds-subtype-tsl31-model.csproj">
+      <Project>{e3d21c47-275f-4997-aa4e-6e33ed6c16c7}</Project>
+      <Name>opensc-umds-subtype-tsl31-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-vtrs-bridge-dynamictexts\opensc-vtrs-bridge-dynamictexts.csproj">
+      <Project>{bca57ee2-904a-4a98-99d5-179b06a4836a}</Project>
+      <Name>opensc-vtrs-bridge-dynamictexts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-vtrs-gui\opensc-vtrs-gui.csproj">
+      <Project>{3cbb7170-9903-47a7-bb5a-47dfd2514005}</Project>
+      <Name>opensc-vtrs-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-vtrs-model\opensc-vtrs-model.csproj">
+      <Project>{9723e8aa-94af-473f-b495-b88013df5157}</Project>
+      <Name>opensc-vtrs-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-vtrs-subtype-casparcg-gui\opensc-vtrs-subtype-casparcg-gui.csproj">
+      <Project>{909cfe52-7d3c-43dc-a2a8-33285989c56a}</Project>
+      <Name>opensc-vtrs-subtype-casparcg-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-vtrs-subtype-casparcg-model\opensc-vtrs-subtype-casparcg-model.csproj">
+      <Project>{949544bc-4682-42ed-9152-6dfd85e9f46e}</Project>
+      <Name>opensc-vtrs-subtype-casparcg-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ThreadHelpers\ThreadHelpers.csproj">
+      <Project>{398de4a8-dfbf-4130-83ac-ef37da249587}</Project>
+      <Name>ThreadHelpers</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="BMDSwitcherAPI">
+      <Guid>{8A92B919-156C-4D61-94EF-03F9BE4004B0}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

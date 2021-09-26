@@ -1,104 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{66652CE7-C94D-4C8F-8B21-203665CB2762}</ProjectGuid>
+    <TargetFramework>net5.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenSC</RootNamespace>
-    <AssemblyName>opensc-macros-model</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bespoke.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bespoke.Common.1.0.0\lib\net45\Bespoke.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Bespoke.Osc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bespoke.Osc.1.0.0\lib\net45\Bespoke.Osc.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Macros\Commands\IMacroCommand.cs" />
-    <Compile Include="Model\Macros\Commands\IMacroCommandArgument.cs" />
-    <Compile Include="Model\Macros\Commands\MacroCommandArgumentAttribute.cs" />
-    <Compile Include="Model\Macros\Commands\MacroCommandArgumentBase.cs" />
-    <Compile Include="Model\Macros\Commands\MacroCommandArgumentDatabaseItem.cs" />
-    <Compile Include="Model\Macros\Commands\MacroCommandArgumentDatabaseSubTypeItem.cs" />
-    <Compile Include="Model\Macros\Commands\MacroCommandArgumentInt.cs" />
-    <Compile Include="Model\Macros\Commands\MacroCommandArgumentString.cs" />
-    <Compile Include="Model\Macros\Commands\MacroCommandAttribue.cs" />
-    <Compile Include="Model\Macros\Commands\MacroCommandBase.cs" />
-    <Compile Include="Model\Macros\Commands\MacroCommandRegister.cs" />
-    <Compile Include="Model\Macros\Commands\MacroCommandWithArguments.cs" />
-    <Compile Include="Model\Macros\Commands\MacroCommandWithArgumentsToCodeSerializer.cs" />
-    <Compile Include="Model\Macros\Commands\MacroCommandWithArgumentsXmlSerializer.cs" />
-    <Compile Include="Model\Macros\Commands\RunMacroMacroCommand.cs" />
-    <Compile Include="Model\Macros\Macro.cs" />
-    <Compile Include="Model\Macros\MacroArgumentKeyType.cs" />
-    <Compile Include="Model\Macros\MacroCodeInterpreter.cs" />
-    <Compile Include="Model\Macros\MacroCodeTokenizer.cs" />
-    <Compile Include="Model\Macros\MacroDatabase.cs" />
-    <Compile Include="Model\Macros\MacroOscServer.cs" />
-    <Compile Include="Model\Macros\Triggers\IMacroTrigger.cs" />
-    <Compile Include="Model\Macros\Triggers\IMacroTriggerArgument.cs" />
-    <Compile Include="Model\Macros\Triggers\MacroTriggerArgumentAttribute.cs" />
-    <Compile Include="Model\Macros\Triggers\MacroTriggerArgumentBase.cs" />
-    <Compile Include="Model\Macros\Triggers\MacroTriggerArgumentDatabaseItem.cs" />
-    <Compile Include="Model\Macros\Triggers\MacroTriggerArgumentDatabaseSubTypeItem.cs" />
-    <Compile Include="Model\Macros\Triggers\MacroTriggerArgumentInt.cs" />
-    <Compile Include="Model\Macros\Triggers\MacroTriggerArgumentString.cs" />
-    <Compile Include="Model\Macros\Triggers\MacroTriggerAttribue.cs" />
-    <Compile Include="Model\Macros\Triggers\MacroTriggerBase.cs" />
-    <Compile Include="Model\Macros\Triggers\MacroTriggerRegister.cs" />
-    <Compile Include="Model\Macros\Triggers\MacroTriggerWithArguments.cs" />
-    <Compile Include="Model\Macros\Triggers\MacroTriggerWithArgumentsActivationData.cs" />
-    <Compile Include="Model\Macros\Triggers\MacroTriggerWithArgumentsXmlSerializer.cs" />
-    <Compile Include="Modules\MacrosBridgeModuleBase.cs" />
-    <Compile Include="Modules\MacrosModelModule.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
-      <Project>{16a6beec-548d-4a77-9fe6-8df8d5333219}</Project>
-      <Name>opensc-core-model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ThreadHelpers\ThreadHelpers.csproj">
-      <Project>{398de4a8-dfbf-4130-83ac-ef37da249587}</Project>
-      <Name>ThreadHelpers</Name>
-    </ProjectReference>
+    <PackageReference Include="Bespoke.Common" Version="1.0.0" />
+    <PackageReference Include="Bespoke.Osc" Version="1.0.0" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

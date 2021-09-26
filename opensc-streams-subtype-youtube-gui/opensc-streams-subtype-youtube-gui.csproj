@@ -1,83 +1,21 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7A3F9835-7188-4A40-9070-8DD9A96B97CB}</ProjectGuid>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenSC</RootNamespace>
-    <AssemblyName>opensc-streams-subtype-youtube-gui</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj" />
+    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
+    <ProjectReference Include="..\opensc-streams-gui\opensc-streams-gui.csproj" />
+    <ProjectReference Include="..\opensc-streams-model\opensc-streams-model.csproj" />
+    <ProjectReference Include="..\opensc-streams-subtype-youtube-model\opensc-streams-subtype-youtube-model.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Modules\StreamsSubtypeYoutubeGuiModule.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GUI\Streams\YoutubeStreamEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Streams\YoutubeStreamEditorForm.Designer.cs">
-      <DependentUpon>YoutubeStreamEditorForm.cs</DependentUpon>
-    </Compile>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GUI\Streams\YoutubeStreamEditorForm.resx">
-      <DependentUpon>YoutubeStreamEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj">
-      <Project>{e30563fd-de1f-4ab5-86dd-72165b84eb85}</Project>
-      <Name>opensc-core-gui</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
-      <Project>{16a6beec-548d-4a77-9fe6-8df8d5333219}</Project>
-      <Name>opensc-core-model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\opensc-streams-gui\opensc-streams-gui.csproj">
-      <Project>{79118814-f2e2-473e-88d3-a94fee4acb68}</Project>
-      <Name>opensc-streams-gui</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\opensc-streams-model\opensc-streams-model.csproj">
-      <Project>{76853b46-32a4-415d-92e2-57feb4600e87}</Project>
-      <Name>opensc-streams-model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\opensc-streams-subtype-youtube-model\opensc-streams-subtype-youtube-model.csproj">
-      <Project>{721e4551-5188-404b-b8c5-6b78b6381615}</Project>
-      <Name>opensc-streams-subtype-youtube-model</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

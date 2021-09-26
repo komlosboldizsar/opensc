@@ -1,106 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4C933149-AD48-4CCA-B19E-0FFAF8C3D8BF}</ProjectGuid>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenSC</RootNamespace>
-    <AssemblyName>opensc-macropanels-gui</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="GUI\Macros\MacroPanelEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroPanelEditorForm.Designer.cs">
-      <DependentUpon>MacroPanelEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroPanelElementButton.cs">
+    <Compile Update="GUI\Macros\MacroPanelElementButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\Macros\MacroPanelElementButton.Designer.cs">
-      <DependentUpon>MacroPanelElementButton.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroPanelForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroPanelForm.Designer.cs">
-      <DependentUpon>MacroPanelForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroPanelList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Macros\MacroPanelList.Designer.cs">
-      <DependentUpon>MacroPanelList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Modules\MacropanelsGuiModule.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GUI\Macros\MacroPanelEditorForm.resx">
-      <DependentUpon>MacroPanelEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Macros\MacroPanelElementButton.resx">
-      <DependentUpon>MacroPanelElementButton.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Macros\MacroPanelForm.resx">
-      <DependentUpon>MacroPanelForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Macros\MacroPanelList.resx">
-      <DependentUpon>MacroPanelList.cs</DependentUpon>
-    </EmbeddedResource>
+    <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj" />
+    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
+    <ProjectReference Include="..\opensc-macropanels-model\opensc-macropanels-model.csproj" />
+    <ProjectReference Include="..\opensc-macros-model\opensc-macros-model.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj">
-      <Project>{e30563fd-de1f-4ab5-86dd-72165b84eb85}</Project>
-      <Name>opensc-core-gui</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
-      <Project>{16a6beec-548d-4a77-9fe6-8df8d5333219}</Project>
-      <Name>opensc-core-model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\opensc-macropanels-model\opensc-macropanels-model.csproj">
-      <Project>{86fac337-c6eb-431e-9e72-5d18851eaa26}</Project>
-      <Name>opensc-macropanels-model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\opensc-macros-model\opensc-macros-model.csproj">
-      <Project>{66652ce7-c94d-4c8f-8b21-203665cb2762}</Project>
-      <Name>opensc-macros-model</Name>
-    </ProjectReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

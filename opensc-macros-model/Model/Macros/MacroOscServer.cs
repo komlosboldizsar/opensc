@@ -8,7 +8,6 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using ThreadHelpers;
 
 namespace OpenSC.Model.Macros
 {
@@ -120,7 +119,7 @@ namespace OpenSC.Model.Macros
                     macro.ID,
                     macro.Name);
             LogDispatcher.I(LOG_TAG, logMessage);
-            InvokeHelper.Invoke(() => macro.Run());
+            macro.Run();
 
         }
 
