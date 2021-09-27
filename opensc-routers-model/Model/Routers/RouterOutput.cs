@@ -279,15 +279,8 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Signals
-        private void registerAsSignal()
-        {
-            SignalRegister.Instance.RegisterSignal(this);
-        }
-
-        private void unregisterAsSignal()
-        {
-            SignalRegister.Instance.UnregisterSignal(this);
-        }
+        private void registerAsSignal() => SignalRegister.Instance.Register(this);
+        private void unregisterAsSignal() => SignalRegister.Instance.Unregister(this);
         #endregion
 
         #region Tally booleans

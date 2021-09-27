@@ -27,12 +27,10 @@ namespace OpenSC.Model.Variables
             get => name;
             set
             {
-                if (!BooleanRegister.Instance.CanNameUsedForBoolean(this, value))
+                if (!BooleanRegister.Instance.CanKeyBeUsedForItem(this, value, out IBoolean nameOwnerItem))
                     return;
                 if (!setProperty(this, ref name, value, NameChanged))
                     return;
-                if (Registered)
-                    BooleanRegister.Instance.BooleanNameChanged(this);
             }
         }
         #endregion
@@ -77,7 +75,7 @@ namespace OpenSC.Model.Variables
         {
             if (Registered)
                 return;
-            BooleanRegister.Instance.RegisterBoolean(this);
+            BooleanRegister.Instance.Register(this);
             Registered = true;
         }
 
@@ -85,7 +83,7 @@ namespace OpenSC.Model.Variables
         {
             if (!Registered)
                 return;
-            BooleanRegister.Instance.UnregisterBoolean(this);
+            BooleanRegister.Instance.Unregister(this);
             Registered = false;
         }
 
