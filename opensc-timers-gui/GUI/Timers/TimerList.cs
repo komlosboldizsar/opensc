@@ -157,7 +157,7 @@ namespace OpenSC.GUI.Timers
 
         private static readonly Bitmap STATE_IMAGE_RUNNING = Icons._16_timer_running;
         private static readonly Bitmap STATE_IMAGE_STOPPED = Icons._16_timer_stopped;
-        private static readonly Bitmap STATE_IMAGE_NOTSHOWN = Properties.GeneralIcons.empty_transparent;
+        private static readonly Bitmap STATE_IMAGE_NOTSHOWN = SolidIcons.empty_transparent;
 
     }
 

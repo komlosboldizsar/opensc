@@ -94,7 +94,7 @@ namespace OpenSC.GUI
             // 
             // tileWindowsHorizontallyMenuItem
             // 
-            this.tileWindowsHorizontallyMenuItem.Image = global::OpenSC.Properties.GeneralIcons._32_tile_horizontally;
+            this.tileWindowsHorizontallyMenuItem.Image = global::OpenSC.GUI.GuiIcons._32_tile_horizontally;
             this.tileWindowsHorizontallyMenuItem.Name = "tileWindowsHorizontallyMenuItem";
             this.tileWindowsHorizontallyMenuItem.Size = new System.Drawing.Size(252, 26);
             this.tileWindowsHorizontallyMenuItem.Text = "Tile windows horizontally";
@@ -102,7 +102,7 @@ namespace OpenSC.GUI
             // 
             // tileWindowsVerticallyMenuItem
             // 
-            this.tileWindowsVerticallyMenuItem.Image = global::OpenSC.Properties.GeneralIcons._32_tile_vertically;
+            this.tileWindowsVerticallyMenuItem.Image = global::OpenSC.GUI.GuiIcons._32_tile_vertically;
             this.tileWindowsVerticallyMenuItem.Name = "tileWindowsVerticallyMenuItem";
             this.tileWindowsVerticallyMenuItem.Size = new System.Drawing.Size(252, 26);
             this.tileWindowsVerticallyMenuItem.Text = "Tile windows vertically";
