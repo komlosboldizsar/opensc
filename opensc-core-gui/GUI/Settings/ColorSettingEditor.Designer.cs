@@ -102,7 +102,6 @@
             this.Name = "ColorSettingEditor";
             this.Padding = new System.Windows.Forms.Padding(0, 0, 0, 6);
             this.Size = new System.Drawing.Size(500, 111);
-            this.Load += new System.EventHandler(this.IntSettingEditor_Load);
             this.customElementsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
