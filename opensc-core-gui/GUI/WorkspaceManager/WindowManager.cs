@@ -24,6 +24,9 @@ namespace OpenSC.GUI.WorkspaceManager
         public delegate void ActiveChildWindowChangedDelegate(Form window);
         public event ActiveChildWindowChangedDelegate ActiveWindowChanged;
 
+        public delegate void ChildWindowsSizePositionChangedDelegate(Form window);
+        public event ChildWindowsSizePositionChangedDelegate ChildWindowsSizePositionChanged;
+
         public delegate void MainFormPositionChangedDelegate(Point position);
         public event MainFormPositionChangedDelegate MainFormPositionChanged;
 
@@ -213,6 +216,7 @@ namespace OpenSC.GUI.WorkspaceManager
         private void persistableWindowSizePositionChangeHandler(object sender, EventArgs e)
         {
             persistWindows();
+            ChildWindowsSizePositionChanged?.Invoke(sender as Form);
         }
 
     }
