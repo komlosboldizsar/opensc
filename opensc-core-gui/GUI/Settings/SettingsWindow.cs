@@ -47,6 +47,7 @@ namespace OpenSC.GUI.Settings
             if(!tabPagesForCategories.TryGetValue(category, out TabPage page))
             {
                 page = new TabPage(category);
+                page.AutoScroll = true;
                 tabControl.TabPages.Add(page);
                 tabPagesForCategories.Add(category, page);
             }
