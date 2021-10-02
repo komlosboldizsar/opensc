@@ -18,38 +18,20 @@ namespace OpenSC.GUI.Settings
     public partial class EnumSettingEditor : SettingEditorBase
     {
 
+        public override ISettingEditorControl GetInstanceForSetting(ISetting setting) => new EnumSettingEditor(setting);
         public EnumSettingEditor() : base() => InitializeComponent();
         public EnumSettingEditor(ISetting setting) : base(setting) => InitializeComponent();
 
-        private void EnumSettingEditor_Load(object sender, EventArgs e)
+        protected override void readValue() => dropDown.SelectByValue(((EnumSetting)setting).Value);
+        protected override void writeValue() => ((EnumSetting)setting).Value = (Enum)dropDown.SelectedValue;
+        protected override void resetToDefault() => dropDown.SelectByValue(((EnumSetting)setting).DefaultValue);
+
+        protected override void initEditor()
         {
             EnumSetting enumSetting = (EnumSetting)setting;
             IComboBoxAdapter enumComboBoxAdapter = new EnumComboBoxAdapter<Enum>(enumSetting.EnumType, enumSetting.Translations, enumSetting.NullTranslation);
             dropDown.SetAdapterAsDataSource(enumComboBoxAdapter);
-            dropDown.SelectByValue(enumSetting.Value);
         }
-
-        private void saveButton_Click(object sender, EventArgs e)
-        {
-            if (setting == null)
-                return;
-            try
-            {
-                ((EnumSetting)setting).Value = (Enum)dropDown.SelectedValue;
-            }
-            catch (ArgumentException ex)
-            {
-                MessageBox.Show(ex.Message, "Validation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void resetButton_Click(object sender, EventArgs e)
-        {
-            if (setting != null)
-                dropDown.SelectByValue(((EnumSetting)setting).Value);
-        }
-
-        public override ISettingEditorControl GetInstanceForSetting(ISetting setting) => new EnumSettingEditor(setting);
 
     }
 

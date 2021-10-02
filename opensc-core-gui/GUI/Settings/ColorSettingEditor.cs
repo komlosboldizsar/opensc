@@ -17,32 +17,13 @@ namespace OpenSC.GUI.Settings
     public partial class ColorSettingEditor : SettingEditorBase
     {
 
+        public override ISettingEditorControl GetInstanceForSetting(ISetting setting) => new ColorSettingEditor(setting);
         public ColorSettingEditor() : base() => InitializeComponent();
         public ColorSettingEditor(ISetting setting) : base(setting) => InitializeComponent();
 
-        private void IntSettingEditor_Load(object sender, EventArgs e) => storedColor = ((Setting<Color>)setting).Value;
-
-        private void saveButton_Click(object sender, EventArgs e)
-        {
-            if (setting == null)
-                return;
-            try
-            {
-                ((Setting<Color>)setting).Value = storedColor;
-            }
-            catch (ArgumentException ex)
-            {
-                MessageBox.Show(ex.Message, "Validation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void resetButton_Click(object sender, EventArgs e)
-        {
-            if (setting != null)
-                storedColor = ((Setting<Color>)setting).Value;
-        }
-
-        public override ISettingEditorControl GetInstanceForSetting(ISetting setting) => new ColorSettingEditor(setting);
+        protected override void readValue() => storedColor = ((Setting<Color>)setting).Value;
+        protected override void writeValue() => ((Setting<Color>)setting).Value = storedColor;
+        protected override void resetToDefault() => storedColor = ((Setting<Color>)setting).DefaultValue;
 
         private void selectColorButton_Click(object sender, EventArgs e)
         {
@@ -52,7 +33,6 @@ namespace OpenSC.GUI.Settings
         }
 
         private Color _storedColor;
-
         private Color storedColor
         {
             get => _storedColor;

@@ -15,12 +15,9 @@ namespace OpenSC.GUI.Settings
     public partial class SettingEditorBase : UserControl, ISettingEditorControl
     {
 
-        protected ISetting setting { get; private set; }
+        public virtual ISettingEditorControl GetInstanceForSetting(ISetting setting) => new SettingEditorBase(setting);
 
-        public SettingEditorBase()
-        {
-            InitializeComponent();
-        }
+        public SettingEditorBase() => InitializeComponent();
 
         public SettingEditorBase(ISetting setting)
         {
@@ -31,16 +28,46 @@ namespace OpenSC.GUI.Settings
             showSettingMetadata();
         }
 
+        protected ISetting setting { get; private set; }
+
         private void showSettingMetadata()
         {
             settingTitleLabel.Text = setting.HumanReadableTitle;
             settingDescriptionLabel.Text = setting.HumanReadableDescription;
         }
 
-        public virtual ISettingEditorControl GetInstanceForSetting(ISetting setting)
+        private void SettingEditorBase_Load(object sender, EventArgs e)
         {
-            return new SettingEditorBase(setting);
+            initEditor();
+            readValue();
         }
+
+        protected virtual void initEditor() { }
+        protected virtual void readValue() { }
+
+        private void resetToDefaultButton_Click(object sender, EventArgs e) => resetToDefault();
+        protected virtual void resetToDefault() { }
+
+        private void resetToCurrentButton_Click(object sender, EventArgs e) => resetToCurrent();
+        protected virtual void resetToCurrent() => readValue();
+
+        private void saveButton_Click(object sender, EventArgs e) => saveSetting();
+
+        protected virtual void saveSetting()
+        {
+            if (setting == null)
+                return;
+            try
+            {
+                writeValue();
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message, "Validation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        protected virtual void writeValue() { }
 
     }
 }

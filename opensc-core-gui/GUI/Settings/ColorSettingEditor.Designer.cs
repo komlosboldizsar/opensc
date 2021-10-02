@@ -32,8 +32,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.resetButton = new System.Windows.Forms.Button();
-            this.saveButton = new System.Windows.Forms.Button();
             this.selectColorButton = new System.Windows.Forms.Button();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.customElementsPanel.SuspendLayout();
@@ -42,11 +40,8 @@
             // customElementsPanel
             // 
             this.customElementsPanel.Controls.Add(this.selectColorButton);
-            this.customElementsPanel.Controls.Add(this.resetButton);
-            this.customElementsPanel.Controls.Add(this.saveButton);
-            this.customElementsPanel.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.customElementsPanel.MinimumSize = new System.Drawing.Size(250, 12);
-            this.customElementsPanel.Size = new System.Drawing.Size(494, 38);
+            this.customElementsPanel.Controls.SetChildIndex(this.selectColorButton, 0);
             // 
             // textBox1
             // 
@@ -82,36 +77,10 @@
             this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // resetButton
-            // 
-            this.resetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.resetButton.BackgroundImage = global::OpenSC.Properties.GeneralIcons._16_reset;
-            this.resetButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.resetButton.Location = new System.Drawing.Point(417, 4);
-            this.resetButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.resetButton.Name = "resetButton";
-            this.resetButton.Size = new System.Drawing.Size(34, 30);
-            this.resetButton.TabIndex = 2;
-            this.resetButton.UseVisualStyleBackColor = true;
-            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
-            // 
-            // saveButton
-            // 
-            this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveButton.BackgroundImage = global::OpenSC.Properties.GeneralIcons._16_tick;
-            this.saveButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.saveButton.Location = new System.Drawing.Point(457, 4);
-            this.saveButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(34, 30);
-            this.saveButton.TabIndex = 1;
-            this.saveButton.UseVisualStyleBackColor = true;
-            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
-            // 
             // selectColorButton
             // 
             this.selectColorButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.selectColorButton.Location = new System.Drawing.Point(3, 4);
+            this.selectColorButton.Location = new System.Drawing.Point(8, 6);
             this.selectColorButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.selectColorButton.Name = "selectColorButton";
             this.selectColorButton.Size = new System.Drawing.Size(214, 30);
@@ -132,7 +101,7 @@
             this.MinimumSize = new System.Drawing.Size(200, 78);
             this.Name = "ColorSettingEditor";
             this.Padding = new System.Windows.Forms.Padding(0, 0, 0, 6);
-            this.Size = new System.Drawing.Size(500, 107);
+            this.Size = new System.Drawing.Size(500, 111);
             this.Load += new System.EventHandler(this.IntSettingEditor_Load);
             this.customElementsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -146,8 +115,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button saveButton;
-        private System.Windows.Forms.Button resetButton;
         private System.Windows.Forms.Button selectColorButton;
         private System.Windows.Forms.ColorDialog colorDialog;
     }
