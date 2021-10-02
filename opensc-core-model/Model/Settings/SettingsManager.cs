@@ -93,6 +93,8 @@ namespace OpenSC.Model.Settings
                 foreach (XmlNode node in root.ChildNodes)
                     deserializeSetting(node);
 
+                SettingsLoaded?.Invoke();
+
             }
             finally
             {
@@ -186,6 +188,11 @@ namespace OpenSC.Model.Settings
                 return null;
             return converter;
         }
+        #endregion
+
+        #region Events
+        public delegate void SettingsLoadedDelegate();
+        public event SettingsLoadedDelegate SettingsLoaded;
         #endregion
 
     }
