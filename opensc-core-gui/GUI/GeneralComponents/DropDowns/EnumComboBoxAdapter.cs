@@ -9,6 +9,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
 {
 
     public class EnumComboBoxAdapter<T> : IComboBoxAdapter
+        where T : Enum
     {
 
         private Type givenType;
@@ -25,8 +26,14 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
         public bool ContainsListCollection => false;
 
         public EnumComboBoxAdapter(Dictionary<T, string> translations = null, string nullTranslation = "")
+            => construct(typeof(T), translations, nullTranslation);
+
+        public EnumComboBoxAdapter(Type enumType, Dictionary<T, string> translations = null, string nullTranslation = "")
+            => construct(enumType, translations, nullTranslation);
+
+        private void construct(Type givenType, Dictionary<T, string> translations = null, string nullTranslation = "")
         {
-            this.givenType = typeof(T);
+            this.givenType = givenType;
             Type _enumType = Nullable.GetUnderlyingType(this.givenType);
             this.enumType = (_enumType != null) ? _enumType : givenType;
             if (!enumType.IsEnum && !Nullable.GetUnderlyingType(enumType).IsEnum)

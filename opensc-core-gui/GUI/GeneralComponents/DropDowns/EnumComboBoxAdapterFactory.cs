@@ -8,6 +8,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
 {
 
     public class EnumComboBoxAdapterFactory<T> : IComboBoxAdapterFactory
+        where T : Enum
     {
 
         Dictionary<T, string> translations;

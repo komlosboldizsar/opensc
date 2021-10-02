@@ -34,20 +34,20 @@ namespace OpenSC.Model.Signals
             protected override void afterAdd(ExternalSignal item)
             {
                 base.afterAdd(item);
-                SignalRegister.Instance.RegisterSignal(item);
+                SignalRegister.Instance.Register(item);
             }
 
             protected override void afterRemove(ExternalSignal item)
             {
                 base.afterRemove(item);
-                SignalRegister.Instance.UnregisterSignal(item);
+                SignalRegister.Instance.Unregister(item);
             }
 
             protected override void afterLoad()
             {
                 base.afterLoad();
                 foreach(ISignalSourceRegistered signal in ItemsAsList)
-                    SignalRegister.Instance.RegisterSignal(signal);
+                    SignalRegister.Instance.Register(signal);
             }
 
         }
