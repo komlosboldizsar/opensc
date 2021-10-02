@@ -150,7 +150,8 @@ namespace OpenSC.Model.Settings
             new DecimalConverter(),
             new FloatConverter(),
             new DoubleConverter(),
-            new ColorConverter()
+            new ColorConverter(),
+            new OpenFilePathConverter()
         };
 
         private static Dictionary<Type, ISettingValueConverter> converters = null;
