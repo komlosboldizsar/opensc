@@ -32,7 +32,10 @@ namespace OpenSC.GUI.Settings
                 if (editorControlCasted != null)
                 {
                     editorControlCasted.Dock = DockStyle.Top;
-                    getPageForCategory(setting.Category).Controls.Add(editorControlCasted);
+                    TabPage pageForCategory = getPageForCategory(setting.Category);
+                    Control.ControlCollection pagesControlCollection = pageForCategory.Controls;
+                    pagesControlCollection.Add(editorControlCasted);
+                    pagesControlCollection.SetChildIndex(editorControlCasted, 0);
                 }
             }
         }
