@@ -173,7 +173,7 @@
             // 
             // colorRedMenuItem
             // 
-            this.colorRedMenuItem.Image = global::OpenSC.Properties.GeneralIcons.solid_red;
+            this.colorRedMenuItem.Image = global::OpenSC.GUI.SolidIcons.solid_red;
             this.colorRedMenuItem.Name = "colorRedMenuItem";
             this.colorRedMenuItem.Size = new System.Drawing.Size(133, 26);
             this.colorRedMenuItem.Tag = "#FF0000";
@@ -181,7 +181,7 @@
             // 
             // colorGreenMenuItem
             // 
-            this.colorGreenMenuItem.Image = global::OpenSC.Properties.GeneralIcons.solid_green;
+            this.colorGreenMenuItem.Image = global::OpenSC.GUI.SolidIcons.solid_green;
             this.colorGreenMenuItem.Name = "colorGreenMenuItem";
             this.colorGreenMenuItem.Size = new System.Drawing.Size(133, 26);
             this.colorGreenMenuItem.Tag = "#008800";
@@ -189,7 +189,7 @@
             // 
             // colorYellowMenuItem
             // 
-            this.colorYellowMenuItem.Image = global::OpenSC.Properties.GeneralIcons.solid_yellow;
+            this.colorYellowMenuItem.Image = global::OpenSC.GUI.SolidIcons.solid_yellow;
             this.colorYellowMenuItem.Name = "colorYellowMenuItem";
             this.colorYellowMenuItem.Size = new System.Drawing.Size(133, 26);
             this.colorYellowMenuItem.Tag = "#EEEE00";
@@ -197,7 +197,7 @@
             // 
             // colorOrangeMenuItem
             // 
-            this.colorOrangeMenuItem.Image = global::OpenSC.Properties.GeneralIcons.solid_orange;
+            this.colorOrangeMenuItem.Image = global::OpenSC.GUI.SolidIcons.solid_orange;
             this.colorOrangeMenuItem.Name = "colorOrangeMenuItem";
             this.colorOrangeMenuItem.Size = new System.Drawing.Size(133, 26);
             this.colorOrangeMenuItem.Tag = "#FF9900";
@@ -205,7 +205,7 @@
             // 
             // colorBlueMenuItem
             // 
-            this.colorBlueMenuItem.Image = global::OpenSC.Properties.GeneralIcons.solid_blue;
+            this.colorBlueMenuItem.Image = global::OpenSC.GUI.SolidIcons.solid_blue;
             this.colorBlueMenuItem.Name = "colorBlueMenuItem";
             this.colorBlueMenuItem.Size = new System.Drawing.Size(133, 26);
             this.colorBlueMenuItem.Tag = "#0000FF";
@@ -213,7 +213,7 @@
             // 
             // colorPurpleMenuItem
             // 
-            this.colorPurpleMenuItem.Image = global::OpenSC.Properties.GeneralIcons.solid_purple;
+            this.colorPurpleMenuItem.Image = global::OpenSC.GUI.SolidIcons.solid_purple;
             this.colorPurpleMenuItem.Name = "colorPurpleMenuItem";
             this.colorPurpleMenuItem.Size = new System.Drawing.Size(133, 26);
             this.colorPurpleMenuItem.Tag = "#AA00FF";
@@ -221,7 +221,7 @@
             // 
             // colorBlackMenuItem
             // 
-            this.colorBlackMenuItem.Image = global::OpenSC.Properties.GeneralIcons.solid_black;
+            this.colorBlackMenuItem.Image = global::OpenSC.GUI.SolidIcons.solid_black;
             this.colorBlackMenuItem.Name = "colorBlackMenuItem";
             this.colorBlackMenuItem.Size = new System.Drawing.Size(133, 26);
             this.colorBlackMenuItem.Tag = "#000000";

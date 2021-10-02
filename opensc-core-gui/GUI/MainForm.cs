@@ -32,7 +32,11 @@ namespace OpenSC.GUI
 
         private const string LOG_TAG = "MainForm";
 
-        public MainForm() => InitializeComponent();
+        public MainForm()
+        {
+            InitializeComponent();
+            WindowTypeRegister.RegisterWindowType<SettingsWindow>();
+        }
 
         private void clockUpdateTimer_Tick(object sender, EventArgs e)
             => statusStripClock.Text = DateTime.Now.ToString("yyyy. MM. dd. HH:mm:ss");

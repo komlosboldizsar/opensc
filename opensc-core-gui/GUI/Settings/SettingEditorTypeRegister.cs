@@ -14,7 +14,8 @@ namespace OpenSC.GUI.Settings
             new IntSettingEditor(),
             new ColorSettingEditor(),
             new BoolSettingEditor(),
-            new EnumSettingEditor()
+            new EnumSettingEditor(),
+            new OpenFileSettingEditor()
         };
 
         private static Dictionary<Type, ISettingEditorControl> registeredEditors = null;
