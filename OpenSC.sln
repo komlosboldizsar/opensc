@@ -3,147 +3,149 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenSC", "OpenSC\OpenSC.csproj", "{E871723E-7268-47CE-AE58-75A18AC93F63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenSC", "OpenSC\OpenSC.csproj", "{E871723E-7268-47CE-AE58-75A18AC93F63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-library-bmdvideohub", "opensc-library-bmdvideohub\opensc-library-bmdvideohub.csproj", "{EADC56A4-B18D-4742-9855-C5142E90AA19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-library-bmdvideohub", "opensc-library-bmdvideohub\opensc-library-bmdvideohub.csproj", "{EADC56A4-B18D-4742-9855-C5142E90AA19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-library-bmdswitcher", "opensc-library-bmdswitcher\opensc-library-bmdswitcher.csproj", "{A9CEE499-CF5C-419A-8CF0-66F20596B820}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-library-bmdswitcher", "opensc-library-bmdswitcher\opensc-library-bmdswitcher.csproj", "{A9CEE499-CF5C-419A-8CF0-66F20596B820}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadHelpers", "ThreadHelpers\ThreadHelpers.csproj", "{398DE4A8-DFBF-4130-83AC-EF37DA249587}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThreadHelpers", "ThreadHelpers\ThreadHelpers.csproj", "{398DE4A8-DFBF-4130-83AC-EF37DA249587}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-core-model", "opensc-core-model\opensc-core-model.csproj", "{16A6BEEC-548D-4A77-9FE6-8DF8D5333219}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-core-model", "opensc-core-model\opensc-core-model.csproj", "{16A6BEEC-548D-4A77-9FE6-8DF8D5333219}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-core-gui", "opensc-core-gui\opensc-core-gui.csproj", "{E30563FD-DE1F-4AB5-86DD-72165B84EB85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-core-gui", "opensc-core-gui\opensc-core-gui.csproj", "{E30563FD-DE1F-4AB5-86DD-72165B84EB85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-routers-model", "opensc-routers-model\opensc-routers-model.csproj", "{B579FF80-0001-44B8-9363-4EBEB4EF6117}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routers-model", "opensc-routers-model\opensc-routers-model.csproj", "{B579FF80-0001-44B8-9363-4EBEB4EF6117}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-signals-model", "opensc-signals-model\opensc-signals-model.csproj", "{FDCF0DA0-9336-4A72-BD61-1AAF396940AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-signals-model", "opensc-signals-model\opensc-signals-model.csproj", "{FDCF0DA0-9336-4A72-BD61-1AAF396940AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-dynamictexts-model", "opensc-dynamictexts-model\opensc-dynamictexts-model.csproj", "{7CFDF83F-4856-4E36-A489-2058415DDE2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-dynamictexts-model", "opensc-dynamictexts-model\opensc-dynamictexts-model.csproj", "{7CFDF83F-4856-4E36-A489-2058415DDE2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-booleans-model", "opensc-booleans-model\opensc-booleans-model.csproj", "{469F1D25-F30D-40F3-B2F9-1005DD37B684}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-booleans-model", "opensc-booleans-model\opensc-booleans-model.csproj", "{469F1D25-F30D-40F3-B2F9-1005DD37B684}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-timers-model", "opensc-timers-model\opensc-timers-model.csproj", "{543A1330-CCB4-4E18-903A-C58D3C007816}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-timers-model", "opensc-timers-model\opensc-timers-model.csproj", "{543A1330-CCB4-4E18-903A-C58D3C007816}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-timers-bridge-dynamictexts", "opensc-timers-bridge-dynamictexts\opensc-timers-bridge-dynamictexts.csproj", "{0A97CA9B-290A-4BCC-9DF8-103C02B1AF29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-timers-bridge-dynamictexts", "opensc-timers-bridge-dynamictexts\opensc-timers-bridge-dynamictexts.csproj", "{0A97CA9B-290A-4BCC-9DF8-103C02B1AF29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-timers-bridge-macros", "opensc-timers-bridge-macros\opensc-timers-bridge-macros.csproj", "{32516067-0D7C-432D-BEF6-079D6230C549}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-timers-bridge-macros", "opensc-timers-bridge-macros\opensc-timers-bridge-macros.csproj", "{32516067-0D7C-432D-BEF6-079D6230C549}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-streams-model", "opensc-streams-model\opensc-streams-model.csproj", "{76853B46-32A4-415D-92E2-57FEB4600E87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-streams-model", "opensc-streams-model\opensc-streams-model.csproj", "{76853B46-32A4-415D-92E2-57FEB4600E87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-streams-bridge-dynamictexts", "opensc-streams-bridge-dynamictexts\opensc-streams-bridge-dynamictexts.csproj", "{C3968358-F075-4CFE-9885-21FB23A83D8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-streams-bridge-dynamictexts", "opensc-streams-bridge-dynamictexts\opensc-streams-bridge-dynamictexts.csproj", "{C3968358-F075-4CFE-9885-21FB23A83D8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-serialports-model", "opensc-serialports-model\opensc-serialports-model.csproj", "{3C15C5F6-E564-4B1B-AB76-C6295FC518C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-serialports-model", "opensc-serialports-model\opensc-serialports-model.csproj", "{3C15C5F6-E564-4B1B-AB76-C6295FC518C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-macros-model", "opensc-macros-model\opensc-macros-model.csproj", "{66652CE7-C94D-4C8F-8B21-203665CB2762}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-macros-model", "opensc-macros-model\opensc-macros-model.csproj", "{66652CE7-C94D-4C8F-8B21-203665CB2762}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-vtrs-model", "opensc-vtrs-model\opensc-vtrs-model.csproj", "{9723E8AA-94AF-473F-B495-B88013DF5157}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-vtrs-model", "opensc-vtrs-model\opensc-vtrs-model.csproj", "{9723E8AA-94AF-473F-B495-B88013DF5157}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-vtrs-subtype-casparcg-model", "opensc-vtrs-subtype-casparcg-model\opensc-vtrs-subtype-casparcg-model.csproj", "{949544BC-4682-42ED-9152-6DFD85E9F46E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-vtrs-subtype-casparcg-model", "opensc-vtrs-subtype-casparcg-model\opensc-vtrs-subtype-casparcg-model.csproj", "{949544BC-4682-42ED-9152-6DFD85E9F46E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-vtrs-bridge-dynamictexts", "opensc-vtrs-bridge-dynamictexts\opensc-vtrs-bridge-dynamictexts.csproj", "{BCA57EE2-904A-4A98-99D5-179B06A4836A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-vtrs-bridge-dynamictexts", "opensc-vtrs-bridge-dynamictexts\opensc-vtrs-bridge-dynamictexts.csproj", "{BCA57EE2-904A-4A98-99D5-179B06A4836A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-umds-model", "opensc-umds-model\opensc-umds-model.csproj", "{8C0E0945-F7D0-4D41-9776-F5CFB7DE4E84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-umds-model", "opensc-umds-model\opensc-umds-model.csproj", "{8C0E0945-F7D0-4D41-9776-F5CFB7DE4E84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-umds-subtype-mccurdy-model", "opensc-umds-subtype-mccurdy-model\opensc-umds-subtype-mccurdy-model.csproj", "{E5CB27C4-DB49-4BA8-9A06-1C375D459740}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-umds-subtype-mccurdy-model", "opensc-umds-subtype-mccurdy-model\opensc-umds-subtype-mccurdy-model.csproj", "{E5CB27C4-DB49-4BA8-9A06-1C375D459740}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-umds-subtype-tsl31-model", "opensc-umds-subtype-tsl31-model\opensc-umds-subtype-tsl31-model.csproj", "{E3D21C47-275F-4997-AA4E-6E33ED6C16C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-umds-subtype-tsl31-model", "opensc-umds-subtype-tsl31-model\opensc-umds-subtype-tsl31-model.csproj", "{E3D21C47-275F-4997-AA4E-6E33ED6C16C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-umds-bridge-macros", "opensc-umds-bridge-macros\opensc-umds-bridge-macros.csproj", "{540D7DFA-F636-47CE-BC3A-59DC9CD93125}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-umds-bridge-macros", "opensc-umds-bridge-macros\opensc-umds-bridge-macros.csproj", "{540D7DFA-F636-47CE-BC3A-59DC9CD93125}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-tallycopying-model", "opensc-tallycopying-model\opensc-tallycopying-model.csproj", "{21147445-DB1A-417C-B38D-D43C5E599589}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-tallycopying-model", "opensc-tallycopying-model\opensc-tallycopying-model.csproj", "{21147445-DB1A-417C-B38D-D43C5E599589}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-booleantallies-model", "opensc-booleantallies-model\opensc-booleantallies-model.csproj", "{0FBA1A41-B393-4C8F-8F10-B81268F4B1EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-booleantallies-model", "opensc-booleantallies-model\opensc-booleantallies-model.csproj", "{0FBA1A41-B393-4C8F-8F10-B81268F4B1EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-mixers-model", "opensc-mixers-model\opensc-mixers-model.csproj", "{7C649008-6A05-4C3D-AC08-B5A85AB72E09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-mixers-model", "opensc-mixers-model\opensc-mixers-model.csproj", "{7C649008-6A05-4C3D-AC08-B5A85AB72E09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-mixers-subtype-bmd-model", "opensc-mixers-subtype-bmd-model\opensc-mixers-subtype-bmd-model.csproj", "{672A67F3-ACED-47E5-AC9E-455F77E68DA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-mixers-subtype-bmd-model", "opensc-mixers-subtype-bmd-model\opensc-mixers-subtype-bmd-model.csproj", "{672A67F3-ACED-47E5-AC9E-455F77E68DA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-mixers-bridge-dynamictexts", "opensc-mixers-bridge-dynamictexts\opensc-mixers-bridge-dynamictexts.csproj", "{A922FC15-E578-4C4D-895C-C308DFD6B82B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-mixers-bridge-dynamictexts", "opensc-mixers-bridge-dynamictexts\opensc-mixers-bridge-dynamictexts.csproj", "{A922FC15-E578-4C4D-895C-C308DFD6B82B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-mixers-subtype-bmd-bridge-macros", "opensc-mixers-subtype-bmd-bridge-macros\opensc-mixers-subtype-bmd-bridge-macros.csproj", "{D6CE2117-2213-48DF-89CA-38BE4E7D2608}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-mixers-subtype-bmd-bridge-macros", "opensc-mixers-subtype-bmd-bridge-macros\opensc-mixers-subtype-bmd-bridge-macros.csproj", "{D6CE2117-2213-48DF-89CA-38BE4E7D2608}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-routers-bridge-dynamictexts", "opensc-routers-bridge-dynamictexts\opensc-routers-bridge-dynamictexts.csproj", "{15B4BEA2-3E1F-4ACF-8707-D6DBE8B5314E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routers-bridge-dynamictexts", "opensc-routers-bridge-dynamictexts\opensc-routers-bridge-dynamictexts.csproj", "{15B4BEA2-3E1F-4ACF-8707-D6DBE8B5314E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-routers-bridge-macros", "opensc-routers-bridge-macros\opensc-routers-bridge-macros.csproj", "{61687A85-4AA2-411E-B1AA-652B93D149C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routers-bridge-macros", "opensc-routers-bridge-macros\opensc-routers-bridge-macros.csproj", "{61687A85-4AA2-411E-B1AA-652B93D149C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-routers-subtype-bmd-model", "opensc-routers-subtype-bmd-model\opensc-routers-subtype-bmd-model.csproj", "{15EA01C2-2967-4002-BE9A-71E537CBD7F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routers-subtype-bmd-model", "opensc-routers-subtype-bmd-model\opensc-routers-subtype-bmd-model.csproj", "{15EA01C2-2967-4002-BE9A-71E537CBD7F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-routers-subtype-leitch-model", "opensc-routers-subtype-leitch-model\opensc-routers-subtype-leitch-model.csproj", "{96C94DC6-74A1-4E3B-AB22-522B89A4C205}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routers-subtype-leitch-model", "opensc-routers-subtype-leitch-model\opensc-routers-subtype-leitch-model.csproj", "{96C94DC6-74A1-4E3B-AB22-522B89A4C205}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-routers-subtype-virtual-model", "opensc-routers-subtype-virtual-model\opensc-routers-subtype-virtual-model.csproj", "{A2F05B74-2903-4912-B52A-16F9C4B76FF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routers-subtype-virtual-model", "opensc-routers-subtype-virtual-model\opensc-routers-subtype-virtual-model.csproj", "{A2F05B74-2903-4912-B52A-16F9C4B76FF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-routers-subtype-virtualleitch-model", "opensc-routers-subtype-virtualleitch-model\opensc-routers-subtype-virtualleitch-model.csproj", "{5DB0C22D-E2FB-4D85-B6B0-56A95E31E41D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routers-subtype-virtualleitch-model", "opensc-routers-subtype-virtualleitch-model\opensc-routers-subtype-virtualleitch-model.csproj", "{5DB0C22D-E2FB-4D85-B6B0-56A95E31E41D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-routermirrors-model", "opensc-routermirrors-model\opensc-routermirrors-model.csproj", "{A636CD79-602A-4A38-AB5E-68E3DCF74409}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routermirrors-model", "opensc-routermirrors-model\opensc-routermirrors-model.csproj", "{A636CD79-602A-4A38-AB5E-68E3DCF74409}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-crosspointbooleans-model", "opensc-crosspointbooleans-model\opensc-crosspointbooleans-model.csproj", "{00D0E325-4E7C-4740-819D-73B075834E8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-crosspointbooleans-model", "opensc-crosspointbooleans-model\opensc-crosspointbooleans-model.csproj", "{00D0E325-4E7C-4740-819D-73B075834E8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-crosspointstores-model", "opensc-crosspointstores-model\opensc-crosspointstores-model.csproj", "{2E95F8F6-C638-46D2-AAE2-F6ADD93F45B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-crosspointstores-model", "opensc-crosspointstores-model\opensc-crosspointstores-model.csproj", "{2E95F8F6-C638-46D2-AAE2-F6ADD93F45B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-crosspointstores-bridge-macros", "opensc-crosspointstores-bridge-macros\opensc-crosspointstores-bridge-macros.csproj", "{983EC3E0-4718-42F4-AAA6-E3F041BE6E92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-crosspointstores-bridge-macros", "opensc-crosspointstores-bridge-macros\opensc-crosspointstores-bridge-macros.csproj", "{983EC3E0-4718-42F4-AAA6-E3F041BE6E92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-labelsets-model", "opensc-labelsets-model\opensc-labelsets-model.csproj", "{F2E2F38A-E5ED-4A7A-B962-2BF5FBF81721}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-labelsets-model", "opensc-labelsets-model\opensc-labelsets-model.csproj", "{F2E2F38A-E5ED-4A7A-B962-2BF5FBF81721}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-macropanels-model", "opensc-macropanels-model\opensc-macropanels-model.csproj", "{86FAC337-C6EB-431E-9E72-5D18851EAA26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-macropanels-model", "opensc-macropanels-model\opensc-macropanels-model.csproj", "{86FAC337-C6EB-431E-9E72-5D18851EAA26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-labelsets-bridge-dynamictexts", "opensc-labelsets-bridge-dynamictexts\opensc-labelsets-bridge-dynamictexts.csproj", "{3811FE57-70EC-49E0-9A4B-5661DEDA9E68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-labelsets-bridge-dynamictexts", "opensc-labelsets-bridge-dynamictexts\opensc-labelsets-bridge-dynamictexts.csproj", "{3811FE57-70EC-49E0-9A4B-5661DEDA9E68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-macros-gui", "opensc-macros-gui\opensc-macros-gui.csproj", "{46639A6B-0837-4F93-B447-77989FC1B839}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-macros-gui", "opensc-macros-gui\opensc-macros-gui.csproj", "{46639A6B-0837-4F93-B447-77989FC1B839}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-macropanels-gui", "opensc-macropanels-gui\opensc-macropanels-gui.csproj", "{4C933149-AD48-4CCA-B19E-0FFAF8C3D8BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-macropanels-gui", "opensc-macropanels-gui\opensc-macropanels-gui.csproj", "{4C933149-AD48-4CCA-B19E-0FFAF8C3D8BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-timers-gui", "opensc-timers-gui\opensc-timers-gui.csproj", "{46EDE88A-1256-4F43-AE4E-ED854266F92C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-timers-gui", "opensc-timers-gui\opensc-timers-gui.csproj", "{46EDE88A-1256-4F43-AE4E-ED854266F92C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-vtrs-gui", "opensc-vtrs-gui\opensc-vtrs-gui.csproj", "{3CBB7170-9903-47A7-BB5A-47DFD2514005}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-vtrs-gui", "opensc-vtrs-gui\opensc-vtrs-gui.csproj", "{3CBB7170-9903-47A7-BB5A-47DFD2514005}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-vtrs-subtype-casparcg-gui", "opensc-vtrs-subtype-casparcg-gui\opensc-vtrs-subtype-casparcg-gui.csproj", "{909CFE52-7D3C-43DC-A2A8-33285989C56A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-vtrs-subtype-casparcg-gui", "opensc-vtrs-subtype-casparcg-gui\opensc-vtrs-subtype-casparcg-gui.csproj", "{909CFE52-7D3C-43DC-A2A8-33285989C56A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-umds-gui", "opensc-umds-gui\opensc-umds-gui.csproj", "{35BD5A02-E363-4A04-9C1E-0F885CA7EA64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-umds-gui", "opensc-umds-gui\opensc-umds-gui.csproj", "{35BD5A02-E363-4A04-9C1E-0F885CA7EA64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-umds-subtype-mccurdy-gui", "opensc-umds-subtype-mccurdy-gui\opensc-umds-subtype-mccurdy-gui.csproj", "{2E1372D7-44FF-4635-B9E3-355D8D75F053}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-umds-subtype-mccurdy-gui", "opensc-umds-subtype-mccurdy-gui\opensc-umds-subtype-mccurdy-gui.csproj", "{2E1372D7-44FF-4635-B9E3-355D8D75F053}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-umds-subtype-tsl31-gui", "opensc-umds-subtype-tsl31-gui\opensc-umds-subtype-tsl31-gui.csproj", "{8FA9F2B1-42D2-4AF3-ABC5-534CCB70C541}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-umds-subtype-tsl31-gui", "opensc-umds-subtype-tsl31-gui\opensc-umds-subtype-tsl31-gui.csproj", "{8FA9F2B1-42D2-4AF3-ABC5-534CCB70C541}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-serialports-gui", "opensc-serialports-gui\opensc-serialports-gui.csproj", "{86C047F6-275B-48FC-9CCB-1F672D9B579F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-serialports-gui", "opensc-serialports-gui\opensc-serialports-gui.csproj", "{86C047F6-275B-48FC-9CCB-1F672D9B579F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-dynamictexts-gui", "opensc-dynamictexts-gui\opensc-dynamictexts-gui.csproj", "{B20F0A6A-4087-4413-9A07-25F24AED8132}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-dynamictexts-gui", "opensc-dynamictexts-gui\opensc-dynamictexts-gui.csproj", "{B20F0A6A-4087-4413-9A07-25F24AED8132}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-booleans-gui", "opensc-booleans-gui\opensc-booleans-gui.csproj", "{96957886-F262-4491-B03C-F3F90E7B07F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-booleans-gui", "opensc-booleans-gui\opensc-booleans-gui.csproj", "{96957886-F262-4491-B03C-F3F90E7B07F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-mixers-gui", "opensc-mixers-gui\opensc-mixers-gui.csproj", "{5D448050-D12A-47FF-AEEC-70C1BB7DA5D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-mixers-gui", "opensc-mixers-gui\opensc-mixers-gui.csproj", "{5D448050-D12A-47FF-AEEC-70C1BB7DA5D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-mixers-subtype-bmd-gui", "opensc-mixers-subtype-bmd-gui\opensc-mixers-subtype-bmd-gui.csproj", "{63A756D8-F014-4A92-BDEF-4CDAC4917412}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-mixers-subtype-bmd-gui", "opensc-mixers-subtype-bmd-gui\opensc-mixers-subtype-bmd-gui.csproj", "{63A756D8-F014-4A92-BDEF-4CDAC4917412}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-signals-gui", "opensc-signals-gui\opensc-signals-gui.csproj", "{36FB1DC4-79C7-4323-AF29-4831C0D427F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-signals-gui", "opensc-signals-gui\opensc-signals-gui.csproj", "{36FB1DC4-79C7-4323-AF29-4831C0D427F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-tallycopying-gui", "opensc-tallycopying-gui\opensc-tallycopying-gui.csproj", "{DFAC8F60-4E30-4173-BBDB-0581D2E40CAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-tallycopying-gui", "opensc-tallycopying-gui\opensc-tallycopying-gui.csproj", "{DFAC8F60-4E30-4173-BBDB-0581D2E40CAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-booleantallies-gui", "opensc-booleantallies-gui\opensc-booleantallies-gui.csproj", "{F49083E5-0939-4E43-84CF-50882A5CB3DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-booleantallies-gui", "opensc-booleantallies-gui\opensc-booleantallies-gui.csproj", "{F49083E5-0939-4E43-84CF-50882A5CB3DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-streams-gui", "opensc-streams-gui\opensc-streams-gui.csproj", "{79118814-F2E2-473E-88D3-A94FEE4ACB68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-streams-gui", "opensc-streams-gui\opensc-streams-gui.csproj", "{79118814-F2E2-473E-88D3-A94FEE4ACB68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-streams-subtype-youtube-gui", "opensc-streams-subtype-youtube-gui\opensc-streams-subtype-youtube-gui.csproj", "{7A3F9835-7188-4A40-9070-8DD9A96B97CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-streams-subtype-youtube-gui", "opensc-streams-subtype-youtube-gui\opensc-streams-subtype-youtube-gui.csproj", "{7A3F9835-7188-4A40-9070-8DD9A96B97CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-streams-subtype-youtube-model", "opensc-streams-subtype-youtube-model\opensc-streams-subtype-youtube-model.csproj", "{721E4551-5188-404B-B8C5-6B78B6381615}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-streams-subtype-youtube-model", "opensc-streams-subtype-youtube-model\opensc-streams-subtype-youtube-model.csproj", "{721E4551-5188-404B-B8C5-6B78B6381615}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-routers-gui", "opensc-routers-gui\opensc-routers-gui.csproj", "{3E4820AC-0807-45A8-BF1F-917AF17FE891}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routers-gui", "opensc-routers-gui\opensc-routers-gui.csproj", "{3E4820AC-0807-45A8-BF1F-917AF17FE891}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-labelsets-gui", "opensc-labelsets-gui\opensc-labelsets-gui.csproj", "{042C648B-52BB-4BFC-8808-C3DFE7500462}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-labelsets-gui", "opensc-labelsets-gui\opensc-labelsets-gui.csproj", "{042C648B-52BB-4BFC-8808-C3DFE7500462}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-routermirrors-gui", "opensc-routermirrors-gui\opensc-routermirrors-gui.csproj", "{106EACDC-C757-4F04-983C-7554B3E51911}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routermirrors-gui", "opensc-routermirrors-gui\opensc-routermirrors-gui.csproj", "{106EACDC-C757-4F04-983C-7554B3E51911}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-routers-subtype-virtual-gui", "opensc-routers-subtype-virtual-gui\opensc-routers-subtype-virtual-gui.csproj", "{4F059898-42B6-4313-92C5-398A5822D450}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routers-subtype-virtual-gui", "opensc-routers-subtype-virtual-gui\opensc-routers-subtype-virtual-gui.csproj", "{4F059898-42B6-4313-92C5-398A5822D450}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-routers-subtype-virtualleitch-gui", "opensc-routers-subtype-virtualleitch-gui\opensc-routers-subtype-virtualleitch-gui.csproj", "{127A4AE9-D71F-412F-84DE-7E774DB187D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routers-subtype-virtualleitch-gui", "opensc-routers-subtype-virtualleitch-gui\opensc-routers-subtype-virtualleitch-gui.csproj", "{127A4AE9-D71F-412F-84DE-7E774DB187D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-routers-subtype-bmd-gui", "opensc-routers-subtype-bmd-gui\opensc-routers-subtype-bmd-gui.csproj", "{6083D1A9-96E2-4149-A4FE-BBEC078E3F3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routers-subtype-bmd-gui", "opensc-routers-subtype-bmd-gui\opensc-routers-subtype-bmd-gui.csproj", "{6083D1A9-96E2-4149-A4FE-BBEC078E3F3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-routers-subtype-leitch-gui", "opensc-routers-subtype-leitch-gui\opensc-routers-subtype-leitch-gui.csproj", "{5DF50051-5F9F-444C-BA55-BC093A9958A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routers-subtype-leitch-gui", "opensc-routers-subtype-leitch-gui\opensc-routers-subtype-leitch-gui.csproj", "{5DF50051-5F9F-444C-BA55-BC093A9958A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-crosspointstores-gui", "opensc-crosspointstores-gui\opensc-crosspointstores-gui.csproj", "{9E88848D-0DD2-471A-9165-AA2440328D39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-crosspointstores-gui", "opensc-crosspointstores-gui\opensc-crosspointstores-gui.csproj", "{9E88848D-0DD2-471A-9165-AA2440328D39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-crosspointbooleans-gui", "opensc-crosspointbooleans-gui\opensc-crosspointbooleans-gui.csproj", "{AD75C376-387A-461F-B09E-F4DDABE13F8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-crosspointbooleans-gui", "opensc-crosspointbooleans-gui\opensc-crosspointbooleans-gui.csproj", "{AD75C376-387A-461F-B09E-F4DDABE13F8A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-wallpaper-gui", "opensc-wallpaper-gui\opensc-wallpaper-gui.csproj", "{1A6F6D96-A889-4AB1-AFE5-8E5FEA4E213E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1007,6 +1009,18 @@ Global
 		{AD75C376-387A-461F-B09E-F4DDABE13F8A}.Release|x64.Build.0 = Release|Any CPU
 		{AD75C376-387A-461F-B09E-F4DDABE13F8A}.Release|x86.ActiveCfg = Release|Any CPU
 		{AD75C376-387A-461F-B09E-F4DDABE13F8A}.Release|x86.Build.0 = Release|Any CPU
+		{1A6F6D96-A889-4AB1-AFE5-8E5FEA4E213E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A6F6D96-A889-4AB1-AFE5-8E5FEA4E213E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A6F6D96-A889-4AB1-AFE5-8E5FEA4E213E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1A6F6D96-A889-4AB1-AFE5-8E5FEA4E213E}.Debug|x64.Build.0 = Debug|Any CPU
+		{1A6F6D96-A889-4AB1-AFE5-8E5FEA4E213E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1A6F6D96-A889-4AB1-AFE5-8E5FEA4E213E}.Debug|x86.Build.0 = Debug|Any CPU
+		{1A6F6D96-A889-4AB1-AFE5-8E5FEA4E213E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A6F6D96-A889-4AB1-AFE5-8E5FEA4E213E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A6F6D96-A889-4AB1-AFE5-8E5FEA4E213E}.Release|x64.ActiveCfg = Release|Any CPU
+		{1A6F6D96-A889-4AB1-AFE5-8E5FEA4E213E}.Release|x64.Build.0 = Release|Any CPU
+		{1A6F6D96-A889-4AB1-AFE5-8E5FEA4E213E}.Release|x86.ActiveCfg = Release|Any CPU
+		{1A6F6D96-A889-4AB1-AFE5-8E5FEA4E213E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

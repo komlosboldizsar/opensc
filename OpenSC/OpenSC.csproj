@@ -76,6 +76,7 @@
     <ProjectReference Include="..\opensc-vtrs-model\opensc-vtrs-model.csproj" />
     <ProjectReference Include="..\opensc-vtrs-subtype-casparcg-gui\opensc-vtrs-subtype-casparcg-gui.csproj" />
     <ProjectReference Include="..\opensc-vtrs-subtype-casparcg-model\opensc-vtrs-subtype-casparcg-model.csproj" />
+    <ProjectReference Include="..\opensc-wallpaper-gui\opensc-wallpaper-gui.csproj" />
     <ProjectReference Include="..\ThreadHelpers\ThreadHelpers.csproj" />
   </ItemGroup>
   <ItemGroup>
