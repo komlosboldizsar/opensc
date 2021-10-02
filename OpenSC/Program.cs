@@ -38,11 +38,13 @@ namespace OpenSC
             // Thread helpers init
             ThreadHelpers.InvokeHelper.Init();
 
+            Form mainForm = GUI.MainForm.Instance;
+
             // Start components
             StartupController.Init();
 
             // Main message loop
-            GUI.MainForm.Instance.Load += mainFormOpenedHandler;
+            mainForm.Load += mainFormOpenedHandler;
             Application.Run(GUI.MainForm.Instance);
 
         }

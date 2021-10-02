@@ -20,6 +20,7 @@ namespace OpenSC.Model.Settings
             HumanReadableTitle = humanReadableTitle;
             HumanReadableDescription = humanReadableDescription;
             value = defaultValue;
+            DefaultValue = defaultValue;
         }
 
         public string Key { get; private set; }
@@ -51,6 +52,8 @@ namespace OpenSC.Model.Settings
             get { return value; }
             set { Value = (T)value; }
         }
+
+        public T DefaultValue { get; private set; }
         #endregion
 
     }

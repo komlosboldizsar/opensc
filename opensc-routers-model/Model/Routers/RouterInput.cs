@@ -169,7 +169,7 @@ namespace OpenSC.Model.Routers
         public void RestoreSource()
         {
             if (_sourceUniqueId != null)
-                AssignSource(SignalRegister.Instance.GetSignalByUniqueId(_sourceUniqueId));
+                AssignSource(SignalRegister.Instance[_sourceUniqueId]);
             TielineCost = _tielineCost;
             TielineIsReserved = _tielineIsReserved;
         }

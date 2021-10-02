@@ -64,7 +64,7 @@ namespace OpenSC.GUI.Signals.TallyCopying
         private void initSourceSignalDropDown(ComboBox dropDown)
             => dropDown.CreateAdapterAsDataSource<ISignalSourceRegistered>(
                 SignalRegister.Instance,
-                signal => string.Format("[{0}] {1}", signal.SignalUniqueId, signal.SignalLabel),
+                SignalRegister.Instance.ToStringMethod,
                 true,
                 "(not associated)");
 

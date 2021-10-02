@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.General;
+using OpenSC.Model.Variables;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,66 +10,26 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
 
-    public class SignalRegister : IObservableList<ISignalSourceRegistered>
+    public class SignalRegister : ObjectRegisterBase<string, ISignalSourceRegistered>
     {
 
         #region Singleton
         public static SignalRegister Instance { get; } = new SignalRegister();
-
-        private SignalRegister()
-        { }
+        private SignalRegister() { }
         #endregion
 
-        #region Store and access signals
-        private List<ISignalSourceRegistered> registeredSignals = new List<ISignalSourceRegistered>();
+        protected override string getKey(ISignalSourceRegistered item) => item.SignalUniqueId;
 
-        public ISignalSourceRegistered this[int index] => registeredSignals[index];
+        protected override void keyChangedSubscribeMethod(ISignalSourceRegistered item) => item.SignalUniqueIdChanged += itemUniqueIdChanged;
+        protected override void keyChangedUnsubscribeMethod(ISignalSourceRegistered item) => item.SignalUniqueIdChanged -= itemUniqueIdChanged;
+        private void itemUniqueIdChanged(ISignalSourceRegistered item, string newValue) => ItemKeyChanged(item);
 
-        public ISignalSourceRegistered GetSignalByUniqueId(string uniqueId)
-        {
-            foreach (ISignalSourceRegistered signal in registeredSignals)
-                if (signal.SignalUniqueId == uniqueId)
-                    return signal;
-            return null;
-        }
-        #endregion
+        protected override void itemRemovedSubscribeMethod(ISignalSourceRegistered item) { }
+        protected override void itemRemovedUnsubscribeMethod(ISignalSourceRegistered item) { }
 
-        #region IObservableList implementation
-        public int Count => registeredSignals.Count;
+        public override string ToStringMethod(ISignalSourceRegistered item)
+            => string.Format("[{0}] {1}", item.SignalUniqueId, item.SignalLabel);
 
-        public event ObservableListItemAddedDelegate ItemAdded;
-        public event ObservableListItemRemovedDelegate ItemRemoved;
-        public event ObservableListItemsChangedDelegate ItemsChanged;
-        #endregion
-
-        #region IEnumberable implementation
-        public IEnumerator<ISignalSourceRegistered> GetEnumerator()
-            => registeredSignals.GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator()
-            => registeredSignals.GetEnumerator();
-        #endregion
-
-        #region Register-unregister
-        public void RegisterSignal(ISignalSourceRegistered signal)
-        {
-            if (registeredSignals.Contains(signal))
-                return;
-            registeredSignals.Add(signal);
-            ItemAdded?.Invoke(new object[] { signal });
-            ItemsChanged?.Invoke();
-        }
-
-        public void UnregisterSignal(ISignalSourceRegistered signal)
-        {
-            if (!registeredSignals.Contains(signal))
-                return;
-            registeredSignals.Remove(signal);
-            ItemRemoved?.Invoke(new object[] { signal });
-            ItemsChanged?.Invoke();
-        }
-        #endregion
-        
     }
 
 }

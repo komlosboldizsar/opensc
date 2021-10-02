@@ -1,6 +1,6 @@
 ﻿namespace OpenSC.GUI.Settings
 {
-    partial class StringSettingEditor
+    partial class ColorSettingEditor
     {
         /// <summary> 
         /// Required designer variable.
@@ -32,16 +32,16 @@
             this.button1 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.valueTextBox = new System.Windows.Forms.TextBox();
+            this.selectColorButton = new System.Windows.Forms.Button();
+            this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.customElementsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // customElementsPanel
             // 
-            this.customElementsPanel.Controls.Add(this.valueTextBox);
-            this.customElementsPanel.Margin = new System.Windows.Forms.Padding(3, 6, 3, 6);
+            this.customElementsPanel.Controls.Add(this.selectColorButton);
             this.customElementsPanel.MinimumSize = new System.Drawing.Size(250, 12);
-            this.customElementsPanel.Controls.SetChildIndex(this.valueTextBox, 0);
+            this.customElementsPanel.Controls.SetChildIndex(this.selectColorButton, 0);
             // 
             // textBox1
             // 
@@ -77,28 +77,33 @@
             this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // valueTextBox
+            // selectColorButton
             // 
-            this.valueTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.valueTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.valueTextBox.Location = new System.Drawing.Point(8, 9);
-            this.valueTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.valueTextBox.Name = "valueTextBox";
-            this.valueTextBox.Size = new System.Drawing.Size(344, 24);
-            this.valueTextBox.TabIndex = 0;
+            this.selectColorButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.selectColorButton.Location = new System.Drawing.Point(8, 6);
+            this.selectColorButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.selectColorButton.Name = "selectColorButton";
+            this.selectColorButton.Size = new System.Drawing.Size(214, 30);
+            this.selectColorButton.TabIndex = 3;
+            this.selectColorButton.Text = "Select color";
+            this.selectColorButton.UseVisualStyleBackColor = true;
+            this.selectColorButton.Click += new System.EventHandler(this.selectColorButton_Click);
             // 
-            // StringSettingEditor
+            // colorDialog
+            // 
+            this.colorDialog.AnyColor = true;
+            // 
+            // ColorSettingEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.MinimumSize = new System.Drawing.Size(200, 78);
-            this.Name = "StringSettingEditor";
+            this.Name = "ColorSettingEditor";
             this.Padding = new System.Windows.Forms.Padding(0, 0, 0, 6);
             this.Size = new System.Drawing.Size(500, 111);
+            this.Load += new System.EventHandler(this.IntSettingEditor_Load);
             this.customElementsPanel.ResumeLayout(false);
-            this.customElementsPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -110,6 +115,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox valueTextBox;
+        private System.Windows.Forms.Button selectColorButton;
+        private System.Windows.Forms.ColorDialog colorDialog;
     }
 }

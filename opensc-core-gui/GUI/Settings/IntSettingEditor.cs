@@ -17,25 +17,19 @@ namespace OpenSC.GUI.Settings
     public partial class IntSettingEditor : SettingEditorBase
     {
 
-        public IntSettingEditor():
-            base()
-        {
-            InitializeComponent();
-        }
+        public override ISettingEditorControl GetInstanceForSetting(ISetting setting) => new IntSettingEditor(setting);
+        public IntSettingEditor() : base() => InitializeComponent();
+        public IntSettingEditor(ISetting setting) : base(setting) => InitializeComponent();
 
-        public IntSettingEditor(ISetting setting):
-            base(setting)
-        {
-            InitializeComponent();
-        }
+        protected override void readValue() => valueNumericField.Value = ((IntSetting)setting).Value;
+        protected override void writeValue() => ((IntSetting)setting).Value = (int)valueNumericField.Value;
+        protected override void resetToDefault() => valueNumericField.Value = ((IntSetting)setting).DefaultValue;
 
-        private void IntSettingEditor_Load(object sender, EventArgs e)
+        protected override void initEditor()
         {
-
             IntSetting typedSetting = (IntSetting)setting;
             valueNumericField.Minimum = typedSetting.MinValue ?? -99999;
             valueNumericField.Maximum = typedSetting.MaxValue ?? 99999;
-            valueNumericField.Value = typedSetting.Value;
 
             List<string> hintTexts = new List<string>();
             if (typedSetting.MinValue != null)
@@ -47,36 +41,8 @@ namespace OpenSC.GUI.Settings
                 minMaxHintLabel.Text = string.Format("({0})", string.Join(", ", hintTexts.ToArray()));
             else
                 minMaxHintLabel.Text = "";
-
-        }
-
-        private void saveButton_Click(object sender, EventArgs e)
-        {
-
-            if (setting == null)
-                return;
-
-            try
-            {
-                ((IntSetting)setting).Value = (int)valueNumericField.Value;
-            }
-            catch (ArgumentException ex)
-            {
-                MessageBox.Show(ex.Message, "Validation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-
-        private void resetButton_Click(object sender, EventArgs e)
-        {
-            if (setting != null)
-                valueNumericField.Value = ((IntSetting)setting).Value;
-        }
-
-        public override ISettingEditorControl GetInstanceForSetting(ISetting setting)
-        {
-            return new IntSettingEditor(setting);
         }
 
     }
+
 }

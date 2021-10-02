@@ -1,6 +1,6 @@
 ﻿namespace OpenSC.GUI.Settings
 {
-    partial class StringSettingEditor
+    partial class EnumSettingEditor
     {
         /// <summary> 
         /// Required designer variable.
@@ -32,16 +32,16 @@
             this.button1 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.valueTextBox = new System.Windows.Forms.TextBox();
+            this.colorDialog = new System.Windows.Forms.ColorDialog();
+            this.dropDown = new System.Windows.Forms.ComboBox();
             this.customElementsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // customElementsPanel
             // 
-            this.customElementsPanel.Controls.Add(this.valueTextBox);
-            this.customElementsPanel.Margin = new System.Windows.Forms.Padding(3, 6, 3, 6);
+            this.customElementsPanel.Controls.Add(this.dropDown);
             this.customElementsPanel.MinimumSize = new System.Drawing.Size(250, 12);
-            this.customElementsPanel.Controls.SetChildIndex(this.valueTextBox, 0);
+            this.customElementsPanel.Controls.SetChildIndex(this.dropDown, 0);
             // 
             // textBox1
             // 
@@ -77,28 +77,29 @@
             this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // valueTextBox
+            // colorDialog
             // 
-            this.valueTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.valueTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.valueTextBox.Location = new System.Drawing.Point(8, 9);
-            this.valueTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.valueTextBox.Name = "valueTextBox";
-            this.valueTextBox.Size = new System.Drawing.Size(344, 24);
-            this.valueTextBox.TabIndex = 0;
+            this.colorDialog.AnyColor = true;
             // 
-            // StringSettingEditor
+            // dropDown
+            // 
+            this.dropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.dropDown.FormattingEnabled = true;
+            this.dropDown.Location = new System.Drawing.Point(8, 8);
+            this.dropDown.Name = "dropDown";
+            this.dropDown.Size = new System.Drawing.Size(294, 28);
+            this.dropDown.TabIndex = 3;
+            // 
+            // EnumSettingEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.MinimumSize = new System.Drawing.Size(200, 78);
-            this.Name = "StringSettingEditor";
+            this.Name = "EnumSettingEditor";
             this.Padding = new System.Windows.Forms.Padding(0, 0, 0, 6);
             this.Size = new System.Drawing.Size(500, 111);
             this.customElementsPanel.ResumeLayout(false);
-            this.customElementsPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -110,6 +111,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox valueTextBox;
+        private System.Windows.Forms.ColorDialog colorDialog;
+        private System.Windows.Forms.ComboBox dropDown;
     }
 }

@@ -131,7 +131,7 @@ namespace OpenSC.Model.Signals.BooleanTallies
             if (_fromBooleanUniqueId != null)
                 FromBoolean = BooleanRegister.Instance[_fromBooleanUniqueId];
             if (_toSignalUniqueId != null)
-                ToSignal = SignalRegister.Instance.GetSignalByUniqueId(_toSignalUniqueId);
+                ToSignal = SignalRegister.Instance[_toSignalUniqueId];
         }
         #endregion
 

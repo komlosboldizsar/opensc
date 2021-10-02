@@ -164,9 +164,9 @@ namespace OpenSC.Model.Signals.TallyCopying
         private void restoreSources()
         {
             if (_fromSignalUniqueId != null)
-                FromSignal = SignalRegister.Instance.GetSignalByUniqueId(_fromSignalUniqueId);
+                FromSignal = SignalRegister.Instance[_fromSignalUniqueId];
             if (_toSignalUniqueId != null)
-                ToSignal = SignalRegister.Instance.GetSignalByUniqueId(_toSignalUniqueId);
+                ToSignal = SignalRegister.Instance[_toSignalUniqueId];
         }
         #endregion
 

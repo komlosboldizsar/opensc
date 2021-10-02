@@ -128,7 +128,7 @@ namespace OpenSC.Model.Mixers
         private void restoreSource()
         {
             if (_sourceSignalUniqueId != null)
-                Source = SignalRegister.Instance.GetSignalByUniqueId(_sourceSignalUniqueId);
+                Source = SignalRegister.Instance[_sourceSignalUniqueId];
         }
 
         public event PropertyChangedOneValueDelegate<MixerInput, bool> RedTallyChanged;
@@ -180,20 +180,20 @@ namespace OpenSC.Model.Mixers
         {
             redTallyBoolean = new MixerInputTallyBoolean(this, MixerInputTallyBoolean.TallyColor.Red);
             greenTallyBoolean = new MixerInputTallyBoolean(this, MixerInputTallyBoolean.TallyColor.Green);
-            BooleanRegister.Instance.RegisterBoolean(redTallyBoolean);
-            BooleanRegister.Instance.RegisterBoolean(greenTallyBoolean);
+            BooleanRegister.Instance.Register(redTallyBoolean);
+            BooleanRegister.Instance.Register(greenTallyBoolean);
         }
 
         private void removeBooleans()
         {
             if (redTallyBoolean != null)
             {
-                BooleanRegister.Instance.UnregisterBoolean(redTallyBoolean);
+                BooleanRegister.Instance.Unregister(redTallyBoolean);
                 redTallyBoolean = null;
             }
             if (greenTallyBoolean != null)
             {
-                BooleanRegister.Instance.UnregisterBoolean(greenTallyBoolean);
+                BooleanRegister.Instance.Unregister(greenTallyBoolean);
                 greenTallyBoolean = null;
             }
         }

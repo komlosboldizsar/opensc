@@ -64,14 +64,14 @@ namespace OpenSC.GUI.Signals.BooleanTallies
         private void initFromBooleanDropDown()
             => fromBooleanDropDown.CreateAdapterAsDataSource<IBoolean>(
                 BooleanRegister.Instance,
-                boolean => boolean.Name,
+                BooleanRegister.Instance.ToStringMethod,
                 true,
                 "(not associated)");
 
         private void initToSignalDropDown()
             => toSignalDropDown.CreateAdapterAsDataSource<ISignalSourceRegistered>(
                 SignalRegister.Instance,
-                signal => string.Format("[{0}] {1}", signal.SignalUniqueId, signal.SignalLabel),
+                SignalRegister.Instance.ToStringMethod,
                 true,
                 "(not associated)");
 
