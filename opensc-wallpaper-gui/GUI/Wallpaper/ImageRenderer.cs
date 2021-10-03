@@ -12,10 +12,7 @@ namespace OpenSC.GUI.Wallpaper
     internal class ImageRenderer
     {
 
-        public ImageRenderer(Image srcImage = null)
-        {
-            SrcImage = srcImage;
-        }
+        public ImageRenderer(Image srcImage = null) => SrcImage = srcImage;
 
         public Image SrcImage { get; set; }
 
@@ -64,12 +61,73 @@ namespace OpenSC.GUI.Wallpaper
             Image dstImage = new Bitmap(DstSize.Width, DstSize.Height);
             using (Graphics graphics = Graphics.FromImage(dstImage))
             {
-                // Resize
-                Rectangle dstRect = new Rectangle(0, 0, dstImage.Width, dstImage.Height);
-                graphics.DrawImage(srcImage, dstRect, 0, 0, srcImage.Width, srcImage.Height, GraphicsUnit.Pixel, imageAttributes);
+                float srcAspect = srcImage.Width / (float)srcImage.Height;
+                float dstAspect = DstSize.Width / (float)DstSize.Height;
+                Rectangle dstRect = new Rectangle(0, 0, DstSize.Width, DstSize.Height);
+                drawImageGraphics = graphics;
+                drawImageSrc = srcImage;
+                switch (Layout)
+                {
+                    case ImageLayout.None:
+                        drawImage(new Rectangle(0, 0, srcImage.Width, srcImage.Height));
+                        break;
+                    case ImageLayout.Tile:
+                        int tilesX = (int)Math.Ceiling(DstSize.Width / (double)srcImage.Width);
+                        int tilesY = (int)Math.Ceiling(DstSize.Height / (double)srcImage.Height);
+                        dstRect = new Rectangle(0, 0, srcImage.Width, srcImage.Height);
+                        for (int ty = 0; ty < tilesY; ty++)
+                        {
+                            dstRect.X = 0;
+                            for (int tx = 0; tx < tilesX; tx++)
+                            {
+                                drawImage(dstRect);
+                                dstRect.X += dstRect.Width;
+                            }
+                            dstRect.Y += dstRect.Height;
+                        }
+                        break;
+                    case ImageLayout.Center:
+                        // Aspect > 1.0f: landscape, aspect < 1.0f: portrait
+                        if (srcAspect < dstAspect)
+                        {
+                            dstRect.Width = (int)(dstRect.Height * srcAspect);
+                            dstRect.X = (DstSize.Width - dstRect.Width) / 2;
+                        }
+                        else
+                        {
+                            dstRect.Height = (int)(dstRect.Width / srcAspect);
+                            dstRect.Y = (DstSize.Height - dstRect.Height) / 2;
+                        }
+                        drawImage(dstRect);
+                        break;
+                    case ImageLayout.Stretch:
+                        drawImage(dstRect);
+                        break;
+                    case ImageLayout.Zoom:
+                        if (srcAspect < dstAspect)
+                        {
+                            dstRect.Height = (int)(dstRect.Width / srcAspect);
+                            dstRect.Y = (DstSize.Height - dstRect.Height) / 2;
+                        }
+                        else
+                        {
+                            dstRect.Width = (int)(dstRect.Height * srcAspect);
+                            dstRect.X = (DstSize.Width - dstRect.Width) / 2;
+                        }
+                        drawImage(dstRect);
+                        break;
+                }
+                drawImageGraphics = null;
+                drawImageSrc = null;
             }
             return dstImage;
         }
+
+        private Graphics drawImageGraphics;
+        private Image drawImageSrc;
+
+        private void drawImage(Rectangle dstRectangle)
+            => drawImageGraphics.DrawImage(drawImageSrc, dstRectangle, 0, 0, drawImageSrc.Width, drawImageSrc.Height, GraphicsUnit.Pixel, imageAttributes);
 
         private ColorMatrix colorMatrix;
         private ImageAttributes imageAttributes = new ImageAttributes();

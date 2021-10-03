@@ -27,7 +27,7 @@ namespace OpenSC.Model.Settings
         public string Category { get; private set; }
         public string HumanReadableTitle { get; private set; }
         public string HumanReadableDescription { get; private set; }
-        public Type Type { get; } = typeof(T);
+        public Type ValueType { get; } = typeof(T);
 
         #region Value properties
         public event SettingValueChangedDelegate ValueChanged;
