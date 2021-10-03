@@ -1,6 +1,6 @@
 ﻿namespace OpenSC.GUI.Settings
 {
-    partial class ColorSettingEditor
+    partial class ColorEditor
     {
         /// <summary> 
         /// Required designer variable.

@@ -12,7 +12,7 @@ using System.Diagnostics;
 
 namespace OpenSC.GUI.Settings
 {
-    [SettingEditorControlType(typeof(string))]
+    [EditorForSettingValue(typeof(string))]
     public partial class StringSettingEditor : SettingEditorBase
     {
         public override ISettingEditorControl GetInstanceForSetting(ISetting setting) => new StringSettingEditor(setting);

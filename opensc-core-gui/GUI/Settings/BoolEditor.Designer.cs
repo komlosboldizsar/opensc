@@ -1,6 +1,6 @@
 ﻿namespace OpenSC.GUI.Settings
 {
-    partial class BoolSettingEditor
+    partial class BoolEditor
     {
         /// <summary> 
         /// Required designer variable.

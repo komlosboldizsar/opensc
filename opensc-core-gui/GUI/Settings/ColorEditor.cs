@@ -13,13 +13,13 @@ using System.Diagnostics;
 namespace OpenSC.GUI.Settings
 {
 
-    [SettingEditorControlType(typeof(Color))]
-    public partial class ColorSettingEditor : SettingEditorBase
+    [EditorForSettingValue(typeof(Color))]
+    public partial class ColorEditor : SettingEditorBase
     {
 
-        public override ISettingEditorControl GetInstanceForSetting(ISetting setting) => new ColorSettingEditor(setting);
-        public ColorSettingEditor() : base() => InitializeComponent();
-        public ColorSettingEditor(ISetting setting) : base(setting) => InitializeComponent();
+        public override ISettingEditorControl GetInstanceForSetting(ISetting setting) => new ColorEditor(setting);
+        public ColorEditor() : base() => InitializeComponent();
+        public ColorEditor(ISetting setting) : base(setting) => InitializeComponent();
 
         protected override void readValue() => storedColor = ((Setting<Color>)setting).Value;
         protected override void writeValue() => ((Setting<Color>)setting).Value = storedColor;

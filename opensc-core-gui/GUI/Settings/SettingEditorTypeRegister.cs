@@ -1,58 +1,86 @@
-﻿using OpenSC.Model.Settings;
+﻿using OpenSC.Model;
+using OpenSC.Model.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace OpenSC.GUI.Settings
 {
     class SettingEditorTypeRegister
     {
 
-        private static ISettingEditorControl[] knownEditors = new ISettingEditorControl[]
-        {
-            new StringSettingEditor(),
-            new IntSettingEditor(),
-            new ColorSettingEditor(),
-            new BoolSettingEditor(),
-            new EnumSettingEditor(),
-            new OpenFileSettingEditor()
-        };
+        #region Singleton
+        public static SettingEditorTypeRegister Instance { get; } = new SettingEditorTypeRegister();
+        private SettingEditorTypeRegister() => autoRegisterAllEditorsFromNamespace(BUILTIN_EDITORS_NAMESPACE);
+        #endregion
 
-        private static Dictionary<Type, ISettingEditorControl> registeredEditors = null;
+        private static ISettingEditorControl BASE_EDITOR = new SettingEditorBase();
 
-        public static Dictionary<Type, ISettingEditorControl> RegisteredEditors
+        private static Dictionary<Type, ISettingEditorControl> registeredSettingEditors = null;
+        private static Dictionary<Type, ISettingEditorControl> registeredValueEditors = null;
+
+        private readonly Type[] EMPTY_TYPE_ARRAY = new Type[] { };
+        private readonly object[] EMPTY_OBJECT_ARRAY = new object[] { };
+
+        private readonly string BUILTIN_EDITORS_NAMESPACE = $"{nameof(OpenSC)}.{nameof(OpenSC.GUI)}.{nameof(OpenSC.GUI.Settings)}.{nameof(OpenSC.GUI.Settings)}";
+
+        private void autoRegisterAllEditorsFromNamespace(string _namespace)
         {
-            get
+            autoRegisterEditorsFromNamespace(_namespace, registeredSettingEditors, getTypeForSettingEditor);
+            autoRegisterEditorsFromNamespace(_namespace, registeredValueEditors, getTypeForValueEditor);
+        }
+
+        private delegate Type EditorTypeGetterDelegate(ISettingEditorControl converter);
+
+        private void autoRegisterEditorsFromNamespace(string _namespace, Dictionary<Type, ISettingEditorControl> storageDictionary, EditorTypeGetterDelegate typeGetterMethod)
+        {
+            Type TYPEOF_EDITOR = typeof(ISettingEditorControl);
+            Type[] allTypes = Assembly.GetExecutingAssembly().GetTypes();
+            IEnumerable<Type> editorTypes = allTypes.Where(t => t.IsClass && !t.IsAbstract && (t.Namespace == _namespace) && t.IsAssignableTo(TYPEOF_EDITOR));
+            foreach (Type editorType in editorTypes)
             {
-                if(registeredEditors == null)
+                ConstructorInfo ctor = editorType.GetConstructor(EMPTY_TYPE_ARRAY);
+                if (ctor != null)
                 {
-                    registeredEditors = new Dictionary<Type, ISettingEditorControl>();
-                    foreach(ISettingEditorControl editor in knownEditors)
-                    {
-                        Type editorType = GetTypeForEditor(editor);
-                        if (editorType != null)
-                            registeredEditors.Add(editorType, editor);
-                    }
+                    ISettingEditorControl editor = ctor.Invoke(EMPTY_OBJECT_ARRAY) as ISettingEditorControl;
+                    if (editor != null)
+                        storageDictionary.Add(typeGetterMethod(editor), editor);
                 }
-                return registeredEditors;
             }
         }
 
-        private static Type GetTypeForEditor(ISettingEditorControl editor)
+        private Type getTypeForSettingEditor(ISettingEditorControl converter)
+            => converter.GetType().GetAttribute<EditorForSettingAttribute>()?.Type;
+
+        private Type getTypeForValueEditor(ISettingEditorControl converter)
+            => converter.GetType().GetAttribute<EditorForSettingValueAttribute>()?.Type;
+
+        private ISettingEditorControl getEditorForSetting(ISetting setting)
+            => getConverterForSomething(setting.GetType(), registeredSettingEditors);
+
+        private ISettingEditorControl getEditorForValue(ISetting setting)
+            => getConverterForSomething(setting.ValueType, registeredValueEditors);
+
+        private ISettingEditorControl getConverterForSomething(Type forType, Dictionary<Type, ISettingEditorControl> availableEditors)
         {
-            object[] attributes = editor.GetType().GetCustomAttributes(true);
-            object foundAttribute = attributes.FirstOrDefault(attr => (attr is SettingEditorControlTypeAttribute));
-            if (foundAttribute == null)
-                return null;
-            SettingEditorControlTypeAttribute typedAttribute = foundAttribute as SettingEditorControlTypeAttribute;
-            return typedAttribute?.Type;
+            if (availableEditors.TryGetValue(forType, out ISettingEditorControl converter))
+                return converter;
+            foreach (KeyValuePair<Type, ISettingEditorControl> availableConverterKVP in availableEditors)
+                if (availableConverterKVP.Key.IsAssignableFrom(forType))
+                    return availableConverterKVP.Value;
+            return null;
         }
 
-        public static ISettingEditorControl GetEditorForSetting(ISetting setting)
+        public ISettingEditorControl GetEditorForSetting(ISetting setting)
         {
-            if (!RegisteredEditors.TryGetValue(setting.ValueType, out ISettingEditorControl editor))
-                return null;
-            return editor.GetInstanceForSetting(setting);
+            ISettingEditorControl settingEditorControl = getEditorForSetting(setting);
+            if (settingEditorControl != null)
+                return settingEditorControl;
+            settingEditorControl = getEditorForValue(setting);
+            if (settingEditorControl != null)
+                return settingEditorControl;
+            return BASE_EDITOR.GetInstanceForSetting(setting);
         }
 
     }
