@@ -15,8 +15,8 @@ namespace OpenSC.GUI.WorkspaceManager
     {
 
         private static readonly string DIRECTORY_WORKSPACE = $"{DataPathInfo.PATH_DATA}workspace{Path.DirectorySeparatorChar}";
-        private static readonly string FILE_WORKSPACE_SAVED = $"{DIRECTORY_WORKSPACE}saved.{EXTENSION_WORKSPACE}";
         private static readonly string EXTENSION_WORKSPACE = "xml";
+        private static readonly string FILE_WORKSPACE_SAVED = $"{DIRECTORY_WORKSPACE}saved.{EXTENSION_WORKSPACE}";
 
         private const string ROOT_TAG = "workspace";
         private const string WINDOW_TAG = "window";

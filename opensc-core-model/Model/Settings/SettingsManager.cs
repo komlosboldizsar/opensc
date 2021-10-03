@@ -44,8 +44,8 @@ namespace OpenSC.Model.Settings
 
         #region Serialization
         private static readonly string DIRECTORY_SETTINGS = $"{DataPathInfo.PATH_DATA}settings{Path.DirectorySeparatorChar}";
-        private static readonly string FILE_SETTINGS_CURRENT = $"{DIRECTORY_SETTINGS}current.{EXTENSION_SETTINGS}";
         private static readonly string EXTENSION_SETTINGS = "xml";
+        private static readonly string FILE_SETTINGS_CURRENT = $"{DIRECTORY_SETTINGS}current.{EXTENSION_SETTINGS}";
 
         private const string ROOT_TAG = "settings";
         private const string SETTING_TAG = "setting";
