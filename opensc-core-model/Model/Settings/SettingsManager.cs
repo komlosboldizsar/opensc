@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.Settings.Converters;
+using OpenSC.Properties;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,7 +42,9 @@ namespace OpenSC.Model.Settings
         #endregion
 
         #region Serialization
-        private const string SETTINGS_FILE_PATH = "settings.xml";
+        private static readonly string DIRECTORY_SETTINGS = $"{DataPathInfo.PATH_DATA}settings{Path.DirectorySeparatorChar}";
+        private static readonly string FILE_SETTINGS_CURRENT = $"{DIRECTORY_SETTINGS}current.{EXTENSION_SETTINGS}";
+        private static readonly string EXTENSION_SETTINGS = "xml";
 
         private const string ROOT_TAG = "settings";
         private const string SETTING_TAG = "setting";
@@ -64,7 +67,10 @@ namespace OpenSC.Model.Settings
                 if (settingElement != null)
                     rootElement.Add(settingElement);
             }
-            using (FileStream stream = new FileStream(SETTINGS_FILE_PATH, FileMode.Create))
+            string fileSettingsCurrentDirectory = Path.GetDirectoryName(FILE_SETTINGS_CURRENT);
+            if (!Directory.Exists(fileSettingsCurrentDirectory))
+                Directory.CreateDirectory(fileSettingsCurrentDirectory);
+            using (FileStream stream = new FileStream(FILE_SETTINGS_CURRENT, FileMode.Create))
             using (XmlWriter writer = XmlWriter.Create(stream, xmlWriterSettings))
             {
                 rootElement.WriteTo(writer);
@@ -79,7 +85,7 @@ namespace OpenSC.Model.Settings
             {
                 loadingSettings = true;
                 XmlDocument doc = new XmlDocument();
-                doc.Load(SETTINGS_FILE_PATH);
+                doc.Load(FILE_SETTINGS_CURRENT);
                 XmlNode root = doc.DocumentElement;
                 if (root.LocalName != ROOT_TAG)
                     return;
