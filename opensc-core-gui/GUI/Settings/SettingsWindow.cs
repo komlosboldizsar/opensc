@@ -27,7 +27,7 @@ namespace OpenSC.GUI.Settings
         {
             foreach(var setting in SettingsManager.Instance.RegisteredSettings)
             {
-                ISettingEditorControl editorControl = SettingEditorTypeRegister.GetEditorForSetting(setting);
+                ISettingEditorControl editorControl = SettingEditorTypeRegister.Instance.GetEditorForSetting(setting);
                 Control editorControlCasted = editorControl as Control;
                 if (editorControlCasted != null)
                 {

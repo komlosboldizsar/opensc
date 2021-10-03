@@ -6,18 +6,10 @@ using System.Threading.Tasks;
 
 namespace OpenSC.GUI.Settings
 {
-
     [AttributeUsage(AttributeTargets.Class)]
-    class SettingEditorControlTypeAttribute : Attribute
+    class EditorForSettingAttribute : Attribute
     {
-
         public Type Type { get; private set; }
-
-        public SettingEditorControlTypeAttribute(Type Type)
-        {
-            this.Type = Type;
-        }
-
+        public EditorForSettingAttribute(Type Type) => this.Type = Type;
     }
-
 }

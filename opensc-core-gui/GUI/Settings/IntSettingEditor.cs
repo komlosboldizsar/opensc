@@ -13,7 +13,7 @@ using System.Diagnostics;
 namespace OpenSC.GUI.Settings
 {
 
-    [SettingEditorControlType(typeof(int))]
+    [EditorForSetting(typeof(IntSetting))]
     public partial class IntSettingEditor : SettingEditorBase
     {
 

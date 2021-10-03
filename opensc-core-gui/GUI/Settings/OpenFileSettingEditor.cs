@@ -14,7 +14,7 @@ using OpenSC.GUI.GeneralComponents.DropDowns;
 namespace OpenSC.GUI.Settings
 {
 
-    [SettingEditorControlType(typeof(OpenFilePath))]
+    [EditorForSetting(typeof(OpenFileSetting))]
     public partial class OpenFileSettingEditor : SettingEditorBase
     {
 
