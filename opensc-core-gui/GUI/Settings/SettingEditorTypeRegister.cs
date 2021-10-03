@@ -45,7 +45,11 @@ namespace OpenSC.GUI.Settings
                 {
                     ISettingEditorControl editor = ctor.Invoke(EMPTY_OBJECT_ARRAY) as ISettingEditorControl;
                     if (editor != null)
-                        storageDictionary.Add(typeGetterMethod(editor), editor);
+                    {
+                        Type registerWithType = typeGetterMethod(editor);
+                        if (registerWithType != null)
+                            storageDictionary.Add(registerWithType, editor);
+                    }
                 }
             }
         }
@@ -75,12 +79,11 @@ namespace OpenSC.GUI.Settings
         public ISettingEditorControl GetEditorForSetting(ISetting setting)
         {
             ISettingEditorControl settingEditorControl = getEditorForSetting(setting);
-            if (settingEditorControl != null)
-                return settingEditorControl;
-            settingEditorControl = getEditorForValue(setting);
-            if (settingEditorControl != null)
-                return settingEditorControl;
-            return BASE_EDITOR.GetInstanceForSetting(setting);
+            if (settingEditorControl == null)
+                settingEditorControl = getEditorForValue(setting);
+            if (settingEditorControl == null)
+                settingEditorControl = BASE_EDITOR;
+            return settingEditorControl.GetInstanceForSetting(setting);
         }
 
     }
