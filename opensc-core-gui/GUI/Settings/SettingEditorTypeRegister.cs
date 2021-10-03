@@ -15,10 +15,10 @@ namespace OpenSC.GUI.Settings
         private SettingEditorTypeRegister() => autoRegisterAllEditorsFromNamespace(BUILTIN_EDITORS_NAMESPACE);
         #endregion
 
-        private static ISettingEditorControl BASE_EDITOR = new SettingEditorBase();
+        private ISettingEditorControl BASE_EDITOR = new SettingEditorBase();
 
-        private static Dictionary<Type, ISettingEditorControl> registeredSettingEditors = new();
-        private static Dictionary<Type, ISettingEditorControl> registeredValueEditors = new();
+        private Dictionary<Type, ISettingEditorControl> registeredSettingEditors = new();
+        private Dictionary<Type, ISettingEditorControl> registeredValueEditors = new();
 
         private readonly Type[] EMPTY_TYPE_ARRAY = new Type[] { };
         private readonly object[] EMPTY_OBJECT_ARRAY = new object[] { };
