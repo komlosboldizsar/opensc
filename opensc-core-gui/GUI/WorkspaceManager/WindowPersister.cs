@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.WorkspaceManager.ValueConverters;
+using OpenSC.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,7 +13,9 @@ namespace OpenSC.GUI.WorkspaceManager
     public class WindowPersister
     {
 
-        private const string WORKSPACE_FILE_PATH = "workspace.xml";
+        private static readonly string DIRECTORY_WORKSPACE = $"{DataPathInfo.PATH_DATA}workspace{Path.DirectorySeparatorChar}";
+        private static readonly string FILE_WORKSPACE_SAVED = $"{DIRECTORY_WORKSPACE}saved.{EXTENSION_WORKSPACE}";
+        private static readonly string EXTENSION_WORKSPACE = "xml";
 
         private const string ROOT_TAG = "workspace";
         private const string WINDOW_TAG = "window";
@@ -62,7 +65,7 @@ namespace OpenSC.GUI.WorkspaceManager
                     rootElement.Add(windowElement);
             }
 
-            using (FileStream stream = new FileStream(WORKSPACE_FILE_PATH, FileMode.Create))
+            using (FileStream stream = new FileStream(FILE_WORKSPACE_SAVED, FileMode.Create))
             using (XmlWriter writer = XmlWriter.Create(stream, xmlWriterSettings))
             {
                 rootElement.WriteTo(writer);
@@ -78,7 +81,7 @@ namespace OpenSC.GUI.WorkspaceManager
             try
             {
                 XmlDocument doc = new XmlDocument();
-                doc.Load(WORKSPACE_FILE_PATH);
+                doc.Load(FILE_WORKSPACE_SAVED);
 
                 XmlNode root = doc.DocumentElement;
                 if (root.LocalName != ROOT_TAG)
