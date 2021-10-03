@@ -14,7 +14,7 @@ using OpenSC.GUI.GeneralComponents.DropDowns;
 namespace OpenSC.GUI.Settings
 {
 
-    [EditorForSetting(typeof(Enum))]
+    [EditorForSetting(typeof(EnumSetting))]
     public partial class EnumSettingEditor : SettingEditorBase
     {
 
