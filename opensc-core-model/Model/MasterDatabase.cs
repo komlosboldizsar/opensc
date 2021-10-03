@@ -1,5 +1,7 @@
-﻿using System;
+﻿using OpenSC.Properties;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -64,17 +66,16 @@ namespace OpenSC.Model
                 database.Save();
         }
 
-        public DatabaseFile GetFileToWrite(IDatabaseBase database)
-        {
-            string key = getKeyForDatabase(database);
-            return new DatabaseFile(key + ".db", DatabaseFile.DatabaseFileMode.Write);
-        }
+        public DatabaseFile GetFileToWrite(IDatabaseBase database) => getFile(database, DatabaseFile.DatabaseFileMode.Write);
+        public DatabaseFile GetFileToRead(IDatabaseBase database) => getFile(database, DatabaseFile.DatabaseFileMode.Read);
+        private DatabaseFile getFile(IDatabaseBase database, DatabaseFile.DatabaseFileMode fileMode) => new(getPathForDatabase(database), fileMode);
 
-        public DatabaseFile GetFileToRead(IDatabaseBase database)
-        {
-            string key = getKeyForDatabase(database);
-            return new DatabaseFile(key + ".db", DatabaseFile.DatabaseFileMode.Read);
-        }
+        public static readonly string PATH_DATABASES = $"{DataPathInfo.PATH_DATA}databases{Path.DirectorySeparatorChar}";
+        public static readonly string PATH_CURRENT_DATABASE = $"{PATH_DATABASES}current{Path.DirectorySeparatorChar}";
+        public static readonly string EXTENSION_DATABASES = "db";
+
+        private string getPathForDatabase(IDatabaseBase database)
+            => $"{PATH_CURRENT_DATABASE}{getKeyForDatabase(database)}.{EXTENSION_DATABASES}";
 
         private string getKeyForDatabase(IDatabaseBase database)
         {
@@ -83,10 +84,7 @@ namespace OpenSC.Model
             return databases.FirstOrDefault(d => (d.Value == database)).Key;
         }
 
-        public void DatabaseFileWritten(DatabaseFile file)
-        {
-
-        }
+        public void DatabaseFileWritten(DatabaseFile file) { }
 
         public object GetItem(string databaseName, int id)
         {
