@@ -125,14 +125,16 @@ namespace OpenSC.Model.Settings
         #region Converters
         private Dictionary<Type, ISettingValueConverter> converters = new Dictionary<Type, ISettingValueConverter>();
 
-        private static readonly Type[] EMPTY_TYPE_ARRAY = new Type[] { };
-        private static readonly object[] EMPTY_OBJECT_ARRAY = new object[] { };
+        private readonly Type[] EMPTY_TYPE_ARRAY = new Type[] { };
+        private readonly object[] EMPTY_OBJECT_ARRAY = new object[] { };
+        private readonly Type TYPEOF_CONVERTER = typeof(ISettingValueConverter);
 
-        private const string BUILTIN_CONVERTERS_NAMESPACE = nameof(OpenSC.Model.Settings.Converters);
+        private readonly string BUILTIN_CONVERTERS_NAMESPACE = $"{nameof(OpenSC)}.{nameof(OpenSC.Model)}.{nameof(OpenSC.Model.Settings)}.{nameof(OpenSC.Model.Settings.Converters)}";
+        
         private void autoRegisterConvertersFromNamespace(string _namespace)
         {
             Type[] allTypes = Assembly.GetExecutingAssembly().GetTypes();
-            IEnumerable<Type> converterTypes = allTypes.Where(t => t.IsClass && !t.IsAbstract && (t.Namespace == _namespace) && t.IsAssignableTo(typeof(ISettingValueConverter)));
+            IEnumerable<Type> converterTypes = allTypes.Where(t => t.IsClass && !t.IsAbstract && (t.Namespace == _namespace) && t.IsAssignableTo(TYPEOF_CONVERTER));
             foreach (Type converterType in converterTypes)
             {
                 ConstructorInfo ctor = converterType.GetConstructor(EMPTY_TYPE_ARRAY);
@@ -140,7 +142,7 @@ namespace OpenSC.Model.Settings
                 {
                     ISettingValueConverter converter = ctor.Invoke(EMPTY_OBJECT_ARRAY) as ISettingValueConverter;
                     if (converter != null)
-                        converters.Add(converterType, converter);
+                        converters.Add(getTypeForConverter(converter), converter);
                 }
             }
         }
