@@ -23,7 +23,7 @@ namespace OpenSC.GUI.Settings
         private readonly Type[] EMPTY_TYPE_ARRAY = new Type[] { };
         private readonly object[] EMPTY_OBJECT_ARRAY = new object[] { };
 
-        private readonly string BUILTIN_EDITORS_NAMESPACE = $"{nameof(OpenSC)}.{nameof(OpenSC.GUI)}.{nameof(OpenSC.GUI.Settings)}.{nameof(OpenSC.GUI.Settings)}";
+        private readonly string BUILTIN_EDITORS_NAMESPACE = $"{nameof(OpenSC)}.{nameof(OpenSC.GUI)}.{nameof(OpenSC.GUI.Settings)}";
 
         private void autoRegisterAllEditorsFromNamespace(string _namespace)
         {
