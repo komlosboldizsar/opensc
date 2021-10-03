@@ -49,7 +49,7 @@ namespace OpenSC.GUI.Settings
 
         public static ISettingEditorControl GetEditorForSetting(ISetting setting)
         {
-            if (!RegisteredEditors.TryGetValue(setting.Type, out ISettingEditorControl editor))
+            if (!RegisteredEditors.TryGetValue(setting.ValueType, out ISettingEditorControl editor))
                 return null;
             return editor.GetInstanceForSetting(setting);
         }

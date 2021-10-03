@@ -16,7 +16,7 @@ namespace OpenSC.Model.Settings
         string HumanReadableTitle { get; }
         string HumanReadableDescription { get; }
         object ObjValue { get; set; }
-        Type Type { get; }
+        Type ValueType { get; }
         event SettingValueChangedDelegate ValueChanged;
     }
 

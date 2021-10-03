@@ -16,7 +16,7 @@ namespace OpenSC.Model.Settings
 
         #region Singleton
         public static SettingsManager Instance { get; } = new SettingsManager();
-        private SettingsManager() => autoRegisterConvertersFromNamespace(BUILTIN_CONVERTERS_NAMESPACE);
+        private SettingsManager() => autoRegisterAllConvertersFromNamespace(BUILTIN_CONVERTERS_NAMESPACE);
         #endregion
 
         #region Settings store
@@ -96,43 +96,73 @@ namespace OpenSC.Model.Settings
         private XElement serializeSetting(ISetting setting)
         {
             XElement xmlElement = new XElement(SETTING_TAG);
-            ISettingValueConverter converter = getConverterForSetting(setting);
             xmlElement.SetAttributeValue(ATTRIBUTE_KEY_KEY, setting.Key);
-            string convertedValue = (converter != null) ? converter.Serialize(setting.ObjValue) : setting.ObjValue?.ToString();
-            xmlElement.SetAttributeValue(ATTRIBUTE_KEY_VALUE, convertedValue);
+            xmlElement.SetAttributeValue(ATTRIBUTE_KEY_VALUE, convertForSerialization(setting));
             return xmlElement;
+        }
+
+        private string convertForSerialization(ISetting setting)
+        {
+            ISettingConverter settingConverter = getConverterForSetting(setting);
+            if (settingConverter != null)
+                return settingConverter.Serialize(setting);
+            ISettingValueConverter valueConverter = getConverterForSettingValue(setting);
+            if (valueConverter != null)
+                return valueConverter.Serialize(setting.ObjValue);
+            return setting.ObjValue?.ToString();
         }
 
         private void deserializeSetting(XmlNode node)
         {
             try
             {
-                string key = node.Attributes[ATTRIBUTE_KEY_KEY].Value;
-                if (!registeredSettings.TryGetValue(key, out ISetting setting))
+                if (!registeredSettings.TryGetValue(node.Attributes[ATTRIBUTE_KEY_KEY].Value, out ISetting setting))
                     return;
-                string serializedValue = node.Attributes[ATTRIBUTE_KEY_VALUE].Value;
-                object convertedValue = serializedValue;
-                ISettingValueConverter converter = getConverterForSetting(setting);
-                if (converter != null)
-                    convertedValue = converter.Deserialize(serializedValue);
-                setting.ObjValue = convertedValue;
+                convertForDeserialization(setting, node.Attributes[ATTRIBUTE_KEY_VALUE].Value);
             }
             catch
             { }
         }
+
+        private void convertForDeserialization(ISetting setting, string serialized)
+        {
+            ISettingConverter settingConverter = getConverterForSetting(setting);
+            if (settingConverter != null)
+            {
+                settingConverter.Deserialize(setting, serialized);
+                return;
+            }
+            ISettingValueConverter valueConverter = getConverterForSettingValue(setting);
+            if (valueConverter != null)
+            {
+                setting.ObjValue = valueConverter.Deserialize(serialized);
+                return;
+            }
+            setting.ObjValue = serialized;
+        }
         #endregion
 
         #region Converters
-        private Dictionary<Type, ISettingValueConverter> converters = new Dictionary<Type, ISettingValueConverter>();
+        private Dictionary<Type, ISettingConverter> settingConverters = new Dictionary<Type, ISettingConverter>();
+        private Dictionary<Type, ISettingValueConverter> valueConverters = new Dictionary<Type, ISettingValueConverter>();
 
         private readonly Type[] EMPTY_TYPE_ARRAY = new Type[] { };
         private readonly object[] EMPTY_OBJECT_ARRAY = new object[] { };
-        private readonly Type TYPEOF_CONVERTER = typeof(ISettingValueConverter);
 
         private readonly string BUILTIN_CONVERTERS_NAMESPACE = $"{nameof(OpenSC)}.{nameof(OpenSC.Model)}.{nameof(OpenSC.Model.Settings)}.{nameof(OpenSC.Model.Settings.Converters)}";
         
-        private void autoRegisterConvertersFromNamespace(string _namespace)
+        private void autoRegisterAllConvertersFromNamespace(string _namespace)
         {
+            autoRegisterConvertersFromNamespace(_namespace, settingConverters, getTypeForSettingConverter);
+            autoRegisterConvertersFromNamespace(_namespace, valueConverters, getTypeForValueConverter);
+        }
+
+        private delegate Type ConverterTypeGetterDelegate<TConverterInterface>(TConverterInterface converter);
+
+        private void autoRegisterConvertersFromNamespace<TConverter>(string _namespace, Dictionary<Type, TConverter> storageDictionary, ConverterTypeGetterDelegate<TConverter> typeGetterMethod)
+            where TConverter : class
+        {
+            Type TYPEOF_CONVERTER = typeof(TConverter);
             Type[] allTypes = Assembly.GetExecutingAssembly().GetTypes();
             IEnumerable<Type> converterTypes = allTypes.Where(t => t.IsClass && !t.IsAbstract && (t.Namespace == _namespace) && t.IsAssignableTo(TYPEOF_CONVERTER));
             foreach (Type converterType in converterTypes)
@@ -140,32 +170,38 @@ namespace OpenSC.Model.Settings
                 ConstructorInfo ctor = converterType.GetConstructor(EMPTY_TYPE_ARRAY);
                 if (ctor != null)
                 {
-                    ISettingValueConverter converter = ctor.Invoke(EMPTY_OBJECT_ARRAY) as ISettingValueConverter;
+                    TConverter converter = ctor.Invoke(EMPTY_OBJECT_ARRAY) as TConverter;
                     if (converter != null)
-                        converters.Add(getTypeForConverter(converter), converter);
+                        storageDictionary.Add(typeGetterMethod(converter), converter);
                 }
             }
         }
 
-        private Type getTypeForConverter(ISettingValueConverter converter)
-        {
-            object[] attributes = converter.GetType().GetCustomAttributes(true);
-            object foundAttribute = attributes.FirstOrDefault(attr => (attr is SettingValueConverterAttribute));
-            if (foundAttribute == null)
-                return null;
-            SettingValueConverterAttribute typedAttribute = foundAttribute as SettingValueConverterAttribute;
-            return typedAttribute?.Type;
-        }
+        private Type getTypeForSettingConverter(ISettingConverter converter)
+            => converter.GetType().GetAttribute<SettingConverterAttribute>()?.Type;
 
-        private ISettingValueConverter getConverterForSetting(ISetting setting)
+        private Type getTypeForValueConverter(ISettingValueConverter converter)
+            => converter.GetType().GetAttribute<SettingValueConverterAttribute>()?.Type;
+
+        private ISettingConverter getConverterForSetting(ISetting setting)
+            => getConverterForSomething(setting.GetType(), settingConverters);
+
+        private ISettingValueConverter getConverterForSettingValue(ISetting setting)
+            => getConverterForSomething(setting.ValueType, valueConverters);
+
+        private TConverter getConverterForSomething<TConverter>(Type forType, Dictionary<Type, TConverter> availableConverters)
+            where TConverter : class
         {
-            if (!converters.TryGetValue(setting.Type, out ISettingValueConverter converter))
-                return null;
-            return converter;
+            if (availableConverters.TryGetValue(forType, out TConverter converter))
+                return converter;
+            foreach (KeyValuePair<Type, TConverter> availableConverterKVP in availableConverters)
+                if (availableConverterKVP.Key.IsAssignableFrom(forType))
+                    return availableConverterKVP.Value;
+            return null;
         }
         #endregion
 
-        #region Events
+            #region Events
         public delegate void SettingsLoadedDelegate();
         public event SettingsLoadedDelegate SettingsLoaded;
         #endregion
