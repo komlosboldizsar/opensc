@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.WorkspaceManager.ValueConverters;
+﻿using OpenSC.Extensions;
+using OpenSC.GUI.WorkspaceManager.ValueConverters;
 using OpenSC.Properties;
 using System;
 using System.Collections.Generic;
@@ -65,6 +66,7 @@ namespace OpenSC.GUI.WorkspaceManager
                     rootElement.Add(windowElement);
             }
 
+            FileExtensions.CreateDirectoriesForFile(FILE_WORKSPACE_SAVED);
             using (FileStream stream = new FileStream(FILE_WORKSPACE_SAVED, FileMode.Create))
             using (XmlWriter writer = XmlWriter.Create(stream, xmlWriterSettings))
             {
@@ -77,10 +79,11 @@ namespace OpenSC.GUI.WorkspaceManager
         {
 
             Workspace workspace = new Workspace();
-
+            FileExtensions.CreateDirectoriesForFile(FILE_WORKSPACE_SAVED);
             try
             {
                 XmlDocument doc = new XmlDocument();
+
                 doc.Load(FILE_WORKSPACE_SAVED);
 
                 XmlNode root = doc.DocumentElement;

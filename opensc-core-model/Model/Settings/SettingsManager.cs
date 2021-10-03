@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Settings.Converters;
+﻿using OpenSC.Extensions;
+using OpenSC.Model.Settings.Converters;
 using OpenSC.Properties;
 using System;
 using System.Collections.Generic;
@@ -67,9 +68,7 @@ namespace OpenSC.Model.Settings
                 if (settingElement != null)
                     rootElement.Add(settingElement);
             }
-            string fileSettingsCurrentDirectory = Path.GetDirectoryName(FILE_SETTINGS_CURRENT);
-            if (!Directory.Exists(fileSettingsCurrentDirectory))
-                Directory.CreateDirectory(fileSettingsCurrentDirectory);
+            FileExtensions.CreateDirectoriesForFile(FILE_SETTINGS_CURRENT);
             using (FileStream stream = new FileStream(FILE_SETTINGS_CURRENT, FileMode.Create))
             using (XmlWriter writer = XmlWriter.Create(stream, xmlWriterSettings))
             {
@@ -85,6 +84,7 @@ namespace OpenSC.Model.Settings
             {
                 loadingSettings = true;
                 XmlDocument doc = new XmlDocument();
+                FileExtensions.CreateDirectoriesForFile(FILE_SETTINGS_CURRENT);
                 doc.Load(FILE_SETTINGS_CURRENT);
                 XmlNode root = doc.DocumentElement;
                 if (root.LocalName != ROOT_TAG)
@@ -207,7 +207,7 @@ namespace OpenSC.Model.Settings
         }
         #endregion
 
-            #region Events
+        #region Events
         public delegate void SettingsLoadedDelegate();
         public event SettingsLoadedDelegate SettingsLoaded;
         #endregion

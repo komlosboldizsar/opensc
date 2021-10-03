@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Extensions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,9 +18,7 @@ namespace OpenSC.Model
         public DatabaseFile(string fileName, DatabaseFileMode mode)
         {
             this.mode = mode;
-            string directoryName = Path.GetDirectoryName(fileName);
-            if (!Directory.Exists(directoryName))
-                Directory.CreateDirectory(directoryName);
+            FileExtensions.CreateDirectoriesForFile(fileName);
             if (mode == DatabaseFileMode.Read)
                 Stream = File.Open(fileName, FileMode.OpenOrCreate, FileAccess.Read);
             else
