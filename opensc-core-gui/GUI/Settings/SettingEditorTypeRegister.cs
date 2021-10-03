@@ -17,8 +17,8 @@ namespace OpenSC.GUI.Settings
 
         private static ISettingEditorControl BASE_EDITOR = new SettingEditorBase();
 
-        private static Dictionary<Type, ISettingEditorControl> registeredSettingEditors = null;
-        private static Dictionary<Type, ISettingEditorControl> registeredValueEditors = null;
+        private static Dictionary<Type, ISettingEditorControl> registeredSettingEditors = new();
+        private static Dictionary<Type, ISettingEditorControl> registeredValueEditors = new();
 
         private readonly Type[] EMPTY_TYPE_ARRAY = new Type[] { };
         private readonly object[] EMPTY_OBJECT_ARRAY = new object[] { };
