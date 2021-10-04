@@ -19,14 +19,6 @@ namespace OpenSC.Model.Macros
                 element.Restored();
         }
 
-        #region ID validation
-        protected override void validateIdForDatabase(int id)
-        {
-            if (!MacroPanelDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = MacroPanelDatabase.Instance;
         #endregion

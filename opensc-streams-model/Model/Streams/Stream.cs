@@ -16,14 +16,6 @@ namespace OpenSC.Model.Streams
         }
         #endregion
 
-        #region ID validation
-        protected override void validateIdForDatabase(int id)
-        {
-            if (!StreamDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = StreamDatabase.Instance;
         #endregion

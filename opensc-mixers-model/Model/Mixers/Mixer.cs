@@ -34,15 +34,6 @@ namespace OpenSC.Model.Mixers
             inputs.Clear();
         }
 
-        #region ID validation
-
-        protected override void validateIdForDatabase(int id)
-        {
-            if (!MixerDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = MixerDatabase.Instance;
         #endregion

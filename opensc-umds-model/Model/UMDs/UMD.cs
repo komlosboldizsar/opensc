@@ -36,14 +36,6 @@ namespace OpenSC.Model.UMDs
         public UMD()
         { }
 
-        #region ID validation
-        protected override void validateIdForDatabase(int id)
-        {
-            if (!UmdDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = UmdDatabase.Instance;
         #endregion

@@ -57,14 +57,6 @@ namespace OpenSC.Model.Routers.Mirrors
         private RouterMirrorSide? synchronizeFromOnTotallyRestored = null;
         #endregion
 
-        #region ID validation
-        protected override void validateIdForDatabase(int id)
-        {
-            if (!RouterMirrorDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = RouterMirrorDatabase.Instance;
         #endregion

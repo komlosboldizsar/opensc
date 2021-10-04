@@ -29,14 +29,6 @@ namespace OpenSC.Model.Signals.TallyCopying
         }
         #endregion
 
-        #region ID validation
-        protected override void validateIdForDatabase(int id)
-        {
-            if (!TallyCopyDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = TallyCopyDatabase.Instance;
         #endregion

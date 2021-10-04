@@ -43,14 +43,6 @@ namespace OpenSC.Model.SerialPorts
             ReceivedDataAsciiString = null;
         }
 
-        #region ID validation
-        protected override void validateIdForDatabase(int id)
-        {
-            if (!SerialPortDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = SerialPortDatabase.Instance;
         #endregion

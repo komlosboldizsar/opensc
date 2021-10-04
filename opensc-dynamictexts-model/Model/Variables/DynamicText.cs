@@ -25,14 +25,6 @@ namespace OpenSC.Model.Variables
             substituteValues.Clear();
         }
 
-        #region ID validation
-        protected override void validateIdForDatabase(int id)
-        {
-            if (!DynamicTextDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = DynamicTextDatabase.Instance;
         #endregion

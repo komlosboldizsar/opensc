@@ -28,14 +28,6 @@ namespace OpenSC.Model.Timers
         }
         #endregion
 
-        #region ID validation
-        protected override void validateIdForDatabase(int id)
-        {
-            if (!TimerDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = TimerDatabase.Instance;
         #endregion

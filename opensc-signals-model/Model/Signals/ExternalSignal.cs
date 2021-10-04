@@ -24,13 +24,7 @@ namespace OpenSC.Model.Signals
         }
         #endregion
 
-        #region ID validation and change
-        protected override void validateIdForDatabase(int id)
-        {
-            if (!ExternalSignalDatabases.Signals.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-
+        #region ID change
         protected override void afterIdChange()
         {
             SignalLabelChanged?.Invoke(this, SignalLabel);

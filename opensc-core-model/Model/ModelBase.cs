@@ -16,7 +16,6 @@ namespace OpenSC.Model
         public event PropertyChangedTwoValuesDelegate<IModel, int> IdChanged;
 
         private int id;
-
         public int ID
         {
             get => id;
@@ -31,13 +30,15 @@ namespace OpenSC.Model
             validateIdExtended(id);
         }
 
-        protected abstract void validateIdForDatabase(int id);
+        protected virtual void validateIdForDatabase(int id)
+        {
+            if (!OwnerDatabase.CanIdBeUsedForItem(id, this))
+                throw new ArgumentException();
+        }
 
-        protected virtual void validateIdExtended(int id)
-        { }
+        protected virtual void validateIdExtended(int id) { }
 
-        protected virtual void afterIdChange()
-        { }
+        protected virtual void afterIdChange() { }
         #endregion
 
         #region Property: Name
@@ -70,8 +71,7 @@ namespace OpenSC.Model
         public abstract IDatabaseBase OwnerDatabase { get; }
         #endregion
 
-        public override string ToString()
-            => $"(#{id}) {name}";
+        public override string ToString() => $"(#{id}) {name}";
 
         public event ModelRemovedHandler ModelRemoved;
 
@@ -83,26 +83,15 @@ namespace OpenSC.Model
 
         public event ModelRestoredHandler ModelRestoredOwnFields;
 
-        public virtual void RestoredOwnFields()
-        {
-            ModelRestoredOwnFields?.Invoke(this);
-        }
+        public virtual void RestoredOwnFields() => ModelRestoredOwnFields?.Invoke(this);
 
-        public virtual void RestoredBasicRelations()
-        { }
-
-        public virtual void RestoreCustomRelations()
-        { }
+        public virtual void RestoredBasicRelations() { }
+        public virtual void RestoreCustomRelations() { }
 
         public event ModelRestoredHandler ModelTotallyRestored;
-
-        public virtual void TotallyRestored()
-        {
-            ModelTotallyRestored?.Invoke(this);
-        }
+        public virtual void TotallyRestored() => ModelTotallyRestored?.Invoke(this);
 
         private int updateCounter = 0;
-
         protected bool Updating { get; private set; }
 
         public void StartUpdate()
@@ -113,9 +102,7 @@ namespace OpenSC.Model
             ModelBeforeUpdate?.Invoke(this);
         }
 
-        protected virtual void beforeUpdate()
-        { }
-
+        protected virtual void beforeUpdate() { }
         public event ModelBeforeUpdateHandler ModelBeforeUpdate;
 
         public void EndUpdate()
@@ -128,9 +115,7 @@ namespace OpenSC.Model
             ModelAfterUpdate?.Invoke(this);
         }
 
-        protected virtual void afterUpdate()
-        { }
-
+        protected virtual void afterUpdate() { }
         public event ModelAfterUpdateHandler ModelAfterUpdate;
 
     }

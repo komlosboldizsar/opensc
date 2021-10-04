@@ -31,14 +31,6 @@ namespace OpenSC.Model.Signals.BooleanTallies
         }
         #endregion
 
-        #region ID validation
-        protected override void validateIdForDatabase(int id)
-        {
-            if (!BooleanTallyDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = BooleanTallyDatabase.Instance;
         #endregion

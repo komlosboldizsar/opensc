@@ -25,14 +25,6 @@ namespace OpenSC.Model.Routers
             // remove event subscriptions
         }
 
-        #region ID validation
-        protected override void validateIdForDatabase(int id)
-        {
-            if (!LabelsetDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = LabelsetDatabase.Instance;
         #endregion

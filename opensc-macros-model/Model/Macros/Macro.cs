@@ -49,14 +49,6 @@ namespace OpenSC.Model.Macros
                 trigger.RestoreCustomRelations();
         }
 
-        #region ID validation
-        protected override void validateIdForDatabase(int id)
-        {
-            if (!MacroDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = MacroDatabase.Instance;
         #endregion

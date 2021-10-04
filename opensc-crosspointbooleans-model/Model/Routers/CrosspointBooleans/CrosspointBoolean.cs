@@ -44,14 +44,6 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
         }
         #endregion
 
-        #region ID validation
-        protected override void validateIdForDatabase(int id)
-        {
-            if (!CrosspointBooleanDatabase.Instance.CanIdBeUsedForItem(id, this))
-                throw new ArgumentException();
-        }
-        #endregion
-
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = CrosspointBooleanDatabase.Instance;
         #endregion
