@@ -13,6 +13,7 @@ namespace OpenSC.Model
         void Save();
         void BuildRelationsByForeignKeys();
         object GetById(int id);
+        bool CanIdBeUsedForItem(int id, object forItem);
         void NotifyItemsRestoredOwnFields();
         void NotifyItemsRestoredBasicRelations();
         void RequestRestoreCustomRelations();

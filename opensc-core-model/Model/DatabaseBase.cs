@@ -40,25 +40,12 @@ namespace OpenSC.Model
 
         protected Dictionary<int, T> items = new Dictionary<int, T>();
 
-        public IReadOnlyDictionary<int, T> Items
-        {
-            get => items;
-        }
-
-        public IReadOnlyList<T> ItemsAsList
-        {
-            get => items.Values.ToList();
-        }
-
-        public int Count
-        {
-            get { return items.Count; }
-        }
-
-        public T this[int index]
-        {
-            get => GetTById(index);
-        }
+        public IReadOnlyDictionary<int, T> Items => items;
+        public IReadOnlyList<T> ItemsAsList => items.Values.ToList();
+        public int Count => items.Count;
+        public T this[int index] => GetTById(index);
+        public IEnumerator GetEnumerator() => items.Values.GetEnumerator();
+        IEnumerator<T> IEnumerable<T>.GetEnumerator() => items.Values.GetEnumerator();
 
         public DatabaseBase()
         {
@@ -99,8 +86,7 @@ namespace OpenSC.Model
 
         }
 
-        protected virtual void afterAdd(T item)
-        { }
+        protected virtual void afterAdd(T item) { }
 
         public bool Remove(T item)
         {
@@ -133,11 +119,9 @@ namespace OpenSC.Model
 
         }
 
-        protected virtual void afterRemove(T item)
-        { }
+        protected virtual void afterRemove(T item) { }
 
-        private void itemAfterUpdateHandler(IModel model)
-            => ItemUpdated(model as T);
+        private void itemAfterUpdateHandler(IModel model) => ItemUpdated(model as T);
 
         public void ItemUpdated(T item)
         {
@@ -148,8 +132,7 @@ namespace OpenSC.Model
             }
         }
 
-        protected virtual void afterItemUpdate(T item)
-        { }
+        protected virtual void afterItemUpdate(T item) { }
 
         public T GetTById(int id)
         {
@@ -158,13 +141,12 @@ namespace OpenSC.Model
             return null;            
         }
 
-        public object GetById(int id)
-        {
-            return GetTById(id);
-        }
+        public object GetById(int id) => GetTById(id);
 
-        public bool CanIdBeUsedForItem(int id, T forItem)
+        public bool CanIdBeUsedForItem(int id, object forItem)
         {
+            if (!(forItem is T))
+                return false;
             if (!items.TryGetValue(id, out T foundItem))
                 return true;
             if (foundItem == forItem)
@@ -188,8 +170,7 @@ namespace OpenSC.Model
             afterSave();
         }
 
-        protected virtual void afterSave()
-        { }
+        protected virtual void afterSave() { }
 
         public void Load()
         {
@@ -205,13 +186,9 @@ namespace OpenSC.Model
                 ChangedItems?.Invoke(this);
             }
         }
-        protected virtual void afterLoad()
-        { }
+        protected virtual void afterLoad() { }
 
-        public void BuildRelationsByForeignKeys()
-        {
-            persister.BuildRelationsByForeignKeys(ref items);
-        }
+        public void BuildRelationsByForeignKeys() => persister.BuildRelationsByForeignKeys(ref items);
 
         public void NotifyItemsRestoredOwnFields()
         {
@@ -237,15 +214,6 @@ namespace OpenSC.Model
                 item.TotallyRestored();
         }
 
-        public IEnumerator GetEnumerator()
-        {
-            return items.Values.GetEnumerator();
-        }
-
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            return items.Values.GetEnumerator();
-        }
-
     }
+
 }
