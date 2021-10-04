@@ -57,6 +57,10 @@ namespace OpenSC.Model.Macros
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = MacroDatabase.Instance;
+        #endregion
+
         #region Commands
         private ObservableList<MacroCommandWithArguments> commands = new ObservableList<MacroCommandWithArguments>();
 

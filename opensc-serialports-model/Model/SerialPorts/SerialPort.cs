@@ -51,6 +51,10 @@ namespace OpenSC.Model.SerialPorts
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = SerialPortDatabase.Instance;
+        #endregion
+
         #region Property: ComPortName
         public event PropertyChangedTwoValuesDelegate<SerialPort, string> ComPortNameChanged;
 

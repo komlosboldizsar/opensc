@@ -33,6 +33,10 @@ namespace OpenSC.Model.Routers
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = LabelsetDatabase.Instance;
+        #endregion
+
         #region Label collection
         private ObservableList<Label> labels = new ObservableList<Label>();
 

@@ -33,6 +33,10 @@ namespace OpenSC.Model.Variables
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = DynamicTextDatabase.Instance;
+        #endregion
+
         #region Property: CurrentText
         public event PropertyChangedTwoValuesDelegate<DynamicText, string> CurrentTextChanged;
 

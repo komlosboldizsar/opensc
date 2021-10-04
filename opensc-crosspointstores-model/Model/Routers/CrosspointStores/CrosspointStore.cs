@@ -46,6 +46,10 @@ namespace OpenSC.Model.Routers.CrosspointStores
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = CrosspointStoreDatabase.Instance;
+        #endregion
+
         #region Property: StoredInput
         public event PropertyChangedTwoValuesDelegate<CrosspointStore, RouterInput> StoredInputChanged;
 

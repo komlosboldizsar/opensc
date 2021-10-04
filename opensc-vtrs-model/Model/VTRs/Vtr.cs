@@ -31,6 +31,10 @@ namespace OpenSC.Model.VTRs
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = VtrDatabase.Instance;
+        #endregion
+
         #region Property: Title
         public event PropertyChangedTwoValuesDelegate<Vtr, string> TitleChanged;
 

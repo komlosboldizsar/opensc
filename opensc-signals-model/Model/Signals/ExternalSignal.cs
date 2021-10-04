@@ -40,6 +40,10 @@ namespace OpenSC.Model.Signals
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = ExternalSignalDatabases.Signals;
+        #endregion
+
         #region Name change
         protected override void afterNameChange()
         {

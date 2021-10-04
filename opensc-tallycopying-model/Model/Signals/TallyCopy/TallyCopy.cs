@@ -37,6 +37,10 @@ namespace OpenSC.Model.Signals.TallyCopying
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = TallyCopyDatabase.Instance;
+        #endregion
+
         #region Property: FromSignal
         public event PropertyChangedTwoValuesDelegate<TallyCopy, ISignalSourceRegistered> FromSignalChanged;
 

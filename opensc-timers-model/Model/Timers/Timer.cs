@@ -36,6 +36,10 @@ namespace OpenSC.Model.Timers
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = TimerDatabase.Instance;
+        #endregion
+
         #region Property: Seconds, TimeSpan
         public event PropertyChangedTwoValuesDelegate<Timer, int> SecondsChanged;
 

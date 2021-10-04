@@ -83,6 +83,10 @@ namespace OpenSC.Model.Routers
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = RouterDatabase.Instance;
+        #endregion
+
         #region Inputs
         private ObservableList<RouterInput> inputs = new ObservableList<RouterInput>();
         public ObservableList<RouterInput> Inputs => inputs;

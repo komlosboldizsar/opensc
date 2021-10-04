@@ -27,6 +27,10 @@ namespace OpenSC.Model.Macros
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = MacroPanelDatabase.Instance;
+        #endregion
+
         #region Property: Width
         public event PropertyChangedTwoValuesDelegate<MacroPanel, int> SizeWChanged;
 

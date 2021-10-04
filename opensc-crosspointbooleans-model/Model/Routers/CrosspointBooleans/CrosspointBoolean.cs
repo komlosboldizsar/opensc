@@ -52,6 +52,10 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = CrosspointBooleanDatabase.Instance;
+        #endregion
+
         #region Property: WatchedRouter
         public event PropertyChangedTwoValuesDelegate<CrosspointBoolean, Router> WatchedRouterChanged;
 

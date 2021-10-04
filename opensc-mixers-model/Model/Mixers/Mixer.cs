@@ -43,6 +43,10 @@ namespace OpenSC.Model.Mixers
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = MixerDatabase.Instance;
+        #endregion
+
         #region Property: OnProgramInput, OnProgramInputName
         public event PropertyChangedTwoValuesDelegate<Mixer, MixerInput> OnProgramInputChanged;
         public event PropertyChangedOneValueDelegate<Mixer, string> OnProgramInputNameChanged;

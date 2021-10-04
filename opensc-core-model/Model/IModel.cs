@@ -18,6 +18,7 @@ namespace OpenSC.Model
         event PropertyChangedTwoValuesDelegate<IModel, int> IdChanged;
         string Name { get; set; }
         event PropertyChangedTwoValuesDelegate<IModel, string> NameChanged;
+        IDatabaseBase OwnerDatabase { get; }
         void RestoredOwnFields();
         void RestoredBasicRelations();
         void RestoreCustomRelations();

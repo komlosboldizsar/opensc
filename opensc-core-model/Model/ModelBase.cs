@@ -66,6 +66,10 @@ namespace OpenSC.Model
         { }
         #endregion
 
+        #region Owner database
+        public abstract IDatabaseBase OwnerDatabase { get; }
+        #endregion
+
         public override string ToString()
             => $"(#{id}) {name}";
 

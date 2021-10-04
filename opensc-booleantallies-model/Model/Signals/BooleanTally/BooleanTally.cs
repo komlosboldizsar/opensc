@@ -39,6 +39,10 @@ namespace OpenSC.Model.Signals.BooleanTallies
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = BooleanTallyDatabase.Instance;
+        #endregion
+
         #region Property: FromBoolean
         public event PropertyChangedTwoValuesDelegate<BooleanTally, IBoolean> FromBooleanChanged;
 

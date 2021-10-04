@@ -44,6 +44,10 @@ namespace OpenSC.Model.UMDs
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = UmdDatabase.Instance;
+        #endregion
+
         #region Property: CurrentText
         public event PropertyChangedTwoValuesDelegate<UMD, string> CurrentTextChanged;
 

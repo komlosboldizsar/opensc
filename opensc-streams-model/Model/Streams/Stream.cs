@@ -24,6 +24,10 @@ namespace OpenSC.Model.Streams
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = StreamDatabase.Instance;
+        #endregion
+
         #region Property: State
         public event PropertyChangedTwoValuesDelegate<Stream, StreamState> StateChanged;
 

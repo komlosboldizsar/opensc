@@ -65,6 +65,10 @@ namespace OpenSC.Model.Routers.Mirrors
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = RouterMirrorDatabase.Instance;
+        #endregion
+
         #region Property: Routers
         public event PropertyChangedTwoValuesDelegate<RouterMirror, Router> RouterAChanged;
 

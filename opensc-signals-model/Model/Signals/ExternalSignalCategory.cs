@@ -20,6 +20,10 @@ namespace OpenSC.Model.Signals
         }
         #endregion
 
+        #region Owner database
+        public override sealed IDatabaseBase OwnerDatabase { get; } = ExternalSignalDatabases.Categories;
+        #endregion
+
         #region Property: Color
         public event PropertyChangedTwoValuesDelegate<ExternalSignalCategory, Color> ColorChanged;
 
