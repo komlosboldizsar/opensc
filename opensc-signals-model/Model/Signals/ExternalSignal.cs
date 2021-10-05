@@ -60,7 +60,7 @@ namespace OpenSC.Model.Signals
 
 #pragma warning disable CS0169
         [TempForeignKey(nameof(category))]
-        private int _category;
+        private string _category;
 #pragma warning restore CS0169
 
         public ExternalSignalCategory Category

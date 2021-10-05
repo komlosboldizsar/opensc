@@ -33,7 +33,7 @@ namespace OpenSC.Model.UMDs.McCurdy
 
 #pragma warning disable CS0169
         [TempForeignKey(nameof(port))]
-        private int _portId;
+        private string _portId;
 #pragma warning restore CS0169
 
         public SerialPort Port
@@ -97,7 +97,7 @@ namespace OpenSC.Model.UMDs.McCurdy
         private DynamicText[] dynamicTextSources = new DynamicText[] { null, null, null };
 
         [TempForeignKey(nameof(dynamicTextSources))]
-        private int[] _dynamicTextSources = new int[] { 0, 0, 0 };
+        private string[] _dynamicTextSources = new string[] { "", "", "" };
 
         public void SetDynamicTextSource(int columnIndex, DynamicText dynamicTextSource)
         {
