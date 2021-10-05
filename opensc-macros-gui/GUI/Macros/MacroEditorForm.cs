@@ -409,7 +409,7 @@ namespace OpenSC.GUI.Macros
                 cell.Style.BackColor = triggerProxy.Editing ? CELL_BACKGROUND_EDITING : CELL_BACKGROUND_NOT_EDITING;
             });
             builder.AddChangeEvent(nameof(MacroTriggerWithArgumentsProxy.Editing));
-            builder.CellContentClickHandlerMethod((triggerProxy, cell, e) => { editTrigger(triggerProxy.Trigger); });
+            builder.CellContentClickHandlerMethod((triggerProxy, cell, e) => { editTrigger(triggerProxy.Original); });
             builder.BuildAndAdd();
 
             // Column: delete button
@@ -426,7 +426,7 @@ namespace OpenSC.GUI.Macros
                 string msgBoxText = string.Format("Do you really want to delete this trigger #{0}?", cell.RowIndex);
                 var confirm = MessageBox.Show(msgBoxText, "Delete confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (confirm == DialogResult.Yes)
-                    macroTriggersCollectionProxy.Remove(triggerProxy.Trigger);
+                    macroTriggersCollectionProxy.Remove(triggerProxy.Original);
             });
             builder.BuildAndAdd();
 
@@ -459,17 +459,13 @@ namespace OpenSC.GUI.Macros
             macroTriggersProxyCollection = new ObservableProxyList<MacroTriggerWithArgumentsProxy, MacroTriggerWithArguments>(macroTriggersCollectionProxy, mtwa => new MacroTriggerWithArgumentsProxy(mtwa));
         }
 
-        private class MacroTriggerWithArgumentsProxy : Model.General.INotifyPropertyChanged
+        private class MacroTriggerWithArgumentsProxy : ObjectProxy<MacroTriggerWithArguments>
         {
 
-            public MacroTriggerWithArguments Trigger { get; private set; }
+            public string TriggerCode => Original.TriggerCode;
+            public string HumanReadable => Original.HumanReadable;
 
-            public string TriggerCode => Trigger.TriggerCode;
-
-            public string HumanReadable => Trigger.HumanReadable;
-
-            public MacroTriggerWithArgumentsProxy(MacroTriggerWithArguments original)
-                => Trigger = original;
+            public MacroTriggerWithArgumentsProxy(MacroTriggerWithArguments original) : base(original) { }
 
             private bool editing = false;
             public bool Editing
@@ -478,18 +474,14 @@ namespace OpenSC.GUI.Macros
                 set
                 {
                     editing = value;
-                    ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Editing));
+                    RaisePropertyChanged(nameof(Editing));
                     if (value == false)
                     {
-                        ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(TriggerCode));
-                        ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(HumanReadable));
+                        RaisePropertyChanged(nameof(TriggerCode));
+                        RaisePropertyChanged(nameof(HumanReadable));
                     }
                 }
             }
-
-            #region INotifyPropertyChanged
-            PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
-            #endregion
 
         }
 
@@ -534,7 +526,7 @@ namespace OpenSC.GUI.Macros
         {
 
             foreach (MacroTriggerWithArgumentsProxy proxy in macroTriggersProxyCollection)
-                proxy.Editing = (proxy.Trigger == triggerWA);
+                proxy.Editing = (proxy.Original == triggerWA);
 
             editedTriggerWA = triggerWA;
 

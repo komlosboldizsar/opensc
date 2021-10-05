@@ -142,7 +142,10 @@ namespace OpenSC.Model.Routers
         public event CurrentInputChangedDelegate CurrentInputChanged;
 
         private void currentSourceChangedHandler(ISignalDestination signalDestination, ISignalSource newSource)
-            => CurrentInputChanged?.Invoke(this, newSource as RouterInput);
+        {
+            CurrentInputChanged?.Invoke(this, newSource as RouterInput);
+            ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(CurrentInput));
+        }
         #endregion
 
         #region Property: SignalLabel
