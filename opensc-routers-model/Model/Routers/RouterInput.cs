@@ -43,7 +43,7 @@ namespace OpenSC.Model.Routers
                 string oldName = name;
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                PropertyChanged?.Invoke(nameof(Name));
+                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Name));
             }
         }
 
@@ -82,7 +82,7 @@ namespace OpenSC.Model.Routers
                 int oldValue = index;
                 index = value;
                 IndexChanged?.Invoke(this, oldValue, value);
-                PropertyChanged?.Invoke(nameof(Index));
+                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Index));
             }
         }
 
@@ -102,7 +102,7 @@ namespace OpenSC.Model.Routers
                     return;
                 isTieline = value;
                 IsTielineChanged?.Invoke(this, !isTieline, isTieline);
-                PropertyChanged?.Invoke(nameof(IsTieline));
+                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(IsTieline));
             }
         }
 
@@ -128,7 +128,7 @@ namespace OpenSC.Model.Routers
                 int? oldValue = tielineCost;
                 tielineCost = (int)value;
                 TielineCostChanged?.Invoke(this, oldValue, tielineCost);
-                PropertyChanged?.Invoke(nameof(TielineCost));
+                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(TielineCost));
             }
         }
 
@@ -154,7 +154,7 @@ namespace OpenSC.Model.Routers
                 bool? oldValue = tielineIsReserved;
                 tielineIsReserved = (bool)value;
                 TielineIsReservedChanged?.Invoke(this, oldValue, tielineIsReserved);
-                PropertyChanged?.Invoke(nameof(TielineIsReserved));
+                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(TielineIsReserved));
             }
         }
 
@@ -175,8 +175,8 @@ namespace OpenSC.Model.Routers
         }
         #endregion
 
-        #region Implementation of INotifyPropertyChanged
-        public event PropertyChangedDelegate PropertyChanged;
+        #region INotifyPropertyChanged
+        PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
         #endregion
 
         #region ToString()

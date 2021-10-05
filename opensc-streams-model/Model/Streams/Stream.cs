@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Persistence;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Persistence;
 using System;
 
 namespace OpenSC.Model.Streams
@@ -28,7 +29,7 @@ namespace OpenSC.Model.Streams
         public StreamState State
         {
             get => state;
-            protected set => setProperty(this, ref state, value, StateChanged);
+            protected set => this.setProperty(ref state, value, StateChanged);
         }
         #endregion
 
@@ -40,7 +41,7 @@ namespace OpenSC.Model.Streams
         public int? ViewerCount
         {
             get => viewerCount;
-            protected set => setProperty(this, ref viewerCount, value, ViewerCountChanged);
+            protected set => this.setProperty(ref viewerCount, value, ViewerCountChanged);
         }
         #endregion
 

@@ -1,5 +1,6 @@
 ﻿using Bespoke.Osc;
 using OpenSC.Logger;
+using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace OpenSC.Model.VTRs
         public string ListenedIp
         {
             get => listenedIp;
-            set => setProperty(this, ref listenedIp, value, ListenedIpChanged,
+            set => this.setProperty(ref listenedIp, value, ListenedIpChanged,
                 (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this),
                 (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this));
         }
@@ -63,7 +64,7 @@ namespace OpenSC.Model.VTRs
         public int WatchedChannel
         {
             get => watchedChannel;
-            set => setProperty(this, ref watchedChannel, value, WatchedChannelChanged,
+            set => this.setProperty(ref watchedChannel, value, WatchedChannelChanged,
                 (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this),
                 (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this));
         }
@@ -78,7 +79,7 @@ namespace OpenSC.Model.VTRs
         public int WatchedLayer
         {
             get => watchedLayer;
-            set => setProperty(this, ref watchedLayer, value, WatchedLayerChanged,
+            set => this.setProperty(ref watchedLayer, value, WatchedLayerChanged,
                 (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this),
                 (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this));
         }

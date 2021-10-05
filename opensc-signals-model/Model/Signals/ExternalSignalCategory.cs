@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Persistence;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -33,7 +34,7 @@ namespace OpenSC.Model.Signals
         public Color Color
         {
             get => color;
-            set => setProperty(this, ref color, value, ColorChanged);
+            set => this.setProperty(ref color, value, ColorChanged);
         }
         #endregion
 

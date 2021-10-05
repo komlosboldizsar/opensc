@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Persistence;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Variables
 {
-  
+
     public class DynamicText : ModelBase
     {
 
@@ -37,7 +38,7 @@ namespace OpenSC.Model.Variables
         public string CurrentText
         {
             get => currentText;
-            private set => setProperty(this, ref currentText, value, CurrentTextChanged);
+            private set => this.setProperty(ref currentText, value, CurrentTextChanged);
         }
         #endregion
 
@@ -52,7 +53,7 @@ namespace OpenSC.Model.Variables
             get => formula;
             set
             {
-                if (!setProperty(this, ref formula, value, FormulaChanged))
+                if (!this.setProperty(ref formula, value, FormulaChanged))
                     return;
                 formulaUpdated();
             }

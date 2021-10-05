@@ -280,7 +280,7 @@ namespace OpenSC.Model.Routers
         public RouterState State
         {
             get => state;
-            protected set => setProperty(this, ref state, value, StateChanged);
+            protected set => this.setProperty(ref state, value, StateChanged);
         }
         #endregion
 
@@ -292,7 +292,7 @@ namespace OpenSC.Model.Routers
         public string StateString
         {
             get => stateString;
-            protected set => setProperty(this, ref stateString, value, StateStringChanged);
+            protected set => this.setProperty(ref stateString, value, StateStringChanged);
         }
         #endregion
 

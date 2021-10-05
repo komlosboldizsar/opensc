@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Persistence;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +42,7 @@ namespace OpenSC.Model.Timers
             get => seconds;
             set
             {
-                if (!setProperty(this, ref seconds, value, SecondsChanged, validator: ValidateSeconds))
+                if (!this.setProperty(ref seconds, value, SecondsChanged, validator: ValidateSeconds))
                     return;
                 RaisePropertyChanged(nameof(TimeSpan));
             }
@@ -68,7 +69,7 @@ namespace OpenSC.Model.Timers
         public int CountdownSeconds
         {
             get => countdownSeconds;
-            set => setProperty(this, ref countdownSeconds, value, CountdownSecondsChanged, validator: ValidateCountdownSeconds);
+            set => this.setProperty(ref countdownSeconds, value, CountdownSecondsChanged, validator: ValidateCountdownSeconds);
         }
 
         public void ValidateCountdownSeconds(int value)
@@ -87,7 +88,7 @@ namespace OpenSC.Model.Timers
             get => running;
             private set
             {
-                if (!setProperty(this, ref running, value, RunningStateChanged))
+                if (!this.setProperty(ref running, value, RunningStateChanged))
                     return;
                 if (value == true)
                     Started?.Invoke(this);
@@ -116,7 +117,7 @@ namespace OpenSC.Model.Timers
                     else if (nv == TimerMode.Forwards)
                         Seconds = 0;
                 };
-                setProperty(this, ref mode, value, ModeChanged, null, afterChangeDelegate);
+                this.setProperty(ref mode, value, ModeChanged, null, afterChangeDelegate);
                 OperationsChanged?.Invoke(this);
             }
         }

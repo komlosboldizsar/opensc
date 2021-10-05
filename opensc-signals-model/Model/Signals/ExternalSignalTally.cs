@@ -71,6 +71,9 @@ namespace OpenSC.Model.Signals
         public List<List<ISignalTallySender>> CurrentRecursionChains => activeSources;
         #endregion
 
+        #region INotifyPropertyChanged
+        PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
+        #endregion
     }
 
 }

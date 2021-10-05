@@ -61,7 +61,7 @@ namespace OpenSC.Model.Routers.CrosspointStores
             get => storedInput;
             set
             {
-                if (!setProperty(this, ref storedInput, value, StoredInputChanged))
+                if (!this.setProperty(ref storedInput, value, StoredInputChanged))
                     return;
                 if (Autotake)
                     Take();
@@ -107,7 +107,7 @@ namespace OpenSC.Model.Routers.CrosspointStores
                     if (importInputAfterOutputSet)
                         StoredInput = nv?.CurrentInput;
                 };
-                setProperty(this, ref storedOutput, value, StoredOutputChanged, null, afterChangeDelegate);
+                this.setProperty(ref storedOutput, value, StoredOutputChanged, null, afterChangeDelegate);
             }
         }
 
@@ -135,7 +135,7 @@ namespace OpenSC.Model.Routers.CrosspointStores
         public bool ClearInputAfterTake
         {
             get => clearInputAfterTake;
-            set => setProperty(this, ref clearInputAfterTake, value, ClearInputAfterTakeChanged);
+            set => this.setProperty(ref clearInputAfterTake, value, ClearInputAfterTakeChanged);
         }
         #endregion
 
@@ -148,7 +148,7 @@ namespace OpenSC.Model.Routers.CrosspointStores
         public bool ClearOutputAfterTake
         {
             get => clearOutputAfterTake;
-            set => setProperty(this, ref clearOutputAfterTake, value, ClearOutputAfterTakeChanged);
+            set => this.setProperty(ref clearOutputAfterTake, value, ClearOutputAfterTakeChanged);
         }
         #endregion
 
@@ -161,7 +161,7 @@ namespace OpenSC.Model.Routers.CrosspointStores
         public bool ImportInputAfterOutputSet
         {
             get => importInputAfterOutputSet;
-            set => setProperty(this, ref importInputAfterOutputSet, value, ImportInputAfterOutputSetChanged);
+            set => this.setProperty(ref importInputAfterOutputSet, value, ImportInputAfterOutputSetChanged);
         }
         #endregion
 
@@ -173,7 +173,7 @@ namespace OpenSC.Model.Routers.CrosspointStores
         public bool Autotake
         {
             get => autotake;
-            set => setProperty(this, ref autotake, value, AutotakeChanged);
+            set => this.setProperty(ref autotake, value, AutotakeChanged);
         }
         #endregion
 

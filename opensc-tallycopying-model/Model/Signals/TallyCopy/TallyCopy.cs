@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Persistence;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -50,7 +51,7 @@ namespace OpenSC.Model.Signals.TallyCopying
         public ISignalSourceRegistered FromSignal
         {
             get => fromSignal;
-            set => setProperty(this, ref fromSignal, value, FromSignalChanged, null, (ov, nv) => updateFromTally());
+            set => this.setProperty(ref fromSignal, value, FromSignalChanged, null, (ov, nv) => updateFromTally());
         }
         #endregion
 
@@ -63,7 +64,7 @@ namespace OpenSC.Model.Signals.TallyCopying
         public SignalTallyColor FromTallyColor
         {
             get => fromTallyColor;
-            set => setProperty(this, ref fromTallyColor, value, FromTallyColorChanged, null, (ov, nv) => updateFromTally());
+            set => this.setProperty(ref fromTallyColor, value, FromTallyColorChanged, null, (ov, nv) => updateFromTally());
         }
         #endregion
 
@@ -117,7 +118,7 @@ namespace OpenSC.Model.Signals.TallyCopying
         public ISignalSourceRegistered ToSignal
         {
             get => toSignal;
-            set => setProperty(this, ref toSignal, value, ToSignalChanged, null, (ov, nv) => updateToTally());
+            set => this.setProperty(ref toSignal, value, ToSignalChanged, null, (ov, nv) => updateToTally());
         }
         #endregion
 
@@ -130,7 +131,7 @@ namespace OpenSC.Model.Signals.TallyCopying
         public SignalTallyColor ToTallyColor
         {
             get => toTallyColor;
-            set => setProperty(this, ref toTallyColor, value, ToTallyColorChanged, null, (ov, nv) => updateToTally());
+            set => this.setProperty(ref toTallyColor, value, ToTallyColorChanged, null, (ov, nv) => updateToTally());
         }
         #endregion
 

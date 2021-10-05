@@ -1,6 +1,7 @@
 ﻿using BMD.Switcher;
 using BMD.Switcher.Exceptions;
 using OpenSC.Logger;
+using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
@@ -114,7 +115,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         public string IpAddress
         {
             get => ipAddress;
-            set => setProperty(this, ref ipAddress, value, IpAddressChanged, null, (ov, nv) => switcher.IpAddress = nv, ValidateIpAddress);
+            set => this.setProperty(ref ipAddress, value, IpAddressChanged, null, (ov, nv) => switcher.IpAddress = nv, ValidateIpAddress);
         }
 
         public void ValidateIpAddress(string ipAddress)
@@ -156,7 +157,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
 
                     }
                 };
-                setProperty(this, ref connectionState, value, ConnectionStateChanged, null, afterChangeDelegate);             
+                this.setProperty(ref connectionState, value, ConnectionStateChanged, null, afterChangeDelegate);             
             }
         }
         #endregion
@@ -170,7 +171,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         public bool AutoReconnect
         {
             get => autoReconnect;
-            set => setProperty(this, ref autoReconnect, value, AutoReconnectChanged);
+            set => this.setProperty(ref autoReconnect, value, AutoReconnectChanged);
         }
         #endregion
 

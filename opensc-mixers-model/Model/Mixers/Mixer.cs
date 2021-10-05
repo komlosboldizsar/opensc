@@ -57,7 +57,7 @@ namespace OpenSC.Model.Mixers
                     if (nv != null)
                         nv.NameChanged += onProgramInputNameChangedHandler;
                 };
-                if (!setProperty(this, ref onProgramInput, value, OnProgramInputChanged, beforeChangeDelegate, afterChangeDelegate))
+                if (!this.setProperty(ref onProgramInput, value, OnProgramInputChanged, beforeChangeDelegate, afterChangeDelegate))
                     return;
                 OnProgramInputNameChanged?.Invoke(this, onProgramInput?.Name);
                 RaisePropertyChanged(nameof(OnProgramInputName));
@@ -89,7 +89,7 @@ namespace OpenSC.Model.Mixers
                     if (nv != null)
                         nv.NameChanged += onPreviewInputNameChangedHandler;
                 };
-                if (!setProperty(this, ref onPreviewInput, value, OnPreviewInputChanged, beforeChangeDelegate, afterChangeDelegate))
+                if (!this.setProperty(ref onPreviewInput, value, OnPreviewInputChanged, beforeChangeDelegate, afterChangeDelegate))
                     return;
                 OnPreviewInputNameChanged?.Invoke(this, onPreviewInput?.Name);
                 RaisePropertyChanged(nameof(OnPreviewInput));
@@ -110,7 +110,7 @@ namespace OpenSC.Model.Mixers
         public MixerState State
         {
             get => state;
-            protected set => setProperty(this, ref state, value, StateChanged);
+            protected set => this.setProperty(ref state, value, StateChanged);
         }
         #endregion
 
@@ -122,7 +122,7 @@ namespace OpenSC.Model.Mixers
         public string StateString
         {
             get => stateString;
-            protected set => setProperty(this, ref stateString, value, StateStringChanged);
+            protected set => this.setProperty(ref stateString, value, StateStringChanged);
         }
         #endregion
 

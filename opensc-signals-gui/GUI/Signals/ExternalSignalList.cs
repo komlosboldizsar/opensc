@@ -3,6 +3,7 @@ using OpenSC.GUI.GeneralComponents.Tables;
 using OpenSC.GUI.Helpers.Converters;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
+using OpenSC.Model.General;
 using OpenSC.Model.Signals;
 using System;
 using System.Collections.Generic;

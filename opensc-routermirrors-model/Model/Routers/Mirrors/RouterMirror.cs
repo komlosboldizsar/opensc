@@ -91,7 +91,7 @@ namespace OpenSC.Model.Routers.Mirrors
                     ClearInputAssociations();
                     ClearOutputAssociations();
                 };
-                setProperty(this, ref routerA, value, RouterAChanged);
+                this.setProperty(ref routerA, value, RouterAChanged);
             }
         }
 
@@ -124,7 +124,7 @@ namespace OpenSC.Model.Routers.Mirrors
                     ClearInputAssociations();
                     ClearOutputAssociations();
                 };
-                setProperty(this, ref routerB, value, RouterBChanged);
+                this.setProperty(ref routerB, value, RouterBChanged);
             }
         }
         #endregion
@@ -138,7 +138,7 @@ namespace OpenSC.Model.Routers.Mirrors
         public RouterMirrorSynchronizationMode SynchronizationMode
         {
             get => synchronizationMode;
-            set => setProperty(this, ref synchronizationMode, value, SynchronizationModeChanged);
+            set => this.setProperty(ref synchronizationMode, value, SynchronizationModeChanged);
         }
         #endregion
 

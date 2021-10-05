@@ -1,4 +1,5 @@
 ﻿using OpenSC.Logger;
+using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.SerialPorts;
 using OpenSC.Model.Settings;
@@ -64,7 +65,7 @@ namespace OpenSC.Model.Routers.Leitch
                 AfterChangePropertyDelegate<SerialPort> afterChangeDelegate = (ov, nv) => {
                     port.ReceivedDataAsciiString += receivedLineFromPort;
                 };
-                setProperty(this, ref port, value, PortChanged, beforeChangeDelegate, afterChangeDelegate);
+                this.setProperty(ref port, value, PortChanged, beforeChangeDelegate, afterChangeDelegate);
             }
         }
 
@@ -89,7 +90,7 @@ namespace OpenSC.Model.Routers.Leitch
         public int Level
         {
             get => level;
-            set => setProperty(this, ref level, value, LevelChanged, validator: ValidateLevel);
+            set => this.setProperty(ref level, value, LevelChanged, validator: ValidateLevel);
         }
 
         public void ValidateLevel(int level)

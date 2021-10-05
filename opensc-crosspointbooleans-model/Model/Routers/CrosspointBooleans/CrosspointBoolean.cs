@@ -56,7 +56,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
         public Router WatchedRouter
         {
             get => watchedRouter;
-            set => setProperty(this, ref watchedRouter, value, WatchedRouterChanged);
+            set => this.setProperty(ref watchedRouter, value, WatchedRouterChanged);
         }
 
         private void updateWatchedRouter()
@@ -86,7 +86,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
             get => watchedInput;
             set
             {
-                setProperty(this, ref watchedInput, value, WatchedInputChanged, null,
+                this.setProperty(ref watchedInput, value, WatchedInputChanged, null,
                     (ov, nv) => {
                         updateWatchedRouter();
                         updateIsValid();
@@ -128,7 +128,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
             get => watchedOutput;
             set
             {
-                setProperty(this, ref watchedOutput, value, WatchedOutputChanged, null,
+                this.setProperty(ref watchedOutput, value, WatchedOutputChanged, null,
                     (ov, nv)=> {
                         updateWatchedRouter();
                         updateIsValid();
@@ -164,7 +164,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
         public bool IsValid
         {
             get => isValid;
-            set => setProperty(this, ref isValid, value, IsValidChanged);
+            set => this.setProperty(ref isValid, value, IsValidChanged);
         }
 
         private void updateIsValid()

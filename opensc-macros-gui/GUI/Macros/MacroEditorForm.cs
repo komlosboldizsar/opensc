@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using INotifyPropertyChanged = OpenSC.Model.General.INotifyPropertyChanged;
 
 namespace OpenSC.GUI.Macros
 {
@@ -477,16 +478,18 @@ namespace OpenSC.GUI.Macros
                 set
                 {
                     editing = value;
-                    PropertyChanged?.Invoke(nameof(Editing));
+                    ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Editing));
                     if (value == false)
                     {
-                        PropertyChanged?.Invoke(nameof(TriggerCode));
-                        PropertyChanged?.Invoke(nameof(HumanReadable));
+                        ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(TriggerCode));
+                        ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(HumanReadable));
                     }
                 }
             }
 
-            public event PropertyChangedDelegate PropertyChanged;
+            #region INotifyPropertyChanged
+            PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
+            #endregion
 
         }
 

@@ -4,7 +4,7 @@ using System.Drawing;
 namespace OpenSC.Model.Variables
 {
 
-    public class BooleanBase : SystemObjectBase, IBoolean, INotifyPropertyChanged
+    public class BooleanBase : SystemObjectBase, IBoolean
     {
 
         public BooleanBase()
@@ -29,7 +29,7 @@ namespace OpenSC.Model.Variables
             {
                 if (!BooleanRegister.Instance.CanKeyBeUsedForItem(this, value, out IBoolean nameOwnerItem))
                     return;
-                if (!setProperty(this, ref name, value, NameChanged))
+                if (!this.setProperty(ref name, value, NameChanged))
                     return;
             }
         }
@@ -43,7 +43,7 @@ namespace OpenSC.Model.Variables
         public Color Color
         {
             get => color;
-            set => setProperty(this, ref color, value, ColorChanged);
+            set => this.setProperty(ref color, value, ColorChanged);
         }
         #endregion
 
@@ -55,7 +55,7 @@ namespace OpenSC.Model.Variables
         public string Description
         {
             get => description;
-            set => setProperty(this, ref description, value, DescriptionChanged);
+            set => this.setProperty(ref description, value, DescriptionChanged);
         }
         #endregion
 
@@ -67,7 +67,7 @@ namespace OpenSC.Model.Variables
         public bool CurrentState
         {
             get => currentState;
-            protected set => setProperty(this, ref currentState, value, StateChanged);
+            protected set => this.setProperty(ref currentState, value, StateChanged);
         }
         #endregion
 

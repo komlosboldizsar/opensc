@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Persistence;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Persistence;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
@@ -62,7 +63,7 @@ namespace OpenSC.Model.Signals.BooleanTallies
                     if (oldState && !newState)
                         toTally?.Revoke(myRecursionChain);
                 };
-                setProperty(this, ref fromBoolean, value, FromBooleanChanged, null, afterChangeDelegate);
+                this.setProperty(ref fromBoolean, value, FromBooleanChanged, null, afterChangeDelegate);
             }
         }
         #endregion
@@ -84,7 +85,7 @@ namespace OpenSC.Model.Signals.BooleanTallies
         public ISignalSourceRegistered ToSignal
         {
             get => toSignal;
-            set => setProperty(this, ref toSignal, value, ToSignalChanged, null, (ov, nv) => updateToTally());
+            set => this.setProperty(ref toSignal, value, ToSignalChanged, null, (ov, nv) => updateToTally());
         }
         #endregion
 
@@ -97,7 +98,7 @@ namespace OpenSC.Model.Signals.BooleanTallies
         public SignalTallyColor ToTallyColor
         {
             get => toTallyColor;
-            set => setProperty(this, ref toTallyColor, value, ToTallyColorChanged, null, (ov, nv) => updateToTally());
+            set => this.setProperty(ref toTallyColor, value, ToTallyColorChanged, null, (ov, nv) => updateToTally());
         }
         #endregion
 

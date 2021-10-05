@@ -41,7 +41,7 @@ namespace OpenSC.Model.Routers
                 string oldText = text;
                 text = value;
                 TextChanged?.Invoke(this, oldText, value);
-                PropertyChanged?.Invoke(nameof(Text));
+                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Text));
             }
         }
 
@@ -62,8 +62,8 @@ namespace OpenSC.Model.Routers
         }
         #endregion
 
-        #region Implementation of INotifyPropertyChanged
-        public event PropertyChangedDelegate PropertyChanged;
+        #region INotifyPropertyChanged
+        PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
         #endregion
 
     }

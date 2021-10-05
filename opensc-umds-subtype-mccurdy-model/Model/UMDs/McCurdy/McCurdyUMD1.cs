@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Persistence;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Persistence;
 using OpenSC.Model.SerialPorts;
 using OpenSC.Model.Variables;
 using System;
@@ -38,7 +39,7 @@ namespace OpenSC.Model.UMDs.McCurdy
         public SerialPort Port
         {
             get => port;
-            set => setProperty(this, ref port, value, PortChanged);
+            set => this.setProperty(ref port, value, PortChanged);
         }
         #endregion
 
@@ -51,7 +52,7 @@ namespace OpenSC.Model.UMDs.McCurdy
         public int Address
         {
             get => address;
-            set => setProperty(this, ref address, value, AddressChanged, validator: ValidateAddress);
+            set => this.setProperty(ref address, value, AddressChanged, validator: ValidateAddress);
         }
 
         public void ValidateAddress(int address)

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Mixers
 {
 
-    public class MixerInput : SystemObjectBase, ISignalTallySender, INotifyPropertyChanged
+    public class MixerInput : ISignalTallySender, INotifyPropertyChanged
     {
 
         public MixerInput()
@@ -50,7 +50,7 @@ namespace OpenSC.Model.Mixers
             set
             {
                 ValidateName(value);
-                setProperty(this, ref name, value, NameChanged);
+                this.setProperty(ref name, value, NameChanged);
             }
         }
 
@@ -69,7 +69,7 @@ namespace OpenSC.Model.Mixers
         public int Index
         {
             get => index;
-            set => setProperty(this, ref index, value, IndexChanged);
+            set => this.setProperty(ref index, value, IndexChanged);
         }
         #endregion
 
@@ -106,9 +106,9 @@ namespace OpenSC.Model.Mixers
                             nv.GreenTally.Give(recursionChain);
                     }
                 };
-                setProperty(this, ref source, value, SourceChanged, beforeChangeDelegate, afterChangeDelegate);
+                this.setProperty(ref source, value, SourceChanged, beforeChangeDelegate, afterChangeDelegate);
                 SourceSignalLabelChanged?.Invoke(this, source?.SignalLabel);
-                RaisePropertyChanged(nameof(SourceName));
+                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(SourceName));
             }
         }
         #endregion
@@ -140,7 +140,7 @@ namespace OpenSC.Model.Mixers
             get => redTally;
             set
             {
-                if (!setProperty(this, ref redTally, value, RedTallyChanged))
+                if (!this.setProperty(ref redTally, value, RedTallyChanged))
                     return;
                 List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
                 recursionChain.Add(this);
@@ -160,7 +160,7 @@ namespace OpenSC.Model.Mixers
             get => greenTally;
             set
             {
-                if (!setProperty(this, ref greenTally, value, GreenTallyChanged))
+                if (!this.setProperty(ref greenTally, value, GreenTallyChanged))
                     return;
                 List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
                 recursionChain.Add(this);
@@ -200,6 +200,10 @@ namespace OpenSC.Model.Mixers
         #endregion
 
         string ISignalTallySender.Label => string.Format("Mixer [#{0} ({1})], input [#{2} ({3})]", Mixer.ID, Mixer.Name, Index, Name);
+
+        #region INotifyPropertyChanged
+        PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
+        #endregion
 
     }
 

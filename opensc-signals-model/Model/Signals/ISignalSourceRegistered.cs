@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.General;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
 
-    public interface ISignalSourceRegistered : ISignalSource
+    public interface ISignalSourceRegistered : ISignalSource, INotifyPropertyChanged
     {
 
         #region Property: SignalUniqueId

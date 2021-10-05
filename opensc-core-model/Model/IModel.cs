@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.General;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace OpenSC.Model
     public delegate void ModelBeforeUpdateHandler(IModel model);
     public delegate void ModelAfterUpdateHandler(IModel model);
 
-    public interface IModel
+    public interface IModel : INotifyPropertyChanged
     {
         int ID { get; set; }
         event PropertyChangedTwoValuesDelegate<IModel, int> IdChanged;

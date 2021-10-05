@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using INotifyPropertyChanged = OpenSC.Model.General.INotifyPropertyChanged;
 
 namespace OpenSC.GUI.Routers
 {
@@ -355,7 +356,7 @@ namespace OpenSC.GUI.Routers
                 routerOutput.NameChanged += RouterOutput_NameChanged;
                 routerOutput.Router.NameChanged += Router_NameChanged;
                 routerOutput.CurrentInputChanged += RouterOutput_CrosspointChanged;
-                routerOutput.PropertyChanged += RouterOutput_PropertyChanged;
+                ((INotifyPropertyChanged)routerOutput).PropertyChanged += RouterOutput_PropertyChanged;
             }
 
 
@@ -364,7 +365,7 @@ namespace OpenSC.GUI.Routers
 
             private void RouterOutput_NameChanged(RouterOutput output, string oldName, string newName)
             {
-                PropertyChanged?.Invoke(nameof(Name));
+                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Name));
             }
             #endregion
 
@@ -373,18 +374,13 @@ namespace OpenSC.GUI.Routers
 
             private void Router_NameChanged(IModel output, string oldName, string newName)
             {
-                PropertyChanged?.Invoke(nameof(RouterName));
+                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(RouterName));
             }
             #endregion
 
             #region Active assignable
-            public ISignalSource ActiveAssigned
-                => Output.CurrentSource;
-
-            private void RouterOutput_CrosspointChanged(RouterOutput output, RouterInput newInput)
-            {
-                PropertyChanged?.Invoke(nameof(ActiveAssigned));
-            }
+            public ISignalSource ActiveAssigned => Output.CurrentSource;
+            private void RouterOutput_CrosspointChanged(RouterOutput output, RouterInput newInput) => ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ActiveAssigned));
             #endregion
 
             #region Selected assignable
@@ -401,15 +397,14 @@ namespace OpenSC.GUI.Routers
                     ISignalSource oldSelectedCrosspoint = selectedToAssign;
                     selectedToAssign = newSelectedAssignable;
                     if (oldSelectedCrosspoint != newSelectedAssignable)
-                        PropertyChanged?.Invoke(nameof(SelectedToAssign));
+                        ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(SelectedToAssign));
                 }
             }
             #endregion
 
-            #region INotifyPropertyChanged implementation
-            public event PropertyChangedDelegate PropertyChanged;
-            private void RouterOutput_PropertyChanged(string propertyName)
-                => PropertyChanged?.Invoke(propertyName);
+            #region INotifyPropertyChanged
+            PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
+            private void RouterOutput_PropertyChanged(string propertyName) => ((INotifyPropertyChanged)this).RaisePropertyChanged(propertyName);
             #endregion
 
         }

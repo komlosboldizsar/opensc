@@ -9,6 +9,7 @@ namespace OpenSC.Model
 {
     public interface IDatabaseBase: IObservableList
     {
+        string Name { get; }
         void Load();
         void Save();
         void BuildRelationsByForeignKeys();

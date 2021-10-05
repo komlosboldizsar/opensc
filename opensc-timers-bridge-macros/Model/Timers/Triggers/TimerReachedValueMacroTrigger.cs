@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Macros;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Macros;
 using System;
 using System.Collections.Generic;
 using System.Linq;

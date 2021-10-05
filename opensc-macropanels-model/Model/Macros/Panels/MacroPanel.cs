@@ -32,7 +32,7 @@ namespace OpenSC.Model.Macros
         public int SizeW
         {
             get => width;
-            set => setProperty(this, ref width, value, SizeWChanged);
+            set => this.setProperty(ref width, value, SizeWChanged);
         }
         #endregion
 
@@ -45,7 +45,7 @@ namespace OpenSC.Model.Macros
         public int SizeH
         {
             get => height;
-            set => setProperty(this, ref height, value, SizeHChanged);
+            set => this.setProperty(ref height, value, SizeHChanged);
         }
         #endregion
 

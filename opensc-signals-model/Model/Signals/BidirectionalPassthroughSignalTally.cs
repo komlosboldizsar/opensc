@@ -83,6 +83,10 @@ namespace OpenSC.Model.Signals
         }
         #endregion
 
+        #region INotifyPropertyChanged
+        PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
+        #endregion
+
     }
 
 }

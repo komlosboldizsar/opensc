@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using OpenSC.Model.General;
+using System.Drawing;
 
 namespace OpenSC.Model.Variables
 {
@@ -8,7 +9,7 @@ namespace OpenSC.Model.Variables
     public delegate void BooleanColorChangedDelegate(IBoolean boolean, Color newColor);
     public delegate void BooleanDescriptionChangedDelegate(IBoolean boolean, string newDescription);
 
-    public interface IBoolean
+    public interface IBoolean : INotifyPropertyChanged
     {
 
         string Name { get; set; }

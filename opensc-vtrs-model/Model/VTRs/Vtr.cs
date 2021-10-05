@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Persistence;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace OpenSC.Model.VTRs
         public string Title
         {
             get => title;
-            protected set => setProperty(this, ref title, value, TitleChanged);
+            protected set => this.setProperty(ref title, value, TitleChanged);
         }
         #endregion
 
@@ -47,7 +48,7 @@ namespace OpenSC.Model.VTRs
         public VtrState State
         {
             get => state;
-            protected set => setProperty(this, ref state, value, StateChanged);
+            protected set => this.setProperty(ref state, value, StateChanged);
         }
         #endregion
 
@@ -61,7 +62,7 @@ namespace OpenSC.Model.VTRs
             get => secondsFull;
             protected set
             {
-                if (!setProperty(this, ref secondsFull, value, SecondsFullChanged))
+                if (!this.setProperty(ref secondsFull, value, SecondsFullChanged))
                     return;
                 RaisePropertyChanged(nameof(TimeFull));
             }
@@ -80,7 +81,7 @@ namespace OpenSC.Model.VTRs
             get => secondsElapsed;
             protected set
             {
-                if (!setProperty(this, ref secondsElapsed, value, SecondsElapsedChanged))
+                if (!this.setProperty(ref secondsElapsed, value, SecondsElapsedChanged))
                     return;
                 RaisePropertyChanged(nameof(TimeElapsed));
             }
@@ -99,7 +100,7 @@ namespace OpenSC.Model.VTRs
             get => secondsRemaining;
             protected set
             {
-                if (!setProperty(this, ref secondsRemaining, value, SecondsRemainingChanged))
+                if (!this.setProperty(ref secondsRemaining, value, SecondsRemainingChanged))
                     return;
                 RaisePropertyChanged(nameof(TimeRemaining));
             }

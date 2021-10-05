@@ -12,6 +12,10 @@ namespace OpenSC.Model
     public abstract class ModelBase : SystemObjectBase, IModel
     {
 
+        #region SystemObject things
+        protected virtual void generateGlobalId() => GlobalID = $"{OwnerDatabase.Name}.{id}";
+        #endregion
+
         #region Property: ID
         public event PropertyChangedTwoValuesDelegate<IModel, int> IdChanged;
 
@@ -19,7 +23,7 @@ namespace OpenSC.Model
         public int ID
         {
             get => id;
-            set => setProperty(this, ref id, value, IdChanged, null, (ov, nv) => afterIdChange(), ValidateId);
+            set => this.setProperty(ref id, value, IdChanged, null, (ov, nv) => { generateGlobalId(); afterIdChange(); }, ValidateId);
         }
 
         public void ValidateId(int id)
@@ -50,7 +54,7 @@ namespace OpenSC.Model
         public string Name
         {
             get => name;
-            set => setProperty(this, ref name, value, NameChanged, null, (ov, nv) => afterNameChange(), ValidateName);
+            set => this.setProperty(ref name, value, NameChanged, null, (ov, nv) => afterNameChange(), ValidateName);
         }
 
         public void ValidateName(string name)

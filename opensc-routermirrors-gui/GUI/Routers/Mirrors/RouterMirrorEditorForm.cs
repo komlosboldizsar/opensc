@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using INotifyPropertyChanged = OpenSC.Model.General.INotifyPropertyChanged;
 
 namespace OpenSC.GUI.Routers.Mirrors
 {
@@ -216,8 +217,8 @@ namespace OpenSC.GUI.Routers.Mirrors
         private ObservableProxyList<RouterInputProxy, RouterInput> routerInputProxies;
         private ObservableProxyList<RouterOutputProxy, RouterOutput> routerOutputProxies;
 
-        private abstract class RouterIOProxy<TElement> : Model.General.INotifyPropertyChanged
-            where TElement: class, Model.General.INotifyPropertyChanged
+        private abstract class RouterIOProxy<TElement> : INotifyPropertyChanged
+            where TElement: class, INotifyPropertyChanged
         {
 
             private TElement thisElement = null;
@@ -253,7 +254,7 @@ namespace OpenSC.GUI.Routers.Mirrors
             private void raisePropertyChangedAssociatedElement(TElement element)
             {
                 if (element != null)
-                    PropertyChanged?.Invoke("#" + getElementIndex(element));
+                    ((INotifyPropertyChanged)this).RaisePropertyChanged("#" + getElementIndex(element));
             }
 
             protected abstract int getElementIndex(TElement element);
@@ -261,8 +262,10 @@ namespace OpenSC.GUI.Routers.Mirrors
             public RouterIOProxy()
             { }
 
-            public event PropertyChangedDelegate PropertyChanged;
-            private void handlePropertyChanged(string propertyName) => PropertyChanged?.Invoke(propertyName);
+            #region INotifyPropertyChanged
+            PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
+            private void handlePropertyChanged(string propertyName) => ((INotifyPropertyChanged)this).RaisePropertyChanged(propertyName);
+            #endregion
 
         }
 

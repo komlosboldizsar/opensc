@@ -47,8 +47,13 @@ namespace OpenSC.Model
         public IEnumerator GetEnumerator() => items.Values.GetEnumerator();
         IEnumerator<T> IEnumerable<T>.GetEnumerator() => items.Values.GetEnumerator();
 
+        public string Name { get; init; }
+
         public DatabaseBase()
         {
+            Name = GetType().GetAttribute<DatabaseNameAttribute>()?.Name;
+            if (Name == null)
+                throw new Exception("A database name must be provided through an 'DatabaseName' attribute!");
             persister  = new DatabasePersister<T>(this);
             SPECIFIC_LOG_TAG = LOG_TAG.Replace(LOG_TAG_DBNAME_PLACEHOLDER, this.GetName() ?? LOG_TAG_DBNAME_UNKNOWN);
         }

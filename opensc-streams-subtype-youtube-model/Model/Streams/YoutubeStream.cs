@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using OpenSC.Logger;
+using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.Settings;
 using System;
@@ -58,7 +59,7 @@ namespace OpenSC.Model.Streams
         public string VideoId
         {
             get => videoId;
-            set => setProperty(this, ref videoId, value, VideoIdChanged);
+            set => this.setProperty(ref videoId, value, VideoIdChanged);
         }
         #endregion
 
@@ -71,7 +72,7 @@ namespace OpenSC.Model.Streams
         public int RefreshRate
         {
             get => refreshRate;
-            set => setProperty(this, ref refreshRate, value, RefreshRateChanged, validator: ValidateRefreshRate);
+            set => this.setProperty(ref refreshRate, value, RefreshRateChanged, validator: ValidateRefreshRate);
         }
 
         public void ValidateRefreshRate(int refreshRate)

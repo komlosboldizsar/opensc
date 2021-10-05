@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Persistence;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Persistence;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.UMDs
 {
-    
+
     public abstract class UMD : ModelBase
     {
 
@@ -48,7 +49,7 @@ namespace OpenSC.Model.UMDs
         public string CurrentText
         {
             get => currentText;
-            set => setProperty(this, ref currentText, value, CurrentTextChanged, null, (ov, nv) => update());
+            set => this.setProperty(ref currentText, value, CurrentTextChanged, null, (ov, nv) => update());
         }
         #endregion
 
@@ -67,7 +68,7 @@ namespace OpenSC.Model.UMDs
                     if (!useStaticText)
                         CurrentText = nv;
                 };
-                setProperty(this, ref dynamicText, value, DynamicTextChanged);
+                this.setProperty(ref dynamicText, value, DynamicTextChanged);
             }
         }
         #endregion
@@ -87,7 +88,7 @@ namespace OpenSC.Model.UMDs
                     if (useStaticText)
                         CurrentText = nv;
                 };
-                setProperty(this, ref staticText, value, StaticTextChanged);
+                this.setProperty(ref staticText, value, StaticTextChanged);
             }
         }
         #endregion
@@ -101,7 +102,7 @@ namespace OpenSC.Model.UMDs
         public bool UseStaticText
         {
             get => useStaticText;
-            set => setProperty(this, ref useStaticText, value, UseStaticTextChanged, null,
+            set => this.setProperty(ref useStaticText, value, UseStaticTextChanged, null,
                 (ov, nv) => { CurrentText = nv ? staticText : dynamicText; });
         }
         #endregion

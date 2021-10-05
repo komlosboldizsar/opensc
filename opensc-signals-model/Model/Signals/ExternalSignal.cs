@@ -1,4 +1,5 @@
-﻿using OpenSC.Model.Persistence;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -65,7 +66,7 @@ namespace OpenSC.Model.Signals
         public ExternalSignalCategory Category
         {
             get => category;
-            set => setProperty(this, ref category, value, CategoryChanged);
+            set => this.setProperty(ref category, value, CategoryChanged);
         }
         #endregion
 

@@ -1,4 +1,5 @@
 ﻿using OpenSC.Logger;
+using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
@@ -62,7 +63,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         public string IpAddress
         {
             get => ipAddress;
-            set => setProperty(this, ref ipAddress, value, IpAddressChanged,
+            set => this.setProperty(ref ipAddress, value, IpAddressChanged,
                 null, (ov, nv) => { videohub.IpAddress = nv; }, ValidateIpAddress);
         }
 
@@ -99,7 +100,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
                         LogDispatcher.I(LOG_TAG, logMessage);
                     }
                 };
-                setProperty(this, ref connected, value, ConnectionStateChanged, null, afterChangeDelegate);
+                this.setProperty(ref connected, value, ConnectionStateChanged, null, afterChangeDelegate);
             }
         }
         #endregion
@@ -113,7 +114,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         public bool AutoReconnect
         {
             get => autoReconnect;
-            set => setProperty(this, ref autoReconnect, value, AutoReconnectChanged);
+            set => this.setProperty(ref autoReconnect, value, AutoReconnectChanged);
         }
         #endregion
 

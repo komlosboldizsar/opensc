@@ -56,9 +56,9 @@ namespace OpenSC.Model.Routers
                 string oldName = name;
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
-                PropertyChanged?.Invoke(nameof(Name));
+                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Name));
                 SignalLabelChanged?.Invoke(this, getSignalLabel());
-                PropertyChanged?.Invoke(nameof(ISignalSourceRegistered.SignalLabel));
+                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
             }
         }
 
@@ -99,11 +99,11 @@ namespace OpenSC.Model.Routers
                 int oldValue = index;
                 index = value;
                 IndexChanged?.Invoke(this, oldValue, value);
-                PropertyChanged?.Invoke(nameof(Index));
+                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Index));
                 SignalLabelChanged?.Invoke(this, getSignalLabel());
-                PropertyChanged?.Invoke(nameof(ISignalSourceRegistered.SignalLabel));
+                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
                 SignalUniqueIdChanged?.Invoke(this, SignalUniqueId);
-                PropertyChanged?.Invoke(nameof(ISignalSourceRegistered.SignalUniqueId));
+                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalUniqueId));
             }
         }
 
@@ -178,7 +178,7 @@ namespace OpenSC.Model.Routers
                 RouterOutputLockState oldValue = value;
                 lockState = value;
                 LockStateChanged?.Invoke(this, oldValue, value);
-                PropertyChanged?.Invoke(nameof(LockState));
+                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(LockState));
             }
         }
 
@@ -232,7 +232,7 @@ namespace OpenSC.Model.Routers
                 RouterOutputLockState oldValue = value;
                 protectState = value;
                 ProtectStateChanged?.Invoke(this, oldValue, value);
-                PropertyChanged?.Invoke(nameof(ProtectState));
+                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ProtectState));
             }
         }
 
@@ -270,8 +270,8 @@ namespace OpenSC.Model.Routers
         }
         #endregion
 
-        #region Implementation of INotifyPropertyChanged
-        public event PropertyChangedDelegate PropertyChanged;
+        #region INotifyPropertyChanged
+        PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
         #endregion
 
         #region ToString()

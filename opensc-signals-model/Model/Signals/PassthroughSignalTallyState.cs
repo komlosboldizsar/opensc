@@ -11,10 +11,7 @@ namespace OpenSC.Model.Signals
     public class PassthroughSignalTallyState : ISignalTallyState
     {
 
-        public PassthroughSignalTallyState(ISignalSource parentSignalSource)
-        {
-            ParentSignalSource = parentSignalSource;
-        }
+        public PassthroughSignalTallyState(ISignalSource parentSignalSource) => ParentSignalSource = parentSignalSource;
 
         public ISignalSource ParentSignalSource { get; private set; }
 
@@ -55,7 +52,7 @@ namespace OpenSC.Model.Signals
                 if (previousState != newState)
                 {
                     StateChanged?.Invoke(ParentSignalSource, this, newState, RecursionChainHelpers.CreateRecursionChain(this));
-                    PropertyChanged?.Invoke(nameof(State));
+                    ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(State));
                 }
             }
         }
@@ -65,12 +62,12 @@ namespace OpenSC.Model.Signals
             if (recursionChain?.Contains(this) == true)
                 return;
             StateChanged?.Invoke(ParentSignalSource, this, newState, recursionChain.ExtendRecursionChain(this));
-            PropertyChanged?.Invoke(nameof(State));
+            ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(State));
         }
         #endregion
 
-        #region INotifyPropertyChanged interface
-        public event PropertyChangedDelegate PropertyChanged;
+        #region INotifyPropertyChanged
+        PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
         #endregion
 
     }

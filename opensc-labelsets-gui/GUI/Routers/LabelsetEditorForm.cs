@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using INotifyPropertyChanged = OpenSC.Model.General.INotifyPropertyChanged;
 
 namespace OpenSC.GUI.Routers
 {
@@ -120,13 +121,13 @@ namespace OpenSC.GUI.Routers
             where T : class
             => new CustomDataGridViewColumnDescriptorBuilder<T>(table);
 
-        protected class LabelProxy : Model.General.INotifyPropertyChanged
+        protected class LabelProxy : INotifyPropertyChanged
         {
 
             private Labelset labelset;
 
             public RouterInput RouterInput { get; private set; }
-            
+
             public LabelProxy(Labelset labelset, RouterInput routerInput)
             {
                 this.labelset = labelset;
@@ -138,9 +139,11 @@ namespace OpenSC.GUI.Routers
                 set => labelset.SetText(RouterInput, value);
             }
 
-            public void TextChanged() => PropertyChanged?.Invoke(nameof(LabelProxy.Text));
+            public void TextChanged() => ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(LabelProxy.Text));
 
-            public event PropertyChangedDelegate PropertyChanged;
+            #region INotifyPropertyChanged
+            PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
+            #endregion
 
         }
 

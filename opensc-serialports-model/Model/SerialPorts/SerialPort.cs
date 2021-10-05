@@ -1,4 +1,5 @@
 ﻿using OpenSC.Logger;
+using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using System;
 using System.Collections.Generic;
@@ -62,7 +63,7 @@ namespace OpenSC.Model.SerialPorts
                     if (serialPort?.IsOpen == true)
                         DeInit();
                 };
-                if (!setProperty(this, ref comPortName, value, ComPortNameChanged, beforeChangeDelegate))
+                if (!this.setProperty(ref comPortName, value, ComPortNameChanged, beforeChangeDelegate))
                     return;
                 Init();
             }
@@ -77,7 +78,7 @@ namespace OpenSC.Model.SerialPorts
         public bool Initialized
         {
             get => initialized;
-            set => setProperty(this, ref initialized, value, InitializedChanged);
+            set => this.setProperty(ref initialized, value, InitializedChanged);
         }
         #endregion
 
@@ -108,7 +109,7 @@ namespace OpenSC.Model.SerialPorts
             get => baudRate;
             set
             {
-                if (!setProperty(this, ref baudRate, value, BaudRateChanged, validator: ValidateBaudRate))
+                if (!this.setProperty(ref baudRate, value, BaudRateChanged, validator: ValidateBaudRate))
                     return;
                 afterPortPropertyChanged();
             }
@@ -132,7 +133,7 @@ namespace OpenSC.Model.SerialPorts
             get => parity;
             set
             {
-                if (!setProperty(this, ref parity, value, ParityChanged))
+                if (!this.setProperty(ref parity, value, ParityChanged))
                     return;
                 afterPortPropertyChanged();
             }
@@ -150,7 +151,7 @@ namespace OpenSC.Model.SerialPorts
             get => dataBits;
             set
             {
-                if (!setProperty(this, ref dataBits, value, DataBitsChanged, validator: ValidateDataBits))
+                if (!this.setProperty(ref dataBits, value, DataBitsChanged, validator: ValidateDataBits))
                     return;
                 afterPortPropertyChanged();
             }
@@ -174,7 +175,7 @@ namespace OpenSC.Model.SerialPorts
             get => stopBits;
             set
             {
-                if (!setProperty(this, ref stopBits, value, StopBitsChanged))
+                if (!this.setProperty(ref stopBits, value, StopBitsChanged))
                     return;
                 afterPortPropertyChanged();
             }
