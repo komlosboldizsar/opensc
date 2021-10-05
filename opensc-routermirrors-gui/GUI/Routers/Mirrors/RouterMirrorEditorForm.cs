@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using INotifyPropertyChanged = OpenSC.Model.General.INotifyPropertyChanged;
 
@@ -78,7 +79,7 @@ namespace OpenSC.GUI.Routers.Mirrors
                 return;
             foreach (TAssociation association in associationCollection)
             {
-                TProxy elementProxy = proxyCollection.FirstOrDefault(proxy => (proxy.ThisElement == association.ItemA));
+                TProxy elementProxy = proxyCollection.FirstOrDefault(proxy => (proxy.Original == association.ItemA));
                 if (elementProxy != null)
                     elementProxy.AssociatedElement = association.ItemB;
             }
@@ -91,7 +92,7 @@ namespace OpenSC.GUI.Routers.Mirrors
             clearAssociationsMethod();
             foreach (TProxy proxy in proxyCollection)
                 if (proxy.AssociatedElement != null)
-                    addAssociationMethod(proxy.ThisElement, proxy.AssociatedElement);
+                    addAssociationMethod(proxy.Original, proxy.AssociatedElement);
         }
 
         private void initDropDowns()
@@ -157,7 +158,7 @@ namespace OpenSC.GUI.Routers.Mirrors
                 return;
 
             // Create database
-            ObservableProxyList<TProxy, TElement> proxyList = new ObservableProxyList<TProxy, TElement>(listA, (elementA) => new TProxy() { ThisElement = elementA });
+            ObservableProxyList<TProxy, TElement> proxyList = new ObservableProxyList<TProxy, TElement>(listA, (elementA) => new TProxy() { Original = elementA });
             proxyListRef = proxyList;
 
             // Column: sideA name
@@ -165,7 +166,7 @@ namespace OpenSC.GUI.Routers.Mirrors
             builder.Header("");
             builder.Width(150);
             builder.DividerWidth(3);
-            builder.InitializerMethod((elementProxyA, cell) => { cell.Value = elementNameGetter(elementProxyA.ThisElement); });
+            builder.InitializerMethod((elementProxyA, cell) => { cell.Value = elementNameGetter(elementProxyA.Original); });
             builder.BuildAndAdd();
 
             // Columns for associations
@@ -217,55 +218,30 @@ namespace OpenSC.GUI.Routers.Mirrors
         private ObservableProxyList<RouterInputProxy, RouterInput> routerInputProxies;
         private ObservableProxyList<RouterOutputProxy, RouterOutput> routerOutputProxies;
 
-        private abstract class RouterIOProxy<TElement> : INotifyPropertyChanged
+        private abstract class RouterIOProxy<TElement> : ObjectProxy<TElement>
             where TElement: class, INotifyPropertyChanged
         {
 
-            private TElement thisElement = null;
-
-            public TElement ThisElement
-            {
-                get => thisElement;
-                set
-                {
-                    if (thisElement != null) // Settable only once
-                        return;
-                    thisElement = value;
-                    thisElement.PropertyChanged += handlePropertyChanged;
-                }
-            }
+            public RouterIOProxy() { }
 
             private TElement associatedElement = null;
-
             public TElement AssociatedElement
             {
                 get => associatedElement;
-                set
+                set => this.setProperty(ref associatedElement, value, (i, ov, nv) => { }, null, (ov, nv) =>
                 {
-                    if (value == associatedElement)
-                        return;
-                    TElement oldValue = associatedElement;
-                    associatedElement = value;
-                    raisePropertyChangedAssociatedElement(oldValue);
-                    raisePropertyChangedAssociatedElement(value);
-                }
+                    raisePropertyChangedAssociatedElement(ov);
+                    raisePropertyChangedAssociatedElement(nv);
+                });
             }
 
             private void raisePropertyChangedAssociatedElement(TElement element)
             {
                 if (element != null)
-                    ((INotifyPropertyChanged)this).RaisePropertyChanged("#" + getElementIndex(element));
+                    RaisePropertyChanged("#" + getElementIndex(element));
             }
 
             protected abstract int getElementIndex(TElement element);
-
-            public RouterIOProxy()
-            { }
-
-            #region INotifyPropertyChanged
-            PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
-            private void handlePropertyChanged(string propertyName) => ((INotifyPropertyChanged)this).RaisePropertyChanged(propertyName);
-            #endregion
 
         }
 

@@ -29,7 +29,7 @@ namespace OpenSC.GUI.Routers
 
         private List<Router> routers
         {
-            get { return _routers; }
+            get => _routers;
             set
             {
 
@@ -61,10 +61,8 @@ namespace OpenSC.GUI.Routers
         }
 
         private bool singleMode => (_routers.Count == 1);
-        public RouterControlTableForm()
-        {
-            InitializeComponent();
-        }
+
+        public RouterControlTableForm() => InitializeComponent();
 
         public RouterControlTableForm(Router router)
         {
@@ -80,10 +78,7 @@ namespace OpenSC.GUI.Routers
             this._routersTempRef.AddRange(routers);
         }
 
-        private void RouterControlForm_Load(object sender, EventArgs e)
-        {
-            routers = _routersTempRef;
-        }
+        private void RouterControlForm_Load(object sender, EventArgs e) => routers = _routersTempRef;
 
 
         #region Table
@@ -154,20 +149,20 @@ namespace OpenSC.GUI.Routers
             builder.Header("Lock");
             builder.Width(30);
             builder.UpdaterMethod((routerOutputProxy, cell) => {
-                RouterOutput ro = routerOutputProxy.Output;
+                RouterOutput ro = routerOutputProxy.Original;
                 if (!ro.LocksSupported)
                     return;
                 cell.Value = lockStateToStringConverter.Convert(ro.LockState);
                 cell.Style.BackColor = (ro.LockState == RouterOutputLockState.Clear) ? BACKCOLOR_LOCK_INACTIVE : BACKCOLOR_LOCK_ACTIVE;
             });
             builder.InitializerMethod((routerOutputProxy, cell) => {
-                RouterOutput ro = routerOutputProxy.Output;
+                RouterOutput ro = routerOutputProxy.Original;
                 if (!ro.LocksSupported)
                     cell.Style.BackColor = BACKCOLOR_LOCK_NOTSUPPORTED;
             });
             builder.CellStyle(lockColumnCellStyle);
             builder.AddChangeEvent(nameof(RouterOutput.LockState));
-            builder.CellDoubleClickHandlerMethod((routerOutputProxy, cell, e) => lockOperation(routerOutputProxy.Output, RouterOutputLockType.Lock));
+            builder.CellDoubleClickHandlerMethod((routerOutputProxy, cell, e) => lockOperation(routerOutputProxy.Original, RouterOutputLockType.Lock));
             builder.BuildAndAdd();
 
             // Column: protect
@@ -177,20 +172,20 @@ namespace OpenSC.GUI.Routers
             builder.Width(30);
             builder.DividerWidth(3);
             builder.UpdaterMethod((routerOutputProxy, cell) => {
-                RouterOutput ro = routerOutputProxy.Output;
+                RouterOutput ro = routerOutputProxy.Original;
                 if (!ro.ProtectsSupported)
                     return;
                 cell.Value = lockStateToStringConverter.Convert(ro.ProtectState);
                 cell.Style.BackColor = (ro.ProtectState == RouterOutputLockState.Clear) ? BACKCOLOR_PROTECT_INACTIVE : BACKCOLOR_PROTECT_ACTIVE;
             });
             builder.InitializerMethod((routerOutputProxy, cell) => {
-                RouterOutput ro = routerOutputProxy.Output;
+                RouterOutput ro = routerOutputProxy.Original;
                 if (!ro.ProtectsSupported)
                     cell.Style.BackColor = BACKCOLOR_PROTECT_NOTSUPPORTED;
             });
             builder.CellStyle(protectColumnCellStyle);
             builder.AddChangeEvent(nameof(RouterOutput.ProtectState));
-            builder.CellDoubleClickHandlerMethod((routerOutputProxy, cell, e) => lockOperation(routerOutputProxy.Output, RouterOutputLockType.Protect));
+            builder.CellDoubleClickHandlerMethod((routerOutputProxy, cell, e) => lockOperation(routerOutputProxy.Original, RouterOutputLockType.Protect));
             builder.BuildAndAdd();
 
             List<ISignalSource> assignables = getAllAssignables();
@@ -208,7 +203,7 @@ namespace OpenSC.GUI.Routers
                 builder.IconShown(false);
                 builder.CellDoubleClickHandlerMethod((routerOutputProxy, cell, e) => {
                     if (autotake)
-                        doAssign(routerOutputProxy.Output, assignable);
+                        doAssign(routerOutputProxy.Original, assignable);
                     else
                         routerOutputProxy.SelectedToAssign = assignable;
                 });
@@ -217,8 +212,8 @@ namespace OpenSC.GUI.Routers
                     DataGridViewSmallIconCell typedCell = ((DataGridViewSmallIconCell)cell);
 
                     bool active = _singleMode
-                        ? (routerOutputProxy.ActiveAssigned == assignable)
-                        : (routerOutputProxy.ActiveAssigned?.RegisteredSourceSignal == assignable.RegisteredSourceSignal);
+                        ? (routerOutputProxy.CurrentSource == assignable)
+                        : (routerOutputProxy.CurrentSource?.RegisteredSourceSignal == assignable.RegisteredSourceSignal);
 
                     bool selected = _singleMode
                         ? (routerOutputProxy.SelectedToAssign == assignable)
@@ -244,7 +239,7 @@ namespace OpenSC.GUI.Routers
                     }
 
                 });
-                builder.AddChangeEvent(nameof(RouterOutputProxy.ActiveAssigned));
+                builder.AddChangeEvent(nameof(RouterOutputProxy.CurrentSource));
                 builder.AddChangeEvent(nameof(RouterOutputProxy.SelectedToAssign));
                 builder.BuildAndAdd();
             }
@@ -345,80 +340,54 @@ namespace OpenSC.GUI.Routers
         #region Proxies
         private ObservableProxyList<RouterOutputProxy, RouterOutput> routerOutputProxies;
 
-        private class RouterOutputProxy : Model.General.INotifyPropertyChanged
+        private class RouterOutputProxy : ObjectProxy<RouterOutput>
         {
 
-            public RouterOutput Output { get; private set; }
+            private static readonly Dictionary<string, string> ROUTER_OUTPUT_PROXY_PROPERTY_BINDINGS = new Dictionary<string, string>()
+            {
+                { nameof(RouterOutput.Name), nameof(RouterOutputProxy.Name) }
+            };
 
             public RouterOutputProxy(RouterOutput routerOutput)
+                : base(routerOutput, ROUTER_OUTPUT_PROXY_PROPERTY_BINDINGS)
             {
-                this.Output = routerOutput;
-                routerOutput.NameChanged += RouterOutput_NameChanged;
                 routerOutput.Router.NameChanged += Router_NameChanged;
-                routerOutput.CurrentInputChanged += RouterOutput_CrosspointChanged;
-                ((INotifyPropertyChanged)routerOutput).PropertyChanged += RouterOutput_PropertyChanged;
+                routerOutput.CurrentSourceChanged += RouterOutput_CurrentSourceChanged; ;
             }
 
+            public string Name => Original.Name;
 
-            #region Property: Name
-            public string Name => Output.Name;
+            public string RouterName => Original.Router.Name;
+            private void Router_NameChanged(IModel item, string oldValue, string newValue) => RaisePropertyChanged(nameof(RouterName));
 
-            private void RouterOutput_NameChanged(RouterOutput output, string oldName, string newName)
-            {
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Name));
-            }
-            #endregion
-
-            #region Property: RouterName
-            public string RouterName => Output.Router.Name;
-
-            private void Router_NameChanged(IModel output, string oldName, string newName)
-            {
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(RouterName));
-            }
-            #endregion
-
-            #region Active assignable
-            public ISignalSource ActiveAssigned => Output.CurrentSource;
-            private void RouterOutput_CrosspointChanged(RouterOutput output, RouterInput newInput) => ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ActiveAssigned));
-            #endregion
-
+            public ISignalSource CurrentSource => Original.CurrentSource;
+            private void RouterOutput_CurrentSourceChanged(ISignalDestination signalDestination, ISignalSource newSource) => RaisePropertyChanged(nameof(CurrentSource));
+           
             #region Selected assignable
             private ISignalSource selectedToAssign = null;
 
             public ISignalSource SelectedToAssign
             {
-                get { return selectedToAssign; }
+                get => selectedToAssign;
                 set
                 {
                     ISignalSource newSelectedAssignable = value;
-                    if (newSelectedAssignable == ActiveAssigned)
+                    if (newSelectedAssignable == CurrentSource)
                         newSelectedAssignable = null;
                     ISignalSource oldSelectedCrosspoint = selectedToAssign;
                     selectedToAssign = newSelectedAssignable;
                     if (oldSelectedCrosspoint != newSelectedAssignable)
-                        ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(SelectedToAssign));
+                        RaisePropertyChanged(nameof(SelectedToAssign));
                 }
             }
-            #endregion
-
-            #region INotifyPropertyChanged
-            PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
-            private void RouterOutput_PropertyChanged(string propertyName) => ((INotifyPropertyChanged)this).RaisePropertyChanged(propertyName);
             #endregion
 
         }
 
         #endregion
 
-        private void inputsChangedHandler()
-        {
-            initializeTable();
-        }
-        private void outputsChangedHandler()
-        {
-            initializeTable();
-        }
+        private void inputsChangedHandler() => initializeTable();
+        private void outputsChangedHandler() => initializeTable();
 
         #region Persistence
         private const string PERSISTENCE_KEY_ROUTER_IDS = "router_ids";
@@ -471,15 +440,8 @@ namespace OpenSC.GUI.Routers
         private static Color AUTOTAKE_INCTIVE_BACKGROUND = Color.FromArgb(255, 224, 192);
         private static Color AUTOTAKE_INCTIVE_BORDER = Color.FromArgb(192, 164, 0);
 
-        private void autotakeButton_Click(object sender, EventArgs e)
-        {
-            Autotake = !Autotake;
-        }
-
-        private void takeButton_Click(object sender, EventArgs e)
-        {
-            take();
-        }
+        private void autotakeButton_Click(object sender, EventArgs e) => Autotake = !Autotake;
+        private void takeButton_Click(object sender, EventArgs e) => take();
 
         private void take()
         {
@@ -487,7 +449,7 @@ namespace OpenSC.GUI.Routers
             {
                 if (routerOutputProxy.SelectedToAssign != null)
                 {
-                    doAssign(routerOutputProxy.Output, routerOutputProxy.SelectedToAssign);
+                    doAssign(routerOutputProxy.Original, routerOutputProxy.SelectedToAssign);
                     routerOutputProxy.SelectedToAssign = null;
                 }
             }
