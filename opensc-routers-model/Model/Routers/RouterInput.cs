@@ -175,10 +175,6 @@ namespace OpenSC.Model.Routers
         }
         #endregion
 
-        #region INotifyPropertyChanged
-        PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
-        #endregion
-
         #region ToString()
         public override string ToString() => string.Format("(#{0}) {1}", index, name);
         #endregion
