@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public class RouterOutput : SignalForwarder, ISignalSourceRegistered, INotifyPropertyChanged
+    public class RouterOutput : SignalForwarder, ISignalSourceRegistered
     {
 
         public RouterOutput() : base()
@@ -268,10 +268,6 @@ namespace OpenSC.Model.Routers
                 return;
             Router.RequestLockOperation(this, RouterOutputLockType.Protect, RouterOutputLockOperationType.ForceUnlock);
         }
-        #endregion
-
-        #region INotifyPropertyChanged
-        PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
         #endregion
 
         #region ToString()

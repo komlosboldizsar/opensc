@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public class RouterInput : SignalForwarder, INotifyPropertyChanged
+    public class RouterInput : SignalForwarder
     {
 
         public RouterInput() : base()

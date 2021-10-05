@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
 
-    public class ExternalSignalTally : IBidirectionalSignalTally
+    public class ExternalSignalTally :  ObjectBase, IBidirectionalSignalTally
     {
 
         public ExternalSignalTally(ExternalSignal parentSignalSource)
@@ -71,9 +71,6 @@ namespace OpenSC.Model.Signals
         public List<List<ISignalTallySender>> CurrentRecursionChains => activeSources;
         #endregion
 
-        #region INotifyPropertyChanged
-        PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
-        #endregion
     }
 
 }
