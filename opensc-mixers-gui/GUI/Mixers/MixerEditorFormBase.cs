@@ -31,9 +31,6 @@ namespace OpenSC.GUI.Mixers
             Mixer mixer = (Mixer)EditedModel;
             if (mixer == null)
                 return;
-            mixer.ValidateId((int)idNumericField.Value);
-            mixer.ValidateName(nameTextBox.Text);
-            // TODO: validate name
         }
 
         protected override void writeFields()

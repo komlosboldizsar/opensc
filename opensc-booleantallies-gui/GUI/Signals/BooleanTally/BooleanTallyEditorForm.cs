@@ -46,8 +46,6 @@ namespace OpenSC.GUI.Signals.BooleanTallies
             BooleanTally booleanTally = (BooleanTally)EditedModel;
             if (booleanTally == null)
                 return;
-            booleanTally.ValidateId((int)idNumericField.Value);
-            //category.ValidateName(nameTextBox.Text);
         }
 
         protected override void writeFields()

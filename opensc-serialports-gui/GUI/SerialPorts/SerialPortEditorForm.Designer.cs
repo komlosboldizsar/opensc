@@ -28,10 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.idLabel = new System.Windows.Forms.Label();
-            this.nameLabel = new System.Windows.Forms.Label();
-            this.idNumericField = new System.Windows.Forms.NumericUpDown();
-            this.nameTextBox = new System.Windows.Forms.TextBox();
             this.comPortDataPanel = new System.Windows.Forms.Panel();
             this.comPortDataGroupBox = new System.Windows.Forms.GroupBox();
             this.comPortDataTable = new System.Windows.Forms.TableLayoutPanel();
@@ -47,7 +43,6 @@
             this.portNameDropDown = new System.Windows.Forms.ComboBox();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).BeginInit();
             this.comPortDataPanel.SuspendLayout();
             this.comPortDataGroupBox.SuspendLayout();
             this.comPortDataTable.SuspendLayout();
@@ -67,45 +62,6 @@
             // 
             this.mainContainer.Padding = new System.Windows.Forms.Padding(10);
             this.mainContainer.Size = new System.Drawing.Size(520, 431);
-            // 
-            // idLabel
-            // 
-            this.idLabel.AutoSize = true;
-            this.idLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.idLabel.Location = new System.Drawing.Point(3, 0);
-            this.idLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.idLabel.Name = "idLabel";
-            this.idLabel.Size = new System.Drawing.Size(21, 28);
-            this.idLabel.TabIndex = 0;
-            this.idLabel.Text = "ID";
-            this.idLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // nameLabel
-            // 
-            this.nameLabel.AutoSize = true;
-            this.nameLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.nameLabel.Location = new System.Drawing.Point(3, 28);
-            this.nameLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.nameLabel.Name = "nameLabel";
-            this.nameLabel.Size = new System.Drawing.Size(45, 28);
-            this.nameLabel.TabIndex = 1;
-            this.nameLabel.Text = "Name";
-            this.nameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // idNumericField
-            // 
-            this.idNumericField.Location = new System.Drawing.Point(66, 3);
-            this.idNumericField.Name = "idNumericField";
-            this.idNumericField.Size = new System.Drawing.Size(120, 22);
-            this.idNumericField.TabIndex = 2;
-            // 
-            // nameTextBox
-            // 
-            this.nameTextBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.nameTextBox.Location = new System.Drawing.Point(66, 31);
-            this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(415, 22);
-            this.nameTextBox.TabIndex = 3;
             // 
             // comPortDataPanel
             // 
@@ -307,7 +263,6 @@
             this.customElementsPanel.ResumeLayout(false);
             this.customElementsPanel.PerformLayout();
             this.mainContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).EndInit();
             this.comPortDataPanel.ResumeLayout(false);
             this.comPortDataPanel.PerformLayout();
             this.comPortDataGroupBox.ResumeLayout(false);
@@ -334,8 +289,5 @@
         private System.Windows.Forms.ComboBox stopBitsDropDown;
         private System.Windows.Forms.Label stopBitsLabel;
         private System.Windows.Forms.NumericUpDown dataBitsNumericField;
-        private System.Windows.Forms.Label idLabel;
-        private System.Windows.Forms.Label nameLabel;
-        private System.Windows.Forms.NumericUpDown idNumericField;
     }
 }

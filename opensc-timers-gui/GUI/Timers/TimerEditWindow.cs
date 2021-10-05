@@ -44,8 +44,6 @@ namespace OpenSC.GUI.Timers
             Timer timer = (Timer)EditedModel;
             if (timer == null)
                 return;
-            timer.ValidateId((int)idNumericField.Value);
-            timer.ValidateName(nameTextBox.Text);
             timer.ValidateCountdownSeconds((int)countdownStartNumericField.Value);
         }
 

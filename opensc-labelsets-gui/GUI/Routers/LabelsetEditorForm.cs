@@ -40,8 +40,6 @@ namespace OpenSC.GUI.Routers
             Labelset labelset = (Labelset)EditedModel;
             if (labelset == null)
                 return;
-            labelset.ValidateId((int)idNumericField.Value);
-            // TODO: validate name
         }
 
         protected override void writeFields()

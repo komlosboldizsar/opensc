@@ -38,8 +38,6 @@ namespace OpenSC.GUI.Variables
             DynamicText dynamicText = (DynamicText)EditedModel;
             if (dynamicText == null)
                 return;
-            dynamicText.ValidateId((int)idNumericField.Value);
-            //dynamicText.ValidateName(nameTextBox.Text);
         }
 
         protected override void writeFields()

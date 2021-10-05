@@ -32,7 +32,6 @@ namespace OpenSC.GUI.Routers
             Router router = (Router)EditedModel;
             if (router == null)
                 return;
-            router.ValidateId((int)idNumericField.Value);
         }
 
         protected override void writeFields()

@@ -56,8 +56,6 @@ namespace OpenSC.GUI.Routers.CrosspointStores
             CrosspointStore crosspointStore = (CrosspointStore)EditedModel;
             if (crosspointStore == null)
                 return;
-            crosspointStore.ValidateId((int)idNumericField.Value);
-            //category.ValidateName(nameTextBox.Text);
         }
 
         protected override void writeFields()

@@ -25,8 +25,6 @@ namespace OpenSC.GUI.Streams
             Stream stream = (Stream)EditedModel;
             if (stream == null)
                 return;
-            stream.ValidateId((int)idNumericField.Value);
-            stream.ValidateName(nameTextBox.Text);
         }
 
         protected override void writeFields()

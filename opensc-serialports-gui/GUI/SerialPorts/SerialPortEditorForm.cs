@@ -42,8 +42,6 @@ namespace OpenSC.GUI.SerialPorts
             SerialPort port = (SerialPort)EditedModel;
             if (port == null)
                 return;
-            port.ValidateId((int)idNumericField.Value);
-            port.ValidateName(nameTextBox.Text);
         }
 
         protected override void writeFields()

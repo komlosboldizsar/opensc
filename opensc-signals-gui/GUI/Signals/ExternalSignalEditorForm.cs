@@ -38,8 +38,6 @@ namespace OpenSC.GUI.Signals
             ExternalSignal externalSignal = (ExternalSignal)EditedModel;
             if (externalSignal == null)
                 return;
-            externalSignal.ValidateId((int)idNumericField.Value);
-            //externalSignal.ValidateName(nameTextBox.Text);
         }
 
         protected override void writeFields()

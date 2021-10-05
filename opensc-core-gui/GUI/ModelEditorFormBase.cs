@@ -138,7 +138,12 @@ namespace OpenSC.GUI
         }
 
         protected virtual void validateFields()
-        { }
+        {
+            if (editedModel == null)
+                return;
+            ((ModelBase)editedModel).ValidateId((int)idNumericField.Value);
+            ((ModelBase)editedModel).ValidateName(nameTextBox.Text);
+        }
 
         protected virtual void writeFields()
         {
