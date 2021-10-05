@@ -42,8 +42,6 @@ namespace OpenSC.GUI.Macros
             Macro macro = (Macro)EditedModel;
             if (macro == null)
                 return;
-            macro.ValidateId((int)idNumericField.Value);
-            macro.ValidateName(nameTextBox.Text);
             validateCode();
         }
 

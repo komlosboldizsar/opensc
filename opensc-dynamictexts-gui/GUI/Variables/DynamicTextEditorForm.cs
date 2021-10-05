@@ -16,7 +16,7 @@ namespace OpenSC.GUI.Variables
         public DynamicTextEditorForm(DynamicText dynamicText) : base(dynamicText)
         {
             InitializeComponent();
-            dynamicText.CurrentTextChanged += dynamicTextCurrentTextChangedHandler;
+            ((DynamicText)EditedModel).CurrentTextChanged += dynamicTextCurrentTextChangedHandler;
         }
 
         protected override IModelEditorFormDataManager createManager()
@@ -38,8 +38,6 @@ namespace OpenSC.GUI.Variables
             DynamicText dynamicText = (DynamicText)EditedModel;
             if (dynamicText == null)
                 return;
-            dynamicText.ValidateId((int)idNumericField.Value);
-            //dynamicText.ValidateName(nameTextBox.Text);
         }
 
         protected override void writeFields()

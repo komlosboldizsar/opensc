@@ -38,8 +38,6 @@ namespace OpenSC.GUI.Macros
             MacroPanel macroPanel = (MacroPanel)EditedModel;
             if (macroPanel == null)
                 return;
-            macroPanel.ValidateId((int)idNumericField.Value);
-            macroPanel.ValidateName(nameTextBox.Text);
         }
 
         protected override void writeFields()

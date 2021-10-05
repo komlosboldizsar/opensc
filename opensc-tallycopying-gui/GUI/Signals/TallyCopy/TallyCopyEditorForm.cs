@@ -45,8 +45,6 @@ namespace OpenSC.GUI.Signals.TallyCopying
             TallyCopy tallyCopy = (TallyCopy)EditedModel;
             if (tallyCopy == null)
                 return;
-            tallyCopy.ValidateId((int)idNumericField.Value);
-            //category.ValidateName(nameTextBox.Text);
         }
 
         protected override void writeFields()

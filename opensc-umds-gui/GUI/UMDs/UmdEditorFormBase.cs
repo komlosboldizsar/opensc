@@ -38,8 +38,6 @@ namespace OpenSC.GUI.UMDs
             UMD umd = (UMD)EditedModel;
             if (umd == null)
                 return;
-            umd.ValidateId((int)idNumericField.Value);
-            umd.ValidateName(nameTextBox.Text);
         }
 
         protected override void writeFields()

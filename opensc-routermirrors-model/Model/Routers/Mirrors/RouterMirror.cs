@@ -69,7 +69,7 @@ namespace OpenSC.Model.Routers.Mirrors
 
 #pragma warning disable CS0169
         [TempForeignKey(nameof(routerA))]
-        private int _routerAid;
+        private string _routerAid;
 #pragma warning restore CS0169
 
         public Router RouterA
@@ -102,7 +102,7 @@ namespace OpenSC.Model.Routers.Mirrors
 
 #pragma warning disable CS0169
         [TempForeignKey(nameof(routerB))]
-        private int _routerBid;
+        private string _routerBid;
 #pragma warning restore CS0169
 
         public Router RouterB

@@ -25,7 +25,6 @@ namespace OpenSC.GUI.VTRs
             Vtr vtr = (Vtr)EditedModel;
             if (vtr == null)
                 return;
-            vtr.ValidateId((int)idNumericField.Value);
         }
 
         protected override void writeFields()

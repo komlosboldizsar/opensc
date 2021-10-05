@@ -53,8 +53,6 @@ namespace OpenSC.GUI.Routers.Mirrors
             RouterMirror routerMirror = (RouterMirror)EditedModel;
             if (routerMirror == null)
                 return;
-            routerMirror.ValidateId((int)idNumericField.Value);
-            // TODO: validate name
         }
 
         protected override void writeFields()

@@ -44,8 +44,6 @@ namespace OpenSC.GUI.Routers.CrosspointBooleans
             CrosspointBoolean crosspointBoolean = ((CrosspointBoolean)EditedModel);
             if (crosspointBoolean == null)
                 return;
-            crosspointBoolean.ValidateId((int)idNumericField.Value);
-            //category.ValidateName(nameTextBox.Text);
         }
 
         protected override void writeFields()

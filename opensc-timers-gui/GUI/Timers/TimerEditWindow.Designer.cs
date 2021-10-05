@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.idLabel = new System.Windows.Forms.Label();
-            this.idNumericField = new System.Windows.Forms.NumericUpDown();
             this.operationGroupBox = new System.Windows.Forms.GroupBox();
             this.modeTable = new System.Windows.Forms.TableLayoutPanel();
             this.modeLabel = new System.Windows.Forms.Label();
@@ -44,7 +42,6 @@
             this.saveButton = new System.Windows.Forms.Button();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).BeginInit();
             this.operationGroupBox.SuspendLayout();
             this.modeTable.SuspendLayout();
             this.modeOptionTable.SuspendLayout();
@@ -69,25 +66,6 @@
             this.mainContainer.Controls.SetChildIndex(this.cancelButton, 0);
             this.mainContainer.Controls.SetChildIndex(this.saveButton, 0);
             this.mainContainer.Controls.SetChildIndex(this.customElementsPanel, 0);
-            // 
-            // idLabel
-            // 
-            this.idLabel.AutoSize = true;
-            this.idLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.idLabel.Location = new System.Drawing.Point(3, 0);
-            this.idLabel.Margin = new System.Windows.Forms.Padding(3, 0, 20, 0);
-            this.idLabel.Name = "idLabel";
-            this.idLabel.Size = new System.Drawing.Size(21, 28);
-            this.idLabel.TabIndex = 0;
-            this.idLabel.Text = "ID";
-            this.idLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // idNumericField
-            // 
-            this.idNumericField.Location = new System.Drawing.Point(61, 3);
-            this.idNumericField.Name = "idNumericField";
-            this.idNumericField.Size = new System.Drawing.Size(120, 22);
-            this.idNumericField.TabIndex = 2;
             // 
             // operationGroupBox
             // 
@@ -253,7 +231,6 @@
             this.customElementsPanel.ResumeLayout(false);
             this.customElementsPanel.PerformLayout();
             this.mainContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).EndInit();
             this.operationGroupBox.ResumeLayout(false);
             this.operationGroupBox.PerformLayout();
             this.modeTable.ResumeLayout(false);
@@ -278,7 +255,5 @@
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button saveAndCloseButton;
         private System.Windows.Forms.Button saveButton;
-        private System.Windows.Forms.Label idLabel;
-        private System.Windows.Forms.NumericUpDown idNumericField;
     }
 }

@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.idLabel = new System.Windows.Forms.Label();
-            this.idNumericField = new System.Windows.Forms.NumericUpDown();
             this.contentGroupBox = new System.Windows.Forms.GroupBox();
             this.contentTable = new System.Windows.Forms.TableLayoutPanel();
             this.formulaLabel = new System.Windows.Forms.Label();
@@ -38,7 +36,6 @@
             this.currentTextTextBox = new System.Windows.Forms.TextBox();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).BeginInit();
             this.contentGroupBox.SuspendLayout();
             this.contentTable.SuspendLayout();
             this.SuspendLayout();
@@ -55,25 +52,6 @@
             // 
             this.mainContainer.Padding = new System.Windows.Forms.Padding(10);
             this.mainContainer.Size = new System.Drawing.Size(509, 378);
-            // 
-            // idLabel
-            // 
-            this.idLabel.AutoSize = true;
-            this.idLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.idLabel.Location = new System.Drawing.Point(3, 0);
-            this.idLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.idLabel.Name = "idLabel";
-            this.idLabel.Size = new System.Drawing.Size(21, 28);
-            this.idLabel.TabIndex = 0;
-            this.idLabel.Text = "ID";
-            this.idLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // idNumericField
-            // 
-            this.idNumericField.Location = new System.Drawing.Point(64, 3);
-            this.idNumericField.Name = "idNumericField";
-            this.idNumericField.Size = new System.Drawing.Size(120, 22);
-            this.idNumericField.TabIndex = 2;
             // 
             // contentGroupBox
             // 
@@ -167,7 +145,6 @@
             this.customElementsPanel.ResumeLayout(false);
             this.customElementsPanel.PerformLayout();
             this.mainContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.idNumericField)).EndInit();
             this.contentGroupBox.ResumeLayout(false);
             this.contentGroupBox.PerformLayout();
             this.contentTable.ResumeLayout(false);
@@ -183,7 +160,5 @@
         private System.Windows.Forms.Label formulaLabel;
         private System.Windows.Forms.TextBox formulaTextBox;
         private System.Windows.Forms.TextBox currentTextTextBox;
-        private System.Windows.Forms.Label idLabel;
-        private System.Windows.Forms.NumericUpDown idNumericField;
     }
 }
