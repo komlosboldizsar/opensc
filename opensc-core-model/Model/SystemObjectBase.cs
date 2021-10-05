@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model
 {
 
-    public abstract class SystemObjectBase : ISystemObject, INotifyPropertyChanged
+    public abstract class SystemObjectBase : ObjectBase, ISystemObject
     {
 
         public event PropertyChangedTwoValuesDelegate<SystemObjectBase, string> GlobalIdChanged;
@@ -20,10 +20,6 @@ namespace OpenSC.Model
             get => globalId;
             protected set => this.setProperty(ref globalId, value, GlobalIdChanged);
         }
-
-        PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
-
-        public virtual void RaisePropertyChanged([CallerMemberName] string propertyName = "") => ((INotifyPropertyChanged)this).RaisePropertyChanged(propertyName);
 
     }
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
 
-    public class BidirectionalPassthroughSignalTally : IBidirectionalSignalTally, ISignalTallySender
+    public class BidirectionalPassthroughSignalTally : ObjectBase, IBidirectionalSignalTally, ISignalTallySender
     {
 
         public BidirectionalPassthroughSignalTally(ISignalSource parentSignalSource)
@@ -81,10 +81,6 @@ namespace OpenSC.Model.Signals
             get => tallyReceiver.Label;
             set { tallyReceiver.Label = value; }
         }
-        #endregion
-
-        #region INotifyPropertyChanged
-        PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
         #endregion
 
     }

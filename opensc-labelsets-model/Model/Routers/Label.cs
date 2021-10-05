@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Routers
 {
-    public class Label : INotifyPropertyChanged
+    public class Label : ObjectBase
     {
         public Label()
         { }
@@ -60,10 +60,6 @@ namespace OpenSC.Model.Routers
         {
             RouterInput = RouterDatabase.Instance.GetTById(_routerId).Inputs[_routerInputIndex];
         }
-        #endregion
-
-        #region INotifyPropertyChanged
-        PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
         #endregion
 
     }

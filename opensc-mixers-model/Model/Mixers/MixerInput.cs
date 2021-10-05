@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Mixers
 {
 
-    public class MixerInput : ISignalTallySender, INotifyPropertyChanged
+    public class MixerInput : ObjectBase, ISignalTallySender
     {
 
         public MixerInput()
@@ -200,10 +200,6 @@ namespace OpenSC.Model.Mixers
         #endregion
 
         string ISignalTallySender.Label => string.Format("Mixer [#{0} ({1})], input [#{2} ({3})]", Mixer.ID, Mixer.Name, Index, Name);
-
-        #region INotifyPropertyChanged
-        PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
-        #endregion
 
     }
 
