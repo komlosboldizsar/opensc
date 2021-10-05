@@ -41,10 +41,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 RaisePropertyChanged(proxyPropertyName);
         }
 
-        #region INotifyPropertyChanged
-        PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
-        protected void RaisePropertyChanged([CallerMemberName] string propertyName = "") => ((INotifyPropertyChanged)this).RaisePropertyChanged(propertyName);
-        #endregion
+        public event PropertyChangedDelegate PropertyChanged;
+        public void RaisePropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(propertyName);
 
     }
 
