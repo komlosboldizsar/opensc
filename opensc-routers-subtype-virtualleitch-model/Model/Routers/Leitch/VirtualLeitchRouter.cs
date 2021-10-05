@@ -70,7 +70,7 @@ namespace OpenSC.Model.Routers.Leitch
         private SerialPort port;
 
 #pragma warning disable CS0169
-        [TempForeignKey(SerialPortDatabase.DBNAME, nameof(port))]
+        [TempForeignKey(nameof(port))]
         private int _portId;
 #pragma warning restore CS0169
 

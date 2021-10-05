@@ -33,8 +33,6 @@ namespace OpenSC.GUI.Signals
             ExternalSignalCategory externalSignalCategory = (ExternalSignalCategory)EditedModel;
             if (externalSignalCategory == null)
                 return;
-            externalSignalCategory.ValidateId((int)idNumericField.Value);
-            //category.ValidateName(nameTextBox.Text);
         }
 
         protected override void writeFields()

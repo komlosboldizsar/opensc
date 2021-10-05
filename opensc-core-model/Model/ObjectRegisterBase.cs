@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSC.Model.Variables
+namespace OpenSC.Model
 {
 
     public abstract class ObjectRegisterBase<TKey, TItem> : IObservableList, IObservableList<TItem>
@@ -27,7 +27,8 @@ namespace OpenSC.Model.Variables
         IEnumerator IEnumerable.GetEnumerator() => registeredItems.Values.GetEnumerator();
         #endregion
 
-        private Dictionary<TKey, TItem> registeredItems = new Dictionary<TKey, TItem>();
+        private List<TItem> registeredItemsWithoutKey = new();
+        private Dictionary<TKey, TItem> registeredItems = new();
 
         public TItem this[TKey key]
         {
@@ -44,16 +45,39 @@ namespace OpenSC.Model.Variables
         public void Register(TItem item)
         {
             TKey key = getKey(item);
-            if (!CanKeyBeUsedForItem(item, key, out TItem foundItem))
-                throw new KeyIsAlreadyUsedException(key, item, foundItem);
-            registeredItems.Add(key, item);
+            if (key == null)
+            {
+                if (registeredItemsWithoutKey.Contains(item))
+                    return;
+                registeredItemsWithoutKey.Add(item);
+            }
+            else
+            {
+                if (!CanKeyBeUsedForItem(item, key, out TItem foundItem))
+                    throw new KeyIsAlreadyUsedException(key, item, foundItem);
+                registeredItems.Add(key, item);
+            }
             keyChangedSubscribeMethod(item);
             itemRemovedSubscribeMethod(item);
             ItemAdded?.Invoke(new TItem[] { item });
             ItemsChanged?.Invoke();
         }
 
-        public void Unregister(TItem item) => UnregisterByKey(getKey(item));
+        public void Unregister(TItem item)
+        {
+            TKey itemKey = getKey(item);
+            if (itemKey != null)
+            {
+                UnregisterByKey(itemKey);
+                return;
+            }
+            if (registeredItemsWithoutKey.Contains(item))
+            {
+                registeredItemsWithoutKey.Remove(item);
+                itemRemoved(item);
+            }
+        }
+         
 
         public void UnregisterByKey(TKey key)
         {
@@ -61,32 +85,53 @@ namespace OpenSC.Model.Variables
                 return;
             if (!registeredItems.TryGetValue(key, out TItem removedItem))
                 return;
-            registeredItems.Remove(key);
-            keyChangedUnsubscribeMethod(removedItem);
-            itemRemovedUnsubscribeMethod(removedItem);
-            ItemRemoved?.Invoke(new TItem[] { removedItem });
+            itemRemoved(removedItem);
+        }
+
+        private void itemRemoved(TItem item)
+        {
+            keyChangedUnsubscribeMethod(item);
+            itemRemovedUnsubscribeMethod(item);
+            ItemRemoved?.Invoke(new TItem[] { item });
             ItemsChanged?.Invoke();
         }
 
         public void ItemKeyChanged(TItem item)
         {
-            if (!registeredItems.ContainsValue(item))
-                return;
             TKey key = getKey(item);
+            bool registeredWithoutKey = registeredItemsWithoutKey.Contains(item);
+            bool registeredWithKey = registeredItems.ContainsValue(item);
+            if (!registeredWithoutKey && !registeredWithKey)
+                return;
             if (!CanKeyBeUsedForItem(item, key, out TItem foundItem))
                 throw new KeyIsAlreadyUsedException(key, item, foundItem);
-            TKey previousRegisteredKey = registeredItems.FirstOrDefault(kvp => (kvp.Value == item)).Key;
-            registeredItems.Remove(previousRegisteredKey);
-            registeredItems.Add(key, item);
+            if (registeredWithoutKey && (key != null))
+            {
+                registeredItemsWithoutKey.Remove(item);
+                registeredItems.Add(key, item); 
+            }
+            if (registeredWithKey)
+            {
+                TKey previousRegisteredKey = registeredItems.FirstOrDefault(kvp => kvp.Value == item).Key;
+                registeredItems.Remove(previousRegisteredKey);
+                if (key != null)
+                    registeredItems.Add(key, item);
+                else
+                    registeredItemsWithoutKey.Add(item);
+            }
         }
 
         public bool CanKeyBeUsedForItem(TItem item, TKey key, out TItem keyOwnerItem)
         {
-            if (!registeredItems.TryGetValue(key, out keyOwnerItem)) {
+            keyOwnerItem = null;
+            if (key == null)
+                return true;
+            if (!registeredItems.TryGetValue(key, out keyOwnerItem))
+            {
                 keyOwnerItem = null;
                 return true;
             }
-            return (keyOwnerItem == item);
+            return keyOwnerItem == item;
         }
 
         protected abstract TKey getKey(TItem item);
