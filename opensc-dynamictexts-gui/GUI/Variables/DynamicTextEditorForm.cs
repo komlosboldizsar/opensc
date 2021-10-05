@@ -16,7 +16,7 @@ namespace OpenSC.GUI.Variables
         public DynamicTextEditorForm(DynamicText dynamicText) : base(dynamicText)
         {
             InitializeComponent();
-            dynamicText.CurrentTextChanged += dynamicTextCurrentTextChangedHandler;
+            ((DynamicText)EditedModel).CurrentTextChanged += dynamicTextCurrentTextChangedHandler;
         }
 
         protected override IModelEditorFormDataManager createManager()
