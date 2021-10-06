@@ -13,8 +13,8 @@ namespace OpenSC.GUI.UMDs
     public partial class UmdList : ModelListFormBase
     {
 
-        protected override string SubjectSingular { get; } = "stream";
-        protected override string SubjectPlural { get; } = "streams";
+        protected override string SubjectSingular { get; } = "UMD";
+        protected override string SubjectPlural { get; } = "UMDs";
 
         protected override IModelTypeRegister TypeRegister { get; } = UmdTypeRegister.Instance;
         protected override IModelEditorFormTypeRegister EditorFormTypeRegister { get; } = UmdEditorFormTypeRegister.Instance;
@@ -42,7 +42,6 @@ namespace OpenSC.GUI.UMDs
             builder.Width(200);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.StaticText; });
             builder.AddChangeEvent(nameof(UMD.StaticText));
-            builder.BuildAndAdd();
 
             // Column: use static text
             builder = builderGetterMethod();
@@ -52,7 +51,6 @@ namespace OpenSC.GUI.UMDs
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.UseStaticText; });
             builder.CellContentClickHandlerMethod((umd, cell, e) => { umd.UseStaticText = !(bool)cell.Value; });
             builder.AddChangeEvent(nameof(UMD.UseStaticText));
-            builder.BuildAndAdd();
 
             // Column: current text
             builder = builderGetterMethod();
@@ -62,7 +60,6 @@ namespace OpenSC.GUI.UMDs
             builder.CellStyle(monospaceTextCellStyle);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.CurrentText; });
             builder.AddChangeEvent(nameof(UMD.CurrentText));
-            builder.BuildAndAdd();
 
             // Columns: tallies
             for (int i = 0; i < MAX_TALLIES; i++)
@@ -77,7 +74,6 @@ namespace OpenSC.GUI.UMDs
                 if (i == MAX_TALLIES - 1)
                     builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
                 builder.AddChangeEvent(nameof(UMD.TallyStates));
-                builder.BuildAndAdd();
             }
 
             // Column: edit, delete

@@ -15,7 +15,7 @@ namespace OpenSC.GUI.UMDs
         public UmdEditorFormBase(UMD umd) : base(umd)
         {
             InitializeComponent();
-            umd.CurrentTextChanged += umdCurrentTextChangedHandler;
+            ((UMD)EditedModel).CurrentTextChanged += umdCurrentTextChangedHandler;
         }
 
         protected override void loadData()
