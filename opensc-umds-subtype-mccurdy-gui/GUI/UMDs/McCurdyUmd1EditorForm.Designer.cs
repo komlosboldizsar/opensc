@@ -64,6 +64,7 @@
             this.portDropDown = new System.Windows.Forms.ComboBox();
             this.addressNumericField = new System.Windows.Forms.NumericUpDown();
             this.mainTabControl.SuspendLayout();
+            this.baseDataTabPage.SuspendLayout();
             this.dynamicDataTabPage.SuspendLayout();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
@@ -85,25 +86,46 @@
             // 
             // mainTabControl
             // 
-            this.mainTabControl.Size = new System.Drawing.Size(775, 509);
+            this.mainTabControl.Location = new System.Drawing.Point(0, 107);
+            this.mainTabControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.mainTabControl.Size = new System.Drawing.Size(775, 525);
             // 
-            // tabPage1
+            // baseDataTabPage
             // 
-            this.baseDataTabPage.Size = new System.Drawing.Size(767, 480);
+            this.baseDataTabPage.Controls.Add(this.connectionGroupBox);
+            this.baseDataTabPage.Location = new System.Drawing.Point(4, 29);
+            this.baseDataTabPage.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.baseDataTabPage.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.baseDataTabPage.Size = new System.Drawing.Size(767, 492);
+            this.baseDataTabPage.Controls.SetChildIndex(this.connectionGroupBox, 0);
             // 
             // dynamicDataTabPage
             // 
             this.dynamicDataTabPage.Controls.Add(this.dynamicSourcesGroupBox);
             this.dynamicDataTabPage.Controls.Add(this.layoutGroupBox);
-            this.dynamicDataTabPage.Size = new System.Drawing.Size(481, 260);
+            this.dynamicDataTabPage.Location = new System.Drawing.Point(4, 29);
+            this.dynamicDataTabPage.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.dynamicDataTabPage.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.dynamicDataTabPage.Size = new System.Drawing.Size(481, 216);
+            // 
+            // talliesTabPage
+            // 
+            this.talliesTabPage.Location = new System.Drawing.Point(4, 29);
+            this.talliesTabPage.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.talliesTabPage.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.talliesTabPage.Size = new System.Drawing.Size(481, 216);
             // 
             // customElementsPanel
             // 
-            this.customElementsPanel.Size = new System.Drawing.Size(775, 509);
+            this.customElementsPanel.Location = new System.Drawing.Point(10, 15);
+            this.customElementsPanel.Margin = new System.Windows.Forms.Padding(3, 6, 3, 6);
+            this.customElementsPanel.Size = new System.Drawing.Size(775, 632);
             // 
             // mainContainer
             // 
-            this.mainContainer.Size = new System.Drawing.Size(795, 598);
+            this.mainContainer.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
+            this.mainContainer.Padding = new System.Windows.Forms.Padding(10, 15, 10, 15);
+            this.mainContainer.Size = new System.Drawing.Size(795, 748);
             // 
             // layoutGroupBox
             // 
@@ -111,11 +133,11 @@
             this.layoutGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.layoutGroupBox.Controls.Add(this.layoutTable);
             this.layoutGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.layoutGroupBox.Location = new System.Drawing.Point(3, 3);
-            this.layoutGroupBox.Margin = new System.Windows.Forms.Padding(10);
+            this.layoutGroupBox.Location = new System.Drawing.Point(3, 5);
+            this.layoutGroupBox.Margin = new System.Windows.Forms.Padding(10, 12, 10, 12);
             this.layoutGroupBox.Name = "layoutGroupBox";
-            this.layoutGroupBox.Padding = new System.Windows.Forms.Padding(8, 8, 4, 8);
-            this.layoutGroupBox.Size = new System.Drawing.Size(475, 211);
+            this.layoutGroupBox.Padding = new System.Windows.Forms.Padding(8, 10, 4, 10);
+            this.layoutGroupBox.Size = new System.Drawing.Size(475, 257);
             this.layoutGroupBox.TabIndex = 0;
             this.layoutGroupBox.TabStop = false;
             this.layoutGroupBox.Text = "Layout";
@@ -138,7 +160,8 @@
             this.layoutTable.Controls.Add(this.useSeparatorBarLabel, 0, 5);
             this.layoutTable.Controls.Add(this.useSeparatorBarCheckBox, 1, 5);
             this.layoutTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layoutTable.Location = new System.Drawing.Point(8, 23);
+            this.layoutTable.Location = new System.Drawing.Point(8, 30);
+            this.layoutTable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.layoutTable.Name = "layoutTable";
             this.layoutTable.RowCount = 6;
             this.layoutTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -147,7 +170,7 @@
             this.layoutTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.layoutTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.layoutTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layoutTable.Size = new System.Drawing.Size(463, 180);
+            this.layoutTable.Size = new System.Drawing.Size(463, 217);
             this.layoutTable.TabIndex = 0;
             // 
             // columnCountLabel
@@ -157,7 +180,7 @@
             this.columnCountLabel.Location = new System.Drawing.Point(3, 0);
             this.columnCountLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.columnCountLabel.Name = "columnCountLabel";
-            this.columnCountLabel.Size = new System.Drawing.Size(94, 69);
+            this.columnCountLabel.Size = new System.Drawing.Size(101, 80);
             this.columnCountLabel.TabIndex = 1;
             this.columnCountLabel.Text = "Column count";
             this.columnCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -166,10 +189,10 @@
             // 
             this.column1WidthLabel.AutoSize = true;
             this.column1WidthLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.column1WidthLabel.Location = new System.Drawing.Point(3, 69);
+            this.column1WidthLabel.Location = new System.Drawing.Point(3, 80);
             this.column1WidthLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.column1WidthLabel.Name = "column1WidthLabel";
-            this.column1WidthLabel.Size = new System.Drawing.Size(129, 28);
+            this.column1WidthLabel.Size = new System.Drawing.Size(141, 35);
             this.column1WidthLabel.TabIndex = 3;
             this.column1WidthLabel.Text = "Width of column #1";
             this.column1WidthLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -178,10 +201,10 @@
             // 
             this.column2WidthLabel.AutoSize = true;
             this.column2WidthLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.column2WidthLabel.Location = new System.Drawing.Point(3, 97);
+            this.column2WidthLabel.Location = new System.Drawing.Point(3, 115);
             this.column2WidthLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.column2WidthLabel.Name = "column2WidthLabel";
-            this.column2WidthLabel.Size = new System.Drawing.Size(129, 28);
+            this.column2WidthLabel.Size = new System.Drawing.Size(141, 35);
             this.column2WidthLabel.TabIndex = 4;
             this.column2WidthLabel.Text = "Width of column #2";
             this.column2WidthLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -190,9 +213,9 @@
             // 
             this.column3WidthLabel.AutoSize = true;
             this.column3WidthLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.column3WidthLabel.Location = new System.Drawing.Point(3, 125);
+            this.column3WidthLabel.Location = new System.Drawing.Point(3, 150);
             this.column3WidthLabel.Name = "column3WidthLabel";
-            this.column3WidthLabel.Size = new System.Drawing.Size(129, 28);
+            this.column3WidthLabel.Size = new System.Drawing.Size(141, 35);
             this.column3WidthLabel.TabIndex = 7;
             this.column3WidthLabel.Text = "Width of column #3";
             this.column3WidthLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -205,18 +228,20 @@
             this.columnCountRadioButtonContainer.Controls.Add(this.columnCountTwoRadioButton);
             this.columnCountRadioButtonContainer.Controls.Add(this.columnCountOneRadioButton);
             this.columnCountRadioButtonContainer.Dock = System.Windows.Forms.DockStyle.Top;
-            this.columnCountRadioButtonContainer.Location = new System.Drawing.Point(150, 3);
+            this.columnCountRadioButtonContainer.Location = new System.Drawing.Point(162, 4);
+            this.columnCountRadioButtonContainer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.columnCountRadioButtonContainer.Name = "columnCountRadioButtonContainer";
-            this.columnCountRadioButtonContainer.Size = new System.Drawing.Size(310, 63);
+            this.columnCountRadioButtonContainer.Size = new System.Drawing.Size(298, 72);
             this.columnCountRadioButtonContainer.TabIndex = 5;
             // 
             // columnCountThreeRadioButton
             // 
             this.columnCountThreeRadioButton.AutoSize = true;
             this.columnCountThreeRadioButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.columnCountThreeRadioButton.Location = new System.Drawing.Point(0, 42);
+            this.columnCountThreeRadioButton.Location = new System.Drawing.Point(0, 48);
+            this.columnCountThreeRadioButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.columnCountThreeRadioButton.Name = "columnCountThreeRadioButton";
-            this.columnCountThreeRadioButton.Size = new System.Drawing.Size(310, 21);
+            this.columnCountThreeRadioButton.Size = new System.Drawing.Size(298, 24);
             this.columnCountThreeRadioButton.TabIndex = 2;
             this.columnCountThreeRadioButton.TabStop = true;
             this.columnCountThreeRadioButton.Tag = "3";
@@ -228,9 +253,10 @@
             // 
             this.columnCountTwoRadioButton.AutoSize = true;
             this.columnCountTwoRadioButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.columnCountTwoRadioButton.Location = new System.Drawing.Point(0, 21);
+            this.columnCountTwoRadioButton.Location = new System.Drawing.Point(0, 24);
+            this.columnCountTwoRadioButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.columnCountTwoRadioButton.Name = "columnCountTwoRadioButton";
-            this.columnCountTwoRadioButton.Size = new System.Drawing.Size(310, 21);
+            this.columnCountTwoRadioButton.Size = new System.Drawing.Size(298, 24);
             this.columnCountTwoRadioButton.TabIndex = 1;
             this.columnCountTwoRadioButton.TabStop = true;
             this.columnCountTwoRadioButton.Tag = "2";
@@ -243,8 +269,9 @@
             this.columnCountOneRadioButton.AutoSize = true;
             this.columnCountOneRadioButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.columnCountOneRadioButton.Location = new System.Drawing.Point(0, 0);
+            this.columnCountOneRadioButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.columnCountOneRadioButton.Name = "columnCountOneRadioButton";
-            this.columnCountOneRadioButton.Size = new System.Drawing.Size(310, 21);
+            this.columnCountOneRadioButton.Size = new System.Drawing.Size(298, 24);
             this.columnCountOneRadioButton.TabIndex = 0;
             this.columnCountOneRadioButton.TabStop = true;
             this.columnCountOneRadioButton.Tag = "1";
@@ -254,40 +281,43 @@
             // 
             // column1WidthNumericField
             // 
-            this.column1WidthNumericField.Location = new System.Drawing.Point(150, 72);
+            this.column1WidthNumericField.Location = new System.Drawing.Point(162, 84);
+            this.column1WidthNumericField.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.column1WidthNumericField.Maximum = new decimal(new int[] {
             160,
             0,
             0,
             0});
             this.column1WidthNumericField.Name = "column1WidthNumericField";
-            this.column1WidthNumericField.Size = new System.Drawing.Size(120, 22);
+            this.column1WidthNumericField.Size = new System.Drawing.Size(120, 27);
             this.column1WidthNumericField.TabIndex = 8;
             this.column1WidthNumericField.ValueChanged += new System.EventHandler(this.columnWidthChangedHandler);
             // 
             // column2WidthNumericField
             // 
-            this.column2WidthNumericField.Location = new System.Drawing.Point(150, 100);
+            this.column2WidthNumericField.Location = new System.Drawing.Point(162, 119);
+            this.column2WidthNumericField.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.column2WidthNumericField.Maximum = new decimal(new int[] {
             160,
             0,
             0,
             0});
             this.column2WidthNumericField.Name = "column2WidthNumericField";
-            this.column2WidthNumericField.Size = new System.Drawing.Size(120, 22);
+            this.column2WidthNumericField.Size = new System.Drawing.Size(120, 27);
             this.column2WidthNumericField.TabIndex = 9;
             this.column2WidthNumericField.ValueChanged += new System.EventHandler(this.columnWidthChangedHandler);
             // 
             // column3WidthNumericField
             // 
-            this.column3WidthNumericField.Location = new System.Drawing.Point(150, 128);
+            this.column3WidthNumericField.Location = new System.Drawing.Point(162, 154);
+            this.column3WidthNumericField.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.column3WidthNumericField.Maximum = new decimal(new int[] {
             160,
             0,
             0,
             0});
             this.column3WidthNumericField.Name = "column3WidthNumericField";
-            this.column3WidthNumericField.Size = new System.Drawing.Size(120, 22);
+            this.column3WidthNumericField.Size = new System.Drawing.Size(120, 27);
             this.column3WidthNumericField.TabIndex = 10;
             this.column3WidthNumericField.ValueChanged += new System.EventHandler(this.columnWidthChangedHandler);
             // 
@@ -295,10 +325,10 @@
             // 
             this.useSeparatorBarLabel.AutoSize = true;
             this.useSeparatorBarLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.useSeparatorBarLabel.Location = new System.Drawing.Point(3, 153);
+            this.useSeparatorBarLabel.Location = new System.Drawing.Point(3, 185);
             this.useSeparatorBarLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.useSeparatorBarLabel.Name = "useSeparatorBarLabel";
-            this.useSeparatorBarLabel.Size = new System.Drawing.Size(96, 27);
+            this.useSeparatorBarLabel.Size = new System.Drawing.Size(100, 32);
             this.useSeparatorBarLabel.TabIndex = 11;
             this.useSeparatorBarLabel.Text = "Separator bar";
             this.useSeparatorBarLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -307,9 +337,10 @@
             // 
             this.useSeparatorBarCheckBox.AutoSize = true;
             this.useSeparatorBarCheckBox.Dock = System.Windows.Forms.DockStyle.Left;
-            this.useSeparatorBarCheckBox.Location = new System.Drawing.Point(150, 156);
+            this.useSeparatorBarCheckBox.Location = new System.Drawing.Point(162, 189);
+            this.useSeparatorBarCheckBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.useSeparatorBarCheckBox.Name = "useSeparatorBarCheckBox";
-            this.useSeparatorBarCheckBox.Size = new System.Drawing.Size(62, 21);
+            this.useSeparatorBarCheckBox.Size = new System.Drawing.Size(65, 24);
             this.useSeparatorBarCheckBox.TabIndex = 12;
             this.useSeparatorBarCheckBox.Text = "show";
             this.useSeparatorBarCheckBox.UseVisualStyleBackColor = true;
@@ -321,11 +352,11 @@
             this.dynamicSourcesGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.dynamicSourcesGroupBox.Controls.Add(this.dynamicSourcesTable);
             this.dynamicSourcesGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.dynamicSourcesGroupBox.Location = new System.Drawing.Point(3, 214);
-            this.dynamicSourcesGroupBox.Margin = new System.Windows.Forms.Padding(10);
+            this.dynamicSourcesGroupBox.Location = new System.Drawing.Point(3, 262);
+            this.dynamicSourcesGroupBox.Margin = new System.Windows.Forms.Padding(10, 12, 10, 12);
             this.dynamicSourcesGroupBox.Name = "dynamicSourcesGroupBox";
-            this.dynamicSourcesGroupBox.Padding = new System.Windows.Forms.Padding(8, 8, 4, 8);
-            this.dynamicSourcesGroupBox.Size = new System.Drawing.Size(475, 143);
+            this.dynamicSourcesGroupBox.Padding = new System.Windows.Forms.Padding(8, 10, 4, 10);
+            this.dynamicSourcesGroupBox.Size = new System.Drawing.Size(475, 173);
             this.dynamicSourcesGroupBox.TabIndex = 1;
             this.dynamicSourcesGroupBox.TabStop = false;
             this.dynamicSourcesGroupBox.Text = "Text sources";
@@ -344,23 +375,24 @@
             this.dynamicSourcesTable.Controls.Add(this.column2DynamicDataPanel, 1, 1);
             this.dynamicSourcesTable.Controls.Add(this.column3DynamicDataPanel, 1, 2);
             this.dynamicSourcesTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dynamicSourcesTable.Location = new System.Drawing.Point(8, 23);
+            this.dynamicSourcesTable.Location = new System.Drawing.Point(8, 30);
+            this.dynamicSourcesTable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dynamicSourcesTable.Name = "dynamicSourcesTable";
             this.dynamicSourcesTable.RowCount = 3;
             this.dynamicSourcesTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.dynamicSourcesTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.dynamicSourcesTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.dynamicSourcesTable.Size = new System.Drawing.Size(463, 112);
+            this.dynamicSourcesTable.Size = new System.Drawing.Size(463, 133);
             this.dynamicSourcesTable.TabIndex = 0;
             // 
             // column3DynamicTextLabel
             // 
             this.column3DynamicTextLabel.AutoSize = true;
             this.column3DynamicTextLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.column3DynamicTextLabel.Location = new System.Drawing.Point(3, 75);
+            this.column3DynamicTextLabel.Location = new System.Drawing.Point(3, 89);
             this.column3DynamicTextLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.column3DynamicTextLabel.Name = "column3DynamicTextLabel";
-            this.column3DynamicTextLabel.Size = new System.Drawing.Size(75, 37);
+            this.column3DynamicTextLabel.Size = new System.Drawing.Size(81, 44);
             this.column3DynamicTextLabel.TabIndex = 6;
             this.column3DynamicTextLabel.Text = "Column #3";
             this.column3DynamicTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -369,10 +401,10 @@
             // 
             this.column2DynamicTextLabel.AutoSize = true;
             this.column2DynamicTextLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.column2DynamicTextLabel.Location = new System.Drawing.Point(3, 38);
+            this.column2DynamicTextLabel.Location = new System.Drawing.Point(3, 45);
             this.column2DynamicTextLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.column2DynamicTextLabel.Name = "column2DynamicTextLabel";
-            this.column2DynamicTextLabel.Size = new System.Drawing.Size(75, 37);
+            this.column2DynamicTextLabel.Size = new System.Drawing.Size(81, 44);
             this.column2DynamicTextLabel.TabIndex = 5;
             this.column2DynamicTextLabel.Text = "Column #2";
             this.column2DynamicTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -384,7 +416,7 @@
             this.column1DynamicTextLabel.Location = new System.Drawing.Point(3, 0);
             this.column1DynamicTextLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.column1DynamicTextLabel.Name = "column1DynamicTextLabel";
-            this.column1DynamicTextLabel.Size = new System.Drawing.Size(75, 37);
+            this.column1DynamicTextLabel.Size = new System.Drawing.Size(81, 45);
             this.column1DynamicTextLabel.TabIndex = 4;
             this.column1DynamicTextLabel.Text = "Column #1";
             this.column1DynamicTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -395,27 +427,30 @@
             this.column1DynamicDataPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.column1DynamicDataPanel.Controls.Add(this.column1DynamicTextSourceDropDown);
             this.column1DynamicDataPanel.Controls.Add(this.column1AlignmentDropDown);
-            this.column1DynamicDataPanel.Location = new System.Drawing.Point(96, 3);
+            this.column1DynamicDataPanel.Location = new System.Drawing.Point(102, 4);
+            this.column1DynamicDataPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.column1DynamicDataPanel.Name = "column1DynamicDataPanel";
-            this.column1DynamicDataPanel.Size = new System.Drawing.Size(364, 32);
+            this.column1DynamicDataPanel.Size = new System.Drawing.Size(358, 37);
             this.column1DynamicDataPanel.TabIndex = 3;
             // 
             // column1DynamicTextSourceDropDown
             // 
             this.column1DynamicTextSourceDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.column1DynamicTextSourceDropDown.FormattingEnabled = true;
-            this.column1DynamicTextSourceDropDown.Location = new System.Drawing.Point(3, 4);
+            this.column1DynamicTextSourceDropDown.Location = new System.Drawing.Point(3, 5);
+            this.column1DynamicTextSourceDropDown.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.column1DynamicTextSourceDropDown.Name = "column1DynamicTextSourceDropDown";
-            this.column1DynamicTextSourceDropDown.Size = new System.Drawing.Size(274, 24);
+            this.column1DynamicTextSourceDropDown.Size = new System.Drawing.Size(274, 28);
             this.column1DynamicTextSourceDropDown.TabIndex = 9;
             // 
             // column1AlignmentDropDown
             // 
             this.column1AlignmentDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.column1AlignmentDropDown.FormattingEnabled = true;
-            this.column1AlignmentDropDown.Location = new System.Drawing.Point(283, 4);
+            this.column1AlignmentDropDown.Location = new System.Drawing.Point(283, 5);
+            this.column1AlignmentDropDown.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.column1AlignmentDropDown.Name = "column1AlignmentDropDown";
-            this.column1AlignmentDropDown.Size = new System.Drawing.Size(121, 24);
+            this.column1AlignmentDropDown.Size = new System.Drawing.Size(121, 28);
             this.column1AlignmentDropDown.TabIndex = 10;
             // 
             // column2DynamicDataPanel
@@ -424,27 +459,30 @@
             this.column2DynamicDataPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.column2DynamicDataPanel.Controls.Add(this.column2DynamicTextSourceDropDown);
             this.column2DynamicDataPanel.Controls.Add(this.column2AlignmentDropDown);
-            this.column2DynamicDataPanel.Location = new System.Drawing.Point(96, 41);
+            this.column2DynamicDataPanel.Location = new System.Drawing.Point(102, 49);
+            this.column2DynamicDataPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.column2DynamicDataPanel.Name = "column2DynamicDataPanel";
-            this.column2DynamicDataPanel.Size = new System.Drawing.Size(364, 31);
+            this.column2DynamicDataPanel.Size = new System.Drawing.Size(358, 36);
             this.column2DynamicDataPanel.TabIndex = 2;
             // 
             // column2DynamicTextSourceDropDown
             // 
             this.column2DynamicTextSourceDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.column2DynamicTextSourceDropDown.FormattingEnabled = true;
-            this.column2DynamicTextSourceDropDown.Location = new System.Drawing.Point(3, 3);
+            this.column2DynamicTextSourceDropDown.Location = new System.Drawing.Point(3, 4);
+            this.column2DynamicTextSourceDropDown.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.column2DynamicTextSourceDropDown.Name = "column2DynamicTextSourceDropDown";
-            this.column2DynamicTextSourceDropDown.Size = new System.Drawing.Size(274, 25);
+            this.column2DynamicTextSourceDropDown.Size = new System.Drawing.Size(274, 28);
             this.column2DynamicTextSourceDropDown.TabIndex = 8;
             // 
             // column2AlignmentDropDown
             // 
             this.column2AlignmentDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.column2AlignmentDropDown.FormattingEnabled = true;
-            this.column2AlignmentDropDown.Location = new System.Drawing.Point(283, 3);
+            this.column2AlignmentDropDown.Location = new System.Drawing.Point(283, 4);
+            this.column2AlignmentDropDown.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.column2AlignmentDropDown.Name = "column2AlignmentDropDown";
-            this.column2AlignmentDropDown.Size = new System.Drawing.Size(121, 25);
+            this.column2AlignmentDropDown.Size = new System.Drawing.Size(121, 28);
             this.column2AlignmentDropDown.TabIndex = 9;
             // 
             // column3DynamicDataPanel
@@ -453,27 +491,30 @@
             this.column3DynamicDataPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.column3DynamicDataPanel.Controls.Add(this.column3DynamicTextSourceDropDown);
             this.column3DynamicDataPanel.Controls.Add(this.column3AlignmentDropDown);
-            this.column3DynamicDataPanel.Location = new System.Drawing.Point(96, 78);
+            this.column3DynamicDataPanel.Location = new System.Drawing.Point(102, 93);
+            this.column3DynamicDataPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.column3DynamicDataPanel.Name = "column3DynamicDataPanel";
-            this.column3DynamicDataPanel.Size = new System.Drawing.Size(364, 31);
+            this.column3DynamicDataPanel.Size = new System.Drawing.Size(358, 36);
             this.column3DynamicDataPanel.TabIndex = 11;
             // 
             // column3DynamicTextSourceDropDown
             // 
             this.column3DynamicTextSourceDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.column3DynamicTextSourceDropDown.FormattingEnabled = true;
-            this.column3DynamicTextSourceDropDown.Location = new System.Drawing.Point(3, 3);
+            this.column3DynamicTextSourceDropDown.Location = new System.Drawing.Point(3, 4);
+            this.column3DynamicTextSourceDropDown.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.column3DynamicTextSourceDropDown.Name = "column3DynamicTextSourceDropDown";
-            this.column3DynamicTextSourceDropDown.Size = new System.Drawing.Size(274, 25);
+            this.column3DynamicTextSourceDropDown.Size = new System.Drawing.Size(274, 28);
             this.column3DynamicTextSourceDropDown.TabIndex = 7;
             // 
             // column3AlignmentDropDown
             // 
             this.column3AlignmentDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.column3AlignmentDropDown.FormattingEnabled = true;
-            this.column3AlignmentDropDown.Location = new System.Drawing.Point(283, 3);
+            this.column3AlignmentDropDown.Location = new System.Drawing.Point(283, 4);
+            this.column3AlignmentDropDown.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.column3AlignmentDropDown.Name = "column3AlignmentDropDown";
-            this.column3AlignmentDropDown.Size = new System.Drawing.Size(121, 25);
+            this.column3AlignmentDropDown.Size = new System.Drawing.Size(121, 28);
             this.column3AlignmentDropDown.TabIndex = 8;
             // 
             // connectionGroupBox
@@ -482,11 +523,11 @@
             this.connectionGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.connectionGroupBox.Controls.Add(this.connectionTable);
             this.connectionGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.connectionGroupBox.Location = new System.Drawing.Point(3, 192);
+            this.connectionGroupBox.Location = new System.Drawing.Point(3, 5);
             this.connectionGroupBox.Margin = new System.Windows.Forms.Padding(10);
             this.connectionGroupBox.Name = "connectionGroupBox";
             this.connectionGroupBox.Padding = new System.Windows.Forms.Padding(8, 8, 4, 8);
-            this.connectionGroupBox.Size = new System.Drawing.Size(761, 89);
+            this.connectionGroupBox.Size = new System.Drawing.Size(761, 103);
             this.connectionGroupBox.TabIndex = 3;
             this.connectionGroupBox.TabStop = false;
             this.connectionGroupBox.Text = "Connection";
@@ -503,12 +544,12 @@
             this.connectionTable.Controls.Add(this.portDropDown, 1, 0);
             this.connectionTable.Controls.Add(this.addressNumericField, 1, 1);
             this.connectionTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.connectionTable.Location = new System.Drawing.Point(8, 23);
+            this.connectionTable.Location = new System.Drawing.Point(8, 28);
             this.connectionTable.Name = "connectionTable";
             this.connectionTable.RowCount = 2;
             this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.connectionTable.Size = new System.Drawing.Size(749, 58);
+            this.connectionTable.Size = new System.Drawing.Size(749, 67);
             this.connectionTable.TabIndex = 0;
             // 
             // portLabel
@@ -518,7 +559,7 @@
             this.portLabel.Location = new System.Drawing.Point(3, 0);
             this.portLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.portLabel.Name = "portLabel";
-            this.portLabel.Size = new System.Drawing.Size(34, 30);
+            this.portLabel.Size = new System.Drawing.Size(35, 34);
             this.portLabel.TabIndex = 0;
             this.portLabel.Text = "Port";
             this.portLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -527,10 +568,10 @@
             // 
             this.addressLabel.AutoSize = true;
             this.addressLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.addressLabel.Location = new System.Drawing.Point(3, 30);
+            this.addressLabel.Location = new System.Drawing.Point(3, 34);
             this.addressLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.addressLabel.Name = "addressLabel";
-            this.addressLabel.Size = new System.Drawing.Size(60, 28);
+            this.addressLabel.Size = new System.Drawing.Size(62, 33);
             this.addressLabel.TabIndex = 1;
             this.addressLabel.Text = "Address";
             this.addressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -539,14 +580,14 @@
             // 
             this.portDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.portDropDown.FormattingEnabled = true;
-            this.portDropDown.Location = new System.Drawing.Point(81, 3);
+            this.portDropDown.Location = new System.Drawing.Point(83, 3);
             this.portDropDown.Name = "portDropDown";
-            this.portDropDown.Size = new System.Drawing.Size(212, 24);
+            this.portDropDown.Size = new System.Drawing.Size(212, 28);
             this.portDropDown.TabIndex = 2;
             // 
             // addressNumericField
             // 
-            this.addressNumericField.Location = new System.Drawing.Point(81, 33);
+            this.addressNumericField.Location = new System.Drawing.Point(83, 37);
             this.addressNumericField.Maximum = new decimal(new int[] {
             255,
             0,
@@ -558,7 +599,7 @@
             0,
             0});
             this.addressNumericField.Name = "addressNumericField";
-            this.addressNumericField.Size = new System.Drawing.Size(212, 22);
+            this.addressNumericField.Size = new System.Drawing.Size(212, 27);
             this.addressNumericField.TabIndex = 3;
             this.addressNumericField.Value = new decimal(new int[] {
             1,
@@ -568,12 +609,17 @@
             // 
             // McCurdyUmd1EditorForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(795, 654);
+            this.ClientSize = new System.Drawing.Size(795, 818);
             this.DeleteButtonVisible = true;
+            this.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
+            this.MinimumSize = new System.Drawing.Size(500, 661);
             this.Name = "McCurdyUmd1EditorForm";
+            this.Load += new System.EventHandler(this.McCurdyUmd1EditorForm_Load);
             this.mainTabControl.ResumeLayout(false);
+            this.baseDataTabPage.ResumeLayout(false);
+            this.baseDataTabPage.PerformLayout();
             this.dynamicDataTabPage.ResumeLayout(false);
             this.dynamicDataTabPage.PerformLayout();
             this.customElementsPanel.ResumeLayout(false);
