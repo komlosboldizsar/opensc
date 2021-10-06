@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Full Property</Title>
+            <Shortcut>fprop</Shortcut>
+            <Description>Add Property with member and change event</Description>
+            <Author>Komlos Boldizsar</Author>
+            <SnippetTypes>
+                <SnippetType>Expansion</SnippetType>
+            </SnippetTypes>
+        </Header>
+        <Snippet>
+            <Declarations>
+				<Literal>
+                    <ID>TProperty</ID>
+                    <ToolTip>Property and Member Type</ToolTip>
+                    <Default>object</Default>
+                </Literal>
+                <Literal>
+                    <ID>NProperty</ID>
+                    <ToolTip>Property Name</ToolTip>
+                    <Default>PropertyName</Default>
+                </Literal>
+                <Literal>
+                    <ID>NMember</ID>
+                    <ToolTip>Member Name</ToolTip>
+                    <Default>memberName</Default>
+                </Literal>
+				<Literal>
+                    <ID>NClass</ID>
+                    <ToolTip>Class Name</ToolTip>
+                    <Default>ClassNamePlaceholder</Default>
+					<Function>ClassName()</Function>
+                </Literal>
+            </Declarations>
+            <Code Language="csharp">
+                <![CDATA[#region Property: $NProperty$
+        public event PropertyChangedTwoValuesDelegate<$NClass$, $TProperty$> $NProperty$Changed;
+
+        [PersistAs("$NMember$")]
+        private $TProperty$ $NMember$;
+
+        public $TProperty$ $NProperty$
+        {
+            get => $NMember$;
+            set => this.setProperty(ref $NMember$, value, $NProperty$Changed);
+        }
+        #endregion$end$]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

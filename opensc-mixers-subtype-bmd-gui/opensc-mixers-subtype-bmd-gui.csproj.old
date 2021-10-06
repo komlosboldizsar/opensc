@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{63A756D8-F014-4A92-BDEF-4CDAC4917412}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>opensc_mixers_subtype_bmd_gui</RootNamespace>
+    <AssemblyName>opensc-mixers-subtype-bmd-gui</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GUI\Mixers\BmdMixerEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Mixers\BmdMixerEditorForm.Designer.cs">
+      <DependentUpon>BmdMixerEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\MixersSubtypeBmdGuiModule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GUI\Mixers\BmdMixerEditorForm.resx">
+      <DependentUpon>BmdMixerEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj">
+      <Project>{e30563fd-de1f-4ab5-86dd-72165b84eb85}</Project>
+      <Name>opensc-core-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
+      <Project>{16a6beec-548d-4a77-9fe6-8df8d5333219}</Project>
+      <Name>opensc-core-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-mixers-gui\opensc-mixers-gui.csproj">
+      <Project>{5d448050-d12a-47ff-aeec-70c1bb7da5d2}</Project>
+      <Name>opensc-mixers-gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj">
+      <Project>{7c649008-6a05-4c3d-ac08-b5a85ab72e09}</Project>
+      <Name>opensc-mixers-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-mixers-subtype-bmd-model\opensc-mixers-subtype-bmd-model.csproj">
+      <Project>{672a67f3-aced-47e5-ac9e-455f77e68da1}</Project>
+      <Name>opensc-mixers-subtype-bmd-model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

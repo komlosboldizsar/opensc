@@ -1,0 +1,85 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace>OpenSC</RootNamespace>
+    <AssemblyName>opensc-gui-core</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="GUI\GeneralComponents\GrowLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="GUI\GeneralComponents\Menus\CustomMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="GUI\GeneralComponents\Menus\CustomToolStripMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="GUI\GeneralComponents\RichTextBoxWithBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="GUI\GeneralComponents\SplitButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="GUI\GeneralComponents\Tables\CustomDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="GUI\Settings\OpenFileSettingEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="GUI\Settings\IntSettingEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="GUI\Settings\SettingEditorBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="GUI\Settings\StringSettingEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Resources\images\general\GeneralIcons.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GeneralIcons.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\images\gui\GuiIcons.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GuiIcons.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\images\solid\SolidIcons.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SolidIcons.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="GUI\Settings\EnumSettingEditor - Copy.resx">
+      <DependentUpon>EnumSettingEditor.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\images\general\GeneralIcons.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralIcons.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>OpenSC.GUI</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\images\gui\GuiIcons.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GuiIcons.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>OpenSC.GUI</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\images\solid\SolidIcons.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SolidIcons.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>OpenSC.GUI</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
