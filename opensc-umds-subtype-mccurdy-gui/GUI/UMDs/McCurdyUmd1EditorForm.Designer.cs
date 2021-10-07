@@ -616,7 +616,6 @@
             this.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
             this.MinimumSize = new System.Drawing.Size(500, 661);
             this.Name = "McCurdyUmd1EditorForm";
-            this.Load += new System.EventHandler(this.McCurdyUmd1EditorForm_Load);
             this.mainTabControl.ResumeLayout(false);
             this.baseDataTabPage.ResumeLayout(false);
             this.baseDataTabPage.PerformLayout();
