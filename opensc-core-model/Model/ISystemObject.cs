@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OpenSC.Model.General;
 
 namespace OpenSC.Model
 {
-    public interface ISystemObject
+    public interface ISystemObject : INotifyPropertyChanged
     {
         string GlobalID { get; }
+        event PropertyChangedTwoValuesDelegate<ISystemObject, string> GlobalIdChanged;
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
 
-    public class PassthroughSignalTallyState : ISignalTallyState
+    public class PassthroughSignalTallyState : ObjectBase, ISignalTallyState
     {
 
         public PassthroughSignalTallyState(ISignalSource parentSignalSource) => ParentSignalSource = parentSignalSource;
@@ -64,10 +64,6 @@ namespace OpenSC.Model.Signals
             StateChanged?.Invoke(ParentSignalSource, this, newState, recursionChain.ExtendRecursionChain(this));
             ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(State));
         }
-        #endregion
-
-        #region INotifyPropertyChanged
-        PropertyChangedDelegate INotifyPropertyChanged._PropertyChanged { get; set; }
         #endregion
 
     }

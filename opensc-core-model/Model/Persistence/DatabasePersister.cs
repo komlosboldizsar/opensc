@@ -186,9 +186,9 @@ namespace OpenSC.Model.Persistence
             if (item == null)
                 return string.Empty;
 
-            IModel itemAsImodel = item as IModel;
-            if (itemAsImodel != null)
-                return itemAsImodel.ID;
+            ISystemObject itemAsSystemObject = item as ISystemObject;
+            if ((itemAsSystemObject != null) && (memberInfo.GetCustomAttribute<PersistDetailedAttribute>() == null))
+                return itemAsSystemObject.GlobalID;
 
             if (memberType.IsArray && (item is Array))
             {
@@ -491,8 +491,6 @@ namespace OpenSC.Model.Persistence
             if (attr == null)
                 return;
 
-            Console.WriteLine("{0} -- {1}", item.GetType().Name, foreignKeyField.Name);
-
             FieldInfo originalField = storedType.GetField(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             if (isPolymorph && (originalField == null))
             {
@@ -509,14 +507,13 @@ namespace OpenSC.Model.Persistence
             object foreignKeys = foreignKeyField.GetValue(item);
             if (foreignKeys == null)
                 return;
-            Console.WriteLine(foreignKeys.ToString());
 
-            object foreignObjects = getAssociatedObjects(foreignKeyField.FieldType, originalField.FieldType, attr.DatabaseName, foreignKeys);
+            object foreignObjects = getAssociatedObjects(foreignKeyField.FieldType, originalField.FieldType, foreignKeys);
             originalField.SetValue(item, foreignObjects);
 
         }
 
-        private object getAssociatedObjects(Type memberType, Type originalType, string databaseName, object foreignKeys)
+        private object getAssociatedObjects(Type memberType, Type originalType, object foreignKeys)
         {
 
             if (memberType.IsArray && (memberType.GetElementType() != typeof(int)))
@@ -526,29 +523,29 @@ namespace OpenSC.Model.Persistence
                     return null;
                 object[] associatedObjects = (object[])Activator.CreateInstance(originalType, new object[] { foreignKeysArray.Length });
                 for (int i = 0; i < foreignKeysArray.Length; i++)
-                    associatedObjects[i] = getAssociatedObjects(memberType.GetElementType(), originalType.GetElementType(), databaseName, foreignKeysArray[i]);
+                    associatedObjects[i] = getAssociatedObjects(memberType.GetElementType(), originalType.GetElementType(), foreignKeysArray[i]);
                 return Convert.ChangeType(associatedObjects, originalType);
             }
             else if(memberType.IsArray)
             {
-                int[] foreignKeysArray = foreignKeys as int[];
+                string[] foreignKeysArray = foreignKeys as string[];
                 if (foreignKeysArray == null)
                     return null;
                 object[] associatedObjects = (object[])Activator.CreateInstance(originalType, new object[] { foreignKeysArray.Length });
                 for (int i = 0; i < foreignKeysArray.Length; i++)
                 {
-                    int? foreignKeyInt = foreignKeysArray[i] as int?;
-                    if(foreignKeyInt != null)
-                        associatedObjects[i] = MasterDatabase.Instance.GetItem(databaseName, (int)foreignKeyInt);
+                    string foreignKeyString = foreignKeysArray[i] as string;
+                    if (foreignKeyString != null)
+                        associatedObjects[i] = SystemObjectRegister.Instance[foreignKeyString];
                 }
                 return associatedObjects;
             }
             else
             {
-                int? foreignKeyInt = foreignKeys as int?;
-                if (foreignKeyInt == null)
+                string foreignKeyString = foreignKeys as string;
+                if (foreignKeyString == null)
                     return null;
-                return MasterDatabase.Instance.GetItem(databaseName, (int)foreignKeyInt);
+                return SystemObjectRegister.Instance[foreignKeyString];
             }
 
         }
@@ -584,25 +581,17 @@ namespace OpenSC.Model.Persistence
 
         }
 
-        private bool isTemporaryForeignKeyField(MemberInfo memberInfo)
-        {
-            return (memberInfo.GetCustomAttributes<TempForeignKeyAttribute>().Count() > 0);
-        }
+        private bool isTemporaryForeignKeyField(MemberInfo memberInfo) => (memberInfo.GetCustomAttributes<TempForeignKeyAttribute>().Count() > 0);
 
         private bool isAssociationField(MemberInfo memberInfo)
         {
             FieldInfo fieldInfo = memberInfo as FieldInfo;
             PropertyInfo propertyInfo = memberInfo as PropertyInfo;
             Type type = (fieldInfo != null) ? fieldInfo.FieldType : propertyInfo.PropertyType;
-            return (getArrayBaseType(type).GetInterfaces().Any(iface => (iface == typeof(IModel))));
+            return (getArrayBaseType(type).GetInterfaces().Any(iface => (iface == typeof(ISystemObject))));
         }
 
-        private Type getArrayBaseType(Type type)
-        {
-            if (type.IsArray)
-                return getArrayBaseType(type.GetElementType());
-            return type;
-        }
+        private Type getArrayBaseType(Type type) => (type.IsArray) ? getArrayBaseType(type.GetElementType()) : type;
 
         private enum Workflow
         {

@@ -2,6 +2,7 @@
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
@@ -15,16 +16,19 @@ namespace OpenSC.Model.SerialPorts
     public class SerialPort : ModelBase
     {
 
+        #region Constants
         private const string LOG_TAG = "SerialPort";
+        #endregion
 
+        #region Persistence, instantiation
         public SerialPort()
         {
-            createAndStartPacketSchedulerThread();
+            startPacketSchedulerTaskMethod();
         }
 
         public override void RestoredOwnFields()
         {
-            createAndStartPacketSchedulerThread();
+            startPacketSchedulerTaskMethod();
             Init();
         }
 
@@ -32,8 +36,7 @@ namespace OpenSC.Model.SerialPorts
         {
             base.Removed();
             DeInit();
-            packetSchedulerThreadWorking = false;
-            packetSchedulerThread = null;
+            stopPacketSchedulerTaskMethod();
             ComPortNameChanged = null;
             InitializedChanged = null;
             BaudRateChanged = null;
@@ -43,6 +46,7 @@ namespace OpenSC.Model.SerialPorts
             ReceivedDataBytes = null;
             ReceivedDataAsciiString = null;
         }
+        #endregion
 
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = SerialPortDatabase.Instance;
@@ -84,10 +88,12 @@ namespace OpenSC.Model.SerialPorts
 
         // >>>> ComPort properties
 
+        #region ComPort contants
         private const int DEFAULT_BAUDRATE = 9600;
         private const Parity DEFAULT_PARITY = Parity.None;
         private const int DEFAULT_DATABITS = 8;
         private const StopBits DEFAULT_STOPBITS = StopBits.One;
+        #endregion
 
         private void afterPortPropertyChanged()
         {
@@ -185,44 +191,57 @@ namespace OpenSC.Model.SerialPorts
         // <<<< ComPort properties
 
         #region Scheduler and sender thread
-        private List<Packet> packetFifo = new List<Packet>();
-        private ManualResetEvent packetFifoNotEmpty = new ManualResetEvent(false);
-        private Thread packetSchedulerThread;
-        private bool packetSchedulerThreadWorking = false;
+        private BlockingCollection<Packet> packetFifo;
+        private CancellationTokenSource packetSchedulerTaskCancellationTokenSource;
+        private Task packetSchedulerTask;
 
-        private void createAndStartPacketSchedulerThread()
+        private void startPacketSchedulerTaskMethod()
         {
-            packetSchedulerThread = new Thread(packetSchedulerThreadMethod)
-            {
-                IsBackground = true
-            };
-            packetSchedulerThreadWorking = true;
-            packetSchedulerThread.Start();
+            if (packetSchedulerTask != null)
+                return;
+            packetFifo = new();
+            packetSchedulerTaskCancellationTokenSource = new();
+            packetSchedulerTask = Task.Run(() => packetSchedulerTaskMethod());
         }
 
-        private void packetSchedulerThreadMethod()
+        private async void stopPacketSchedulerTaskMethod()
         {
-            while (packetSchedulerThreadWorking)
+            if (packetSchedulerTask == null)
+                return;
+            try
             {
-                packetFifoNotEmpty.WaitOne();
-                lock (packetFifo)
+                packetSchedulerTaskCancellationTokenSource.Cancel();
+                await packetSchedulerTask;
+                packetSchedulerTask.Dispose();
+                packetSchedulerTask = null;
+                packetSchedulerTaskCancellationTokenSource.Dispose();
+                packetSchedulerTaskCancellationTokenSource = null;
+                packetSchedulerTask.Dispose();
+                packetSchedulerTask = null;
+            }
+            catch (ObjectDisposedException)
+            { }
+        }
+
+        private void packetSchedulerTaskMethod()
+        {
+            while (true)
+            {
+                try
                 {
-                    while (packetFifo.Count > 0)
+                    Packet packet = packetFifo.Take(packetSchedulerTaskCancellationTokenSource.Token);
+                    if ((packet != null) && packetIsValid(packet))
                     {
-                        Packet p = packetFifo[0];
-                        packetFifo.RemoveAt(0);
-                        if (packetIsValid(p))
-                        {
-                            serialPort.Write(p.Data, 0, p.Data.Length);
-                        }
-                        else
-                        {
-                            string errorMessage = string.Format("Dropped an invalid packet on port (ID: {0}).", ID);
-                            LogDispatcher.W(LOG_TAG, errorMessage);
-                        }
+                        serialPort.Write(packet.Data, 0, packet.Data.Length);
                     }
-                    packetFifoNotEmpty.Reset();
+                    else
+                    {
+                        string errorMessage = string.Format($"Dropped an invalid packet on port [{this}]");
+                        LogDispatcher.W(LOG_TAG, errorMessage);
+                    }
                 }
+                catch (OperationCanceledException)
+                { }
             }
         }
         #endregion
@@ -246,12 +265,7 @@ namespace OpenSC.Model.SerialPorts
             catch (Exception ex)
             {
                 string errorMessage = string.Format("Couldn't initialize port (ID: {0}) with settings [baudrate: {1}, parity: {2}, databits: {3}, stopbits: {4}]. Exception message: [{5}].",
-                    ID,
-                    baudRate,
-                    parity,
-                    dataBits,
-                    stopBits,
-                    ex.Message);
+                    ID, baudRate, parity, dataBits, stopBits, ex.Message);
                 LogDispatcher.E(LOG_TAG, errorMessage);
             }
 
@@ -272,47 +286,32 @@ namespace OpenSC.Model.SerialPorts
             catch (Exception ex)
             {
                 string errorMessage = string.Format("Couldn't deinitialize port (ID: {0}). Exception message: [{1}].",
-                        ID,
-                        ex.Message);
+                        ID, ex.Message);
                 LogDispatcher.E(LOG_TAG, errorMessage);
             }
         }
-        #endregion
 
-        protected override void afterUpdate()
+        public void ReInit()
         {
-            base.afterUpdate();
-            if (Initialized)
-            {
-                DeInit();
-                Init();
-            }
+            DeInit();
+            Init();
         }
+        #endregion
 
         #region Data sending
         public void SendData(byte[] data, DateTime validUntil)
-        {
-            SendData(new Packet() {
-                Data = data,
-                ValidUntil = validUntil
-            });
-        }
+            => SendData(new Packet() { Data = data, ValidUntil = validUntil });
 
         public void SendData(Packet packet)
         {
-            if ((serialPort == null) || !serialPort.IsOpen)
+            if (serialPort?.IsOpen != true)
                 return;
-            lock (packetFifo)
-            {
-                packetFifo.Add(packet);
-                packetFifoNotEmpty.Set();
-            }
+            if (packetSchedulerTaskCancellationTokenSource.IsCancellationRequested)
+                return;
+            packetFifo?.Add(packet);
         }
 
-        protected bool packetIsValid(Packet packet)
-        {
-            return (packet.ValidUntil >= DateTime.Now);
-        }
+        protected bool packetIsValid(Packet packet) => (packet.ValidUntil >= DateTime.Now);
 
         public class Packet
         {

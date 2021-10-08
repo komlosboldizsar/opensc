@@ -11,7 +11,7 @@ namespace OpenSC.Model.Persistence
     {
         public string DatabaseName { get; private set; }
         public string OriginalFieldName { get; private set; }
-        public TempForeignKeyAttribute(string DatabaseName, string OriginalFieldName)
+        public TempForeignKeyAttribute(string OriginalFieldName)
         {
             this.DatabaseName = DatabaseName;
             this.OriginalFieldName = OriginalFieldName;

@@ -1,5 +1,4 @@
 ﻿using OpenSC.Model.General;
-using OpenSC.Model.Variables;
 using System;
 using System.Collections;
 using System.Collections.Generic;

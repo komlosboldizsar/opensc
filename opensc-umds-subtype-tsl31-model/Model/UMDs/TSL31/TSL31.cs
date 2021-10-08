@@ -24,8 +24,8 @@ namespace OpenSC.Model.UMDs.TSL31
         private SerialPort port;
 
 #pragma warning disable CS0169
-        [TempForeignKey(SerialPortDatabase.DBNAME, nameof(port))]
-        private int _portId;
+        [TempForeignKey(nameof(port))]
+        private string _portId;
 #pragma warning restore CS0169
 
         public SerialPort Port
