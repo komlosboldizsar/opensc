@@ -80,22 +80,30 @@ namespace OpenSC.Model.Settings
 
         public void LoadSettings()
         {
-            try
+            if (File.Exists(FILE_SETTINGS_CURRENT))
             {
-                loadingSettings = true;
-                XmlDocument doc = new XmlDocument();
-                FileExtensions.CreateDirectoriesForFile(FILE_SETTINGS_CURRENT);
-                doc.Load(FILE_SETTINGS_CURRENT);
-                XmlNode root = doc.DocumentElement;
-                if (root.LocalName != ROOT_TAG)
-                    return;
-                foreach (XmlNode node in root.ChildNodes)
-                    deserializeSetting(node);
-                SettingsLoaded?.Invoke();
+                try
+                {
+                    loadingSettings = true;
+                    XmlDocument doc = new XmlDocument();
+                    FileExtensions.CreateDirectoriesForFile(FILE_SETTINGS_CURRENT);
+                    doc.Load(FILE_SETTINGS_CURRENT);
+                    XmlNode root = doc.DocumentElement;
+                    if (root.LocalName != ROOT_TAG)
+                        return;
+                    foreach (XmlNode node in root.ChildNodes)
+                        deserializeSetting(node);
+                    SettingsLoaded?.Invoke();
+                }
+                finally
+                {
+                    loadingSettings = false;
+                }
             }
-            finally
+            else
             {
-                loadingSettings = false;
+                SaveSettings();
+                SettingsLoaded?.Invoke();
             }
         }
 
