@@ -199,6 +199,26 @@ namespace OpenSC.Model.Persistence
                 return arrayElements;
             }
 
+            bool isCollection = false;
+            Type elementType = null;
+            foreach (Type interfaceType in memberType.GetInterfaces())
+            {
+                if (interfaceType.IsGenericType && (interfaceType.GetGenericTypeDefinition() == typeof(ICollection<>)))
+                {
+                    isCollection = true;
+                    elementType = interfaceType.GetGenericArguments()[0];
+                    break;
+                }
+            }
+            if (isCollection)
+            {
+                IEnumerable enumerable = item as IEnumerable;
+                List<XElement> arrayElements = new List<XElement>();
+                foreach (var element in enumerable)
+                    arrayElements.Add(serializeCollectionElement(memberInfo, elementType, element, parentItem, arrayDimension));
+                return arrayElements;
+            }
+
             if (Type.GetTypeCode(memberType) == TypeCode.Object)
             {
 
@@ -379,7 +399,8 @@ namespace OpenSC.Model.Persistence
             if ((xmlElement.InnerText == string.Empty) && PRIMITIVE_TYPES_NULL_IS_0.Contains(memberType))
                 return 0;
 
-            if (memberType.IsArray)
+            bool isCollection = memberType.GetInterfaces().Any(interfaceType => interfaceType.IsGenericType && (interfaceType.GetGenericTypeDefinition() == typeof(ICollection<>)));
+            if (memberType.IsArray || isCollection)
             {
                 List<XmlElement> childElements = new List<XmlElement>();
                 foreach (XmlNode childNode in xmlElement.ChildNodes)
@@ -437,20 +458,47 @@ namespace OpenSC.Model.Persistence
         {
 
             int childElementCount = childElements.Count;
-            Type elementType = memberType.GetElementType();
 
-            if (Type.GetTypeCode(elementType) != TypeCode.Object)
+            if (memberType.IsArray)
             {
-                Array typedArray = Array.CreateInstance(elementType, childElementCount);
+                Type arrayElementType = memberType.GetElementType();
+                if (Type.GetTypeCode(arrayElementType) != TypeCode.Object)
+                {
+                    Array typedArray = Array.CreateInstance(arrayElementType, childElementCount);
+                    for (int i = 0; i < childElementCount; i++)
+                        typedArray.SetValue(deserializeXmlElement(memberInfo, arrayElementType, childElements[i], arrayDimension + 1), i);
+                    return typedArray;
+                }
+                object[] array = (object[])Activator.CreateInstance(memberType, new object[] { childElementCount });
                 for (int i = 0; i < childElementCount; i++)
-                    typedArray.SetValue(deserializeXmlElement(memberInfo, elementType, childElements[i], arrayDimension + 1), i);
-                return typedArray;
+                    array[i] = deserializeXmlElement(memberInfo, memberType.GetElementType(), childElements[i], parentItem, arrayDimension + 1);
+                return array;
             }
 
-            object[] array = (object[])Activator.CreateInstance(memberType, new object[] { childElementCount });
-            for (int i = 0; i < childElementCount; i++)
-                array[i] = deserializeXmlElement(memberInfo, memberType.GetElementType(), childElements[i], parentItem, arrayDimension + 1);
-            return array;
+            bool isCollection = false;
+            Type elementType = null;
+            foreach (Type interfaceType in memberType.GetInterfaces())
+            {
+                if (interfaceType.IsGenericType && (interfaceType.GetGenericTypeDefinition() == typeof(ICollection<>)))
+                {
+                    isCollection = true;
+                    elementType = interfaceType.GetGenericArguments()[0];
+                    break;
+                }
+            }
+            if (isCollection)
+            {
+                object collection = Activator.CreateInstance(memberType, new object[] { });
+                MethodInfo addMethod = memberType.GetMethod(nameof(ICollection<object>.Add), BindingFlags.Instance | BindingFlags.Public);
+                for (int i = 0; i < childElementCount; i++)
+                {
+                    object deserializedElement = deserializeXmlElement(memberInfo, elementType, childElements[i], parentItem, arrayDimension + 1);
+                    addMethod.Invoke(collection, new object[] { deserializedElement });
+                }
+                return collection;
+            }
+
+            return null;
 
         }
         #endregion
