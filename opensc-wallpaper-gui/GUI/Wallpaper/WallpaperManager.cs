@@ -105,25 +105,48 @@ namespace OpenSC.GUI.Wallpaper
         {
             foreach (ISetting setting in settings)
                 SettingsManager.Instance.RegisterSetting(setting);
-            backgroundcolorSetting.ValueChanged += settingValueChangedHandlerFactory();
-            imagePathSetting.ValueChanged += settingValueChangedHandlerFactory(() =>
-            {
-                Image backgroundImageOriginalOld = backgroundImageOriginal;
-                try
-                {
-                    backgroundImageOriginal = Image.FromFile(imagePathSetting.Value);
-                }
-                catch
-                {
-                    backgroundImageOriginal = null;
-                }
-                backgroundImageOriginalOld?.Dispose();
-            });
-            layoutSetting.ValueChanged += settingValueChangedHandlerFactory(() => { backgroundImageRenderer.Layout = layoutSetting.EnumValue; });
-            opacitySetting.ValueChanged += settingValueChangedHandlerFactory(() => { backgroundImageRenderer.Opacity = opacitySetting.Value / 100.0f; });
-            monochromeSetting.ValueChanged += settingValueChangedHandlerFactory(() => { backgroundImageRenderer.Monochrome = monochromeSetting.Value; });
-            imageTintSetting.ValueChanged += settingValueChangedHandlerFactory(() => { backgroundImageRenderer.Tint = imageTintSetting.Value; });
+            subscribeSettingValueChangedHandlers();
+            SettingsManager.Instance.SettingsLoaded += readSettingValues;
         }
+
+        private void readSettingValues()
+        {
+            updateFromBackgroundcolorSetting();
+            updateFromImagePathSetting();
+            updateFromLayoutSetting();
+            updateFromOpacitySetting();
+            updateFromMonochromeSetting();
+            updateFromImageTintSetting();
+        }
+
+        private void subscribeSettingValueChangedHandlers()
+        {
+            backgroundcolorSetting.ValueChanged += settingValueChangedHandlerFactory(updateFromBackgroundcolorSetting);
+            imagePathSetting.ValueChanged += settingValueChangedHandlerFactory(updateFromImagePathSetting);
+            layoutSetting.ValueChanged += settingValueChangedHandlerFactory(updateFromLayoutSetting);
+            opacitySetting.ValueChanged += settingValueChangedHandlerFactory(updateFromOpacitySetting);
+            monochromeSetting.ValueChanged += settingValueChangedHandlerFactory(updateFromMonochromeSetting);
+            imageTintSetting.ValueChanged += settingValueChangedHandlerFactory(updateFromImageTintSetting);
+        }
+
+        private void updateFromBackgroundcolorSetting() { }
+        private void updateFromImagePathSetting()
+        {
+            Image backgroundImageOriginalOld = backgroundImageOriginal;
+            try
+            {
+                backgroundImageOriginal = Image.FromFile(imagePathSetting.Value);
+            }
+            catch
+            {
+                backgroundImageOriginal = null;
+            }
+            backgroundImageOriginalOld?.Dispose();
+        }
+        private void updateFromLayoutSetting() => backgroundImageRenderer.Layout = layoutSetting.EnumValue;
+        private void updateFromOpacitySetting() => backgroundImageRenderer.Opacity = opacitySetting.Value / 100.0f;
+        private void updateFromMonochromeSetting() => backgroundImageRenderer.Monochrome = monochromeSetting.Value;
+        private void updateFromImageTintSetting() => backgroundImageRenderer.Tint = imageTintSetting.Value;
 
         public const string SETTINGS_PREFIX = "wallpaper";
         public const string SETTINGS_CATEGORY = "Wallpaper";
