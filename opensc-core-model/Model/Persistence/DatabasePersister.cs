@@ -257,15 +257,26 @@ namespace OpenSC.Model.Persistence
         private XElement serializeCollectionElement(MemberInfo memberInfo, Type memberType, object element, object parentItem, int arrayDimension)
         {
 
-            PersistAsAttribute persistData = getPersistDataForMember(memberInfo, element, arrayDimension + 1);
-            if (persistData == null)
-                persistData = new PersistAsAttribute(UNDEFINED_ARRAY_ITEM_TAG, 0);
-            object arrayElementValue = serializeValue(memberInfo, memberType, element, parentItem, arrayDimension + 1);
+            object elementKey = null;
+            object elementToSerialize = element;
+            Type typeToSerialize = memberType;
 
-            if (!(arrayElementValue is XElement) || (persistData.TagName != null)) // packing
-                return new XElement(persistData.TagName, arrayElementValue);
+            if (memberType.IsGenericType && (memberType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>)))
+            {
+                PropertyInfo keyPropertyInfo = memberType.GetProperty(nameof(KeyValuePair<object, object>.Key));
+                PropertyInfo valuePropertyInfo = memberType.GetProperty(nameof(KeyValuePair<object, object>.Value));
+                elementKey = keyPropertyInfo.GetValue(element);
+                elementToSerialize = valuePropertyInfo.GetValue(element);
+                typeToSerialize = memberType.GetGenericArguments()[1];
+            }
 
-            return (XElement)arrayElementValue;
+            object arrayElementValue = serializeValue(memberInfo, typeToSerialize, elementToSerialize, parentItem, arrayDimension + 1);
+            PersistAsAttribute persistData = getPersistDataForMember(memberInfo, elementToSerialize, arrayDimension + 1);
+            XElement returnElement = ((arrayElementValue is XElement) && (persistData?.TagName == null)) ? (XElement)arrayElementValue : new XElement(persistData?.TagName ?? UNDEFINED_ARRAY_ITEM_TAG, arrayElementValue);
+            if (elementKey != null)
+                returnElement.SetAttributeValue(persistData?.KeyAttribute ?? "key", elementKey.ToString());
+
+            return returnElement;
 
         }
         #endregion
@@ -476,14 +487,27 @@ namespace OpenSC.Model.Persistence
             }
 
             bool isCollection = false;
+            bool isDictionary = false;
+            Type keyType = null;
             Type elementType = null;
             foreach (Type interfaceType in memberType.GetInterfaces())
             {
-                if (interfaceType.IsGenericType && (interfaceType.GetGenericTypeDefinition() == typeof(ICollection<>)))
+                if (interfaceType.IsGenericType)
                 {
-                    isCollection = true;
-                    elementType = interfaceType.GetGenericArguments()[0];
-                    break;
+                    if (interfaceType.GetGenericTypeDefinition() == typeof(IDictionary<,>))
+                    {
+                        isDictionary = true;
+                        isCollection = true;
+                        keyType = interfaceType.GetGenericArguments()[0];
+                        elementType = interfaceType.GetGenericArguments()[1];
+                        break;
+                    }
+                    if (interfaceType.GetGenericTypeDefinition() == typeof(ICollection<>))
+                    {
+                        isCollection = true;
+                        elementType = interfaceType.GetGenericArguments()[0];
+                        break;
+                    }
                 }
             }
             if (isCollection)
@@ -493,7 +517,17 @@ namespace OpenSC.Model.Persistence
                 for (int i = 0; i < childElementCount; i++)
                 {
                     object deserializedElement = deserializeXmlElement(memberInfo, elementType, childElements[i], parentItem, arrayDimension + 1);
-                    addMethod.Invoke(collection, new object[] { deserializedElement });
+                    if (isDictionary)
+                    {
+                        PersistAsAttribute persistData = getPersistDataForMember(memberInfo, null, arrayDimension + 1);
+                        object deserializedKey = childElements[i].GetAttribute(persistData.KeyAttribute);
+                        if (deserializedKey != null)
+                            addMethod.Invoke(collection, new object[] { deserializedKey, deserializedElement });
+                    }
+                    else
+                    {
+                        addMethod.Invoke(collection, new object[] { deserializedElement });
+                    }
                 }
                 return collection;
             }
