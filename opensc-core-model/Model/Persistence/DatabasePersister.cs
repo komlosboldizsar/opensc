@@ -76,8 +76,8 @@ namespace OpenSC.Model.Persistence
 
             var items = new Dictionary<int, T>();
 
-            try
-            {
+           /* try
+            {*/
                 using (DatabaseFile inputFile = MasterDatabase.Instance.GetFileToRead(database))
                 {
 
@@ -97,8 +97,8 @@ namespace OpenSC.Model.Persistence
                     }
 
                 }
-            }
-            catch { }
+           /* }
+            catch { }*/
 
             return items;
 
@@ -274,7 +274,7 @@ namespace OpenSC.Model.Persistence
             PersistAsAttribute persistData = getPersistDataForMember(memberInfo, elementToSerialize, arrayDimension + 1);
             XElement returnElement = ((arrayElementValue is XElement) && (persistData?.TagName == null)) ? (XElement)arrayElementValue : new XElement(persistData?.TagName ?? UNDEFINED_ARRAY_ITEM_TAG, arrayElementValue);
             if (elementKey != null)
-                returnElement.SetAttributeValue(persistData?.KeyAttribute ?? "key", elementKey.ToString());
+                returnElement.SetAttributeValue(persistData?.KeyAttribute ?? "key", (elementKey is ISystemObject elementKeyObj) ? elementKeyObj.GlobalID : elementKey.ToString());
 
             return returnElement;
 
@@ -380,16 +380,19 @@ namespace OpenSC.Model.Persistence
 
             Type type = (fieldInfo != null) ? fieldInfo.FieldType : propertyInfo.PropertyType;
 
-            object value = deserializeXmlElement(memberInfo, type, xmlElement, item);
-
             try
             {
-                if (fieldInfo != null)
-                    fieldInfo.SetValue(item, value);
-                else
-                    propertyInfo.SetValue(item, value);
-            }
-            catch { }
+                object value = deserializeXmlElement(memberInfo, type, xmlElement, item);
+
+                try
+                {
+                    if (fieldInfo != null)
+                        fieldInfo.SetValue(item, value);
+                    else
+                        propertyInfo.SetValue(item, value);
+                }
+                catch { }
+            } catch (WillRestoreValueLaterException) { }
 
         }
 
@@ -512,6 +515,13 @@ namespace OpenSC.Model.Persistence
             }
             if (isCollection)
             {
+                if (memberInfo.GetCustomAttribute<PersistDetailedAttribute>() == null)
+                {
+                    if (elementType.IsAssignableTo(typeof(ISystemObject)) || (keyType?.IsAssignableTo(typeof(ISystemObject)) == true))
+                        throw new WillRestoreValueLaterException();
+                    Type[] genericParams = (keyType != null) ? new Type[] { keyType, elementType } : new Type[] { elementType };
+                    memberType = memberType.GetGenericTypeDefinition().MakeGenericType(genericParams);
+                }
                 object collection = Activator.CreateInstance(memberType, new object[] { });
                 MethodInfo addMethod = memberType.GetMethod(nameof(ICollection<object>.Add), BindingFlags.Instance | BindingFlags.Public);
                 for (int i = 0; i < childElementCount; i++)
@@ -520,6 +530,8 @@ namespace OpenSC.Model.Persistence
                     if (isDictionary)
                     {
                         PersistAsAttribute persistData = getPersistDataForMember(memberInfo, null, arrayDimension + 1);
+                        if (persistData == null)
+                            persistData = new PersistAsAttribute(UNDEFINED_ARRAY_ITEM_TAG);
                         object deserializedKey = childElements[i].GetAttribute(persistData.KeyAttribute);
                         if (deserializedKey != null)
                             addMethod.Invoke(collection, new object[] { deserializedKey, deserializedElement });
@@ -529,12 +541,14 @@ namespace OpenSC.Model.Persistence
                         addMethod.Invoke(collection, new object[] { deserializedElement });
                     }
                 }
-                return collection;
+                return collection; 
             }
 
             return null;
 
         }
+
+        private class WillRestoreValueLaterException : Exception { }
         #endregion
 
         #region Relations/associations
@@ -574,31 +588,44 @@ namespace OpenSC.Model.Persistence
                 return;
 
             FieldInfo originalField = storedType.GetField(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-            if (isPolymorph && (originalField == null))
+            PropertyInfo originalProperty = null;
+            if (originalField == null)
+                originalProperty = storedType.GetProperty(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            if (isPolymorph && (originalField == null) && (originalField == null))
             {
                 Type currentType = item.GetType();
                 do
                 {
                     originalField = currentType.GetField(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                    if (originalField == null)
+                        originalProperty = currentType.GetProperty(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
                     currentType = currentType.BaseType;
-                } while (!currentType.Equals(storedType) && (originalField == null));
+                } while (!currentType.Equals(storedType) && (originalField == null) && (originalProperty == null));
             }
-            if (originalField == null)
+            if ((originalField == null) && (originalProperty == null))
                 return;
 
             object foreignKeys = foreignKeyField.GetValue(item);
             if (foreignKeys == null)
                 return;
 
-            object foreignObjects = getAssociatedObjects(foreignKeyField.FieldType, originalField.FieldType, foreignKeys);
-            originalField.SetValue(item, foreignObjects);
+            if (originalProperty != null)
+            {
+                object foreignObjects = getAssociatedObjects(foreignKeyField.FieldType, originalProperty.PropertyType, foreignKeys);
+                originalProperty.SetValue(item, foreignObjects);
+            }
+            else
+            {
+                object foreignObjects = getAssociatedObjects(foreignKeyField.FieldType, originalField.FieldType, foreignKeys);
+                originalField.SetValue(item, foreignObjects);
+            }
 
         }
 
         private object getAssociatedObjects(Type memberType, Type originalType, object foreignKeys)
         {
 
-            if (memberType.IsArray && (memberType.GetElementType() != typeof(int)))
+            if (memberType.IsArray && (memberType.GetElementType() != typeof(string)))
             {
                 object[] foreignKeysArray = foreignKeys as object[];
                 if (foreignKeysArray == null)
@@ -608,7 +635,7 @@ namespace OpenSC.Model.Persistence
                     associatedObjects[i] = getAssociatedObjects(memberType.GetElementType(), originalType.GetElementType(), foreignKeysArray[i]);
                 return Convert.ChangeType(associatedObjects, originalType);
             }
-            else if(memberType.IsArray)
+            if(memberType.IsArray)
             {
                 string[] foreignKeysArray = foreignKeys as string[];
                 if (foreignKeysArray == null)
@@ -622,13 +649,111 @@ namespace OpenSC.Model.Persistence
                 }
                 return associatedObjects;
             }
-            else
+
+            bool isCollection = false;
+            bool isDictionary = false;
+            Type memberKeyType = null;
+            Type memberElementType = null;
+            foreach (Type interfaceType in memberType.GetInterfaces())
             {
-                string foreignKeyString = foreignKeys as string;
-                if (foreignKeyString == null)
-                    return null;
-                return SystemObjectRegister.Instance[foreignKeyString];
+                if (interfaceType.IsGenericType)
+                {
+                    if (interfaceType.GetGenericTypeDefinition() == typeof(IDictionary<,>))
+                    {
+                        isDictionary = true;
+                        isCollection = true;
+                        memberKeyType = interfaceType.GetGenericArguments()[0];
+                        memberElementType = interfaceType.GetGenericArguments()[1];
+                        break;
+                    }
+                    if (interfaceType.GetGenericTypeDefinition() == typeof(ICollection<>))
+                    {
+                        isCollection = true;
+                        memberElementType = interfaceType.GetGenericArguments()[0];
+                        break;
+                    }
+                }
             }
+            Type originalKeyType = null;
+            Type originalElementType = null;
+            foreach (Type interfaceType in originalType.GetInterfaces())
+            {
+                if (interfaceType.IsGenericType)
+                {
+                    if (interfaceType.GetGenericTypeDefinition() == typeof(IDictionary<,>))
+                    {
+                        isDictionary = true;
+                        isCollection = true;
+                        originalKeyType = interfaceType.GetGenericArguments()[0];
+                        originalElementType = interfaceType.GetGenericArguments()[1];
+                        break;
+                    }
+                    if (interfaceType.GetGenericTypeDefinition() == typeof(ICollection<>))
+                    {
+                        isCollection = true;
+                        originalElementType = interfaceType.GetGenericArguments()[0];
+                        break;
+                    }
+                }
+            }
+
+            if (isCollection)
+            {
+                object associatedObjects = Activator.CreateInstance(originalType, new object[] { });
+                MethodInfo addMethod = originalType.GetMethod(nameof(ICollection<object>.Add), BindingFlags.Instance | BindingFlags.Public);
+                IEnumerable foreignKeysEnumerable = foreignKeys as IEnumerable;
+                if (foreignKeysEnumerable == null)
+                    return null;
+                foreach (object foreignKey in foreignKeysEnumerable)
+                {
+                    object foreignKeyValue = foreignKey;
+                    object foreignKeyKey = null;
+                    if (isDictionary)
+                    {
+                        Type foreignKeyType = foreignKey.GetType();
+                        PropertyInfo keyProperty = foreignKeyType.GetProperty(nameof(KeyValuePair<object, object>.Key), BindingFlags.Public | BindingFlags.Instance);
+                        PropertyInfo valueProperty = foreignKeyType.GetProperty(nameof(KeyValuePair<object, object>.Value), BindingFlags.Public | BindingFlags.Instance);
+                        foreignKeyKey = keyProperty.GetValue(foreignKey);
+                        foreignKeyValue = valueProperty.GetValue(foreignKey);
+                    }
+                    object associatedObject = null;
+                    if (memberElementType != typeof(string))
+                    {                        
+                        associatedObject = getAssociatedObjects(memberElementType, originalElementType, foreignKeyValue);
+                    }
+                    else
+                    {
+                        string foreignKeyString = null;
+                        foreignKeyString = foreignKeyValue as string;
+                        if (foreignKeyString != null)
+                            associatedObject = SystemObjectRegister.Instance[foreignKeyString];
+                    }
+                    if (isDictionary)
+                    {
+                        if (foreignKeyKey != null)
+                        {
+                            if (originalKeyType.IsAssignableTo(typeof(ISystemObject)))
+                            {
+                                string foreignKeyKeyString = foreignKeyKey as string;
+                                if (foreignKeyKeyString != null)
+                                    foreignKeyKey = SystemObjectRegister.Instance[foreignKeyKeyString];
+                            }
+                            if (foreignKeyKey != null)
+                                addMethod.Invoke(associatedObjects, new object[] { foreignKeyKey, associatedObject });
+                        }
+                    }
+                    else
+                    {
+                        addMethod.Invoke(associatedObjects, new object[] { associatedObject });
+                    }
+                }
+                return associatedObjects;
+            }
+
+            string _foreignKeyString = foreignKeys as string;
+            if (_foreignKeyString == null)
+                return null;
+            return SystemObjectRegister.Instance[_foreignKeyString];
 
         }
 
