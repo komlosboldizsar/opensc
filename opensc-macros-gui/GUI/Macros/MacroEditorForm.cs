@@ -449,12 +449,12 @@ namespace OpenSC.GUI.Macros
             => new CustomDataGridViewColumnDescriptorBuilder<T>(table);
 
         private ObservableList<MacroTriggerWithArguments> macroTriggersCollectionProxy;
-        private IObservableList<MacroTriggerWithArgumentsProxy> macroTriggersProxyCollection;
+        private IObservableEnumerable<MacroTriggerWithArgumentsProxy> macroTriggersProxyCollection;
 
         private void initTriggerCollectionProxies()
         {
             macroTriggersCollectionProxy = new ObservableList<MacroTriggerWithArguments>();
-            macroTriggersProxyCollection = new ObservableProxyList<MacroTriggerWithArgumentsProxy, MacroTriggerWithArguments>(macroTriggersCollectionProxy, mtwa => new MacroTriggerWithArgumentsProxy(mtwa));
+            macroTriggersProxyCollection = new ObservableProxyEnumerable<MacroTriggerWithArgumentsProxy, MacroTriggerWithArguments>(macroTriggersCollectionProxy, mtwa => new MacroTriggerWithArgumentsProxy(mtwa));
         }
 
         private class MacroTriggerWithArgumentsProxy : ObjectProxy<MacroTriggerWithArguments>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model
 {
-    public interface IDatabaseBase: IObservableList
+    public interface IDatabaseBase
     {
         string Name { get; }
         void Load();

@@ -18,8 +18,10 @@ namespace OpenSC.Model.Routers
         #region Persistence, instantiation
         public Router()
         {
-            inputs.ItemsChanged += inputsChangedHandler;
-            outputs.ItemsChanged += outputsChangedHandler;
+            inputs.ItemsAdded += inputsChangedHandler;
+            inputs.ItemsRemoved += inputsChangedHandler;
+            outputs.ItemsAdded += outputsChangedHandler;
+            outputs.ItemsRemoved += outputsChangedHandler;
         }
 
         public override void Removed()
@@ -29,9 +31,9 @@ namespace OpenSC.Model.Routers
             OutputsChanged = null;
             StateChanged = null;
             StateStringChanged = null;
-            Inputs.ForEach(i => i.RemovedFromRouter(this));
+            Inputs.Foreach(i => i.RemovedFromRouter(this));
             inputs.Clear();
-            Outputs.ForEach(o => o.RemovedFromRouter(this));
+            Outputs.Foreach(o => o.RemovedFromRouter(this));
             outputs.Clear();
         }
 
@@ -64,14 +66,14 @@ namespace OpenSC.Model.Routers
 
         private void notifyIOsRestored()
         {
-            inputs.ForEach(i => i.Restored());
-            outputs.ForEach(o => o.Restored());
+            inputs.Foreach(i => i.Restored());
+            outputs.Foreach(o => o.Restored());
         }
 
         private void notifyIOsTotallyRestored()
         {
-            inputs.ForEach(i => i.TotallyRestored());
-            outputs.ForEach(o => o.TotallyRestored());
+            inputs.Foreach(i => i.TotallyRestored());
+            outputs.Foreach(o => o.TotallyRestored());
         }
         #endregion
 
@@ -94,7 +96,7 @@ namespace OpenSC.Model.Routers
                 inputs.Clear();
                 if (value != null)
                     inputs.AddRange(value);
-                inputs.ForEach(i => i.AssignParentRouter(this));
+                inputs.Foreach(i => i.AssignParentRouter(this));
             }
         }
 
@@ -112,7 +114,7 @@ namespace OpenSC.Model.Routers
 
         public RouterInput GetInput(int index) => inputs.FirstOrDefault(ri => (ri.Index == index));
 
-        private void inputsChangedHandler()
+        private void inputsChangedHandler(IEnumerable<IObservableEnumerable<RouterInput>.ItemWithPosition> affectedItemsWithPositions)
         {
             InputsChanged?.Invoke(this);
             RaisePropertyChanged(nameof(Inputs));
@@ -120,7 +122,7 @@ namespace OpenSC.Model.Routers
 
         public PropertyChangedNoValueDelegate<Router> InputsChanged;
 
-        private void restoreInputSources() => inputs.ForEach(i => i.RestoreSource());
+        private void restoreInputSources() => inputs.Foreach(i => i.RestoreSource());
 
         public abstract RouterInput CreateInput(string name, int index);
 
@@ -147,7 +149,7 @@ namespace OpenSC.Model.Routers
                 outputs.Clear();
                 if (value != null)
                     outputs.AddRange(value);
-                outputs.ForEach(o => o.AssignParentRouter(this));
+                outputs.Foreach(o => o.AssignParentRouter(this));
             }
         }
 
@@ -165,7 +167,7 @@ namespace OpenSC.Model.Routers
 
         public RouterOutput GetOutput(int index) => outputs.FirstOrDefault(ro => (ro.Index == index));
 
-        private void outputsChangedHandler()
+        private void outputsChangedHandler(IEnumerable<IObservableEnumerable<RouterOutput>.ItemWithPosition> affectedItemsWithPositions)
         {
             OutputsChanged?.Invoke(this);
             RaisePropertyChanged(nameof(Outputs));

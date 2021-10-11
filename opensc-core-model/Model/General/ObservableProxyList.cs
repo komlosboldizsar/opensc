@@ -8,55 +8,65 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.General
 {
 
-    public class ObservableProxyList<TProxy, TOriginal> : IObservableList<TProxy>
+    public class ObservableProxyEnumerable<TProxy, TOriginal> : IObservableEnumerable<TProxy>
     {
 
-        protected ObservableList<TOriginal> originalList;
-
-        protected List<TProxy> proxyList = new List<TProxy>();
+        private IObservableEnumerable<TOriginal> originalCollection;
+        private List<TProxy> proxyList = new();
 
         public delegate TProxy OriginalToProxyConverterMethodDelegate(TOriginal original);
         protected OriginalToProxyConverterMethodDelegate converterMethod;
-        public ObservableProxyList(ObservableList<TOriginal> originalList, OriginalToProxyConverterMethodDelegate converterMethod)
+
+        public ObservableProxyEnumerable(IObservableEnumerable<TOriginal> originalCollection, OriginalToProxyConverterMethodDelegate converterMethod)
         {
-            this.originalList = originalList;
+            this.originalCollection = originalCollection;
             this.converterMethod = converterMethod;
-            rebuildProxies();
-            originalList.ItemAdded += OriginalList_ItemAdded;
-            originalList.ItemRemoved += OriginalList_ItemRemoved;
-            originalList.ItemsChanged += OriginalList_ItemsChanged;
+            buildProxies();
+            originalCollection.ItemsAdded += originalCollectionItemsAdded;
+            originalCollection.ItemsRemoved += originalCollectionItemsRemoved;
         }
 
-        private void OriginalList_ItemAdded(IEnumerable addedItems)
-        {
-            rebuildProxies();
-            ItemAdded?.Invoke(addedItems);
-        }
-
-        private void OriginalList_ItemRemoved(IEnumerable removedItems)
-        {
-            rebuildProxies();
-            ItemRemoved?.Invoke(removedItems);
-        }
-
-        private void OriginalList_ItemsChanged() => rebuildProxies();
-
-        private void rebuildProxies()
+        private void buildProxies()
         {
             proxyList.Clear();
-            foreach (TOriginal original in originalList)
-                proxyList.Add(converterMethod(original));
-            ItemsChanged?.Invoke();
+            originalCollection.Foreach(originalItem => proxyList.Add(converterMethod(originalItem)));
         }
 
-        public event ObservableListItemAddedDelegate ItemAdded;
-        public event ObservableListItemRemovedDelegate ItemRemoved;
-        public event ObservableListItemsChangedDelegate ItemsChanged;
+        #region Events and handlers
+        public event ObservableEnumerableItemsChangedDelegate<TProxy> ItemsAdded;
+        public event ObservableEnumerableItemsChangedDelegate<TProxy> ItemsRemoved;
 
+        private void originalCollectionItemsAdded(IEnumerable<IObservableCollection<TOriginal>.ItemWithPosition> affectedItems)
+        {
+            List<IObservableCollection<TProxy>.ItemWithPosition> eventData = new();
+            foreach (IObservableCollection<TOriginal>.ItemWithPosition affectedItem in affectedItems)
+            {
+                TProxy proxy = converterMethod(affectedItem.Item);
+                proxyList.Insert(affectedItem.Position, proxy);
+                eventData.Add(new(proxy, affectedItem.Position));
+            }
+            ItemsAdded?.Invoke(eventData);
+        }
+
+        private void originalCollectionItemsRemoved(IEnumerable<IObservableCollection<TOriginal>.ItemWithPosition> affectedItems)
+        {
+
+            List<IObservableCollection<TProxy>.ItemWithPosition> eventData = new();
+            foreach (IObservableCollection<TOriginal>.ItemWithPosition affectedItem in affectedItems)
+            {
+                TProxy removedProxy = proxyList[affectedItem.Position];
+                proxyList.RemoveAt(affectedItem.Position);
+                eventData.Add(new(removedProxy, affectedItem.Position));
+            }
+            ItemsRemoved?.Invoke(eventData);
+        }
+        #endregion
+
+        #region Enumerators
         public IEnumerator<TProxy> GetEnumerator() => proxyList.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => proxyList.GetEnumerator();
-        public int Count => proxyList.Count;
-        public TProxy this[int index] => proxyList[index];
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)proxyList).GetEnumerator();
+        #endregion
+
 
     }
 

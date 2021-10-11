@@ -141,7 +141,7 @@ namespace OpenSC.GUI.Routers.Mirrors
 
         private void initAssociationsTable<TElement, TProxy>
             (ref CustomDataGridView<TProxy> tableCDGV, ref DataGridView tableOriginal,
-            ref Panel containerPanel, ref ObservableProxyList<TProxy, TElement> proxyListRef,
+            ref Panel containerPanel, ref ObservableProxyEnumerable<TProxy, TElement> proxyListRef,
             ObservableList<TElement> listA, ObservableList<TElement> listB,
             Func<TElement, string> elementNameGetter, Func<TElement, int> elementIndexGetter) 
             where TElement : class, Model.General.INotifyPropertyChanged
@@ -156,7 +156,7 @@ namespace OpenSC.GUI.Routers.Mirrors
                 return;
 
             // Create database
-            ObservableProxyList<TProxy, TElement> proxyList = new ObservableProxyList<TProxy, TElement>(listA, (elementA) => new TProxy() { Original = elementA });
+            ObservableProxyEnumerable<TProxy, TElement> proxyList = new ObservableProxyEnumerable<TProxy, TElement>(listA, (elementA) => new TProxy() { Original = elementA });
             proxyListRef = proxyList;
 
             // Column: sideA name
@@ -201,7 +201,7 @@ namespace OpenSC.GUI.Routers.Mirrors
 
         }
 
-        private void doAssociation<TProxy, TElement>(TProxy elementProxyA, TElement elementB, ObservableProxyList<TProxy, TElement> otherProxies)
+        private void doAssociation<TProxy, TElement>(TProxy elementProxyA, TElement elementB, ObservableProxyEnumerable<TProxy, TElement> otherProxies)
             where TElement : class, Model.General.INotifyPropertyChanged
             where TProxy : RouterIOProxy<TElement>, new()
         {
@@ -213,8 +213,8 @@ namespace OpenSC.GUI.Routers.Mirrors
         #endregion
 
         #region Proxies
-        private ObservableProxyList<RouterInputProxy, RouterInput> routerInputProxies;
-        private ObservableProxyList<RouterOutputProxy, RouterOutput> routerOutputProxies;
+        private ObservableProxyEnumerable<RouterInputProxy, RouterInput> routerInputProxies;
+        private ObservableProxyEnumerable<RouterOutputProxy, RouterOutput> routerOutputProxies;
 
         private abstract class RouterIOProxy<TElement> : ObjectProxy<TElement>
             where TElement: class, INotifyPropertyChanged

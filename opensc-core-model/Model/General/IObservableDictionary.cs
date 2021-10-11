@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.General
 {
-    public interface IObservableList<T> : IObservableCollection<T>, IList<T>
+    public interface IObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IObservableCollection<KeyValuePair<TKey, TValue>>
     { }
 }

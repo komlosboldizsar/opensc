@@ -9,32 +9,34 @@ namespace OpenSC.GUI.GeneralComponents.Tables
     public class CustomDataGridView<T>: DataGridView
     {
 
-        private IObservableList<T> boundCollection;
+        private IObservableEnumerable<T> boundCollection;
 
-        public IObservableList<T> BoundCollection
+        public IObservableEnumerable<T> BoundCollection
         {
-            get { return boundCollection; }
+            get => boundCollection;
             set
             {
                 if (boundCollection != null)
-                    boundCollection.ItemsChanged -= itemsChangedHandler;
+                {
+                    boundCollection.ItemsAdded -= itemsAddedHandler;
+                    boundCollection.ItemsRemoved -= itemsRemovedHandler;
+                }
                 boundCollection = value;
                 loadItems();
                 if (boundCollection != null)
-                    boundCollection.ItemsChanged += itemsChangedHandler;
+                {
+                    boundCollection.ItemsAdded += itemsAddedHandler;
+                    boundCollection.ItemsRemoved += itemsRemovedHandler;
+                }
             }
         }
 
         private List<CustomDataGridViewColumnDescriptor<T>> columnDescriptors = new List<CustomDataGridViewColumnDescriptor<T>>();
-
         public IReadOnlyList<CustomDataGridViewColumnDescriptor<T>> ColumnDescriptors => columnDescriptors;
 
-        public CustomDataGridView()
-        {
-            init();
-        }
+        public CustomDataGridView() => init();
 
-        public CustomDataGridView(IObservableList<T> boundCollection)
+        public CustomDataGridView(IObservableEnumerable<T> boundCollection)
         {
             BoundCollection = boundCollection;
             init();
@@ -44,11 +46,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         {
             base.Dispose(disposing);
             if (disposing)
-            {
-                if (boundCollection != null)
-                    boundCollection.ItemsChanged -= itemsChangedHandler;
-                boundCollection = null;
-            }
+                BoundCollection = null;
         }
 
         private void init()
@@ -86,10 +84,11 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             row?.HandleDoubleClick(e);
         }
 
-        private void itemsChangedHandler()
-        {
-            loadItems();
-        }
+        private void itemsAddedHandler(IEnumerable<IObservableCollection<T>.ItemWithPosition> affectedItemsWithPositions)
+            => affectedItemsWithPositions.Foreach(aiwp => Rows.Insert(aiwp.Position, new CustomDataGridViewRow<T>(this, aiwp.Item)));
+
+        private void itemsRemovedHandler(IEnumerable<IObservableCollection<T>.ItemWithPosition> affectedItemsWithPositions)
+            => affectedItemsWithPositions.Foreach(aiwp => Rows.RemoveAt(aiwp.Position));
 
         private void loadItems()
         {
@@ -97,10 +96,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             if (boundCollection == null)
                 return;
             foreach (T item in boundCollection)
-            {
-                var row = new CustomDataGridViewRow<T>(this, item);
-                Rows.Add(row);
-            }
+                Rows.Add(new CustomDataGridViewRow<T>(this, item));
         }
 
         public void AddColumn(CustomDataGridViewColumnDescriptor<T> columnDescriptor)

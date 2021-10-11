@@ -35,8 +35,10 @@ namespace OpenSC.GUI.Routers
 
                 foreach (Router router in _routers)
                 {
-                    router.Inputs.ItemsChanged -= inputsChangedHandler;
-                    router.Outputs.ItemsChanged -= outputsChangedHandler;
+                    router.Inputs.ItemsAdded += inputsChangedHandler;
+                    router.Inputs.ItemsRemoved += inputsChangedHandler;
+                    router.Outputs.ItemsAdded += outputsChangedHandler;
+                    router.Outputs.ItemsRemoved += outputsChangedHandler;
                 }
                 Text = HeaderText = "Router crosspoints: ?";
 
@@ -46,8 +48,10 @@ namespace OpenSC.GUI.Routers
 
                 foreach (Router router in _routers)
                 {
-                    router.Inputs.ItemsChanged += inputsChangedHandler;
-                    router.Outputs.ItemsChanged += outputsChangedHandler;
+                    router.Inputs.ItemsAdded -= inputsChangedHandler;
+                    router.Inputs.ItemsRemoved -= inputsChangedHandler;
+                    router.Outputs.ItemsAdded -= outputsChangedHandler;
+                    router.Outputs.ItemsRemoved -= outputsChangedHandler;
                 }
 
                 Text = HeaderText =
@@ -79,7 +83,6 @@ namespace OpenSC.GUI.Routers
         }
 
         private void RouterControlForm_Load(object sender, EventArgs e) => routers = _routersTempRef;
-
 
         #region Table
 
@@ -246,7 +249,7 @@ namespace OpenSC.GUI.Routers
 
             // Bind database
             ObservableList<RouterOutput> allOutputs = getAllOutputs();
-            routerOutputProxies = new ObservableProxyList<RouterOutputProxy, RouterOutput>(allOutputs, (routerOutput) => new RouterOutputProxy(routerOutput));
+            routerOutputProxies = new ObservableProxyEnumerable<RouterOutputProxy, RouterOutput>(allOutputs, (routerOutput) => new RouterOutputProxy(routerOutput));
             table.BoundCollection = routerOutputProxies;
 
         }
@@ -338,7 +341,7 @@ namespace OpenSC.GUI.Routers
         }
 
         #region Proxies
-        private ObservableProxyList<RouterOutputProxy, RouterOutput> routerOutputProxies;
+        private ObservableProxyEnumerable<RouterOutputProxy, RouterOutput> routerOutputProxies;
 
         private class RouterOutputProxy : ObjectProxy<RouterOutput>
         {
@@ -386,8 +389,8 @@ namespace OpenSC.GUI.Routers
 
         #endregion
 
-        private void inputsChangedHandler() => initializeTable();
-        private void outputsChangedHandler() => initializeTable();
+        private void inputsChangedHandler(IEnumerable<IObservableEnumerable<RouterInput>.ItemWithPosition> affectedItemsWithPositions) => initializeTable();
+        private void outputsChangedHandler(IEnumerable<IObservableEnumerable<RouterOutput>.ItemWithPosition> affectedItemsWithPositions) => initializeTable();
 
         #region Persistence
         private const string PERSISTENCE_KEY_ROUTER_IDS = "router_ids";

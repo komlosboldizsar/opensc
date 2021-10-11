@@ -216,16 +216,16 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             {
                 source.IsProgramTalliedChanged += sourceIsProgramTalliedChangedHandler;
                 source.IsPreviewTalliedChanged += sourceIsPreviewTalliedChangedHandler;
-                Inputs.FindAll(input => (input.Index == source.ID)).ForEach(input => { input.RedTally = source.IsProgramTallied; });
-                Inputs.FindAll(input => (input.Index == source.ID)).ForEach(input => { input.GreenTally = source.IsPreviewTallied; });
+                Inputs.Findall(input => (input.Index == source.ID)).Foreach(input => { input.RedTally = source.IsProgramTallied; });
+                Inputs.Findall(input => (input.Index == source.ID)).Foreach(input => { input.GreenTally = source.IsPreviewTallied; });
             }
         }
 
         private void sourceIsProgramTalliedChangedHandler(BMDSwitcherAPI.IBMDSwitcherInput apiSource, Source source, bool isTallied)
-            => Inputs.FindAll(input => (input.Index == source.ID)).ForEach(input => { input.RedTally = isTallied; });
+            => Inputs.Findall(input => (input.Index == source.ID)).Foreach(input => { input.RedTally = isTallied; });
 
         private void sourceIsPreviewTalliedChangedHandler(BMDSwitcherAPI.IBMDSwitcherInput apiSource, Source source, bool isTallied)
-            => Inputs.FindAll(input => (input.Index == source.ID)).ForEach(input => { input.GreenTally = isTallied; });
+            => Inputs.Findall(input => (input.Index == source.ID)).Foreach(input => { input.GreenTally = isTallied; });
         #endregion
 
         #region Mix/effect block monitors

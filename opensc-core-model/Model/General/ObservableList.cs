@@ -8,141 +8,81 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.General
 {
 
-    public class ObservableList<T> : List<T>, IObservableList<T>
+    public class ObservableList<T> : IObservableList<T>
     {
 
-        public ObservableList()
-        { }
+        private List<T> underlying = new();
 
-        public ObservableList(int capacity) : base(capacity)
-        { }
+        public IEnumerator<T> GetEnumerator() => underlying.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => ((IList<T>)underlying).GetEnumerator();
 
-        public ObservableList(IEnumerable<T> collection) : base(collection)
-        { }
-
-        public event ObservableListItemAddedDelegate ItemAdded;
-        public event ObservableListItemRemovedDelegate ItemRemoved;
-        public event ObservableListItemsChangedDelegate ItemsChanged;
-
-        public new void Add(T item)
+        public T this[int index]
         {
-            base.Add(item);
-            ItemAdded?.Invoke(new object[] { item });
-            ItemsChanged?.Invoke();
+            get => underlying[index];
+            set => underlying[index] = value;
         }
 
-        public new void AddRange(IEnumerable<T> collection)
+        public int Count => underlying.Count;
+        public bool IsReadOnly => ((IList<T>)underlying).IsReadOnly;
+
+        public event ObservableEnumerableItemsChangedDelegate<T> ItemsAdded;
+        public event ObservableEnumerableItemsChangedDelegate<T> ItemsRemoved;
+
+        public void Add(T item)
         {
-            base.AddRange(collection);
-            if (collection.Count() > 0)
-            {
-                ItemAdded?.Invoke(collection);
-                ItemsChanged?.Invoke();
-            }
+            underlying.Add(item);
+            ItemsAdded?.Invoke(new IObservableEnumerable<T>.ItemWithPosition[] { new(item, underlying.Count - 1) });
         }
 
-        public new void Clear()
+        public void AddRange(IEnumerable<T> items)
         {
-            int count = Count;
-            IEnumerable removedItems = new List<T>(this);
-            base.Clear();
+            int startIndex = underlying.Count;
+            underlying.AddRange(items);
+            ItemsAdded?.Invoke(items.Select((item, index) => new IObservableEnumerable<T>.ItemWithPosition(item, startIndex + index)));
+        }
+
+        public void Clear()
+        {
+            int count = underlying.Count;
+            IEnumerable<IObservableEnumerable<T>.ItemWithPosition> removedItems = null;
+            if (ItemsRemoved != null)
+                removedItems = underlying.Select((item, index) => new IObservableEnumerable<T>.ItemWithPosition(item, index));
+            underlying.Clear();
             if (count > 0)
-            { 
-                ItemRemoved?.Invoke(removedItems);
-                ItemsChanged?.Invoke();
-            }
+                ItemsRemoved?.Invoke(removedItems);
         }
 
-        public new void Insert(int index, T item)
+        public void Insert(int index, T item)
         {
-            base.Insert(index, item);
-            ItemAdded?.Invoke(new object[] { item });
-            ItemsChanged?.Invoke();
+            underlying.Insert(index, item);
+            ItemsAdded?.Invoke(new IObservableEnumerable<T>.ItemWithPosition[] { new(item, index) });
         }
 
-        public new void InsertRange(int index, IEnumerable<T> collection)
+        public bool Remove(T item)
         {
-            base.InsertRange(index, collection);
-            if (collection.Count() > 0) {
-                ItemAdded?.Invoke(collection);
-                ItemsChanged?.Invoke();
-            }
-        }
-
-        public new bool Remove(T item)
-        {
-            if (base.Remove(item))
+            int index = -1;
+            if (ItemsRemoved != null)
+                index = underlying.IndexOf(item);
+            if (underlying.Remove(item))
             {
-                ItemRemoved?.Invoke(new object[] { item });
-                ItemsChanged?.Invoke();
+                ItemsRemoved?.Invoke(new IObservableEnumerable<T>.ItemWithPosition[] { new(item, index) });
                 return true;
             }
             return false;
         }
 
-        public new int RemoveAll(Predicate<T> match)
+        public void RemoveAt(int index)
         {
-            IEnumerable removedItems = new List<T>(this.Where(i => match(i)));
-            int removedCount = base.RemoveAll(match);
-            ItemRemoved?.Invoke(removedItems);
-            ItemsChanged?.Invoke();
-            return removedCount;
+            T removedItem = default(T);
+            if (ItemsRemoved != null)
+                removedItem = underlying[index];
+            underlying.RemoveAt(index);
+            ItemsRemoved?.Invoke(new IObservableEnumerable<T>.ItemWithPosition[] { new(removedItem, index) });
         }
 
-        public new void RemoveAt(int index)
-        {
-            T removedItem = this[index];
-            base.RemoveAt(index);
-            ItemRemoved?.Invoke(new object[] { removedItem });
-            ItemsChanged?.Invoke();
-        }
-
-        public new void RemoveRange(int index, int count)
-        {
-            IEnumerable removedItems = new List<T>(this.GetRange(index, count));
-            base.RemoveRange(index, count);
-            ItemRemoved?.Invoke(removedItems);
-            ItemsChanged?.Invoke();
-        }
-
-        public new void Reverse(int index, int count)
-        {
-            base.Reverse(index, count);
-            ItemsChanged?.Invoke();
-        }
-
-        public new void Reverse()
-        {
-            base.Reverse();
-            ItemsChanged?.Invoke();
-        }
-
-        public new void Sort(int index, int count, IComparer<T> comparer)
-        {
-            base.Sort(index, count, comparer);
-            ItemsChanged?.Invoke();
-        }
-
-        public new void Sort(Comparison<T> comparison)
-        {
-            base.Sort(comparison);
-            ItemsChanged?.Invoke();
-        }
-
-        public new void Sort()
-        {
-            base.Sort();
-            ItemsChanged?.Invoke();
-        }
-
-        public new void Sort(IComparer<T> comparer)
-        {
-            base.Sort(comparer);
-            ItemsChanged?.Invoke();
-        }
-
-        public new void TrimExcess()
-            => base.TrimExcess();
+        public bool Contains(T item) => underlying.Contains(item);
+        public void CopyTo(T[] array, int arrayIndex) => ((IList<T>)underlying).CopyTo(array, arrayIndex);
+        public int IndexOf(T item) => underlying.IndexOf(item);
 
     }
 

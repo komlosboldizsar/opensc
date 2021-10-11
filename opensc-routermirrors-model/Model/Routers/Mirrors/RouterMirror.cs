@@ -47,8 +47,8 @@ namespace OpenSC.Model.Routers.Mirrors
         {
             base.TotallyRestored();
             totallyRestored = true;
-            inputAssociations.ForEach(ia => ia.TotallyRestored());
-            outputAssociations.ForEach(oa => oa.TotallyRestored());
+            inputAssociations.Foreach(ia => ia.TotallyRestored());
+            outputAssociations.Foreach(oa => oa.TotallyRestored());
             if (synchronizeFromOnTotallyRestored != null)
                 Synchronize((RouterMirrorSide)synchronizeFromOnTotallyRestored);
         }
@@ -156,13 +156,13 @@ namespace OpenSC.Model.Routers.Mirrors
                 inputAssociations.Clear();
                 if (value != null)
                     inputAssociations.AddRange(value);
-                inputAssociations.ForEach(i => i.AssignParent(this));
+                inputAssociations.Foreach(i => i.AssignParent(this));
             }
         }
 
         public void ClearInputAssociations()
         {
-            inputAssociations.ForEach(ia => ia.RemovedFromParent());
+            inputAssociations.Foreach(ia => ia.RemovedFromParent());
             inputAssociations.Clear();
         }
 
@@ -196,13 +196,13 @@ namespace OpenSC.Model.Routers.Mirrors
                 outputAssociations.Clear();
                 if (value != null)
                     outputAssociations.AddRange(value);
-                outputAssociations.ForEach(i => i.AssignParent(this));
+                outputAssociations.Foreach(i => i.AssignParent(this));
             }
         }
 
         public void ClearOutputAssociations()
         {
-            outputAssociations.ForEach(oa => oa.RemovedFromParent());
+            outputAssociations.Foreach(oa => oa.RemovedFromParent());
             outputAssociations.Clear();
         }
 
