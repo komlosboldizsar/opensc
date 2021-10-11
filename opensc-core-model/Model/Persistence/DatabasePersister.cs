@@ -56,7 +56,7 @@ namespace OpenSC.Model.Persistence
             IndentChars = "\t"
         };
 
-        public void Save(Dictionary<int, T> items)
+        public void Save(IDictionary<int, T> items)
         {
 
             XElement rootElement = new XElement(rootTag);
@@ -71,7 +71,7 @@ namespace OpenSC.Model.Persistence
 
         }
 
-        public Dictionary<int, T> Load()
+        public IDictionary<int, T> Load()
         {
 
             var items = new Dictionary<int, T>();
@@ -552,7 +552,7 @@ namespace OpenSC.Model.Persistence
         #endregion
 
         #region Relations/associations
-        public void BuildRelationsByForeignKeys(ref Dictionary<int, T> items)
+        public void BuildRelationsByForeignKeys(IDictionary<int, T> items)
         {
 
             FieldInfo[] baseFields = storedType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
@@ -579,7 +579,7 @@ namespace OpenSC.Model.Persistence
 
         }
 
-        private void buildRelationForField(T item, FieldInfo foreignKeyField, ref Dictionary<int, T> items)
+        private void buildRelationForField(T item, FieldInfo foreignKeyField, ref IDictionary<int, T> items)
         {
 
             

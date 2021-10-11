@@ -16,9 +16,9 @@ namespace OpenSC.GUI
     {
 
         protected ItemListFormBase form;
-        protected IObservableList<TItem> boundCollection;
+        protected IObservableEnumerable<TItem> boundCollection;
 
-        public ItemListFormBaseManager(ItemListFormBase form, IObservableList<TItem> boundCollection, ColumnDescriptorCreatorDelegate baseColumnCreatorMethod)
+        public ItemListFormBaseManager(ItemListFormBase form, IObservableEnumerable<TItem> boundCollection, ColumnDescriptorCreatorDelegate baseColumnCreatorMethod)
         {
             this.form = form;
             this.boundCollection = boundCollection;

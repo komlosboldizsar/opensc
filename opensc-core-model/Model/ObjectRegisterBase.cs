@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -10,39 +11,20 @@ using System.Threading.Tasks;
 namespace OpenSC.Model
 {
 
-    public abstract class ObjectRegisterBase<TKey, TItem> : IObservableList, IObservableList<TItem>
-        where TItem : class
+    public abstract class ObjectRegisterBase<TKey, TObject> : ObservableEnumerableAdapter<TObject, KeyValuePair<TKey, TObject>>
+        where TObject : class
     {
 
-        #region IObservableList<T> implementation
-        public TItem this[int index] => registeredItems.Values.ToList()[index];
+        private List<TObject> registeredItemsWithoutKey = new();
+        private ObservableDictionary<TKey, TObject> registeredItems = new();
 
-        public int Count => registeredItems.Count;
+        public ObjectRegisterBase() => Adaptee = registeredItems;
+        protected override IEnumerator<TObject> getEnumerator() => registeredItems.Values.GetEnumerator();
+        protected override TObject convertAdaptee(KeyValuePair<TKey, TObject> adaptee) => adaptee.Value;
 
-        public event ObservableListItemAddedDelegate ItemAdded;
-        public event ObservableListItemRemovedDelegate ItemRemoved;
-        public event ObservableListItemsChangedDelegate ItemsChanged;
+        public TObject this[TKey key] => registeredItems[key];
 
-        public IEnumerator<TItem> GetEnumerator() => registeredItems.Values.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => registeredItems.Values.GetEnumerator();
-        #endregion
-
-        private List<TItem> registeredItemsWithoutKey = new();
-        private Dictionary<TKey, TItem> registeredItems = new();
-
-        public TItem this[TKey key]
-        {
-            get
-            {
-                if (key == null)
-                    return null;
-                if (!registeredItems.TryGetValue(key, out TItem foundBoolean))
-                    return null;
-                return foundBoolean;
-            }
-        }
-
-        public void Register(TItem item)
+        public void Register(TObject item)
         {
             TKey key = getKey(item);
             if (key == null)
@@ -53,17 +35,15 @@ namespace OpenSC.Model
             }
             else
             {
-                if (!CanKeyBeUsedForItem(item, key, out TItem foundItem))
+                if (!CanKeyBeUsedForItem(item, key, out TObject foundItem))
                     throw new KeyIsAlreadyUsedException(key, item, foundItem);
                 registeredItems.Add(key, item);
             }
             keyChangedSubscribeMethod(item);
             itemRemovedSubscribeMethod(item);
-            ItemAdded?.Invoke(new TItem[] { item });
-            ItemsChanged?.Invoke();
         }
 
-        public void Unregister(TItem item)
+        public void Unregister(TObject item)
         {
             TKey itemKey = getKey(item);
             if (itemKey != null)
@@ -72,56 +52,18 @@ namespace OpenSC.Model
                 return;
             }
             if (registeredItemsWithoutKey.Contains(item))
-            {
                 registeredItemsWithoutKey.Remove(item);
-                itemRemoved(item);
-            }
         }
-         
 
-        public void UnregisterByKey(TKey key)
+
+        public bool UnregisterByKey(TKey key)
         {
             if (key == null)
-                return;
-            if (!registeredItems.TryGetValue(key, out TItem removedItem))
-                return;
-            itemRemoved(removedItem);
+                return false;
+            return registeredItems.Remove(key);
         }
 
-        private void itemRemoved(TItem item)
-        {
-            keyChangedUnsubscribeMethod(item);
-            itemRemovedUnsubscribeMethod(item);
-            ItemRemoved?.Invoke(new TItem[] { item });
-            ItemsChanged?.Invoke();
-        }
-
-        public void ItemKeyChanged(TItem item)
-        {
-            TKey key = getKey(item);
-            bool registeredWithoutKey = registeredItemsWithoutKey.Contains(item);
-            bool registeredWithKey = registeredItems.ContainsValue(item);
-            if (!registeredWithoutKey && !registeredWithKey)
-                return;
-            if (!CanKeyBeUsedForItem(item, key, out TItem foundItem))
-                throw new KeyIsAlreadyUsedException(key, item, foundItem);
-            if (registeredWithoutKey && (key != null))
-            {
-                registeredItemsWithoutKey.Remove(item);
-                registeredItems.Add(key, item); 
-            }
-            if (registeredWithKey)
-            {
-                TKey previousRegisteredKey = registeredItems.FirstOrDefault(kvp => kvp.Value == item).Key;
-                registeredItems.Remove(previousRegisteredKey);
-                if (key != null)
-                    registeredItems.Add(key, item);
-                else
-                    registeredItemsWithoutKey.Add(item);
-            }
-        }
-
-        public bool CanKeyBeUsedForItem(TItem item, TKey key, out TItem keyOwnerItem)
+        public bool CanKeyBeUsedForItem(TObject item, TKey key, out TObject keyOwnerItem)
         {
             keyOwnerItem = null;
             if (key == null)
@@ -134,17 +76,35 @@ namespace OpenSC.Model
             return keyOwnerItem == item;
         }
 
-        protected abstract TKey getKey(TItem item);
-        protected abstract void keyChangedSubscribeMethod(TItem item);
-        protected abstract void keyChangedUnsubscribeMethod(TItem item);
-        protected abstract void itemRemovedSubscribeMethod(TItem item);
-        protected abstract void itemRemovedUnsubscribeMethod(TItem item);
+        public void ItemKeyChanged(TObject item)
+        {
+            TKey key = getKey(item);
+            bool registeredWithoutKey = registeredItemsWithoutKey.Contains(item);
+            bool registeredWithKey = registeredItems.ContainsValue(item);
+            if (!registeredWithoutKey && !registeredWithKey)
+                return;
+            if (!CanKeyBeUsedForItem(item, key, out TObject foundItem))
+                throw new KeyIsAlreadyUsedException(key, item, foundItem);
+            if (registeredWithoutKey && (key != null))
+            {
+                registeredItemsWithoutKey.Remove(item);
+                registeredItems.Add(key, item);
+            }
+            if (registeredWithKey)
+                registeredItems.ChangeKeyOfItem(item, key);
+        }
 
-        public virtual string ToStringMethod(TItem item) => getKey(item).ToString();
+        protected abstract TKey getKey(TObject item);
+        protected abstract void keyChangedSubscribeMethod(TObject item);
+        protected abstract void keyChangedUnsubscribeMethod(TObject item);
+        protected abstract void itemRemovedSubscribeMethod(TObject item);
+        protected abstract void itemRemovedUnsubscribeMethod(TObject item);
+
+        public virtual string ToStringMethod(TObject item) => getKey(item).ToString();
 
         public class KeyIsAlreadyUsedException : Exception
         {
-            public KeyIsAlreadyUsedException(TKey key, TItem keyWantingItem, TItem keyOwnerItem)
+            public KeyIsAlreadyUsedException(TKey key, TObject keyWantingItem, TObject keyOwnerItem)
                 : base($"The key [{key}] can't be used for the item [{keyWantingItem}], because it is already used by [{keyOwnerItem}].")
             { }
         }

@@ -16,7 +16,7 @@ using System.Xml.Linq;
 namespace OpenSC.Model
 {
 
-    public abstract class DatabaseBase<T>: IDatabaseBase, IObservableList<T>
+    public abstract class DatabaseBase<T>: ObservableEnumerableAdapter<T, KeyValuePair<int, T>>, IDatabaseBase
         where T: class, IModel
     {
 
@@ -28,24 +28,19 @@ namespace OpenSC.Model
         
         public delegate void AddedItemDelegate(DatabaseBase<T> database, T item);
         public event AddedItemDelegate AddedItem;
-        public event ObservableListItemAddedDelegate ItemAdded;
-        
+
         public delegate void RemovedItemDelegate(DatabaseBase<T> database, T item);
         public event RemovedItemDelegate RemovedItem;
-        public event ObservableListItemRemovedDelegate ItemRemoved;
-        
+
         public delegate void ChangedItemsDelegate(DatabaseBase<T> database);
         public event ChangedItemsDelegate ChangedItems;
-        public event ObservableListItemsChangedDelegate ItemsChanged;
 
-        protected Dictionary<int, T> items = new Dictionary<int, T>();
-
-        public IReadOnlyDictionary<int, T> Items => items;
-        public IReadOnlyList<T> ItemsAsList => items.Values.ToList();
+        protected ObservableDictionary<int, T> items = new ObservableDictionary<int, T>();
         public int Count => items.Count;
-        public T this[int index] => GetTById(index);
-        public IEnumerator GetEnumerator() => items.Values.GetEnumerator();
-        IEnumerator<T> IEnumerable<T>.GetEnumerator() => items.Values.GetEnumerator();
+        public T this[int id] => GetTById(id);
+        public bool IsReadOnly => false;
+        protected override IEnumerator<T> getEnumerator() => items.Values.GetEnumerator();
+        protected override T convertAdaptee(KeyValuePair<int, T> adaptee) => adaptee.Value;
 
         public string Name { get; init; }
 
@@ -60,68 +55,36 @@ namespace OpenSC.Model
 
         public void Add(T item)
         {
-
-            // Validate argument
             if (item == null)
                 throw new ArgumentNullException();
-
-            // Validate ID
             if (item.ID <= 0)
                 throw new Exception();
-
             if (items.ContainsKey(item.ID))
                 throw new Exception();
-
-            // Add element
             items.Add(item.ID, item);
-
             LogDispatcher.V(SPECIFIC_LOG_TAG, "An item added with ID: " + item.ID);
-
             AddedItem?.Invoke(this, item);
             ChangedItems?.Invoke(this);
-
-            ItemAdded?.Invoke(new object[] { item });
-            ItemsChanged?.Invoke();
-
             item.ModelAfterUpdate += itemAfterUpdateHandler;
-
             Save();
-
             afterAdd(item);
-
         }
 
         protected virtual void afterAdd(T item) { }
 
         public bool Remove(T item)
         {
-
-            // Validate argument
             if (item == null)
                 throw new ArgumentNullException();
-
-            if (!items.ContainsValue(item))
+            if (!items.Remove(item.ID))
                 return false;
-
-            // Remove element
-            items.Remove(item.ID);
-
             LogDispatcher.V(SPECIFIC_LOG_TAG, "An item removed with ID: " + item.ID);
-
             RemovedItem?.Invoke(this, item);
             ChangedItems?.Invoke(this);
-
-            ItemRemoved?.Invoke(new object[] { item });
-            ItemsChanged?.Invoke();
-
             item.ModelAfterUpdate -= itemAfterUpdateHandler;
-
             Save();
-
             afterRemove(item);
-
             return true;
-
         }
 
         protected virtual void afterRemove(T item) { }
@@ -130,7 +93,7 @@ namespace OpenSC.Model
 
         public void ItemUpdated(T item)
         {
-            if (items.ContainsValue(item))
+            if (items.Values.Contains(item))
             {
                 Save();
                 afterItemUpdate(item);
@@ -183,9 +146,11 @@ namespace OpenSC.Model
             var loadedItems = persister.Load();
             if (loadedItems != null)
             {
-                items = loadedItems;
-                foreach (T item in items.Values)
-                    item.ModelAfterUpdate += itemAfterUpdateHandler;
+                foreach (KeyValuePair<int, T> item in loadedItems)
+                {
+                    items.Add(item.Key, item.Value);
+                    item.Value.ModelAfterUpdate += itemAfterUpdateHandler;
+                }
                 LogDispatcher.I(SPECIFIC_LOG_TAG, "Loaded from file.");
                 afterLoad();
                 ChangedItems?.Invoke(this);
@@ -193,7 +158,7 @@ namespace OpenSC.Model
         }
         protected virtual void afterLoad() { }
 
-        public void BuildRelationsByForeignKeys() => persister.BuildRelationsByForeignKeys(ref items);
+        public void BuildRelationsByForeignKeys() => persister.BuildRelationsByForeignKeys(items);
 
         public void NotifyItemsRestoredOwnFields()
         {

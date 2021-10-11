@@ -30,7 +30,7 @@ namespace OpenSC.Model.Mixers
             StateChanged = null;
             StateStringChanged = null;
             InputsChanged = null;
-            inputs.ForEach(i => i.RemovedFromMixer(this));
+            inputs.Foreach(i => i.RemovedFromMixer(this));
             inputs.Clear();
         }
 

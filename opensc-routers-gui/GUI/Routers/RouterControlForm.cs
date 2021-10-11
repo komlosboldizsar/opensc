@@ -32,8 +32,10 @@ namespace OpenSC.GUI.Routers
 
                 if (_router != null)
                 {
-                    _router.Inputs.ItemsChanged -= inputsChangedHandler;
-                    _router.Outputs.ItemsChanged -= outputsChangedHandler;
+                    _router.Inputs.ItemsAdded -= inputsChangedHandler;
+                    _router.Inputs.ItemsRemoved -= inputsChangedHandler;
+                    _router.Outputs.ItemsAdded -= outputsChangedHandler;
+                    _router.Outputs.ItemsRemoved -= outputsChangedHandler;
                     Text = HeaderText = "Router crosspoints: ?";
                 }
 
@@ -43,8 +45,11 @@ namespace OpenSC.GUI.Routers
                 {
 
                     Text = HeaderText = string.Format("Router crosspoints: {0}", router.Name);
-                    _router.Inputs.ItemsChanged += inputsChangedHandler;
-                    _router.Outputs.ItemsChanged += outputsChangedHandler;
+
+                    _router.Inputs.ItemsAdded += inputsChangedHandler;
+                    _router.Inputs.ItemsRemoved += inputsChangedHandler;
+                    _router.Outputs.ItemsAdded += outputsChangedHandler;
+                    _router.Outputs.ItemsRemoved += outputsChangedHandler;
                 }
 
                 loadInputs();
@@ -84,15 +89,10 @@ namespace OpenSC.GUI.Routers
             }
         }
 
-        private void inputsChangedHandler()
-        {
-            loadInputs();
-        }
+        private void inputsChangedHandler(IEnumerable<Model.General.IObservableEnumerable<RouterInput>.ItemWithPosition> affectedItemsWithPositions)
+            => loadInputs();
 
-        public void InputClicked(RouterInputControl input)
-        {
-            SelectedInput = input.Input;
-        }
+        public void InputClicked(RouterInputControl input) => SelectedInput = input.Input;
 
         private RouterInput selectedInput = null;
 
@@ -123,10 +123,8 @@ namespace OpenSC.GUI.Routers
             }
         }
 
-        private void outputsChangedHandler()
-        {
-            loadOutputs();
-        }
+        private void outputsChangedHandler(IEnumerable<Model.General.IObservableEnumerable<RouterOutput>.ItemWithPosition> affectedItemsWithPositions)
+            => loadOutputs();
 
         public void OutputClicked(RouterOutputControl output)
         {

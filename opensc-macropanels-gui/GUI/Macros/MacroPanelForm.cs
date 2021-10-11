@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.WorkspaceManager;
+using OpenSC.Model.General;
 using OpenSC.Model.Macros;
 using System;
 using System.Collections.Generic;
@@ -76,18 +77,19 @@ namespace OpenSC.GUI.Macros
             HeaderText = macroPanel.Name;
             loadElements();
             resizeElementsPanel();
-            macroPanel.Elements.ItemsChanged += Elements_ItemsChanged;
+            macroPanel.Elements.ItemsAdded += elementsChangedHandler;
+            macroPanel.Elements.ItemsRemoved += elementsChangedHandler;
         }
+
 
         private void MacroPanelForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            macroPanel.Elements.ItemsChanged -= Elements_ItemsChanged;
+            macroPanel.Elements.ItemsAdded -= elementsChangedHandler;
+            macroPanel.Elements.ItemsRemoved -= elementsChangedHandler;
         }
 
-        private void Elements_ItemsChanged()
-        {
-            loadElements();
-        }
+
+        private void elementsChangedHandler(IEnumerable<IObservableEnumerable<MacroPanelElement>.ItemWithPosition> affectedItemsWithPositions) => loadElements();
 
         #region Persistence
         private const string PERSISTENCE_KEY_MACRO_PANEL_ID = "macro_panel_id";

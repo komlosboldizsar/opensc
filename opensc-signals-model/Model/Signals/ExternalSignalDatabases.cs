@@ -46,7 +46,7 @@ namespace OpenSC.Model.Signals
             protected override void afterLoad()
             {
                 base.afterLoad();
-                foreach(ISignalSourceRegistered signal in ItemsAsList)
+                foreach(ISignalSourceRegistered signal in this)
                     SignalRegister.Instance.Register(signal);
             }
 

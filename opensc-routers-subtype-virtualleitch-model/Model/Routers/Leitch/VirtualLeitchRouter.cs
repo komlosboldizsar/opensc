@@ -25,8 +25,13 @@ namespace OpenSC.Model.Routers.Leitch
         {
             State = RouterState.Warning;
             StateString = "initializing";
-            Outputs.ItemAdded += outputAdded;
-            Outputs.ItemRemoved += outputRemoved;
+            Outputs.ItemsAdded += outputAdded;
+            Outputs.ItemsRemoved += outputRemoved;
+        }
+
+        private void Outputs_ItemsAdded()
+        {
+            throw new NotImplementedException();
         }
 
         public override void TotallyRestored()
@@ -45,19 +50,20 @@ namespace OpenSC.Model.Routers.Leitch
                 port.ReceivedDataAsciiString -= receivedLineFromPort;
         }
 
-        private void outputAdded(IEnumerable addedOutputs)
+        private void outputAdded(IEnumerable<IObservableEnumerable<RouterOutput>.ItemWithPosition> addedOutputsData)
         {
-            foreach (RouterOutput output in addedOutputs)
+            foreach (IObservableEnumerable<RouterOutput>.ItemWithPosition outputData in addedOutputsData)
             {
+                RouterOutput output = outputData.Item;
                 output.CurrentInputChanged += outputsCurrentInputChanged;
                 sendOutputFullStatusReport(output);
             }
         }
 
-        private void outputRemoved(IEnumerable removedOutputs)
+        private void outputRemoved(IEnumerable<IObservableEnumerable<RouterOutput>.ItemWithPosition> removedOutputsData)
         {
-            foreach (RouterOutput output in removedOutputs)
-                output.CurrentInputChanged -= outputsCurrentInputChanged;
+            foreach (IObservableEnumerable<RouterOutput>.ItemWithPosition outputData in removedOutputsData)
+                outputData.Item.CurrentInputChanged -= outputsCurrentInputChanged;
         }
 
         private void outputsCurrentInputChanged(RouterOutput output, RouterInput newInput)
@@ -446,10 +452,10 @@ namespace OpenSC.Model.Routers.Leitch
 
         #region Presets
         private void clearPresets()
-            => Outputs.ForEach(ro => (ro as VirtualLeitchRouterOutput).ClearPreset());
+            => Outputs.Foreach(ro => (ro as VirtualLeitchRouterOutput).ClearPreset());
 
         private void executePresets()
-            => Outputs.ForEach(ro => (ro as VirtualLeitchRouterOutput).ExecutePreset());
+            => Outputs.Foreach(ro => (ro as VirtualLeitchRouterOutput).ExecutePreset());
         #endregion
 
         #region Settings
