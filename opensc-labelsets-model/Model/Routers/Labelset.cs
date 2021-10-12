@@ -10,13 +10,17 @@ namespace OpenSC.Model.Routers
 {
     public class Labelset : ModelBase
     {
-        public Labelset()
-        { }
 
-        public override void RestoredOwnFields()
+        #region Instantiation, restoration
+        public Labelset()
         {
-            updateLabelLabelsetAssociations();
-            notifyLabelsRestored();
+            LabelableObjectRegister.Instance.ItemsRemoved += labelableItemsRemoved;
+        }
+
+        public override void TotallyRestored()
+        {
+            base.TotallyRestored();
+            labels.Foreach(lkvp => lkvp.Value.AssociatedObject = lkvp.Key);
         }
 
         public override void Removed()
@@ -24,78 +28,51 @@ namespace OpenSC.Model.Routers
             base.Removed();
             // remove event subscriptions
         }
+        #endregion
 
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = LabelsetDatabase.Instance;
         #endregion
 
         #region Label collection
-        private ObservableList<Label> labels = new ObservableList<Label>();
-
-        public ObservableList<Label> Labels
-        {
-            get { return labels; }
-        }
-
         [PersistAs("labels")]
-        [PersistAs("label", 1)]
-        private Label[] _labels
-        {
-            get { return labels.ToArray(); }
-            set
-            {
-                labels.Clear();
-                if (value != null)
-                    labels.AddRange(value);
-            }
-        }
-        private void updateLabelLabelsetAssociations()
-        {
-            foreach (Label label in labels)
-                label.Labelset = this;
-        }
+        [PersistAs(null, 1, LabelXmlSerializer.ATTRIBUTE_OBJECT)]
+        private ObservableDictionary<ISystemObject, Label> labels = new();
+        public ObservableDictionary<ISystemObject, Label> Labels => labels;
 
-        private void notifyLabelsRestored()
-        {
-            foreach (Label label in labels)
-                label.Restored();
-        }
+        [TempForeignKey(nameof(labels))]
+        private ObservableDictionary<string, Label> _labels = new();
 
-        private Label getLabel(RouterInput routerInput)
+        public Label CreateLabel() => new(this);
+
+        public Label GetLabel(ISystemObject forObject)
         {
-            foreach (Label label in labels)
-                if (label.RouterInput == routerInput)
-                    return label;
+            if (labels.TryGetValue(forObject, out Label label))
+                return label;
             return null;
         }
+
+        public Label this[ISystemObject forObject] => GetLabel(forObject);
+
+        private void labelableItemsRemoved(IEnumerable<IObservableEnumerable<ISystemObject>.ItemWithPosition> affectedItemsWithPositions)
+            => affectedItemsWithPositions.Foreach(aiwp => labels.Remove(aiwp.Item));
         #endregion
 
-        #region Label text getters, setters and events
-        public string GetText(RouterInput routerInput)
-        {
-            return getLabel(routerInput)?.Text;
-        }
+        #region Label text getters, setters
+        public string GetText(ISystemObject forObject) => GetLabel(forObject)?.Text;
 
-        public void SetText(RouterInput routerInput, string text)
+        public void SetText(ISystemObject forObject, string text)
         {
-            Label label = getLabel(routerInput);
+            if (!LabelableObjectRegister.Instance.Contains(forObject))
+                return;
+            Label label = GetLabel(forObject);
             if (label != null)
             {
                 label.Text = text;
                 return;
             }
-            label = new Label(this, text, routerInput);
-            labels.Add(label);
-        }
-
-        public delegate void LabelTextChangedDelegate(Labelset labelset, RouterInput routerInput, string oldText, string newText);
-        public event LabelTextChangedDelegate LabelTextChanged;
-
-        internal void NotifyLabelTextChanged(Label label, string oldText, string newText)
-        {
-            if (label.Labelset != this)
-                return;
-            LabelTextChanged?.Invoke(this, label.RouterInput, oldText, newText);
+            label = new Label(this, forObject) { Text = text };
+            labels.Add(forObject, label);
         }
         #endregion
 

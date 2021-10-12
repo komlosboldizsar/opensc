@@ -7,60 +7,37 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Routers
 {
+
     public class Label : ObjectBase
     {
-        public Label()
-        { }
 
-        public Label(Labelset labelset, string text, RouterInput routerInput)
+        public Label(Labelset labelset, ISystemObject associatedObject = null)
         {
-            this.Labelset = labelset;
-            this.text = text;
-            this.RouterInput = routerInput;
+            Labelset = labelset;
+            AssociatedObject = associatedObject;
         }
 
-        public void Restored()
-        {
-            restoreRouterInputAssociation();
-        }
+        public Labelset Labelset { get; init; }
 
-        public Labelset Labelset { get; internal set; }
+        private ISystemObject associatedObject;
+        public ISystemObject AssociatedObject
+        {
+            get => associatedObject;
+            set => associatedObject ??= value;
+        }
 
         #region Property: Text
+        public event PropertyChangedTwoValuesDelegate<Label, string> TextChanged;
+
         private string text;
 
         public string Text
         {
-            get { return text; }
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException();
-                if (value == text)
-                    return;
-                string oldText = text;
-                text = value;
-                TextChanged?.Invoke(this, oldText, value);
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Text));
-            }
-        }
-
-        public delegate void TextChangedDelegate(Label input, string oldText, string newText);
-        public event TextChangedDelegate TextChanged;
-        #endregion
-
-        #region Router input association
-        public RouterInput RouterInput { get; internal set; }
-
-        // "Temp foreign key"
-        public int _routerId;
-        public int _routerInputIndex;
-
-        public void restoreRouterInputAssociation()
-        {
-            RouterInput = RouterDatabase.Instance.GetTById(_routerId).Inputs[_routerInputIndex];
+            get => text;
+            set => this.setProperty(ref text, value, TextChanged);
         }
         #endregion
 
     }
+
 }
