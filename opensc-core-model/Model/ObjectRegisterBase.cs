@@ -22,7 +22,15 @@ namespace OpenSC.Model
         protected override IEnumerator<TObject> getEnumerator() => registeredItems.Values.GetEnumerator();
         protected override TObject convertAdaptee(KeyValuePair<TKey, TObject> adaptee) => adaptee.Value;
 
-        public TObject this[TKey key] => registeredItems[key];
+        public TObject this[TKey key]
+        {
+            get
+            {
+                if (registeredItems.TryGetValue(key, out TObject value))
+                    return value;
+                return null;
+            }
+        }
 
         public void Register(TObject item)
         {
@@ -35,6 +43,8 @@ namespace OpenSC.Model
             }
             else
             {
+                if (registeredItems.ContainsValue(item))
+                    return;
                 if (!CanKeyBeUsedForItem(item, key, out TObject foundItem))
                     throw new KeyIsAlreadyUsedException(key, item, foundItem);
                 registeredItems.Add(key, item);
