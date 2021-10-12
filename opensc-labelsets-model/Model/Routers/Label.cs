@@ -34,7 +34,7 @@ namespace OpenSC.Model.Routers
         public string Text
         {
             get => text;
-            set => this.setProperty(ref text, value, TextChanged);
+            set => this.setProperty(ref text, value, TextChanged, null, (ov, nv) => Labelset.NotifyLabelTextChanged(this, nv));
         }
         #endregion
 

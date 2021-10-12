@@ -73,7 +73,14 @@ namespace OpenSC.Model.Routers
             }
             label = new Label(this, forObject) { Text = text };
             labels.Add(forObject, label);
+            LabelTextChanged?.Invoke(label, text);
         }
+        #endregion
+
+        #region Label text changed event
+        internal void NotifyLabelTextChanged(Label label, string newText) => LabelTextChanged?.Invoke(label, newText);
+
+        public event PropertyChangedOneValueDelegate<Label, string> LabelTextChanged;
         #endregion
 
     }
