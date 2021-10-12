@@ -82,11 +82,14 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Inputs
+
+        
         private ObservableList<RouterInput> inputs = new ObservableList<RouterInput>();
         public ObservableList<RouterInput> Inputs => inputs;
 
         [PersistAs("inputs")]
         [PersistAs(null, 1)]
+        [PersistDetailed]
         [PolymorphField(nameof(InputTypesDictionaryGetter))]
         private RouterInput[] _inputs // for persistence
         {
@@ -140,6 +143,7 @@ namespace OpenSC.Model.Routers
 
         [PersistAs("outputs")]
         [PersistAs(null, 1)]
+        [PersistDetailed]
         [PolymorphField(nameof(OutputTypesDictionaryGetter))]
         private RouterOutput[] _outputs // for persistence
         {

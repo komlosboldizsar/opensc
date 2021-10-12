@@ -46,6 +46,7 @@ namespace OpenSC.Model
 
         public DatabaseBase()
         {
+            Adaptee = items;
             Name = GetType().GetAttribute<DatabaseNameAttribute>()?.Name;
             if (Name == null)
                 throw new Exception("A database name must be provided through an 'DatabaseName' attribute!");
@@ -131,14 +132,21 @@ namespace OpenSC.Model
 
         private DatabasePersister<T> persister;
 
+        public delegate void SavedDelegate(DatabaseBase<T> database);
+        public event SavedDelegate Saved;
+
         public void Save()
         {
             persister.Save(items);
             LogDispatcher.I(SPECIFIC_LOG_TAG, "Saved to file.");
             afterSave();
+            Saved?.Invoke(this);
         }
 
         protected virtual void afterSave() { }
+
+        public delegate void LoadedDelegate(DatabaseBase<T> database);
+        public event LoadedDelegate Loaded;
 
         public void Load()
         {
@@ -153,9 +161,11 @@ namespace OpenSC.Model
                 }
                 LogDispatcher.I(SPECIFIC_LOG_TAG, "Loaded from file.");
                 afterLoad();
+                Loaded?.Invoke(this);
                 ChangedItems?.Invoke(this);
             }
         }
+
         protected virtual void afterLoad() { }
 
         public void BuildRelationsByForeignKeys() => persister.BuildRelationsByForeignKeys(items);
