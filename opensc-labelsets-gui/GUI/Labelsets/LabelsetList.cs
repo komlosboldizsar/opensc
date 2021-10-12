@@ -3,16 +3,16 @@ using OpenSC.GUI.GeneralComponents.Tables;
 using OpenSC.GUI.Helpers.Converters;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Model;
-using OpenSC.Model.Routers;
+using OpenSC.Model.Labelsets;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace OpenSC.GUI.Routers
+namespace OpenSC.GUI.Labelsets
 {
 
-    [WindowTypeName("routers.labelsetlist")]
+    [WindowTypeName("labelsets.labelsetlist")]
     public partial class LabelsetList : ModelListFormBase
     {
 

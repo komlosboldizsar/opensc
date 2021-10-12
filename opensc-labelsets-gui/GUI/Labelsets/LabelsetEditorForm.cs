@@ -1,14 +1,14 @@
 ﻿using OpenSC.GUI.GeneralComponents.Tables;
 using OpenSC.Model;
 using OpenSC.Model.General;
-using OpenSC.Model.Routers;
+using OpenSC.Model.Labelsets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace OpenSC.GUI.Routers
+namespace OpenSC.GUI.Labelsets
 {
 
     public partial class LabelsetEditorForm : ModelEditorFormBase, IModelEditorForm<Labelset>

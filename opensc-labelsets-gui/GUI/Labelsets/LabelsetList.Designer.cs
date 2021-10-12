@@ -1,4 +1,4 @@
-﻿namespace OpenSC.GUI.Routers
+﻿namespace OpenSC.GUI.Labelsets
 {
     partial class LabelsetList
     {
