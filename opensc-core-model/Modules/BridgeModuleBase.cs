@@ -8,12 +8,12 @@ namespace OpenSC.Modules
         public abstract void Initialize();
     }
 
-    public abstract class BridgeModuleBase<TModuleFrom, TModuleTo1, TModuleTo2> : IModule
+    public abstract class BridgeModuleBase<TModuleFrom1, TModuleFrom2, TModuleTo> : IModule
     {
         public abstract void Initialize();
     }
 
-    public abstract class BridgeModuleBase<TModuleFrom, TModuleTo1, TModuleTo2, TModuleTo3> : IModule
+    public abstract class BridgeModuleBase<TModuleFrom1, TModuleFrom2, TModuleFrom3, TModuleTo> : IModule
     {
         public abstract void Initialize();
     }
