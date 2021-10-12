@@ -11,12 +11,13 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public class RouterOutput : SignalForwarder, ISignalSourceRegistered
+    public class RouterOutput : SignalForwarder, ISignalSourceRegistered, ISystemObject
     {
 
         public RouterOutput() : base()
         {
             this.CurrentSourceChanged += currentSourceChangedHandler;
+            SystemObjectRegister.Instance.Register(this);
         }
 
         public RouterOutput(string name, Router router, int index)
@@ -26,12 +27,14 @@ namespace OpenSC.Model.Routers
             this.Router = router;
             this.Index = index;
             this.CurrentSourceChanged += currentSourceChangedHandler;
+            SystemObjectRegister.Instance.Register(this);
             registerAsSignal();
+            router.GlobalIdChanged += (i, ov, nv) => generateGlobalId();
+            generateGlobalId();
         }
 
         public void Restored()
         {
-            registerAsSignal();
             createTallyBooleans();
         }
 
@@ -40,6 +43,27 @@ namespace OpenSC.Model.Routers
 
         public delegate void RemovedDelegate(RouterOutput routerOutput);
         public event RemovedDelegate Removed;
+
+        #region Property: GlobalID
+        public event PropertyChangedTwoValuesDelegate<ISystemObject, string> GlobalIdChanged;
+
+        private string globalId;
+        public string GlobalID
+        {
+            get => globalId;
+            protected set => this.setProperty(ref globalId, value, GlobalIdChanged);
+        }
+
+        private void generateGlobalId()
+        {
+            if (Router == null)
+            {
+                GlobalID = null;
+                return;
+            }
+            GlobalID = $"{Router.GlobalID}.output.{Index}";
+        }
+        #endregion
 
         #region Property: Name
         private string name;
@@ -74,6 +98,7 @@ namespace OpenSC.Model.Routers
             if (Router != null)
                 return;
             Router = router;
+            router.GlobalIdChanged += (i, ov, nv) => generateGlobalId();
         }
 
         public void RemovedFromRouter(Router router)
@@ -104,6 +129,7 @@ namespace OpenSC.Model.Routers
                 ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
                 SignalUniqueIdChanged?.Invoke(this, SignalUniqueId);
                 ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalUniqueId));
+                generateGlobalId();
             }
         }
 

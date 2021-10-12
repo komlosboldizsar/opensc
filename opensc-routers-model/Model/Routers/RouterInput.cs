@@ -9,17 +9,19 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public class RouterInput : SignalForwarder
+    public class RouterInput : SignalForwarder, ISystemObject
     {
 
-        public RouterInput() : base()
-        { }
+        public RouterInput() : base() => SystemObjectRegister.Instance.Register(this);
 
         public RouterInput(string name, Router router, int index) : base()
         {
             this.name = name;
             this.Router = router;
             this.Index = index;
+            SystemObjectRegister.Instance.Register(this);
+            router.GlobalIdChanged += (i, ov, nv) => generateGlobalId();
+            generateGlobalId();
         }
 
         public void Restored()
@@ -27,6 +29,27 @@ namespace OpenSC.Model.Routers
 
         public virtual void TotallyRestored()
         { }
+
+        #region Property: GlobalID
+        public event PropertyChangedTwoValuesDelegate<ISystemObject, string> GlobalIdChanged;
+
+        private string globalId;
+        public string GlobalID
+        {
+            get => globalId;
+            protected set => this.setProperty(ref globalId, value, GlobalIdChanged);
+        }
+
+        private void generateGlobalId()
+        {
+            if (Router == null)
+            {
+                GlobalID = null;
+                return;
+            }
+            GlobalID = $"{Router.GlobalID}.input.{Index}";
+        }
+        #endregion
 
         #region Property: Name
         private string name;
@@ -59,6 +82,8 @@ namespace OpenSC.Model.Routers
             if (Router != null)
                 return;
             Router = router;
+            router.GlobalIdChanged += (i, ov, nv) => generateGlobalId();
+            generateGlobalId();
         }
 
         public void RemovedFromRouter(Router router)
@@ -83,6 +108,7 @@ namespace OpenSC.Model.Routers
                 index = value;
                 IndexChanged?.Invoke(this, oldValue, value);
                 ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Index));
+                generateGlobalId();
             }
         }
 
