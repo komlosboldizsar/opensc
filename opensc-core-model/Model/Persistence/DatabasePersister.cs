@@ -523,7 +523,8 @@ namespace OpenSC.Model.Persistence
                     memberType = memberType.GetGenericTypeDefinition().MakeGenericType(genericParams);
                 }
                 object collection = Activator.CreateInstance(memberType, new object[] { });
-                MethodInfo addMethod = memberType.GetMethod(nameof(ICollection<object>.Add), BindingFlags.Instance | BindingFlags.Public);
+                Type[] addMethodTypes = isDictionary ? new Type[] { keyType, elementType } : new Type[] { elementType };
+                MethodInfo addMethod = memberType.GetMethod(nameof(ICollection<object>.Add), addMethodTypes);
                 for (int i = 0; i < childElementCount; i++)
                 {
                     object deserializedElement = deserializeXmlElement(memberInfo, elementType, childElements[i], parentItem, arrayDimension + 1);
@@ -700,7 +701,8 @@ namespace OpenSC.Model.Persistence
             if (isCollection)
             {
                 object associatedObjects = Activator.CreateInstance(originalType, new object[] { });
-                MethodInfo addMethod = originalType.GetMethod(nameof(ICollection<object>.Add), BindingFlags.Instance | BindingFlags.Public);
+                Type[] addMethodTypes = isDictionary ? new Type[] { originalKeyType, originalElementType } : new Type[] { originalElementType };
+                MethodInfo addMethod = originalType.GetMethod(nameof(ICollection<object>.Add), addMethodTypes);
                 IEnumerable foreignKeysEnumerable = foreignKeys as IEnumerable;
                 if (foreignKeysEnumerable == null)
                     return null;
@@ -750,6 +752,9 @@ namespace OpenSC.Model.Persistence
                 return associatedObjects;
             }
 
+            if (foreignKeys?.GetType() != typeof(string))
+                return foreignKeys;
+
             string _foreignKeyString = foreignKeys as string;
             if (_foreignKeyString == null)
                 return null;
@@ -784,7 +789,7 @@ namespace OpenSC.Model.Persistence
             if (originalMemberInfo.Length == 0)
                 return null;
 
-            return originalMemberInfo[0].GetCustomAttribute<PersistAsAttribute>();
+            return getPersistDataForMember(originalMemberInfo[0], item, dimension);
 
         }
 
@@ -795,7 +800,7 @@ namespace OpenSC.Model.Persistence
             FieldInfo fieldInfo = memberInfo as FieldInfo;
             PropertyInfo propertyInfo = memberInfo as PropertyInfo;
             Type type = (fieldInfo != null) ? fieldInfo.FieldType : propertyInfo.PropertyType;
-            return (getArrayBaseType(type).GetInterfaces().Any(iface => (iface == typeof(ISystemObject))));
+            return ((getArrayBaseType(type).GetInterfaces().Any(iface => (iface == typeof(ISystemObject)))) && (memberInfo.GetCustomAttribute<PersistDetailedAttribute>() == null));
         }
 
         private Type getArrayBaseType(Type type) => (type.IsArray) ? getArrayBaseType(type.GetElementType()) : type;
