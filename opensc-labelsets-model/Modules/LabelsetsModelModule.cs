@@ -1,6 +1,6 @@
 ﻿using OpenSC.Model;
 using OpenSC.Model.Persistence;
-using OpenSC.Model.Routers;
+using OpenSC.Model.Labelsets;
 
 namespace OpenSC.Modules
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSC.Model.Routers
+namespace OpenSC.Model.Labelsets
 {
 
     public class LabelableObjectRegister : ObjectRegisterBase<string, ISystemObject>

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSC.Model.Routers.DynamicTextFunctions
+namespace OpenSC.Model.Labelsets.DynamicTextFunctions
 {
 
     [DynamicTextFunction(nameof(ObjectLabel), "The label from a labelset associated with a system object.")]

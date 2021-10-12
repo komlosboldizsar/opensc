@@ -1,5 +1,5 @@
 ﻿using OpenSC.Model;
-using OpenSC.Model.Routers.DynamicTextFunctions;
+using OpenSC.Model.Labelsets.DynamicTextFunctions;
 using OpenSC.Model.Variables;
 
 namespace OpenSC.Modules

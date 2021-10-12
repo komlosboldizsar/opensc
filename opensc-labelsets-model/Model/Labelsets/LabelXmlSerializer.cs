@@ -3,7 +3,7 @@ using System;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace OpenSC.Model.Routers
+namespace OpenSC.Model.Labelsets
 {
 
     public class LabelXmlSerializer : IValueXmlSerializer
