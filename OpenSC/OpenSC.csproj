@@ -38,6 +38,7 @@
     <ProjectReference Include="..\opensc-routermirrors-gui\opensc-routermirrors-gui.csproj" />
     <ProjectReference Include="..\opensc-routermirrors-model\opensc-routermirrors-model.csproj" />
     <ProjectReference Include="..\opensc-routers-bridge-dynamictexts\opensc-routers-bridge-dynamictexts.csproj" />
+    <ProjectReference Include="..\opensc-routers-bridge-labelsets\opensc-routers-bridge-labelsets.csproj" />
     <ProjectReference Include="..\opensc-routers-bridge-macros\opensc-routers-bridge-macros.csproj" />
     <ProjectReference Include="..\opensc-routers-gui\opensc-routers-gui.csproj" />
     <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj" />

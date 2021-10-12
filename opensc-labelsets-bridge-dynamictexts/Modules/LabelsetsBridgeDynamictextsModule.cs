@@ -12,7 +12,7 @@ namespace OpenSC.Modules
 
         protected override void registerDynamicTextFunctions()
         {
-            DynamicTextFunctionRegister.Instance.RegisterFunction(new RouterOutputInputLabel());
+            DynamicTextFunctionRegister.Instance.RegisterFunction(new ObjectLabel());
         }
 
     }
