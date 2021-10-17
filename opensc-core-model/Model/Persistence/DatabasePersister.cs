@@ -76,8 +76,8 @@ namespace OpenSC.Model.Persistence
 
             var items = new Dictionary<int, T>();
 
-           /* try
-            {*/
+            try
+            {
                 using (DatabaseFile inputFile = MasterDatabase.Instance.GetFileToRead(database))
                 {
 
@@ -97,8 +97,8 @@ namespace OpenSC.Model.Persistence
                     }
 
                 }
-           /* }
-            catch { }*/
+            }
+            catch { }
 
             return items;
 
