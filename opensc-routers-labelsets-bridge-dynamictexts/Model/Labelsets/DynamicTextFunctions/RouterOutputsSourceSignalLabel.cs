@@ -62,7 +62,7 @@ namespace OpenSC.Model.Labelsets.DynamicTextFunctions
                 }
                 output.CurrentSourceChanged += currentSourceChangedHandler;
 
-                Labelset labelset = argumentObjects[2] as Labelset;
+                labelset = argumentObjects[2] as Labelset;
                 if (labelset == null)
                 {
                     CurrentValue = "?";
