@@ -31,23 +31,20 @@ namespace OpenSC.Model.Routers
         { }
 
         #region Property: GlobalID
-        public event PropertyChangedTwoValuesDelegate<ISystemObject, string> GlobalIdChanged;
+        public override event PropertyChangedTwoValuesDelegate<ISystemObject, string> GlobalIdChanged;
 
         private string globalId;
-        public string GlobalID
-        {
-            get => globalId;
-            protected set => this.setProperty(ref globalId, value, GlobalIdChanged);
-        }
+        public override string GlobalID  => globalId;
+        private void updateGlobalId(string value) => this.setProperty(ref globalId, value, GlobalIdChanged);
 
         private void generateGlobalId()
         {
             if (Router == null)
             {
-                GlobalID = null;
+                updateGlobalId(null);
                 return;
             }
-            GlobalID = $"{Router.GlobalID}.input.{Index}";
+            updateGlobalId($"{Router.GlobalID}.input.{Index}");
         }
         #endregion
 
