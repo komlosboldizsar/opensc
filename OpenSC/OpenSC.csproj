@@ -41,6 +41,7 @@
     <ProjectReference Include="..\opensc-routers-bridge-labelsets\opensc-routers-bridge-labelsets.csproj" />
     <ProjectReference Include="..\opensc-routers-bridge-macros\opensc-routers-bridge-macros.csproj" />
     <ProjectReference Include="..\opensc-routers-gui\opensc-routers-gui.csproj" />
+    <ProjectReference Include="..\opensc-routers-labelsets-bridge-dynamictexts\opensc-routers-labelsets-bridge-dynamictexts.csproj" />
     <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj" />
     <ProjectReference Include="..\opensc-routers-subtype-bmd-gui\opensc-routers-subtype-bmd-gui.csproj" />
     <ProjectReference Include="..\opensc-routers-subtype-bmd-model\opensc-routers-subtype-bmd-model.csproj" />
@@ -52,6 +53,7 @@
     <ProjectReference Include="..\opensc-routers-subtype-virtualleitch-model\opensc-routers-subtype-virtualleitch-model.csproj" />
     <ProjectReference Include="..\opensc-serialports-gui\opensc-serialports-gui.csproj" />
     <ProjectReference Include="..\opensc-serialports-model\opensc-serialports-model.csproj" />
+    <ProjectReference Include="..\opensc-signals-bridge-labelsets\opensc-signals-bridge-labelsets.csproj" />
     <ProjectReference Include="..\opensc-signals-gui\opensc-signals-gui.csproj" />
     <ProjectReference Include="..\opensc-signals-model\opensc-signals-model.csproj" />
     <ProjectReference Include="..\opensc-streams-bridge-dynamictexts\opensc-streams-bridge-dynamictexts.csproj" />
