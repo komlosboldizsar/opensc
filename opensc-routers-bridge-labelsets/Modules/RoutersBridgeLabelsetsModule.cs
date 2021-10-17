@@ -1,6 +1,7 @@
 ﻿using OpenSC.Model;
 using OpenSC.Model.General;
 using OpenSC.Model.Routers;
+using OpenSC.Model.Labelsets;
 using OpenSC.Model.Variables;
 
 namespace OpenSC.Modules
