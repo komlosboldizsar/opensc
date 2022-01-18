@@ -40,7 +40,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
 
             Disconnect();
             deinitSwitcher();
-            switcher = null;
+            ApiSwitcher = null;
 
             IpAddressChanged = null;
             AutoReconnectChanged = null;
@@ -58,7 +58,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         {
             try
             {
-                switcher?.Connect();
+                ApiSwitcher?.Connect();
             }
             catch (CouldNotConnectException ex)
             {
@@ -78,7 +78,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         {
             try
             {
-                switcher?.Disconnect();
+                ApiSwitcher?.Disconnect();
             }
             catch (NotConnectedException ex)
             {
@@ -88,19 +88,19 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
             }
         }
 
-        private Switcher switcher;
+        public Switcher ApiSwitcher { get; private set; }
 
         private void initSwitcher()
         {
-            switcher = new Switcher(ipAddress);
-            switcher.ConnectionStateChanged += switcherConnectionStateChanged;
+            ApiSwitcher = new Switcher(ipAddress);
+            ApiSwitcher.ConnectionStateChanged += switcherConnectionStateChanged;
             State = MixerState.Warning;
             StateString = "disconnected";
         }
 
         private void deinitSwitcher()
         {
-            switcher.ConnectionStateChanged -= switcherConnectionStateChanged;
+            ApiSwitcher.ConnectionStateChanged -= switcherConnectionStateChanged;
         }
 
         private void switcherConnectionStateChanged(Switcher switcher, bool newState)
@@ -115,7 +115,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         public string IpAddress
         {
             get => ipAddress;
-            set => this.setProperty(ref ipAddress, value, IpAddressChanged, null, (ov, nv) => switcher.IpAddress = nv, ValidateIpAddress);
+            set => this.setProperty(ref ipAddress, value, IpAddressChanged, null, (ov, nv) => ApiSwitcher.IpAddress = nv, ValidateIpAddress);
         }
 
         public void ValidateIpAddress(string ipAddress)
@@ -212,7 +212,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         #region Sources
         private void getInputMonitors()
         {
-            foreach(Source source in switcher.GetSources().Values)
+            foreach(Source source in ApiSwitcher.GetSources().Values)
             {
                 source.IsProgramTalliedChanged += sourceIsProgramTalliedChangedHandler;
                 source.IsPreviewTalliedChanged += sourceIsPreviewTalliedChangedHandler;
@@ -235,7 +235,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
 
         private void getMixEffectBlockMonitor()
         {
-            mixEffectBlock = switcher.GetMixEffectBlock(MONITORED_MIXEFFECT_BLOCK_INDEX);
+            mixEffectBlock = ApiSwitcher.GetMixEffectBlock(MONITORED_MIXEFFECT_BLOCK_INDEX);
             mixEffectBlock.ProgramInputChanged += mixEffectBlockMonitorProgramInputChangedHandler;
             mixEffectBlock.PreviewInputChanged += mixEffectBlockMonitorPreviewInputChangedHandler;
             OnProgramInput = Inputs.FirstOrDefault(input => input.Index == mixEffectBlock.ProgramSourceId);
@@ -257,18 +257,18 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
 
         #region P/P input sources
         public void SetProgramSource(int meBlockIndex, int inputId)
-            => switcher.GetMixEffectBlock(meBlockIndex).RequestSetProgramSource(inputId);
+            => ApiSwitcher.GetMixEffectBlock(meBlockIndex).RequestSetProgramSource(inputId);
 
         public void SetPreviewSource(int meBlockIndex, int inputId)
-            => switcher.GetMixEffectBlock(meBlockIndex).RequestSetPreviewSource(inputId);
+            => ApiSwitcher.GetMixEffectBlock(meBlockIndex).RequestSetPreviewSource(inputId);
         #endregion
 
         #region Transitions
         public void AutoTransition(int meBlockIndex)
-            => switcher.GetMixEffectBlock(meBlockIndex).PerformAutoTransition();
+            => ApiSwitcher.GetMixEffectBlock(meBlockIndex).PerformAutoTransition();
 
         public void CutTransition(int meBlockIndex)
-            => switcher.GetMixEffectBlock(meBlockIndex).PerformAutoTransition();
+            => ApiSwitcher.GetMixEffectBlock(meBlockIndex).PerformAutoTransition();
         #endregion
 
     }
