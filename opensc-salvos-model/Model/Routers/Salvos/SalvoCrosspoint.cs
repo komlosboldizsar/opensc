@@ -11,9 +11,9 @@ namespace OpenSC.Model.Routers.Salvos
     {
 
         // "Temp foreign keys"
-        public int __routerId;
-        public int __outputIndex;
-        public int __inputIndex;
+        public int? __routerId;
+        public int? __outputIndex;
+        public int? __inputIndex;
 
         public Router Router => output?.Router;
 
@@ -33,11 +33,15 @@ namespace OpenSC.Model.Routers.Salvos
 
         internal void RestoreAssociations()
         {
-            Router router = RouterDatabase.Instance.GetTById(__routerId);
+            if (__routerId == null)
+                return;
+            Router router = RouterDatabase.Instance.GetTById((int)__routerId);
             if (router == null)
                 return;
-            Output = router.GetOutput(__outputIndex);
-            Input = router.GetInput(__inputIndex);
+            if (__outputIndex != null)
+                Output = router.GetOutput((int)__outputIndex);
+            if (__inputIndex != null)
+                Input = router.GetInput((int)__inputIndex);
         }
 
         public void Take()

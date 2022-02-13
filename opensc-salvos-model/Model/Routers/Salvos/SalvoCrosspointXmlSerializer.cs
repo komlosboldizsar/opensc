@@ -20,12 +20,15 @@ namespace OpenSC.Model.Routers.Salvos
         {
             if (serializedItem.LocalName != TAG_NAME)
                 return null;
-            if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_ROUTER]?.Value, out int routerId))
-                routerId = 0;
-            if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_OUTPUT]?.Value, out int outputIndex))
-                outputIndex = 0;
-            if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_INPUT]?.Value, out int inputIndex))
-                inputIndex = 0;
+            int? routerId = null;
+            int? outputIndex = null;
+            int? inputIndex = null;
+            if (int.TryParse(serializedItem.Attributes[ATTRIBUTE_ROUTER]?.Value, out int _routerId))
+                routerId = _routerId;
+            if (int.TryParse(serializedItem.Attributes[ATTRIBUTE_OUTPUT]?.Value, out int _outputIndex))
+                outputIndex = _outputIndex;
+            if (int.TryParse(serializedItem.Attributes[ATTRIBUTE_INPUT]?.Value, out int _inputIndex))
+                inputIndex = _inputIndex;
             SalvoCrosspoint crosspoint = new SalvoCrosspoint()
             {
                 __routerId = routerId,
