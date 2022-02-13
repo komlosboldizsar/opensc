@@ -23,6 +23,8 @@ namespace OpenSC.GUI.Mixers
             if (mixer == null)
                 return;
             initInputsTable();
+            userMixersRedTallyCheckbox.Checked = mixer.GivesRedTallyToSources;
+            userMixersGreenTallyCheckbox.Checked = mixer.GivesGreenTallyToSources;
         }
 
         protected override void validateFields()
@@ -39,6 +41,8 @@ namespace OpenSC.GUI.Mixers
             Mixer mixer = (Mixer)EditedModel;
             if (mixer == null)
                 return;
+            mixer.GivesRedTallyToSources = userMixersRedTallyCheckbox.Checked;
+            mixer.GivesGreenTallyToSources = userMixersGreenTallyCheckbox.Checked;
         }
 
         private CustomDataGridView<MixerInput> inputsTableCDGV;
