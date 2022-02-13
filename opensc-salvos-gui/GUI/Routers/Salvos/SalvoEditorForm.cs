@@ -20,6 +20,9 @@ namespace OpenSC.GUI.Routers.Salvos
         public SalvoEditorForm() : base() => InitializeComponent();
         public SalvoEditorForm(Salvo salvo) : base(salvo) => InitializeComponent();
 
+        protected override IModelEditorFormDataManager createManager()
+            => new ModelEditorFormDataManager<Salvo, Salvo>(this, SalvoDatabase.Instance);
+
         protected override void loadData()
         {
             base.loadData();
