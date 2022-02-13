@@ -66,6 +66,8 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.InitializerMethod((crosspoint, cell) => { });
             builder.UpdaterMethod((crosspoint, cell) => { cell.Value = crosspoint.Router; });
             builder.CellEndEditHandlerMethod((crosspoint, cell, eventargs) => {
+                ((DataGridViewComboBoxCell)cell.OwningRow.Cells[1]).Value = null;
+                ((DataGridViewComboBoxCell)cell.OwningRow.Cells[2]).Value = null;
                 ((DataGridViewComboBoxCell)cell.OwningRow.Cells[1]).Items.Clear();
                 ((DataGridViewComboBoxCell)cell.OwningRow.Cells[2]).Items.Clear();
                 ((DataGridViewComboBoxCell)cell.OwningRow.Cells[1]).Items.AddRange(getArrayForDropDown((cell.Value as Router)?.Outputs));
@@ -75,7 +77,6 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.BuildAndAdd();
 
             // Column: output
-            CustomDataGridViewComboBoxItem<RouterOutput>[] outputs = getArrayForDropDown<RouterOutput>(null);
             builder = getColumnDescriptorBuilderForTable<SalvoCrosspoint>(crosspointsTableCDGV);
             builder.Type(DataGridViewColumnType.ComboBox);
             builder.Header("Output");
@@ -83,11 +84,10 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.InitializerMethod((crosspoint, cell) => { });
             builder.UpdaterMethod((crosspoint, cell) => { cell.Value = crosspoint.Output; });
             builder.CellEndEditHandlerMethod((crosspoint, cell, eventargs) => { crosspoint.Output = cell.Value as RouterOutput; });
-            builder.DropDownPopulatorMethod((crosspoint, cell) => outputs);
+            builder.DropDownPopulatorMethod((crosspoint, cell) => getArrayForDropDown<RouterOutput>(crosspoint.Router?.Outputs));
             builder.BuildAndAdd();
 
             // Column: input
-            CustomDataGridViewComboBoxItem<RouterInput>[] inputs = getArrayForDropDown<RouterInput>(null);
             builder = getColumnDescriptorBuilderForTable<SalvoCrosspoint>(crosspointsTableCDGV);
             builder.Type(DataGridViewColumnType.ComboBox);
             builder.Header("Input");
@@ -95,7 +95,7 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.InitializerMethod((crosspoint, cell) => { });
             builder.UpdaterMethod((crosspoint, cell) => { cell.Value = crosspoint.Input; });
             builder.CellEndEditHandlerMethod((crosspoint, cell, eventargs) => { crosspoint.Input = cell.Value as RouterInput; });
-            builder.DropDownPopulatorMethod((crosspoint, cell) => inputs);
+            builder.DropDownPopulatorMethod((crosspoint, cell) => getArrayForDropDown<RouterInput>(crosspoint.Router?.Inputs));
             builder.BuildAndAdd();
 
             // Column: delete button
