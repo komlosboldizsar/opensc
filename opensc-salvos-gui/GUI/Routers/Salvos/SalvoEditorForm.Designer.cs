@@ -60,11 +60,11 @@
             // 
             this.tabControl.Controls.Add(this.crosspointsTabPage);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(10, 122);
+            this.tabControl.Location = new System.Drawing.Point(10, 120);
             this.tabControl.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1062, 413);
+            this.tabControl.Size = new System.Drawing.Size(1062, 415);
             this.tabControl.TabIndex = 1;
             // 
             // crosspointsTabPage
@@ -76,7 +76,7 @@
             this.crosspointsTabPage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.crosspointsTabPage.Name = "crosspointsTabPage";
             this.crosspointsTabPage.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.crosspointsTabPage.Size = new System.Drawing.Size(1054, 380);
+            this.crosspointsTabPage.Size = new System.Drawing.Size(1054, 382);
             this.crosspointsTabPage.TabIndex = 1;
             this.crosspointsTabPage.Text = "Crosspoints";
             // 
@@ -87,7 +87,7 @@
             this.crosspointsTableContainerPanel.Location = new System.Drawing.Point(3, 4);
             this.crosspointsTableContainerPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.crosspointsTableContainerPanel.Name = "crosspointsTableContainerPanel";
-            this.crosspointsTableContainerPanel.Size = new System.Drawing.Size(1048, 317);
+            this.crosspointsTableContainerPanel.Size = new System.Drawing.Size(1048, 319);
             this.crosspointsTableContainerPanel.TabIndex = 2;
             // 
             // crosspointsTable
@@ -102,14 +102,14 @@
             this.crosspointsTable.ReadOnly = true;
             this.crosspointsTable.RowHeadersWidth = 51;
             this.crosspointsTable.RowTemplate.Height = 24;
-            this.crosspointsTable.Size = new System.Drawing.Size(1048, 317);
+            this.crosspointsTable.Size = new System.Drawing.Size(1048, 319);
             this.crosspointsTable.TabIndex = 0;
             // 
             // inputsButtonsPanel
             // 
             this.inputsButtonsPanel.Controls.Add(this.addInputButton);
             this.inputsButtonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.inputsButtonsPanel.Location = new System.Drawing.Point(3, 321);
+            this.inputsButtonsPanel.Location = new System.Drawing.Point(3, 323);
             this.inputsButtonsPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.inputsButtonsPanel.Name = "inputsButtonsPanel";
             this.inputsButtonsPanel.Size = new System.Drawing.Size(1048, 55);
@@ -122,7 +122,7 @@
             this.addInputButton.Name = "addInputButton";
             this.addInputButton.Size = new System.Drawing.Size(126, 32);
             this.addInputButton.TabIndex = 0;
-            this.addInputButton.Text = "Add input";
+            this.addInputButton.Text = "Add crosspoint";
             this.addInputButton.UseVisualStyleBackColor = true;
             this.addInputButton.Click += new System.EventHandler(this.addCrosspointButton_Click);
             // 

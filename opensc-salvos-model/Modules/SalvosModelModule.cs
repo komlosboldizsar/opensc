@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model;
+using OpenSC.Model.Persistence;
 using OpenSC.Model.Routers.Salvos;
 
 namespace OpenSC.Modules
@@ -15,7 +16,9 @@ namespace OpenSC.Modules
         }
 
         protected override void registerSerializers()
-        { }
+        {
+            DatabasePersister<Salvo>.RegisterSerializer(new SalvoCrosspointXmlSerializer());
+        }
 
     }
 
