@@ -9,7 +9,9 @@ using OpenSC.Model.Variables;
 using OpenSC.Modules;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,117 +21,22 @@ namespace OpenSC
     internal class StartupController
     {
 
-        #region Property: Status
-        public delegate void StatusChangedDelegate(string status);
-        public static event StatusChangedDelegate StatusChanged;
-
-        private static string status;
-
-        public static string Status
-        {
-            get => status;
-            set
-            {
-                status = value;
-                LogDispatcher.I(LOG_TAG, value);
-                StatusChanged?.Invoke(value);
-            }
-        }
-        #endregion
-
         private const string LOG_TAG = "StartupController";
 
-        public static void ProgramStarted()
+        public static void Init()
         {
-            InitSettings();
-            InitModules();
-            InitDatabases();
-        }
-
-        public static void GuiInitializable()
-        {
-            Status = "Initializing GUI...";
-            InitGUI();
-            InitMenus();
-        }
-
-        public static void MainWindowOpened()
-        {
-            ModuleManager.MainWindowOpened();
-        }
-
-        private static void InitSettings()
-        {
-            Status = "Registering settings...";
-            ModuleManager.RegisterSettings();
-            Status = "Loading settings...";
+            ModuleLoader loader = new ModuleLoader();
+            loader.LoadModules();
+            log("Loading settings...");
             SettingsManager.Instance.LoadSettings();
-            Status = "Settings loaded.";
-        }
-
-        private static void InitModules()
-        {
-            Status = "Initializing module manager...";
-            ModuleManager.Init();
-            Status = "Registering model types...";
-            ModuleManager.RegisterModelTypes();
-            Status = "Registering dynamic text functions...";
-            ModuleManager.RegisterDynamicTextFunctions();
-            Status = "Registering macro commands and triggers...";
-            ModuleManager.RegisterMacroCommandsAndTriggers();
-        }
-
-        private static void InitDatabases()
-        {
-            
-            // Register databases
-            Status = "Registering databases...";
-            MacrosManager.RegisterDatabases();
-            VariablesManager.RegisterDatabases();
-            SignalsManager.RegisterDatabases();
-            SerialPortsManager.RegisterDatabases();
-            ModuleManager.RegisterDatabasePersisterSerializers();
-            ModuleManager.RegisterDatabases();
-
-            // Load
-            Status = "Loading databases...";
+            log("Loading databases...");
             MasterDatabase.Instance.LoadEverything();
-            Status = "Databases loaded.";
-
-            // Log
-            LogDispatcher.I(LOG_TAG, "Databases initialized and loaded.");
-
-        }
-
-        private static void InitGUI()
-        {
-
-            // Register window types
-            Status = "Registering window types...";
-            VariablesManager.RegisterWindowTypes();
-            MacrosManager.RegisterWindowTypes();
-            SignalsManager.RegisterWindowTypes();
-            SerialPortsManager.RegisterWindowTypes();
-            ModuleManager.RegisterWindowTypes();
-
-            // Init window manager
-            Status = "Initializing window manager...";
+            log("Loading workspace...");
             WindowManager.Instance.Init();
-
-            // Log
-            LogDispatcher.I(LOG_TAG, "Workspace and window manager initialized.");
-
+            log("Ready.");
         }
 
-        private static void InitMenus()
-        {
-            Status = "Registering menus...";
-            VariablesManager.RegisterMenus();
-            MacrosManager.RegisterMenus();
-            SignalsManager.RegisterMenus();
-            SerialPortsManager.RegisterMenus();
-            ModuleManager.RegisterMenus();
-        }
+        private static void log(string message) => LogDispatcher.I(LOG_TAG, message);
 
     }
 

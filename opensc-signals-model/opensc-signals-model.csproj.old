@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FDCF0DA0-9336-4A72-BD61-1AAF396940AF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OpenSC</RootNamespace>
+    <AssemblyName>opensc-signals-model</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Model\Signals\BidirectionalPassthroughSignalTally.cs" />
+    <Compile Include="Model\Signals\ExternalSignal.cs" />
+    <Compile Include="Model\Signals\ExternalSignalCategory.cs" />
+    <Compile Include="Model\Signals\ExternalSignalDatabases.cs" />
+    <Compile Include="Model\Signals\ExternalSignalTally.cs" />
+    <Compile Include="Model\Signals\ExternalSignalTallyBoolean.cs" />
+    <Compile Include="Model\Signals\IBidirectionalSignalTally.cs" />
+    <Compile Include="Model\Signals\ISignalDestination.cs" />
+    <Compile Include="Model\Signals\ISignalSource.cs" />
+    <Compile Include="Model\Signals\ISignalSourceRegistered.cs" />
+    <Compile Include="Model\Signals\ISignalSourceTallyHelper.cs" />
+    <Compile Include="Model\Signals\ISignalTallyReceiver.cs" />
+    <Compile Include="Model\Signals\ISignalTallySender.cs" />
+    <Compile Include="Model\Signals\ISignalTallyState.cs" />
+    <Compile Include="Model\Signals\ISignalTallyStateOrReceiver.cs" />
+    <Compile Include="Model\Signals\PassthroughSignalTallyReceiver.cs" />
+    <Compile Include="Model\Signals\PassthroughSignalTallyState.cs" />
+    <Compile Include="Model\Signals\RecursionChainHelpers.cs" />
+    <Compile Include="Model\Signals\SignalForwarder.cs" />
+    <Compile Include="Model\Signals\SignalRegister.cs" />
+    <Compile Include="Model\Signals\SignalTallyBoolean.cs" />
+    <Compile Include="Model\Signals\SignalTallyColor.cs" />
+    <Compile Include="Modules\SignalsModelModule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-booleans-model\opensc-booleans-model.csproj">
+      <Project>{469f1d25-f30d-40f3-b2f9-1005dd37b684}</Project>
+      <Name>opensc-booleans-model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
+      <Project>{16a6beec-548d-4a77-9fe6-8df8d5333219}</Project>
+      <Name>opensc-core-model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
