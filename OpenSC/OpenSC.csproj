@@ -49,6 +49,8 @@
     <ProjectReference Include="..\opensc-routers-subtype-virtual-model\opensc-routers-subtype-virtual-model.csproj" />
     <ProjectReference Include="..\opensc-routers-subtype-virtualleitch-gui\opensc-routers-subtype-virtualleitch-gui.csproj" />
     <ProjectReference Include="..\opensc-routers-subtype-virtualleitch-model\opensc-routers-subtype-virtualleitch-model.csproj" />
+    <ProjectReference Include="..\opensc-salvos-gui\opensc-salvos-gui.csproj" />
+    <ProjectReference Include="..\opensc-salvos-model\opensc-salvos-model.csproj" />
     <ProjectReference Include="..\opensc-serialports-gui\opensc-serialports-gui.csproj" />
     <ProjectReference Include="..\opensc-serialports-model\opensc-serialports-model.csproj" />
     <ProjectReference Include="..\opensc-signals-gui\opensc-signals-gui.csproj" />
