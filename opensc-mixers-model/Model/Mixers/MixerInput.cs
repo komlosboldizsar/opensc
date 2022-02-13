@@ -30,8 +30,31 @@ namespace OpenSC.Model.Mixers
             createBooleans();
         }
 
+        private Mixer mixer;
 
-        public Mixer Mixer { get; internal set; }
+        public Mixer Mixer
+        {
+            get => mixer;
+            internal set
+            {
+                if (mixer != null)
+                {
+                    mixer.GivesRedTallyToSourcesChanged -= mixerGivesRedTallyToSourcesChanged;
+                    mixer.GivesGreenTallyToSourcesChanged -= mixerGivesGreenTallyToSourcesChanged;
+                }
+                mixer = value;
+                if (mixer != null)
+                {
+                    mixer.GivesRedTallyToSourcesChanged += mixerGivesRedTallyToSourcesChanged;
+                    mixer.GivesGreenTallyToSourcesChanged += mixerGivesGreenTallyToSourcesChanged;
+                }
+                updateRedTally();
+                updateGreenTally();
+            }
+        }
+
+        private void mixerGivesRedTallyToSourcesChanged(Mixer item, bool oldValue, bool newValue) => updateRedTally();
+        private void mixerGivesGreenTallyToSourcesChanged(Mixer item, bool oldValue, bool newValue) => updateGreenTally();
 
         public void RemovedFromMixer(Mixer mixer)
         {
@@ -142,13 +165,19 @@ namespace OpenSC.Model.Mixers
             {
                 if (!this.setProperty(ref redTally, value, RedTallyChanged))
                     return;
-                List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
-                recursionChain.Add(this);
-                if (value)
-                    source?.RedTally.Give(recursionChain);
-                else
-                    source?.RedTally.Revoke(recursionChain);
+                updateRedTally();
             }
+        }
+
+        private void updateRedTally()
+        {
+
+            List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
+            recursionChain.Add(this);
+            if (redTally && Mixer.GivesRedTallyToSources)
+                source?.RedTally.Give(recursionChain);
+            else
+                source?.RedTally.Revoke(recursionChain);
         }
 
         public event PropertyChangedOneValueDelegate<MixerInput, bool> GreenTallyChanged;
@@ -164,12 +193,23 @@ namespace OpenSC.Model.Mixers
                     return;
                 List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
                 recursionChain.Add(this);
-                if (value)
+                if (value && Mixer.GivesGreenTallyToSources)
                     source?.GreenTally.Give(recursionChain);
                 else
                     source?.GreenTally.Revoke(recursionChain);
 
             }
+        }
+
+        private void updateGreenTally()
+        {
+
+            List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
+            recursionChain.Add(this);
+            if (greenTally && Mixer.GivesGreenTallyToSources)
+                source?.GreenTally.Give(recursionChain);
+            else
+                source?.GreenTally.Revoke(recursionChain);
         }
 
         #region Tally booleans
