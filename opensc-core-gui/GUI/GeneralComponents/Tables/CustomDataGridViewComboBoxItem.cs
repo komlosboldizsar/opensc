@@ -12,7 +12,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
     {
 
         public T Value { get; private set; }
-        public string Label => ToString();
+        public virtual string Label => Value?.ToString() ?? "";
 
         public CustomDataGridViewComboBoxItem(T value) => Value = value;
 
@@ -20,7 +20,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         {
             private string label;
             public NullItem(string label) : base(null) => this.label = label;
-            public override string ToString() => label;
+            public override string Label => label;
         }
 
     }
