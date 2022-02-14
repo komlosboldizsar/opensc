@@ -36,7 +36,7 @@ namespace OpenSC.GUI
             List<CustomDataGridViewColumnDescriptorBuilder<TItem>> columnDescriptorBuilders = new List<CustomDataGridViewColumnDescriptorBuilder<TItem>>();
             ColumnDescriptorBuilderGetterDelegate builderGetterMethod = () =>
             {
-                CustomDataGridViewColumnDescriptorBuilder<TItem> builder = new CustomDataGridViewColumnDescriptorBuilder<TItem>(table);
+                CustomDataGridViewColumnDescriptorBuilder<TItem> builder = new CustomDataGridViewColumnDescriptorBuilder<TItem>();
                 columnDescriptorBuilders.Add(builder);
                 return builder;
             };
