@@ -55,8 +55,13 @@ namespace OpenSC.Model.Routers.Salvos
 
         public void Take()
         {
-            foreach (SalvoCrosspoint crosspoint in crosspoints)
-                crosspoint.Take();
+            IEnumerable<Router> routers = crosspoints.Select(cp => cp.Router);
+            foreach (Router router in routers)
+            {
+                IEnumerable<SalvoCrosspoint> validCrosspoints = crosspoints.Where(cp => ((cp.Router == router) && (cp.Output != null) && (cp.Input != null)));
+                IEnumerable<RouterCrosspoint> routerCrosspoints = validCrosspoints.Select(cp => new RouterCrosspoint(cp.Output, cp.Input));
+                router.RequestCrosspointUpdates(routerCrosspoints);
+            }
         }
         
 

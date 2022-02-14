@@ -44,12 +44,6 @@ namespace OpenSC.Model.Routers.Salvos
                 Input = router.GetInput((int)__inputIndex);
         }
 
-        public void Take()
-        {
-            if ((output != null) && (input != null))
-                output.RequestCrosspointUpdate(input);
-        }
-
     }
 
 }
