@@ -109,7 +109,7 @@ namespace OpenSC.Model.Variables
                     else if (currentChr == '"')
                     {
                         state = TokenType.FunctionStringArgumentStart;
-                        currentArgumentValue += currentChr;
+                        //currentArgumentValue += currentChr;
                     }
                     else if (currentChr == ')')
                     {
