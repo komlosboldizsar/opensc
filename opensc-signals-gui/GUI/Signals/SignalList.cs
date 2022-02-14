@@ -32,6 +32,7 @@ namespace OpenSC.GUI.Signals
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Label");
             builder.Width(300);
+            builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((signal, cell) => { cell.Value = signal.SignalLabel; });
             builder.AddChangeEvent(nameof(ISignalSourceRegistered.SignalLabel));
@@ -49,7 +50,6 @@ namespace OpenSC.GUI.Signals
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("T(Y)");
             builder.Width(50);
-            builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.YellowTally.State ? Color.Gold : Color.LightGray); });
             builder.AddMultilevelChangeEvent(nameof(ExternalSignal.YellowTally), nameof(IBidirectionalSignalTally.State));;
 
@@ -58,7 +58,6 @@ namespace OpenSC.GUI.Signals
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("T(G)");
             builder.Width(50);
-            builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.GreenTally.State ? Color.ForestGreen : Color.LightGray); });
             builder.AddMultilevelChangeEvent(nameof(ExternalSignal.GreenTally), nameof(IBidirectionalSignalTally.State));
 
