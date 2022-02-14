@@ -42,7 +42,6 @@ namespace OpenSC.GUI.Signals.TallyCopying
             builder.Width(150);
             builder.UpdaterMethod((tallyCopy, cell) => { cell.Value = tallyCopy.FromSignal.SignalLabel; });
             builder.AddMultilevelChangeEvent(nameof(TallyCopy.FromSignal), nameof(ISignalSourceRegistered.SignalLabel));
-            builder.BuildAndAdd();
 
             // Column: from color
             builder = builderGetterMethod();
@@ -54,7 +53,6 @@ namespace OpenSC.GUI.Signals.TallyCopying
                 cell.Style.BackColor = tallyCopy.FromTallyColor.ConvertToLightColor();
             });
             builder.AddChangeEvent(nameof(TallyCopy.FromTallyColor));
-            builder.BuildAndAdd();
 
             // Column: to signal
             builder = builderGetterMethod();
@@ -63,7 +61,6 @@ namespace OpenSC.GUI.Signals.TallyCopying
             builder.Width(150);
             builder.UpdaterMethod((tallyCopy, cell) => { cell.Value = tallyCopy.ToSignal.SignalLabel; });
             builder.AddMultilevelChangeEvent(nameof(TallyCopy.ToSignal), nameof(ISignalSourceRegistered.SignalLabel));
-            builder.BuildAndAdd();
 
             // Column: to color
             builder = builderGetterMethod();
