@@ -10,7 +10,7 @@ namespace OpenSC.Model.Variables
     public class DynamicTextFunctionArgumentString : DynamicTextFunctionArgumentBase
     {
 
-        public DynamicTextFunctionArgumentString(int? min = 0, int? max = null) : base(typeof(string), DynamicTextFunctionArgumentType.String)
+        public DynamicTextFunctionArgumentString() : base(typeof(string), DynamicTextFunctionArgumentType.String)
         { }
 
         public override object GetObjectByKey(object key, object[] previousArgumentObjects) => (string)key;
