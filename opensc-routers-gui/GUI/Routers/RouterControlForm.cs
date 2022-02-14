@@ -170,8 +170,10 @@ namespace OpenSC.GUI.Routers
         {
             if ((router == null) || (SelectedInput == null))
                 return;
+            List<RouterCrosspoint> crosspoints = new List<RouterCrosspoint>();
             foreach (RouterOutput output in selectedOutputs)
-                router.RequestCrosspointUpdate(output, SelectedInput);
+                crosspoints.Add(new RouterCrosspoint(output, SelectedInput));
+            router.RequestCrosspointUpdates(crosspoints);
             SelectedInput = null;
             selectNoOutput();
         }
