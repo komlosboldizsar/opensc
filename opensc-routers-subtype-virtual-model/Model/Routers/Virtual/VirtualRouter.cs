@@ -34,6 +34,12 @@ namespace OpenSC.Model.Routers.Virtual
         protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)
             => notifyCrosspointChanged(output, input);
 
+        protected override void requestCrosspointUpdatesImpl(IEnumerable<RouterCrosspoint> crosspoints)
+        {
+            foreach (RouterCrosspoint crosspoint in crosspoints)
+                notifyCrosspointChanged(crosspoint.Output, crosspoint.Input);
+        }
+
         protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
         {
             RouterOutputLockState newState = (lockOperationType == RouterOutputLockOperationType.Lock) ? RouterOutputLockState.Locked : RouterOutputLockState.Clear;

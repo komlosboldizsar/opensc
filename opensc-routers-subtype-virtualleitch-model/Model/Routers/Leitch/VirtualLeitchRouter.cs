@@ -138,8 +138,12 @@ namespace OpenSC.Model.Routers.Leitch
 
         #region Setting/getting crosspoints
         protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)
+            => output.AssignSource(input);
+
+        protected override void requestCrosspointUpdatesImpl(IEnumerable<RouterCrosspoint> crosspoints)
         {
-            output.AssignSource(input);
+            foreach (RouterCrosspoint crosspoint in crosspoints)
+                crosspoint.Output.AssignSource(crosspoint.Input);
         }
 
         protected override void queryAllStates()

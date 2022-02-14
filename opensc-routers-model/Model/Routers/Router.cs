@@ -196,13 +196,28 @@ namespace OpenSC.Model.Routers
         {
             if (!outputs.Contains(output))
                 throw new ArgumentException();
-            string logMessage = string.Format("Router crosspoint update request. Router: [(#{0}) #1], destination: {2}, source: {3}.",
-                ID, Name, output.Index, input.Index);
+            string logMessage = $"Router single crosspoint update request. Router: [{this}], destination: {output}, source: {input}.";
             LogDispatcher.I(LOG_TAG, logMessage);
             requestCrosspointUpdateImpl(output, input);
         }
 
+        public void RequestCrosspointUpdates(IEnumerable<RouterCrosspoint> crosspoints)
+        {
+            List<string> logMessageDetailsPieces = new List<string>();
+            foreach (RouterCrosspoint crosspoint in crosspoints)
+            {
+                logMessageDetailsPieces.Add($"[destination: {crosspoint.Output}, source: {crosspoint.Input}]");
+                if (!outputs.Contains(crosspoint.Output))
+                    throw new ArgumentException();
+            }
+            string logMessageDetails = string.Join(", ", logMessageDetailsPieces);
+            string logMessage = $"Router multi crosspoint update request. Router: [{this}], crosspoints: [{logMessageDetails}].";
+            LogDispatcher.I(LOG_TAG, logMessage);
+            requestCrosspointUpdatesImpl(crosspoints);
+        }
+
         protected abstract void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input);
+        protected abstract void requestCrosspointUpdatesImpl(IEnumerable<RouterCrosspoint> crosspoints);
 
         public delegate void CrosspointChangedDelegate(Router router, RouterOutput output, RouterInput newInput);
         public event CrosspointChangedDelegate CrosspointChanged;
