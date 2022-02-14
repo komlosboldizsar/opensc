@@ -35,7 +35,6 @@ namespace OpenSC.GUI.Signals
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((signal, cell) => { cell.Value = signal.SignalLabel; });
             builder.AddChangeEvent(nameof(ISignalSourceRegistered.SignalLabel));
-            builder.BuildAndAdd();
 
             // Column: red tally
             builder = builderGetterMethod();
@@ -62,7 +61,7 @@ namespace OpenSC.GUI.Signals
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.GreenTally.State ? Color.ForestGreen : Color.LightGray); });
             builder.AddMultilevelChangeEvent(nameof(ExternalSignal.GreenTally), nameof(IBidirectionalSignalTally.State));
-        
+
         }
 
     }
