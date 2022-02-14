@@ -18,6 +18,7 @@
     <ProjectReference Include="..\opensc-crosspointstores-bridge-macros\opensc-crosspointstores-bridge-macros.csproj" />
     <ProjectReference Include="..\opensc-crosspointstores-gui\opensc-crosspointstores-gui.csproj" />
     <ProjectReference Include="..\opensc-crosspointstores-model\opensc-crosspointstores-model.csproj" />
+    <ProjectReference Include="..\opensc-dynamictexts-datetime\opensc-dynamictexts-functions-datetime.csproj" />
     <ProjectReference Include="..\opensc-dynamictexts-gui\opensc-dynamictexts-gui.csproj" />
     <ProjectReference Include="..\opensc-dynamictexts-model\opensc-dynamictexts-model.csproj" />
     <ProjectReference Include="..\opensc-labelsets-bridge-dynamictexts\opensc-labelsets-bridge-dynamictexts.csproj" />
