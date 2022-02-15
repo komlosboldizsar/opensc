@@ -85,6 +85,7 @@ namespace OpenSC.Model.Routers.Leitch
         #region Property: Level
         public event PropertyChangedTwoValuesDelegate<LeitchRouter, int> LevelChanged;
 
+        [PersistAs("level")]
         private int level;
 
         public int Level
