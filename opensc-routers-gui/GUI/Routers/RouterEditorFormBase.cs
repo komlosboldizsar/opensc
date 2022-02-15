@@ -67,8 +67,8 @@ namespace OpenSC.GUI.Routers
                 try
                 {
                     int index = int.Parse(cell.Value.ToString());
-                    if ((index < 1) || (index > 65535))
-                        throw new ArgumentException("Index of router input must be between 1 and 65535.");
+                    if ((index < 0) || (index > 65535))
+                        throw new ArgumentException("Index of router input must be between 0 and 65535.");
                     input.Index = index;
                 }
                 catch (ArgumentException e)
@@ -216,8 +216,8 @@ namespace OpenSC.GUI.Routers
                 try
                 {
                     int index = int.Parse(cell.Value.ToString());
-                    if ((index < 1) || (index > 65535))
-                        throw new ArgumentException("Index of router input must be between 1 and 65535.");
+                    if ((index < 0) || (index > 65535))
+                        throw new ArgumentException("Index of router input must be between 0 and 65535.");
                     output.Index = index;
                 }
                 catch (ArgumentException e)
