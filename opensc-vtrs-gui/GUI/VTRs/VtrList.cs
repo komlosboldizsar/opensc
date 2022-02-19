@@ -95,6 +95,7 @@ namespace OpenSC.GUI.VTRs
         private static readonly EnumToStringConverter<VtrState> stateLabelConverter = new EnumToStringConverter<VtrState>() {
             { VtrState.Stopped, "stopped" },
             { VtrState.Paused, "paused" },
+            { VtrState.Cued, "cued" },
             { VtrState.Playing, "playing" },
             { VtrState.Rewinding, "rewinding" },
             { VtrState.FastForwarding, "fast-forwarding" },
@@ -104,6 +105,7 @@ namespace OpenSC.GUI.VTRs
         private static readonly EnumToBitmapConverter<VtrState> stateImageConverter = new EnumToBitmapConverter<VtrState>() {
             { VtrState.Stopped, Icons._16_vtr_stopped },
             { VtrState.Paused, Icons._16_vtr_paused },
+            { VtrState.Cued, Icons._16_vtr_cued },
             { VtrState.Playing, Icons._16_vtr_playing },
             { VtrState.Rewinding, Icons._16_vtr_rewinding },
             { VtrState.FastForwarding, Icons._16_vtr_fastforwarding },

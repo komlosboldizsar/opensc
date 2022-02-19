@@ -9,6 +9,7 @@ namespace OpenSC.Model.VTRs
     public enum VtrState
     {
         Stopped,
+        Cued,
         Paused,
         Playing,
         Rewinding,
