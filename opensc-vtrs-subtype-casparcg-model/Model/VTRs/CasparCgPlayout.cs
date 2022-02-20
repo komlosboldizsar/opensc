@@ -51,7 +51,10 @@ namespace OpenSC.Model.VTRs
             get => listenedIp;
             set => this.setProperty(ref listenedIp, value, ListenedIpChanged,
                 (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this),
-                (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this));
+                (ov, nv) => {
+                    resetStateAndData();
+                    CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
+                });
         }
         #endregion
 
@@ -66,7 +69,10 @@ namespace OpenSC.Model.VTRs
             get => watchedChannel;
             set => this.setProperty(ref watchedChannel, value, WatchedChannelChanged,
                 (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this),
-                (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this));
+                (ov, nv) => {
+                    resetStateAndData();
+                    CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
+                });
         }
         #endregion
 
@@ -81,7 +87,10 @@ namespace OpenSC.Model.VTRs
             get => watchedLayer;
             set => this.setProperty(ref watchedLayer, value, WatchedLayerChanged,
                 (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this),
-                (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this));
+                (ov, nv) => {
+                    resetStateAndData();
+                    CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
+                });
         }
         #endregion
 
