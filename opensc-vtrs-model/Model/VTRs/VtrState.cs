@@ -8,6 +8,7 @@ namespace OpenSC.Model.VTRs
 {
     public enum VtrState
     {
+        Unknown,
         Stopped,
         Cued,
         Paused,
