@@ -28,14 +28,14 @@ namespace OpenSC.Model.VTRs
         public override void RestoredOwnFields()
         {
             base.RestoredOwnFields();
-            CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this);
+            CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
             initStillStateDetection();
         }
 
         public override void Removed()
         {
             base.Removed();
-            CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this);
+            CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this);
             deinitStillStateDetection();
         }
         #endregion
@@ -50,8 +50,8 @@ namespace OpenSC.Model.VTRs
         {
             get => listenedIp;
             set => this.setProperty(ref listenedIp, value, ListenedIpChanged,
-                (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this),
-                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this));
+                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this),
+                (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this));
         }
         #endregion
 
@@ -65,8 +65,8 @@ namespace OpenSC.Model.VTRs
         {
             get => watchedChannel;
             set => this.setProperty(ref watchedChannel, value, WatchedChannelChanged,
-                (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this),
-                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this));
+                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this),
+                (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this));
         }
         #endregion
 
@@ -80,8 +80,8 @@ namespace OpenSC.Model.VTRs
         {
             get => watchedLayer;
             set => this.setProperty(ref watchedLayer, value, WatchedLayerChanged,
-                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this),
-                (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this));
+                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this),
+                (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this));
         }
         #endregion
 
