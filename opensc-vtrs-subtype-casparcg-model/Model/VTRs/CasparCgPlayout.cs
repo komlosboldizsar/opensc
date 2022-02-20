@@ -29,14 +29,14 @@ namespace OpenSC.Model.VTRs
         {
             base.RestoredOwnFields();
             CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this);
-            initStoppedStateDetection();
+            initStillStateDetection();
         }
 
         public override void Removed()
         {
             base.Removed();
             CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this);
-            deinitStoppedStateDetection();
+            deinitStillStateDetection();
         }
         #endregion
 
@@ -88,6 +88,11 @@ namespace OpenSC.Model.VTRs
         #region OSC receiving and state processing
         private object stateUpdatingLock = new object();
         private bool isPaused = false;
+        private int elapsedFrames;
+        private int lastElapsedFrames;
+        private const int ELAPSED_FRAMES_CUED_LIMIT = 5;
+        private DateTime lastChangeToPausedFalse = DateTime.Now;
+        private int frameChangesSinceStill = 0;
 
         public void ReceiveOscMessage(OscMessage message, string subaddress)
         {
@@ -107,17 +112,28 @@ namespace OpenSC.Model.VTRs
                             if ((lastElapsedTime != -1) && (elapsedTime != lastElapsedTime))
                             {
                                 lastElapsedTimeUpdate = DateTime.Now;
-                                State = VtrState.Playing;
+                                still = false;
                             }
                             SecondsElapsed = tElapsed;
                             SecondsFull = tFull;
                             SecondsRemaining = tFull - tElapsed;
                             lastElapsedTime = elapsedTime;
+                            updateState();
+                            break;
+                        case "file/frame":
+                            elapsedFrames = Convert.ToInt32(message.Data[0]);
+                            if (lastElapsedFrames != elapsedFrames)
+                                frameChangesSinceStill++;
+                            lastElapsedFrames = elapsedFrames;
                             break;
                         case "paused":
                             isPaused = (message.Data[0].ToString() == "True");
                             if (isPaused)
-                                State = VtrState.Paused;
+                            {
+                                lastChangeToPausedFalse = DateTime.Now;
+                                frameChangesSinceStill = 0;
+                            }
+                            updateState();
                             break;
                     }
                 }
@@ -130,44 +146,69 @@ namespace OpenSC.Model.VTRs
                 LogDispatcher.E(LOG_TAG, errorMessage);
             }
         }
-        #endregion
 
-        #region Stopped/paused state detection
-        private float lastElapsedTime = -1;
-        private DateTime lastElapsedTimeUpdate = DateTime.Now;
-        private System.Timers.Timer stoppedStateDetectionTimer;
-        private const int STOPPED_STATE_DIFFERENCE_MILLISECONDS = 500;
-
-        private void stoppedStateDetection(object sender, System.Timers.ElapsedEventArgs e)
+        private void updateState()
         {
-            lock (stateUpdatingLock)
+            if (isPaused)
             {
-                if (isPaused)
-                    return;
-                TimeSpan diff = DateTime.Now - lastElapsedTimeUpdate;
-                if (diff.TotalMilliseconds > STOPPED_STATE_DIFFERENCE_MILLISECONDS)
+                State = (elapsedFrames <= ELAPSED_FRAMES_CUED_LIMIT) ? VtrState.Cued : VtrState.Paused;
+            }
+            else if (!still)
+            {
+                if ((State != VtrState.Cued) || (frameChangesSinceStill > 0))
+                    State = VtrState.Playing;
+            }
+            else if (State != VtrState.Cued)
+            {
+                State = VtrState.Stopped;
+            }
+            else
+            {
+                TimeSpan diff = DateTime.Now - lastChangeToPausedFalse;
+                if (diff.TotalMilliseconds > STILL_STATE_DIFFERENCE_MILLISECONDS)
                     State = VtrState.Stopped;
             }
         }
+        #endregion
 
-        private void initStoppedStateDetection()
+        #region Still state detection
+        private float lastElapsedTime = -1;
+        private DateTime lastElapsedTimeUpdate = DateTime.Now;
+        private System.Timers.Timer stillStateDetectionTimer;
+        private const int STILL_STATE_DIFFERENCE_MILLISECONDS = 500;
+        private bool still = false;
+
+        private void stillStateDetection(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if (stoppedStateDetectionTimer != null)
-                return;
-            stoppedStateDetectionTimer = new System.Timers.Timer(STOPPED_STATE_DIFFERENCE_MILLISECONDS);
-            stoppedStateDetectionTimer.Elapsed += stoppedStateDetection;
-            stoppedStateDetectionTimer.AutoReset = true;
-            stoppedStateDetectionTimer.Enabled = true;
+            lock (stateUpdatingLock)
+            {
+                TimeSpan diff = DateTime.Now - lastElapsedTimeUpdate;
+                if (diff.TotalMilliseconds > STILL_STATE_DIFFERENCE_MILLISECONDS)
+                {
+                    still = true;
+                    frameChangesSinceStill = 0;
+                }
+            }
         }
 
-        private void deinitStoppedStateDetection()
+        private void initStillStateDetection()
         {
-            if (stoppedStateDetectionTimer == null)
+            if (stillStateDetectionTimer != null)
                 return;
-            stoppedStateDetectionTimer.Enabled = false;
-            stoppedStateDetectionTimer.Elapsed -= stoppedStateDetection;
-            stoppedStateDetectionTimer.Dispose();
-            stoppedStateDetectionTimer = null;
+            stillStateDetectionTimer = new System.Timers.Timer(STILL_STATE_DIFFERENCE_MILLISECONDS);
+            stillStateDetectionTimer.Elapsed += stillStateDetection;
+            stillStateDetectionTimer.AutoReset = true;
+            stillStateDetectionTimer.Enabled = true;
+        }
+
+        private void deinitStillStateDetection()
+        {
+            if (stillStateDetectionTimer == null)
+                return;
+            stillStateDetectionTimer.Enabled = false;
+            stillStateDetectionTimer.Elapsed -= stillStateDetection;
+            stillStateDetectionTimer.Dispose();
+            stillStateDetectionTimer = null;
         }
         #endregion
 
