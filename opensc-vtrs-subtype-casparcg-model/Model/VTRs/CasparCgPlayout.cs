@@ -29,14 +29,14 @@ namespace OpenSC.Model.VTRs
         {
             base.RestoredOwnFields();
             CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
-            initStillStateDetection();
+            initStillClearStateDetection();
         }
 
         public override void Removed()
         {
             base.Removed();
             CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this);
-            deinitStillStateDetection();
+            deinitStillClearStateDetection();
         }
         #endregion
 
@@ -142,6 +142,7 @@ namespace OpenSC.Model.VTRs
                                 lastChangeToPausedFalse = DateTime.Now;
                                 frameChangesSinceStill = 0;
                             }
+                            lastPausedStateUpdate = DateTime.Now;
                             updateState();
                             break;
                     }
@@ -174,50 +175,54 @@ namespace OpenSC.Model.VTRs
             else
             {
                 TimeSpan diff = DateTime.Now - lastChangeToPausedFalse;
-                if (diff.TotalMilliseconds > STILL_STATE_DIFFERENCE_MILLISECONDS)
+                if (diff.TotalMilliseconds > STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS)
                     State = VtrState.Stopped;
             }
         }
         #endregion
 
-        #region Still state detection
+        #region Still and clear state detection
         private float lastElapsedTime = -1;
         private DateTime lastElapsedTimeUpdate = DateTime.Now;
-        private System.Timers.Timer stillStateDetectionTimer;
-        private const int STILL_STATE_DIFFERENCE_MILLISECONDS = 500;
+        private DateTime lastPausedStateUpdate = DateTime.Now;
+        private System.Timers.Timer stillClearStateDetectionTimer;
+        private const int STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS = 500;
         private bool still = false;
 
-        private void stillStateDetection(object sender, System.Timers.ElapsedEventArgs e)
+        private void stillClearStateDetection(object sender, System.Timers.ElapsedEventArgs e)
         {
             lock (stateUpdatingLock)
             {
                 TimeSpan diff = DateTime.Now - lastElapsedTimeUpdate;
-                if (diff.TotalMilliseconds > STILL_STATE_DIFFERENCE_MILLISECONDS)
+                if (diff.TotalMilliseconds > STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS)
                 {
                     still = true;
                     frameChangesSinceStill = 0;
                 }
+                diff = DateTime.Now - lastPausedStateUpdate;
+                if (diff.TotalMilliseconds > STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS)
+                    resetStateAndData();
             }
         }
 
-        private void initStillStateDetection()
+        private void initStillClearStateDetection()
         {
-            if (stillStateDetectionTimer != null)
+            if (stillClearStateDetectionTimer != null)
                 return;
-            stillStateDetectionTimer = new System.Timers.Timer(STILL_STATE_DIFFERENCE_MILLISECONDS);
-            stillStateDetectionTimer.Elapsed += stillStateDetection;
-            stillStateDetectionTimer.AutoReset = true;
-            stillStateDetectionTimer.Enabled = true;
+            stillClearStateDetectionTimer = new System.Timers.Timer(STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS);
+            stillClearStateDetectionTimer.Elapsed += stillClearStateDetection;
+            stillClearStateDetectionTimer.AutoReset = true;
+            stillClearStateDetectionTimer.Enabled = true;
         }
 
-        private void deinitStillStateDetection()
+        private void deinitStillClearStateDetection()
         {
-            if (stillStateDetectionTimer == null)
+            if (stillClearStateDetectionTimer == null)
                 return;
-            stillStateDetectionTimer.Enabled = false;
-            stillStateDetectionTimer.Elapsed -= stillStateDetection;
-            stillStateDetectionTimer.Dispose();
-            stillStateDetectionTimer = null;
+            stillClearStateDetectionTimer.Enabled = false;
+            stillClearStateDetectionTimer.Elapsed -= stillClearStateDetection;
+            stillClearStateDetectionTimer.Dispose();
+            stillClearStateDetectionTimer = null;
         }
         #endregion
 
