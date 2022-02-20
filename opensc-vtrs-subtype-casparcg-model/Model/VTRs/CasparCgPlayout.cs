@@ -201,7 +201,7 @@ namespace OpenSC.Model.VTRs
                 }
                 diff = DateTime.Now - lastPausedStateUpdate;
                 if (diff.TotalMilliseconds > STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS)
-                    resetStateAndData();
+                    resetStateAndData(VtrState.Stopped);
             }
         }
 
