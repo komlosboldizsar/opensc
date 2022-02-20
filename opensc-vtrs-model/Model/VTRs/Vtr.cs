@@ -22,6 +22,17 @@ namespace OpenSC.Model.VTRs
             SecondsElapsedChanged = null;
             SecondsRemainingChanged = null;
         }
+
+        public Vtr()
+        {
+            resetStateAndData();
+        }
+
+        public override void RestoredOwnFields()
+        {
+            base.RestoredOwnFields();
+            resetStateAndData();
+        }
         #endregion
 
         #region Owner database
@@ -108,6 +119,15 @@ namespace OpenSC.Model.VTRs
 
         public TimeSpan TimeRemaining => TimeSpan.FromSeconds(secondsRemaining);
         #endregion
+
+        protected void resetStateAndData()
+        {
+            Title = null;
+            State = VtrState.Stopped;
+            SecondsFull = 0;
+            SecondsElapsed = 0;
+            SecondsRemaining = 0;
+        }
 
     }
 
