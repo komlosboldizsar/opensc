@@ -29,14 +29,14 @@ namespace OpenSC.Model.VTRs
         {
             base.RestoredOwnFields();
             CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
-            initStillClearStateDetection();
+            initStillClearUnknownStateDetection();
         }
 
         public override void Removed()
         {
             base.Removed();
             CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this);
-            deinitStillClearStateDetection();
+            deinitStillClearUnknownStateDetection();
         }
         #endregion
 
@@ -103,7 +103,7 @@ namespace OpenSC.Model.VTRs
         private DateTime lastChangeToPausedFalse = DateTime.Now;
         private int frameChangesSinceStill = 0;
 
-        public void ReceiveOscMessage(OscMessage message, string subaddress)
+        public void ReceiveLayerOscMessage(OscMessage message, string subaddress)
         {
             try
             {
@@ -146,6 +146,7 @@ namespace OpenSC.Model.VTRs
                             updateState();
                             break;
                     }
+                    lastAnyStateUpdate = DateTime.Now;
                 }
             }
             catch (Exception ex)
@@ -155,6 +156,13 @@ namespace OpenSC.Model.VTRs
                     ex.Message);
                 LogDispatcher.E(LOG_TAG, errorMessage);
             }
+        }
+
+        public void ReceiveChannelOscMessage(OscMessage message, string subaddress)
+        {
+            lastAnyStateUpdate = DateTime.Now;
+            if (State == VtrState.Unknown)
+                resetStateAndData(VtrState.Stopped);
         }
 
         private void updateState()
@@ -185,44 +193,52 @@ namespace OpenSC.Model.VTRs
         private float lastElapsedTime = -1;
         private DateTime lastElapsedTimeUpdate = DateTime.Now;
         private DateTime lastPausedStateUpdate = DateTime.Now;
-        private System.Timers.Timer stillClearStateDetectionTimer;
+        private DateTime lastAnyStateUpdate = DateTime.Now;
+        private System.Timers.Timer stillClearUnknownStateDetectionTimer;
         private const int STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS = 500;
+        private const int UNKNOWN_STATE_DIFFERENCE_MILLISECONDS = 1000;
         private bool still = false;
 
-        private void stillClearStateDetection(object sender, System.Timers.ElapsedEventArgs e)
+        private void stillClearUnknownStateDetection(object sender, System.Timers.ElapsedEventArgs e)
         {
             lock (stateUpdatingLock)
             {
-                TimeSpan diff = DateTime.Now - lastElapsedTimeUpdate;
-                if (diff.TotalMilliseconds > STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS)
+                TimeSpan lastElapsedTimeUpdateDiff = DateTime.Now - lastElapsedTimeUpdate;
+                if (lastElapsedTimeUpdateDiff.TotalMilliseconds > STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS)
                 {
                     still = true;
                     frameChangesSinceStill = 0;
                 }
-                diff = DateTime.Now - lastPausedStateUpdate;
-                if (diff.TotalMilliseconds > STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS)
+                TimeSpan lastAnyStateUpdateDiff = DateTime.Now - lastAnyStateUpdate;
+                if (lastAnyStateUpdateDiff.TotalMilliseconds > UNKNOWN_STATE_DIFFERENCE_MILLISECONDS)
+                {
+                    State = VtrState.Unknown;
+                    return;
+                }
+                TimeSpan lastPausedStateUpdateDiff = DateTime.Now - lastPausedStateUpdate;
+                if (lastPausedStateUpdateDiff.TotalMilliseconds > STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS)
                     resetStateAndData(VtrState.Stopped);
             }
         }
 
-        private void initStillClearStateDetection()
+        private void initStillClearUnknownStateDetection()
         {
-            if (stillClearStateDetectionTimer != null)
+            if (stillClearUnknownStateDetectionTimer != null)
                 return;
-            stillClearStateDetectionTimer = new System.Timers.Timer(STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS);
-            stillClearStateDetectionTimer.Elapsed += stillClearStateDetection;
-            stillClearStateDetectionTimer.AutoReset = true;
-            stillClearStateDetectionTimer.Enabled = true;
+            stillClearUnknownStateDetectionTimer = new System.Timers.Timer(STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS);
+            stillClearUnknownStateDetectionTimer.Elapsed += stillClearUnknownStateDetection;
+            stillClearUnknownStateDetectionTimer.AutoReset = true;
+            stillClearUnknownStateDetectionTimer.Enabled = true;
         }
 
-        private void deinitStillClearStateDetection()
+        private void deinitStillClearUnknownStateDetection()
         {
-            if (stillClearStateDetectionTimer == null)
+            if (stillClearUnknownStateDetectionTimer == null)
                 return;
-            stillClearStateDetectionTimer.Enabled = false;
-            stillClearStateDetectionTimer.Elapsed -= stillClearStateDetection;
-            stillClearStateDetectionTimer.Dispose();
-            stillClearStateDetectionTimer = null;
+            stillClearUnknownStateDetectionTimer.Enabled = false;
+            stillClearUnknownStateDetectionTimer.Elapsed -= stillClearUnknownStateDetection;
+            stillClearUnknownStateDetectionTimer.Dispose();
+            stillClearUnknownStateDetectionTimer = null;
         }
         #endregion
 
