@@ -54,7 +54,7 @@ namespace OpenSC.Model.VTRs
         #region Property: State
         public event PropertyChangedTwoValuesDelegate<Vtr, VtrState> StateChanged;
 
-        private VtrState state;
+        private VtrState state = VtrState.Unknown;
 
         public VtrState State
         {
