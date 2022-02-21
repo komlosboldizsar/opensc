@@ -19,34 +19,44 @@ namespace OpenSC.Model.VTRs.DynamicTextFunctions
             { }
         }
 
-        [DynamicTextFunctionArgument(1, "Translation for state 'stopped'.")]
+        [DynamicTextFunctionArgument(1, "Translation for state 'unknown'.")]
         public class Arg1 : DynamicTextFunctionArgumentString
         { }
 
-        [DynamicTextFunctionArgument(2, "Translation for state 'paused'.")]
+        [DynamicTextFunctionArgument(2, "Translation for state 'stopped'.")]
         public class Arg2 : DynamicTextFunctionArgumentString
         { }
 
-        [DynamicTextFunctionArgument(3, "Translation for state 'playing'.")]
+        [DynamicTextFunctionArgument(3, "Translation for state 'cued'.")]
         public class Arg3 : DynamicTextFunctionArgumentString
         { }
 
-        [DynamicTextFunctionArgument(4, "Translation for state 'rewinding'.")]
+        [DynamicTextFunctionArgument(4, "Translation for state 'paused'.")]
         public class Arg4 : DynamicTextFunctionArgumentString
         { }
 
-        [DynamicTextFunctionArgument(5, "Translation for state 'fastforwarding'.")]
+        [DynamicTextFunctionArgument(5, "Translation for state 'playing'.")]
         public class Arg5 : DynamicTextFunctionArgumentString
         { }
 
-        [DynamicTextFunctionArgument(6, "Translation for state 'recording'.")]
+        [DynamicTextFunctionArgument(6, "Translation for state 'rewinding'.")]
         public class Arg6 : DynamicTextFunctionArgumentString
+        { }
+
+        [DynamicTextFunctionArgument(7, "Translation for state 'fastforwarding'.")]
+        public class Arg7 : DynamicTextFunctionArgumentString
+        { }
+
+        [DynamicTextFunctionArgument(8, "Translation for state 'recording'.")]
+        public class Arg8 : DynamicTextFunctionArgumentString
         { }
 
         public class Substitute : VtrState.Substitute
         {
 
+            private string translationForUnknown;
             private string translationForStopped;
+            private string translationForCued;
             private string translationForPaused;
             private string translationForPlaying;
             private string translationForRewinding;
@@ -55,12 +65,14 @@ namespace OpenSC.Model.VTRs.DynamicTextFunctions
 
             public override void Init(object[] argumentObjects)
             {
-                translationForStopped = (string)argumentObjects[1];
-                translationForPaused = (string)argumentObjects[2];
-                translationForPlaying = (string)argumentObjects[3];
-                translationForRewinding = (string)argumentObjects[4];
-                translationForFastForwarding = (string)argumentObjects[5];
-                translationForRecording = (string)argumentObjects[6];
+                translationForUnknown = (string)argumentObjects[1];
+                translationForStopped = (string)argumentObjects[2];
+                translationForCued = (string)argumentObjects[3];
+                translationForPaused = (string)argumentObjects[4];
+                translationForPlaying = (string)argumentObjects[5];
+                translationForRewinding = (string)argumentObjects[6];
+                translationForFastForwarding = (string)argumentObjects[7];
+                translationForRecording = (string)argumentObjects[8];
                 base.Init(argumentObjects);
             }
 
@@ -68,8 +80,12 @@ namespace OpenSC.Model.VTRs.DynamicTextFunctions
             {
                 switch (state)
                 {
+                    case VTRs.VtrState.Unknown:
+                        return translationForUnknown;
                     case VTRs.VtrState.Stopped:
                         return translationForStopped;
+                    case VTRs.VtrState.Cued:
+                        return translationForCued;
                     case VTRs.VtrState.Paused:
                         return translationForPaused;
                     case VTRs.VtrState.Playing:

@@ -41,8 +41,12 @@ namespace OpenSC.Model.VTRs.DynamicTextFunctions
             {
                 switch (state)
                 {
+                    case VTRs.VtrState.Unknown:
+                        return "unknown";
                     case VTRs.VtrState.Stopped:
                         return "stopped";
+                    case VTRs.VtrState.Cued:
+                        return "cued";
                     case VTRs.VtrState.Paused:
                         return "paused";
                     case VTRs.VtrState.Playing:
