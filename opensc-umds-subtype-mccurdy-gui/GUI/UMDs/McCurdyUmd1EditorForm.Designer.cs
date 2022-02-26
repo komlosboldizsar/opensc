@@ -65,7 +65,7 @@
             this.addressNumericField = new System.Windows.Forms.NumericUpDown();
             this.mainTabControl.SuspendLayout();
             this.baseDataTabPage.SuspendLayout();
-            this.dynamicDataTabPage.SuspendLayout();
+            this.dynamicTextTabPage.SuspendLayout();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.layoutGroupBox.SuspendLayout();
@@ -101,12 +101,12 @@
             // 
             // dynamicDataTabPage
             // 
-            this.dynamicDataTabPage.Controls.Add(this.dynamicSourcesGroupBox);
-            this.dynamicDataTabPage.Controls.Add(this.layoutGroupBox);
-            this.dynamicDataTabPage.Location = new System.Drawing.Point(4, 29);
-            this.dynamicDataTabPage.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.dynamicDataTabPage.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.dynamicDataTabPage.Size = new System.Drawing.Size(481, 216);
+            this.dynamicTextTabPage.Controls.Add(this.dynamicSourcesGroupBox);
+            this.dynamicTextTabPage.Controls.Add(this.layoutGroupBox);
+            this.dynamicTextTabPage.Location = new System.Drawing.Point(4, 29);
+            this.dynamicTextTabPage.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.dynamicTextTabPage.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.dynamicTextTabPage.Size = new System.Drawing.Size(767, 492);
             // 
             // talliesTabPage
             // 
@@ -137,7 +137,7 @@
             this.layoutGroupBox.Margin = new System.Windows.Forms.Padding(10, 12, 10, 12);
             this.layoutGroupBox.Name = "layoutGroupBox";
             this.layoutGroupBox.Padding = new System.Windows.Forms.Padding(8, 10, 4, 10);
-            this.layoutGroupBox.Size = new System.Drawing.Size(475, 257);
+            this.layoutGroupBox.Size = new System.Drawing.Size(761, 257);
             this.layoutGroupBox.TabIndex = 0;
             this.layoutGroupBox.TabStop = false;
             this.layoutGroupBox.Text = "Layout";
@@ -170,7 +170,7 @@
             this.layoutTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.layoutTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.layoutTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layoutTable.Size = new System.Drawing.Size(463, 217);
+            this.layoutTable.Size = new System.Drawing.Size(749, 217);
             this.layoutTable.TabIndex = 0;
             // 
             // columnCountLabel
@@ -231,7 +231,7 @@
             this.columnCountRadioButtonContainer.Location = new System.Drawing.Point(162, 4);
             this.columnCountRadioButtonContainer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.columnCountRadioButtonContainer.Name = "columnCountRadioButtonContainer";
-            this.columnCountRadioButtonContainer.Size = new System.Drawing.Size(298, 72);
+            this.columnCountRadioButtonContainer.Size = new System.Drawing.Size(584, 72);
             this.columnCountRadioButtonContainer.TabIndex = 5;
             // 
             // columnCountThreeRadioButton
@@ -241,7 +241,7 @@
             this.columnCountThreeRadioButton.Location = new System.Drawing.Point(0, 48);
             this.columnCountThreeRadioButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.columnCountThreeRadioButton.Name = "columnCountThreeRadioButton";
-            this.columnCountThreeRadioButton.Size = new System.Drawing.Size(298, 24);
+            this.columnCountThreeRadioButton.Size = new System.Drawing.Size(584, 24);
             this.columnCountThreeRadioButton.TabIndex = 2;
             this.columnCountThreeRadioButton.TabStop = true;
             this.columnCountThreeRadioButton.Tag = "3";
@@ -256,7 +256,7 @@
             this.columnCountTwoRadioButton.Location = new System.Drawing.Point(0, 24);
             this.columnCountTwoRadioButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.columnCountTwoRadioButton.Name = "columnCountTwoRadioButton";
-            this.columnCountTwoRadioButton.Size = new System.Drawing.Size(298, 24);
+            this.columnCountTwoRadioButton.Size = new System.Drawing.Size(584, 24);
             this.columnCountTwoRadioButton.TabIndex = 1;
             this.columnCountTwoRadioButton.TabStop = true;
             this.columnCountTwoRadioButton.Tag = "2";
@@ -271,7 +271,7 @@
             this.columnCountOneRadioButton.Location = new System.Drawing.Point(0, 0);
             this.columnCountOneRadioButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.columnCountOneRadioButton.Name = "columnCountOneRadioButton";
-            this.columnCountOneRadioButton.Size = new System.Drawing.Size(298, 24);
+            this.columnCountOneRadioButton.Size = new System.Drawing.Size(584, 24);
             this.columnCountOneRadioButton.TabIndex = 0;
             this.columnCountOneRadioButton.TabStop = true;
             this.columnCountOneRadioButton.Tag = "1";
@@ -356,7 +356,7 @@
             this.dynamicSourcesGroupBox.Margin = new System.Windows.Forms.Padding(10, 12, 10, 12);
             this.dynamicSourcesGroupBox.Name = "dynamicSourcesGroupBox";
             this.dynamicSourcesGroupBox.Padding = new System.Windows.Forms.Padding(8, 10, 4, 10);
-            this.dynamicSourcesGroupBox.Size = new System.Drawing.Size(475, 173);
+            this.dynamicSourcesGroupBox.Size = new System.Drawing.Size(761, 173);
             this.dynamicSourcesGroupBox.TabIndex = 1;
             this.dynamicSourcesGroupBox.TabStop = false;
             this.dynamicSourcesGroupBox.Text = "Text sources";
@@ -382,7 +382,7 @@
             this.dynamicSourcesTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.dynamicSourcesTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.dynamicSourcesTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.dynamicSourcesTable.Size = new System.Drawing.Size(463, 133);
+            this.dynamicSourcesTable.Size = new System.Drawing.Size(749, 133);
             this.dynamicSourcesTable.TabIndex = 0;
             // 
             // column3DynamicTextLabel
@@ -430,7 +430,7 @@
             this.column1DynamicDataPanel.Location = new System.Drawing.Point(102, 4);
             this.column1DynamicDataPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.column1DynamicDataPanel.Name = "column1DynamicDataPanel";
-            this.column1DynamicDataPanel.Size = new System.Drawing.Size(358, 37);
+            this.column1DynamicDataPanel.Size = new System.Drawing.Size(407, 37);
             this.column1DynamicDataPanel.TabIndex = 3;
             // 
             // column1DynamicTextSourceDropDown
@@ -462,7 +462,7 @@
             this.column2DynamicDataPanel.Location = new System.Drawing.Point(102, 49);
             this.column2DynamicDataPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.column2DynamicDataPanel.Name = "column2DynamicDataPanel";
-            this.column2DynamicDataPanel.Size = new System.Drawing.Size(358, 36);
+            this.column2DynamicDataPanel.Size = new System.Drawing.Size(407, 36);
             this.column2DynamicDataPanel.TabIndex = 2;
             // 
             // column2DynamicTextSourceDropDown
@@ -494,7 +494,7 @@
             this.column3DynamicDataPanel.Location = new System.Drawing.Point(102, 93);
             this.column3DynamicDataPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.column3DynamicDataPanel.Name = "column3DynamicDataPanel";
-            this.column3DynamicDataPanel.Size = new System.Drawing.Size(358, 36);
+            this.column3DynamicDataPanel.Size = new System.Drawing.Size(407, 36);
             this.column3DynamicDataPanel.TabIndex = 11;
             // 
             // column3DynamicTextSourceDropDown
@@ -523,7 +523,7 @@
             this.connectionGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.connectionGroupBox.Controls.Add(this.connectionTable);
             this.connectionGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.connectionGroupBox.Location = new System.Drawing.Point(3, 5);
+            this.connectionGroupBox.Location = new System.Drawing.Point(3, 130);
             this.connectionGroupBox.Margin = new System.Windows.Forms.Padding(10);
             this.connectionGroupBox.Name = "connectionGroupBox";
             this.connectionGroupBox.Padding = new System.Windows.Forms.Padding(8, 8, 4, 8);
@@ -619,8 +619,8 @@
             this.mainTabControl.ResumeLayout(false);
             this.baseDataTabPage.ResumeLayout(false);
             this.baseDataTabPage.PerformLayout();
-            this.dynamicDataTabPage.ResumeLayout(false);
-            this.dynamicDataTabPage.PerformLayout();
+            this.dynamicTextTabPage.ResumeLayout(false);
+            this.dynamicTextTabPage.PerformLayout();
             this.customElementsPanel.ResumeLayout(false);
             this.customElementsPanel.PerformLayout();
             this.mainContainer.ResumeLayout(false);

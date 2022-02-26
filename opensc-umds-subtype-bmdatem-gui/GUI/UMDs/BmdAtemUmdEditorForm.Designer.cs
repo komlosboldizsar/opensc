@@ -64,10 +64,10 @@
             // 
             // dynamicDataTabPage
             // 
-            this.dynamicDataTabPage.Location = new System.Drawing.Point(4, 29);
-            this.dynamicDataTabPage.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.dynamicDataTabPage.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.dynamicDataTabPage.Size = new System.Drawing.Size(481, 286);
+            this.dynamicTextTabPage.Location = new System.Drawing.Point(4, 29);
+            this.dynamicTextTabPage.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.dynamicTextTabPage.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.dynamicTextTabPage.Size = new System.Drawing.Size(481, 286);
             // 
             // talliesTabPage
             // 

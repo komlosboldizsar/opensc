@@ -43,7 +43,7 @@
             // 
             // dynamicDataTabPage
             // 
-            this.dynamicDataTabPage.Size = new System.Drawing.Size(767, 480);
+            this.dynamicTextTabPage.Size = new System.Drawing.Size(767, 480);
             // 
             // talliesTabPage
             // 

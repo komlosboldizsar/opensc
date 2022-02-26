@@ -43,7 +43,7 @@
             // 
             // dynamicDataTabPage
             // 
-            this.dynamicDataTabPage.Size = new System.Drawing.Size(481, 260);
+            this.dynamicTextTabPage.Size = new System.Drawing.Size(481, 260);
             // 
             // customElementsPanel
             // 
