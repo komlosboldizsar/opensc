@@ -98,7 +98,7 @@ namespace BMD.Switcher
         }
 
         public void UpdateShortName(string newShortName)
-            => InvokeHelper.Invoke(() => ApiSource.SetShortName(newShortName));
+            => InvokeHelper.Invoke(() => ApiSource.SetShortName(newShortName ?? ""));
         #endregion
 
         #region Long name
@@ -116,7 +116,7 @@ namespace BMD.Switcher
         }
 
         public void UpdateLongName(string newLongName)
-            => InvokeHelper.Invoke(() => ApiSource.SetLongName(newLongName));
+            => InvokeHelper.Invoke(() => ApiSource.SetLongName(newLongName ?? ""));
         #endregion
         #endregion
 
