@@ -37,7 +37,7 @@ namespace OpenSC.GUI.UMDs
             BmdAtem bmdAtem = (BmdAtem)EditedModel;
             if (bmdAtem == null)
                 return;
-            mixerDropDown.SelectByValue(bmdAtem.Input.Mixer);
+            mixerDropDown.SelectByValue(bmdAtem.Input?.Mixer);
             inputDropDown.SelectByValue(bmdAtem.Input);
             nameTypeShortRadioButton.Checked = (bmdAtem.NameType == BmdAtemInputNameType.Short);
             nameTypeLongRadioButton.Checked = (bmdAtem.NameType == BmdAtemInputNameType.Long);

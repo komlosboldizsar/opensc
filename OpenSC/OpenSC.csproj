@@ -73,6 +73,7 @@
     <ProjectReference Include="..\opensc-umds-bridge-macros\opensc-umds-bridge-macros.csproj" />
     <ProjectReference Include="..\opensc-umds-gui\opensc-umds-gui.csproj" />
     <ProjectReference Include="..\opensc-umds-model\opensc-umds-model.csproj" />
+    <ProjectReference Include="..\opensc-umds-subtype-bmdatem-gui\opensc-umds-subtype-bmdatem-gui.csproj" />
     <ProjectReference Include="..\opensc-umds-subtype-bmdatem-model\opensc-umds-subtype-bmdatem-model.csproj" />
     <ProjectReference Include="..\opensc-umds-subtype-mccurdy-gui\opensc-umds-subtype-mccurdy-gui.csproj" />
     <ProjectReference Include="..\opensc-umds-subtype-mccurdy-model\opensc-umds-subtype-mccurdy-model.csproj" />

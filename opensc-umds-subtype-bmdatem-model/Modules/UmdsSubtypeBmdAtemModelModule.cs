@@ -7,6 +7,7 @@ namespace OpenSC.Modules
 
     [Module("umds-subtype-bmdatem-model", "UMDs / BMD ATEM (model)", "TODO")]
     [DependsOnModule(typeof(UmdsModelModule))]
+    [DependsOnModule(typeof(MixersSubtypeBmdModelModule))]
     public class UmdsSubtypeBmdatemModelModule : SubtypeModelModuleBase<UmdsModelModule>
     {
 

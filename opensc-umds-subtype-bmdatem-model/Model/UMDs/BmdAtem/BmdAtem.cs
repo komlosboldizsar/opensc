@@ -33,7 +33,7 @@ namespace OpenSC.Model.UMDs.BmdAtem
         public MixerInput Input
         {
             get => input;
-            set => this.setProperty(ref input, value, InputChanged, null, (ov, nv) => updateInputsSource(), ValidateInputIndex);
+            set => this.setProperty(ref input, value, InputChanged, null, (ov, nv) => updateInputsSource());
         }
 
         [PersistAs("input")]
