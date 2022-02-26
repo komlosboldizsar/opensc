@@ -18,6 +18,7 @@
     <ProjectReference Include="..\opensc-crosspointstores-bridge-macros\opensc-crosspointstores-bridge-macros.csproj" />
     <ProjectReference Include="..\opensc-crosspointstores-gui\opensc-crosspointstores-gui.csproj" />
     <ProjectReference Include="..\opensc-crosspointstores-model\opensc-crosspointstores-model.csproj" />
+    <ProjectReference Include="..\opensc-dynamictexts-datetime\opensc-dynamictexts-functions-datetime.csproj" />
     <ProjectReference Include="..\opensc-dynamictexts-gui\opensc-dynamictexts-gui.csproj" />
     <ProjectReference Include="..\opensc-dynamictexts-model\opensc-dynamictexts-model.csproj" />
     <ProjectReference Include="..\opensc-labelsets-bridge-dynamictexts\opensc-labelsets-bridge-dynamictexts.csproj" />
@@ -41,6 +42,7 @@
     <ProjectReference Include="..\opensc-routers-bridge-labelsets\opensc-routers-bridge-labelsets.csproj" />
     <ProjectReference Include="..\opensc-routers-bridge-macros\opensc-routers-bridge-macros.csproj" />
     <ProjectReference Include="..\opensc-routers-gui\opensc-routers-gui.csproj" />
+    <ProjectReference Include="..\opensc-routers-labelsets-bridge-dynamictexts\opensc-routers-labelsets-bridge-dynamictexts.csproj" />
     <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj" />
     <ProjectReference Include="..\opensc-routers-subtype-bmd-gui\opensc-routers-subtype-bmd-gui.csproj" />
     <ProjectReference Include="..\opensc-routers-subtype-bmd-model\opensc-routers-subtype-bmd-model.csproj" />
@@ -50,8 +52,11 @@
     <ProjectReference Include="..\opensc-routers-subtype-virtual-model\opensc-routers-subtype-virtual-model.csproj" />
     <ProjectReference Include="..\opensc-routers-subtype-virtualleitch-gui\opensc-routers-subtype-virtualleitch-gui.csproj" />
     <ProjectReference Include="..\opensc-routers-subtype-virtualleitch-model\opensc-routers-subtype-virtualleitch-model.csproj" />
+    <ProjectReference Include="..\opensc-salvos-gui\opensc-salvos-gui.csproj" />
+    <ProjectReference Include="..\opensc-salvos-model\opensc-salvos-model.csproj" />
     <ProjectReference Include="..\opensc-serialports-gui\opensc-serialports-gui.csproj" />
     <ProjectReference Include="..\opensc-serialports-model\opensc-serialports-model.csproj" />
+    <ProjectReference Include="..\opensc-signals-bridge-labelsets\opensc-signals-bridge-labelsets.csproj" />
     <ProjectReference Include="..\opensc-signals-gui\opensc-signals-gui.csproj" />
     <ProjectReference Include="..\opensc-signals-model\opensc-signals-model.csproj" />
     <ProjectReference Include="..\opensc-streams-bridge-dynamictexts\opensc-streams-bridge-dynamictexts.csproj" />
@@ -73,6 +78,8 @@
     <ProjectReference Include="..\opensc-umds-subtype-mccurdy-model\opensc-umds-subtype-mccurdy-model.csproj" />
     <ProjectReference Include="..\opensc-umds-subtype-tsl31-gui\opensc-umds-subtype-tsl31-gui.csproj" />
     <ProjectReference Include="..\opensc-umds-subtype-tsl31-model\opensc-umds-subtype-tsl31-model.csproj" />
+    <ProjectReference Include="..\opensc-umds-subtype-tsl50-gui\opensc-umds-subtype-tsl50-gui.csproj" />
+    <ProjectReference Include="..\opensc-umds-subtype-tsl50-model\opensc-umds-subtype-tsl50-model.csproj" />
     <ProjectReference Include="..\opensc-vtrs-bridge-dynamictexts\opensc-vtrs-bridge-dynamictexts.csproj" />
     <ProjectReference Include="..\opensc-vtrs-gui\opensc-vtrs-gui.csproj" />
     <ProjectReference Include="..\opensc-vtrs-model\opensc-vtrs-model.csproj" />

@@ -59,22 +59,22 @@ namespace OpenSC.GUI.Routers
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("#");
             builder.Width(30);
-            builder.UpdaterMethod((input, cell) => { cell.Value = input.Index + 1; });
+            builder.UpdaterMethod((input, cell) => { cell.Value = input.Index; });
             builder.AddChangeEvent(nameof(RouterInput.Index));
             builder.TextEditable(true);
             builder.CellEndEditHandlerMethod((input, cell, eventargs) =>
             {
                 try
                 {
-                    int index = int.Parse(cell.Value.ToString()) - 1;
-                    if ((index < 0) || (index > 65534))
-                        throw new ArgumentException("Index of router input must be between 1 and 65535.");
+                    int index = int.Parse(cell.Value.ToString());
+                    if ((index < 0) || (index > 65535))
+                        throw new ArgumentException("Index of router input must be between 0 and 65535.");
                     input.Index = index;
                 }
                 catch (ArgumentException e)
                 {
                     MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    cell.Value = input.Index + 1;
+                    cell.Value = input.Index;
                 }
             });
             builder.BuildAndAdd();
@@ -182,7 +182,7 @@ namespace OpenSC.GUI.Routers
             builder.Width(70);
             builder.ButtonText("Delete");
             builder.CellContentClickHandlerMethod((input, cell, e) => {
-                string msgBoxText = string.Format("Do you really want to delete input #{0}?", (input.Index + 1));
+                string msgBoxText = $"Do you really want to delete input [{input}]?";
                 var confirm = MessageBox.Show(msgBoxText, "Delete confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (confirm == DialogResult.Yes)
                     router.RemoveInput(input);
@@ -208,22 +208,22 @@ namespace OpenSC.GUI.Routers
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("#");
             builder.Width(30);
-            builder.UpdaterMethod((output, cell) => { cell.Value = output.Index + 1; });
+            builder.UpdaterMethod((output, cell) => { cell.Value = output.Index; });
             builder.AddChangeEvent(nameof(RouterOutput.Index));
             builder.TextEditable(true);
             builder.CellEndEditHandlerMethod((output, cell, eventargs) =>
             {
                 try
                 {
-                    int index = int.Parse(cell.Value.ToString()) - 1;
-                    if ((index < 0) || (index > 65534))
-                        throw new ArgumentException("Index of router input must be between 1 and 65535.");
+                    int index = int.Parse(cell.Value.ToString());
+                    if ((index < 0) || (index > 65535))
+                        throw new ArgumentException("Index of router input must be between 0 and 65535.");
                     output.Index = index;
                 }
                 catch (ArgumentException e)
                 {
                     MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    cell.Value = output.Index + 1;
+                    cell.Value = output.Index;
                 }
             });
             builder.BuildAndAdd();
@@ -257,7 +257,7 @@ namespace OpenSC.GUI.Routers
             builder.Width(70);
             builder.ButtonText("Delete");
             builder.CellContentClickHandlerMethod((output, cell, e) => {
-                string msgBoxText = string.Format("Do you really want to delete output #{0}?", (output.Index + 1));
+                string msgBoxText = $"Do you really want to delete output [{output}]?";
                 var confirm = MessageBox.Show(msgBoxText, "Delete confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (confirm == DialogResult.Yes)
                     router.RemoveOutput(output);

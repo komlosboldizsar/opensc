@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Signals
 {
-    public class SignalForwarder : ObjectBase, ISignalSource, ISignalDestination
+    public abstract class SignalForwarder : ObjectBase, ISignalSource, ISignalDestination
     {
 
         #region Instantiation
@@ -109,6 +109,11 @@ namespace OpenSC.Model.Signals
                 return;
             RegisteredSourceSignalNameChanged?.Invoke(this, newName, recursionChain.ExtendRecursionChain(this));
         }
+        #endregion
+
+        #region ISystemObject interface (abstract)
+        public abstract string GlobalID { get; }
+        public abstract event PropertyChangedTwoValuesDelegate<ISystemObject, string> GlobalIdChanged;
         #endregion
 
     }

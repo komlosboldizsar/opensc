@@ -85,6 +85,7 @@ namespace OpenSC.Model.Routers.Leitch
         #region Property: Level
         public event PropertyChangedTwoValuesDelegate<LeitchRouter, int> LevelChanged;
 
+        [PersistAs("level")]
         private int level;
 
         public int Level
@@ -119,6 +120,14 @@ namespace OpenSC.Model.Routers.Leitch
         #region Setting/getting crosspoints
         protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)
             => sendSerialCommand("@ X:{0:X}/{1:X},{2:X}:I{3:X}", level, output.Index, input.Index, PanelIdSetting.Value);
+
+        protected override void requestCrosspointUpdatesImpl(IEnumerable<RouterCrosspoint> crosspoints)
+        {
+            StringBuilder crosspointsStrBuilder = new StringBuilder();
+            foreach (RouterCrosspoint crosspoint in crosspoints)
+                crosspointsStrBuilder.Append(string.Format("/{0:X},{1:X}", crosspoint.Output.Index, crosspoint.Input.Index));
+            sendSerialCommand("@ X:{0:X}{1}:I{2:X}", level, crosspointsStrBuilder.ToString(), PanelIdSetting.Value);
+        }
 
         protected override void queryAllStates()
             => sendSerialCommand("@ S?{0:X}", level);

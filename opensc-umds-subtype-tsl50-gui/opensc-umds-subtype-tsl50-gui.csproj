@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows7.0</TargetFramework>
+    <RootNamespace>OpenSC</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj" />
+    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
+    <ProjectReference Include="..\opensc-umds-gui\opensc-umds-gui.csproj" />
+    <ProjectReference Include="..\opensc-umds-subtype-tsl50-model\opensc-umds-subtype-tsl50-model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="GUI\UMDs\Tsl50ScreenEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="GUI\UMDs\Tsl50ScreenList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="GUI\UMDs\Tsl50DisplayUmdEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>

@@ -1,5 +1,5 @@
 ﻿using OpenSC.GUI.Menus;
-using OpenSC.GUI.Routers;
+using OpenSC.GUI.Labelsets;
 using OpenSC.GUI.WorkspaceManager;
 
 namespace OpenSC.Modules

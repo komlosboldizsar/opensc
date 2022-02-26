@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj" />
     <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
+    <ProjectReference Include="..\opensc-macropanels-gui\opensc-macropanels-gui.csproj" />
     <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj" />
     <ProjectReference Include="..\opensc-signals-model\opensc-signals-model.csproj" />
   </ItemGroup>

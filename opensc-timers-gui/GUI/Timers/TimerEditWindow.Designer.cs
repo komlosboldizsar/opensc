@@ -37,9 +37,6 @@
             this.modeBackwardsRadio = new System.Windows.Forms.RadioButton();
             this.modeClockRadio = new System.Windows.Forms.RadioButton();
             this.countdownStartNumericField = new System.Windows.Forms.NumericUpDown();
-            this.saveAndCloseButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.saveButton = new System.Windows.Forms.Button();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.operationGroupBox.SuspendLayout();
@@ -51,21 +48,17 @@
             // customElementsPanel
             // 
             this.customElementsPanel.Controls.Add(this.operationGroupBox);
-            this.customElementsPanel.Location = new System.Drawing.Point(10, 10);
-            this.customElementsPanel.Size = new System.Drawing.Size(462, 248);
+            this.customElementsPanel.Location = new System.Drawing.Point(10, 12);
+            this.customElementsPanel.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.customElementsPanel.Padding = new System.Windows.Forms.Padding(10, 15, 10, 0);
+            this.customElementsPanel.Size = new System.Drawing.Size(462, 311);
             this.customElementsPanel.Controls.SetChildIndex(this.operationGroupBox, 0);
             // 
             // mainContainer
             // 
-            this.mainContainer.Controls.Add(this.saveButton);
-            this.mainContainer.Controls.Add(this.cancelButton);
-            this.mainContainer.Controls.Add(this.saveAndCloseButton);
-            this.mainContainer.Padding = new System.Windows.Forms.Padding(10);
-            this.mainContainer.Size = new System.Drawing.Size(482, 337);
-            this.mainContainer.Controls.SetChildIndex(this.saveAndCloseButton, 0);
-            this.mainContainer.Controls.SetChildIndex(this.cancelButton, 0);
-            this.mainContainer.Controls.SetChildIndex(this.saveButton, 0);
-            this.mainContainer.Controls.SetChildIndex(this.customElementsPanel, 0);
+            this.mainContainer.Margin = new System.Windows.Forms.Padding(3, 6, 3, 6);
+            this.mainContainer.Padding = new System.Windows.Forms.Padding(10, 12, 10, 12);
+            this.mainContainer.Size = new System.Drawing.Size(482, 421);
             // 
             // operationGroupBox
             // 
@@ -73,11 +66,11 @@
             this.operationGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.operationGroupBox.Controls.Add(this.modeTable);
             this.operationGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.operationGroupBox.Location = new System.Drawing.Point(10, 65);
-            this.operationGroupBox.Margin = new System.Windows.Forms.Padding(10);
+            this.operationGroupBox.Location = new System.Drawing.Point(10, 122);
+            this.operationGroupBox.Margin = new System.Windows.Forms.Padding(10, 12, 10, 12);
             this.operationGroupBox.Name = "operationGroupBox";
-            this.operationGroupBox.Padding = new System.Windows.Forms.Padding(8, 4, 8, 8);
-            this.operationGroupBox.Size = new System.Drawing.Size(442, 142);
+            this.operationGroupBox.Padding = new System.Windows.Forms.Padding(8, 5, 8, 10);
+            this.operationGroupBox.Size = new System.Drawing.Size(442, 174);
             this.operationGroupBox.TabIndex = 2;
             this.operationGroupBox.TabStop = false;
             this.operationGroupBox.Text = "Operation";
@@ -94,12 +87,13 @@
             this.modeTable.Controls.Add(this.modeOptionTable, 1, 0);
             this.modeTable.Controls.Add(this.countdownStartNumericField, 1, 1);
             this.modeTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.modeTable.Location = new System.Drawing.Point(8, 19);
+            this.modeTable.Location = new System.Drawing.Point(8, 25);
+            this.modeTable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.modeTable.Name = "modeTable";
             this.modeTable.RowCount = 2;
             this.modeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.modeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.modeTable.Size = new System.Drawing.Size(426, 115);
+            this.modeTable.Size = new System.Drawing.Size(426, 139);
             this.modeTable.TabIndex = 0;
             // 
             // modeLabel
@@ -109,7 +103,7 @@
             this.modeLabel.Location = new System.Drawing.Point(3, 0);
             this.modeLabel.Margin = new System.Windows.Forms.Padding(3, 0, 20, 0);
             this.modeLabel.Name = "modeLabel";
-            this.modeLabel.Size = new System.Drawing.Size(43, 87);
+            this.modeLabel.Size = new System.Drawing.Size(48, 104);
             this.modeLabel.TabIndex = 0;
             this.modeLabel.Text = "Mode";
             this.modeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -118,10 +112,10 @@
             // 
             this.countdownStartLabel.AutoSize = true;
             this.countdownStartLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.countdownStartLabel.Location = new System.Drawing.Point(3, 87);
+            this.countdownStartLabel.Location = new System.Drawing.Point(3, 104);
             this.countdownStartLabel.Margin = new System.Windows.Forms.Padding(3, 0, 20, 0);
             this.countdownStartLabel.Name = "countdownStartLabel";
-            this.countdownStartLabel.Size = new System.Drawing.Size(110, 28);
+            this.countdownStartLabel.Size = new System.Drawing.Size(118, 35);
             this.countdownStartLabel.TabIndex = 1;
             this.countdownStartLabel.Text = "Countdown start";
             this.countdownStartLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -136,21 +130,23 @@
             this.modeOptionTable.Controls.Add(this.modeBackwardsRadio, 0, 1);
             this.modeOptionTable.Controls.Add(this.modeClockRadio, 0, 2);
             this.modeOptionTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.modeOptionTable.Location = new System.Drawing.Point(136, 3);
+            this.modeOptionTable.Location = new System.Drawing.Point(144, 4);
+            this.modeOptionTable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.modeOptionTable.Name = "modeOptionTable";
             this.modeOptionTable.RowCount = 3;
             this.modeOptionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.modeOptionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.modeOptionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.modeOptionTable.Size = new System.Drawing.Size(287, 81);
+            this.modeOptionTable.Size = new System.Drawing.Size(279, 96);
             this.modeOptionTable.TabIndex = 2;
             // 
             // modeForwardsRadio
             // 
             this.modeForwardsRadio.AutoSize = true;
-            this.modeForwardsRadio.Location = new System.Drawing.Point(3, 3);
+            this.modeForwardsRadio.Location = new System.Drawing.Point(3, 4);
+            this.modeForwardsRadio.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.modeForwardsRadio.Name = "modeForwardsRadio";
-            this.modeForwardsRadio.Size = new System.Drawing.Size(147, 21);
+            this.modeForwardsRadio.Size = new System.Drawing.Size(155, 24);
             this.modeForwardsRadio.TabIndex = 0;
             this.modeForwardsRadio.TabStop = true;
             this.modeForwardsRadio.Text = "Stopper (forwards)";
@@ -159,9 +155,10 @@
             // modeBackwardsRadio
             // 
             this.modeBackwardsRadio.AutoSize = true;
-            this.modeBackwardsRadio.Location = new System.Drawing.Point(3, 30);
+            this.modeBackwardsRadio.Location = new System.Drawing.Point(3, 36);
+            this.modeBackwardsRadio.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.modeBackwardsRadio.Name = "modeBackwardsRadio";
-            this.modeBackwardsRadio.Size = new System.Drawing.Size(180, 21);
+            this.modeBackwardsRadio.Size = new System.Drawing.Size(190, 24);
             this.modeBackwardsRadio.TabIndex = 1;
             this.modeBackwardsRadio.TabStop = true;
             this.modeBackwardsRadio.Text = "Countdown (backwards)";
@@ -170,9 +167,10 @@
             // modeClockRadio
             // 
             this.modeClockRadio.AutoSize = true;
-            this.modeClockRadio.Location = new System.Drawing.Point(3, 57);
+            this.modeClockRadio.Location = new System.Drawing.Point(3, 68);
+            this.modeClockRadio.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.modeClockRadio.Name = "modeClockRadio";
-            this.modeClockRadio.Size = new System.Drawing.Size(152, 21);
+            this.modeClockRadio.Size = new System.Drawing.Size(160, 24);
             this.modeClockRadio.TabIndex = 2;
             this.modeClockRadio.TabStop = true;
             this.modeClockRadio.Text = "Clock (current time)";
@@ -180,50 +178,21 @@
             // 
             // countdownStartNumericField
             // 
-            this.countdownStartNumericField.Location = new System.Drawing.Point(136, 90);
+            this.countdownStartNumericField.Location = new System.Drawing.Point(144, 108);
+            this.countdownStartNumericField.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.countdownStartNumericField.Name = "countdownStartNumericField";
-            this.countdownStartNumericField.Size = new System.Drawing.Size(118, 22);
+            this.countdownStartNumericField.Size = new System.Drawing.Size(118, 27);
             this.countdownStartNumericField.TabIndex = 3;
-            // 
-            // saveAndCloseButton
-            // 
-            this.saveAndCloseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveAndCloseButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.saveAndCloseButton.Location = new System.Drawing.Point(332, 290);
-            this.saveAndCloseButton.Name = "saveAndCloseButton";
-            this.saveAndCloseButton.Size = new System.Drawing.Size(137, 35);
-            this.saveAndCloseButton.TabIndex = 3;
-            this.saveAndCloseButton.Text = "Save and close";
-            this.saveAndCloseButton.UseVisualStyleBackColor = true;
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.Location = new System.Drawing.Point(154, 289);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(83, 35);
-            this.cancelButton.TabIndex = 4;
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            // 
-            // saveButton
-            // 
-            this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveButton.Location = new System.Drawing.Point(243, 290);
-            this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(83, 35);
-            this.saveButton.TabIndex = 5;
-            this.saveButton.Text = "Save";
-            this.saveButton.UseVisualStyleBackColor = true;
             // 
             // TimerEditWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(482, 393);
+            this.ClientSize = new System.Drawing.Size(482, 491);
             this.DeleteButtonVisible = true;
             this.HeaderText = "New timer";
-            this.MinimumSize = new System.Drawing.Size(500, 440);
+            this.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
+            this.MinimumSize = new System.Drawing.Size(500, 538);
             this.Name = "TimerEditWindow";
             this.SubjectPlural = "timers";
             this.SubjectSingular = "timer";
@@ -252,8 +221,5 @@
         private System.Windows.Forms.RadioButton modeBackwardsRadio;
         private System.Windows.Forms.RadioButton modeClockRadio;
         private System.Windows.Forms.NumericUpDown countdownStartNumericField;
-        private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.Button saveAndCloseButton;
-        private System.Windows.Forms.Button saveButton;
     }
 }

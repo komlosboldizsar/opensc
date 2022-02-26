@@ -28,15 +28,15 @@ namespace OpenSC.Model.VTRs
         public override void RestoredOwnFields()
         {
             base.RestoredOwnFields();
-            CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this);
-            initStoppedStateDetection();
+            CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
+            initStillClearUnknownStateDetection();
         }
 
         public override void Removed()
         {
             base.Removed();
-            CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this);
-            deinitStoppedStateDetection();
+            CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this);
+            deinitStillClearUnknownStateDetection();
         }
         #endregion
 
@@ -50,8 +50,11 @@ namespace OpenSC.Model.VTRs
         {
             get => listenedIp;
             set => this.setProperty(ref listenedIp, value, ListenedIpChanged,
-                (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this),
-                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this));
+                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this),
+                (ov, nv) => {
+                    resetStateAndData();
+                    CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
+                });
         }
         #endregion
 
@@ -65,8 +68,11 @@ namespace OpenSC.Model.VTRs
         {
             get => watchedChannel;
             set => this.setProperty(ref watchedChannel, value, WatchedChannelChanged,
-                (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this),
-                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this));
+                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this),
+                (ov, nv) => {
+                    resetStateAndData();
+                    CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
+                });
         }
         #endregion
 
@@ -80,16 +86,24 @@ namespace OpenSC.Model.VTRs
         {
             get => watchedLayer;
             set => this.setProperty(ref watchedLayer, value, WatchedLayerChanged,
-                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromChannelLayer(this),
-                (ov, nv) => CasparCgPlayoutCommons.Instance.SubscribeToChannelLayer(this));
+                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this),
+                (ov, nv) => {
+                    resetStateAndData();
+                    CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
+                });
         }
         #endregion
 
         #region OSC receiving and state processing
         private object stateUpdatingLock = new object();
         private bool isPaused = false;
+        private int elapsedFrames;
+        private int lastElapsedFrames;
+        private const int ELAPSED_FRAMES_CUED_LIMIT = 5;
+        private DateTime lastChangeToPausedFalse = DateTime.Now;
+        private int frameChangesSinceStill = 0;
 
-        public void ReceiveOscMessage(OscMessage message, string subaddress)
+        public void ReceiveLayerOscMessage(OscMessage message, string subaddress)
         {
             try
             {
@@ -107,19 +121,32 @@ namespace OpenSC.Model.VTRs
                             if ((lastElapsedTime != -1) && (elapsedTime != lastElapsedTime))
                             {
                                 lastElapsedTimeUpdate = DateTime.Now;
-                                State = VtrState.Playing;
+                                still = false;
                             }
                             SecondsElapsed = tElapsed;
                             SecondsFull = tFull;
                             SecondsRemaining = tFull - tElapsed;
                             lastElapsedTime = elapsedTime;
+                            updateState();
+                            break;
+                        case "file/frame":
+                            elapsedFrames = Convert.ToInt32(message.Data[0]);
+                            if (lastElapsedFrames != elapsedFrames)
+                                frameChangesSinceStill++;
+                            lastElapsedFrames = elapsedFrames;
                             break;
                         case "paused":
                             isPaused = (message.Data[0].ToString() == "True");
                             if (isPaused)
-                                State = VtrState.Paused;
+                            {
+                                lastChangeToPausedFalse = DateTime.Now;
+                                frameChangesSinceStill = 0;
+                            }
+                            lastPausedStateUpdate = DateTime.Now;
+                            updateState();
                             break;
                     }
+                    lastAnyStateUpdate = DateTime.Now;
                 }
             }
             catch (Exception ex)
@@ -130,44 +157,88 @@ namespace OpenSC.Model.VTRs
                 LogDispatcher.E(LOG_TAG, errorMessage);
             }
         }
-        #endregion
 
-        #region Stopped/paused state detection
-        private float lastElapsedTime = -1;
-        private DateTime lastElapsedTimeUpdate = DateTime.Now;
-        private System.Timers.Timer stoppedStateDetectionTimer;
-        private const int STOPPED_STATE_DIFFERENCE_MILLISECONDS = 500;
-
-        private void stoppedStateDetection(object sender, System.Timers.ElapsedEventArgs e)
+        public void ReceiveChannelOscMessage(OscMessage message, string subaddress)
         {
-            lock (stateUpdatingLock)
+            lastAnyStateUpdate = DateTime.Now;
+            if (State == VtrState.Unknown)
+                resetStateAndData(VtrState.Stopped);
+        }
+
+        private void updateState()
+        {
+            if (isPaused)
             {
-                if (isPaused)
-                    return;
-                TimeSpan diff = DateTime.Now - lastElapsedTimeUpdate;
-                if (diff.TotalMilliseconds > STOPPED_STATE_DIFFERENCE_MILLISECONDS)
+                State = (elapsedFrames <= ELAPSED_FRAMES_CUED_LIMIT) ? VtrState.Cued : VtrState.Paused;
+            }
+            else if (!still)
+            {
+                if ((State != VtrState.Cued) || (frameChangesSinceStill > 0))
+                    State = VtrState.Playing;
+            }
+            else if (State != VtrState.Cued)
+            {
+                State = VtrState.Stopped;
+            }
+            else
+            {
+                TimeSpan diff = DateTime.Now - lastChangeToPausedFalse;
+                if (diff.TotalMilliseconds > STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS)
                     State = VtrState.Stopped;
             }
         }
+        #endregion
 
-        private void initStoppedStateDetection()
+        #region Still and clear state detection
+        private float lastElapsedTime = -1;
+        private DateTime lastElapsedTimeUpdate = DateTime.Now;
+        private DateTime lastPausedStateUpdate = DateTime.Now;
+        private DateTime lastAnyStateUpdate = DateTime.Now;
+        private System.Timers.Timer stillClearUnknownStateDetectionTimer;
+        private const int STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS = 500;
+        private const int UNKNOWN_STATE_DIFFERENCE_MILLISECONDS = 1000;
+        private bool still = false;
+
+        private void stillClearUnknownStateDetection(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if (stoppedStateDetectionTimer != null)
-                return;
-            stoppedStateDetectionTimer = new System.Timers.Timer(STOPPED_STATE_DIFFERENCE_MILLISECONDS);
-            stoppedStateDetectionTimer.Elapsed += stoppedStateDetection;
-            stoppedStateDetectionTimer.AutoReset = true;
-            stoppedStateDetectionTimer.Enabled = true;
+            lock (stateUpdatingLock)
+            {
+                TimeSpan lastElapsedTimeUpdateDiff = DateTime.Now - lastElapsedTimeUpdate;
+                if (lastElapsedTimeUpdateDiff.TotalMilliseconds > STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS)
+                {
+                    still = true;
+                    frameChangesSinceStill = 0;
+                }
+                TimeSpan lastAnyStateUpdateDiff = DateTime.Now - lastAnyStateUpdate;
+                if (lastAnyStateUpdateDiff.TotalMilliseconds > UNKNOWN_STATE_DIFFERENCE_MILLISECONDS)
+                {
+                    State = VtrState.Unknown;
+                    return;
+                }
+                TimeSpan lastPausedStateUpdateDiff = DateTime.Now - lastPausedStateUpdate;
+                if (lastPausedStateUpdateDiff.TotalMilliseconds > STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS)
+                    resetStateAndData(VtrState.Stopped);
+            }
         }
 
-        private void deinitStoppedStateDetection()
+        private void initStillClearUnknownStateDetection()
         {
-            if (stoppedStateDetectionTimer == null)
+            if (stillClearUnknownStateDetectionTimer != null)
                 return;
-            stoppedStateDetectionTimer.Enabled = false;
-            stoppedStateDetectionTimer.Elapsed -= stoppedStateDetection;
-            stoppedStateDetectionTimer.Dispose();
-            stoppedStateDetectionTimer = null;
+            stillClearUnknownStateDetectionTimer = new System.Timers.Timer(STILL_CLEAR_STATE_DIFFERENCE_MILLISECONDS);
+            stillClearUnknownStateDetectionTimer.Elapsed += stillClearUnknownStateDetection;
+            stillClearUnknownStateDetectionTimer.AutoReset = true;
+            stillClearUnknownStateDetectionTimer.Enabled = true;
+        }
+
+        private void deinitStillClearUnknownStateDetection()
+        {
+            if (stillClearUnknownStateDetectionTimer == null)
+                return;
+            stillClearUnknownStateDetectionTimer.Enabled = false;
+            stillClearUnknownStateDetectionTimer.Elapsed -= stillClearUnknownStateDetection;
+            stillClearUnknownStateDetectionTimer.Dispose();
+            stillClearUnknownStateDetectionTimer = null;
         }
         #endregion
 

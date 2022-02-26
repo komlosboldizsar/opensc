@@ -24,6 +24,7 @@ namespace OpenSC.GUI.Routers
                 if (_crosspoint != null)
                     _crosspoint.NameChanged -= crosspointInputNameChangedHandler;
                 _crosspoint = value;
+                updateLabel();
                 if (_crosspoint != null)
                     _crosspoint.NameChanged += crosspointInputNameChangedHandler;
             }
