@@ -14,6 +14,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         public DataGridViewColumnType Type { get; private set; }
 
+        public string ID { get; private set; }
+
         public string Header { get; private set; }
 
         public int Width { get; private set; }
@@ -65,6 +67,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         public CustomDataGridViewColumnDescriptor(
                 DataGridViewColumnType type,
+                string id,
                 string header,
                 int width,
                 int dividerWidth,
@@ -88,6 +91,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 Padding iconPadding)
         {
             Type = type;
+            ID = id;
             Header = header;
             Width = width;
             DividerWidth = dividerWidth;

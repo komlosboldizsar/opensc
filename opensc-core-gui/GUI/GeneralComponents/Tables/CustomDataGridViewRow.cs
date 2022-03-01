@@ -11,11 +11,13 @@ namespace OpenSC.GUI.GeneralComponents.Tables
     public class CustomDataGridViewRow<T>: DataGridViewRow
     {
 
-        CustomDataGridView<T> table;
+        private CustomDataGridView<T> table;
 
-        List<DataGridViewCell> cells = new List<DataGridViewCell>();
+        private List<DataGridViewCell> cells = new List<DataGridViewCell>();
 
-        T item;
+        private T item;
+
+        public T Item => item;
 
         public CustomDataGridViewRow(CustomDataGridView<T> table, T item)
         {

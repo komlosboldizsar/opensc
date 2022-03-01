@@ -1,12 +1,13 @@
 ﻿using OpenSC.Model;
 using OpenSC.Model.General;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace OpenSC.GUI.GeneralComponents.Tables
 {
-    public class CustomDataGridView<T>: DataGridView
+    public class CustomDataGridView<T> : DataGridView
     {
 
         private IObservableEnumerable<T> boundCollection;
@@ -54,6 +55,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             CellContentClick += cellContentClickHandler;
             CellDoubleClick += cellDoubleClickHandler;
             CellEndEdit += cellEndEditHandler;
+            CellMouseDown += cellMouseDownHandler;
             AllowUserToAddRows = false;
             AllowUserToDeleteRows = false;
             AllowUserToOrderColumns = false;
@@ -84,6 +86,26 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             row?.HandleDoubleClick(e);
         }
 
+        private void cellMouseDownHandler(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if ((e.RowIndex < 0) || (e.RowIndex >= Rows.Count))
+                return;
+            CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
+            DataGridViewColumn column = Columns[e.ColumnIndex];
+            CustomDataGridViewDragEventArgs<T> dragEventArgs = new()
+            {
+                ColumnIndex = e.ColumnIndex,
+                Column = column,
+                RowIndex = e.RowIndex,
+                Row = row
+            };
+            DragHandlers.GetDragData(dragEventArgs, out DragDropEffects allowedEffects, out object draggedObject);
+            if (allowedEffects != DragDropEffects.None)
+                DoDragDrop(draggedObject, allowedEffects);
+        }
+
+        public CustomDataGridViewDragHandlerCollection<T> DragHandlers { get; } = new();
+
         private void itemsAddedHandler(IEnumerable<IObservableCollection<T>.ItemWithPosition> affectedItemsWithPositions)
             => affectedItemsWithPositions.Foreach(aiwp => Rows.Insert(aiwp.Position, new CustomDataGridViewRow<T>(this, aiwp.Item)));
 
@@ -103,6 +125,10 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         {
             columnDescriptors.Add(columnDescriptor);
             DataGridViewColumn column = getColumnByType(columnDescriptor.Type);
+            column.Tag = new CustomDataGridViewColumnTag()
+            {
+                ID = columnDescriptor.ID
+            };
             column.HeaderText = columnDescriptor.Header;
             column.Width = columnDescriptor.Width + columnDescriptor.DividerWidth;
             column.DividerWidth = columnDescriptor.DividerWidth;
@@ -112,10 +138,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             Columns.Add(column);
         }
 
-        public void ColumnChangeReady()
-        {
-            loadItems();
-        }
+        public void ColumnChangeReady() => loadItems();
 
         private static DataGridViewColumn getColumnByType(DataGridViewColumnType type)
         {
