@@ -57,21 +57,31 @@ namespace OpenSC.GUI.Routers.CrosspointBooleans
         }
 
         private void initRouterDropDown()
-            => routerDropDown.CreateAdapterAsDataSource<Router>(RouterDatabase.Instance, null, true, "(not associated)");
+        {
+            routerDropDown.CreateAdapterAsDataSource(RouterDatabase.Instance, null, true, "(not associated)");
+            routerDropDown.ReceiveSystemObjectDrop();
+            routerDropDown.FilterSystemObjectDropByType<Router>();
+        }
 
         private void updateRouterInputDropDown()
-            => routerInputDropDown.CreateAdapterAsDataSource<RouterInput>(
+        {
+            routerInputDropDown.CreateAdapterAsDataSource(
                 (routerDropDown.SelectedValue as Router)?.Inputs,
                 routerInput => string.Format("(#{0}) {1}", routerInput.Index, routerInput.Name),
-                true,
-                "(not associated)");
+                true, "(not associated)");
+            routerInputDropDown.ReceiveSystemObjectDrop();
+            routerInputDropDown.FilterSystemObjectDropByType<RouterInput>();
+        }
 
         private void updateRouterOutputDropDown()
-            => routerOutputDropDown.CreateAdapterAsDataSource<RouterOutput>(
+        {
+            routerOutputDropDown.CreateAdapterAsDataSource(
                 (routerDropDown.SelectedValue as Router)?.Outputs,
                 routerOutput => string.Format("(#{0}) {1}", routerOutput.Index, routerOutput.Name),
-                true,
-                "(not associated)");
+                true, "(not associated)");
+            routerOutputDropDown.ReceiveSystemObjectDrop();
+            routerInputDropDown.FilterSystemObjectDropByType<RouterOutput>();
+        }
 
         private void selectedRouterChanged(object sender, EventArgs e)
         {

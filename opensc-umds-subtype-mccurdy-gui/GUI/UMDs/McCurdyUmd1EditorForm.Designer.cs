@@ -523,7 +523,7 @@
             this.connectionGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.connectionGroupBox.Controls.Add(this.connectionTable);
             this.connectionGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.connectionGroupBox.Location = new System.Drawing.Point(3, 5);
+            this.connectionGroupBox.Location = new System.Drawing.Point(3, 130);
             this.connectionGroupBox.Margin = new System.Windows.Forms.Padding(10);
             this.connectionGroupBox.Name = "connectionGroupBox";
             this.connectionGroupBox.Padding = new System.Windows.Forms.Padding(8, 8, 4, 8);
@@ -578,6 +578,7 @@
             // 
             // portDropDown
             // 
+            this.portDropDown.AllowDrop = true;
             this.portDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.portDropDown.FormattingEnabled = true;
             this.portDropDown.Location = new System.Drawing.Point(83, 3);

@@ -21,6 +21,8 @@ namespace OpenSC.GUI.Routers.CrosspointStores
             InitializeComponent();
             initRouterDropDown(routerInputRouterDropDown);
             initRouterDropDown(routerOutputRouterDropDown);
+            initRouterInputDropDown();
+            initRouterOutputDropDown();
             routerInputRouterDropDown.SelectedIndexChanged += selectedRouterForInputChanged;
             routerOutputRouterDropDown.SelectedIndexChanged += selectedRouterForOutputChanged;
         }
@@ -73,15 +75,30 @@ namespace OpenSC.GUI.Routers.CrosspointStores
         }
 
         private void initRouterDropDown(ComboBox dropDown)
-            => dropDown.CreateAdapterAsDataSource(RouterDatabase.Instance, null, true, "(not associated)");
+        {
+            dropDown.CreateAdapterAsDataSource(RouterDatabase.Instance, null, true, "(not associated)");
+            dropDown.ReceiveSystemObjectDrop();
+            dropDown.FilterSystemObjectDropByType<Router>();
+        }
+
+        private void initRouterInputDropDown()
+        {
+            routerInputInputDropDown.ReceiveSystemObjectDrop();
+            routerInputInputDropDown.FilterSystemObjectDropByType<RouterInput>();
+        }
+
+        private void initRouterOutputDropDown()
+        {
+            routerOutputOutputDropDown.ReceiveSystemObjectDrop();
+            routerOutputOutputDropDown.FilterSystemObjectDropByType<RouterOutput>();
+        }
 
         private void updateRouterInputDropDown(Router router)
         {
             routerInputInputDropDown.CreateAdapterAsDataSource<RouterInput>(
                 router?.Inputs,
                 routerInput => string.Format("(#{0}) {1}", routerInput.Index, routerInput.Name),
-                true,
-                "(not associated)");
+                true, "(not associated)");
         }
 
         private void updateRouterOutputDropDown(Router router)

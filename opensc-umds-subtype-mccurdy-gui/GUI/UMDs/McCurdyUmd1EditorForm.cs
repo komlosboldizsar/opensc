@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.GeneralComponents.DropDowns;
+using OpenSC.Model;
 using OpenSC.Model.SerialPorts;
 using OpenSC.Model.UMDs;
 using OpenSC.Model.UMDs.McCurdy;
@@ -147,6 +148,8 @@ namespace OpenSC.GUI.UMDs
         {
             // Ports
             portDropDown.CreateAdapterAsDataSource(SerialPortDatabase.Instance, port => port.Name, true, "(not connected)");
+            portDropDown.ReceiveSystemObjectDrop();
+            portDropDown.FilterSystemObjectDropByType<SerialPort>();
             // Dynamic text sources
             IComboBoxAdapterFactory dynamicTextAdapterFactory = new ComboBoxAdapterFactory<DynamicText>(DynamicTextDatabase.Instance, dt => dt.Name, true, "(empty)");
             for (int i = 0; i < MAX_COLUMN_COUNT; i++)
