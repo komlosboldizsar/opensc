@@ -25,6 +25,13 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
             }
         }
 
+        public static void FilterSystemObjectDropByType<T>(this ComboBox comboBox)
+        {
+            if (!dropDataDictionary.TryGetValue(comboBox, out DropData dropData))
+                return;
+            dropData.TypeFilters.Add(new TypeFilter<T>());
+        }
+
         private static void disposedHandler(object sender, EventArgs e)
         {
             if (sender is ComboBox comboBox)
@@ -59,6 +66,12 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
                 return false;
             if (!dropDataDictionary.TryGetValue(comboBox, out dropData))
                 return false;
+            if (dropData.TypeFilters.Count > 0) {
+                SystemObjectReference systemObjectReference = e.Data.GetData(typeof(SystemObjectReference)) as SystemObjectReference;
+                ISystemObject systemObject = systemObjectReference?.Object;
+                if (!dropData.TypeFilters.Any(tf => tf.Is(systemObject)))
+                    return false;
+            }
             e.Effect = DragDropEffects.Link;
             return true;
         }
@@ -68,6 +81,17 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
         private class DropData
         {
             public ComboBox ComboBox { get; set; }
+            public List<ITypeFilter> TypeFilters { get; } = new();
+        }
+
+        private interface ITypeFilter
+        {
+            bool Is(object obj);
+        }
+
+        private class TypeFilter<T> : ITypeFilter
+        {
+            public bool Is(object obj) => obj is T;
         }
 
     }
