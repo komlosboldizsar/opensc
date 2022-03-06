@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using OpenSC.Model.Settings;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
@@ -95,6 +96,26 @@ namespace OpenSC.GUI.Menus
                     return;
                 weight = value;
                 WeightChanged?.Invoke(this, oldWeight, value);
+            }
+        }
+        #endregion
+
+        #region Property: BoundCheckedSetting
+        public delegate void BoundCheckedSettingChangedDelegate(MenuItem menuItem, Setting<bool> oldSetting, Setting<bool> newSetting);
+        public event BoundCheckedSettingChangedDelegate BoundCheckedSettingChanged;
+
+        private Setting<bool> boundCheckedSetting;
+
+        public Setting<bool> BoundCheckedSetting
+        {
+            get => boundCheckedSetting;
+            set
+            {
+                Setting<bool> oldBoundCheckedSetting = boundCheckedSetting;
+                if (boundCheckedSetting == value)
+                    return;
+                boundCheckedSetting = value;
+                BoundCheckedSettingChanged?.Invoke(this, oldBoundCheckedSetting, value);
             }
         }
         #endregion
