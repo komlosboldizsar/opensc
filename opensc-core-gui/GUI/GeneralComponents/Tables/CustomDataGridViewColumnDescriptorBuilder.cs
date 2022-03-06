@@ -38,9 +38,9 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private CustomDataGridViewColumnDescriptor<T>.CellEndEditHandlerMethodDelegate endEditHandlerMethod;
 
-        private List<string> changeEvents = new List<string>();
+        private List<string> changeEvents = new();
 
-        private List<string[]> multilevelChangeEvents = new List<string[]>();
+        private List<string[]> multilevelChangeEvents = new();
 
         private CustomDataGridViewColumnDescriptor<T>.ExternalUpdateEventSubscriberMethodDelegate externalUpdateEventSubscriberMethod;
 
@@ -60,18 +60,14 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private Padding iconPadding;
 
+        private List<CustomDataGridViewColumnDescriptorExtension<T>> extensions = new();
+
         public CustomDataGridViewColumnDescriptorBuilder()
         { }
 
-        public CustomDataGridViewColumnDescriptorBuilder(DataGridViewColumnType type)
-        {
-            this.type = type;
-        }
+        public CustomDataGridViewColumnDescriptorBuilder(DataGridViewColumnType type) => this.type = type;
 
-        public CustomDataGridViewColumnDescriptorBuilder(CustomDataGridView<T> table)
-        {
-            this.table = table;
-        }
+        public CustomDataGridViewColumnDescriptorBuilder(CustomDataGridView<T> table) => this.table = table;
 
         public CustomDataGridViewColumnDescriptor<T> Build()
         {
@@ -98,7 +94,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 iconShown,
                 iconColor,
                 iconType,
-                iconPadding);
+                iconPadding,
+                extensions.ToArray());
         }
 
         public CustomDataGridViewColumnDescriptor<T> BuildAndAdd(CustomDataGridView<T> table) {
@@ -252,5 +249,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             return this;
         }
 
+        public CustomDataGridViewColumnDescriptorBuilder<T> AddExtension(CustomDataGridViewColumnDescriptorExtension<T> extension)
+        {
+            extensions.Add(extension);
+            return this;
+        }
+
     }
+
 }

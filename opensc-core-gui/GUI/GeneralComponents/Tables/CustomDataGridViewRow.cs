@@ -166,6 +166,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
             columnDescriptor.InitializerMethod?.Invoke(item, cell);
             columnDescriptor.UpdaterMethod?.Invoke(item, cell);
+            columnDescriptor.Extensions?.Foreach(ext => ext.CellReady(table, cell));
 
             return cell;
 

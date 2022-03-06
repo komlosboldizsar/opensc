@@ -64,6 +64,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public DataGridViewSmallIconCell.IconTypes IconType { get; set; }
 
         public Padding IconPadding { get; set; }
+        public CustomDataGridViewColumnDescriptorExtension<T>[] Extensions { get; private set; }
 
         public CustomDataGridViewColumnDescriptor(
                 DataGridViewColumnType type,
@@ -88,7 +89,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 bool iconShown,
                 Color iconColor,
                 DataGridViewSmallIconCell.IconTypes iconType,
-                Padding iconPadding)
+                Padding iconPadding,
+                CustomDataGridViewColumnDescriptorExtension<T>[] extensions)
         {
             Type = type;
             ID = id;
@@ -113,6 +115,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             IconColor = iconColor;
             IconType = iconType;
             IconPadding = iconPadding;
+            Extensions = extensions;
         }
 
     }
