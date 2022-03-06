@@ -13,7 +13,7 @@ namespace OpenSC.Model
     public delegate void ModelBeforeUpdateHandler(IModel model);
     public delegate void ModelAfterUpdateHandler(IModel model);
 
-    public interface IModel : INotifyPropertyChanged
+    public interface IModel : ISystemObject
     {
         int ID { get; set; }
         event PropertyChangedTwoValuesDelegate<IModel, int> IdChanged;
