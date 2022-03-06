@@ -82,7 +82,7 @@ namespace OpenSC.GUI
             builder.Width(30);
             builder.UpdaterMethod((item, cell) => { cell.Value = string.Format("#{0}", item.ID); });
             builder.AddChangeEvent(nameof(IModel.ID));
-            createAndAddDragHandler(table);
+            builder.AllowSystemObjectDrag();
             return builder;
         }
 
@@ -99,7 +99,7 @@ namespace OpenSC.GUI
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((item, cell) => { cell.Value = item.Name; });
             builder.AddChangeEvent(nameof(IModel.Name));
-            createAndAddDragHandler(table);
+            builder.AllowSystemObjectDrag();
             return builder;
         }
 
@@ -149,31 +149,6 @@ namespace OpenSC.GUI
                     ((IModelListFormBaseManager)Manager).DeleteItem(item);
             });
             return builder;
-        }
-
-        private class IdNameDragHandler<TModelBasetype> : CustomDataGridViewDragHandler<TModelBasetype>
-        {
-
-            public override DragDropEffects GetAllowedEffects(CustomDataGridViewDragSourceEventArgs<TModelBasetype> eventArgs)
-            {
-                string columnId = eventArgs.Column.GetID();
-                if ((columnId == COLUMN_ID_ID) || (columnId == COLUMN_ID_NAME))
-                    return DragDropEffects.Link;
-                return DragDropEffects.None;
-            }
-
-            public override object GetDraggedObject(CustomDataGridViewDragSourceEventArgs<TModelBasetype> eventArgs)
-                => new SystemObjectReference(eventArgs.Row.Item as ISystemObject);
-
-        }
-
-        private object idNameDragHandler;
-
-        private void createAndAddDragHandler<TModelBasetype>(CustomDataGridView<TModelBasetype> table)
-        {
-            if (idNameDragHandler == null)
-                idNameDragHandler = new IdNameDragHandler<TModelBasetype>();
-            table.DragHandlers.AddHandler(new IdNameDragHandler<TModelBasetype>());
         }
 
         protected override void setTexts()

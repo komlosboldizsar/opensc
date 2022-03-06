@@ -94,6 +94,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             DataGridViewColumn column = Columns[e.ColumnIndex];
             CustomDataGridViewDragSourceEventArgs<T> dragEventArgs = new()
             {
+                Table = this,
                 ColumnIndex = e.ColumnIndex,
                 Column = column,
                 RowIndex = e.RowIndex,
