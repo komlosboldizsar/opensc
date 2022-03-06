@@ -31,7 +31,8 @@ namespace OpenSC.GUI.Signals.TallyCopying
 
             CustomDataGridViewColumnDescriptorBuilder<TallyCopy> builder;
 
-            // Column: ID, name
+            // Column: GlobalID, ID, name
+            globalIdColumnCreator(table, builderGetterMethod);
             idColumnCreator(table, builderGetterMethod);
             nameColumnCreator(table, builderGetterMethod);
 

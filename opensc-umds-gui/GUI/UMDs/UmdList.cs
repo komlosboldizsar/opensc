@@ -31,7 +31,8 @@ namespace OpenSC.GUI.UMDs
             DataGridViewCellStyle monospaceTextCellStyle = table.DefaultCellStyle.Clone();
             monospaceTextCellStyle.Font = new Font(FontFamily.GenericMonospace, 9);
 
-            // Column: ID, name
+            // Column: GlobalID, ID, name
+            globalIdColumnCreator(table, builderGetterMethod);
             idColumnCreator(table, builderGetterMethod);
             nameColumnCreator(table, builderGetterMethod);
 

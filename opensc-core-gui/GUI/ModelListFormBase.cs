@@ -70,6 +70,25 @@ namespace OpenSC.GUI
             (editorForm as ChildWindowBase)?.ShowAsChild();
         }
 
+        protected const string COLUMN_ID_GLOBALID = "base@globalid";
+
+        protected CustomDataGridViewColumnDescriptorBuilder<TModelBasetype> globalIdColumnCreator<TModelBasetype>(CustomDataGridView<TModelBasetype> table, ItemListFormBaseManager<TModelBasetype>.ColumnDescriptorBuilderGetterDelegate builderGetterMethod)
+            where TModelBasetype : class, IModel, INotifyPropertyChanged
+        {
+            DataGridViewCellStyle cellStyle = table.DefaultCellStyle.Clone();
+            cellStyle.BackColor = Color.LightGoldenrodYellow;
+            CustomDataGridViewColumnDescriptorBuilder<TModelBasetype> builder = builderGetterMethod();
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.ID(COLUMN_ID_GLOBALID);
+            builder.Header("Global ID");
+            builder.Width(120);
+            builder.CellStyle(cellStyle);
+            builder.UpdaterMethod((item, cell) => { cell.Value = item.GlobalID; });
+            builder.AddChangeEvent(nameof(IModel.GlobalID));
+            builder.AllowSystemObjectDrag();
+            return builder;
+        }
+
         protected const string COLUMN_ID_ID = "base@id";
 
         protected CustomDataGridViewColumnDescriptorBuilder<TModelBasetype> idColumnCreator<TModelBasetype>(CustomDataGridView<TModelBasetype> table, ItemListFormBaseManager<TModelBasetype>.ColumnDescriptorBuilderGetterDelegate builderGetterMethod)

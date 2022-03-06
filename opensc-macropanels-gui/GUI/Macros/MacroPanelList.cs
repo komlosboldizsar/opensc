@@ -25,7 +25,8 @@ namespace OpenSC.GUI.Macros
 
             CustomDataGridViewColumnDescriptorBuilder<MacroPanel> builder;
 
-            // Column: ID, name
+            // Column: GlobalID, ID, name
+            globalIdColumnCreator(table, builderGetterMethod);
             idColumnCreator(table, builderGetterMethod);
             nameColumnCreator(table, builderGetterMethod);
 
