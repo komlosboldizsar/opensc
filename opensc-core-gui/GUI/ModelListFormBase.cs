@@ -155,7 +155,7 @@ namespace OpenSC.GUI
         private class IdNameDragHandler<TModelBasetype> : CustomDataGridViewDragHandler<TModelBasetype>
         {
 
-            public override DragDropEffects GetAllowedEffects(CustomDataGridViewDragEventArgs<TModelBasetype> eventArgs)
+            public override DragDropEffects GetAllowedEffects(CustomDataGridViewDragSourceEventArgs<TModelBasetype> eventArgs)
             {
                 string columnId = eventArgs.Column.GetID();
                 if ((columnId == COLUMN_ID_ID) || (columnId == COLUMN_ID_NAME))
@@ -163,7 +163,7 @@ namespace OpenSC.GUI
                 return DragDropEffects.None;
             }
 
-            public override object GetDraggedObject(CustomDataGridViewDragEventArgs<TModelBasetype> eventArgs)
+            public override object GetDraggedObject(CustomDataGridViewDragSourceEventArgs<TModelBasetype> eventArgs)
                 => new SystemObjectReference(eventArgs.Row.Item as ISystemObject);
 
         }
