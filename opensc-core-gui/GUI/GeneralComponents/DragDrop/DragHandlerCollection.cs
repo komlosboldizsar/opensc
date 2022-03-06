@@ -8,9 +8,9 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.GeneralComponents.DragDrop
 {
 
-    public class DragHandlerCollection<TDragHandler, TDragEventArgs>
-        where TDragHandler : DragHandler<TDragEventArgs>
-        where TDragEventArgs : DragEventArgs
+    public class DragHandlerCollection<TDragHandler, TDragSourceEventArgs>
+        where TDragHandler : DragHandler<TDragSourceEventArgs>
+        where TDragSourceEventArgs : DragSourceEventArgs
     {
 
         private List<TDragHandler> registeredHandlers = new();
@@ -20,7 +20,7 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
                 registeredHandlers.Add(handler);
         }
 
-        public void GetDragData(TDragEventArgs eventArgs, out DragDropEffects allowedEffects, out object draggedObject)
+        public void GetDragData(TDragSourceEventArgs eventArgs, out DragDropEffects allowedEffects, out object draggedObject)
         {
             foreach (TDragHandler handler in registeredHandlers)
             {

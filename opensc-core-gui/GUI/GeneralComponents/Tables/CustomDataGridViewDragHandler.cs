@@ -8,6 +8,6 @@ using System.Windows.Forms;
 
 namespace OpenSC.GUI.GeneralComponents.Tables
 {
-    public abstract class CustomDataGridViewDragHandler<TRowItem> : DragHandler<CustomDataGridViewDragEventArgs<TRowItem>>
+    public abstract class CustomDataGridViewDragHandler<TRowItem> : DragHandler<CustomDataGridViewDragSourceEventArgs<TRowItem>>
     { }
 }

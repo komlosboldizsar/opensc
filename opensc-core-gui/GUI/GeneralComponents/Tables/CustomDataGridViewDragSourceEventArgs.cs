@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace OpenSC.GUI.GeneralComponents.Tables
 {
-    public class CustomDataGridViewDragEventArgs<TRowItem> : OpenSC.GUI.GeneralComponents.DragDrop.DragEventArgs
+    public class CustomDataGridViewDragSourceEventArgs<TRowItem> : DragDrop.DragSourceEventArgs
     {
         public int RowIndex { get; init; }
         public DataGridViewColumn Column { get; init; }

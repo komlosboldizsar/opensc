@@ -9,7 +9,7 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
 {
 
     public abstract class DragHandler<TDragEventArgs>
-        where TDragEventArgs : DragEventArgs
+        where TDragEventArgs : DragSourceEventArgs
     {
         public abstract DragDropEffects GetAllowedEffects(TDragEventArgs eventArgs);
         public abstract object GetDraggedObject(TDragEventArgs eventArgs);

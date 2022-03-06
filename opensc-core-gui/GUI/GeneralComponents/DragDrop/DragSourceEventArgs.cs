@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace OpenSC.GUI.GeneralComponents.DragDrop
 {
-    public class DragEventArgs : EventArgs
+    public class DragSourceEventArgs : EventArgs
     { }
 }

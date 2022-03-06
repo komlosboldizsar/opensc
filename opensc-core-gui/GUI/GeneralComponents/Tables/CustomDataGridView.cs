@@ -92,7 +92,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 return;
             CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
             DataGridViewColumn column = Columns[e.ColumnIndex];
-            CustomDataGridViewDragEventArgs<T> dragEventArgs = new()
+            CustomDataGridViewDragSourceEventArgs<T> dragEventArgs = new()
             {
                 ColumnIndex = e.ColumnIndex,
                 Column = column,
@@ -136,6 +136,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 column.DefaultCellStyle = columnDescriptor.CellStyle;
             column.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
             Columns.Add(column);
+            columnDescriptor.Extensions?.Foreach(ext => ext.ColumnReady(this, column));
         }
 
         public void ColumnChangeReady() => loadItems();
