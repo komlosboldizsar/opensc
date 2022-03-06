@@ -23,10 +23,10 @@ namespace OpenSC.Model.Settings
             DefaultValue = defaultValue;
         }
 
-        public string Key { get; private set; }
-        public string Category { get; private set; }
-        public string HumanReadableTitle { get; private set; }
-        public string HumanReadableDescription { get; private set; }
+        public string Key { get; init; }
+        public string Category { get; init; }
+        public string HumanReadableTitle { get; init; }
+        public string HumanReadableDescription { get; init; }
         public Type ValueType { get; } = typeof(T);
 
         #region Value properties
