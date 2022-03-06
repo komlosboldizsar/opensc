@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.GeneralComponents.Tables;
+﻿using OpenSC.GUI.GeneralComponents.DropDowns;
+using OpenSC.GUI.GeneralComponents.Tables;
 using OpenSC.Model.Routers;
 using OpenSC.Model.Routers.Salvos;
 using OpenSC.Model.Signals;
@@ -85,6 +86,8 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.UpdaterMethod((crosspoint, cell) => { cell.Value = crosspoint.Output; });
             builder.CellEndEditHandlerMethod((crosspoint, cell, eventargs) => { crosspoint.Output = cell.Value as RouterOutput; });
             builder.DropDownPopulatorMethod((crosspoint, cell) => getArrayForDropDown<RouterOutput>(crosspoint.Router?.Outputs));
+            builder.ReceiveSystemObjectDrop();
+            builder.FilterSystemObjectDropByType<SalvoCrosspoint, RouterOutput>();
             builder.BuildAndAdd();
 
             // Column: input
@@ -96,6 +99,8 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.UpdaterMethod((crosspoint, cell) => { cell.Value = crosspoint.Input; });
             builder.CellEndEditHandlerMethod((crosspoint, cell, eventargs) => { crosspoint.Input = cell.Value as RouterInput; });
             builder.DropDownPopulatorMethod((crosspoint, cell) => getArrayForDropDown<RouterInput>(crosspoint.Router?.Inputs));
+            builder.ReceiveSystemObjectDrop();
+            builder.FilterSystemObjectDropByType<SalvoCrosspoint, RouterInput>();
             builder.BuildAndAdd();
 
             // Column: delete button

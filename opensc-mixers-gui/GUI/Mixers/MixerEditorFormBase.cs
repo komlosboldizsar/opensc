@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.GeneralComponents.Tables;
+﻿using OpenSC.GUI.GeneralComponents.DropDowns;
+using OpenSC.GUI.GeneralComponents.Tables;
 using OpenSC.Model.Mixers;
 using OpenSC.Model.Signals;
 using System;
@@ -74,6 +75,7 @@ namespace OpenSC.GUI.Mixers
                 }
             });
             //builder.AddChangeEvent(nameof(MixerInput.IndexChangedPCN));
+            //builder.AllowSystemObjectDrag();
             builder.BuildAndAdd();
 
             // Column: name
@@ -96,6 +98,7 @@ namespace OpenSC.GUI.Mixers
                     cell.Value = input.Name;
                 }
             });
+            //builder.AllowSystemObjectDrag();
             builder.BuildAndAdd();
 
             // Column: source
@@ -108,6 +111,8 @@ namespace OpenSC.GUI.Mixers
             builder.UpdaterMethod((input, cell) => { cell.Value = input.Source; });
             builder.CellEndEditHandlerMethod((input, cell, eventargs) => { input.Source = cell.Value as ISignalSourceRegistered; });
             builder.DropDownPopulatorMethod((input, cell) => signals);
+            builder.ReceiveSystemObjectDrop();
+            builder.FilterSystemObjectDropByType<MixerInput, ISignalSourceRegistered>();
             builder.BuildAndAdd();
 
             // Column: delete button
