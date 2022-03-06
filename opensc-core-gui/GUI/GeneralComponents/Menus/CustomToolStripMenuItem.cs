@@ -47,22 +47,7 @@ namespace OpenSC.GUI.GeneralComponents.Menus
         private void tagChangedHandler(MenuItem menuItem, object oldTag, object newTag) => Tag = newTag;
 
         private void boundCheckedSettingChangedHandler(MenuItem menuItem, Setting<bool> oldSetting, Setting<bool> newSetting)
-        {
-            if (oldSetting != null)
-                oldSetting.ValueChanged -= boundCheckedSettingsValueChangedHandler;
-            if (newSetting != null)
-            {
-                Checked = newSetting.Value;
-                newSetting.ValueChanged += boundCheckedSettingsValueChangedHandler;
-            }
-            else
-            {
-                Checked = false;
-            }
-        }
-
-        private void boundCheckedSettingsValueChangedHandler(ISetting setting, object oldValue, object newValue)
-            => Checked = (bool)newValue;
+            => this.BindCheckedSetting(newSetting);
 
         private void clickHandler(object sender, EventArgs e)
         {
