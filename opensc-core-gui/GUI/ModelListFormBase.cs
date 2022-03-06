@@ -86,6 +86,7 @@ namespace OpenSC.GUI
             builder.UpdaterMethod((item, cell) => { cell.Value = item.GlobalID; });
             builder.AddChangeEvent(nameof(IModel.GlobalID));
             builder.AllowSystemObjectDrag();
+            builder.BindVisibilityToSetting(MainForm.SHOW_GLOBAL_ID_IN_TABLES_SETTING);
             return builder;
         }
 

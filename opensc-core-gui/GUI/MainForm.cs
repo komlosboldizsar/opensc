@@ -1,8 +1,10 @@
-﻿using OpenSC.GUI.Menus;
+﻿using OpenSC.GUI.GeneralComponents.Menus;
+using OpenSC.GUI.Menus;
 using OpenSC.GUI.Settings;
 using OpenSC.GUI.WorkspaceManager;
 using OpenSC.Logger;
 using OpenSC.Model;
+using OpenSC.Model.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -36,6 +38,7 @@ namespace OpenSC.GUI
         {
             InitializeComponent();
             WindowTypeRegister.RegisterWindowType<SettingsWindow>();
+            SettingsManager.Instance.RegisterSetting(SHOW_GLOBAL_ID_IN_TABLES_SETTING);
         }
 
         private void clockUpdateTimer_Tick(object sender, EventArgs e)
@@ -59,8 +62,22 @@ namespace OpenSC.GUI
 
             menuStrip.DynamicChildrenInsertPosition = 1;
             menuStrip.AssociatedMenuItem = MenuManager.Instance.TopMenu;
+            createFileMenuBindings();
 
         }
+
+        private void createFileMenuBindings()
+        {
+            showGlobalIdInTablesToolStripMenuItem.BindCheckedSetting(SHOW_GLOBAL_ID_IN_TABLES_SETTING);
+        }
+
+        public static Setting<bool> SHOW_GLOBAL_ID_IN_TABLES_SETTING { get; } = new(
+            "guibasic.showglobalidintables",
+            "GUI basic",
+            "Show GlobalID in tables",
+            "Show GlobalID of system objects in the first columns of tables where possible and relevant.",
+            false)
+        { Hidden = true };
 
         #region Size and position change event handlers
         private void mainFormSizeChangedHandler(Size size) => Size = size;
