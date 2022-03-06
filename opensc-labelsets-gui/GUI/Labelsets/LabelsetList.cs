@@ -24,6 +24,8 @@ namespace OpenSC.GUI.Labelsets
         protected override IItemListFormBaseManager createManager()
             => new ModelListFormBaseManager<Labelset>(this, LabelsetDatabase.Instance, baseColumnCreator);
 
+        public LabelsetList() => InitializeComponent();
+
         private void baseColumnCreator(CustomDataGridView<Labelset> table, ItemListFormBaseManager<Labelset>.ColumnDescriptorBuilderGetterDelegate builderGetterMethod)
         {
             // Column: ID, name
@@ -33,6 +35,9 @@ namespace OpenSC.GUI.Labelsets
             editButtonColumnCreator(table, builderGetterMethod);
             deleteButtonColumnCreator(table, builderGetterMethod);
         }
+
+        private void editAllButton_Click(object sender, EventArgs e)
+            => (new AllLabelsetEditorForm()).ShowAsChild();
 
     }
 
