@@ -83,7 +83,6 @@ namespace OpenSC.GUI
             builder.UpdaterMethod((item, cell) => { cell.Value = string.Format("#{0}", item.ID); });
             builder.AddChangeEvent(nameof(IModel.ID));
             createAndAddDragHandler(table);
-            table.DragHandlers.AddHandler(new IdNameDragHandler<TModelBasetype>());
             return builder;
         }
 
