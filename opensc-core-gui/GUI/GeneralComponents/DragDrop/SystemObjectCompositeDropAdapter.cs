@@ -50,7 +50,7 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
                     ReceiverChild = receiverChild,
                     Tag = tag
                 };
-                dropDataChildDictionary.Add(receiverChild, dropData);
+                dropDataChildDictionary.Add(receiverChild ?? receiverChildNull, dropData);
             }
         }
 
