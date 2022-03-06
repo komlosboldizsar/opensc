@@ -77,5 +77,16 @@ namespace OpenSC.GUI.Settings
         }
         #endregion
 
+        private void SettingsWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // @source https://stackoverflow.com/a/2021708
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                Hide();
+            }
+        }
+
     }
+
 }
