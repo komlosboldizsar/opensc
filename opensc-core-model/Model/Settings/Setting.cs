@@ -27,6 +27,7 @@ namespace OpenSC.Model.Settings
         public string Category { get; init; }
         public string HumanReadableTitle { get; init; }
         public string HumanReadableDescription { get; init; }
+        public bool Hidden { get; init; } = false;
         public Type ValueType { get; } = typeof(T);
 
         #region Value properties
