@@ -122,7 +122,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 Rows.Add(new CustomDataGridViewRow<T>(this, item));
         }
 
-        public void AddColumn(CustomDataGridViewColumnDescriptor<T> columnDescriptor)
+        public DataGridViewColumn AddColumn(CustomDataGridViewColumnDescriptor<T> columnDescriptor)
         {
             columnDescriptors.Add(columnDescriptor);
             DataGridViewColumn column = getColumnByType(columnDescriptor.Type);
@@ -138,6 +138,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             column.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
             Columns.Add(column);
             columnDescriptor.Extensions?.Foreach(ext => ext.ColumnReady(this, column));
+            return column;
         }
 
         public void ColumnChangeReady() => loadItems();

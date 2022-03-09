@@ -66,6 +66,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public Padding IconPadding { get; set; }
         public CustomDataGridViewColumnDescriptorExtension<T>[] Extensions { get; private set; }
 
+        public DataGridViewColumn ReadyColumn { get; internal set; }
+
         public CustomDataGridViewColumnDescriptor(
                 DataGridViewColumnType type,
                 string id,
@@ -118,5 +120,13 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             Extensions = extensions;
         }
 
+        public void AddToTable(CustomDataGridView<T> table)
+        {
+            if (ReadyColumn != null)
+                throw new Exception();
+            ReadyColumn = table.AddColumn(this);
+        }
+
     }
+
 }

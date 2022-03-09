@@ -69,9 +69,11 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         public CustomDataGridViewColumnDescriptorBuilder(CustomDataGridView<T> table) => this.table = table;
 
+        public CustomDataGridViewColumnDescriptor<T> ReadyDescriptor { get; private set; }
+
         public CustomDataGridViewColumnDescriptor<T> Build()
         {
-            return new CustomDataGridViewColumnDescriptor<T>(
+            ReadyDescriptor = new CustomDataGridViewColumnDescriptor<T>(
                 type,
                 id,
                 header,
@@ -96,11 +98,13 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 iconType,
                 iconPadding,
                 extensions.ToArray());
+            return ReadyDescriptor;
         }
 
-        public CustomDataGridViewColumnDescriptor<T> BuildAndAdd(CustomDataGridView<T> table) {
+        public CustomDataGridViewColumnDescriptor<T> BuildAndAdd(CustomDataGridView<T> table)
+        {
             var columnDescriptor = Build();
-            table.AddColumn(columnDescriptor);
+            columnDescriptor.AddToTable(table);
             return columnDescriptor;
         }
 
@@ -252,6 +256,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public CustomDataGridViewColumnDescriptorBuilder<T> AddExtension(CustomDataGridViewColumnDescriptorExtension<T> extension)
         {
             extensions.Add(extension);
+            extension.AddedToBuilder(this);
             return this;
         }
 
