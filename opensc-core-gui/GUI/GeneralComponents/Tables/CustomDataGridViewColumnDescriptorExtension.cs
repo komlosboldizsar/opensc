@@ -10,8 +10,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
     public abstract class CustomDataGridViewColumnDescriptorExtension<T>
     {
-        public abstract void CellReady(CustomDataGridView<T> table, DataGridViewCell cell);
-        public abstract void ColumnReady(CustomDataGridView<T> table, DataGridViewColumn column);
+        public virtual void CellReady(CustomDataGridView<T> table, DataGridViewCell cell) { }
+        public virtual void ColumnReady(CustomDataGridView<T> table, DataGridViewColumn column) { }
     }
 
 }

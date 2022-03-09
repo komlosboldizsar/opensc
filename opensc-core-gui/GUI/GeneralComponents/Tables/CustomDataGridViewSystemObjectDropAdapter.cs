@@ -78,14 +78,12 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
 
         private class ReceiveSystemObjectDropDescriptorExtension<T> : CustomDataGridViewColumnDescriptorExtension<T>
         {
-            public override void CellReady(CustomDataGridView<T> table, DataGridViewCell cell) { }
             public override void ColumnReady(CustomDataGridView<T> table, DataGridViewColumn column)
                 => column.ReceiveSystemObjectDrop();
         }
 
         private class FilterSystemObjectDropByTypeDescriptorExtension<T, TSystemObject> : CustomDataGridViewColumnDescriptorExtension<T>
         {
-            public override void CellReady(CustomDataGridView<T> table, DataGridViewCell cell) { }
             public override void ColumnReady(CustomDataGridView<T> table, DataGridViewColumn column)
                 => column.FilterSystemObjectDropByType<TSystemObject>();
         }

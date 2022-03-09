@@ -27,7 +27,6 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 setting.ValueChanged += settingValueChanged;
             }
 
-            public override void CellReady(CustomDataGridView<T> table, DataGridViewCell cell) { }
             public override void ColumnReady(CustomDataGridView<T> table, DataGridViewColumn column)
             {
                 this.column = column;

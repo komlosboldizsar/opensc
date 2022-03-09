@@ -16,7 +16,6 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private class AllowSystemObjectDragDescriptorExtension<T> : CustomDataGridViewColumnDescriptorExtension<T>
         {
-            public override void CellReady(CustomDataGridView<T> table, DataGridViewCell cell) { }
             public override void ColumnReady(CustomDataGridView<T> table, DataGridViewColumn column)
             {
                 SystemObjectDragHandler<T> dragHandler = SystemObjectDragHandler<T>.Instance;
