@@ -56,7 +56,7 @@ namespace OpenSC.GUI.Routers.Salvos
 
             Salvo salvo = (Salvo)EditedModel;
             crosspointsTableCDGV = createTable<SalvoCrosspoint>(crosspointsTableContainerPanel, ref this.crosspointsTable);
-            CustomDataGridViewColumnDescriptorBuilder<SalvoCrosspoint> builder;
+            CustomDataGridViewColumnDescriptorBuilder<SalvoCrosspoint> builder, routerBuilder;
 
             // Column: router
             CustomDataGridViewComboBoxItem<Router>[] routers = getArrayForDropDown(RouterDatabase.Instance);
@@ -66,7 +66,7 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.Width(180);
             builder.InitializerMethod((crosspoint, cell) => { });
             builder.UpdaterMethod((crosspoint, cell) => { cell.Value = crosspoint.Router; });
-            builder.CellEndEditHandlerMethod((crosspoint, cell, eventargs) => {
+            builder.CellValueChangedHandlerMethod((crosspoint, cell, eventargs) => {
                 ((DataGridViewComboBoxCell)cell.OwningRow.Cells[1]).Value = null;
                 ((DataGridViewComboBoxCell)cell.OwningRow.Cells[2]).Value = null;
                 ((DataGridViewComboBoxCell)cell.OwningRow.Cells[1]).Items.Clear();
@@ -76,6 +76,7 @@ namespace OpenSC.GUI.Routers.Salvos
             });
             builder.DropDownPopulatorMethod((crosspoint, cell) => routers);
             builder.BuildAndAdd();
+            routerBuilder = builder;
 
             // Column: output
             builder = getColumnDescriptorBuilderForTable<SalvoCrosspoint>(crosspointsTableCDGV);
@@ -88,6 +89,7 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.DropDownPopulatorMethod((crosspoint, cell) => getArrayForDropDown<RouterOutput>(crosspoint.Router?.Outputs));
             builder.ReceiveSystemObjectDrop();
             builder.FilterSystemObjectDropByType<SalvoCrosspoint, RouterOutput>();
+            builder.BindParent(routerBuilder, ro => ((RouterOutput)ro)?.Router);
             builder.BuildAndAdd();
 
             // Column: input
@@ -101,6 +103,7 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.DropDownPopulatorMethod((crosspoint, cell) => getArrayForDropDown<RouterInput>(crosspoint.Router?.Inputs));
             builder.ReceiveSystemObjectDrop();
             builder.FilterSystemObjectDropByType<SalvoCrosspoint, RouterInput>();
+            builder.BindParent(routerBuilder, ri => ((RouterInput)ri)?.Router);
             builder.BuildAndAdd();
 
             // Column: delete button
