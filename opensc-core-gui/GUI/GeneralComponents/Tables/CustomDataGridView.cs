@@ -55,6 +55,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             CellContentClick += cellContentClickHandler;
             CellDoubleClick += cellDoubleClickHandler;
             CellEndEdit += cellEndEditHandler;
+            CellValueChanged += cellValueChangedHandler;
             CellMouseDown += cellMouseDownHandler;
             AllowUserToAddRows = false;
             AllowUserToDeleteRows = false;
@@ -68,6 +69,14 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 return;
             CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
             row?.HandleEndEdit(e);
+        }
+
+        private void cellValueChangedHandler(object sender, DataGridViewCellEventArgs e)
+        {
+            if ((e.RowIndex < 0) || (e.RowIndex >= Rows.Count))
+                return;
+            CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
+            row?.HandleValueChanged(e);
         }
 
         private void cellContentClickHandler(object sender, DataGridViewCellEventArgs e)

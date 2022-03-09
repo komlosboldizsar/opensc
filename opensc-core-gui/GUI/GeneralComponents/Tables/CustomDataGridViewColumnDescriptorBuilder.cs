@@ -37,6 +37,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         private CustomDataGridViewColumnDescriptor<T>.CellDoubleClickHandlerMethodDelegate doubleClickHandlerMethod;
 
         private CustomDataGridViewColumnDescriptor<T>.CellEndEditHandlerMethodDelegate endEditHandlerMethod;
+        private CustomDataGridViewColumnDescriptor<T>.CellValueChangedHandlerMethodDelegate valueChangedHandlerMethod;
 
         private List<string> changeEvents = new();
 
@@ -86,6 +87,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 contentClickHandlerMethod,
                 doubleClickHandlerMethod,
                 endEditHandlerMethod,
+                valueChangedHandlerMethod,
                 changeEvents.ToArray(),
                 multilevelChangeEvents.ToArray(),
                 externalUpdateEventSubscriberMethod,
@@ -184,6 +186,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public CustomDataGridViewColumnDescriptorBuilder<T> CellEndEditHandlerMethod(CustomDataGridViewColumnDescriptor<T>.CellEndEditHandlerMethodDelegate endEditHandlerMethod)
         {
             this.endEditHandlerMethod = endEditHandlerMethod;
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> CellValueChangedHandlerMethod(CustomDataGridViewColumnDescriptor<T>.CellValueChangedHandlerMethodDelegate valueChangedHandlerMethod)
+        {
+            this.valueChangedHandlerMethod = valueChangedHandlerMethod;
             return this;
         }
 

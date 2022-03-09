@@ -41,6 +41,9 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         public delegate void CellEndEditHandlerMethodDelegate(T item, DataGridViewCell cell, DataGridViewCellEventArgs eventArgs);
         public CellEndEditHandlerMethodDelegate EndEditHandlerMethod { get; private set; }
+        
+        public delegate void CellValueChangedHandlerMethodDelegate(T item, DataGridViewCell cell, DataGridViewCellEventArgs eventArgs);
+        public CellValueChangedHandlerMethodDelegate ValueChangedHandlerMethod { get; private set; }
 
         public string[] ChangeEvents { get; private set; }
         public string[][] MultilevelChangeEvents { get; private set; }
@@ -81,6 +84,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 CellContentClickHandlerMethodDelegate contentClickHandlerMethod,
                 CellDoubleClickHandlerMethodDelegate doubleClickHandlerMethod,
                 CellEndEditHandlerMethodDelegate endEditHandlerMethod,
+                CellValueChangedHandlerMethodDelegate valueChangedHandlerMethod,
                 string[] changeEvents,
                 string[][] multilevelChangeEvents,
                 ExternalUpdateEventSubscriberMethodDelegate externalUpdateEventSubscriberMethod,
@@ -106,6 +110,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             ContentClickHandlerMethod = contentClickHandlerMethod;
             DoubleClickHandlerMethod = doubleClickHandlerMethod;
             EndEditHandlerMethod = endEditHandlerMethod;
+            ValueChangedHandlerMethod = valueChangedHandlerMethod;
             ChangeEvents = changeEvents;
             MultilevelChangeEvents = multilevelChangeEvents;
             ExternalUpdateEventSubscriberMethod = externalUpdateEventSubscriberMethod;

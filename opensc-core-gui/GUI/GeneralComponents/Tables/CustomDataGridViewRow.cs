@@ -221,6 +221,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             getColumnDescriptor(ci).EndEditHandlerMethod?.Invoke(item, Cells[ci], eventArgs);
         }
 
+        public void HandleValueChanged(DataGridViewCellEventArgs eventArgs)
+        {
+            int ci = eventArgs.ColumnIndex;
+            getColumnDescriptor(ci).ValueChangedHandlerMethod?.Invoke(item, Cells[ci], eventArgs);
+        }
+
         private CustomDataGridViewColumnDescriptor<T> getColumnDescriptor(int columnIndex)
         {
             return table.ColumnDescriptors[columnIndex];
