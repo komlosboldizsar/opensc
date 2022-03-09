@@ -85,12 +85,14 @@ namespace OpenSC.GUI.Routers.CrosspointStores
         {
             routerInputInputDropDown.ReceiveSystemObjectDrop();
             routerInputInputDropDown.FilterSystemObjectDropByType<RouterInput>();
+            routerInputInputDropDown.BindParent(routerInputRouterDropDown, ri => ((RouterInput)ri).Router);
         }
 
         private void initRouterOutputDropDown()
         {
             routerOutputOutputDropDown.ReceiveSystemObjectDrop();
             routerOutputOutputDropDown.FilterSystemObjectDropByType<RouterOutput>();
+            routerOutputOutputDropDown.BindParent(routerOutputRouterDropDown, ro => ((RouterOutput)ro).Router);
         }
 
         private void updateRouterInputDropDown(Router router)
