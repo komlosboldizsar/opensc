@@ -19,6 +19,19 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             return false;
         }
 
+        public static bool SelectIfContainsValue(this DataGridViewComboBoxCell comboBoxCell, object value)
+        {
+            foreach (object itemProxy in comboBoxCell.Items)
+            {
+                if ((itemProxy as ICustomDataGridViewComboBoxItem).ObjValue == value)
+                {
+                    comboBoxCell.Value = value;
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
 
 }

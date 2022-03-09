@@ -51,10 +51,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
                 return;
             DataGridViewCell cell = receiverParent.Rows[hitTestInfo.RowIndex].Cells[hitTestInfo.ColumnIndex];
             if (cell is DataGridViewComboBoxCell comboBoxCell)
-            {
-                if (comboBoxCell.ContainsValue(systemObject))
-                    comboBoxCell.Value = systemObject;
-            }
+                comboBoxCell.SelectWithParentsHelp(systemObject);
             // Other cell types not supported at the moment
         }
 
