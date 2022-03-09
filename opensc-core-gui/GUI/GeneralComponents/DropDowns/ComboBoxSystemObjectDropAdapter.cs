@@ -25,10 +25,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
         }
 
         private static void receiverValueSetter(ComboBox receiver, ISystemObject systemObject, DragEventArgs eventArgs, object tag)
-        {
-            if (receiver.ContainsValue(systemObject))
-                receiver.SelectByValue(systemObject);
-        }
+            => receiver.SelectWithParentsHelp(systemObject);
 
         private static bool receiverDragResponder(ComboBox receiver, DragEventArgs eventArgs, object tag) => true;
 
@@ -36,7 +33,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
             => BaseInstance.ReceiveSystemObjectDrop(comboBox);
 
         public static void FilterSystemObjectDropByType<TSystemObject>(this ComboBox comboBox)
-            => BaseInstance.FilterSystemObjectDropByType<TSystemObject>(comboBox);
+            => BaseInstance.FilterSystemObjectDropByType<TSystemObject>(comboBox);        
 
     }
 
