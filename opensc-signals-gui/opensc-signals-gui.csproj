@@ -16,4 +16,5 @@
     <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
     <ProjectReference Include="..\opensc-signals-model\opensc-signals-model.csproj" />
   </ItemGroup>
+  <Import Project="..\GlobalCsproj\*.csproj" />
 </Project>

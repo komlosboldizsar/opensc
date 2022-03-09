@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /c /y &quot;$(TargetPath)&quot; &quot;$(SolutionDir)\_MODULE\&quot;" />
+    <Exec Command="xcopy /c /y &quot;$(TargetDir)\$(TargetName).pdb&quot; &quot;$(SolutionDir)\_MODULE\&quot;" />
+  </Target>
+</Project>

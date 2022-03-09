@@ -82,4 +82,5 @@
       <CustomToolNamespace>OpenSC.GUI</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
+  <Import Project="..\GlobalCsproj\*.csproj" />
 </Project>

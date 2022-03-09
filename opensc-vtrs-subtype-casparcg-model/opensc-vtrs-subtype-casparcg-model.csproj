@@ -17,4 +17,5 @@
     <PackageReference Include="Bespoke.Common" Version="1.0.0" />
     <PackageReference Include="Bespoke.Osc" Version="1.0.0" />
   </ItemGroup>
+  <Import Project="..\GlobalCsproj\*.csproj" />
 </Project>

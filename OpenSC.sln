@@ -161,7 +161,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-salvos-model", "open
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-salvos-gui", "opensc-salvos-gui\opensc-salvos-gui.csproj", "{16A1DAC0-856A-439A-89B3-DB2D32A37C5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-dynamictexts-functions-datetime", "opensc-dynamictexts-datetime\opensc-dynamictexts-functions-datetime.csproj", "{2F81DCF9-9E75-4109-8A2A-E8DB2464B623}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-dynamictexts-functions-datetime", "opensc-dynamictexts-datetime\opensc-dynamictexts-functions-datetime.csproj", "{2F81DCF9-9E75-4109-8A2A-E8DB2464B623}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7C18D161-333C-4082-8790-6AB61E3CDFA1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GlobalCsproj", "GlobalCsproj", "{D01344E8-BF53-48BD-94DB-80B7378770ED}"
+	ProjectSection(SolutionItems) = preProject
+		GlobalCsproj\CopyToOutput.csproj = GlobalCsproj\CopyToOutput.csproj
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1136,6 +1143,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D01344E8-BF53-48BD-94DB-80B7378770ED} = {7C18D161-333C-4082-8790-6AB61E3CDFA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {67985880-EFE9-47A1-8BFC-49EC31C75F01}

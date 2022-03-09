@@ -23,4 +23,5 @@
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
+  <Import Project="..\GlobalCsproj\*.csproj" />
 </Project>

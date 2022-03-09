@@ -17,4 +17,5 @@
     <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj" />
     <ProjectReference Include="..\opensc-signals-model\opensc-signals-model.csproj" />
   </ItemGroup>
+  <Import Project="..\GlobalCsproj\*.csproj" />
 </Project>

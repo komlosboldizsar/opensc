@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
@@ -40,4 +40,8 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /c /y &quot;$(SolutionDir)\_MODULE\*.dll&quot; &quot;$(TargetDir)&quot;" />
+    <Exec Command="xcopy /c /y &quot;$(SolutionDir)\_MODULE\*.pdb&quot; &quot;$(TargetDir)&quot;" />
+  </Target>
 </Project>

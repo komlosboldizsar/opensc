@@ -18,4 +18,5 @@
     <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj" />
     <ProjectReference Include="..\opensc-routers-subtype-virtual-model\opensc-routers-subtype-virtual-model.csproj" />
   </ItemGroup>
+  <Import Project="..\GlobalCsproj\*.csproj" />
 </Project>
