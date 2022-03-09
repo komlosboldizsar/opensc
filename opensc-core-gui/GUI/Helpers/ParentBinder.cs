@@ -5,27 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace OpenSC.GUI.GeneralComponents.DropDowns
+namespace OpenSC.GUI.Helpers
 {
 
-    public class ParentBinder<T>
-        where T : Control
+    public class ParentBinder<TControl, TSelectEventArgs>
+        where TSelectEventArgs : ParentBinderSelectEventArgs<TControl>
     {
 
-        public ParentBinder(Func<T, object, bool> selectIfCanMethod, Func<T, object, bool> canSelectMethod)
+        public ParentBinder(Func<TControl, object, TSelectEventArgs, bool> selectIfCanMethod, Func<TControl, object, TSelectEventArgs, bool> canSelectMethod)
         {
             this.selectIfCanMethod = selectIfCanMethod;
             this.canSelectMethod = canSelectMethod;
         }
 
-        private Func<T, object, bool> selectIfCanMethod;
-        private Func<T, object, bool> canSelectMethod;
+        private Func<TControl, object, TSelectEventArgs, bool> selectIfCanMethod;
+        private Func<TControl, object, TSelectEventArgs, bool> canSelectMethod;
 
-        private Dictionary<T, Dictionary<T, Func<object, object>>> allParentBindingDataDictionary = new();
+        private Dictionary<TControl, Dictionary<TControl, Func<object, object>>> allParentBindingDataDictionary = new();
 
-        public void BindParent(T child, T parent, Func<object, object> parentsValueSelector)
+        public void BindParent(TControl child, TControl parent, Func<object, object> parentsValueSelector)
         {
-            if (!allParentBindingDataDictionary.TryGetValue(child, out Dictionary<T, Func<object, object>> parentBindingDataDictionary))
+            if (!allParentBindingDataDictionary.TryGetValue(child, out Dictionary<TControl, Func<object, object>> parentBindingDataDictionary))
             {
                 parentBindingDataDictionary = new();
                 allParentBindingDataDictionary.Add(child, parentBindingDataDictionary);
@@ -34,56 +34,56 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
                 parentBindingDataDictionary.Add(parent, parentsValueSelector);
         }
 
-        public bool SelectWithParentsHelp(T child, object value)
+        public bool SelectWithParentsHelp(TControl child, object value, TSelectEventArgs eventArgs = null)
         {
-            if (selectIfCanMethod(child, value))
+            if (selectIfCanMethod(child, value, eventArgs))
                 return true;
-            if (CanParentsHelpSelection(child, value))
+            if (CanParentsHelpSelection(child, value, eventArgs))
             {
-                DoParentsHelpSelection(child, value);
-                return selectIfCanMethod(child, value);
+                DoParentsHelpSelection(child, value, eventArgs);
+                return selectIfCanMethod(child, value, eventArgs);
             }
             return false;
         }
 
-        public bool CanParentsHelpSelection(T child, object childValue)
+        public bool CanParentsHelpSelection(TControl child, object childValue, TSelectEventArgs eventArgs = null)
         {
-            if (!allParentBindingDataDictionary.TryGetValue(child, out Dictionary<T, Func<object, object>> parentBindingDataDictionary))
+            if (!allParentBindingDataDictionary.TryGetValue(child, out Dictionary<TControl, Func<object, object>> parentBindingDataDictionary))
                 return false;
-            return parentBindingDataDictionary.All(pbd => CanHelpChildSelection(pbd.Key, child, childValue));
+            return parentBindingDataDictionary.All(pbd => canHelpChildSelection(pbd.Key, child, childValue, eventArgs));
         }
 
-        public bool CanHelpChildSelection(T parent, T child, object childValue)
+        private bool canHelpChildSelection(TControl parent, TControl child, object childValue, TSelectEventArgs eventArgs)
         {
-            if (!allParentBindingDataDictionary.TryGetValue(child, out Dictionary<T, Func<object, object>> parentBindingDataDictionary))
+            if (!allParentBindingDataDictionary.TryGetValue(child, out Dictionary<TControl, Func<object, object>> parentBindingDataDictionary))
                 return false;
             if (!parentBindingDataDictionary.TryGetValue(parent, out Func<object, object> parentsValueSelector))
                 return false;
             object myValue = parentsValueSelector(childValue);
-            if (canSelectMethod(parent, myValue))
+            if (canSelectMethod(parent, myValue, eventArgs))
                 return true;
-            return CanParentsHelpSelection(parent, myValue);
+            return CanParentsHelpSelection(parent, myValue, eventArgs);
         }
 
-        public void DoParentsHelpSelection(T child, object childValue)
+        public void DoParentsHelpSelection(TControl child, object childValue, TSelectEventArgs eventArgs = null)
         {
-            if (!allParentBindingDataDictionary.TryGetValue(child, out Dictionary<T, Func<object, object>> parentBindingDataDictionary))
+            if (!allParentBindingDataDictionary.TryGetValue(child, out Dictionary<TControl, Func<object, object>> parentBindingDataDictionary))
                 return;
-            foreach (KeyValuePair<T, Func<object, object>> parentBindingData in parentBindingDataDictionary)
-                DoHelpChildSelection(parentBindingData.Key, child, childValue);
+            foreach (KeyValuePair<TControl, Func<object, object>> parentBindingData in parentBindingDataDictionary)
+                doHelpChildSelection(parentBindingData.Key, child, childValue, eventArgs);
         }
 
-        public void DoHelpChildSelection(T parent, T child, object childSelection)
+        private void doHelpChildSelection(TControl parent, TControl child, object childSelection, TSelectEventArgs eventArgs)
         {
-            if (!allParentBindingDataDictionary.TryGetValue(child, out Dictionary<T, Func<object, object>> parentBindingDataDictionary))
+            if (!allParentBindingDataDictionary.TryGetValue(child, out Dictionary<TControl, Func<object, object>> parentBindingDataDictionary))
                 return;
             if (!parentBindingDataDictionary.TryGetValue(parent, out Func<object, object> parentValueSelector))
                 return;
             object myValue = parentValueSelector(childSelection);
-            if (selectIfCanMethod(parent, myValue))
+            if (selectIfCanMethod(parent, myValue, eventArgs))
                 return;
-            DoParentsHelpSelection(child, myValue);
-            selectIfCanMethod(parent, myValue);
+            DoParentsHelpSelection(child, myValue, eventArgs);
+            selectIfCanMethod(parent, myValue, eventArgs);
         }
 
     }
