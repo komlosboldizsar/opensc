@@ -21,7 +21,7 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
         { }
 
         public delegate bool SimpleReceiverDragDesponderDelegate(TReceiver receiver, DragEventArgs eventArgs, object tag);
-        public delegate void SimpleReceiverValueSetterDelegate(TReceiver receiver, ISystemObject systemObject, DragEventArgs eventArgs, object tag);
+        public delegate void SimpleReceiverValueSetterDelegate(TReceiver receiver, IEnumerable<ISystemObject> systemObjects, DragEventArgs eventArgs, object tag);
 
         private static NullChild nullChildSelector(TReceiver receiver, DragEventArgs eventArgs) => null;
 

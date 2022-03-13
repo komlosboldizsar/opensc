@@ -33,7 +33,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
             return true;
         }
 
-        private static void receiverValueSetter(DataGridView receiverParent, DataGridViewColumn receiverChild, ISystemObject systemObject, DragEventArgs eventArgs, object tag)
+        private static void receiverValueSetter(DataGridView receiverParent, DataGridViewColumn receiverChild, IEnumerable<ISystemObject> systemObjects, DragEventArgs eventArgs, object tag)
         {
             DataGridView.HitTestInfo hitTestInfo = hitTest(receiverParent, eventArgs);
             if ((hitTestInfo.ColumnIndex < 0) || (hitTestInfo.ColumnIndex >= receiverParent.ColumnCount))
@@ -42,7 +42,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
                 return;
             DataGridViewCell cell = receiverParent.Rows[hitTestInfo.RowIndex].Cells[hitTestInfo.ColumnIndex];
             if (cell is DataGridViewComboBoxCell comboBoxCell)
-                comboBoxCell.SelectWithParentsHelp(systemObject);
+                comboBoxCell.SelectWithParentsHelp(systemObjects.First());
             // Other cell types not supported at the moment
         }
 
