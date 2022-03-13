@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace OpenSC.GUI.GeneralComponents.Tables
 {
-    public static class CustomDataGridViewSystemObjectDragAdapter
+    public static class CustomDataGridViewColumnSystemObjectDragAdapter
     {
 
         public static void AllowSystemObjectDrag<T>(this CustomDataGridViewColumnDescriptorBuilder<T> customDataGridViewColumnDescriptorBuilder)

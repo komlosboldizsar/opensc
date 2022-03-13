@@ -12,19 +12,10 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.GeneralComponents.DropDowns
 {
 
-    public static class CustomDataGridViewSystemObjectDropAdapter
+    public static class CustomDataGridViewColumnSystemObjectDropAdapter
     {
 
-        private static SystemObjectCompositeDropAdapter<DataGridView, DataGridViewColumn> baseInstance;
-        private static SystemObjectCompositeDropAdapter<DataGridView, DataGridViewColumn> BaseInstance
-        {
-            get
-            {
-                if (baseInstance == null)
-                    baseInstance = new SystemObjectCompositeDropAdapter<DataGridView, DataGridViewColumn>(receiverChildSelector, receiverDragResponder, receiverValueSetter, new DataGridViewColumn());
-                return baseInstance;
-            }
-        }
+        private static SystemObjectCompositeDropAdapter<DataGridView, DataGridViewColumn> BaseInstance = new SystemObjectCompositeDropAdapter<DataGridView, DataGridViewColumn>(receiverChildSelector, receiverDragResponder, receiverValueSetter, new DataGridViewColumn());
 
         private static DataGridViewColumn receiverChildSelector(DataGridView receiverParent, DragEventArgs eventArgs)
         {
