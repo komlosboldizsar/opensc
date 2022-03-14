@@ -10,6 +10,12 @@ namespace OpenSC.Model.Routers.Salvos
     public class SalvoCrosspoint
     {
 
+        public SalvoCrosspoint(RouterOutput output = null, RouterInput input = null)
+        {
+            Output = output;
+            Input = input;
+        }
+
         // "Temp foreign keys"
         public int? __routerId;
         public int? __outputIndex;

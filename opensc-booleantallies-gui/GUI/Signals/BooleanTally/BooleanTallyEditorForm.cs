@@ -64,8 +64,7 @@ namespace OpenSC.GUI.Signals.BooleanTallies
             fromBooleanDropDown.CreateAdapterAsDataSource(
                 BooleanRegister.Instance, BooleanRegister.Instance.ToStringMethod,
                 true, "(not associated)");
-            fromBooleanDropDown.ReceiveSystemObjectDrop();
-            fromBooleanDropDown.FilterSystemObjectDropByType<IBoolean>();
+            fromBooleanDropDown.ReceiveSystemObjectDrop().FilterByType<IBoolean>();
         }
 
         private void initToSignalDropDown()
@@ -73,8 +72,7 @@ namespace OpenSC.GUI.Signals.BooleanTallies
             toSignalDropDown.CreateAdapterAsDataSource(
                 SignalRegister.Instance, SignalRegister.Instance.ToStringMethod,
                 true, "(not associated)");
-            toSignalDropDown.ReceiveSystemObjectDrop();
-            toSignalDropDown.FilterSystemObjectDropByType<ISignalSource>();
+            toSignalDropDown.ReceiveSystemObjectDrop().FilterByType<ISignalSource>();
         }
 
         private void initToColorDropDown() =>

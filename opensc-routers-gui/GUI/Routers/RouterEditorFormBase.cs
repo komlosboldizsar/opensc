@@ -114,8 +114,7 @@ namespace OpenSC.GUI.Routers
             builder.UpdaterMethod((input, cell) => { cell.Value = input.CurrentSource; });
             builder.CellEndEditHandlerMethod((input, cell, eventargs) => { input.AssignSource(cell.Value as ISignalSource); });
             builder.DropDownPopulatorMethod((input, cell) => sources);
-            builder.ReceiveSystemObjectDrop();
-            builder.FilterSystemObjectDropByType<RouterInput, ISignalSourceRegistered>();
+            builder.ReceiveSystemObjectDrop().FilterByType<ISignalSourceRegistered>();
             builder.BuildAndAdd();
 
             // Column: tieline cost

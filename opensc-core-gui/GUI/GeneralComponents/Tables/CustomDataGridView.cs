@@ -107,7 +107,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 ColumnIndex = e.ColumnIndex,
                 Column = column,
                 RowIndex = e.RowIndex,
-                Row = row
+                Row = row,
+                Cell = row.Cells[e.ColumnIndex]
             };
             DragHandlers.GetDragData(dragEventArgs, out DragDropEffects allowedEffects, out object draggedObject);
             if (allowedEffects != DragDropEffects.None)

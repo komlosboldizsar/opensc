@@ -13,27 +13,27 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
     public static class ComboBoxSystemObjectDropAdapter
     {
 
-        private static SystemObjectSimpleDropAdapter<ComboBox> baseInstance;
-        private static SystemObjectSimpleDropAdapter<ComboBox> BaseInstance
+        private class Handlers
         {
-            get
-            {
-                if (baseInstance == null)
-                    baseInstance = new SystemObjectSimpleDropAdapter<ComboBox>(receiverDragResponder, receiverValueSetter);
-                return baseInstance;
-            }
+
+            public static Handlers Instance { get; } = new();
+            private Handlers() => SystemObjectDropAdapter<ComboBox>.Handle(receiverCanHandle, receiverDragResponder, receiverValueSetter);
+            public void _() { }
+
+            private static bool receiverCanHandle(ComboBox receiverParent, DragEventArgs eventArgs, object tag) => true;
+
+            private static bool receiverDragResponder(ComboBox receiver, DragEventArgs eventArgs, object tag) => true;
+
+            private static void receiverValueSetter(ComboBox receiver, IEnumerable<ISystemObject> systemObjects, DragEventArgs eventArgs, object tag)
+                => receiver.SelectWithParentsHelp(systemObjects.First());
+
         }
 
-        private static void receiverValueSetter(ComboBox receiver, ISystemObject systemObject, DragEventArgs eventArgs, object tag)
-            => receiver.SelectWithParentsHelp(systemObject);
-
-        private static bool receiverDragResponder(ComboBox receiver, DragEventArgs eventArgs, object tag) => true;
-
-        public static void ReceiveSystemObjectDrop(this ComboBox comboBox)
-            => BaseInstance.ReceiveSystemObjectDrop(comboBox);
-
-        public static void FilterSystemObjectDropByType<TSystemObject>(this ComboBox comboBox)
-            => BaseInstance.FilterSystemObjectDropByType<TSystemObject>(comboBox);        
+        public static SystemObjectDropAdapter<ComboBox>.IDropSettingManager ReceiveSystemObjectDrop(this ComboBox comboBox)
+        {
+            Handlers.Instance._();
+            return SystemObjectDropAdapter<ComboBox>.ReceiveSystemObjectDrop(comboBox);
+        }  
 
     }
 

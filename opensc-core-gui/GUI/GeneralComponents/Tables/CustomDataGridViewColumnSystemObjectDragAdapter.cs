@@ -1,6 +1,7 @@
 ﻿using OpenSC.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ using System.Windows.Forms;
 
 namespace OpenSC.GUI.GeneralComponents.Tables
 {
-    public static class CustomDataGridViewSystemObjectDragAdapter
+    public static class CustomDataGridViewColumnSystemObjectDragAdapter
     {
 
         public static void AllowSystemObjectDrag<T>(this CustomDataGridViewColumnDescriptorBuilder<T> customDataGridViewColumnDescriptorBuilder)
@@ -27,16 +28,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         private class SystemObjectDragHandler<T> : CustomDataGridViewDragHandler<T>
         {
 
-            private static SystemObjectDragHandler<T> instance;
-
-            internal static SystemObjectDragHandler<T> Instance
-            {
-                get
-                {
-                    instance ??= new();
-                    return instance;
-                }
-            }
+            internal static SystemObjectDragHandler<T> Instance { get; } = new();
 
             private Dictionary<CustomDataGridView<T>, List<DataGridViewColumn>> handledTablesColumns = new();
 
@@ -61,7 +53,26 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             }
 
             public override object GetDraggedObject(CustomDataGridViewDragSourceEventArgs<T> eventArgs)
-                => new SystemObjectReference(eventArgs.Row.Item as ISystemObject);
+            {
+                DataGridViewSelectedCellCollection selectedCells = eventArgs.Table.SelectedCells;
+                if ((selectedCells.Count > 1) && selectedCells.Contains(eventArgs.Cell))
+                {
+                    return selectedCells.Cast<DataGridViewCell>()
+                        .Where(c => (c.ColumnIndex == eventArgs.ColumnIndex))
+                        .Distinct(CellRowIndexEqualityComparer.Instance)
+                        .OrderBy(c => c.RowIndex)
+                        .Select(c => new SystemObjectReference(((CustomDataGridViewRow<T>)c.OwningRow).Item as ISystemObject))
+                        .ToArray();
+                }
+                return new SystemObjectReference(eventArgs.Row.Item as ISystemObject);
+            }
+
+            private class CellRowIndexEqualityComparer : IEqualityComparer<DataGridViewCell>
+            {
+                public static CellRowIndexEqualityComparer Instance { get; } = new();
+                public bool Equals(DataGridViewCell x, DataGridViewCell y) => (x.RowIndex == y.RowIndex);
+                public int GetHashCode([DisallowNull] DataGridViewCell obj) => obj.GetHashCode();
+            }
 
         }
 

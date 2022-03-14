@@ -14,5 +14,6 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public DataGridViewColumn Column { get; init; }
         public int ColumnIndex { get; init; }
         public CustomDataGridViewRow<TRowItem> Row { get; init; }
+        public DataGridViewCell Cell { get; init; }
     }
 }
