@@ -12,7 +12,7 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.GeneralComponents.DropDowns
 {
 
-    public static class CustomDataGridViewSystemObjectDropAdapter
+    /*public static class CustomDataGridViewSystemObjectDropAdapter
     {
 
         private static SystemObjectSimpleDropAdapter<DataGridView> BaseInstance = new SystemObjectSimpleDropAdapter<DataGridView>(receiverDragResponder, receiverValueSetter);
@@ -42,6 +42,6 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
         public static void FilterSystemObjectDropByType<TSystemObject>(this DataGridView dataGridView)
             => BaseInstance.FilterSystemObjectDropByType<TSystemObject>(dataGridView);
 
-    }
+    }*/
 
 }

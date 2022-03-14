@@ -111,8 +111,7 @@ namespace OpenSC.GUI.Mixers
             builder.UpdaterMethod((input, cell) => { cell.Value = input.Source; });
             builder.CellEndEditHandlerMethod((input, cell, eventargs) => { input.Source = cell.Value as ISignalSourceRegistered; });
             builder.DropDownPopulatorMethod((input, cell) => signals);
-            builder.ReceiveSystemObjectDrop();
-            builder.FilterSystemObjectDropByType<MixerInput, ISignalSourceRegistered>();
+            builder.ReceiveSystemObjectDrop().FilterByType<ISignalSourceRegistered>();
             builder.BuildAndAdd();
 
             // Column: delete button

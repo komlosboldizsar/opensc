@@ -57,8 +57,7 @@ namespace OpenSC.GUI.Routers
         private void initDropDowns()
         {
             portDropDown.CreateAdapterAsDataSource(SerialPortDatabase.Instance, port => port.Name, true, "(not connected)");
-            portDropDown.ReceiveSystemObjectDrop();
-            portDropDown.FilterSystemObjectDropByType<SerialPort>();
+            portDropDown.ReceiveSystemObjectDrop().FilterByType<SerialPort>();
         }
 
     }

@@ -77,21 +77,18 @@ namespace OpenSC.GUI.Routers.CrosspointStores
         private void initRouterDropDown(ComboBox dropDown)
         {
             dropDown.CreateAdapterAsDataSource(RouterDatabase.Instance, null, true, "(not associated)");
-            dropDown.ReceiveSystemObjectDrop();
-            dropDown.FilterSystemObjectDropByType<Router>();
+            dropDown.ReceiveSystemObjectDrop().FilterByType<Router>();
         }
 
         private void initRouterInputDropDown()
         {
-            routerInputInputDropDown.ReceiveSystemObjectDrop();
-            routerInputInputDropDown.FilterSystemObjectDropByType<RouterInput>();
+            routerInputInputDropDown.ReceiveSystemObjectDrop().FilterByType<RouterInput>();
             routerInputInputDropDown.BindParent(routerInputRouterDropDown, ri => ((RouterInput)ri).Router);
         }
 
         private void initRouterOutputDropDown()
         {
-            routerOutputOutputDropDown.ReceiveSystemObjectDrop();
-            routerOutputOutputDropDown.FilterSystemObjectDropByType<RouterOutput>();
+            routerOutputOutputDropDown.ReceiveSystemObjectDrop().FilterByType<RouterOutput>();
             routerOutputOutputDropDown.BindParent(routerOutputRouterDropDown, ro => ((RouterOutput)ro).Router);
         }
 
