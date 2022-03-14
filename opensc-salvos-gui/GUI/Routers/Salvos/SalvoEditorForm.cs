@@ -120,8 +120,10 @@ namespace OpenSC.GUI.Routers.Salvos
             });
             builder.BuildAndAdd();
 
-            //crosspointsTableCDGV.ReceiveSystemObjectDrop(crosspointsTableSystemObjectDropReceiver, true);
-            //crosspointsTableCDGV.FilterSystemObjectDropByType<RouterOutput>();
+            crosspointsTableCDGV
+                .ReceiveSystemObjectDrop(crosspointsTableSystemObjectDropReceiver)
+                .EnableMulti()
+                .FilterByType<RouterOutput>();
 
             // Bind collection
             crosspointsTableCDGV.BoundCollection = salvo.Crosspoints;
