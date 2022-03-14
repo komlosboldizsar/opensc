@@ -12,36 +12,46 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.GeneralComponents.DropDowns
 {
 
-    /*public static class CustomDataGridViewSystemObjectDropAdapter
+    public static class CustomDataGridViewSystemObjectDropAdapter
     {
 
-        private static SystemObjectSimpleDropAdapter<DataGridView> BaseInstance = new SystemObjectSimpleDropAdapter<DataGridView>(receiverDragResponder, receiverValueSetter);
-
-        private static bool receiverDragResponder(DataGridView receiverParent, DragEventArgs eventArgs, object tag)
-            => onEmptyArea(receiverParent, eventArgs);
-
-        private static void receiverValueSetter(DataGridView receiverParent, IEnumerable<ISystemObject> systemObjects, DragEventArgs eventArgs, object tag)
+        private class Handlers
         {
-            if (!onEmptyArea(receiverParent, eventArgs))
-                return;
-            ((ObjectReceiverMethod)tag)(receiverParent, systemObjects);
-        }
 
-        private static bool onEmptyArea(DataGridView receiverParent, DragEventArgs eventArgs)
-        {
-            Point clientCoords = receiverParent.PointToClient(new Point(eventArgs.X, eventArgs.Y));
-            DataGridView.HitTestInfo hitTestInfo = receiverParent.HitTest(clientCoords.X, clientCoords.Y);
-            return ((hitTestInfo.RowIndex == -1) && (hitTestInfo.ColumnIndex == -1)); ;
+            public static Handlers Instance { get; } = new();
+            private Handlers() => SystemObjectDropAdapter<DataGridView>.Handle(receiverCanHandle, receiverDragResponder, receiverValueSetter);
+            public void _() { }
+
+            private static bool receiverCanHandle(DataGridView receiverParent, DragEventArgs eventArgs, object tag)
+                => onEmptyArea(receiverParent, eventArgs);
+
+            private static bool receiverDragResponder(DataGridView receiverParent, DragEventArgs eventArgs, object tag)
+                => true;
+
+            private static void receiverValueSetter(DataGridView receiverParent, IEnumerable<ISystemObject> systemObjects, DragEventArgs eventArgs, object tag)
+            {
+                if (!onEmptyArea(receiverParent, eventArgs))
+                    return;
+                ((ObjectReceiverMethod)tag)(receiverParent, systemObjects);
+            }
+
+            private static bool onEmptyArea(DataGridView receiverParent, DragEventArgs eventArgs)
+            {
+                Point clientCoords = receiverParent.PointToClient(new Point(eventArgs.X, eventArgs.Y));
+                DataGridView.HitTestInfo hitTestInfo = receiverParent.HitTest(clientCoords.X, clientCoords.Y);
+                return ((hitTestInfo.RowIndex == -1) && (hitTestInfo.ColumnIndex == -1)); ;
+            }
+
         }
 
         public delegate void ObjectReceiverMethod(DataGridView table, IEnumerable<ISystemObject> systemObjects);
 
-        public static void ReceiveSystemObjectDrop(this DataGridView dataGridView, ObjectReceiverMethod objectReceiverMethod, bool enableMulti = false)
-            => BaseInstance.ReceiveSystemObjectDrop(dataGridView, null, objectReceiverMethod, enableMulti);
+        public static SystemObjectDropAdapter<DataGridView>.IDropSettingManager ReceiveSystemObjectDrop(this DataGridView table, ObjectReceiverMethod objectReceiverMethod)
+        {
+            Handlers.Instance._();
+            return SystemObjectDropAdapter<DataGridView>.ReceiveSystemObjectDrop(table, objectReceiverMethod);
+        }
 
-        public static void FilterSystemObjectDropByType<TSystemObject>(this DataGridView dataGridView)
-            => BaseInstance.FilterSystemObjectDropByType<TSystemObject>(dataGridView);
-
-    }*/
+    }
 
 }
