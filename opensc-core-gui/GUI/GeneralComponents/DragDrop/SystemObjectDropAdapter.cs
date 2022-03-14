@@ -52,9 +52,9 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
         public delegate void PartedValueSetterDelegate<TReceiverPart>(TReceiver receiverParent, TReceiverPart receiverChild, IEnumerable<ISystemObject> systemObjects, DragEventArgs eventArgs, object tag);
 
         public static IDropSettingManager ReceiveSystemObjectDrop(TReceiver receiver, object tag = null)
-            => ReceiveSystemObjectDrop<NoPart>(receiver, null, null);
+            => ReceiveSystemObjectDropParted<NoPart>(receiver, null, tag);
 
-        public static IDropSettingManager ReceiveSystemObjectDrop<TReceiverPart>(TReceiver receiver, TReceiverPart receiverPart, object tag = null)
+        public static IDropSettingManager ReceiveSystemObjectDropParted<TReceiverPart>(TReceiver receiver, TReceiverPart receiverPart, object tag = null)
             where TReceiverPart : class
         {
             if (!knownObjects.Contains(receiver))
