@@ -1,7 +1,7 @@
 ﻿using OpenSC.Model;
 using OpenSC.Model.Macros;
-//using OpenSC.Model.Booleans.Macros;
-//using OpenSC.Model.Booleans.Triggers;
+//using OpenSC.Model.Variables.Macros;
+using OpenSC.Model.Variables.Triggers;
 
 namespace OpenSC.Modules
 {
@@ -18,7 +18,7 @@ namespace OpenSC.Modules
 
         protected override void registerTriggerTypes()
         {
-            //MacroTriggerRegister.Instance.RegisterTrigger(new XY());
+            MacroTriggerRegister.Instance.RegisterTrigger(new BooleanStateChangedMacroTrigger());
         }
 
     }
