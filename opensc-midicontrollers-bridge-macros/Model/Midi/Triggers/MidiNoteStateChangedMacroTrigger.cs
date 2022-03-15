@@ -37,11 +37,11 @@ namespace OpenSC.Model.MidiControllers.Triggers
         internal class ActivationData : MacroTriggerWithArgumentsActivationData
         {
             public MidiController Controller { get; private set; }
-            public MidiController.NoteChangeDelegate NoteChangeHandler { get; private set; }
-            public ActivationData(MidiController controller, MidiController.NoteChangeDelegate noteChangeHandler)
+            public MidiController.NoteStateChangedDelegate NoteChangedHandler { get; private set; }
+            public ActivationData(MidiController controller, MidiController.NoteStateChangedDelegate noteChangeHandler)
             {
                 Controller = controller;
-                NoteChangeHandler = noteChangeHandler;
+                NoteChangedHandler = noteChangeHandler;
             }
         }
 
@@ -53,18 +53,18 @@ namespace OpenSC.Model.MidiControllers.Triggers
                 return;
             bool observeOff = (bool)argumentObjects[2];
             bool observeOn = (bool)argumentObjects[3];
-            MidiController.NoteChangeDelegate noteChangeHandler = (i, ov, nv) => {
-                if ((observeOff && !nv) || (observeOn && nv))
+            MidiController.NoteStateChangedDelegate noteStateChangeHandler = (c, n, s) => {
+                if ((observeOff && !s) || (observeOn && s))
                     triggerWithArguments.Fire();
             };
-            controller.NoteChange += noteChangeHandler;
-            ActivationData activationData = new ActivationData(controller, noteChangeHandler);
+            controller.NoteStateChanged += noteStateChangeHandler;
+            ActivationData activationData = new ActivationData(controller, noteStateChangeHandler);
             triggerWithArguments.Activated(activationData);
         }
 
         protected override void _deactivate(MacroTriggerWithArguments triggerWithArguments, ActivationData activationData)
         {
-            activationData.Controller.NoteChange -= activationData.NoteChangeHandler;
+            activationData.Controller.NoteStateChanged -= activationData.NoteChangedHandler;
             triggerWithArguments.Deactivated();
         }
 

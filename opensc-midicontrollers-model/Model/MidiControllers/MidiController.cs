@@ -30,7 +30,7 @@ namespace OpenSC.Model.MidiControllers
             base.Removed();
             DeInit();
             DeviceIdChanged = null;
-            NoteChange = null;
+            NoteStateChanged = null;
         }
         #endregion
 
@@ -126,10 +126,10 @@ namespace OpenSC.Model.MidiControllers
             switch (e.Message.Command)
             {
                 case ChannelCommand.NoteOff:
-                    handleNoteChaneMessage(e.Message.Data1, false);
+                    handleNoteChangeMessage(e.Message.Data1, false);
                     break;
                 case ChannelCommand.NoteOn:
-                    handleNoteChaneMessage(e.Message.Data1, true);
+                    handleNoteChangeMessage(e.Message.Data1, true);
                     break;
             }
         }
@@ -140,11 +140,11 @@ namespace OpenSC.Model.MidiControllers
         public const int PITCH_C4 = 60;
         public const int PITCH_A4 = 69;
 
-        private void handleNoteChaneMessage(int note, bool on)
-            => NoteChange?.Invoke(this, note, on);
+        private void handleNoteChangeMessage(int note, bool on)
+            => NoteStateChanged?.Invoke(this, note, on);
 
-        public delegate void NoteChangeDelegate(MidiController controller, int note, bool on);
-        public event NoteChangeDelegate NoteChange;
+        public delegate void NoteStateChangedDelegate(MidiController controller, int note, bool state);
+        public event NoteStateChangedDelegate NoteStateChanged;
         #endregion
 
     }
