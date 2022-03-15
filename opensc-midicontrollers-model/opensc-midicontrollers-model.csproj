@@ -5,12 +5,14 @@
       <RootNamespace>OpenSC</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-      <PackageReference Include="Sanford.Multimedia.Midi" Version="6.6.2"/>
+      <PackageReference Include="Sanford.Multimedia.Midi" Version="6.6.2">
+        <NoWarn>NU1701</NoWarn>
+      </PackageReference>
   </ItemGroup>
   <ItemGroup>
       <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
          <Private>false</Private>
       </ProjectReference>
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj"/>
+  <Import Project="..\GlobalCsproj\*.csproj" />
 </Project>
