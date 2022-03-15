@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "OpenSC": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\Boldi\\Documents\\Egyetem\\7. félév (2018-2019-1)\\Szakdolgozat\\Projekt\\OpenSC\\_OUTPUT\\OpenSC.exe",
+      "workingDirectory": "C:\\Users\\Boldi\\Documents\\Egyetem\\7. félév (2018-2019-1)\\Szakdolgozat\\Projekt\\OpenSC\\_OUTPUT"
+    }
+  }
+}

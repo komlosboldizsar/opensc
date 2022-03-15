@@ -1,30 +1,36 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0-windows7.0</TargetFramework>
-    <OutputType>Library</OutputType>
-    <RootNamespace>OpenSC</RootNamespace>
-    <AssemblyName>opensc-mixers-subtype-bmd</AssemblyName>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+      <TargetFramework>net5.0-windows7.0</TargetFramework>
+      <OutputType>Library</OutputType>
+      <RootNamespace>OpenSC</RootNamespace>
+      <AssemblyName>opensc-mixers-subtype-bmd</AssemblyName>
+      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
-    <ProjectReference Include="..\opensc-library-bmdswitcher\opensc-library-bmdswitcher.csproj" />
-    <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj" />
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
+         <Private>false</Private>
+      </ProjectReference>
+      <ProjectReference Include="..\opensc-library-bmdswitcher\opensc-library-bmdswitcher.csproj">
+         <Private>false</Private>
+      </ProjectReference>
+      <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj">
+         <Private>false</Private>
+      </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="BMDSwitcherAPI">
-      <Guid>{8A92B919-156C-4D61-94EF-03F9BE4004B0}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
+      <COMReference Include="BMDSwitcherAPI">
+         <Guid>{8A92B919-156C-4D61-94EF-03F9BE4004B0}</Guid>
+         <VersionMajor>1</VersionMajor>
+         <VersionMinor>0</VersionMinor>
+         <Lcid>0</Lcid>
+         <WrapperTool>tlbimp</WrapperTool>
+         <Isolated>False</Isolated>
+         <EmbedInteropTypes>True</EmbedInteropTypes>
+      </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+      <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
+      <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj" />
+  <Import Project="..\GlobalCsproj\*.csproj"/>
 </Project>

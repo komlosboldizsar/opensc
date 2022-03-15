@@ -1,47 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
-    <OutputType>WinExe</OutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWindowsForms>true</UseWindowsForms>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+      <TargetFramework>net5.0-windows</TargetFramework>
+      <OutputType>WinExe</OutputType>
+      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+      <UseWindowsForms>true</UseWindowsForms>
+      <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj" />
-    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
-    <ProjectReference Include="..\ThreadHelpers\ThreadHelpers.csproj" />
+      <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj" />
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
+      <ProjectReference Include="..\ThreadHelpers\ThreadHelpers.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="BMDSwitcherAPI">
-      <Guid>{8A92B919-156C-4D61-94EF-03F9BE4004B0}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
+      <COMReference Include="BMDSwitcherAPI">
+         <Guid>{8A92B919-156C-4D61-94EF-03F9BE4004B0}</Guid>
+         <VersionMajor>1</VersionMajor>
+         <VersionMinor>0</VersionMinor>
+         <Lcid>0</Lcid>
+         <WrapperTool>tlbimp</WrapperTool>
+         <Isolated>False</Isolated>
+         <EmbedInteropTypes>True</EmbedInteropTypes>
+      </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="System.IO.Ports" Version="5.0.1" />
+      <Compile Update="Properties\Settings.Designer.cs">
+         <DesignTimeSharedInput>True</DesignTimeSharedInput>
+         <AutoGen>True</AutoGen>
+         <DependentUpon>Settings.settings</DependentUpon>
+      </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
+      <None Update="Properties\Settings.settings">
+         <Generator>SettingsSingleFileGenerator</Generator>
+         <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      </None>
   </ItemGroup>
-  <ItemGroup>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /c /y &quot;$(SolutionDir)\_MODULE\*.dll&quot; &quot;$(TargetDir)&quot;" />
-    <Exec Command="xcopy /c /y &quot;$(SolutionDir)\_MODULE\*.pdb&quot; &quot;$(TargetDir)&quot;" />
-  </Target>
+  <Import Project="..\GlobalCsproj\*.csproj" />
 </Project>

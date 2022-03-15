@@ -1,18 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <OutputType>Library</OutputType>
-    <RootNamespace>OpenSC</RootNamespace>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+      <TargetFramework>net5.0</TargetFramework>
+      <OutputType>Library</OutputType>
+      <RootNamespace>OpenSC</RootNamespace>
+      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
-    <ProjectReference Include="..\opensc-dynamictexts-model\opensc-dynamictexts-model.csproj" />
-    <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj" />
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
+         <Private>false</Private>
+      </ProjectReference>
+      <ProjectReference Include="..\opensc-dynamictexts-model\opensc-dynamictexts-model.csproj">
+         <Private>false</Private>
+      </ProjectReference>
+      <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj">
+         <Private>false</Private>
+      </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+      <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
+      <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj" />
+  <Import Project="..\GlobalCsproj\*.csproj"/>
 </Project>
