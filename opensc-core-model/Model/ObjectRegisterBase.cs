@@ -104,7 +104,7 @@ namespace OpenSC.Model
                 registeredItems.ChangeKeyOfItem(item, key);
         }
 
-        protected abstract TKey getKey(TObject item);
+        public abstract TKey GetKey(TObject item);
         protected abstract void keyChangedSubscribeMethod(TObject item);
         protected abstract void keyChangedUnsubscribeMethod(TObject item);
         protected abstract void itemRemovedSubscribeMethod(TObject item);
