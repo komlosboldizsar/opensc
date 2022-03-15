@@ -1,6 +1,6 @@
 ﻿using OpenSC.Model;
 using OpenSC.Model.Macros;
-//using OpenSC.Model.Midi.Triggers;
+using OpenSC.Model.Midi.Triggers;
 
 namespace OpenSC.Modules
 {
@@ -14,7 +14,9 @@ namespace OpenSC.Modules
         { }
 
         protected override void registerTriggerTypes()
-        { }
+        {
+            MacroTriggerRegister.Instance.RegisterTrigger(new MidiNoteStateChangedMacroTrigger());
+        }
 
     }
 
