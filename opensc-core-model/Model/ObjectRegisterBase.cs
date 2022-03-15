@@ -34,7 +34,7 @@ namespace OpenSC.Model
 
         public void Register(TObject item)
         {
-            TKey key = getKey(item);
+            TKey key = GetKey(item);
             if (key == null)
             {
                 if (registeredItemsWithoutKey.Contains(item))
@@ -55,7 +55,7 @@ namespace OpenSC.Model
 
         public void Unregister(TObject item)
         {
-            TKey itemKey = getKey(item);
+            TKey itemKey = GetKey(item);
             if (itemKey != null)
             {
                 UnregisterByKey(itemKey);
@@ -88,7 +88,7 @@ namespace OpenSC.Model
 
         public void ItemKeyChanged(TObject item)
         {
-            TKey key = getKey(item);
+            TKey key = GetKey(item);
             bool registeredWithoutKey = registeredItemsWithoutKey.Contains(item);
             bool registeredWithKey = registeredItems.ContainsValue(item);
             if (!registeredWithoutKey && !registeredWithKey)
@@ -110,7 +110,7 @@ namespace OpenSC.Model
         protected abstract void itemRemovedSubscribeMethod(TObject item);
         protected abstract void itemRemovedUnsubscribeMethod(TObject item);
 
-        public virtual string ToStringMethod(TObject item) => getKey(item).ToString();
+        public virtual string ToStringMethod(TObject item) => GetKey(item).ToString();
 
         public class KeyIsAlreadyUsedException : Exception
         {
