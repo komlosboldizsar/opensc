@@ -10,8 +10,5 @@
   <ItemGroup>
     <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
   <Import Project="..\GlobalCsproj\*.csproj" />
 </Project>

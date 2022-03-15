@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model;
+using OpenSC.Model.Midi;
 using OpenSC.Model.Persistence;
 
 namespace OpenSC.Modules
@@ -10,6 +11,7 @@ namespace OpenSC.Modules
 
         protected override void registerDatabases()
         {
+            MasterDatabase.Instance.RegisterSingletonDatabase(typeof(MidiControllerDatabase));
         }
 
         protected override void registerSerializers()
