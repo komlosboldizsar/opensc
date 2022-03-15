@@ -10,6 +10,7 @@ namespace OpenSC.Model.Macros
     {
         String,
         Integer,
+        Boolean,
         Float
     }
 }
