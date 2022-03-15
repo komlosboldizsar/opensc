@@ -27,18 +27,12 @@ namespace OpenSC.Model.Midi.Triggers
         }
 
         [MacroTriggerArgument(2, "Observe off", "Fire trigger when note state is changed to off.")]
-        public class Arg2 : MacroTriggerArgumentInt
-        {
-            public Arg2() : base(0, 1)
-            { }
-        }
+        public class Arg2 : MacroTriggerArgumentBool
+        { }
 
         [MacroTriggerArgument(3, "Observe on", "Fire trigger when note state is changed to on.")]
-        public class Arg3 : MacroTriggerArgumentInt
-        {
-            public Arg3() : base(0, 1)
-            { }
-        }
+        public class Arg3 : MacroTriggerArgumentBool
+        { }
 
         internal class ActivationData : MacroTriggerWithArgumentsActivationData
         {
@@ -77,8 +71,8 @@ namespace OpenSC.Model.Midi.Triggers
             if (controller == null)
                 return null;
             int note = (int)argumentObjects[1];
-            int observeOff = (((int)argumentObjects[2] > 0) ? 1 : 0);
-            int observeOn = (((int)argumentObjects[3] > 0) ? 2 : 0);
+            int observeOff = ((bool)argumentObjects[2] ? 1 : 0);
+            int observeOn = ((bool)argumentObjects[3] ? 2 : 0);
             string observedState = (observeOff + observeOn) switch
             {
                 0 => "-",
