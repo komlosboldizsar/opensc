@@ -174,6 +174,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-midi-model", "opensc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-midi-gui", "opensc-midi-gui\opensc-midi-gui.csproj", "{E9350071-6AF6-4155-BF1F-6B1C2A4AE66B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-midi-bridge-macros", "opensc-midi-bridge-macros\opensc-midi-bridge-macros.csproj", "{41AF7494-469D-4B2A-8E71-C16B0B8FB307}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1168,6 +1170,18 @@ Global
 		{E9350071-6AF6-4155-BF1F-6B1C2A4AE66B}.Release|x64.Build.0 = Release|Any CPU
 		{E9350071-6AF6-4155-BF1F-6B1C2A4AE66B}.Release|x86.ActiveCfg = Release|Any CPU
 		{E9350071-6AF6-4155-BF1F-6B1C2A4AE66B}.Release|x86.Build.0 = Release|Any CPU
+		{41AF7494-469D-4B2A-8E71-C16B0B8FB307}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41AF7494-469D-4B2A-8E71-C16B0B8FB307}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41AF7494-469D-4B2A-8E71-C16B0B8FB307}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{41AF7494-469D-4B2A-8E71-C16B0B8FB307}.Debug|x64.Build.0 = Debug|Any CPU
+		{41AF7494-469D-4B2A-8E71-C16B0B8FB307}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{41AF7494-469D-4B2A-8E71-C16B0B8FB307}.Debug|x86.Build.0 = Debug|Any CPU
+		{41AF7494-469D-4B2A-8E71-C16B0B8FB307}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41AF7494-469D-4B2A-8E71-C16B0B8FB307}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41AF7494-469D-4B2A-8E71-C16B0B8FB307}.Release|x64.ActiveCfg = Release|Any CPU
+		{41AF7494-469D-4B2A-8E71-C16B0B8FB307}.Release|x64.Build.0 = Release|Any CPU
+		{41AF7494-469D-4B2A-8E71-C16B0B8FB307}.Release|x86.ActiveCfg = Release|Any CPU
+		{41AF7494-469D-4B2A-8E71-C16B0B8FB307}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
