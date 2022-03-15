@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>OpenSC</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
+    <ProjectReference Include="..\opensc-midicontrollers-model\opensc-midicontrollers-model.csproj" />
+    <ProjectReference Include="..\opensc-macros-model\opensc-macros-model.csproj" />
+  </ItemGroup>
+  <Import Project="..\GlobalCsproj\*.csproj" />
+</Project>
