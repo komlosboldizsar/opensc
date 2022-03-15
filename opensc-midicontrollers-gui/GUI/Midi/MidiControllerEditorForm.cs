@@ -1,9 +1,9 @@
 ﻿using OpenSC.GUI.GeneralComponents.DropDowns;
-using OpenSC.Model.Midi;
+using OpenSC.Model.MidiControllers;
 using System;
 using System.Windows.Forms;
 
-namespace OpenSC.GUI.Midi
+namespace OpenSC.GUI.MidiControllers
 {
 
     public partial class MidiControllerEditorForm : ModelEditorFormBase, IModelEditorForm<MidiController>

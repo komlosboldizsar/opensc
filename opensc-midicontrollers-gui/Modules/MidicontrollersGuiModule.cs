@@ -1,13 +1,13 @@
 ﻿using OpenSC.GUI.Menus;
-using OpenSC.GUI.Midi;
+using OpenSC.GUI.MidiControllers;
 using OpenSC.GUI.WorkspaceManager;
 
 namespace OpenSC.Modules
 {
 
-    [Module("midi-gui", "Midi (GUI)", "TODO")]
-    [DependsOnModule(typeof(MidiModelModule))]
-    public class MidiGuiModule : BasetypeGuiModuleBase<MidiModelModule>
+    [Module("midicontrollers-gui", "MIDI controllers (GUI)", "TODO")]
+    [DependsOnModule(typeof(MidicontrollersModelModule))]
+    public class MidicontrollersGuiModule : BasetypeGuiModuleBase<MidicontrollersModelModule>
     {
 
         protected override void registerPersistableWindowTypes()

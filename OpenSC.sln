@@ -170,11 +170,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GlobalCsproj", "GlobalCspro
 		GlobalCsproj\CopyToOutput.csproj = GlobalCsproj\CopyToOutput.csproj
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-midi-model", "opensc-midi-model\opensc-midi-model.csproj", "{97A5FDFF-B688-446A-93B4-0E9729894891}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-midicontrollers-model", "opensc-midicontrollers-model\opensc-midicontrollers-model.csproj", "{97A5FDFF-B688-446A-93B4-0E9729894891}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-midi-gui", "opensc-midi-gui\opensc-midi-gui.csproj", "{E9350071-6AF6-4155-BF1F-6B1C2A4AE66B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-midicontrollers-gui", "opensc-midicontrollers-gui\opensc-midicontrollers-gui.csproj", "{E9350071-6AF6-4155-BF1F-6B1C2A4AE66B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-midi-bridge-macros", "opensc-midi-bridge-macros\opensc-midi-bridge-macros.csproj", "{41AF7494-469D-4B2A-8E71-C16B0B8FB307}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-midicontrollers-bridge-macros", "opensc-midicontrollers-bridge-macros\opensc-midicontrollers-bridge-macros.csproj", "{41AF7494-469D-4B2A-8E71-C16B0B8FB307}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

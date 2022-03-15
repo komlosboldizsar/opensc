@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSC.Model.Midi
+namespace OpenSC.Model.MidiControllers
 {
     public class MidiController : ModelBase
     {

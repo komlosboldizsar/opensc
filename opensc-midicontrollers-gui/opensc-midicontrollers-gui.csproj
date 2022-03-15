@@ -8,7 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj" />
     <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
-    <ProjectReference Include="..\opensc-midi-model\opensc-midi-model.csproj" />
+    <ProjectReference Include="..\opensc-midicontrollers-model\opensc-midicontrollers-model.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />

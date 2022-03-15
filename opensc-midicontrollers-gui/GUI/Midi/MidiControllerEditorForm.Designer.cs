@@ -1,4 +1,4 @@
-﻿namespace OpenSC.GUI.Midi
+﻿namespace OpenSC.GUI.MidiControllers
 {
     partial class MidiControllerEditorForm
     {

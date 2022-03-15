@@ -1,13 +1,13 @@
 ﻿using OpenSC.Model;
 using OpenSC.Model.Macros;
-using OpenSC.Model.Midi.Triggers;
+using OpenSC.Model.MidiControllers.Triggers;
 
 namespace OpenSC.Modules
 {
 
-    [Module("midi-bridge-macros", "Midi (bridge to macros)", "TODO")]
-    [DependsOnModule(typeof(MidiModelModule))]
-    public class MidiBridgeMacrosModule : MacrosBridgeModuleBase<MidiModelModule>
+    [Module("midicontrollers-bridge-macros", "MIDI controllers (bridge to macros)", "TODO")]
+    [DependsOnModule(typeof(MidicontrollersModelModule))]
+    public class MidiBridgeMacrosModule : MacrosBridgeModuleBase<MidicontrollersModelModule>
     {
 
         protected override void registerMacroCommands()

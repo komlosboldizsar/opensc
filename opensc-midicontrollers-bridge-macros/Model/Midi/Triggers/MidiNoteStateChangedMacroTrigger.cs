@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSC.Model.Midi.Triggers
+namespace OpenSC.Model.MidiControllers.Triggers
 {
 
     [MacroTrigger("Midi.NoteStateChanged", "State (on/off) change of a note on a MIDI controller", "Observe only one note for changing state from off (not pressed) to on (pressed) or on to off.")]

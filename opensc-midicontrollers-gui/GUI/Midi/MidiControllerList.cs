@@ -1,15 +1,15 @@
 ﻿using OpenSC.GUI.GeneralComponents.Tables;
 using OpenSC.GUI.Helpers.Converters;
 using OpenSC.GUI.WorkspaceManager;
-using OpenSC.Model.Midi;
+using OpenSC.Model.MidiControllers;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace OpenSC.GUI.Midi
+namespace OpenSC.GUI.MidiControllers
 {
 
-    [WindowTypeName("midi.midicontrollerlist")]
+    [WindowTypeName("midicontrollers.midicontrollerlist")]
     public partial class MidiControllerList : ModelListFormBase
     {
 

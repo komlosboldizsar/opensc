@@ -1,12 +1,12 @@
 ﻿using OpenSC.Model;
-using OpenSC.Model.Midi;
+using OpenSC.Model.MidiControllers;
 using OpenSC.Model.Persistence;
 
 namespace OpenSC.Modules
 {
 
-    [Module("midi-model", "Midi (model)", "TODO")]
-    public class MidiModelModule : BasetypeModuleBase
+    [Module("midicontrollers-model", "MIDI controllers (model)", "TODO")]
+    public class MidicontrollersModelModule : BasetypeModuleBase
     {
 
         protected override void registerDatabases()

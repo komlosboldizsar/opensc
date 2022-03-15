@@ -5,17 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSC.Model.Midi
+namespace OpenSC.Model.MidiControllers
 {
 
     [DatabaseName(MidiControllerDatabase.DBNAME)]
-    [XmlTagNames("midicontrollers", "midicontroller")]
+    [XmlTagNames("midi_controllers", "midi_controller")]
     public class MidiControllerDatabase : DatabaseBase<MidiController>
     {
 
         public static MidiControllerDatabase Instance { get; } = new MidiControllerDatabase();
 
-        public const string DBNAME = "midicontrollers";
+        public const string DBNAME = "midi_controllers";
 
     }
 
