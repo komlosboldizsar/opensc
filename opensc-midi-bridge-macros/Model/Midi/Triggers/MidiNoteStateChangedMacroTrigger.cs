@@ -51,8 +51,11 @@ namespace OpenSC.Model.Midi.Triggers
             MidiController controller = argumentObjects[0] as MidiController;
             if (controller == null)
                 return;
+            bool observeOff = (bool)argumentObjects[2];
+            bool observeOn = (bool)argumentObjects[3];
             MidiController.NoteChangeDelegate noteChangeHandler = (i, ov, nv) => {
-                triggerWithArguments.Fire();
+                if ((observeOff && !nv) || (observeOn && nv))
+                    triggerWithArguments.Fire();
             };
             controller.NoteChange += noteChangeHandler;
             ActivationData activationData = new ActivationData(controller, noteChangeHandler);
