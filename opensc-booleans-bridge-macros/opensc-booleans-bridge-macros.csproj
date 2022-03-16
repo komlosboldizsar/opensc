@@ -6,15 +6,9 @@
       <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-macros-model\opensc-macros-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-booleans-model\opensc-booleans-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
+      <ProjectReference Include="..\opensc-macros-model\opensc-macros-model.csproj"/>
+      <ProjectReference Include="..\opensc-booleans-model\opensc-booleans-model.csproj"/>
   </ItemGroup>
   <Import Project="..\GlobalCsproj\*.csproj"/>
 </Project>

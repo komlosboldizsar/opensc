@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
       <TargetFramework>net5.0-windows</TargetFramework>
       <OutputType>Library</OutputType>
@@ -14,18 +14,10 @@
       </Compile>
   </ItemGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-macropanels-model\opensc-macropanels-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-macros-model\opensc-macros-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
+      <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj"/>
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
+      <ProjectReference Include="..\opensc-macropanels-model\opensc-macropanels-model.csproj"/>
+      <ProjectReference Include="..\opensc-macros-model\opensc-macros-model.csproj"/>
   </ItemGroup>
   <ItemGroup>
       <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>

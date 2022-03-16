@@ -11,21 +11,11 @@
       <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
   </ItemGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-dynamictexts-model\opensc-dynamictexts-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-labelsets-model\opensc-labelsets-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-signals-model\opensc-signals-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
+      <ProjectReference Include="..\opensc-dynamictexts-model\opensc-dynamictexts-model.csproj"/>
+      <ProjectReference Include="..\opensc-labelsets-model\opensc-labelsets-model.csproj"/>
+      <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj"/>
+      <ProjectReference Include="..\opensc-signals-model\opensc-signals-model.csproj"/>
   </ItemGroup>
   <Import Project="..\GlobalCsproj\*.csproj"/>
 </Project>

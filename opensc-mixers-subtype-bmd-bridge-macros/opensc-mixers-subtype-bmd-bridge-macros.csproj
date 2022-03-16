@@ -6,18 +6,10 @@
       <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-macros-model\opensc-macros-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-mixers-subtype-bmd-model\opensc-mixers-subtype-bmd-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
+      <ProjectReference Include="..\opensc-macros-model\opensc-macros-model.csproj"/>
+      <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj"/>
+      <ProjectReference Include="..\opensc-mixers-subtype-bmd-model\opensc-mixers-subtype-bmd-model.csproj"/>
   </ItemGroup>
   <ItemGroup>
       <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>

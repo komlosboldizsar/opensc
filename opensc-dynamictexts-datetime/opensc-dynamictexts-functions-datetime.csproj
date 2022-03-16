@@ -4,12 +4,8 @@
       <RootNamespace>opensc_dynamictexts_datetime</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-dynamictexts-model\opensc-dynamictexts-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
+      <ProjectReference Include="..\opensc-dynamictexts-model\opensc-dynamictexts-model.csproj"/>
   </ItemGroup>
   <Import Project="..\GlobalCsproj\*.csproj"/>
 </Project>

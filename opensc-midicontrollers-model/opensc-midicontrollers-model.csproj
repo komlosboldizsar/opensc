@@ -10,9 +10,7 @@
       </PackageReference>
   </ItemGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj" />
+  <Import Project="..\GlobalCsproj\*.csproj"/>
 </Project>

@@ -6,15 +6,9 @@
       <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-dynamictexts-model\opensc-dynamictexts-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-timers-model\opensc-timers-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
+      <ProjectReference Include="..\opensc-dynamictexts-model\opensc-dynamictexts-model.csproj"/>
+      <ProjectReference Include="..\opensc-timers-model\opensc-timers-model.csproj"/>
   </ItemGroup>
   <ItemGroup>
       <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>

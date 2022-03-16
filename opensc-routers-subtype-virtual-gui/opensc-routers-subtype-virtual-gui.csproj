@@ -13,21 +13,11 @@
       <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
   </ItemGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-routers-gui\opensc-routers-gui.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-routers-subtype-virtual-model\opensc-routers-subtype-virtual-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
+      <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj"/>
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
+      <ProjectReference Include="..\opensc-routers-gui\opensc-routers-gui.csproj"/>
+      <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj"/>
+      <ProjectReference Include="..\opensc-routers-subtype-virtual-model\opensc-routers-subtype-virtual-model.csproj"/>
   </ItemGroup>
   <Import Project="..\GlobalCsproj\*.csproj"/>
 </Project>

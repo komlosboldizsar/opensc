@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
       <TargetFramework>net5.0-windows</TargetFramework>
       <OutputType>Library</OutputType>
@@ -9,24 +9,12 @@
       <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-booleans-model\opensc-booleans-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-booleantallies-model\opensc-booleantallies-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-signals-gui\opensc-signals-gui.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-signals-model\opensc-signals-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
+      <ProjectReference Include="..\opensc-booleans-model\opensc-booleans-model.csproj"/>
+      <ProjectReference Include="..\opensc-booleantallies-model\opensc-booleantallies-model.csproj"/>
+      <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj"/>
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
+      <ProjectReference Include="..\opensc-signals-gui\opensc-signals-gui.csproj"/>
+      <ProjectReference Include="..\opensc-signals-model\opensc-signals-model.csproj"/>
   </ItemGroup>
   <ItemGroup>
       <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>

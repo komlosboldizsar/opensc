@@ -4,15 +4,9 @@
       <RootNamespace>opensc_routers_bridge_labelsets</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-labelsets-model\opensc-labelsets-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
+      <ProjectReference Include="..\opensc-labelsets-model\opensc-labelsets-model.csproj"/>
+      <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj"/>
   </ItemGroup>
   <Import Project="..\GlobalCsproj\*.csproj"/>
 </Project>

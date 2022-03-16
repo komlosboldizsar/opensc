@@ -9,25 +9,15 @@
       <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-umds-gui\opensc-umds-gui.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-umds-model\opensc-umds-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-umds-subtype-tsl31-model\opensc-umds-subtype-tsl31-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
+      <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj"/>
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
+      <ProjectReference Include="..\opensc-umds-gui\opensc-umds-gui.csproj"/>
+      <ProjectReference Include="..\opensc-umds-model\opensc-umds-model.csproj"/>
+      <ProjectReference Include="..\opensc-umds-subtype-tsl31-model\opensc-umds-subtype-tsl31-model.csproj"/>
   </ItemGroup>
   <ItemGroup>
-      <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-      <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+      <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
+      <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj" />
+  <Import Project="..\GlobalCsproj\*.csproj"/>
 </Project>

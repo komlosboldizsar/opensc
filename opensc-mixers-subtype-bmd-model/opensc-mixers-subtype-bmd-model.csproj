@@ -7,15 +7,9 @@
       <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-library-bmdswitcher\opensc-library-bmdswitcher.csproj">
-         <Private>false</Private>
-      </ProjectReference>
-      <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj">
-         <Private>false</Private>
-      </ProjectReference>
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
+      <ProjectReference Include="..\opensc-library-bmdswitcher\opensc-library-bmdswitcher.csproj"/>
+      <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj"/>
   </ItemGroup>
   <ItemGroup>
       <COMReference Include="BMDSwitcherAPI">

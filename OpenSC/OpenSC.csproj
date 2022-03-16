@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
       <TargetFramework>net5.0-windows</TargetFramework>
       <OutputType>WinExe</OutputType>
@@ -7,9 +7,9 @@
       <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj" />
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
-      <ProjectReference Include="..\ThreadHelpers\ThreadHelpers.csproj" />
+      <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj"/>
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
+      <ProjectReference Include="..\ThreadHelpers\ThreadHelpers.csproj"/>
   </ItemGroup>
   <ItemGroup>
       <COMReference Include="BMDSwitcherAPI">
@@ -35,5 +35,5 @@
          <LastGenOutput>Settings.Designer.cs</LastGenOutput>
       </None>
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj" />
+  <Import Project="..\GlobalCsproj\*.csproj"/>
 </Project>
