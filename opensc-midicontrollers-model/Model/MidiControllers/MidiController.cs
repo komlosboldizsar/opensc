@@ -118,7 +118,7 @@ namespace OpenSC.Model.MidiControllers
                 }
                 catch (Exception ex)
                 {
-                    LogDispatcher.I(LOG_TAG, $"Error occurred during deinitialization of MIDI controller [{this}]: [{ex.Message}].");
+                    LogDispatcher.E(LOG_TAG, $"Error occurred during deinitialization of MIDI controller [{this}]: [{ex.Message}].");
                 }
             }
             inputDevice = null;
