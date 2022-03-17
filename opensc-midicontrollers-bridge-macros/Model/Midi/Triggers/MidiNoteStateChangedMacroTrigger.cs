@@ -54,7 +54,7 @@ namespace OpenSC.Model.MidiControllers.Triggers
             bool observeOff = (bool)argumentObjects[2];
             bool observeOn = (bool)argumentObjects[3];
             MidiController.NoteStateChangedDelegate noteStateChangeHandler = (c, n, s) => {
-                if ((observeOff && !s) || (observeOn && s))
+                if ((n == (int)argumentObjects[1]) && ((observeOff && !s) || (observeOn && s)))
                     triggerWithArguments.Fire();
             };
             controller.NoteStateChanged += noteStateChangeHandler;
