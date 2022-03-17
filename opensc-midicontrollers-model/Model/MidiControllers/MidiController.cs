@@ -2,6 +2,7 @@
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using Sanford.Multimedia.Midi;
+using Sanford.Threading;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,6 +91,7 @@ namespace OpenSC.Model.MidiControllers
                 inputDevice.ChannelMessageReceived += inputDeviceMidiChannelMessageHandler;
                 inputDevice.StartRecording();
                 Initialized = true;
+                AppDomain.CurrentDomain.ProcessExit += mainProcessExitHandler;
                 LogDispatcher.I(LOG_TAG, $"Initialized MIDI controller [{this}].");
             }
             catch (Exception ex)
@@ -121,6 +123,7 @@ namespace OpenSC.Model.MidiControllers
                     LogDispatcher.E(LOG_TAG, $"Error occurred during deinitialization of MIDI controller [{this}]: [{ex.Message}].");
                 }
             }
+            AppDomain.CurrentDomain.ProcessExit -= mainProcessExitHandler;
             inputDevice = null;
             Initialized = false;
             LogDispatcher.I(LOG_TAG, $"Deinitialized MIDI controller [{this}].");
@@ -131,6 +134,9 @@ namespace OpenSC.Model.MidiControllers
             DeInit();
             Init();
         }
+
+        private void mainProcessExitHandler(object sender, EventArgs e)
+            => DeInit();
         #endregion
 
         #region Message handling
