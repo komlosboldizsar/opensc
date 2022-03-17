@@ -87,13 +87,18 @@ namespace OpenSC.Model.MidiControllers
             {
                 inputDevice = new InputDevice(deviceId);
                 inputDevice.ChannelMessageReceived += inputDeviceMidiChannelMessageHandler;
+                inputDevice.StartRecording();
                 Initialized = true;
             }
             catch
             {
+                if (inputDevice != null)
+                {
+                    inputDevice.StopRecording();
+                    inputDevice.ChannelMessageReceived -= inputDeviceMidiChannelMessageHandler;
+                }
                 inputDevice = null;
-                inputDevice.ChannelMessageReceived -= inputDeviceMidiChannelMessageHandler;
-                Initialized = true;
+                Initialized = false;
             }
         }
 
@@ -101,6 +106,7 @@ namespace OpenSC.Model.MidiControllers
         {
             if (inputDevice != null)
             {
+                inputDevice.StopRecording();
                 inputDevice.ChannelMessageReceived -= inputDeviceMidiChannelMessageHandler;
                 try
                 {
