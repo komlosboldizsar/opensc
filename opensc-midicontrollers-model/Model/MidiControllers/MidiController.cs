@@ -91,7 +91,7 @@ namespace OpenSC.Model.MidiControllers
                 inputDevice.ChannelMessageReceived += inputDeviceMidiChannelMessageHandler;
                 inputDevice.StartRecording();
                 Initialized = true;
-                AppDomain.CurrentDomain.ProcessExit += mainProcessExitHandler;
+                ApplicationEvents.Exiting += applicationExitingHandler;
                 LogDispatcher.I(LOG_TAG, $"Initialized MIDI controller [{this}].");
             }
             catch (Exception ex)
@@ -103,6 +103,7 @@ namespace OpenSC.Model.MidiControllers
                 }
                 inputDevice = null;
                 Initialized = false;
+                ApplicationEvents.Exiting -= applicationExitingHandler;
                 LogDispatcher.E(LOG_TAG, $"Failed to initialize MIDI controller [{this}], error message: [{ex.Message}].");
             }
         }
@@ -123,7 +124,7 @@ namespace OpenSC.Model.MidiControllers
                     LogDispatcher.E(LOG_TAG, $"Error occurred during deinitialization of MIDI controller [{this}]: [{ex.Message}].");
                 }
             }
-            AppDomain.CurrentDomain.ProcessExit -= mainProcessExitHandler;
+            ApplicationEvents.Exiting -= applicationExitingHandler;
             inputDevice = null;
             Initialized = false;
             LogDispatcher.I(LOG_TAG, $"Deinitialized MIDI controller [{this}].");
@@ -135,7 +136,7 @@ namespace OpenSC.Model.MidiControllers
             Init();
         }
 
-        private void mainProcessExitHandler(object sender, EventArgs e)
+        private void applicationExitingHandler(object sender, EventArgs e)
             => DeInit();
         #endregion
 
