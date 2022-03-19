@@ -19,7 +19,7 @@ namespace OpenSC.Modules
         public const string TOPMENU_LABEL = "MIDI";
         public const string MENUGROUP_ID = MenuManager.GROUP_ID_BASE;
         public const int MENUGROUP_WEIGHT = MenuManager.GROUP_WEIGHT_BASE;
-        public const string SUBMENU_LABEL = "Midi controller list";
+        public const string SUBMENU_LABEL = "MIDI controller list";
 
         protected override void registerMenus()
         {

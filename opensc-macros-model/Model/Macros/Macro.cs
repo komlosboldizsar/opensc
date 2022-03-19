@@ -46,7 +46,7 @@ namespace OpenSC.Model.Macros
         {
             base.TotallyRestored();
             foreach (MacroTriggerWithArguments trigger in triggers)
-                trigger.RestoreCustomRelations();
+                trigger.TotallyRestored();
         }
 
         #region Owner database

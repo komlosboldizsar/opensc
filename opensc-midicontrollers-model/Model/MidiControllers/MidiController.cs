@@ -1,6 +1,8 @@
-﻿using OpenSC.Model.General;
+﻿using OpenSC.Logger;
+using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using Sanford.Multimedia.Midi;
+using Sanford.Threading;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,13 +89,22 @@ namespace OpenSC.Model.MidiControllers
             {
                 inputDevice = new InputDevice(deviceId);
                 inputDevice.ChannelMessageReceived += inputDeviceMidiChannelMessageHandler;
+                inputDevice.StartRecording();
                 Initialized = true;
+                ApplicationEvents.Exiting += applicationExitingHandler;
+                LogDispatcher.I(LOG_TAG, $"Initialized MIDI controller [{this}].");
             }
-            catch
+            catch (Exception ex)
             {
+                if (inputDevice != null)
+                {
+                    inputDevice.StopRecording();
+                    inputDevice.ChannelMessageReceived -= inputDeviceMidiChannelMessageHandler;
+                }
                 inputDevice = null;
-                inputDevice.ChannelMessageReceived -= inputDeviceMidiChannelMessageHandler;
-                Initialized = true;
+                Initialized = false;
+                ApplicationEvents.Exiting -= applicationExitingHandler;
+                LogDispatcher.E(LOG_TAG, $"Failed to initialize MIDI controller [{this}], error message: [{ex.Message}].");
             }
         }
 
@@ -101,16 +112,22 @@ namespace OpenSC.Model.MidiControllers
         {
             if (inputDevice != null)
             {
+                inputDevice.StopRecording();
                 inputDevice.ChannelMessageReceived -= inputDeviceMidiChannelMessageHandler;
                 try
                 {
                     inputDevice.Close();
                     inputDevice.Dispose();
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    LogDispatcher.E(LOG_TAG, $"Error occurred during deinitialization of MIDI controller [{this}]: [{ex.Message}].");
+                }
             }
+            ApplicationEvents.Exiting -= applicationExitingHandler;
             inputDevice = null;
             Initialized = false;
+            LogDispatcher.I(LOG_TAG, $"Deinitialized MIDI controller [{this}].");
         }
 
         public void ReInit()
@@ -118,6 +135,9 @@ namespace OpenSC.Model.MidiControllers
             DeInit();
             Init();
         }
+
+        private void applicationExitingHandler(object sender, EventArgs e)
+            => DeInit();
         #endregion
 
         #region Message handling
@@ -141,7 +161,11 @@ namespace OpenSC.Model.MidiControllers
         public const int PITCH_A4 = 69;
 
         private void handleNoteChangeMessage(int note, bool on)
-            => NoteStateChanged?.Invoke(this, note, on);
+        {
+            string noteState = on ? "on" : "off";
+            LogDispatcher.V(LOG_TAG, $"Note changed on MIDI controller [{this}]: Note [{note}] to [{noteState}].");
+            NoteStateChanged?.Invoke(this, note, on);
+        }
 
         public delegate void NoteStateChangedDelegate(MidiController controller, int note, bool state);
         public event NoteStateChangedDelegate NoteStateChanged;
