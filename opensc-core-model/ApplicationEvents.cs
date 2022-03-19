@@ -11,11 +11,13 @@ namespace OpenSC
     public class ApplicationEvents
     {
 
+        public const string LOG_TAG = "ApplicationEvents";
+
         public static event EventHandler Exiting;
         public static void FireExitingEvent(object sender, System.EventArgs eventArgs)
         {
             Exiting?.Invoke(sender, eventArgs);
-            LogDispatcher.I($"Exit event, source: [{sender}].");
+            LogDispatcher.I(LOG_TAG, $"Exit event, source: [{sender}].");
         }
 
     }
