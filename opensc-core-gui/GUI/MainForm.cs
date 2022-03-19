@@ -160,7 +160,10 @@ namespace OpenSC.GUI
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-            => MasterDatabase.Instance.SaveEverything();
+        {
+            ApplicationEvents.FireExitingEvent(this, e);
+            MasterDatabase.Instance.SaveEverything();
+        }
 
         private void globalSettingsToolStripMenuItem_Click(object sender, EventArgs e)
             => SettingsWindow.Instance.ShowAsChild();
