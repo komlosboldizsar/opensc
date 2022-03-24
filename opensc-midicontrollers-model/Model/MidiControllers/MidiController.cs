@@ -1,8 +1,8 @@
 ﻿using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
-using Sanford.Multimedia.Midi;
-using Sanford.Threading;
+using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,27 +83,25 @@ namespace OpenSC.Model.MidiControllers
                 return;
             if (deviceId < 0)
                 return;
-            if (deviceId >= InputDevice.DeviceCount)
+            if (deviceId >= InputDevice.GetDevicesCount())
                 return;
             try
             {
-                inputDevice = new InputDevice(deviceId);
-                inputDevice.ChannelMessageReceived += inputDeviceMidiChannelMessageHandler;
-                inputDevice.StartRecording();
+                inputDevice = InputDevice.GetByIndex(deviceId);
+                inputDevice.EventReceived += inputDeviceMidiChannelMessageHandler;
+                inputDevice.StartEventsListening();
                 Initialized = true;
-                ApplicationEvents.Exiting += applicationExitingHandler;
                 LogDispatcher.I(LOG_TAG, $"Initialized MIDI controller [{this}].");
             }
             catch (Exception ex)
             {
                 if (inputDevice != null)
                 {
-                    inputDevice.StopRecording();
-                    inputDevice.ChannelMessageReceived -= inputDeviceMidiChannelMessageHandler;
+                    inputDevice.StopEventsListening();
+                    inputDevice.EventReceived -= inputDeviceMidiChannelMessageHandler;
                 }
                 inputDevice = null;
                 Initialized = false;
-                ApplicationEvents.Exiting -= applicationExitingHandler;
                 LogDispatcher.E(LOG_TAG, $"Failed to initialize MIDI controller [{this}], error message: [{ex.Message}].");
             }
         }
@@ -112,11 +110,10 @@ namespace OpenSC.Model.MidiControllers
         {
             if (inputDevice != null)
             {
-                inputDevice.StopRecording();
-                inputDevice.ChannelMessageReceived -= inputDeviceMidiChannelMessageHandler;
+                inputDevice.StopEventsListening();
+                inputDevice.EventReceived -= inputDeviceMidiChannelMessageHandler;
                 try
                 {
-                    inputDevice.Close();
                     inputDevice.Dispose();
                 }
                 catch (Exception ex)
@@ -124,7 +121,6 @@ namespace OpenSC.Model.MidiControllers
                     LogDispatcher.E(LOG_TAG, $"Error occurred during deinitialization of MIDI controller [{this}]: [{ex.Message}].");
                 }
             }
-            ApplicationEvents.Exiting -= applicationExitingHandler;
             inputDevice = null;
             Initialized = false;
             LogDispatcher.I(LOG_TAG, $"Deinitialized MIDI controller [{this}].");
@@ -135,21 +131,18 @@ namespace OpenSC.Model.MidiControllers
             DeInit();
             Init();
         }
-
-        private void applicationExitingHandler(object sender, EventArgs e)
-            => DeInit();
         #endregion
 
         #region Message handling
-        private void inputDeviceMidiChannelMessageHandler(object sender, ChannelMessageEventArgs e)
+        private void inputDeviceMidiChannelMessageHandler(object sender, MidiEventReceivedEventArgs e)
         {
-            switch (e.Message.Command)
+            switch (e.Event.EventType)
             {
-                case ChannelCommand.NoteOff:
-                    handleNoteChangeMessage(e.Message.Data1, false);
+                case MidiEventType.NoteOn:
+                    handleNoteChangeMessage(((NoteEvent)e.Event).NoteNumber, false);
                     break;
-                case ChannelCommand.NoteOn:
-                    handleNoteChangeMessage(e.Message.Data1, true);
+                case MidiEventType.NoteOff:
+                    handleNoteChangeMessage(((NoteEvent)e.Event).NoteNumber, true);
                     break;
             }
         }
