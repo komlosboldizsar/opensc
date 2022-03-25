@@ -12,7 +12,16 @@ namespace OpenSC.Model.Timers
     public class Timer : ModelBase
     {
 
-        #region Persistence, instantiation
+        #region Instantiation, persistence, restoration
+        public Timer()
+        {
+            innerTimer = new System.Timers.Timer(1000);
+            innerTimer.Elapsed += innerTimerTick;
+            innerTimer.AutoReset = true;
+            innerTimer.Enabled = true;
+            Reset();
+        }
+
         public override void Removed()
         {
             base.Removed();
@@ -26,6 +35,12 @@ namespace OpenSC.Model.Timers
             ModeChanged = null;
             ReachedZero = null;
             innerTimer?.Dispose();
+        }
+
+        public override void TotallyRestored()
+        {
+            base.TotallyRestored();
+            Reset();
         }
         #endregion
 
@@ -169,15 +184,6 @@ namespace OpenSC.Model.Timers
 
         #region Timer
         private System.Timers.Timer innerTimer;
-
-        public Timer()
-        {
-            innerTimer = new System.Timers.Timer(1000);
-            innerTimer.Elapsed += innerTimerTick;
-            innerTimer.AutoReset = true;
-            innerTimer.Enabled = true;
-            Reset();
-        }
 
         bool firstReachedZeroEvent = true;
 
