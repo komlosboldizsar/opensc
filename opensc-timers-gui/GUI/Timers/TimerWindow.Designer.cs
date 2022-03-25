@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TimerWindow));
             this.timeLabel = new System.Windows.Forms.Label();
             this.titleLabel = new System.Windows.Forms.Label();
             this.buttonsPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -54,7 +55,6 @@
             this.modeImageContainer = new System.Windows.Forms.FlowLayoutPanel();
             this.modeImageBackwards = new System.Windows.Forms.PictureBox();
             this.modeImageForwards = new System.Windows.Forms.PictureBox();
-            this.modeImageClock = new System.Windows.Forms.PictureBox();
             this.stateImageContainer = new System.Windows.Forms.FlowLayoutPanel();
             this.runningStateImage = new System.Windows.Forms.PictureBox();
             this.buttonsPanel.SuspendLayout();
@@ -63,7 +63,6 @@
             this.modeImageContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.modeImageBackwards)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.modeImageForwards)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.modeImageClock)).BeginInit();
             this.stateImageContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.runningStateImage)).BeginInit();
             this.SuspendLayout();
@@ -72,12 +71,12 @@
             // 
             this.timeLabel.BackColor = System.Drawing.Color.Transparent;
             this.timeLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.timeLabel.Font = new System.Drawing.Font("DSEG7 Classic", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.timeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.timeLabel.ForeColor = System.Drawing.Color.Red;
             this.timeLabel.Location = new System.Drawing.Point(0, 0);
             this.timeLabel.Name = "timeLabel";
-            this.timeLabel.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.timeLabel.Size = new System.Drawing.Size(522, 100);
+            this.timeLabel.Padding = new System.Windows.Forms.Padding(0, 12, 0, 0);
+            this.timeLabel.Size = new System.Drawing.Size(522, 125);
             this.timeLabel.TabIndex = 0;
             this.timeLabel.Text = "12:00:00";
             this.timeLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -85,11 +84,11 @@
             // titleLabel
             // 
             this.titleLabel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.titleLabel.Location = new System.Drawing.Point(0, 0);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
-            this.titleLabel.Size = new System.Drawing.Size(522, 37);
+            this.titleLabel.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.titleLabel.Size = new System.Drawing.Size(522, 46);
             this.titleLabel.TabIndex = 1;
             this.titleLabel.Text = "Title of this counter";
             this.titleLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -104,19 +103,21 @@
             this.buttonsPanel.Controls.Add(this.startButton, 0, 0);
             this.buttonsPanel.Controls.Add(this.stopButton, 1, 0);
             this.buttonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonsPanel.Location = new System.Drawing.Point(0, 141);
+            this.buttonsPanel.Location = new System.Drawing.Point(0, 176);
+            this.buttonsPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonsPanel.Name = "buttonsPanel";
             this.buttonsPanel.RowCount = 1;
             this.buttonsPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.buttonsPanel.Size = new System.Drawing.Size(522, 32);
+            this.buttonsPanel.Size = new System.Drawing.Size(522, 40);
             this.buttonsPanel.TabIndex = 2;
             // 
             // resetButton
             // 
             this.resetButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.resetButton.Location = new System.Drawing.Point(351, 3);
+            this.resetButton.Location = new System.Drawing.Point(351, 4);
+            this.resetButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.resetButton.Name = "resetButton";
-            this.resetButton.Size = new System.Drawing.Size(168, 26);
+            this.resetButton.Size = new System.Drawing.Size(168, 32);
             this.resetButton.TabIndex = 0;
             this.resetButton.Text = "RESET";
             this.resetButton.UseVisualStyleBackColor = true;
@@ -125,9 +126,10 @@
             // startButton
             // 
             this.startButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.startButton.Location = new System.Drawing.Point(3, 3);
+            this.startButton.Location = new System.Drawing.Point(3, 4);
+            this.startButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(168, 26);
+            this.startButton.Size = new System.Drawing.Size(168, 32);
             this.startButton.TabIndex = 1;
             this.startButton.Text = "START";
             this.startButton.UseVisualStyleBackColor = true;
@@ -136,9 +138,10 @@
             // stopButton
             // 
             this.stopButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.stopButton.Location = new System.Drawing.Point(177, 3);
+            this.stopButton.Location = new System.Drawing.Point(177, 4);
+            this.stopButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.stopButton.Name = "stopButton";
-            this.stopButton.Size = new System.Drawing.Size(168, 26);
+            this.stopButton.Size = new System.Drawing.Size(168, 32);
             this.stopButton.TabIndex = 2;
             this.stopButton.Text = "STOP";
             this.stopButton.UseVisualStyleBackColor = true;
@@ -155,7 +158,7 @@
             this.contextMenuSeparator1,
             this.settingsToolStripMenuItem});
             this.timerDisplayContextMenu.Name = "timerDisplayContextMenu";
-            this.timerDisplayContextMenu.Size = new System.Drawing.Size(211, 168);
+            this.timerDisplayContextMenu.Size = new System.Drawing.Size(204, 140);
             // 
             // setColorMenuItem
             // 
@@ -168,69 +171,69 @@
             this.colorPurpleMenuItem,
             this.colorBlackMenuItem});
             this.setColorMenuItem.Name = "setColorMenuItem";
-            this.setColorMenuItem.Size = new System.Drawing.Size(210, 26);
+            this.setColorMenuItem.Size = new System.Drawing.Size(203, 26);
             this.setColorMenuItem.Text = "Color";
             // 
             // colorRedMenuItem
             // 
-            this.colorRedMenuItem.Image = global::OpenSC.GUI.SolidIcons.solid_red;
+            this.colorRedMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("colorRedMenuItem.Image")));
             this.colorRedMenuItem.Name = "colorRedMenuItem";
-            this.colorRedMenuItem.Size = new System.Drawing.Size(133, 26);
+            this.colorRedMenuItem.Size = new System.Drawing.Size(141, 26);
             this.colorRedMenuItem.Tag = "#FF0000";
             this.colorRedMenuItem.Text = "Red";
             // 
             // colorGreenMenuItem
             // 
-            this.colorGreenMenuItem.Image = global::OpenSC.GUI.SolidIcons.solid_green;
+            this.colorGreenMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("colorGreenMenuItem.Image")));
             this.colorGreenMenuItem.Name = "colorGreenMenuItem";
-            this.colorGreenMenuItem.Size = new System.Drawing.Size(133, 26);
+            this.colorGreenMenuItem.Size = new System.Drawing.Size(141, 26);
             this.colorGreenMenuItem.Tag = "#008800";
             this.colorGreenMenuItem.Text = "Green";
             // 
             // colorYellowMenuItem
             // 
-            this.colorYellowMenuItem.Image = global::OpenSC.GUI.SolidIcons.solid_yellow;
+            this.colorYellowMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("colorYellowMenuItem.Image")));
             this.colorYellowMenuItem.Name = "colorYellowMenuItem";
-            this.colorYellowMenuItem.Size = new System.Drawing.Size(133, 26);
+            this.colorYellowMenuItem.Size = new System.Drawing.Size(141, 26);
             this.colorYellowMenuItem.Tag = "#EEEE00";
             this.colorYellowMenuItem.Text = "Yellow";
             // 
             // colorOrangeMenuItem
             // 
-            this.colorOrangeMenuItem.Image = global::OpenSC.GUI.SolidIcons.solid_orange;
+            this.colorOrangeMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("colorOrangeMenuItem.Image")));
             this.colorOrangeMenuItem.Name = "colorOrangeMenuItem";
-            this.colorOrangeMenuItem.Size = new System.Drawing.Size(133, 26);
+            this.colorOrangeMenuItem.Size = new System.Drawing.Size(141, 26);
             this.colorOrangeMenuItem.Tag = "#FF9900";
             this.colorOrangeMenuItem.Text = "Orange";
             // 
             // colorBlueMenuItem
             // 
-            this.colorBlueMenuItem.Image = global::OpenSC.GUI.SolidIcons.solid_blue;
+            this.colorBlueMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("colorBlueMenuItem.Image")));
             this.colorBlueMenuItem.Name = "colorBlueMenuItem";
-            this.colorBlueMenuItem.Size = new System.Drawing.Size(133, 26);
+            this.colorBlueMenuItem.Size = new System.Drawing.Size(141, 26);
             this.colorBlueMenuItem.Tag = "#0000FF";
             this.colorBlueMenuItem.Text = "Blue";
             // 
             // colorPurpleMenuItem
             // 
-            this.colorPurpleMenuItem.Image = global::OpenSC.GUI.SolidIcons.solid_purple;
+            this.colorPurpleMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("colorPurpleMenuItem.Image")));
             this.colorPurpleMenuItem.Name = "colorPurpleMenuItem";
-            this.colorPurpleMenuItem.Size = new System.Drawing.Size(133, 26);
+            this.colorPurpleMenuItem.Size = new System.Drawing.Size(141, 26);
             this.colorPurpleMenuItem.Tag = "#AA00FF";
             this.colorPurpleMenuItem.Text = "Purple";
             // 
             // colorBlackMenuItem
             // 
-            this.colorBlackMenuItem.Image = global::OpenSC.GUI.SolidIcons.solid_black;
+            this.colorBlackMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("colorBlackMenuItem.Image")));
             this.colorBlackMenuItem.Name = "colorBlackMenuItem";
-            this.colorBlackMenuItem.Size = new System.Drawing.Size(133, 26);
+            this.colorBlackMenuItem.Size = new System.Drawing.Size(141, 26);
             this.colorBlackMenuItem.Tag = "#000000";
             this.colorBlackMenuItem.Text = "Black";
             // 
             // showAllSegmentsContextItem
             // 
             this.showAllSegmentsContextItem.Name = "showAllSegmentsContextItem";
-            this.showAllSegmentsContextItem.Size = new System.Drawing.Size(210, 26);
+            this.showAllSegmentsContextItem.Size = new System.Drawing.Size(203, 26);
             this.showAllSegmentsContextItem.Text = "Show all segments";
             this.showAllSegmentsContextItem.Click += new System.EventHandler(this.showAllSegmentsContextItem_Click);
             // 
@@ -239,7 +242,7 @@
             this.blinkWhenExpiredContextItem.Checked = true;
             this.blinkWhenExpiredContextItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.blinkWhenExpiredContextItem.Name = "blinkWhenExpiredContextItem";
-            this.blinkWhenExpiredContextItem.Size = new System.Drawing.Size(210, 26);
+            this.blinkWhenExpiredContextItem.Size = new System.Drawing.Size(203, 26);
             this.blinkWhenExpiredContextItem.Text = "Blink when expired";
             this.blinkWhenExpiredContextItem.Click += new System.EventHandler(this.blinkWhenExpiredContextItem_Click);
             // 
@@ -248,19 +251,19 @@
             this.buttonsContextItem.Checked = true;
             this.buttonsContextItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.buttonsContextItem.Name = "buttonsContextItem";
-            this.buttonsContextItem.Size = new System.Drawing.Size(210, 26);
+            this.buttonsContextItem.Size = new System.Drawing.Size(203, 26);
             this.buttonsContextItem.Text = "Buttons";
             this.buttonsContextItem.Click += new System.EventHandler(this.buttonsToolStripMenuItem_Click);
             // 
             // contextMenuSeparator1
             // 
             this.contextMenuSeparator1.Name = "contextMenuSeparator1";
-            this.contextMenuSeparator1.Size = new System.Drawing.Size(207, 6);
+            this.contextMenuSeparator1.Size = new System.Drawing.Size(200, 6);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(203, 26);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // timeLabelContainer
@@ -268,21 +271,22 @@
             this.timeLabelContainer.Controls.Add(this.timeLabel);
             this.timeLabelContainer.Controls.Add(this.timeLabelBackground);
             this.timeLabelContainer.Dock = System.Windows.Forms.DockStyle.Top;
-            this.timeLabelContainer.Location = new System.Drawing.Point(0, 37);
+            this.timeLabelContainer.Location = new System.Drawing.Point(0, 46);
+            this.timeLabelContainer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.timeLabelContainer.Name = "timeLabelContainer";
-            this.timeLabelContainer.Size = new System.Drawing.Size(522, 100);
+            this.timeLabelContainer.Size = new System.Drawing.Size(522, 125);
             this.timeLabelContainer.TabIndex = 3;
             // 
             // timeLabelBackground
             // 
             this.timeLabelBackground.BackColor = System.Drawing.SystemColors.Control;
             this.timeLabelBackground.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.timeLabelBackground.Font = new System.Drawing.Font("DSEG7 Classic", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.timeLabelBackground.Font = new System.Drawing.Font("Microsoft Sans Serif", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.timeLabelBackground.ForeColor = System.Drawing.Color.Gainsboro;
             this.timeLabelBackground.Location = new System.Drawing.Point(0, 0);
             this.timeLabelBackground.Name = "timeLabelBackground";
-            this.timeLabelBackground.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.timeLabelBackground.Size = new System.Drawing.Size(522, 100);
+            this.timeLabelBackground.Padding = new System.Windows.Forms.Padding(0, 12, 0, 0);
+            this.timeLabelBackground.Size = new System.Drawing.Size(522, 125);
             this.timeLabelBackground.TabIndex = 1;
             this.timeLabelBackground.Text = "88:88:88";
             this.timeLabelBackground.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -292,80 +296,75 @@
             this.modeImageContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.modeImageContainer.Controls.Add(this.modeImageBackwards);
             this.modeImageContainer.Controls.Add(this.modeImageForwards);
-            this.modeImageContainer.Controls.Add(this.modeImageClock);
             this.modeImageContainer.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.modeImageContainer.Location = new System.Drawing.Point(415, 0);
+            this.modeImageContainer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.modeImageContainer.Name = "modeImageContainer";
-            this.modeImageContainer.Padding = new System.Windows.Forms.Padding(0, 3, 3, 0);
-            this.modeImageContainer.Size = new System.Drawing.Size(107, 37);
+            this.modeImageContainer.Padding = new System.Windows.Forms.Padding(0, 4, 3, 0);
+            this.modeImageContainer.Size = new System.Drawing.Size(107, 46);
             this.modeImageContainer.TabIndex = 5;
             // 
             // modeImageBackwards
             // 
-            this.modeImageBackwards.Image = Icons.timer_backward_inactive;
-            this.modeImageBackwards.Location = new System.Drawing.Point(77, 6);
+            this.modeImageBackwards.Image = ((System.Drawing.Image)(resources.GetObject("modeImageBackwards.Image")));
+            this.modeImageBackwards.Location = new System.Drawing.Point(77, 8);
+            this.modeImageBackwards.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.modeImageBackwards.Name = "modeImageBackwards";
-            this.modeImageBackwards.Size = new System.Drawing.Size(24, 24);
+            this.modeImageBackwards.Size = new System.Drawing.Size(24, 30);
             this.modeImageBackwards.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.modeImageBackwards.TabIndex = 4;
             this.modeImageBackwards.TabStop = false;
             // 
             // modeImageForwards
             // 
-            this.modeImageForwards.Image = Icons.timer_forward_inactive;
-            this.modeImageForwards.Location = new System.Drawing.Point(47, 6);
+            this.modeImageForwards.Image = ((System.Drawing.Image)(resources.GetObject("modeImageForwards.Image")));
+            this.modeImageForwards.Location = new System.Drawing.Point(47, 8);
+            this.modeImageForwards.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.modeImageForwards.Name = "modeImageForwards";
-            this.modeImageForwards.Size = new System.Drawing.Size(24, 24);
+            this.modeImageForwards.Size = new System.Drawing.Size(24, 30);
             this.modeImageForwards.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.modeImageForwards.TabIndex = 5;
             this.modeImageForwards.TabStop = false;
-            // 
-            // modeImageClock
-            // 
-            this.modeImageClock.Image = Icons.timer_clock_inactive;
-            this.modeImageClock.Location = new System.Drawing.Point(17, 6);
-            this.modeImageClock.Name = "modeImageClock";
-            this.modeImageClock.Size = new System.Drawing.Size(24, 24);
-            this.modeImageClock.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.modeImageClock.TabIndex = 6;
-            this.modeImageClock.TabStop = false;
             // 
             // stateImageContainer
             // 
             this.stateImageContainer.Controls.Add(this.runningStateImage);
             this.stateImageContainer.Location = new System.Drawing.Point(0, 0);
+            this.stateImageContainer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.stateImageContainer.Name = "stateImageContainer";
-            this.stateImageContainer.Padding = new System.Windows.Forms.Padding(3, 3, 0, 0);
-            this.stateImageContainer.Size = new System.Drawing.Size(107, 37);
+            this.stateImageContainer.Padding = new System.Windows.Forms.Padding(3, 4, 0, 0);
+            this.stateImageContainer.Size = new System.Drawing.Size(107, 46);
             this.stateImageContainer.TabIndex = 6;
             // 
             // runningStateImage
             // 
-            this.runningStateImage.Image = Icons.timer_stopped;
-            this.runningStateImage.Location = new System.Drawing.Point(6, 6);
+            this.runningStateImage.Image = ((System.Drawing.Image)(resources.GetObject("runningStateImage.Image")));
+            this.runningStateImage.Location = new System.Drawing.Point(6, 8);
+            this.runningStateImage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.runningStateImage.Name = "runningStateImage";
-            this.runningStateImage.Size = new System.Drawing.Size(24, 24);
+            this.runningStateImage.Size = new System.Drawing.Size(24, 30);
             this.runningStateImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.runningStateImage.TabIndex = 6;
             this.runningStateImage.TabStop = false;
             // 
             // TimerWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(522, 173);
+            this.ClientSize = new System.Drawing.Size(522, 216);
             this.ContextMenuStrip = this.timerDisplayContextMenu;
             this.Controls.Add(this.stateImageContainer);
             this.Controls.Add(this.modeImageContainer);
             this.Controls.Add(this.timeLabelContainer);
             this.Controls.Add(this.buttonsPanel);
             this.Controls.Add(this.titleLabel);
+            this.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(540, 220);
+            this.MaximumSize = new System.Drawing.Size(540, 263);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(540, 220);
+            this.MinimumSize = new System.Drawing.Size(540, 263);
             this.Name = "TimerWindow";
             this.Text = "TimerWindow";
             this.Load += new System.EventHandler(this.TimerWindow_Load);
@@ -375,7 +374,6 @@
             this.modeImageContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.modeImageBackwards)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.modeImageForwards)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.modeImageClock)).EndInit();
             this.stateImageContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.runningStateImage)).EndInit();
             this.ResumeLayout(false);
@@ -408,7 +406,6 @@
         private System.Windows.Forms.PictureBox modeImageBackwards;
         private System.Windows.Forms.FlowLayoutPanel modeImageContainer;
         private System.Windows.Forms.PictureBox modeImageForwards;
-        private System.Windows.Forms.PictureBox modeImageClock;
         private System.Windows.Forms.ToolStripMenuItem blinkWhenExpiredContextItem;
         private System.Windows.Forms.FlowLayoutPanel stateImageContainer;
         private System.Windows.Forms.PictureBox runningStateImage;

@@ -157,22 +157,11 @@ namespace OpenSC.GUI.Timers
                 Invoke(new Action(() => updateButtons()));
                 return;
             }
-            if (timer.Mode == Model.Timers.TimerMode.Clock)
-            {
-                startButton.Enabled = false;
-                stopButton.Enabled = false;
-                resetButton.Enabled = false;
-            }
-            else
-            {
-                startButton.Enabled = !timer.Running && !(timer.Mode == Model.Timers.TimerMode.Backwards && timer.Seconds == 0);
-                stopButton.Enabled = timer.Running;
-                resetButton.Enabled = true;
-            }
+            startButton.Enabled = !timer.Running && !(timer.Mode == Model.Timers.TimerMode.Backwards && timer.Seconds == 0);
+            stopButton.Enabled = timer.Running;
+            resetButton.Enabled = true;
         }
 
-        private static readonly Image MODE_IMAGE_CLOCK_INACTIVE = Icons.timer_clock_inactive;
-        private static readonly Image MODE_IMAGE_CLOCK_ACTIVE = Icons.timer_clock;
         private static readonly Image MODE_IMAGE_FORWARDS_INACTIVE = Icons.timer_forward_inactive;
         private static readonly Image MODE_IMAGE_FORWARDS_ACTIVE = Icons.timer_forward;
         private static readonly Image MODE_IMAGE_BACKWARDS_INACTIVE = Icons.timer_backward_inactive;
@@ -180,7 +169,6 @@ namespace OpenSC.GUI.Timers
 
         private void updateModeImages()
         {
-            modeImageClock.Image = (timer.Mode == Model.Timers.TimerMode.Clock) ? MODE_IMAGE_CLOCK_ACTIVE : MODE_IMAGE_CLOCK_INACTIVE;
             modeImageForwards.Image = (timer.Mode == Model.Timers.TimerMode.Forwards) ? MODE_IMAGE_FORWARDS_ACTIVE : MODE_IMAGE_FORWARDS_INACTIVE;
             modeImageBackwards.Image = (timer.Mode == Model.Timers.TimerMode.Backwards) ? MODE_IMAGE_BACKWARDS_ACTIVE : MODE_IMAGE_BACKWARDS_INACTIVE;
         }

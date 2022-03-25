@@ -133,9 +133,9 @@ namespace OpenSC.Model.Timers
         #region Possible operations
         public event PropertyChangedNoValueDelegate<Timer> OperationsChanged;
 
-        public bool CanStart => ((mode != TimerMode.Clock) && !Running);
-        public bool CanStop => ((mode != TimerMode.Clock) && Running);
-        public bool CanReset => (mode != TimerMode.Clock);
+        public bool CanStart => !Running;
+        public bool CanStop =>  Running;
+        public bool CanReset => true;
         #endregion
 
         #region Operations
@@ -159,9 +159,6 @@ namespace OpenSC.Model.Timers
                     break;
                 case TimerMode.Backwards:
                     Seconds = CountdownSeconds;
-                    break;
-                case TimerMode.Clock:
-                    // Do nothing
                     break;
             }
             firstReachedZeroEvent = true;
@@ -203,9 +200,6 @@ namespace OpenSC.Model.Timers
                         firstReachedZeroEvent = false;
                         ReachedZero?.Invoke(this);
                     }
-                    break;
-                case TimerMode.Clock:
-                    Seconds = (int)DateTime.Now.TimeOfDay.TotalSeconds;
                     break;
             }
 

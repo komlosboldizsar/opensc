@@ -34,7 +34,6 @@ namespace OpenSC.GUI.Timers
                 return;
             modeForwardsRadio.Checked = (timer.Mode == TimerMode.Forwards);
             modeBackwardsRadio.Checked = (timer.Mode == TimerMode.Backwards);
-            modeClockRadio.Checked = (timer.Mode == TimerMode.Clock);
             countdownStartNumericField.Value = timer.CountdownSeconds;
         }
 
@@ -61,9 +60,7 @@ namespace OpenSC.GUI.Timers
         {
             if (modeForwardsRadio.Checked)
                 return TimerMode.Forwards;
-            if (modeBackwardsRadio.Checked)
-                return TimerMode.Backwards;
-            return TimerMode.Clock;
+            return TimerMode.Backwards;
         }
 
     }

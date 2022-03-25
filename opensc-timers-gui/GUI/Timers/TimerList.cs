@@ -58,12 +58,7 @@ namespace OpenSC.GUI.Timers
             builder.Header("");
             builder.Width(30);
             builder.CellStyle(TWO_PIXELS_PADDING_CELL_STYLE);
-            builder.UpdaterMethod((timer, cell) => {
-                if (timer.Mode == TimerMode.Clock)
-                    cell.Value = STATE_IMAGE_NOTSHOWN;
-                else
-                    cell.Value = timer.Running ? STATE_IMAGE_RUNNING : STATE_IMAGE_STOPPED;
-            });
+            builder.UpdaterMethod((timer, cell) => { cell.Value = timer.Running ? STATE_IMAGE_RUNNING : STATE_IMAGE_STOPPED; });
             builder.AddChangeEvent(nameof(Timer.Mode));
             builder.AddChangeEvent(nameof(Timer.Running));
 
@@ -143,14 +138,12 @@ namespace OpenSC.GUI.Timers
 
         private static readonly EnumToStringConverter<TimerMode> modeLabelConverter = new EnumToStringConverter<TimerMode>() {
             { TimerMode.Forwards, "stopper" },
-            { TimerMode.Backwards, "countdown" },
-            { TimerMode.Clock, "clock" },
+            { TimerMode.Backwards, "countdown" }
         };
 
         private static readonly EnumToBitmapConverter<TimerMode> modeImageConverter = new EnumToBitmapConverter<TimerMode>() {
             { TimerMode.Forwards, Icons._16_timer_forward },
-            { TimerMode.Backwards, Icons._16_timer_backward },
-            { TimerMode.Clock, Icons._16_timer_clock },
+            { TimerMode.Backwards, Icons._16_timer_backward }
         };
 
         private static readonly Bitmap BUTTON_IMAGE_START = Icons._16_timer_running;

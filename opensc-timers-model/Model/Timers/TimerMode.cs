@@ -9,7 +9,6 @@ namespace OpenSC.Model.Timers
     public enum TimerMode
     {
         Forwards,
-        Backwards,
-        Clock
+        Backwards
     }
 }
