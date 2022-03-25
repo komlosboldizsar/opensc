@@ -1,6 +1,6 @@
 ﻿namespace OpenSC.GUI.Timers
 {
-    partial class TimerEditWindow
+    partial class TimerEditorForm
     {
         /// <summary>
         /// Required designer variable.

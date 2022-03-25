@@ -19,7 +19,7 @@ namespace OpenSC.GUI.Timers
         protected override string SubjectSingular { get; } = "timer";
         protected override string SubjectPlural { get; } = "timers";
 
-        protected override IModelEditorForm ModelEditorForm { get; } = new TimerEditWindow();
+        protected override IModelEditorForm ModelEditorForm { get; } = new TimerEditorForm();
 
         protected override IItemListFormBaseManager createManager()
             => new ModelListFormBaseManager<Timer>(this, TimerDatabase.Instance, baseColumnCreator);

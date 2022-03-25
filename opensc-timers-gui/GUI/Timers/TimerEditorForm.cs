@@ -13,15 +13,15 @@ using Timer = OpenSC.Model.Timers.Timer;
 
 namespace OpenSC.GUI.Timers
 {
-    [WindowTypeName("timers.timereditwindow")]
-    public partial class TimerEditWindow : ModelEditorFormBase, IModelEditorForm<Timer>
+
+    public partial class TimerEditorForm : ModelEditorFormBase, IModelEditorForm<Timer>
     {
 
-        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Model.Timers.Timer);
-        public IModelEditorForm<Model.Timers.Timer> GetInstanceT(Model.Timers.Timer modelInstance) => new TimerEditWindow(modelInstance);
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Timer);
+        public IModelEditorForm<Timer> GetInstanceT(Timer modelInstance) => new TimerEditorForm(modelInstance);
 
-        public TimerEditWindow() : base() => InitializeComponent();
-        public TimerEditWindow(Timer timer) : base(timer) => InitializeComponent();
+        public TimerEditorForm() : base() => InitializeComponent();
+        public TimerEditorForm(Timer timer) : base(timer) => InitializeComponent();
 
         protected override IModelEditorFormDataManager createManager()
            => new ModelEditorFormDataManager<Timer, Timer>(this, TimerDatabase.Instance);
@@ -67,4 +67,5 @@ namespace OpenSC.GUI.Timers
         }
 
     }
+
 }
