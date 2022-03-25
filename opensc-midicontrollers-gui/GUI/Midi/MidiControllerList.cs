@@ -31,13 +31,22 @@ namespace OpenSC.GUI.MidiControllers
             idColumnCreator(table, builderGetterMethod);
             nameColumnCreator(table, builderGetterMethod);
 
-            // Column: com port name
+            // Column: device
             builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
-            builder.Header("Device ID");
-            builder.Width(80);
-            builder.UpdaterMethod((port, cell) => { cell.Value = port.DeviceId; });
-            builder.AddChangeEvent(nameof(MidiController.DeviceId));
+            builder.Header("Device");
+            builder.Width(180);
+            builder.UpdaterMethod((port, cell) => {
+                cell.Value = port.DeviceIdentifiedBy switch
+                {
+                    MidiController.IdentifierType.Index => $"Index: #{port.DeviceIndex}",
+                    MidiController.IdentifierType.Name => $"Name: {port.DeviceName}"
+                    _ => "",
+                };
+            });
+            builder.AddChangeEvent(nameof(MidiController.DeviceIndex));
+            builder.AddChangeEvent(nameof(MidiController.DeviceName));
+            builder.AddChangeEvent(nameof(MidiController.DeviceIdentifiedBy));
 
             // Column: state (is initialized?)
             builder = builderGetterMethod();

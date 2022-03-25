@@ -31,7 +31,7 @@ namespace OpenSC.Model.MidiControllers
         {
             base.Removed();
             DeInit();
-            DeviceIdChanged = null;
+            DeviceIndexChanged = null;
             NoteStateChanged = null;
         }
         #endregion
@@ -40,25 +40,75 @@ namespace OpenSC.Model.MidiControllers
         public override sealed IDatabaseBase OwnerDatabase { get; } = MidiControllerDatabase.Instance;
         #endregion
 
-        #region Property: DeviceId
-        public event PropertyChangedTwoValuesDelegate<MidiController, int> DeviceIdChanged;
+        #region Property: DeviceIndex
+        public event PropertyChangedTwoValuesDelegate<MidiController, int> DeviceIndexChanged;
 
-        [PersistAs("device_id")]
-        private int deviceId;
+        [PersistAs("device_index")]
+        private int deviceIndex;
 
-        public int DeviceId
+        public int DeviceIndex
         {
-            get => deviceId;
+            get => deviceIndex;
             set
             {
                 AfterChangePropertyDelegate<int> afterChangeDelegate = (ov, nv) =>
                 {
+                    if ((deviceIdentifiedBy == IdentifierType.Index) && Initialized && !Updating)
+                        ReInit();
+                };
+                if (!this.setProperty(ref deviceIndex, value, DeviceIndexChanged, null, afterChangeDelegate))
+                    return;
+            }
+        }
+        #endregion
+
+        #region Property: DeviceName
+        public event PropertyChangedTwoValuesDelegate<MidiController, string> DeviceNameChanged;
+
+        [PersistAs("device_name")]
+        private string deviceName;
+
+        public string DeviceName
+        {
+            get => deviceName;
+            set
+            {
+                AfterChangePropertyDelegate<string> afterChangeDelegate = (ov, nv) =>
+                {
+                    if ((deviceIdentifiedBy == IdentifierType.Name) && Initialized && !Updating)
+                        ReInit();
+                };
+                if (!this.setProperty(ref deviceName, value, DeviceNameChanged, null, afterChangeDelegate))
+                    return;
+            }
+        }
+        #endregion
+
+        #region Property: DeviceIdentifyBy
+        public event PropertyChangedTwoValuesDelegate<MidiController, IdentifierType> DeviceIdentifiedByChanged;
+
+        [PersistAs("device_identified_by")]
+        private IdentifierType deviceIdentifiedBy;
+
+        public IdentifierType DeviceIdentifiedBy
+        {
+            get => deviceIdentifiedBy;
+            set
+            {
+                AfterChangePropertyDelegate<IdentifierType> afterChangeDelegate = (ov, nv) =>
+                {
                     if (Initialized && !Updating)
                         ReInit();
                 };
-                if (!this.setProperty(ref deviceId, value, DeviceIdChanged, null, afterChangeDelegate))
+                if (!this.setProperty(ref deviceIdentifiedBy, value, DeviceIdentifiedByChanged, null, afterChangeDelegate))
                     return;
             }
+        }
+
+        public enum IdentifierType
+        {
+            Index,
+            Name
         }
         #endregion
 
@@ -81,13 +131,18 @@ namespace OpenSC.Model.MidiControllers
         {
             if (inputDevice != null)
                 return;
-            if (deviceId < 0)
-                return;
-            if (deviceId >= InputDevice.GetDevicesCount())
+            if (deviceIndex < 0)
                 return;
             try
             {
-                inputDevice = InputDevice.GetByIndex(deviceId);
+                inputDevice = deviceIdentifiedBy switch
+                {
+                    IdentifierType.Index => InputDevice.GetByIndex(deviceIndex),
+                    IdentifierType.Name => InputDevice.GetByName(deviceName),
+                    _ => null
+                };
+                if (inputDevice == null)
+                    return;
                 inputDevice.EventReceived += inputDeviceMidiChannelMessageHandler;
                 inputDevice.StartEventsListening();
                 Initialized = true;
