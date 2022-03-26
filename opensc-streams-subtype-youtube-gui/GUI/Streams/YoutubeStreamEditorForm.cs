@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace OpenSC.GUI.Streams
 {
-    public partial class YoutubeStreamEditorForm : StreamEditorFormBase, IModelEditorForm<Stream>
+    public partial class YoutubeStreamEditorForm : HttpApiBasedStreamEditorFormBase, IModelEditorForm<Stream>
     {
 
         public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Stream);
