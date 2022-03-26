@@ -18,6 +18,7 @@ namespace OpenSC.GUI.Streams
             if (stream == null)
                 return;
             updateIntervalNumericField.Value = stream.RefreshRate;
+            periodicUpdateEnabledCheckBox.Checked = stream.RefreshEnabled;
         }
 
         protected override void validateFields()
@@ -35,6 +36,7 @@ namespace OpenSC.GUI.Streams
             if (stream == null)
                 return;
             stream.RefreshRate = (int)updateIntervalNumericField.Value;
+            stream.RefreshEnabled = periodicUpdateEnabledCheckBox.Checked;
         }
 
     }

@@ -32,6 +32,8 @@
             this.restApiTable = new System.Windows.Forms.TableLayoutPanel();
             this.updateIntervalLabel = new System.Windows.Forms.Label();
             this.updateIntervalNumericField = new System.Windows.Forms.NumericUpDown();
+            this.periodicUpdateEnabledLabel = new System.Windows.Forms.Label();
+            this.periodicUpdateEnabledCheckBox = new System.Windows.Forms.CheckBox();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.restApiGroupBox.SuspendLayout();
@@ -60,7 +62,7 @@
             this.restApiGroupBox.Margin = new System.Windows.Forms.Padding(10, 12, 10, 12);
             this.restApiGroupBox.Name = "restApiGroupBox";
             this.restApiGroupBox.Padding = new System.Windows.Forms.Padding(8, 5, 8, 10);
-            this.restApiGroupBox.Size = new System.Drawing.Size(462, 68);
+            this.restApiGroupBox.Size = new System.Drawing.Size(462, 91);
             this.restApiGroupBox.TabIndex = 3;
             this.restApiGroupBox.TabStop = false;
             this.restApiGroupBox.Text = "REST API";
@@ -74,13 +76,16 @@
             this.restApiTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.restApiTable.Controls.Add(this.updateIntervalLabel, 0, 0);
             this.restApiTable.Controls.Add(this.updateIntervalNumericField, 1, 0);
+            this.restApiTable.Controls.Add(this.periodicUpdateEnabledLabel, 0, 1);
+            this.restApiTable.Controls.Add(this.periodicUpdateEnabledCheckBox, 1, 1);
             this.restApiTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.restApiTable.Location = new System.Drawing.Point(8, 25);
             this.restApiTable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.restApiTable.Name = "restApiTable";
-            this.restApiTable.RowCount = 1;
+            this.restApiTable.RowCount = 2;
             this.restApiTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.restApiTable.Size = new System.Drawing.Size(446, 33);
+            this.restApiTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.restApiTable.Size = new System.Drawing.Size(446, 56);
             this.restApiTable.TabIndex = 0;
             // 
             // updateIntervalLabel
@@ -118,6 +123,28 @@
             0,
             0});
             // 
+            // periodicUpdateEnabledLabel
+            // 
+            this.periodicUpdateEnabledLabel.AutoSize = true;
+            this.periodicUpdateEnabledLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.periodicUpdateEnabledLabel.Location = new System.Drawing.Point(3, 33);
+            this.periodicUpdateEnabledLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.periodicUpdateEnabledLabel.Name = "periodicUpdateEnabledLabel";
+            this.periodicUpdateEnabledLabel.Size = new System.Drawing.Size(171, 23);
+            this.periodicUpdateEnabledLabel.TabIndex = 2;
+            this.periodicUpdateEnabledLabel.Text = "Periodic update enabled";
+            this.periodicUpdateEnabledLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // periodicUpdateEnabledCheckBox
+            // 
+            this.periodicUpdateEnabledCheckBox.AutoSize = true;
+            this.periodicUpdateEnabledCheckBox.Dock = System.Windows.Forms.DockStyle.Left;
+            this.periodicUpdateEnabledCheckBox.Location = new System.Drawing.Point(199, 36);
+            this.periodicUpdateEnabledCheckBox.Name = "periodicUpdateEnabledCheckBox";
+            this.periodicUpdateEnabledCheckBox.Size = new System.Drawing.Size(18, 17);
+            this.periodicUpdateEnabledCheckBox.TabIndex = 3;
+            this.periodicUpdateEnabledCheckBox.UseVisualStyleBackColor = true;
+            // 
             // HttpApiBasedStreamEditorFormBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -145,5 +172,7 @@
         private System.Windows.Forms.TableLayoutPanel restApiTable;
         private System.Windows.Forms.Label updateIntervalLabel;
         private System.Windows.Forms.NumericUpDown updateIntervalNumericField;
+        private System.Windows.Forms.Label periodicUpdateEnabledLabel;
+        private System.Windows.Forms.CheckBox periodicUpdateEnabledCheckBox;
     }
 }

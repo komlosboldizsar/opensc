@@ -49,6 +49,19 @@ namespace OpenSC.Model.Streams
         }
         #endregion
 
+        #region Property: RefreshEnabled
+        public event PropertyChangedTwoValuesDelegate<HttpApiBasedStream, bool> RefreshEnabledChanged;
+
+        [PersistAs("refresh_enabled")]
+        private bool refreshEnabled = true;
+
+        public bool RefreshEnabled
+        {
+            get => refreshEnabled;
+            set => this.setProperty(ref refreshEnabled, value, RefreshEnabledChanged);
+        }
+        #endregion
+
         #region Update task and timer
         private static List<HttpApiBasedStream> registeredStreamsToUpdate = new();
         private static Task updateTask = null;
@@ -78,7 +91,7 @@ namespace OpenSC.Model.Streams
 
         private void update1sTick()
         {
-            if ((secondsSinceLastUpdate == -1) || (secondsSinceLastUpdate >= refreshRate))
+            if (refreshEnabled && ((secondsSinceLastUpdate == -1) || (secondsSinceLastUpdate >= refreshRate)))
             {
                 doHttpRequest();
                 secondsSinceLastUpdate = 0;
