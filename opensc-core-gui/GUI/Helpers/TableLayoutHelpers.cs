@@ -29,10 +29,23 @@ namespace OpenSC.GUI.Helpers
             if ((destinationIndex != ROW_INDEX_LAST) && (destinationIndex <= sourceIndex))
                 newSourceIndex++;
             int newDestinationIndex = (destinationIndex == ROW_INDEX_LAST) ? (tableLayout.RowCount - 1) : destinationIndex;
-            for (int columnIndex = 0; columnIndex < tableLayout.ColumnCount; columnIndex++)
+            int columnIndex = 0; 
+            while (columnIndex < tableLayout.ColumnCount)
             {
-                Control clonedControl = tableLayout.GetControlFromPosition(columnIndex, newSourceIndex).Clone(excludeProperties);
-                tableLayout.Controls.Add(clonedControl, columnIndex, newDestinationIndex);
+                Control originalControl = tableLayout.GetControlFromPosition(columnIndex, newSourceIndex);
+                if (originalControl != null)
+                {
+                    int columnSpan = tableLayout.GetColumnSpan(originalControl);
+                    Control clonedControl = originalControl.CloneTypeOnly();
+                    tableLayout.Controls.Add(clonedControl, columnIndex, newDestinationIndex);
+                    tableLayout.SetColumnSpan(clonedControl, columnSpan);
+                    clonedControl.ClonePropertiesFrom(originalControl, excludeProperties);
+                    columnIndex += columnSpan;
+                }
+                else
+                {
+                    columnIndex++;
+                }
             }
         }
 

@@ -9,32 +9,36 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.Helpers
 {
 
+    // @source https://stackoverflow.com/a/10267292
     public static class Cloning
     {
 
         public static Control Clone(this Control baseInstance, string[] excludeProperties = null)
         {
-            Type baseType = baseInstance.GetType();
-            PropertyInfo[] controlProperties = baseType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            Control newInstance = (Control)Activator.CreateInstance(baseType);
-            foreach (PropertyInfo propInfo in controlProperties)
-                if (propInfo.CanWrite)
-                    if ((propInfo.Name != "WindowTarget") && (excludeProperties?.Contains(propInfo.Name) != true))
-                        propInfo.SetValue(newInstance, propInfo.GetValue(baseInstance, null), null);
+            Control newInstance = baseInstance.CloneTypeOnly();
+            newInstance.ClonePropertiesFrom(baseInstance, excludeProperties);
+            return newInstance;
+            
+        }
+        
+        public static T CloneT<T>(this T baseInstance, string[] excludeProperties = null)
+            where T : Control, new()
+        {
+            T newInstance = new T();
+            newInstance.ClonePropertiesFrom(baseInstance, excludeProperties);
             return newInstance;
         }
 
-        // @source https://stackoverflow.com/a/10267292
-        public static T CloneT<T>(this T baseInstance, string[] excludeProperties = null)
-            where T : Control
+        public static Control CloneTypeOnly(this Control baseInstance) => (Control)Activator.CreateInstance(baseInstance.GetType());
+
+        public static void ClonePropertiesFrom(this Control newInstance, Control baseInstance, string[] excludeProperties = null)
         {
-            PropertyInfo[] controlProperties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            T newInstance = Activator.CreateInstance<T>();
+            Type baseType = baseInstance.GetType();
+            PropertyInfo[] controlProperties = baseType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (PropertyInfo propInfo in controlProperties)
                 if (propInfo.CanWrite)
                     if ((propInfo.Name != "WindowTarget") && (excludeProperties?.Contains(propInfo.Name) != true))
                         propInfo.SetValue(newInstance, propInfo.GetValue(baseInstance, null), null);
-            return newInstance;
         }
 
     }
