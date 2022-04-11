@@ -10,15 +10,15 @@ using System.Linq;
 namespace OpenSC.GUI.UMDs
 {
 
-    public partial class BmdAtemUmdEditorForm : UmdEditorFormBase, IModelEditorForm<UMD>
+    public partial class BmdAtemUmdEditorForm : UmdEditorFormBase, IModelEditorForm<Umd>
     {
 
-        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as UMD);
-        public IModelEditorForm<UMD> GetInstanceT(UMD modelInstance) => new BmdAtemUmdEditorForm(modelInstance);
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Umd);
+        public IModelEditorForm<Umd> GetInstanceT(Umd modelInstance) => new BmdAtemUmdEditorForm(modelInstance);
 
         public BmdAtemUmdEditorForm(): base() => InitializeComponent();
 
-        public BmdAtemUmdEditorForm(UMD umd) : base(umd)
+        public BmdAtemUmdEditorForm(Umd umd) : base(umd)
         {
             InitializeComponent();
             if ((umd != null) && !(umd is BmdAtem))
@@ -29,7 +29,7 @@ namespace OpenSC.GUI.UMDs
         }
 
         protected override IModelEditorFormDataManager createManager()
-            => new ModelEditorFormDataManager<UMD, BmdAtem>(this, UmdDatabase.Instance);
+            => new ModelEditorFormDataManager<Umd, BmdAtem>(this, UmdDatabase.Instance);
 
         protected override void loadData()
         {

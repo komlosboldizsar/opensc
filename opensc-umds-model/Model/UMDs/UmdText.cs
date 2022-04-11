@@ -12,12 +12,12 @@ namespace OpenSC.Model.UMDs
     public class UmdText : ObjectBase
     {
 
-        public UMD Owner { get; private set; }
+        public Umd Owner { get; private set; }
         public int IndexAtOwner { get; init; }
         public UmdTextInfo Info { get; init; }
 
         #region Instantiation, persistence
-        public UmdText(UMD owner, int indexAtOwner, UmdTextInfo info)
+        public UmdText(Umd owner, int indexAtOwner, UmdTextInfo info)
         {
             Owner = owner;
             IndexAtOwner = indexAtOwner;

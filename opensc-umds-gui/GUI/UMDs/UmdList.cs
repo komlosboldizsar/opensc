@@ -20,12 +20,12 @@ namespace OpenSC.GUI.UMDs
         protected override IModelEditorFormTypeRegister EditorFormTypeRegister { get; } = UmdEditorFormTypeRegister.Instance;
 
         protected override IItemListFormBaseManager createManager()
-            => new ModelListFormBaseManager<UMD>(this, UmdDatabase.Instance, baseColumnCreator);
+            => new ModelListFormBaseManager<Umd>(this, UmdDatabase.Instance, baseColumnCreator);
 
-        private void baseColumnCreator(CustomDataGridView<UMD> table, ItemListFormBaseManager<UMD>.ColumnDescriptorBuilderGetterDelegate builderGetterMethod)
+        private void baseColumnCreator(CustomDataGridView<Umd> table, ItemListFormBaseManager<Umd>.ColumnDescriptorBuilderGetterDelegate builderGetterMethod)
         {
 
-            CustomDataGridViewColumnDescriptorBuilder<UMD> builder;
+            CustomDataGridViewColumnDescriptorBuilder<Umd> builder;
 
             // Custom cell styles
             DataGridViewCellStyle monospaceTextCellStyle = table.DefaultCellStyle.Clone();
@@ -42,7 +42,7 @@ namespace OpenSC.GUI.UMDs
             builder.Header("Static text");
             builder.Width(200);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.FullStaticText; });
-            builder.AddChangeEvent(nameof(UMD.FullStaticText));
+            builder.AddChangeEvent(nameof(Umd.FullStaticText));
 
             // Column: use static text
             builder = builderGetterMethod();
@@ -51,7 +51,7 @@ namespace OpenSC.GUI.UMDs
             builder.Width(50);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.UseFullStaticText; });
             builder.CellContentClickHandlerMethod((umd, cell, e) => { umd.UseFullStaticText = !(bool)cell.Value; });
-            builder.AddChangeEvent(nameof(UMD.UseFullStaticText));
+            builder.AddChangeEvent(nameof(Umd.UseFullStaticText));
 
             // Column: current text
             builder = builderGetterMethod();
@@ -60,7 +60,7 @@ namespace OpenSC.GUI.UMDs
             builder.Width(200);
             builder.CellStyle(monospaceTextCellStyle);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.DisplayableRawText; });
-            builder.AddChangeEvent(nameof(UMD.DisplayableRawText));
+            builder.AddChangeEvent(nameof(Umd.DisplayableRawText));
 
             // Column: tallies
             builder = builderGetterMethod();

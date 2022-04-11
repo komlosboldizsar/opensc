@@ -13,12 +13,12 @@ namespace OpenSC.Model.UMDs
     public class UmdTally : ObjectBase
     {
 
-        public UMD Owner { get; private set; }
+        public Umd Owner { get; private set; }
         public int IndexAtOwner { get; init; }
         public UmdTallyInfo Info { get; init; }
 
         #region Instantiation, persistence
-        public UmdTally(UMD owner, int indexAtOwner, UmdTallyInfo info)
+        public UmdTally(Umd owner, int indexAtOwner, UmdTallyInfo info)
         {
             Owner = owner;
             IndexAtOwner = indexAtOwner;

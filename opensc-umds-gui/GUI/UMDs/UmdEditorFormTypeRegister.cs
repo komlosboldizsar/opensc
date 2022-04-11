@@ -2,9 +2,9 @@
 
 namespace OpenSC.GUI.UMDs
 {
-    public class UmdEditorFormTypeRegister : ModelEditorFormTypeRegister<UMD>
+    public class UmdEditorFormTypeRegister : ModelEditorFormTypeRegister<Umd>
     {
-        public static ModelEditorFormTypeRegister<UMD> Instance { get; } = new UmdEditorFormTypeRegister();
+        public static ModelEditorFormTypeRegister<Umd> Instance { get; } = new UmdEditorFormTypeRegister();
         private UmdEditorFormTypeRegister() { }
     }
 }

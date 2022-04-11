@@ -11,7 +11,7 @@ namespace OpenSC.Model.UMDs.Tsl50
 {
     [TypeLabel("TSL 5.0")]
     [TypeCode("tsl50")]
-    public class Tsl50Display : UMD
+    public class Tsl50Display : Umd
     {
 
         #region Property: Screen

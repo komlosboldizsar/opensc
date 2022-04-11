@@ -7,15 +7,15 @@ using System;
 namespace OpenSC.GUI.UMDs
 {
 
-    public partial class Tsl31UmdEditorForm : UmdEditorFormBase, IModelEditorForm<UMD>
+    public partial class Tsl31UmdEditorForm : UmdEditorFormBase, IModelEditorForm<Umd>
     {
 
-        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as UMD);
-        public IModelEditorForm<UMD> GetInstanceT(UMD modelInstance) => new Tsl31UmdEditorForm(modelInstance);
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Umd);
+        public IModelEditorForm<Umd> GetInstanceT(Umd modelInstance) => new Tsl31UmdEditorForm(modelInstance);
 
         public Tsl31UmdEditorForm(): base() => InitializeComponent();
 
-        public Tsl31UmdEditorForm(UMD umd) : base(umd)
+        public Tsl31UmdEditorForm(Umd umd) : base(umd)
         {
             InitializeComponent();
             if ((umd != null) && !(umd is TSL31))
@@ -23,7 +23,7 @@ namespace OpenSC.GUI.UMDs
         }
 
         protected override IModelEditorFormDataManager createManager()
-            => new ModelEditorFormDataManager<UMD, TSL31>(this, UmdDatabase.Instance);
+            => new ModelEditorFormDataManager<Umd, TSL31>(this, UmdDatabase.Instance);
 
         protected override void loadData()
         {

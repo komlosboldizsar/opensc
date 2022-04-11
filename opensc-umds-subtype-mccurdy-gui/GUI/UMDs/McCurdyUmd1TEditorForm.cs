@@ -16,12 +16,12 @@ namespace OpenSC.GUI.UMDs
     public partial class McCurdyUmd1TEditorForm : McCurdyUmd1EditorForm
     {
 
-        public new IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as UMD);
-        public new IModelEditorForm<UMD> GetInstanceT(UMD modelInstance) => new McCurdyUmd1TEditorForm(modelInstance);
+        public new IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Umd);
+        public new IModelEditorForm<Umd> GetInstanceT(Umd modelInstance) => new McCurdyUmd1TEditorForm(modelInstance);
 
         public McCurdyUmd1TEditorForm() : base() => InitializeComponent();
 
-        public McCurdyUmd1TEditorForm(UMD umd) : base(umd)
+        public McCurdyUmd1TEditorForm(Umd umd) : base(umd)
         {
             InitializeComponent();
             if ((umd != null) && !(umd is McCurdyUMD1T))
@@ -29,7 +29,7 @@ namespace OpenSC.GUI.UMDs
         }
 
         protected override IModelEditorFormDataManager createManager()
-            => new ModelEditorFormDataManager<UMD, McCurdyUMD1T>(this, UmdDatabase.Instance);
+            => new ModelEditorFormDataManager<Umd, McCurdyUMD1T>(this, UmdDatabase.Instance);
 
     }
 

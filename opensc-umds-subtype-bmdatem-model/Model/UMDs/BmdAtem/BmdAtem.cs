@@ -15,7 +15,7 @@ namespace OpenSC.Model.UMDs.BmdAtem
 
     [TypeLabel("BMD ATEM")]
     [TypeCode("bmdatem")]
-    public class BmdAtem : UMD
+    public class BmdAtem : Umd
     {
 
         public override void RestoreCustomRelations()

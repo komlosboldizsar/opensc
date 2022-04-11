@@ -13,7 +13,7 @@ namespace OpenSC.Model.UMDs.McCurdy
 {
     [TypeLabel("McCurdy UMD-1")]
     [TypeCode("mccurdy")]
-    public class McCurdyUMD1 : UMD
+    public class McCurdyUMD1 : Umd
     {
 
         #region Property: Port

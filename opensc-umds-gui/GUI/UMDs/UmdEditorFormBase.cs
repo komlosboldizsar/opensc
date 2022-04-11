@@ -14,7 +14,7 @@ namespace OpenSC.GUI.UMDs
 
         public UmdEditorFormBase() : base() => InitializeComponent();
 
-        public UmdEditorFormBase(UMD umd) : base(umd)
+        public UmdEditorFormBase(Umd umd) : base(umd)
         {
             InitializeComponent();
             initStatusMonitor();
@@ -26,7 +26,7 @@ namespace OpenSC.GUI.UMDs
         protected override void loadData()
         {
             base.loadData();
-            UMD umd = (UMD)EditedModel;
+            Umd umd = (Umd)EditedModel;
             if (umd == null)
                 return;
             // Status monitor
@@ -67,7 +67,7 @@ namespace OpenSC.GUI.UMDs
         protected override void validateFields()
         {
             base.validateFields();
-            UMD umd = (UMD)EditedModel;
+            Umd umd = (Umd)EditedModel;
             if (umd == null)
                 return;
         }
@@ -75,7 +75,7 @@ namespace OpenSC.GUI.UMDs
         protected override void writeFields()
         {
             base.writeFields();
-            UMD umd = (UMD)EditedModel;
+            Umd umd = (Umd)EditedModel;
             if (umd == null)
                 return;
             // Tab: Texts
@@ -108,7 +108,7 @@ namespace OpenSC.GUI.UMDs
 
         private void initStatusMonitor()
         {
-            UMD umd = (UMD)EditedModel;
+            Umd umd = (Umd)EditedModel;
             int tallyCount = umd.TallyInfo.Length;
             statusMonitorTalliesPanel.Controls.Remove((tallyCount == 0) ? statusMonitorExampleTallyLabel : statusMonitorNoTalliesLabel);
             statusMonitorTallyLabels = new Label[tallyCount];
@@ -128,7 +128,7 @@ namespace OpenSC.GUI.UMDs
 
         private string formatDisplayableRawText(string rawText) => $"[{rawText}]";
 
-        private void displayableCompactTextChanged(UMD item, string oldValue, string newValue)
+        private void displayableCompactTextChanged(Umd item, string oldValue, string newValue)
         {
             if (InvokeRequired)
             {
@@ -138,7 +138,7 @@ namespace OpenSC.GUI.UMDs
             statusMonitorCompactTextTextBox.Text = newValue;
         }
 
-        private void displayableRawTextChanged(UMD item, string oldValue, string newValue)
+        private void displayableRawTextChanged(Umd item, string oldValue, string newValue)
         {
             if (InvokeRequired)
             {
@@ -192,7 +192,7 @@ namespace OpenSC.GUI.UMDs
 
         private void initTextsTab()
         {
-            UMD umd = (UMD)EditedModel;
+            Umd umd = (Umd)EditedModel;
             int textCount = umd.TextInfo.Length;
             textsTabPage.Controls.Remove((textCount == 0) ? textsSourceAndAlignmentGroupBox : textsTabPageNoTextLabel);
             textControls = new TextControls[textCount];
@@ -253,7 +253,7 @@ namespace OpenSC.GUI.UMDs
 
         private void initTalliesTab()
         {
-            UMD umd = (UMD)EditedModel;
+            Umd umd = (Umd)EditedModel;
             int tallyCount = umd.TallyInfo.Length;
             talliesTabPage.Controls.Remove((tallyCount == 0) ? talliesSourceAndColorGroupBox : talliesTabPageNoTallyLabel);
             tallyControls = new TallyControls[tallyCount];
@@ -315,7 +315,7 @@ namespace OpenSC.GUI.UMDs
         private void initFullStaticTextTab()
         {
             fullStaticAlignmentDropDown.GetAdapterFromFactoryAsDataSource(alignmentDropDownAdapterFactory);
-            fullStaticAlignmentDropDown.Enabled = ((UMD)EditedModel).AlignableFullStaticText;
+            fullStaticAlignmentDropDown.Enabled = ((Umd)EditedModel).AlignableFullStaticText;
         }
         #endregion
 

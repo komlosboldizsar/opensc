@@ -13,11 +13,11 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.UMDs
 {
 
-    public abstract class UMD : ModelBase
+    public abstract class Umd : ModelBase
     {
 
         #region Instantiation, restoration, persistence, removation
-        public UMD()
+        public Umd()
         {
             alignmentWithFullStaticText = DefaultAlignmentWithFullStaticText;
             initTextThings();
@@ -59,7 +59,7 @@ namespace OpenSC.Model.UMDs
         #endregion
 
         #region Property: DisplayableRawText
-        public event PropertyChangedTwoValuesDelegate<UMD, string> DisplayableRawTextChanged;
+        public event PropertyChangedTwoValuesDelegate<Umd, string> DisplayableRawTextChanged;
 
         protected string displayableRawText = "";
 
@@ -71,7 +71,7 @@ namespace OpenSC.Model.UMDs
         #endregion
 
         #region Property: DisplayableCompactText
-        public event PropertyChangedTwoValuesDelegate<UMD, string> DisplayableCompactTextChanged;
+        public event PropertyChangedTwoValuesDelegate<Umd, string> DisplayableCompactTextChanged;
 
         protected string displayableCompactText = "";
 
@@ -83,7 +83,7 @@ namespace OpenSC.Model.UMDs
         #endregion
 
         #region Property: FullStaticText
-        public event PropertyChangedTwoValuesDelegate<UMD, string> FullStaticTextChanged;
+        public event PropertyChangedTwoValuesDelegate<Umd, string> FullStaticTextChanged;
 
         [PersistAs("full_static_text")]
         private string fullStaticText;
@@ -100,7 +100,7 @@ namespace OpenSC.Model.UMDs
         #endregion
 
         #region Property: UseFullStaticText
-        public event PropertyChangedTwoValuesDelegate<UMD, bool> UseFullStaticTextChanged;
+        public event PropertyChangedTwoValuesDelegate<Umd, bool> UseFullStaticTextChanged;
 
         [PersistAs("use_full_static_text")]
         private bool useFullStaticText = false;
@@ -113,7 +113,7 @@ namespace OpenSC.Model.UMDs
         #endregion
 
         #region Property: AlignmentWithFullStaticText
-        public event PropertyChangedTwoValuesDelegate<UMD, UmdTextAlignment> AlignmentWithFullStaticTextChanged;
+        public event PropertyChangedTwoValuesDelegate<Umd, UmdTextAlignment> AlignmentWithFullStaticTextChanged;
 
         [PersistAs("alignment_with_full_static_text")]
         private UmdTextAlignment alignmentWithFullStaticText = UmdTextAlignment.Left;

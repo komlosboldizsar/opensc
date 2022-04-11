@@ -12,15 +12,15 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.UMDs
 {
 
-    public partial class McCurdyUmd1EditorForm : UmdEditorFormBase, IModelEditorForm<UMD>
+    public partial class McCurdyUmd1EditorForm : UmdEditorFormBase, IModelEditorForm<Umd>
     {
 
-        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as UMD);
-        public IModelEditorForm<UMD> GetInstanceT(UMD modelInstance) => new McCurdyUmd1EditorForm(modelInstance);
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Umd);
+        public IModelEditorForm<Umd> GetInstanceT(Umd modelInstance) => new McCurdyUmd1EditorForm(modelInstance);
 
         public McCurdyUmd1EditorForm() : base() => InitializeComponent();
 
-        public McCurdyUmd1EditorForm(UMD umd) : base(umd)
+        public McCurdyUmd1EditorForm(Umd umd) : base(umd)
         {
             InitializeComponent();
             if ((umd != null) && !(umd is McCurdyUMD1))
@@ -29,7 +29,7 @@ namespace OpenSC.GUI.UMDs
         }
 
         protected override IModelEditorFormDataManager createManager()
-            => new ModelEditorFormDataManager<UMD, McCurdyUMD1>(this, UmdDatabase.Instance);
+            => new ModelEditorFormDataManager<Umd, McCurdyUMD1>(this, UmdDatabase.Instance);
 
         protected override void loadData()
         {

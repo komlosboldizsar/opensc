@@ -17,7 +17,7 @@ namespace OpenSC.Model.UMDs
 
         public object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
         {
-            UMD parentUmd = (UMD)parentItem;
+            Umd parentUmd = (Umd)parentItem;
             UmdTallyInfo thisTallyInfo = parentUmd.TallyInfo[(int)indicesOrKeys[0]];
             if (serializedItem.LocalName != TAG_NAME)
                 return null;
@@ -41,7 +41,7 @@ namespace OpenSC.Model.UMDs
 
         public XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
         {
-            UMD parentUmd = (UMD)parentItem;
+            Umd parentUmd = (Umd)parentItem;
             UmdTallyInfo thisTallyInfo = parentUmd.TallyInfo[(int)indicesOrKeys[0]];
             UmdTally tally = item as UmdTally;
             if (tally == null)
