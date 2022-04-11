@@ -122,6 +122,26 @@ namespace OpenSC.Model.UMDs.BmdAtem
         private const int LENGTH_SHORT = 4;
         private const int LENGTH_LONG = 16;
 
+        protected override void calculateDisplayableCompactText()
+        {
+            base.calculateDisplayableCompactText();
+            string shortText = "-";
+            if (Texts[0].Used)
+            {
+                shortText = UseFullStaticText ? FullStaticText : Texts[0].CurrentValue;
+                if (shortText.Length > LENGTH_SHORT)
+                    shortText.Substring(0, LENGTH_SHORT);
+            }
+            string longText = "-";
+            if (Texts[0].Used)
+            {
+                longText = UseFullStaticText ? FullStaticText : Texts[1].CurrentValue;
+                if (longText.Length > LENGTH_LONG)
+                    longText.Substring(0, LENGTH_LONG);
+            }
+            DisplayableCompactText = $"{shortText} | {longText}";
+        }
+
         private string shortTextToHardware = "";
         private string longTextToHardware = "";
 
