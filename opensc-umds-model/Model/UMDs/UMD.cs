@@ -193,11 +193,16 @@ namespace OpenSC.Model.UMDs
 
         private void updateTexts()
         {
+            calculateDisplayableCompactText();
+            updateTextsToHardware();
+        }
+
+        protected virtual void calculateDisplayableCompactText()
+        {
             if (useFullStaticText)
                 DisplayableCompactText = fullStaticText;
             else
                 DisplayableCompactText = string.Join(" | ", Texts.Where(t => t.Used).Select(t => t.CurrentValue));
-            updateTextsToHardware();
         }
         #endregion
 
