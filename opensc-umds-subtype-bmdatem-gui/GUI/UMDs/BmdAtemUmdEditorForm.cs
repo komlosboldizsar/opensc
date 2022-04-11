@@ -25,7 +25,7 @@ namespace OpenSC.GUI.UMDs
                 throw new ArgumentException($"Type of UMD should be {nameof(BmdAtem)}.", nameof(umd));
             initMixerDropDown();
             initInputDropDown();
-            mixerDropDown.SelectedIndexChanged += MixerDropDown_SelectedIndexChanged;
+            mixerDropDown.SelectedIndexChanged += mixerDropDownSelectionChanged;
         }
 
         protected override IModelEditorFormDataManager createManager()
@@ -39,8 +39,6 @@ namespace OpenSC.GUI.UMDs
                 return;
             mixerDropDown.SelectByValue(bmdAtem.Input?.Mixer);
             inputDropDown.SelectByValue(bmdAtem.Input);
-            nameTypeShortRadioButton.Checked = (bmdAtem.NameType == BmdAtemInputNameType.Short);
-            nameTypeLongRadioButton.Checked = (bmdAtem.NameType == BmdAtemInputNameType.Long);
         }
 
         protected override void writeFields()
@@ -50,7 +48,6 @@ namespace OpenSC.GUI.UMDs
             if (bmdAtem == null)
                 return;
             bmdAtem.Input = inputDropDown.SelectedValue as MixerInput;
-            bmdAtem.NameType = nameTypeShortRadioButton.Checked ? BmdAtemInputNameType.Short : BmdAtemInputNameType.Long;
         }
 
         protected override void validateFields()
@@ -62,9 +59,19 @@ namespace OpenSC.GUI.UMDs
         }
 
         private void initMixerDropDown()
-            => mixerDropDown.CreateAdapterAsDataSource(MixerDatabase.Instance.OfType<BmdMixer>(), null, true, "(not associated)");
+        {
+            mixerDropDown.CreateAdapterAsDataSource(MixerDatabase.Instance.OfType<BmdMixer>(), null, true, "(not associated)");
+            mixerDropDown.ReceiveSystemObjectDrop().FilterByType<Mixer>();
+        }
 
         private void initInputDropDown()
+        {
+            populateInputDropDown();
+            inputDropDown.ReceiveSystemObjectDrop().FilterByType<MixerInput>();
+            inputDropDown.BindParent(mixerDropDown, mi => ((MixerInput)mi)?.Mixer);
+        }
+
+        private void populateInputDropDown()
         {
             Mixer selectedMixer = mixerDropDown.SelectedValue as Mixer;
             IEnumerable<MixerInput> inputs = null;
@@ -73,8 +80,7 @@ namespace OpenSC.GUI.UMDs
             inputDropDown.CreateAdapterAsDataSource(inputs, i => $"(#{i.Index}) {i.Name}", true, "(not associated)");
         }
 
-        private void MixerDropDown_SelectedIndexChanged(object sender, EventArgs e)
-            => initInputDropDown();
+        private void mixerDropDownSelectionChanged(object sender, EventArgs e) => populateInputDropDown();
 
     }
 

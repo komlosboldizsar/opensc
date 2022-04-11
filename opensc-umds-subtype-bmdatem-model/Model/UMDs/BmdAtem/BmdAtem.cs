@@ -12,12 +12,11 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.UMDs.BmdAtem
 {
+
     [TypeLabel("BMD ATEM")]
     [TypeCode("bmdatem")]
     public class BmdAtem : UMD
     {
-
-        public override IUMDType Type => new BmdAtemType();
 
         public override void RestoreCustomRelations()
         {
@@ -79,19 +78,7 @@ namespace OpenSC.Model.UMDs.BmdAtem
         }
         #endregion
 
-        #region Property: NameType
-        public event PropertyChangedTwoValuesDelegate<BmdAtem, BmdAtemInputNameType> NameTypeChanged;
-
-        [PersistAs("name_type")]
-        private BmdAtemInputNameType nameType = BmdAtemInputNameType.Long;
-
-        public BmdAtemInputNameType NameType
-        {
-            get => nameType;
-            set => this.setProperty(ref nameType, value, NameTypeChanged, null, (ov, nv) => update());
-        }
-        #endregion
-
+        #region Inputs source
         private Source inputsSource;
 
         private void updateInputsSource()
@@ -105,23 +92,68 @@ namespace OpenSC.Model.UMDs.BmdAtem
             {
                 inputsSource = null;
             }
-            update();
+            updateTextsToHardware();
         }
+        #endregion
 
-        public override Color[] TallyColors => new Color[] { };
-
-        protected override void update()
+        #region Info
+        public override UmdTextInfo[] TextInfo => new UmdTextInfo[]
         {
-            switch (nameType)
-            {
-                case BmdAtemInputNameType.Short:
-                    inputsSource?.UpdateShortName(CurrentText);
-                    break;
-                case BmdAtemInputNameType.Long:
-                    inputsSource?.UpdateLongName(CurrentText);
-                    break;
-            }
+           new("Short", true, true, false, UmdTextAlignment.Left),
+           new("Long", true, true, false, UmdTextAlignment.Center),
+        };
+
+        public override UmdTallyInfo[] TallyInfo => Array.Empty<UmdTallyInfo>();
+
+        public override bool AlignableFullStaticText => false;
+        #endregion
+
+        #region Sending data to hardware
+        protected override void updateTextsToHardware() => updateTotalToHardware();
+
+        protected override void updateTalliesToHardware() { }
+
+        protected override void updateTotalToHardware()
+        {
+            calculateTextFields();
+            sendData();
         }
+
+        private const int LENGTH_SHORT = 4;
+        private const int LENGTH_LONG = 16;
+
+        private string shortTextToHardware = "";
+        private string longTextToHardware = "";
+
+        private void calculateTextFields()
+        {
+            shortTextToHardware = UseFullStaticText ? FullStaticText : Texts[0].CurrentValue;
+            if (shortTextToHardware.Length > LENGTH_SHORT)
+                shortTextToHardware.Substring(0, LENGTH_SHORT);
+            longTextToHardware = UseFullStaticText ? FullStaticText : Texts[1].CurrentValue;
+            if (longTextToHardware.Length > LENGTH_LONG)
+                longTextToHardware.Substring(0, LENGTH_LONG);
+            string _displayableRawText = "";
+            if (Texts[0].Used)
+                _displayableRawText += $"Short: [{shortTextToHardware}]";
+            if (Texts[1].Used)
+            {
+                if (_displayableRawText.Length > 0)
+                    _displayableRawText += " ";
+                _displayableRawText += $"Long: [{longTextToHardware}]";
+            }
+            DisplayableRawText = _displayableRawText;
+        }
+
+        private void sendData()
+        {
+            if (Texts[0].Used)
+                inputsSource?.UpdateShortName(shortTextToHardware);
+            if (Texts[1].Used)
+                inputsSource?.UpdateLongName(longTextToHardware);
+        }
+        #endregion
 
     }
+
 }
