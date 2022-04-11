@@ -90,19 +90,20 @@ namespace OpenSC.Model.UMDs.TSL31
         private string textToHardware;
         protected byte[] textBytesToHardware;
 
+        private const int TEXT_MAX_LENGTH = 16;
+
         private void calculateTextFields()
         {
-            int substrLength = 16;
-            if (DisplayableCompactText.Length < 16)
-                substrLength = DisplayableCompactText.Length;
-            string textToHardwareTemp = DisplayableCompactText.Substring(0, substrLength);
+            string textToHardwareTemp = DisplayableCompactText;
+            if (textToHardwareTemp.Length > TEXT_MAX_LENGTH)
+                textToHardwareTemp = textToHardwareTemp.Substring(0, TEXT_MAX_LENGTH);
             int textToHardwareTempLength = textToHardwareTemp.Length;
             textToHardware = (UseFullStaticText ? AlignmentWithFullStaticText : Texts[0].Alignment) switch
             {
-                UmdTextAlignment.Left => textToHardwareTemp.PadRight(16),
-                UmdTextAlignment.Center => textToHardwareTemp.PadLeft(textToHardwareTempLength / 2 + 8).PadRight(16),
-                UmdTextAlignment.Right => textToHardwareTemp.PadLeft(16),
-                _ => textToHardwareTemp.PadRight(16)
+                UmdTextAlignment.Left => textToHardwareTemp.PadRight(TEXT_MAX_LENGTH),
+                UmdTextAlignment.Center => textToHardwareTemp.PadLeft((textToHardwareTempLength + TEXT_MAX_LENGTH) / 2).PadRight(TEXT_MAX_LENGTH),
+                UmdTextAlignment.Right => textToHardwareTemp.PadLeft(TEXT_MAX_LENGTH),
+                _ => textToHardwareTemp.PadRight(TEXT_MAX_LENGTH)
             };
             textBytesToHardware = Encoding.ASCII.GetBytes(textToHardware);
             DisplayableRawText = textToHardware;
