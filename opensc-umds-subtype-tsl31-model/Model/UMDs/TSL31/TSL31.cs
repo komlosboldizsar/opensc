@@ -8,15 +8,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSC.Model.UMDs.TSL31
+namespace OpenSC.Model.UMDs.Tsl31
 {
     [TypeLabel("TSL 3.1")]
     [TypeCode("tsl31")]
-    public class TSL31 : Umd
+    public class Tsl31 : Umd
     {
 
         #region Property: Port
-        public event PropertyChangedTwoValuesDelegate<TSL31, SerialPort> PortChanged;
+        public event PropertyChangedTwoValuesDelegate<Tsl31, SerialPort> PortChanged;
 
         [PersistAs("port")]
         private SerialPort port;
@@ -34,7 +34,7 @@ namespace OpenSC.Model.UMDs.TSL31
         #endregion
 
         #region Property: Address
-        public event PropertyChangedTwoValuesDelegate<TSL31, int> AddressChanged;
+        public event PropertyChangedTwoValuesDelegate<Tsl31, int> AddressChanged;
 
         [PersistAs("address")]
         private int address = 1;

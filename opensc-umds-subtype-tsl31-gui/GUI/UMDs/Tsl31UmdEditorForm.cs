@@ -1,7 +1,7 @@
 ﻿using OpenSC.GUI.GeneralComponents.DropDowns;
 using OpenSC.Model.SerialPorts;
 using OpenSC.Model.UMDs;
-using OpenSC.Model.UMDs.TSL31;
+using OpenSC.Model.UMDs.Tsl31;
 using System;
 
 namespace OpenSC.GUI.UMDs
@@ -18,17 +18,17 @@ namespace OpenSC.GUI.UMDs
         public Tsl31UmdEditorForm(Umd umd) : base(umd)
         {
             InitializeComponent();
-            if ((umd != null) && !(umd is TSL31))
-                throw new ArgumentException($"Type of UMD should be {nameof(TSL31)}.", nameof(umd));
+            if ((umd != null) && !(umd is Tsl31))
+                throw new ArgumentException($"Type of UMD should be {nameof(Tsl31)}.", nameof(umd));
         }
 
         protected override IModelEditorFormDataManager createManager()
-            => new ModelEditorFormDataManager<Umd, TSL31>(this, UmdDatabase.Instance);
+            => new ModelEditorFormDataManager<Umd, Tsl31>(this, UmdDatabase.Instance);
 
         protected override void loadData()
         {
             base.loadData();
-            TSL31 tsl31 = (TSL31)EditedModel;
+            Tsl31 tsl31 = (Tsl31)EditedModel;
             if (tsl31 == null)
                 return;
             portDropDown.SelectByValue(tsl31.Port);
@@ -38,7 +38,7 @@ namespace OpenSC.GUI.UMDs
         protected override void writeFields()
         {
             base.writeFields();
-            TSL31 tsl31 = (TSL31)EditedModel;
+            Tsl31 tsl31 = (Tsl31)EditedModel;
             if (tsl31 == null)
                 return;
             tsl31.Port = portDropDown.SelectedValue as SerialPort;
@@ -48,7 +48,7 @@ namespace OpenSC.GUI.UMDs
         protected override void validateFields()
         {
             base.validateFields();
-            TSL31 tsl31 = (TSL31)EditedModel;
+            Tsl31 tsl31 = (Tsl31)EditedModel;
             if (tsl31 == null)
                 return;
             tsl31.ValidateAddress((int)addressNumericInput.Value);
