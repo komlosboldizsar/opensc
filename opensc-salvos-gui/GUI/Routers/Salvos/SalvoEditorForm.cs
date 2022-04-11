@@ -1,4 +1,6 @@
-﻿using OpenSC.GUI.GeneralComponents.Tables;
+﻿using OpenSC.GUI.GeneralComponents.DropDowns;
+using OpenSC.GUI.GeneralComponents.Tables;
+using OpenSC.Model;
 using OpenSC.Model.Routers;
 using OpenSC.Model.Routers.Salvos;
 using OpenSC.Model.Signals;
@@ -6,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace OpenSC.GUI.Routers.Salvos
@@ -55,7 +58,7 @@ namespace OpenSC.GUI.Routers.Salvos
 
             Salvo salvo = (Salvo)EditedModel;
             crosspointsTableCDGV = createTable<SalvoCrosspoint>(crosspointsTableContainerPanel, ref this.crosspointsTable);
-            CustomDataGridViewColumnDescriptorBuilder<SalvoCrosspoint> builder;
+            CustomDataGridViewColumnDescriptorBuilder<SalvoCrosspoint> builder, routerBuilder;
 
             // Column: router
             CustomDataGridViewComboBoxItem<Router>[] routers = getArrayForDropDown(RouterDatabase.Instance);
@@ -65,7 +68,7 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.Width(180);
             builder.InitializerMethod((crosspoint, cell) => { });
             builder.UpdaterMethod((crosspoint, cell) => { cell.Value = crosspoint.Router; });
-            builder.CellEndEditHandlerMethod((crosspoint, cell, eventargs) => {
+            builder.CellValueChangedHandlerMethod((crosspoint, cell, eventargs) => {
                 ((DataGridViewComboBoxCell)cell.OwningRow.Cells[1]).Value = null;
                 ((DataGridViewComboBoxCell)cell.OwningRow.Cells[2]).Value = null;
                 ((DataGridViewComboBoxCell)cell.OwningRow.Cells[1]).Items.Clear();
@@ -75,6 +78,7 @@ namespace OpenSC.GUI.Routers.Salvos
             });
             builder.DropDownPopulatorMethod((crosspoint, cell) => routers);
             builder.BuildAndAdd();
+            routerBuilder = builder;
 
             // Column: output
             builder = getColumnDescriptorBuilderForTable<SalvoCrosspoint>(crosspointsTableCDGV);
@@ -85,6 +89,8 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.UpdaterMethod((crosspoint, cell) => { cell.Value = crosspoint.Output; });
             builder.CellEndEditHandlerMethod((crosspoint, cell, eventargs) => { crosspoint.Output = cell.Value as RouterOutput; });
             builder.DropDownPopulatorMethod((crosspoint, cell) => getArrayForDropDown<RouterOutput>(crosspoint.Router?.Outputs));
+            builder.ReceiveSystemObjectDrop().FilterByType<RouterOutput>();
+            builder.BindParent(routerBuilder, ro => ((RouterOutput)ro)?.Router);
             builder.BuildAndAdd();
 
             // Column: input
@@ -96,6 +102,8 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.UpdaterMethod((crosspoint, cell) => { cell.Value = crosspoint.Input; });
             builder.CellEndEditHandlerMethod((crosspoint, cell, eventargs) => { crosspoint.Input = cell.Value as RouterInput; });
             builder.DropDownPopulatorMethod((crosspoint, cell) => getArrayForDropDown<RouterInput>(crosspoint.Router?.Inputs));
+            builder.ReceiveSystemObjectDrop().FilterByType<RouterInput>();
+            builder.BindParent(routerBuilder, ri => ((RouterInput)ri)?.Router);
             builder.BuildAndAdd();
 
             // Column: delete button
@@ -111,6 +119,11 @@ namespace OpenSC.GUI.Routers.Salvos
                     salvo.RemoveCrosspoint(crosspoint);
             });
             builder.BuildAndAdd();
+
+            crosspointsTableCDGV
+                .ReceiveSystemObjectDrop(crosspointsTableSystemObjectDropReceiver)
+                .EnableMulti()
+                .FilterByType<RouterOutput>();
 
             // Bind collection
             crosspointsTableCDGV.BoundCollection = salvo.Crosspoints;
@@ -144,6 +157,20 @@ namespace OpenSC.GUI.Routers.Salvos
         }
 
         private void addCrosspointButton_Click(object sender, EventArgs e) => ((Salvo)EditedModel).AddCrosspoint();
+
+        private void crosspointsTableSystemObjectDropReceiver(DataGridView table, IEnumerable<ISystemObject> systemObjects)
+        {
+            Salvo salvo = (Salvo)EditedModel;
+            ISystemObject firstSystemObject = systemObjects.First();
+            if (firstSystemObject is RouterOutput)
+            {
+                foreach (RouterOutput routerOutput in systemObjects.Cast<RouterOutput>())
+                    if (!(salvo.Crosspoints.Any(cp => cp.Output == routerOutput)))
+                        salvo.AddCrosspoint(routerOutput, null);
+                return;
+            }
+        }
+
 
 
     }

@@ -49,7 +49,7 @@ namespace OpenSC.Model.Routers.Salvos
                 crosspoint.RestoreAssociations();
         }
 
-        public void AddCrosspoint() => crosspoints.Add(new SalvoCrosspoint());
+        public void AddCrosspoint(RouterOutput output = null, RouterInput input = null) => crosspoints.Add(new SalvoCrosspoint(output, input));
         public void RemoveCrosspoint(SalvoCrosspoint crosspoint) => crosspoints.Remove(crosspoint);
         #endregion
 

@@ -243,6 +243,7 @@ namespace OpenSC.GUI.Macros
         private void MacroPanelForm_Load(object sender, EventArgs e)
         {
             loadMacros();
+            elementMacroDropDown.ReceiveSystemObjectDrop().FilterByType<Macro>();
             MacroDatabase.Instance.ChangedItems += MacroDatabase_ChangedItems;
         }
 

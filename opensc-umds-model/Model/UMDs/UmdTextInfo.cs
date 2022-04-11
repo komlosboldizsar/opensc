@@ -6,9 +6,6 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.UMDs
 {
-    public interface IUMDType
-    {
-        string Name { get; }
-        int TallyCount { get; }
-    }
+    public record UmdTextInfo(string Name, bool Switchable, bool DefaultUsed, bool Alignable, UmdTextAlignment DefaultAlignment)
+    { }
 }

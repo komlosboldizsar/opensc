@@ -57,22 +57,26 @@ namespace OpenSC.GUI.Macros
                 valueTextBox.Dock = DockStyle.Top;
                 valueField = valueTextBox;
             }
+            else if (isBoolType(argument.ObjectType))
+            {
+                table.Controls.Remove(valueComboBox);
+                CheckBox valueCheckBox = new CheckBox();
+                table.Controls.Add(valueCheckBox, 1, 2);
+                valueCheckBox.Dock = DockStyle.Left;
+                valueField = valueCheckBox;
+            }
             else if (isNumericalType(argument.ObjectType))
             {
-
                 table.Controls.Remove(valueComboBox);
-
                 NumericUpDown valueNumericField = new NumericUpDown();
                 valueNumericField.Minimum = 0;
                 valueNumericField.Maximum = 99999;
                 bool isInt = (argument.ObjectType == typeof(int));
                 valueNumericField.DecimalPlaces = isInt ? 0 : 2;
                 valueNumericField.Increment = isInt ? 1 : (decimal)0.05;
-
                 table.Controls.Add(valueNumericField, 1, 2);
                 valueNumericField.Dock = DockStyle.Top;
                 valueField = valueNumericField;
-
             }
             else
             {
@@ -84,6 +88,9 @@ namespace OpenSC.GUI.Macros
 
         private static bool isNumericalType(Type type)
             => ((type == typeof(int)) || (type == typeof(decimal)) || (type == typeof(float)) || (type == typeof(double)));
+
+        private static bool isBoolType(Type type)
+           => (type == typeof(bool));
 
         public object[] PreviousArgumentValues
         {
@@ -102,6 +109,9 @@ namespace OpenSC.GUI.Macros
                 TextBox valueTextBox = valueField as TextBox;
                 if (valueTextBox != null)
                     return valueTextBox.Text;
+                CheckBox valueCheckBox = valueField as CheckBox;
+                if (valueCheckBox != null)
+                    return valueCheckBox.Checked;
                 NumericUpDown valueNumericField = valueField as NumericUpDown;
                 if (valueNumericField != null)
                 {
@@ -123,8 +133,15 @@ namespace OpenSC.GUI.Macros
                     valueTextBox.Text = value?.ToString() ?? "";
                     return;
                 }
+                CheckBox valueCheckBox = valueField as CheckBox;
+                if (valueCheckBox != null)
+                {
+                    valueCheckBox.Checked = (bool)value;
+                    return;
+                }
                 NumericUpDown valueNumericField = valueField as NumericUpDown;
-                if (valueNumericField != null) {
+                if (valueNumericField != null)
+                {
                     if (!decimal.TryParse((value?.ToString() ?? ""), out decimal valueDecimal))
                         valueDecimal = 0;
                     valueNumericField.Value = valueDecimal;

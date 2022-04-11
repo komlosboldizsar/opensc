@@ -70,36 +70,67 @@ namespace OpenSC.GUI
             (editorForm as ChildWindowBase)?.ShowAsChild();
         }
 
+        protected const string COLUMN_ID_GLOBALID = "base@globalid";
+
+        protected CustomDataGridViewColumnDescriptorBuilder<TModelBasetype> globalIdColumnCreator<TModelBasetype>(CustomDataGridView<TModelBasetype> table, ItemListFormBaseManager<TModelBasetype>.ColumnDescriptorBuilderGetterDelegate builderGetterMethod)
+            where TModelBasetype : class, IModel, INotifyPropertyChanged
+        {
+            DataGridViewCellStyle cellStyle = table.DefaultCellStyle.Clone();
+            cellStyle.BackColor = Color.LightGoldenrodYellow;
+            CustomDataGridViewColumnDescriptorBuilder<TModelBasetype> builder = builderGetterMethod();
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.ID(COLUMN_ID_GLOBALID);
+            builder.Header("Global ID");
+            builder.Width(120);
+            builder.CellStyle(cellStyle);
+            builder.UpdaterMethod((item, cell) => { cell.Value = item.GlobalID; });
+            builder.AddChangeEvent(nameof(IModel.GlobalID));
+            builder.AllowSystemObjectDrag();
+            builder.BindVisibilityToSetting(MainForm.SHOW_GLOBAL_ID_IN_TABLES_SETTING);
+            return builder;
+        }
+
+        protected const string COLUMN_ID_ID = "base@id";
+
         protected CustomDataGridViewColumnDescriptorBuilder<TModelBasetype> idColumnCreator<TModelBasetype>(CustomDataGridView<TModelBasetype> table, ItemListFormBaseManager<TModelBasetype>.ColumnDescriptorBuilderGetterDelegate builderGetterMethod)
             where TModelBasetype : class, IModel, INotifyPropertyChanged
         {
             CustomDataGridViewColumnDescriptorBuilder<TModelBasetype> builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
+            builder.ID(COLUMN_ID_ID);
             builder.Header("ID");
             builder.Width(30);
             builder.UpdaterMethod((item, cell) => { cell.Value = string.Format("#{0}", item.ID); });
             builder.AddChangeEvent(nameof(IModel.ID));
+            builder.AllowSystemObjectDrag();
             return builder;
         }
+
+        protected const string COLUMN_ID_NAME = "base@name";
 
         protected CustomDataGridViewColumnDescriptorBuilder<TModelBasetype> nameColumnCreator<TModelBasetype>(CustomDataGridView<TModelBasetype> table, ItemListFormBaseManager<TModelBasetype>.ColumnDescriptorBuilderGetterDelegate builderGetterMethod)
             where TModelBasetype : class, IModel, INotifyPropertyChanged
         {
             CustomDataGridViewColumnDescriptorBuilder<TModelBasetype> builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
+            builder.ID(COLUMN_ID_NAME);
             builder.Header("Name");
             builder.Width(150);
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((item, cell) => { cell.Value = item.Name; });
             builder.AddChangeEvent(nameof(IModel.Name));
+            builder.AllowSystemObjectDrag();
             return builder;
         }
+
+        protected const string COLUMN_ID_EDIT = "base@edit";
 
         protected CustomDataGridViewColumnDescriptorBuilder<TModelBasetype> editButtonColumnCreator<TModelBasetype>(CustomDataGridView<TModelBasetype> table, ItemListFormBaseManager<TModelBasetype>.ColumnDescriptorBuilderGetterDelegate builderGetterMethod)
             where TModelBasetype : class, IModel, INotifyPropertyChanged
         {
             CustomDataGridViewColumnDescriptorBuilder<TModelBasetype> builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.Button);
+            builder.ID(COLUMN_ID_EDIT);
             builder.Header("Edit");
             builder.Width(70);
             builder.ButtonText("Edit");
@@ -119,11 +150,14 @@ namespace OpenSC.GUI
             return builder;
         }
 
+        protected const string COLUMN_ID_DELETE = "base@delete";
+
         protected CustomDataGridViewColumnDescriptorBuilder<TModelBasetype> deleteButtonColumnCreator<TModelBasetype>(CustomDataGridView<TModelBasetype> table, ItemListFormBaseManager<TModelBasetype>.ColumnDescriptorBuilderGetterDelegate builderGetterMethod)
             where TModelBasetype : class, IModel, INotifyPropertyChanged
         {
             CustomDataGridViewColumnDescriptorBuilder<TModelBasetype> builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.Button);
+            builder.ID(COLUMN_ID_DELETE);
             builder.Header("Delete");
             builder.Width(70);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);

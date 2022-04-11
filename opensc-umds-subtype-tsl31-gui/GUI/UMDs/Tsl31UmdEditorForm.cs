@@ -1,4 +1,6 @@
-﻿using OpenSC.Model.UMDs;
+﻿using OpenSC.GUI.GeneralComponents.DropDowns;
+using OpenSC.Model.SerialPorts;
+using OpenSC.Model.UMDs;
 using OpenSC.Model.UMDs.TSL31;
 using System;
 
@@ -29,6 +31,8 @@ namespace OpenSC.GUI.UMDs
             TSL31 tsl31 = (TSL31)EditedModel;
             if (tsl31 == null)
                 return;
+            portDropDown.SelectByValue(tsl31.Port);
+            addressNumericInput.Value = tsl31.Address;
         }
 
         protected override void writeFields()
@@ -37,6 +41,8 @@ namespace OpenSC.GUI.UMDs
             TSL31 tsl31 = (TSL31)EditedModel;
             if (tsl31 == null)
                 return;
+            tsl31.Port = portDropDown.SelectedValue as SerialPort;
+            tsl31.Address = (int)addressNumericInput.Value;
         }
 
         protected override void validateFields()
@@ -45,6 +51,13 @@ namespace OpenSC.GUI.UMDs
             TSL31 tsl31 = (TSL31)EditedModel;
             if (tsl31 == null)
                 return;
+            tsl31.ValidateAddress((int)addressNumericInput.Value);
+        }
+
+        private void initPortDropDown()
+        {
+            portDropDown.CreateAdapterAsDataSource(SerialPortDatabase.Instance, null, true, "(not associated)");
+            portDropDown.ReceiveSystemObjectDrop().FilterByType<SerialPort>();
         }
 
     }

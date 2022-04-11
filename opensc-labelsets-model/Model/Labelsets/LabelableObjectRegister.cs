@@ -16,7 +16,7 @@ namespace OpenSC.Model.Labelsets
         { }
         #endregion
 
-        protected override string getKey(ISystemObject item) => item.GlobalID;
+        public override string GetKey(ISystemObject item) => item.GlobalID;
         protected override void keyChangedSubscribeMethod(ISystemObject item) => item.GlobalIdChanged += itemGlobalIdChanged;
         protected override void keyChangedUnsubscribeMethod(ISystemObject item) => item.GlobalIdChanged -= itemGlobalIdChanged;
         private void itemGlobalIdChanged(ISystemObject item, string oldValue, string newValue) => ItemKeyChanged(item);

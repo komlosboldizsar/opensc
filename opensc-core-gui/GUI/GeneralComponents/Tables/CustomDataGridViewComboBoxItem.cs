@@ -7,11 +7,18 @@ using System.Threading.Tasks;
 namespace OpenSC.GUI.GeneralComponents.Tables
 {
 
-    public class CustomDataGridViewComboBoxItem<T>
+    public interface ICustomDataGridViewComboBoxItem
+    {
+        object ObjValue { get; }
+        string Label { get; }
+    }
+
+    public class CustomDataGridViewComboBoxItem<T> : ICustomDataGridViewComboBoxItem
         where T : class
     {
 
         public T Value { get; private set; }
+        public object ObjValue => Value;
         public virtual string Label => Value?.ToString() ?? "";
 
         public CustomDataGridViewComboBoxItem(T value) => Value = value;

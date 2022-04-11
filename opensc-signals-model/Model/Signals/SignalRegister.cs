@@ -17,7 +17,7 @@ namespace OpenSC.Model.Signals
         private SignalRegister() { }
         #endregion
 
-        protected override string getKey(ISignalSourceRegistered item) => item.SignalUniqueId;
+        public override string GetKey(ISignalSourceRegistered item) => item.SignalUniqueId;
 
         protected override void keyChangedSubscribeMethod(ISignalSourceRegistered item) => item.SignalUniqueIdChanged += itemUniqueIdChanged;
         protected override void keyChangedUnsubscribeMethod(ISignalSourceRegistered item) => item.SignalUniqueIdChanged -= itemUniqueIdChanged;

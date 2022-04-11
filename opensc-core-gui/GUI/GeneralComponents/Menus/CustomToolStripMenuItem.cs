@@ -1,4 +1,5 @@
 ﻿using OpenSC.GUI.Menus;
+using OpenSC.Model.Settings;
 using System;
 using System.Linq;
 
@@ -31,6 +32,7 @@ namespace OpenSC.GUI.GeneralComponents.Menus
             AssociatedMenuItem.TextChanged += textChangedHandler;
             AssociatedMenuItem.ImageChanged += imageChangedHandler;
             AssociatedMenuItem.TagChanged += tagChangedHandler;
+            AssociatedMenuItem.BoundCheckedSettingChanged += boundCheckedSettingChangedHandler;
         }
 
         private void updateProperties()
@@ -43,7 +45,17 @@ namespace OpenSC.GUI.GeneralComponents.Menus
         private void textChangedHandler(MenuItem menuItem, string oldText, string newText) => Text = newText;
         private void imageChangedHandler(MenuItem menuItem, System.Drawing.Bitmap oldImage, System.Drawing.Bitmap newImage) => Image = newImage;
         private void tagChangedHandler(MenuItem menuItem, object oldTag, object newTag) => Tag = newTag;
-        private void clickHandler(object sender, EventArgs e) => AssociatedMenuItem?.HandleClick();
+
+        private void boundCheckedSettingChangedHandler(MenuItem menuItem, Setting<bool> oldSetting, Setting<bool> newSetting)
+            => this.BindCheckedSetting(newSetting);
+
+        private void clickHandler(object sender, EventArgs e)
+        {
+            AssociatedMenuItem?.HandleClick();
+            Setting<bool> boundCheckedSetting = AssociatedMenuItem?.BoundCheckedSetting;
+            if (boundCheckedSetting != null)
+                boundCheckedSetting.Value = !boundCheckedSetting.Value;
+        }
 
     }
 

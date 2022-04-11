@@ -14,6 +14,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         public DataGridViewColumnType Type { get; private set; }
 
+        public string ID { get; private set; }
+
         public string Header { get; private set; }
 
         public int Width { get; private set; }
@@ -39,6 +41,9 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         public delegate void CellEndEditHandlerMethodDelegate(T item, DataGridViewCell cell, DataGridViewCellEventArgs eventArgs);
         public CellEndEditHandlerMethodDelegate EndEditHandlerMethod { get; private set; }
+        
+        public delegate void CellValueChangedHandlerMethodDelegate(T item, DataGridViewCell cell, DataGridViewCellEventArgs eventArgs);
+        public CellValueChangedHandlerMethodDelegate ValueChangedHandlerMethod { get; private set; }
 
         public string[] ChangeEvents { get; private set; }
         public string[][] MultilevelChangeEvents { get; private set; }
@@ -62,9 +67,13 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public DataGridViewSmallIconCell.IconTypes IconType { get; set; }
 
         public Padding IconPadding { get; set; }
+        public CustomDataGridViewColumnDescriptorExtension<T>[] Extensions { get; private set; }
+
+        public DataGridViewColumn ReadyColumn { get; internal set; }
 
         public CustomDataGridViewColumnDescriptor(
                 DataGridViewColumnType type,
+                string id,
                 string header,
                 int width,
                 int dividerWidth,
@@ -75,6 +84,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 CellContentClickHandlerMethodDelegate contentClickHandlerMethod,
                 CellDoubleClickHandlerMethodDelegate doubleClickHandlerMethod,
                 CellEndEditHandlerMethodDelegate endEditHandlerMethod,
+                CellValueChangedHandlerMethodDelegate valueChangedHandlerMethod,
                 string[] changeEvents,
                 string[][] multilevelChangeEvents,
                 ExternalUpdateEventSubscriberMethodDelegate externalUpdateEventSubscriberMethod,
@@ -85,9 +95,11 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 bool iconShown,
                 Color iconColor,
                 DataGridViewSmallIconCell.IconTypes iconType,
-                Padding iconPadding)
+                Padding iconPadding,
+                CustomDataGridViewColumnDescriptorExtension<T>[] extensions)
         {
             Type = type;
+            ID = id;
             Header = header;
             Width = width;
             DividerWidth = dividerWidth;
@@ -98,6 +110,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             ContentClickHandlerMethod = contentClickHandlerMethod;
             DoubleClickHandlerMethod = doubleClickHandlerMethod;
             EndEditHandlerMethod = endEditHandlerMethod;
+            ValueChangedHandlerMethod = valueChangedHandlerMethod;
             ChangeEvents = changeEvents;
             MultilevelChangeEvents = multilevelChangeEvents;
             ExternalUpdateEventSubscriberMethod = externalUpdateEventSubscriberMethod;
@@ -109,7 +122,16 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             IconColor = iconColor;
             IconType = iconType;
             IconPadding = iconPadding;
+            Extensions = extensions;
+        }
+
+        public void AddToTable(CustomDataGridView<T> table)
+        {
+            if (ReadyColumn != null)
+                throw new Exception();
+            ReadyColumn = table.AddColumn(this);
         }
 
     }
+
 }

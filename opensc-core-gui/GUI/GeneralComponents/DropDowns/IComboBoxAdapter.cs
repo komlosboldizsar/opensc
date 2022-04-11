@@ -10,7 +10,15 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
 
     public interface IComboBoxAdapter : IListSource, ICloneable
     {
+
         bool ContainsNull { get; }
+
+        public interface IItemProxy
+        {
+            object ObjValue { get; }
+            string Label { get; }
+        }
+
     }
 
 }

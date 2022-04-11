@@ -22,6 +22,27 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
             comboBox.SelectedValue = value;
         }
 
+        public static bool ContainsValue(this ComboBox comboBox, object value)
+        {
+            foreach (object itemProxy in comboBox.Items)
+                if ((itemProxy as IComboBoxAdapter.IItemProxy).ObjValue == value)
+                    return true;
+            return false;
+        }
+
+        public static bool SelectIfContainsValue(this ComboBox comboBox, object value)
+        {
+            foreach (object itemProxy in comboBox.Items)
+            {
+                if ((itemProxy as IComboBoxAdapter.IItemProxy).ObjValue == value)
+                {
+                    comboBox.SelectedValue = value;
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public static void CreateAdapterAsDataSource<T>(this ComboBox comboBox, IEnumerable<T> elements, ComboBoxAdapter<T>.ToStringFunctionDelegate toStringFunction, bool containsNull = false, string nullLabel = "")
             where T : class
         {

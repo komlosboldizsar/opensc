@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSC.Model.UMDs.McCurdy
+namespace OpenSC.GUI.Helpers
 {
-    public enum TextAlignment
-    {
-        Left,
-        Center,
-        Right
-    }
+
+    public class ParentBinderSelectEventArgs<TControl>
+    { }
+
 }

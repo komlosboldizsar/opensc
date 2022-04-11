@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.GeneralComponents.Tables;
+﻿using OpenSC.GUI.GeneralComponents.DropDowns;
+using OpenSC.GUI.GeneralComponents.Tables;
 using OpenSC.Model.Routers;
 using OpenSC.Model.Signals;
 using System;
@@ -77,6 +78,7 @@ namespace OpenSC.GUI.Routers
                     cell.Value = input.Index;
                 }
             });
+            builder.AllowSystemObjectDrag();
             builder.BuildAndAdd();
 
             // Column: name
@@ -99,6 +101,7 @@ namespace OpenSC.GUI.Routers
                     cell.Value = input.Name;
                 }
             });
+            builder.AllowSystemObjectDrag();
             builder.BuildAndAdd();
 
             // Column: source
@@ -111,6 +114,7 @@ namespace OpenSC.GUI.Routers
             builder.UpdaterMethod((input, cell) => { cell.Value = input.CurrentSource; });
             builder.CellEndEditHandlerMethod((input, cell, eventargs) => { input.AssignSource(cell.Value as ISignalSource); });
             builder.DropDownPopulatorMethod((input, cell) => sources);
+            builder.ReceiveSystemObjectDrop().FilterByType<ISignalSourceRegistered>();
             builder.BuildAndAdd();
 
             // Column: tieline cost
@@ -226,6 +230,7 @@ namespace OpenSC.GUI.Routers
                     cell.Value = output.Index;
                 }
             });
+            builder.AllowSystemObjectDrag();
             builder.BuildAndAdd();
 
             // Column: name
@@ -248,6 +253,7 @@ namespace OpenSC.GUI.Routers
                     cell.Value = output.Name;
                 }
             });
+            builder.AllowSystemObjectDrag();
             builder.BuildAndAdd();
 
             // Column: delete button

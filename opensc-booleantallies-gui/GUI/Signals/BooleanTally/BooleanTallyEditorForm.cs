@@ -60,18 +60,20 @@ namespace OpenSC.GUI.Signals.BooleanTallies
         }
 
         private void initFromBooleanDropDown()
-            => fromBooleanDropDown.CreateAdapterAsDataSource<IBoolean>(
-                BooleanRegister.Instance,
-                BooleanRegister.Instance.ToStringMethod,
-                true,
-                "(not associated)");
+        {
+            fromBooleanDropDown.CreateAdapterAsDataSource(
+                BooleanRegister.Instance, BooleanRegister.Instance.ToStringMethod,
+                true, "(not associated)");
+            fromBooleanDropDown.ReceiveSystemObjectDrop().FilterByType<IBoolean>();
+        }
 
         private void initToSignalDropDown()
-            => toSignalDropDown.CreateAdapterAsDataSource<ISignalSourceRegistered>(
-                SignalRegister.Instance,
-                SignalRegister.Instance.ToStringMethod,
-                true,
-                "(not associated)");
+        {
+            toSignalDropDown.CreateAdapterAsDataSource(
+                SignalRegister.Instance, SignalRegister.Instance.ToStringMethod,
+                true, "(not associated)");
+            toSignalDropDown.ReceiveSystemObjectDrop().FilterByType<ISignalSource>();
+        }
 
         private void initToColorDropDown() =>
             toColorDropDown.SetAdapterAsDataSource(new EnumComboBoxAdapter<SignalTallyColor>());

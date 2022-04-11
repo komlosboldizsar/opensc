@@ -60,11 +60,12 @@ namespace OpenSC.GUI.Signals.TallyCopying
         }
 
         private void initSourceSignalDropDown(ComboBox dropDown)
-            => dropDown.CreateAdapterAsDataSource<ISignalSourceRegistered>(
-                SignalRegister.Instance,
-                SignalRegister.Instance.ToStringMethod,
-                true,
-                "(not associated)");
+        {
+            dropDown.CreateAdapterAsDataSource(
+                SignalRegister.Instance, SignalRegister.Instance.ToStringMethod,
+                true, "(not associated)");
+            dropDown.ReceiveSystemObjectDrop().FilterByType<ISignalSourceRegistered>();
+        }
 
         private void initColorDropDown(ComboBox dropDown)
             => dropDown.SetAdapterAsDataSource(new EnumComboBoxAdapter<SignalTallyColor>());

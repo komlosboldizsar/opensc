@@ -41,31 +41,38 @@ namespace OpenSC.Modules
             {
                 if (fileInfo.Extension == ".dll")
                 {
-                    Assembly assembly = Assembly.LoadFrom(fileInfo.FullName);
-                    IEnumerable<TypeInfo> moduleDescriptorTypeInfos = assembly.DefinedTypes.Where(ti => ti.ImplementedInterfaces.Contains(MODULE_DESCRIPTOR_TYPE));
-                    foreach (TypeInfo moduleDescriptorTypeInfo in moduleDescriptorTypeInfos)
+                    try
                     {
-                        ModuleAttribute moduleAttribute = moduleDescriptorTypeInfo.GetCustomAttribute<ModuleAttribute>();
-                        if (moduleAttribute == null)
-                            continue;
-                        ConstructorInfo constuctorInfo = moduleDescriptorTypeInfo.GetConstructor(EMPTY_TYPE_ARRAY);
-                        if (constuctorInfo == null)
-                            continue;
-                        IModule moduleDescriptor = constuctorInfo.Invoke(EMPTY_ARRAY) as IModule;
-                        if (moduleDescriptor == null)
-                            continue;
-                        ModuleData moduleData = new ModuleData()
+                        Assembly assembly = Assembly.LoadFrom(fileInfo.FullName);
+                        IEnumerable<TypeInfo> moduleDescriptorTypeInfos = assembly.DefinedTypes.Where(ti => ti.ImplementedInterfaces.Contains(MODULE_DESCRIPTOR_TYPE));
+                        foreach (TypeInfo moduleDescriptorTypeInfo in moduleDescriptorTypeInfos)
                         {
-                            Name = moduleAttribute.Name,
-                            Path = fileInfo.FullName,
-                            Assembly = assembly,
-                            Instance = moduleDescriptor,
-                            Type = moduleDescriptorTypeInfo.AsType()
-                        };
-                        loadedModules.Add(moduleData);
-                        loadedModulesByName.Add(moduleData.Name, moduleData);
-                        loadedModulesByType.Add(moduleData.Type, moduleData);
-                        LogDispatcher.I(LOG_TAG, "Found module [{0}] in [{1}].", moduleData.Name, moduleData.Path);
+                            ModuleAttribute moduleAttribute = moduleDescriptorTypeInfo.GetCustomAttribute<ModuleAttribute>();
+                            if (moduleAttribute == null)
+                                continue;
+                            ConstructorInfo constuctorInfo = moduleDescriptorTypeInfo.GetConstructor(EMPTY_TYPE_ARRAY);
+                            if (constuctorInfo == null)
+                                continue;
+                            IModule moduleDescriptor = constuctorInfo.Invoke(EMPTY_ARRAY) as IModule;
+                            if (moduleDescriptor == null)
+                                continue;
+                            ModuleData moduleData = new ModuleData()
+                            {
+                                Name = moduleAttribute.Name,
+                                Path = fileInfo.FullName,
+                                Assembly = assembly,
+                                Instance = moduleDescriptor,
+                                Type = moduleDescriptorTypeInfo.AsType()
+                            };
+                            loadedModules.Add(moduleData);
+                            loadedModulesByName.Add(moduleData.Name, moduleData);
+                            loadedModulesByType.Add(moduleData.Type, moduleData);
+                            LogDispatcher.I(LOG_TAG, $"Found module [{moduleData.Name}] in [{moduleData.Path}].");
+                        }
+                    }
+                    catch
+                    {
+                        LogDispatcher.E(LOG_TAG, $"Couldn't open module file [{fileInfo.FullName}].");
                     }
                 }
             }

@@ -28,96 +28,73 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.displayIdentifierGroupBox = new System.Windows.Forms.GroupBox();
-            this.displayIdentifierTable = new System.Windows.Forms.TableLayoutPanel();
+            this.connectionGroupBox = new System.Windows.Forms.GroupBox();
+            this.connectionTable = new System.Windows.Forms.TableLayoutPanel();
             this.screenLabel = new System.Windows.Forms.Label();
-            this.screenDropDown = new System.Windows.Forms.ComboBox();
             this.indexLabel = new System.Windows.Forms.Label();
             this.indexNumericInput = new System.Windows.Forms.NumericUpDown();
+            this.screenDropDown = new System.Windows.Forms.ComboBox();
             this.mainTabControl.SuspendLayout();
-            this.baseDataTabPage.SuspendLayout();
+            this.connectionTabPage.SuspendLayout();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
-            this.displayIdentifierGroupBox.SuspendLayout();
-            this.displayIdentifierTable.SuspendLayout();
+            this.connectionGroupBox.SuspendLayout();
+            this.connectionTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.indexNumericInput)).BeginInit();
             this.SuspendLayout();
             // 
             // mainTabControl
             // 
-            this.mainTabControl.Location = new System.Drawing.Point(0, 111);
-            this.mainTabControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.mainTabControl.Size = new System.Drawing.Size(780, 317);
+            this.mainTabControl.Size = new System.Drawing.Size(780, 198);
             // 
-            // baseDataTabPage
+            // connectionTabPage
             // 
-            this.baseDataTabPage.Controls.Add(this.displayIdentifierGroupBox);
-            this.baseDataTabPage.Location = new System.Drawing.Point(4, 29);
-            this.baseDataTabPage.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.baseDataTabPage.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.baseDataTabPage.Size = new System.Drawing.Size(772, 284);
-            this.baseDataTabPage.Controls.SetChildIndex(this.displayIdentifierGroupBox, 0);
-            // 
-            // dynamicDataTabPage
-            // 
-            this.dynamicTextTabPage.Location = new System.Drawing.Point(4, 29);
-            this.dynamicTextTabPage.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.dynamicTextTabPage.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.dynamicTextTabPage.Size = new System.Drawing.Size(772, 284);
-            // 
-            // talliesTabPage
-            // 
-            this.talliesTabPage.Location = new System.Drawing.Point(4, 29);
-            this.talliesTabPage.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.talliesTabPage.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.talliesTabPage.Size = new System.Drawing.Size(772, 284);
+            this.connectionTabPage.Controls.Add(this.connectionGroupBox);
+            this.connectionTabPage.Size = new System.Drawing.Size(772, 165);
             // 
             // customElementsPanel
             // 
-            this.customElementsPanel.Location = new System.Drawing.Point(10, 15);
-            this.customElementsPanel.Margin = new System.Windows.Forms.Padding(3, 6, 3, 6);
-            this.customElementsPanel.Size = new System.Drawing.Size(780, 428);
+            this.customElementsPanel.Size = new System.Drawing.Size(780, 434);
             // 
             // mainContainer
             // 
-            this.mainContainer.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
-            this.mainContainer.Padding = new System.Windows.Forms.Padding(10, 15, 10, 15);
             this.mainContainer.Size = new System.Drawing.Size(800, 544);
             // 
-            // displayIdentifierGroupBox
+            // connectionGroupBox
             // 
-            this.displayIdentifierGroupBox.AutoSize = true;
-            this.displayIdentifierGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.displayIdentifierGroupBox.Controls.Add(this.displayIdentifierTable);
-            this.displayIdentifierGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.displayIdentifierGroupBox.Location = new System.Drawing.Point(3, 134);
-            this.displayIdentifierGroupBox.Margin = new System.Windows.Forms.Padding(10, 12, 10, 12);
-            this.displayIdentifierGroupBox.Name = "displayIdentifierGroupBox";
-            this.displayIdentifierGroupBox.Padding = new System.Windows.Forms.Padding(8, 5, 8, 10);
-            this.displayIdentifierGroupBox.Size = new System.Drawing.Size(766, 102);
-            this.displayIdentifierGroupBox.TabIndex = 3;
-            this.displayIdentifierGroupBox.TabStop = false;
-            this.displayIdentifierGroupBox.Text = "Display identifier";
+            this.connectionGroupBox.AutoSize = true;
+            this.connectionGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.connectionGroupBox.Controls.Add(this.connectionTable);
+            this.connectionGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.connectionGroupBox.Location = new System.Drawing.Point(3, 3);
+            this.connectionGroupBox.Margin = new System.Windows.Forms.Padding(10, 12, 10, 12);
+            this.connectionGroupBox.Name = "connectionGroupBox";
+            this.connectionGroupBox.Padding = new System.Windows.Forms.Padding(8, 5, 8, 10);
+            this.connectionGroupBox.Size = new System.Drawing.Size(766, 102);
+            this.connectionGroupBox.TabIndex = 1;
+            this.connectionGroupBox.TabStop = false;
+            this.connectionGroupBox.Text = "Display data";
             // 
-            // displayIdentifierTable
+            // connectionTable
             // 
-            this.displayIdentifierTable.AutoSize = true;
-            this.displayIdentifierTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.displayIdentifierTable.ColumnCount = 2;
-            this.displayIdentifierTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.displayIdentifierTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.displayIdentifierTable.Controls.Add(this.screenLabel, 0, 0);
-            this.displayIdentifierTable.Controls.Add(this.screenDropDown, 1, 0);
-            this.displayIdentifierTable.Controls.Add(this.indexLabel, 0, 1);
-            this.displayIdentifierTable.Controls.Add(this.indexNumericInput, 1, 1);
-            this.displayIdentifierTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.displayIdentifierTable.Location = new System.Drawing.Point(8, 25);
-            this.displayIdentifierTable.Name = "displayIdentifierTable";
-            this.displayIdentifierTable.RowCount = 2;
-            this.displayIdentifierTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.displayIdentifierTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.displayIdentifierTable.Size = new System.Drawing.Size(750, 67);
-            this.displayIdentifierTable.TabIndex = 0;
+            this.connectionTable.AutoSize = true;
+            this.connectionTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.connectionTable.ColumnCount = 2;
+            this.connectionTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.connectionTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.connectionTable.Controls.Add(this.screenLabel, 0, 0);
+            this.connectionTable.Controls.Add(this.indexLabel, 0, 1);
+            this.connectionTable.Controls.Add(this.indexNumericInput, 1, 1);
+            this.connectionTable.Controls.Add(this.screenDropDown, 1, 0);
+            this.connectionTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.connectionTable.Location = new System.Drawing.Point(8, 25);
+            this.connectionTable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.connectionTable.Name = "connectionTable";
+            this.connectionTable.RowCount = 2;
+            this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.connectionTable.Size = new System.Drawing.Size(750, 67);
+            this.connectionTable.TabIndex = 0;
             // 
             // screenLabel
             // 
@@ -131,16 +108,6 @@
             this.screenLabel.Text = "Screen";
             this.screenLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // screenDropDown
-            // 
-            this.screenDropDown.Dock = System.Windows.Forms.DockStyle.Left;
-            this.screenDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.screenDropDown.FormattingEnabled = true;
-            this.screenDropDown.Location = new System.Drawing.Point(74, 3);
-            this.screenDropDown.Name = "screenDropDown";
-            this.screenDropDown.Size = new System.Drawing.Size(322, 28);
-            this.screenDropDown.TabIndex = 1;
-            // 
             // indexLabel
             // 
             this.indexLabel.AutoSize = true;
@@ -149,7 +116,7 @@
             this.indexLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.indexLabel.Name = "indexLabel";
             this.indexLabel.Size = new System.Drawing.Size(45, 33);
-            this.indexLabel.TabIndex = 2;
+            this.indexLabel.TabIndex = 1;
             this.indexLabel.Text = "Index";
             this.indexLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -157,9 +124,24 @@
             // 
             this.indexNumericInput.Dock = System.Windows.Forms.DockStyle.Left;
             this.indexNumericInput.Location = new System.Drawing.Point(74, 37);
+            this.indexNumericInput.Maximum = new decimal(new int[] {
+            65534,
+            0,
+            0,
+            0});
             this.indexNumericInput.Name = "indexNumericInput";
-            this.indexNumericInput.Size = new System.Drawing.Size(151, 27);
-            this.indexNumericInput.TabIndex = 3;
+            this.indexNumericInput.Size = new System.Drawing.Size(150, 27);
+            this.indexNumericInput.TabIndex = 2;
+            // 
+            // screenDropDown
+            // 
+            this.screenDropDown.Dock = System.Windows.Forms.DockStyle.Left;
+            this.screenDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.screenDropDown.FormattingEnabled = true;
+            this.screenDropDown.Location = new System.Drawing.Point(74, 3);
+            this.screenDropDown.Name = "screenDropDown";
+            this.screenDropDown.Size = new System.Drawing.Size(305, 28);
+            this.screenDropDown.TabIndex = 3;
             // 
             // Tsl50DisplayUmdEditorForm
             // 
@@ -171,15 +153,15 @@
             this.MinimumSize = new System.Drawing.Size(500, 661);
             this.Name = "Tsl50DisplayUmdEditorForm";
             this.mainTabControl.ResumeLayout(false);
-            this.baseDataTabPage.ResumeLayout(false);
-            this.baseDataTabPage.PerformLayout();
+            this.connectionTabPage.ResumeLayout(false);
+            this.connectionTabPage.PerformLayout();
             this.customElementsPanel.ResumeLayout(false);
             this.customElementsPanel.PerformLayout();
             this.mainContainer.ResumeLayout(false);
-            this.displayIdentifierGroupBox.ResumeLayout(false);
-            this.displayIdentifierGroupBox.PerformLayout();
-            this.displayIdentifierTable.ResumeLayout(false);
-            this.displayIdentifierTable.PerformLayout();
+            this.connectionGroupBox.ResumeLayout(false);
+            this.connectionGroupBox.PerformLayout();
+            this.connectionTable.ResumeLayout(false);
+            this.connectionTable.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.indexNumericInput)).EndInit();
             this.ResumeLayout(false);
 
@@ -187,11 +169,11 @@
 
         #endregion
 
-        private System.Windows.Forms.GroupBox displayIdentifierGroupBox;
-        private System.Windows.Forms.TableLayoutPanel displayIdentifierTable;
+        private System.Windows.Forms.GroupBox connectionGroupBox;
+        private System.Windows.Forms.TableLayoutPanel connectionTable;
         private System.Windows.Forms.Label screenLabel;
-        private System.Windows.Forms.ComboBox screenDropDown;
         private System.Windows.Forms.Label indexLabel;
         private System.Windows.Forms.NumericUpDown indexNumericInput;
+        private System.Windows.Forms.ComboBox screenDropDown;
     }
 }
