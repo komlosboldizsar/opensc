@@ -2,9 +2,11 @@
 using OpenSC.Model.Persistence;
 using OpenSC.Model.Variables;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,186 +16,234 @@ namespace OpenSC.Model.UMDs
     public abstract class UMD : ModelBase
     {
 
-        public abstract IUMDType Type { get; }
-        public abstract Color[] TallyColors { get; }
+        #region Instantiation, restoration, persistence, removation
+        public UMD()
+        {
+            alignmentWithFullStaticText = DefaultAlignmentWithFullStaticText;
+            initTextThings();
+            initTallyThings();
+        }
 
-        protected abstract void update();
+        public override void RestoredOwnFields()
+        {
+            base.RestoredOwnFields();
+            handleRestoredOwnFieldsTexts();
+            handleRestoredOwnFieldsTallies();
+        }
 
         public override void RestoreCustomRelations()
         {
             base.RestoreCustomRelations();
-            restoreTallySources();
+            Texts.ForEach(t => t.RestoreCustomRelations());
+            Tallies.ForEach(t => t.RestoreCustomRelations());
+        }
+
+        public override void TotallyRestored()
+        {
+            base.TotallyRestored();
+            updateTotalToHardware();
         }
 
         public override void Removed()
         {
             base.Removed();
-            StaticTextChanged = null;
-            UseStaticTextChanged = null;
-            for (int i = 0; i < MAX_TALLIES; i++)
-                SetTallySource(i, null);
+            FullStaticTextChanged = null;
+            UseFullStaticTextChanged = null;
+            Texts.ForEach(t => t.Removed());
+            Tallies.ForEach(t => t.Removed());
         }
-
-        public UMD()
-        { }
+        #endregion
 
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = UmdDatabase.Instance;
         #endregion
 
-        #region Property: CurrentText
-        public event PropertyChangedTwoValuesDelegate<UMD, string> CurrentTextChanged;
+        #region Property: DisplayableRawText
+        public event PropertyChangedTwoValuesDelegate<UMD, string> DisplayableRawTextChanged;
 
-        protected string currentText = "";
+        protected string displayableRawText = "";
 
-        public string CurrentText
+        public string DisplayableRawText
         {
-            get => currentText;
-            set => this.setProperty(ref currentText, value, CurrentTextChanged, null, (ov, nv) => update());
+            get => displayableRawText;
+            set => this.setProperty(ref displayableRawText, value, DisplayableRawTextChanged);
         }
         #endregion
 
-        #region Property: DynamicText
-        public event PropertyChangedTwoValuesDelegate<UMD, string> DynamicTextChanged;
+        #region Property: DisplayableCompactText
+        public event PropertyChangedTwoValuesDelegate<UMD, string> DisplayableCompactTextChanged;
 
-        private string dynamicText;
-        
-        protected string DynamicText
+        protected string displayableCompactText = "";
+
+        public string DisplayableCompactText
         {
-            get => dynamicText;
+            get => displayableCompactText;
+            set => this.setProperty(ref displayableCompactText, value, DisplayableCompactTextChanged);
+        }
+        #endregion
+
+        #region Property: FullStaticText
+        public event PropertyChangedTwoValuesDelegate<UMD, string> FullStaticTextChanged;
+
+        [PersistAs("full_static_text")]
+        private string fullStaticText;
+
+        public string FullStaticText
+        {
+            get => fullStaticText;
+            set => this.setProperty(ref fullStaticText, value, FullStaticTextChanged, null, (_, _) =>
+            {
+                if (useFullStaticText)
+                    updateTextsToHardware();
+            });
+        }
+        #endregion
+
+        #region Property: UseFullStaticText
+        public event PropertyChangedTwoValuesDelegate<UMD, bool> UseFullStaticTextChanged;
+
+        [PersistAs("use_full_static_text")]
+        private bool useFullStaticText = false;
+
+        public bool UseFullStaticText
+        {
+            get => useFullStaticText;
+            set => this.setProperty(ref useFullStaticText, value, UseFullStaticTextChanged, null, (_, _) => updateTextsToHardware());
+        }
+        #endregion
+
+        #region Property: AlignmentWithFullStaticText
+        public event PropertyChangedTwoValuesDelegate<UMD, UmdTextAlignment> AlignmentWithFullStaticTextChanged;
+
+        [PersistAs("alignment_with_full_static_text")]
+        private UmdTextAlignment alignmentWithFullStaticText = UmdTextAlignment.Left;
+
+        public UmdTextAlignment AlignmentWithFullStaticText
+        {
+            get => alignmentWithFullStaticText;
             set
             {
-                AfterChangePropertyDelegate<string> afterChangeDelegate = (ov, nv) =>
+                if (!AlignableFullStaticText)
+                    return;
+                this.setProperty(ref alignmentWithFullStaticText, value, AlignmentWithFullStaticTextChanged, null, (_, _) =>
                 {
-                    if (!useStaticText)
-                        CurrentText = nv;
-                };
-                this.setProperty(ref dynamicText, value, DynamicTextChanged);
+                    if (useFullStaticText)
+                        updateTextsToHardware();
+                });
             }
         }
         #endregion
 
-        #region Property: StaticText
-        public event PropertyChangedTwoValuesDelegate<UMD, string> StaticTextChanged;
+        #region Read-only full static text settings
+        public virtual bool AlignableFullStaticText { get; } = false;
+        public virtual UmdTextAlignment DefaultAlignmentWithFullStaticText { get; } = UmdTextAlignment.Left;
+        #endregion
 
-        [PersistAs("static_text")]
-        private string staticText;
+        #region Texts
+        public abstract UmdTextInfo[] TextInfo { get; }
+        [PersistAs("texts")]
+        [PersistAs(null, 1)]
+        public readonly List<UmdText> Texts = new();
+        private List<UmdText> textsByConstructor;
 
-        public string StaticText
+        private void initTextThings()
         {
-            get => staticText;
-            set
+            int i = 0;
+            foreach (UmdTextInfo textInfo in TextInfo)
+                Texts.Add(new(this, i++, textInfo));
+            textsByConstructor = new(Texts);
+        }
+
+        private void handleRestoredOwnFieldsTexts()
+        {
+            textsByConstructor.ForEach(t => t.Removed());
+            textsByConstructor.Clear();
+            textsByConstructor = null;
+            int textCount = Texts.Count;
+            int textInfoLength = TextInfo.Length;
+            if (textCount > textInfoLength)
             {
-                AfterChangePropertyDelegate<string> afterChangeDelegate = (ov, nv) => {
-                    if (useStaticText)
-                        CurrentText = nv;
-                };
-                this.setProperty(ref staticText, value, StaticTextChanged);
+                for (int i = textCount - 1; i >= textInfoLength; i--)
+                {
+                    Texts[i].Removed();
+                    Texts.RemoveAt(i);
+                }
             }
+            if (textCount < textInfoLength)
+                for (int i = textCount; i < textInfoLength; i++)
+                    Texts.Add(new(this, i, TextInfo[i]));
         }
-        #endregion
 
-        #region Property: UseStaticText
-        public event PropertyChangedTwoValuesDelegate<UMD, bool> UseStaticTextChanged;
-
-        [PersistAs("use_static_text")]
-        private bool useStaticText = false;
-
-        public bool UseStaticText
+        internal void NotifyTextStaticValueChanged(UmdText text)
         {
-            get => useStaticText;
-            set => this.setProperty(ref useStaticText, value, UseStaticTextChanged, null,
-                (ov, nv) => { CurrentText = nv ? staticText : dynamicText; });
+            if (text.UseStaticValue)
+                notifyTextChanged(text);
+        }
+
+        internal void NotifyTextUseStaticValueChanged(UmdText text) => notifyTextChanged(text);
+        internal void NotifyTextUsedChanged(UmdText text) => notifyTextChanged(text);
+        internal void NotifyTextAlignmentChanged(UmdText text) => notifyTextChanged(text);
+        internal void NotifyTextCurrentValueChanged(UmdText text) => notifyTextChanged(text);
+
+        private void notifyTextChanged(UmdText text)
+        {
+            if (text.Used)
+                updateTexts();
+        }
+
+        private void updateTexts()
+        {
+            if (useFullStaticText)
+                DisplayableCompactText = fullStaticText;
+            else
+                DisplayableCompactText = string.Join(" | ", Texts.Where(t => t.Used).Select(t => t.CurrentValue));
+            updateTextsToHardware();
         }
         #endregion
 
         #region Tallies
-        public delegate void TallyChangedDelegate(UMD umd, int index, bool oldState, bool newState);
-        public event TallyChangedDelegate TallyChanged;
+        public abstract UmdTallyInfo[] TallyInfo { get; }
+        [PersistAs("tallies")]
+        [PersistAs(null, 1)]
+        public readonly List<UmdTally> Tallies = new();
+        private List<UmdTally> talliesByConstructor;
 
-        public const int MAX_TALLIES = 8;
-
-        [PersistAs("tally_sources")]
-        private string[] _tallySources = new string[MAX_TALLIES];
-
-        private IBoolean[] tallySources = new IBoolean[MAX_TALLIES];
-
-        public void SetTallySource(int index, IBoolean source)
+        private void initTallyThings()
         {
-            if ((index < 0) || (index >= MAX_TALLIES) || (index >= Type.TallyCount))
-                throw new ArgumentOutOfRangeException(nameof(index));
-            if (source == tallySources[index])
-                return;
-            if(tallySources[index] != null)
-                tallySources[index].StateChanged -= tallyStateChangedHandler;
-            tallySources[index] = source;
-            _tallySources[index] = source?.Name;
-            if (tallySources[index] != null)
+            int i = 0;
+            foreach (UmdTallyInfo tallyInfo in TallyInfo)
+                Tallies.Add(new(this, i++, tallyInfo));
+            talliesByConstructor = new(Tallies);
+        }
+
+        private void handleRestoredOwnFieldsTallies()
+        {
+            talliesByConstructor.ForEach(t => t.Removed());
+            talliesByConstructor.Clear();
+            talliesByConstructor = null;
+            int tallyCount = Tallies.Count;
+            int tallyInfoLength = TallyInfo.Length;
+            if (tallyCount > tallyInfoLength)
             {
-                tallySources[index].StateChanged += tallyStateChangedHandler;
-                updateTally(index, source.CurrentState);
+                for (int i = tallyCount - 1; i >= tallyInfoLength; i--)
+                {
+                    Tallies[i].Removed();
+                    Tallies.RemoveAt(i);
+                }
             }
-            else
-            {
-                updateTally(index, false);
-            }
+            if (tallyCount < tallyInfoLength)
+                for (int i = tallyCount; i < tallyInfoLength; i++)
+                    Tallies.Add(new(this, i, TallyInfo[i]));
         }
 
-        public IBoolean GetTallySource(int index)
-        {
-            if ((index < 0) || (index >= MAX_TALLIES) || (index >= Type.TallyCount))
-                throw new ArgumentOutOfRangeException(nameof(index));
-            return tallySources[index];
-        }
-
-        private void restoreTallySources()
-        {
-            string[] restoredTallySourceNames = _tallySources;
-            for (int i = 0; i < Type.TallyCount; i++) {
-                string sourceName = restoredTallySourceNames[i];
-                IBoolean tallySource = BooleanRegister.Instance[sourceName];
-                SetTallySource(i, tallySource);
-            }
-        }   
-
-        private void tallyStateChangedHandler(IBoolean boolean, bool oldState, bool newState)
-        {
-            for (int i = 0; i < MAX_TALLIES; i++)
-                if (tallySources[i] == boolean)
-                    updateTally(i, newState);
-        }
-
-        private bool[] tallyStates = new bool[MAX_TALLIES];
-
-        public bool[] TallyStates
-        {
-            get => tallyStates;
-        }
-
-        private void updateTally(int index, bool state)
-        {
-
-            if (tallyStates[index] == state)
-                return;
-
-            tallyStates[index] = state;
-            tallyChanged(index, state);
-
-            TallyChanged?.Invoke(this, index, !state, state);
-            RaisePropertyChanged(nameof(TallyStates));
-
-        }
-
-        private bool GetTallyState(int index)
-        {
-            if ((index < 0) || (index >= MAX_TALLIES) || (index >= Type.TallyCount))
-                throw new ArgumentOutOfRangeException(nameof(index));
-            return tallyStates[index];
-        }
-
-        protected virtual void tallyChanged(int index, bool state)
-        { }
+        internal void NotifyTallyColorChanged(UmdTally tally) => updateTalliesToHardware();
+        internal void NotifyTallyCurrentStateChanged(UmdTally tally) => updateTalliesToHardware();
         #endregion
 
+        protected abstract void updateTextsToHardware();
+        protected abstract void updateTalliesToHardware();
+        protected abstract void updateTotalToHardware();
+
     }
+
 }

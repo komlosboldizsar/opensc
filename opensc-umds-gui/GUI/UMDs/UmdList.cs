@@ -41,17 +41,17 @@ namespace OpenSC.GUI.UMDs
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Static text");
             builder.Width(200);
-            builder.UpdaterMethod((umd, cell) => { cell.Value = umd.StaticText; });
-            builder.AddChangeEvent(nameof(UMD.StaticText));
+            builder.UpdaterMethod((umd, cell) => { cell.Value = umd.FullStaticText; });
+            builder.AddChangeEvent(nameof(UMD.FullStaticText));
 
             // Column: use static text
             builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.CheckBox);
             builder.Header("Static");
             builder.Width(50);
-            builder.UpdaterMethod((umd, cell) => { cell.Value = umd.UseStaticText; });
-            builder.CellContentClickHandlerMethod((umd, cell, e) => { umd.UseStaticText = !(bool)cell.Value; });
-            builder.AddChangeEvent(nameof(UMD.UseStaticText));
+            builder.UpdaterMethod((umd, cell) => { cell.Value = umd.UseFullStaticText; });
+            builder.CellContentClickHandlerMethod((umd, cell, e) => { umd.UseFullStaticText = !(bool)cell.Value; });
+            builder.AddChangeEvent(nameof(UMD.UseFullStaticText));
 
             // Column: current text
             builder = builderGetterMethod();
@@ -59,31 +59,22 @@ namespace OpenSC.GUI.UMDs
             builder.Header("Current text");
             builder.Width(200);
             builder.CellStyle(monospaceTextCellStyle);
-            builder.UpdaterMethod((umd, cell) => { cell.Value = umd.CurrentText; });
-            builder.AddChangeEvent(nameof(UMD.CurrentText));
+            builder.UpdaterMethod((umd, cell) => { cell.Value = umd.DisplayableRawText; });
+            builder.AddChangeEvent(nameof(UMD.DisplayableRawText));
 
-            // Columns: tallies
-            for (int i = 0; i < MAX_TALLIES; i++)
-            {
-                builder = builderGetterMethod();
-                builder.Type(DataGridViewColumnType.TextBox);
-                builder.Header(string.Format("T{0}", i + 1));
-                builder.Width(30);
-                builder.UpdaterMethod((umd, cell) => {
-                    cell.Style.BackColor = ((umd.Type.TallyCount > i) && umd.TallyStates[i]) ? umd.TallyColors[i] : Color.LightGray;
-                });
-                if (i == MAX_TALLIES - 1)
-                    builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
-                builder.AddChangeEvent(nameof(UMD.TallyStates));
-            }
+            // Column: tallies
+            builder = builderGetterMethod();
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.Header("Tallies");
+            builder.Width(100);
+            builder.UpdaterMethod((umd, cell) => { cell.Value = "TODO"; });
+            //builder.AddChangeEvent(nameof(UMD.TallyStates));
 
             // Column: edit, delete
             editButtonColumnCreator(table, builderGetterMethod);
             deleteButtonColumnCreator(table, builderGetterMethod);
 
         }
-
-        private const int MAX_TALLIES = 2;
 
     }
 

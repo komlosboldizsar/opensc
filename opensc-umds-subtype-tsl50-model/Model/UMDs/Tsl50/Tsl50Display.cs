@@ -14,8 +14,6 @@ namespace OpenSC.Model.UMDs.Tsl50
     public class Tsl50Display : UMD
     {
 
-        public override IUMDType Type => new Tsl50DisplayType();
-
         #region Property: Screen
         public event PropertyChangedTwoValuesDelegate<Tsl50Display, Tsl50Screen> ScreenChanged;
 
@@ -53,37 +51,82 @@ namespace OpenSC.Model.UMDs.Tsl50
         }
         #endregion
 
-        public override Color[] TallyColors => new Color[] { Color.Red, Color.Green, Color.Red, Color.Green, Color.Red, Color.Green };
-        protected override void tallyChanged(int index, bool state) => updateWithoutText();
+        #region Info
+        public override UmdTextInfo[] TextInfo => new UmdTextInfo[]
+        {
+           new("Text", false, true, false, UmdTextAlignment.Left)
+        };
 
-        protected override void update() => screen?.SendDisplayData(getBytesToSend());
-        protected void updateWithoutText() => screen?.SendDisplayData(getBytesToSend(false));
+        public override UmdTallyInfo[] TallyInfo => new UmdTallyInfo[]
+        {
+            new("Left tally 1 (red)", UmdTallyInfo.ColorSettingMode.LocalChangeable, Color.Red),
+            new("Left tally 2 (green)", UmdTallyInfo.ColorSettingMode.LocalChangeable, Color.Green),
+            new("Text tally 1 (red)", UmdTallyInfo.ColorSettingMode.LocalChangeable, Color.Red),
+            new("Text tally 2 (green)", UmdTallyInfo.ColorSettingMode.LocalChangeable, Color.Green),
+            new("Right tally 1 (red)", UmdTallyInfo.ColorSettingMode.LocalChangeable, Color.Red),
+            new("Right tally 2 (green)", UmdTallyInfo.ColorSettingMode.LocalChangeable, Color.Green)
+        };
+        #endregion
 
-        protected virtual byte[] getBytesToSend(bool updateText = true)
+        #region Sending data to hardware
+        protected override void updateTextsToHardware()
+        {
+            calculateTextFields();
+            sendData(true);
+        }
+
+        protected override void updateTalliesToHardware()
+        {
+            calculateTallyFields();
+            sendData(false);
+        }
+
+        protected override void updateTotalToHardware()
+        {
+            calculateTextFields();
+            calculateTallyFields();
+            sendData(true);
+        }
+
+        protected byte[] textBytesToHardware = Array.Empty<byte>();
+
+        private void calculateTextFields()
+        {
+            textBytesToHardware = Encoding.ASCII.GetBytes(DisplayableCompactText);
+            DisplayableRawText = DisplayableCompactText;
+        }
+
+        private byte tallyByteToHardware;
+
+        private void calculateTallyFields()
+        {
+            tallyByteToHardware = 0;
+            for (int i = 0, t = 32; i < TallyInfo.Length; i++, t /= 2)
+                if (Tallies[i].CurrentState)
+                    tallyByteToHardware += (byte)t;
+        }
+
+        protected virtual byte[] getAllBytesToSend(bool sendText = true)
         {
             int byteCount = 4; // INDEX + CONTROL
-            byte[] text = null;
-            if (updateText)
+            if (sendText)
+                byteCount += 2 + textBytesToHardware.Length; // LENGTH + TEXT
+            byte[] bytes = new byte[byteCount]; // LITTLE ENDIAN!
+            bytes[0] = (byte)(index & 0xFF); // DISPLAY INDEX LSB
+            bytes[1] = (byte)((index >> 8) & 0xFF); // DISPLAY INDEX MSB
+            bytes[2] = tallyByteToHardware; // CONTROL LSB (tallies, brightness)
+            bytes[3] = 0; // CONTROL MSB (control bit, reserved)
+            if (sendText)
             {
-                text = Encoding.ASCII.GetBytes(currentText);
-                byteCount += 2 + text.Length; // LENGTH + TEXT
-            }
-            byte[] bytes = new byte[byteCount];
-            bytes[0] = (byte)((index >> 8) & 0xFF);
-            bytes[1] = (byte)(index & 0xFF);
-            bytes[2] = 0; // CONTROL 
-            bytes[3] = 0; // CONTROL (tallies)
-            for (int i = 0, t = 1; i < Type.TallyCount; i++, t *= 2)
-                if (TallyStates[i])
-                    bytes[3] += (byte)t;
-            if (updateText)
-            {
-                bytes[4] = (byte)((text.Length >> 8) & 0xFF); // LENGTH
-                bytes[5] = (byte)(text.Length & 0xFF); // LENGTH
-                text.CopyTo(bytes, 6);
+                bytes[4] = (byte)(textBytesToHardware.Length & 0xFF); // LENGTH MSB
+                bytes[5] = (byte)((textBytesToHardware.Length >> 8) & 0xFF); // LENGTH LSB
+                textBytesToHardware.CopyTo(bytes, 6);
             }
             return bytes;
         }
+
+        private void sendData(bool sendText) => screen?.SendDisplayData(getAllBytesToSend(sendText));
+        #endregion
 
     }
 

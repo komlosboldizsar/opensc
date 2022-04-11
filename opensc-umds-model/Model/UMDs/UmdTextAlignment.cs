@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSC.Model.UMDs.McCurdy
+namespace OpenSC.Model.UMDs
 {
-    public enum TextAlignment
+    public enum UmdTextAlignment
     {
         Left,
         Center,

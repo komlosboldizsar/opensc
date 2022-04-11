@@ -18,7 +18,7 @@ namespace OpenSC.Model.UMDs.Macros
             UMD umd = argumentValues[0] as UMD;
             if (umd == null)
                 return;
-            umd.UseStaticText = false;
+            umd.UseFullStaticText = false;
         }
 
         [MacroCommandArgument(0, "UMD", "The UMD to change mode and text.")]

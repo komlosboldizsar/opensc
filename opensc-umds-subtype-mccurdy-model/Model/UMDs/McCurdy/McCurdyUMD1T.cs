@@ -13,17 +13,23 @@ namespace OpenSC.Model.UMDs.McCurdy
     public class McCurdyUMD1T : McCurdyUMD1
     {
 
-        public override IUMDType Type => new McCurdyUMD1TType();
-
-        public override int TotalWidth => 150;
-
-        protected override string getTextToSend()
+        #region Info
+        public override UmdTallyInfo[] TallyInfo => new UmdTallyInfo[]
         {
-            string replaced = currentText.Replace('1', (char)0x7E);
+            new("Tally", UmdTallyInfo.ColorSettingMode.Fix, Color.Red)
+        };
+        public override int TotalWidth => 150;
+        #endregion
+
+        #region Sending data to hardware
+        protected override string getCommandTextToSend()
+        {
+            string replaced = textToHardware.Replace('1', (char)0x7E);
             replaced = replaced.Replace("%", "%%");
-            replaced = string.Format("{0}{1}", (TallyStates[0] ? "#" : "! "), replaced);
+            replaced = string.Format("{0}{1}", (Tallies[0].CurrentState ? "#" : "! "), replaced);
             return string.Format("%{0}D{1}%Z", Address, replaced);
         }
+        #endregion
 
     }
 
