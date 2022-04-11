@@ -92,6 +92,14 @@ namespace OpenSC.Model.UMDs.Tsl31
 
         private const int TEXT_MAX_LENGTH = 16;
 
+        protected override void calculateDisplayableCompactText()
+        {
+            string _displayableCompactText = UseFullStaticText ? FullStaticText : Texts[0].CurrentValue;
+            if (_displayableCompactText.Length > TEXT_MAX_LENGTH)
+                _displayableCompactText = _displayableCompactText.Substring(0, TEXT_MAX_LENGTH);
+            DisplayableCompactText = _displayableCompactText;
+        }
+
         private void calculateTextFields()
         {
             string textToHardwareTemp = DisplayableCompactText;
