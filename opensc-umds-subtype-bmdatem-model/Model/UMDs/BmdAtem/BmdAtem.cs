@@ -109,50 +109,43 @@ namespace OpenSC.Model.UMDs.BmdAtem
         #endregion
 
         #region Sending data to hardware
-        protected override void updateTextsToHardware() => updateTotalToHardware();
+        protected override void updateTextsToHardware() => updateTotalToHardware(); // Has only texts
 
-        protected override void updateTalliesToHardware() { }
+        protected override void updateTalliesToHardware() { } // Has no tallies
 
         protected override void updateTotalToHardware()
         {
-            calculateTextFields();
+            // Texts are already calculated by updateTexts()
             sendData();
         }
 
         private const int LENGTH_SHORT = 4;
         private const int LENGTH_LONG = 16;
 
-        protected override void calculateDisplayableCompactText()
+        protected override void updateTexts()
         {
-            base.calculateDisplayableCompactText();
-            string shortText = "-";
-            if (Texts[0].Used)
+            // To hardware
+            string shortTextToHardware = Texts[0].CurrentValue;
+            string longTextToHardware = Texts[1].CurrentValue;
+            if (UseFullStaticText)
             {
-                shortText = UseFullStaticText ? FullStaticText : Texts[0].CurrentValue;
-                if (shortText.Length > LENGTH_SHORT)
-                    shortText.Substring(0, LENGTH_SHORT);
+                string[] fullStaticPieces = FullStaticText.Split('|');
+                if (fullStaticPieces.Length > 1)
+                {
+                    shortTextToHardware = fullStaticPieces[0];
+                    longTextToHardware = fullStaticPieces[1];
+                }
+                else
+                {
+                    shortTextToHardware = FullStaticText;
+                    longTextToHardware = FullStaticText;
+                }
             }
-            string longText = "-";
-            if (Texts[0].Used)
-            {
-                longText = UseFullStaticText ? FullStaticText : Texts[1].CurrentValue;
-                if (longText.Length > LENGTH_LONG)
-                    longText.Substring(0, LENGTH_LONG);
-            }
-            DisplayableCompactText = $"{shortText} | {longText}";
-        }
-
-        private string shortTextToHardware = "";
-        private string longTextToHardware = "";
-
-        private void calculateTextFields()
-        {
-            shortTextToHardware = UseFullStaticText ? FullStaticText : Texts[0].CurrentValue;
             if (shortTextToHardware.Length > LENGTH_SHORT)
                 shortTextToHardware.Substring(0, LENGTH_SHORT);
-            longTextToHardware = UseFullStaticText ? FullStaticText : Texts[1].CurrentValue;
             if (longTextToHardware.Length > LENGTH_LONG)
                 longTextToHardware.Substring(0, LENGTH_LONG);
+            // Raw
             string _displayableRawText = "";
             if (Texts[0].Used)
                 _displayableRawText += $"Short: [{shortTextToHardware}]";
@@ -163,7 +156,14 @@ namespace OpenSC.Model.UMDs.BmdAtem
                 _displayableRawText += $"Long: [{longTextToHardware}]";
             }
             DisplayableRawText = _displayableRawText;
+            // Compact
+            string shortTextCompact = Texts[0].Used ? shortTextToHardware : "-";
+            string longTextCompact = Texts[1].Used ? longTextToHardware : "-";
+            DisplayableCompactText = $"{shortTextCompact} | {longTextCompact}";
         }
+
+        private string shortTextToHardware = "";
+        private string longTextToHardware = "";
 
         private void sendData()
         {
