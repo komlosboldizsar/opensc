@@ -73,8 +73,8 @@ namespace OpenSC.Model.UMDs.Tsl31
         #region Sending data to hardware
         protected override void updateTextsToHardware()
         {
-            calculateTextFields();
-            updateTotalToHardware();
+            sendData();
+            // everything is implemented in updateTexts()
         }
 
         protected override void updateTalliesToHardware()
@@ -85,7 +85,7 @@ namespace OpenSC.Model.UMDs.Tsl31
 
         protected override void updateTotalToHardware()
         {
-            calculateTextFields();
+            // texts fields are already calculated by updateTexts()
             calculateTallyFields();
             sendData();
         }
@@ -95,6 +95,18 @@ namespace OpenSC.Model.UMDs.Tsl31
 
         private const int TEXT_SINGLE_MAX_LENGTH = 16;
         private const int TEXT_DUAL_MAX_LENGTH = 8;
+
+        protected override void updateTexts()
+        {
+            string[] textsToDisplay = getTextsToDisplay();
+            DisplayableCompactText = string.Join(" | ", textsToDisplay);
+            string[] textsToDisplayAligned = new string[textsToDisplay.Length];
+            for (int i = 0; i < textsToDisplay.Length; i++)
+                textsToDisplayAligned[i] = alignText(textsToDisplay[i], Texts[1].Used ? TEXT_DUAL_MAX_LENGTH : TEXT_SINGLE_MAX_LENGTH, Texts[i].Alignment);
+            textBytesToHardware = Encoding.ASCII.GetBytes(string.Join("", textsToDisplayAligned));
+            DisplayableRawText = textToHardware;
+            sendData();
+        }
 
         private string[] getTextsToDisplay()
         {
@@ -125,19 +137,6 @@ namespace OpenSC.Model.UMDs.Tsl31
                 if (textsToDisplay[0].Length > TEXT_SINGLE_MAX_LENGTH)
                     textsToDisplay[0] = textsToDisplay[0].Substring(0, TEXT_SINGLE_MAX_LENGTH);
             return textsToDisplay;
-        }
-
-        protected override void calculateDisplayableCompactText()
-            => DisplayableCompactText = string.Join(" | ", getTextsToDisplay());
-
-        private void calculateTextFields()
-        {
-            string[] textsToDisplay = getTextsToDisplay();
-            string[] textsToDisplayAligned = new string[textsToDisplay.Length];
-            for (int i = 0; i < textsToDisplay.Length; i++)
-                textsToDisplayAligned[i] = alignText(textsToDisplay[i], Texts[1].Used ? TEXT_DUAL_MAX_LENGTH : TEXT_SINGLE_MAX_LENGTH, Texts[i].Alignment);
-            textBytesToHardware = Encoding.ASCII.GetBytes(string.Join("", textsToDisplayAligned));
-            DisplayableRawText = textToHardware;
         }
 
         private string alignText(string text, int maxLength, UmdTextAlignment alignment)
