@@ -55,13 +55,16 @@ namespace OpenSC.Model.UMDs.Tsl31
         #region Info
         public override UmdTextInfo[] TextInfo => new UmdTextInfo[]
         {
-           new("Text", false, true, true, UmdTextAlignment.Center)
+           new("Main/left", false, true, true, UmdTextAlignment.Center),
+           new("Right", true, false, true, UmdTextAlignment.Center)
         };
 
         public override UmdTallyInfo[] TallyInfo => new UmdTallyInfo[]
         {
-            new("Red", UmdTallyInfo.ColorSettingMode.LocalChangeable, Color.Red),
-            new("Green", UmdTallyInfo.ColorSettingMode.LocalChangeable, Color.Green)
+            new("Main/left red", UmdTallyInfo.ColorSettingMode.LocalChangeable, Color.Red),
+            new("Main/left green", UmdTallyInfo.ColorSettingMode.LocalChangeable, Color.Green),
+            new("Right red", UmdTallyInfo.ColorSettingMode.LocalChangeable, Color.Red),
+            new("Right green", UmdTallyInfo.ColorSettingMode.LocalChangeable, Color.Green)
         };
 
         public override bool AlignableFullStaticText => true;
@@ -90,31 +93,62 @@ namespace OpenSC.Model.UMDs.Tsl31
         private string textToHardware;
         protected byte[] textBytesToHardware;
 
-        private const int TEXT_MAX_LENGTH = 16;
+        private const int TEXT_SINGLE_MAX_LENGTH = 16;
+        private const int TEXT_DUAL_MAX_LENGTH = 8;
+
+        private string[] getTextsToDisplay()
+        {
+            bool dualMode = Texts[1].Used;
+            int arraySize = dualMode ? 2 : 1;
+            string[] textsToDisplay = new string[arraySize];
+            for (int i = 0; i < arraySize; i++)
+               textsToDisplay[i] = Texts[i].CurrentValue;
+            if (UseFullStaticText)
+            {
+                if (dualMode)
+                {
+                    string[] fullStaticPieces = FullStaticText.Split('|');
+                    if (fullStaticPieces.Length > 1)
+                        for (int i = 0; i < 2; i++)
+                            textsToDisplay[i] = fullStaticPieces[i];
+                }
+                else
+                {
+                    textsToDisplay[0] = FullStaticText;
+                }
+            }
+            if (dualMode)
+                for (int i = 0; i < 2; i++)
+                    if (textsToDisplay[i].Length > TEXT_DUAL_MAX_LENGTH)
+                        textsToDisplay[i] = textsToDisplay[i].Substring(0, TEXT_DUAL_MAX_LENGTH);
+            else
+                if (textsToDisplay[0].Length > TEXT_SINGLE_MAX_LENGTH)
+                    textsToDisplay[0] = textsToDisplay[0].Substring(0, TEXT_SINGLE_MAX_LENGTH);
+            return textsToDisplay;
+        }
 
         protected override void calculateDisplayableCompactText()
-        {
-            string _displayableCompactText = UseFullStaticText ? FullStaticText : Texts[0].CurrentValue;
-            if (_displayableCompactText.Length > TEXT_MAX_LENGTH)
-                _displayableCompactText = _displayableCompactText.Substring(0, TEXT_MAX_LENGTH);
-            DisplayableCompactText = _displayableCompactText;
-        }
+            => DisplayableCompactText = string.Join(" | ", getTextsToDisplay());
 
         private void calculateTextFields()
         {
-            string textToHardwareTemp = DisplayableCompactText;
-            if (textToHardwareTemp.Length > TEXT_MAX_LENGTH)
-                textToHardwareTemp = textToHardwareTemp.Substring(0, TEXT_MAX_LENGTH);
-            int textToHardwareTempLength = textToHardwareTemp.Length;
-            textToHardware = (UseFullStaticText ? AlignmentWithFullStaticText : Texts[0].Alignment) switch
-            {
-                UmdTextAlignment.Left => textToHardwareTemp.PadRight(TEXT_MAX_LENGTH),
-                UmdTextAlignment.Center => textToHardwareTemp.PadLeft((textToHardwareTempLength + TEXT_MAX_LENGTH) / 2).PadRight(TEXT_MAX_LENGTH),
-                UmdTextAlignment.Right => textToHardwareTemp.PadLeft(TEXT_MAX_LENGTH),
-                _ => textToHardwareTemp.PadRight(TEXT_MAX_LENGTH)
-            };
-            textBytesToHardware = Encoding.ASCII.GetBytes(textToHardware);
+            string[] textsToDisplay = getTextsToDisplay();
+            string[] textsToDisplayAligned = new string[textsToDisplay.Length];
+            for (int i = 0; i < textsToDisplay.Length; i++)
+                textsToDisplayAligned[i] = alignText(textsToDisplay[i], Texts[1].Used ? TEXT_DUAL_MAX_LENGTH : TEXT_SINGLE_MAX_LENGTH, Texts[i].Alignment);
+            textBytesToHardware = Encoding.ASCII.GetBytes(string.Join("", textsToDisplayAligned));
             DisplayableRawText = textToHardware;
+        }
+
+        private string alignText(string text, int maxLength, UmdTextAlignment alignment)
+        {
+            return alignment switch
+            {
+                UmdTextAlignment.Left => text.PadRight(maxLength),
+                UmdTextAlignment.Center => text.PadLeft((text.Length + maxLength) / 2).PadRight(maxLength),
+                UmdTextAlignment.Right => text.PadLeft(maxLength),
+                _ => text.PadRight(maxLength)
+            };
         }
 
         private byte tallyByteToHardware = 0x00;
