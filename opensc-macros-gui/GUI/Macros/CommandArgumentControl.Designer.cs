@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.table = new System.Windows.Forms.TableLayoutPanel();
-            this.argumentNameLabel = new GrowLabel();
-            this.argumentIndexLabel = new GrowLabel();
-            this.argumentDescriptionLabel = new GrowLabel();
+            this.argumentNameLabel = new OpenSC.GUI.GeneralComponents.GrowLabel();
+            this.argumentIndexLabel = new OpenSC.GUI.GeneralComponents.GrowLabel();
+            this.argumentDescriptionLabel = new OpenSC.GUI.GeneralComponents.GrowLabel();
             this.valueComboBox = new System.Windows.Forms.ComboBox();
             this.valueLabel = new System.Windows.Forms.Label();
             this.tableContainerPanel = new System.Windows.Forms.Panel();
