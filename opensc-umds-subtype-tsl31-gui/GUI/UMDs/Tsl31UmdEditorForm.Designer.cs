@@ -37,8 +37,10 @@
             this.portDropDown = new System.Windows.Forms.ComboBox();
             this.textLengthInfoLabel1 = new OpenSC.GUI.GeneralComponents.GrowLabel();
             this.textLengthInfoLabel2 = new OpenSC.GUI.GeneralComponents.GrowLabel();
+            this.tallyInfoLabel = new OpenSC.GUI.GeneralComponents.GrowLabel();
             this.mainTabControl.SuspendLayout();
             this.textsTabPage.SuspendLayout();
+            this.talliesTabPage.SuspendLayout();
             this.fullStaticTextTabPage.SuspendLayout();
             this.connectionTabPage.SuspendLayout();
             this.customElementsPanel.SuspendLayout();
@@ -55,7 +57,14 @@
             // textsTabPage
             // 
             this.textsTabPage.Controls.Add(this.textLengthInfoLabel1);
+            this.textsTabPage.Size = new System.Drawing.Size(772, 242);
             this.textsTabPage.Controls.SetChildIndex(this.textLengthInfoLabel1, 0);
+            // 
+            // talliesTabPage
+            // 
+            this.talliesTabPage.Controls.Add(this.tallyInfoLabel);
+            this.talliesTabPage.Size = new System.Drawing.Size(772, 242);
+            this.talliesTabPage.Controls.SetChildIndex(this.tallyInfoLabel, 0);
             // 
             // fullStaticTextTabPage
             // 
@@ -161,25 +170,32 @@
             // 
             // textLengthInfoLabel1
             // 
-            this.textLengthInfoLabel1.AutoSize = true;
             this.textLengthInfoLabel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.textLengthInfoLabel1.Location = new System.Drawing.Point(3, 165);
             this.textLengthInfoLabel1.Name = "textLengthInfoLabel1";
-            this.textLengthInfoLabel1.Size = new System.Drawing.Size(715, 60);
+            this.textLengthInfoLabel1.Size = new System.Drawing.Size(766, 60);
             this.textLengthInfoLabel1.TabIndex = 5;
             this.textLengthInfoLabel1.Text = resources.GetString("textLengthInfoLabel1.Text");
             this.textLengthInfoLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // textLengthInfoLabel2
             // 
-            this.textLengthInfoLabel2.AutoSize = true;
             this.textLengthInfoLabel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.textLengthInfoLabel2.Location = new System.Drawing.Point(3, 133);
             this.textLengthInfoLabel2.Name = "textLengthInfoLabel2";
-            this.textLengthInfoLabel2.Size = new System.Drawing.Size(715, 20);
+            this.textLengthInfoLabel2.Size = new System.Drawing.Size(766, 60);
             this.textLengthInfoLabel2.TabIndex = 3;
-            this.textLengthInfoLabel2.Text = "When a single display is using the address set on \"Connection\" page, maximum text" +
-    " length is 16 characters.";
+            this.textLengthInfoLabel2.Text = resources.GetString("textLengthInfoLabel2.Text");
+            // 
+            // tallyInfoLabel
+            // 
+            this.tallyInfoLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tallyInfoLabel.Location = new System.Drawing.Point(3, 75);
+            this.tallyInfoLabel.Name = "tallyInfoLabel";
+            this.tallyInfoLabel.Size = new System.Drawing.Size(766, 40);
+            this.tallyInfoLabel.TabIndex = 4;
+            this.tallyInfoLabel.Text = "Only the first two tallies are used for single displays.\r\nTallies 3&&4 are shown " +
+    "by the second (right) unit if the hardware is a dual display.";
             // 
             // Tsl31UmdEditorForm
             // 
@@ -193,6 +209,8 @@
             this.mainTabControl.ResumeLayout(false);
             this.textsTabPage.ResumeLayout(false);
             this.textsTabPage.PerformLayout();
+            this.talliesTabPage.ResumeLayout(false);
+            this.talliesTabPage.PerformLayout();
             this.fullStaticTextTabPage.ResumeLayout(false);
             this.fullStaticTextTabPage.PerformLayout();
             this.connectionTabPage.ResumeLayout(false);
@@ -219,6 +237,6 @@
         private System.Windows.Forms.ComboBox portDropDown;
         private OpenSC.GUI.GeneralComponents.GrowLabel textLengthInfoLabel1;
         private OpenSC.GUI.GeneralComponents.GrowLabel textLengthInfoLabel2;
-
+        private GeneralComponents.GrowLabel tallyInfoLabel;
     }
 }
