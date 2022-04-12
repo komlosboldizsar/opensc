@@ -67,7 +67,7 @@ namespace OpenSC.Model.UMDs.Tsl31
             new("Right green", UmdTallyInfo.ColorSettingMode.LocalChangeable, Color.Green)
         };
 
-        public override bool AlignableFullStaticText => true;
+        public override bool AlignableFullStaticText => false;
         #endregion
 
         #region Sending data to hardware
@@ -90,7 +90,6 @@ namespace OpenSC.Model.UMDs.Tsl31
             sendData();
         }
 
-        private string textToHardware;
         protected byte[] textBytesToHardware;
 
         private const int TEXT_SINGLE_MAX_LENGTH = 16;
@@ -98,37 +97,36 @@ namespace OpenSC.Model.UMDs.Tsl31
 
         protected override void updateTexts()
         {
-            string[] textsToDisplay = getTextsToDisplay();
-            DisplayableCompactText = string.Join(" | ", textsToDisplay);
-            string[] textsToDisplayAligned = new string[textsToDisplay.Length];
-            for (int i = 0; i < textsToDisplay.Length; i++)
-                textsToDisplayAligned[i] = alignText(textsToDisplay[i], Texts[1].Used ? TEXT_DUAL_MAX_LENGTH : TEXT_SINGLE_MAX_LENGTH, Texts[i].Alignment);
-            textBytesToHardware = Encoding.ASCII.GetBytes(string.Join("", textsToDisplayAligned));
-            DisplayableRawText = textToHardware;
+            if (UseFullStaticText)
+            {
+                string textToDisplay = FullStaticText;
+                if (textToDisplay.Length > TEXT_SINGLE_MAX_LENGTH)
+                    textToDisplay = textToDisplay.Substring(0, TEXT_SINGLE_MAX_LENGTH);
+                DisplayableCompactText = textToDisplay;
+                textBytesToHardware = Encoding.ASCII.GetBytes(textToDisplay);
+                DisplayableRawText = textToDisplay;
+            }
+            else
+            {
+                string[] textsToDisplay = getDynamicTextSources();
+                DisplayableCompactText = string.Join(" | ", textsToDisplay);
+                string[] textsToDisplayAligned = new string[textsToDisplay.Length];
+                for (int i = 0; i < textsToDisplay.Length; i++)
+                    textsToDisplayAligned[i] = alignText(textsToDisplay[i], Texts[1].Used ? TEXT_DUAL_MAX_LENGTH : TEXT_SINGLE_MAX_LENGTH, Texts[i].Alignment);
+                string textToHardware = string.Join("", textsToDisplayAligned);
+                textBytesToHardware = Encoding.ASCII.GetBytes(textToHardware);
+                DisplayableRawText = textToHardware;
+            }
             sendData();
         }
 
-        private string[] getTextsToDisplay()
+        private string[] getDynamicTextSources()
         {
             bool dualMode = Texts[1].Used;
             int arraySize = dualMode ? 2 : 1;
             string[] textsToDisplay = new string[arraySize];
             for (int i = 0; i < arraySize; i++)
                textsToDisplay[i] = Texts[i].CurrentValue;
-            if (UseFullStaticText)
-            {
-                if (dualMode)
-                {
-                    string[] fullStaticPieces = FullStaticText.Split('|');
-                    if (fullStaticPieces.Length > 1)
-                        for (int i = 0; i < 2; i++)
-                            textsToDisplay[i] = fullStaticPieces[i];
-                }
-                else
-                {
-                    textsToDisplay[0] = FullStaticText;
-                }
-            }
             if (dualMode)
                 for (int i = 0; i < 2; i++)
                     if (textsToDisplay[i].Length > TEXT_DUAL_MAX_LENGTH)
