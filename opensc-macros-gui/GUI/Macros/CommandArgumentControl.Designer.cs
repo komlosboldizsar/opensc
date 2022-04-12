@@ -159,10 +159,10 @@
         }
 
         #endregion
-        private GrowLabel argumentIndexLabel;
+        private OpenSC.GUI.GeneralComponents.GrowLabel argumentIndexLabel;
         private System.Windows.Forms.TableLayoutPanel table;
-        private GrowLabel argumentNameLabel;
-        private GrowLabel argumentDescriptionLabel;
+        private OpenSC.GUI.GeneralComponents.GrowLabel argumentNameLabel;
+        private OpenSC.GUI.GeneralComponents.GrowLabel argumentDescriptionLabel;
         private System.Windows.Forms.ComboBox valueComboBox;
         private System.Windows.Forms.Label valueLabel;
         private System.Windows.Forms.Panel tableContainerPanel;
