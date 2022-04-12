@@ -349,7 +349,6 @@
             this.talliesSourceAndColorTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.talliesSourceAndColorTable.Size = new System.Drawing.Size(665, 36);
             this.talliesSourceAndColorTable.TabIndex = 0;
-            this.talliesSourceAndColorTable.Paint += new System.Windows.Forms.PaintEventHandler(this.talliesSourceAndColorTable_Paint);
             // 
             // tallyNameExampleLabel
             // 
