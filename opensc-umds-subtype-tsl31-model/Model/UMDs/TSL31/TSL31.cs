@@ -52,6 +52,28 @@ namespace OpenSC.Model.UMDs.Tsl31
         }
         #endregion
 
+        #region Properties: Tally1Overrides2, Tally3Overrides4
+        public event PropertyChangedTwoValuesDelegate<Tsl31, bool> Tally1Overrides2Changed;
+        public event PropertyChangedTwoValuesDelegate<Tsl31, bool> Tally3Overrides4Changed;
+
+        [PersistAs("tally1overrides2")]
+        private bool tally1overrides2 = false;
+        [PersistAs("tally3overrides4")]
+        private bool tally3overrides4 = false;
+
+        public bool Tally1Overrides2
+        {
+            get => tally1overrides2;
+            set => this.setProperty(ref tally1overrides2, value, Tally1Overrides2Changed, null, (_, _) => updateTalliesToHardware());
+        }
+
+        public bool Tally3Overrides4
+        {
+            get => tally3overrides4;
+            set => this.setProperty(ref tally3overrides4, value, Tally3Overrides4Changed, null, (_, _) => updateTalliesToHardware());
+        }
+        #endregion
+
         #region Info
         public override UmdTextInfo[] TextInfo => new UmdTextInfo[]
         {
@@ -156,6 +178,10 @@ namespace OpenSC.Model.UMDs.Tsl31
             for (int i = 0, t = 1; i < TallyInfo.Length; i++, t *= 2)
                 if (Tallies[i].CurrentState)
                     tallyByteToHardware += (byte)t;
+            if (Tallies[0].CurrentState && tally1overrides2)
+                tallyByteToHardware &= (0xFF ^ 0x02);
+            if (Tallies[2].CurrentState && tally3overrides4)
+                tallyByteToHardware &= (0xFF ^ 0x08);
         }
 
         protected virtual byte[] getBytesToSend()
