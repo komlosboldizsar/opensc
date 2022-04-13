@@ -307,7 +307,7 @@ namespace OpenSC.GUI.UMDs
         private void setTallyColorButtonColor(Button button, Color color)
         {
             button.BackColor = color;
-            button.ForeColor = (color.GetBrightness() > 0.5f) ? Color.White : Color.Black;
+            button.ForeColor = (color.GetBrightness() > 0.5f) ? Color.Black : Color.White;
         }
         #endregion
 
