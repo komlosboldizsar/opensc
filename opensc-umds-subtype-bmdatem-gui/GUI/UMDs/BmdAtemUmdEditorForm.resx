@@ -57,4 +57,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="textsInfoLabel2.Text" xml:space="preserve">
+    <value>When displaying full static text, use the "|" character to separate short and long texts, example: &gt;&gt;SHRT|Long text&lt;&lt;. If one of them should not be updated, use the separator, but leave the field empty, examples: &gt;&gt;|Long text&lt;&lt;, &gt;&gt;SHRT|&lt;&lt;. Any length is accepted, but only the first 4 characters will be shown of the short text and the long one will be trimmed to 16 characters as well.
+If no separator found, both the short and the long text will be updated with the value of full static text - short with the first 4, long with the first 16 characters of it.</value>
+  </data>
 </root>

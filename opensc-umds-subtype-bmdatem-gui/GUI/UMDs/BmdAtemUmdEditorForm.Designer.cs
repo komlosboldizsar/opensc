@@ -28,13 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BmdAtemUmdEditorForm));
             this.mixerInputGroupBox = new System.Windows.Forms.GroupBox();
             this.mixerInputTable = new System.Windows.Forms.TableLayoutPanel();
             this.mixerLabel = new System.Windows.Forms.Label();
             this.inputLabel = new System.Windows.Forms.Label();
             this.mixerDropDown = new System.Windows.Forms.ComboBox();
             this.inputDropDown = new System.Windows.Forms.ComboBox();
+            this.textsInfoLabel2 = new OpenSC.GUI.GeneralComponents.GrowLabel();
+            this.textsInfoLabel1 = new OpenSC.GUI.GeneralComponents.GrowLabel();
             this.mainTabControl.SuspendLayout();
+            this.textsTabPage.SuspendLayout();
+            this.fullStaticTextTabPage.SuspendLayout();
             this.connectionTabPage.SuspendLayout();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
@@ -49,11 +54,19 @@
             // 
             // textsTabPage
             // 
+            this.textsTabPage.Controls.Add(this.textsInfoLabel1);
             this.textsTabPage.Size = new System.Drawing.Size(772, 260);
+            this.textsTabPage.Controls.SetChildIndex(this.textsInfoLabel1, 0);
             // 
             // talliesTabPage
             // 
             this.talliesTabPage.Size = new System.Drawing.Size(772, 260);
+            // 
+            // fullStaticTextTabPage
+            // 
+            this.fullStaticTextTabPage.Controls.Add(this.textsInfoLabel2);
+            this.fullStaticTextTabPage.Size = new System.Drawing.Size(772, 260);
+            this.fullStaticTextTabPage.Controls.SetChildIndex(this.textsInfoLabel2, 0);
             // 
             // connectionTabPage
             // 
@@ -145,6 +158,26 @@
             this.inputDropDown.Size = new System.Drawing.Size(690, 28);
             this.inputDropDown.TabIndex = 3;
             // 
+            // textsInfoLabel2
+            // 
+            this.textsInfoLabel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textsInfoLabel2.Location = new System.Drawing.Point(3, 133);
+            this.textsInfoLabel2.Name = "textsInfoLabel2";
+            this.textsInfoLabel2.Size = new System.Drawing.Size(766, 120);
+            this.textsInfoLabel2.TabIndex = 3;
+            this.textsInfoLabel2.Text = resources.GetString("textsInfoLabel2.Text");
+            // 
+            // textsInfoLabel1
+            // 
+            this.textsInfoLabel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textsInfoLabel1.Location = new System.Drawing.Point(3, 165);
+            this.textsInfoLabel1.Name = "textsInfoLabel1";
+            this.textsInfoLabel1.Size = new System.Drawing.Size(766, 40);
+            this.textsInfoLabel1.TabIndex = 5;
+            this.textsInfoLabel1.Text = "As short text only 4 characters are displayable, as long text only 16. The texts " +
+    "sources can have any length, they will be automatically trimmed when sending to " +
+    "hardware.";
+            // 
             // BmdAtemUmdEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -155,6 +188,10 @@
             this.MinimumSize = new System.Drawing.Size(500, 661);
             this.Name = "BmdAtemUmdEditorForm";
             this.mainTabControl.ResumeLayout(false);
+            this.textsTabPage.ResumeLayout(false);
+            this.textsTabPage.PerformLayout();
+            this.fullStaticTextTabPage.ResumeLayout(false);
+            this.fullStaticTextTabPage.PerformLayout();
             this.connectionTabPage.ResumeLayout(false);
             this.connectionTabPage.PerformLayout();
             this.customElementsPanel.ResumeLayout(false);
@@ -176,5 +213,7 @@
         private System.Windows.Forms.Label inputLabel;
         private System.Windows.Forms.ComboBox mixerDropDown;
         private System.Windows.Forms.ComboBox inputDropDown;
+        private GeneralComponents.GrowLabel textsInfoLabel1;
+        private GeneralComponents.GrowLabel textsInfoLabel2;
     }
 }
