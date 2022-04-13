@@ -117,7 +117,7 @@ namespace OpenSC.GUI.UMDs
                 Label thisStatusMonitorTallyLabel = statusMonitorExampleTallyLabel;
                 if (i > 0)
                 {
-                    thisStatusMonitorTallyLabel = statusMonitorExampleTallyLabel.CloneT();
+                    thisStatusMonitorTallyLabel = statusMonitorExampleTallyLabel.CloneT(new string[] { nameof(Control.Visible) });
                     statusMonitorTalliesPanel.Controls.Add(thisStatusMonitorTallyLabel);
                 }
                 statusMonitorTallyLabels[i] = thisStatusMonitorTallyLabel;
