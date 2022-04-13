@@ -35,6 +35,11 @@ namespace OpenSC.GUI
             get => statusLabel.Text;
             set
             {
+                if (InvokeRequired)
+                {
+                    Invoke(new Action(() => Status = value));
+                    return;
+                }
                 statusLabel.Text = value;
                 Application.DoEvents();
             }
