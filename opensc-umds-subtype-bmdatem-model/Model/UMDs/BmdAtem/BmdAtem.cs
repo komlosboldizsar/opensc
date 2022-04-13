@@ -167,9 +167,9 @@ namespace OpenSC.Model.UMDs.BmdAtem
 
         private void sendData()
         {
-            if (Texts[0].Used)
+            if ((!UseFullStaticText && Texts[0].Used) || (UseFullStaticText && shortTextToHardware.Length > 0))
                 inputsSource?.UpdateShortName(shortTextToHardware);
-            if (Texts[1].Used)
+            if ((!UseFullStaticText && Texts[1].Used) || (UseFullStaticText && longTextToHardware.Length > 0))
                 inputsSource?.UpdateLongName(longTextToHardware);
         }
         #endregion
