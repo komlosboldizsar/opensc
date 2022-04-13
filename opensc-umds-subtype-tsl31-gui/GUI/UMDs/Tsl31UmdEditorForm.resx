@@ -57,4 +57,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="textLengthInfoLabel1.Text" xml:space="preserve">
+    <value>When a single display is using the address set on "Connection" page, maximum text length is 16 characters.
+When a dual display is connected, maximum length for both texts is 8 characters.
+If texts are longer, they will be trimmed, the first 8/16 characters will only be displayed. </value>
+  </data>
+  <data name="textLengthInfoLabel2.Text" xml:space="preserve">
+    <value>When a single display is using the address set on "Connection" page, maximum text length is 16 characters.
+When a dual display is connected, the first 8 characters will be shown on the first unit and characters 9-16 on the second one.</value>
+  </data>
 </root>
