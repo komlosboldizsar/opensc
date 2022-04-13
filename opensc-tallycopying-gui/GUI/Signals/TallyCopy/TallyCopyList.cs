@@ -41,7 +41,7 @@ namespace OpenSC.GUI.Signals.TallyCopying
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("From signal");
             builder.Width(150);
-            builder.UpdaterMethod((tallyCopy, cell) => { cell.Value = tallyCopy.FromSignal.SignalLabel; });
+            builder.UpdaterMethod((tallyCopy, cell) => { cell.Value = tallyCopy.FromSignal?.SignalLabel ?? ""; });
             builder.AddMultilevelChangeEvent(nameof(TallyCopy.FromSignal), nameof(ISignalSourceRegistered.SignalLabel));
 
             // Column: from color
@@ -60,7 +60,7 @@ namespace OpenSC.GUI.Signals.TallyCopying
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("To signal");
             builder.Width(150);
-            builder.UpdaterMethod((tallyCopy, cell) => { cell.Value = tallyCopy.ToSignal.SignalLabel; });
+            builder.UpdaterMethod((tallyCopy, cell) => { cell.Value = tallyCopy.ToSignal?.SignalLabel ?? ""; });
             builder.AddMultilevelChangeEvent(nameof(TallyCopy.ToSignal), nameof(ISignalSourceRegistered.SignalLabel));
 
             // Column: to color
