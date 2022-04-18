@@ -83,23 +83,19 @@ namespace OpenSC.Model.UMDs.McCurdy
         public virtual int TotalWidth => 160;
         #endregion
 
-        #region Sending data to hardware
-        protected override void updateTextsToHardware() => updateTotalToHardware();
-        protected override void updateTalliesToHardware() => sendData();
-
-        protected override void updateTotalToHardware()
+        #region Calculating and sending data to hardware
+        protected override void calculateTextFields()
         {
-            calculateTextFields();
-            sendData();
+            // TODO
         }
 
         protected string textToHardware = "";
 
-        private void calculateTextFields()
-        {
-            //textToHardware = calculateTextToSend();
-            //DisplayableRawText = textToHardware.Replace();
-        }
+        protected override void calculateTallyFields() { }
+
+        protected override void sendTextsToHardware() => sendData();
+        protected override void sendTalliesToHardware() => sendData();
+        protected override void sendEverythingToHardware() => sendData();
 
         private void sendData()
         {

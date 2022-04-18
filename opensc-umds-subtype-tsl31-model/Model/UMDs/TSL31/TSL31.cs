@@ -64,13 +64,13 @@ namespace OpenSC.Model.UMDs.Tsl31
         public bool Tally1Overrides2
         {
             get => tally1overrides2;
-            set => this.setProperty(ref tally1overrides2, value, Tally1Overrides2Changed, null, (_, _) => updateTalliesToHardware());
+            set => this.setProperty(ref tally1overrides2, value, Tally1Overrides2Changed, null, (_, _) => UpdateTallies());
         }
 
         public bool Tally3Overrides4
         {
             get => tally3overrides4;
-            set => this.setProperty(ref tally3overrides4, value, Tally3Overrides4Changed, null, (_, _) => updateTalliesToHardware());
+            set => this.setProperty(ref tally3overrides4, value, Tally3Overrides4Changed, null, (_, _) => UpdateTallies());
         }
         #endregion
 
@@ -93,31 +93,10 @@ namespace OpenSC.Model.UMDs.Tsl31
         #endregion
 
         #region Sending data to hardware
-        protected override void updateTextsToHardware()
-        {
-            sendData();
-            // everything is implemented in updateTexts()
-        }
-
-        protected override void updateTalliesToHardware()
-        {
-            calculateTallyFields();
-            sendData();
-        }
-
-        protected override void updateTotalToHardware()
-        {
-            // texts fields are already calculated by updateTexts()
-            calculateTallyFields();
-            sendData();
-        }
-
-        protected byte[] textBytesToHardware;
-
         private const int TEXT_SINGLE_MAX_LENGTH = 16;
         private const int TEXT_DUAL_MAX_LENGTH = 8;
 
-        protected override void updateTexts()
+        protected override void calculateTextFields()
         {
             if (UseFullStaticText)
             {
@@ -142,6 +121,8 @@ namespace OpenSC.Model.UMDs.Tsl31
             sendData();
         }
 
+        protected byte[] textBytesToHardware;
+
         private string[] getDynamicTextSources()
         {
             bool dualMode = Texts[1].Used;
@@ -161,6 +142,8 @@ namespace OpenSC.Model.UMDs.Tsl31
 
         private string alignText(string text, int maxLength, UmdTextAlignment alignment)
         {
+            if (text == null)
+                return "".PadRight(maxLength);
             return alignment switch
             {
                 UmdTextAlignment.Left => text.PadRight(maxLength),
@@ -172,7 +155,7 @@ namespace OpenSC.Model.UMDs.Tsl31
 
         private byte tallyByteToHardware = 0x00;
 
-        private void calculateTallyFields()
+        protected override void calculateTallyFields()
         {
             tallyByteToHardware = 0;
             for (int i = 0, t = 1; i < TallyInfo.Length; i++, t *= 2)
@@ -184,14 +167,9 @@ namespace OpenSC.Model.UMDs.Tsl31
                 tallyByteToHardware &= (0xFF ^ 0x08);
         }
 
-        protected virtual byte[] getBytesToSend()
-        {
-            byte[] bytes = new byte[18];
-            bytes[0] = (byte)(Address + 0x80);
-            bytes[1] = tallyByteToHardware;
-            textBytesToHardware.CopyTo(bytes, 2);
-            return bytes;
-        }
+        protected override void sendTextsToHardware() => sendData();
+        protected override void sendTalliesToHardware() => sendData();
+        protected override void sendEverythingToHardware() => sendData();
 
         private void sendData()
         {
@@ -199,6 +177,15 @@ namespace OpenSC.Model.UMDs.Tsl31
                 return;
             DateTime packetValidUntil = DateTime.Now + TimeSpan.FromSeconds(5);
             port.SendData(getBytesToSend(), packetValidUntil);
+        }
+
+        protected virtual byte[] getBytesToSend()
+        {
+            byte[] bytes = new byte[18];
+            bytes[0] = (byte)(Address + 0x80);
+            bytes[1] = tallyByteToHardware;
+            textBytesToHardware.CopyTo(bytes, 2);
+            return bytes;
         }
         #endregion
 

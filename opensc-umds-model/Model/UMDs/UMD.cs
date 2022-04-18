@@ -41,7 +41,7 @@ namespace OpenSC.Model.UMDs
         public override void TotallyRestored()
         {
             base.TotallyRestored();
-            updateTotalToHardware();
+            UpdateEverything();
         }
 
         public override void Removed()
@@ -94,7 +94,7 @@ namespace OpenSC.Model.UMDs
             set => this.setProperty(ref fullStaticText, value, FullStaticTextChanged, null, (_, _) =>
             {
                 if (useFullStaticText)
-                    updateTextsToHardware();
+                    UpdateTexts();
             });
         }
         #endregion
@@ -108,7 +108,7 @@ namespace OpenSC.Model.UMDs
         public bool UseFullStaticText
         {
             get => useFullStaticText;
-            set => this.setProperty(ref useFullStaticText, value, UseFullStaticTextChanged, null, (_, _) => updateTextsToHardware());
+            set => this.setProperty(ref useFullStaticText, value, UseFullStaticTextChanged, null, (_, _) => UpdateTexts());
         }
         #endregion
 
@@ -128,7 +128,7 @@ namespace OpenSC.Model.UMDs
                 this.setProperty(ref alignmentWithFullStaticText, value, AlignmentWithFullStaticTextChanged, null, (_, _) =>
                 {
                     if (useFullStaticText)
-                        updateTextsToHardware();
+                        UpdateTexts();
                 });
             }
         }
@@ -188,17 +188,17 @@ namespace OpenSC.Model.UMDs
         private void notifyTextChanged(UmdText text)
         {
             if (text.Used)
-                updateTexts();
+                UpdateTexts();
         }
 
-        protected virtual void updateTexts()
+        public void UpdateTexts()
         {
-            if (useFullStaticText)
-                DisplayableCompactText = fullStaticText;
-            else
-                DisplayableCompactText = string.Join(" | ", Texts.Where(t => t.Used).Select(t => t.CurrentValue));
-            updateTextsToHardware();
+            calculateTextFields();
+            sendTextsToHardware();
         }
+
+        protected abstract void calculateTextFields();
+        protected abstract void sendTextsToHardware();
         #endregion
 
         #region Tallies
@@ -236,13 +236,27 @@ namespace OpenSC.Model.UMDs
                     Tallies.Add(new(this, i, TallyInfo[i]));
         }
 
-        internal void NotifyTallyColorChanged(UmdTally tally) => updateTalliesToHardware();
-        internal void NotifyTallyCurrentStateChanged(UmdTally tally) => updateTalliesToHardware();
+        internal void NotifyTallyColorChanged(UmdTally tally) => UpdateTallies();
+        internal void NotifyTallyCurrentStateChanged(UmdTally tally) => UpdateTallies();
+
+        public void UpdateTallies()
+        {
+            calculateTallyFields();
+            sendTalliesToHardware();
+        }
+
+        protected abstract void calculateTallyFields();
+        protected abstract void sendTalliesToHardware();
         #endregion
 
-        protected abstract void updateTextsToHardware();
-        protected abstract void updateTalliesToHardware();
-        protected abstract void updateTotalToHardware();
+        public void UpdateEverything()
+        {
+            calculateTextFields();
+            calculateTextFields();
+            sendEverythingToHardware();
+        }
+
+        protected abstract void sendEverythingToHardware();
 
     }
 
