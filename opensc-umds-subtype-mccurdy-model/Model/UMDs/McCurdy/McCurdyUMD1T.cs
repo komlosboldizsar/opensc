@@ -16,19 +16,18 @@ namespace OpenSC.Model.UMDs.McCurdy
         #region Info
         public override UmdTallyInfo[] TallyInfo => new UmdTallyInfo[]
         {
-            new("Tally", UmdTallyInfo.ColorSettingMode.Fix, Color.Red)
+            new("L+R red", UmdTallyInfo.ColorSettingMode.Fix, Color.Red)
         };
-        public override int TotalWidth => 150;
+        public override int TotalColumnWidth => 150;
+        #endregion
+
+        #region Calculating and sending data to hardware
+        protected override void calculateTallyFields() => tallyToHardware = Tallies[0].CurrentState ? "#" : "! ";
+        protected string tallyToHardware = "";
         #endregion
 
         #region Sending data to hardware
-        protected override string getCommandTextToSend()
-        {
-            string replaced = textToHardware.Replace('1', (char)0x7E);
-            replaced = replaced.Replace("%", "%%");
-            replaced = string.Format("{0}{1}", (Tallies[0].CurrentState ? "#" : "! "), replaced);
-            return string.Format("%{0}D{1}%Z", Address, replaced);
-        }
+        protected override string getCommandTextToSend() => string.Format("%{0}D{1}{2}%Z", Address, tallyToHardware, textToHardware);
         #endregion
 
     }

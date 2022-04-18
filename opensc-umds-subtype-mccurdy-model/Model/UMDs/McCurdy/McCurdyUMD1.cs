@@ -16,6 +16,13 @@ namespace OpenSC.Model.UMDs.McCurdy
     public class McCurdyUMD1 : Umd
     {
 
+        #region Instantiation, restoration, removation
+        public McCurdyUMD1()
+        {
+            columnWidths[0] = TotalColumnWidth;
+        }
+        #endregion
+
         #region Property: Port
         public event PropertyChangedTwoValuesDelegate<McCurdyUMD1, SerialPort> PortChanged;
 
@@ -55,15 +62,15 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         #region Property: ColumnWidths
         [PersistAs("column_widths")]
-        private int[] columnWidths = new int[] { 40, 40 };
+        private int[] columnWidths = new int[] { 0, 0, 0 };
 
         public int[] ColumnWidths
         {
-            get { return columnWidths; }
+            get => columnWidths;
             set
             {
                 columnWidths = value;
-                //updateCurrentText();
+                UpdateTexts();
             }
         }
         #endregion
@@ -80,13 +87,164 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         public override bool AlignableFullStaticText => true;
 
-        public virtual int TotalWidth => 160;
+        public virtual int TotalColumnWidth => 160;
         #endregion
 
         #region Calculating and sending data to hardware
         protected override void calculateTextFields()
         {
-            // TODO
+            List<TextPiece> rawTextPieces = new();
+            List<string> compactTextPieces = new();
+            // Align texts
+            if (UseFullStaticText)
+            {
+                alignTextForRaw(FullStaticText, AlignmentWithFullStaticText, TotalColumnWidth, rawTextPieces);
+                compactTextPieces.Add(FullStaticText);
+            }
+            else
+            {
+                for (int i = 0; i < TextInfo.Length; i++)
+                {
+                    if (Texts[i].Used)
+                    {
+                        alignTextForRaw(Texts[i].CurrentValue, Texts[i].Alignment, columnWidths[i], rawTextPieces);
+                        compactTextPieces.Add(Texts[i].CurrentValue);
+                    }
+                    else
+                    {
+                        rawTextPieces.Add(new(columnWidths[i]));
+                    }
+                }
+            }
+            // Join spaces
+            List<TextPiece> rawTextPiecesSpacesJoined = new();
+            int sumSpacesWidth = 0;
+            foreach (TextPiece piece in rawTextPieces)
+            {
+                if (piece.text == null)
+                {
+                    sumSpacesWidth += piece.spacesWidth;
+                }
+                else
+                {
+                    if (sumSpacesWidth > 0)
+                    {
+                        rawTextPiecesSpacesJoined.Add(new(sumSpacesWidth));
+                        sumSpacesWidth = 0;
+                    }
+                    rawTextPiecesSpacesJoined.Add(piece);
+                }
+            }
+            if (sumSpacesWidth > 0)
+                rawTextPiecesSpacesJoined.Add(new(sumSpacesWidth));
+            // Play with spaces...
+            int spareSpaces = 0;
+            StringBuilder joinedTextBuilder = new();
+            foreach (TextPiece piece in rawTextPiecesSpacesJoined)
+            {
+                if (piece.text == null)
+                {
+                    int spacesFloorDiff = piece.spacesWidth % SPACE_WIDTH;
+                    if (spacesFloorDiff != 0) {
+                        int spacesCeilDiff = SPACE_WIDTH - spacesFloorDiff;
+                        if (spacesCeilDiff <= spareSpaces)
+                        {
+                            spareSpaces -= spacesCeilDiff;
+                            piece.spacesWidth += spacesCeilDiff;
+                        }
+                        else
+                        {
+                            spareSpaces += spacesFloorDiff;
+                            piece.spacesWidth -= spacesFloorDiff;
+                        }
+                    }
+                    joinedTextBuilder.Append("".PadRight(piece.spacesWidth / SPACE_WIDTH));
+                }
+                else
+                {
+                    joinedTextBuilder.Append(piece.text);
+                }
+            }
+            // Store
+            string builtText = joinedTextBuilder.ToString();
+            textToHardware = builtText.Replace('1', (char)0x7E).Replace("%", "%%");
+            DisplayableRawText = builtText;
+            DisplayableCompactText = string.Join(" | ", compactTextPieces);
+        }
+
+        private void alignTextForRaw(string text, UmdTextAlignment alignment, int columnWidth, List<TextPiece> rawPieces)
+        {
+            string trimmedText = trimTextToFit(text, columnWidth, out int trimmedWidth);
+            int leftoverWidth = columnWidth - trimmedWidth;
+            switch (alignment)
+            {
+                case UmdTextAlignment.Left:
+                    rawPieces.Add(new(trimmedText, trimmedWidth));
+                    rawPieces.Add(new(leftoverWidth));
+                    break;
+                case UmdTextAlignment.Center:
+                    int leftSpacesWidth = leftoverWidth / 2;
+                    rawPieces.Add(new(leftSpacesWidth));
+                    rawPieces.Add(new(trimmedText, trimmedWidth));
+                    rawPieces.Add(new(leftoverWidth - leftSpacesWidth));
+                    break;
+                case UmdTextAlignment.Right:
+                    rawPieces.Add(new(leftoverWidth));
+                    rawPieces.Add(new(trimmedText, trimmedWidth));
+                    break;
+            }
+        }
+
+        private class TextPiece
+        {
+
+            public string text;
+            public int textWidth;
+            public int spacesWidth;
+
+            public TextPiece(string text, int textWidth)
+            {
+                this.text = text;
+                this.textWidth = textWidth;
+            }
+
+            public TextPiece(int spacesWidth)
+            {
+                this.spacesWidth = spacesWidth;
+            }
+
+        }
+
+        private static readonly int[] CHAR_WIDTHS = new int[] {
+            4, 2, 4, 6, 6, 6, 6, 3,
+            4, 4, 6, 6, 3, 4, 3, 6,
+            6, 6, 6, 6, 6, 6, 6, 6, // "1" will be replaced with 0x7F in calculateTextFields(), so calculate with 6 columns width
+            6, 6, 3, 3, 5, 6, 5, 6,
+            6, 6, 6, 6, 6, 6, 6, 6,
+            6, 4, 6, 6, 6, 6, 6, 6,
+            6, 6, 6, 6, 6, 6, 6, 6,
+            6, 6, 6, 4, 6, 4, 6, 6,
+            3, 6, 6, 5, 6, 6, 5, 6,
+            6, 4, 5, 5, 4, 6, 6, 6,
+            6, 6, 5, 6, 5, 6, 6, 6,
+            6, 6, 6, 6, 2, 6, 6, 6
+        };
+        private const int CHAR_WIDTHS_START = 0x20;
+
+        private static readonly int SPACE_WIDTH = CHAR_WIDTHS[' ' - CHAR_WIDTHS_START];
+
+        private string trimTextToFit(string original, int maxWidth, out int newWidth)
+        {
+            int trimToChr = 0;
+            newWidth = 0;
+            for (; trimToChr < original.Length; trimToChr++)
+            {
+                char chr = original[trimToChr];
+                newWidth += CHAR_WIDTHS[chr - CHAR_WIDTHS_START];
+                if (newWidth > maxWidth)
+                    break;
+            }
+            return original.Substring(0, trimToChr);
         }
 
         protected string textToHardware = "";
@@ -106,48 +264,7 @@ namespace OpenSC.Model.UMDs.McCurdy
             port.SendData(bytesToSend, packetValidUntil);
         }
 
-        protected virtual string getCommandTextToSend()
-        {
-            string replaced = textToHardware.Replace('1', (char)0x7E);
-            replaced = replaced.Replace("%", "%%");
-            return string.Format("%{0}D{1}%Z", address, replaced);
-        }
-        #endregion
-
-        #region Alignment, text calculation
-        private static readonly int[] CHAR_WIDTHS = new int[] {
-            4, 1, 3, 5, 5, 5, 5, 2, 3,
-            3, 5, 5, 2, 3, 2, 5, 5, 5,
-            5, 5, 5, 5, 5, 5, 5, 5, 2,
-            2, 4, 5, 4, 5, 5, 5, 5, 5,
-            5, 5, 5, 5, 5, 3, 5, 5, 5,
-            5, 5, 5, 5, 5, 5, 5, 5, 5,
-            5, 5, 5, 5, 5, 3, 5, 3, 5,
-            5, 2, 5, 5, 4, 5, 5, 4, 5,
-            5, 3, 4, 4, 3, 5, 5, 5, 5,
-            5, 4, 5, 4, 5, 5, 5, 5, 5,
-            5, 5, 1, 5
-        };
-        private const int CHAR_WIDTHS_START = 32;
-        private const int CHAR_SEPARATOR_WIDTH = 1;
-
-        private int getWidthOfText(string text)
-        {
-            int width = 0;
-            for (int i = 0; i < text.Length; i++)
-            {
-                char chr = text[i];
-                width += CHAR_WIDTHS[chr - CHAR_WIDTHS_START];
-                if (chr != ' ')
-                    width += CHAR_SEPARATOR_WIDTH;
-            }
-            return width;
-        }
-
-        private static readonly int SPACE_WIDTH = CHAR_WIDTHS[' ' - CHAR_WIDTHS_START];
-        private const char SEPARATOR_CHAR = '|';
-        private static readonly int SEPARATOR_WIDTH = CHAR_WIDTHS[SEPARATOR_CHAR - CHAR_WIDTHS_START] + 2 * CHAR_SEPARATOR_WIDTH + 2 * SPACE_WIDTH;
-
+        protected virtual string getCommandTextToSend() => string.Format("%{0}D{1}%Z", address, textToHardware);
         #endregion
 
     }
