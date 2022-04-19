@@ -363,10 +363,7 @@ namespace OpenSC.GUI.UMDs
                     (Button)talliesSourceAndColorTable.GetControlFromPosition(2, i));
                 tallyControls[i] = thisTallyControls;
             }
-            talliesTabInitialized();
         }
-
-        protected virtual void talliesTabInitialized() { }
         #endregion
 
         #region TabPage: Full static text
