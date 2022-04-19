@@ -10,12 +10,12 @@ namespace OpenSC.Model.UMDs
     public class UmdTallyXmlSerializer : IValueXmlSerializer
     {
 
-        public Type Type => typeof(UmdTally);
+        public virtual Type Type => typeof(UmdTally);
 
         private const string TAG_NAME = "tally";
         private const string ATTRIBUTE_COLOR = "color";
 
-        public object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
+        public virtual object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
         {
             Umd parentUmd = (Umd)parentItem;
             UmdTallyInfo thisTallyInfo = parentUmd.TallyInfo[(int)indicesOrKeys[0]];
@@ -32,14 +32,13 @@ namespace OpenSC.Model.UMDs
                 }
                 catch { }
             }
-            return new UmdTally(parentUmd, (int)indicesOrKeys[0], thisTallyInfo)
-            {
-                _tfk_name_source = sourceGlobalId,
-                Color = colorAttributeValueConverted
-            };
+            UmdTally tally = parentUmd.CreateTally(parentUmd, (int)indicesOrKeys[0], thisTallyInfo);
+            tally._tfk_name_source = sourceGlobalId;
+            tally.Color = colorAttributeValueConverted;
+            return tally;
         }
 
-        public XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
+        public virtual XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
         {
             Umd parentUmd = (Umd)parentItem;
             UmdTallyInfo thisTallyInfo = parentUmd.TallyInfo[(int)indicesOrKeys[0]];

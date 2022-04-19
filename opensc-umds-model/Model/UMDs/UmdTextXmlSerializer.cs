@@ -10,7 +10,7 @@ namespace OpenSC.Model.UMDs
     public class UmdTextXmlSerializer : IValueXmlSerializer
     {
 
-        public Type Type => typeof(UmdText);
+        public virtual Type Type => typeof(UmdText);
 
         private const string TAG_NAME = "text";
         private const string ATTRIBUTE_STATICVALUE = "staticvalue";
@@ -18,7 +18,7 @@ namespace OpenSC.Model.UMDs
         private const string ATTRIBUTE_USED = "used";
         private const string ATTRIBUTE_ALIGNMENT = "alignment";
 
-        public object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
+        public virtual object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
         {
             Umd parentUmd = (Umd)parentItem;
             UmdTextInfo thisTextInfo = parentUmd.TextInfo[(int)indicesOrKeys[0]];
@@ -35,17 +35,16 @@ namespace OpenSC.Model.UMDs
             string alignmentAttributeValue = serializedItem.Attributes[ATTRIBUTE_ALIGNMENT]?.Value;
             if (!Enum.TryParse(alignmentAttributeValue, out UmdTextAlignment alignmentAttributeValueConverted))
                 alignmentAttributeValueConverted = thisTextInfo.DefaultAlignment;
-            return new UmdText(parentUmd, (int)indicesOrKeys[0], thisTextInfo)
-            {
-                _tfk_globalId_source = sourceGlobalId,
-                StaticValue = staticValueAttributeValue,
-                UseStaticValue = useStaticValueAttributeValueConverted,
-                Used = usedAttributeValueConverted,
-                Alignment = alignmentAttributeValueConverted
-            };
+            UmdText text = parentUmd.CreateText(parentUmd, (int)indicesOrKeys[0], thisTextInfo);
+            text._tfk_globalId_source = sourceGlobalId;
+            text.StaticValue = staticValueAttributeValue;
+            text.UseStaticValue = useStaticValueAttributeValueConverted;
+            text.Used = usedAttributeValueConverted;
+            text.Alignment = alignmentAttributeValueConverted;
+            return text;
         }
 
-        public XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
+        public virtual XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
         {
             Umd parentUmd = (Umd)parentItem;
             UmdTextInfo thisTextInfo = parentUmd.TextInfo[(int)indicesOrKeys[0]];

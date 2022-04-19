@@ -30,7 +30,7 @@ namespace OpenSC.GUI.UMDs
             if (umd == null)
                 return;
             // Status monitor
-            statusMonitorCompactTextTextBox.Text = umd.DisplayableRawText;
+            statusMonitorCompactTextTextBox.Text = umd.DisplayableCompactText;
             statusMonitorRawTextTextBox.Text = formatDisplayableRawText(umd.DisplayableRawText);
             umd.DisplayableCompactTextChanged += displayableCompactTextChanged;
             umd.DisplayableRawTextChanged += displayableRawTextChanged;
@@ -42,21 +42,14 @@ namespace OpenSC.GUI.UMDs
             // Tab: Texts
             for (int i = 0; i < umd.TextInfo.Length; i++)
             {
-                UmdText thisText = umd.Texts[i];
-                TextControls thisTextControls = textControls[i];
-                thisTextControls.UseStaticSourceCheckBox.Checked = thisText.Used;
-                thisTextControls.DynamicSourceDropDown.SelectByValue(thisText.Source);
-                thisTextControls.UseStaticSourceCheckBox.Checked = thisText.UseStaticValue;
-                thisTextControls.StaticSourceTextBox.Text = thisText.StaticValue;
-                thisTextControls.AlignmentDropDown.SelectByValue(thisText.Alignment);
+                textControls[i].AssignInfo(umd.TextInfo[i]);
+                textControls[i].Load(umd.Texts[i]);
             }
             // Tab: Tallies
             for (int i = 0; i < umd.TallyInfo.Length; i++)
             {
-                UmdTally thisTally = umd.Tallies[i];
-                TallyControls thisTallyControls = tallyControls[i];
-                thisTallyControls.SourceDropDown.SelectByValue(thisTally.Source);
-                setTallyColorButtonColor(thisTallyControls.ColorButton, thisTally.Color);
+                tallyControls[i].AssignInfo(umd.TallyInfo[i]);
+                tallyControls[i].Load(umd.Tallies[i]);
             }
             // Tab: Full static text
             staticTextTextBox.Text = umd.FullStaticText;
@@ -80,23 +73,10 @@ namespace OpenSC.GUI.UMDs
                 return;
             // Tab: Texts
             for (int i = 0; i < umd.TextInfo.Length; i++)
-            {
-                UmdText thisText = umd.Texts[i];
-                TextControls thisTextControls = textControls[i];
-                thisText.Used = thisTextControls.UseStaticSourceCheckBox.Checked;
-                thisText.Source = thisTextControls.DynamicSourceDropDown.SelectedValue as DynamicText;
-                thisText.UseStaticValue = thisTextControls.UseStaticSourceCheckBox.Checked;
-                thisText.StaticValue = thisTextControls.StaticSourceTextBox.Text;
-                thisText.Alignment = (UmdTextAlignment)thisTextControls.AlignmentDropDown.SelectedValue;
-            }
+                textControls[i].Write();
             // Tab: Tallies
             for (int i = 0; i < umd.TallyInfo.Length; i++)
-            {
-                UmdTally thisTally = umd.Tallies[i];
-                TallyControls thisTallyControls = tallyControls[i];
-                thisTally.Source = thisTallyControls.SourceDropDown.SelectedValue as IBoolean;
-                thisTally.Color = thisTallyControls.ColorButton.BackColor;
-            }
+                tallyControls[i].Write();
             // Tab: Full static text
             umd.FullStaticText = staticTextTextBox.Text;
             umd.UseFullStaticText = useStaticTextCheckBox.Checked;
@@ -104,7 +84,7 @@ namespace OpenSC.GUI.UMDs
         }
 
         #region Status monitor
-        private Label[] statusMonitorTallyLabels = null;
+        protected Label[] statusMonitorTallyLabels = null;
 
         private void initStatusMonitor()
         {
@@ -178,17 +158,78 @@ namespace OpenSC.GUI.UMDs
         #endregion
 
         #region TabPage: Texts
-        private class TextControls
+        protected class TextControls
         {
-            public Label NameLabel;
-            public CheckBox UsedCheckBox;
-            public ComboBox DynamicSourceDropDown;
-            public CheckBox UseStaticSourceCheckBox;
-            public TextBox StaticSourceTextBox;
-            public ComboBox AlignmentDropDown;
+
+            private UmdEditorFormBase parentForm;
+            public readonly Label NameLabel;
+            public readonly CheckBox UsedCheckBox;
+            public readonly ComboBox DynamicSourceDropDown;
+            public readonly CheckBox UseStaticSourceCheckBox;
+            public readonly TextBox StaticSourceTextBox;
+            public readonly ComboBox AlignmentDropDown;
+
+            public TextControls(UmdEditorFormBase parentForm, Label nameLabel, CheckBox usedCheckBox,ComboBox dynamicSourceDropDown, CheckBox useStaticSourceCheckBox, TextBox staticSourceTextBox, ComboBox alignmentDropDown)
+            {
+                this.parentForm = parentForm;
+                NameLabel = nameLabel;
+                UsedCheckBox = usedCheckBox;
+                DynamicSourceDropDown = dynamicSourceDropDown;
+                UseStaticSourceCheckBox = useStaticSourceCheckBox;
+                StaticSourceTextBox = staticSourceTextBox;
+                AlignmentDropDown = alignmentDropDown;
+                NameLabel.Tag = this;
+                UsedCheckBox.Tag = this;
+                DynamicSourceDropDown.Tag = this;
+                UseStaticSourceCheckBox.Tag = this;
+                StaticSourceTextBox.Tag = this;
+                AlignmentDropDown.Tag = this;
+            }
+
+            public UmdTextInfo TextInfo { get; private set; }
+            public UmdText Text { get; private set; }
+
+            public void AssignInfo(UmdTextInfo textInfo)
+            {
+                TextInfo = textInfo;
+                NameLabel.Text = TextInfo.Name;
+                if (!TextInfo.Switchable)
+                {
+                    UsedCheckBox.Checked = true;
+                    UsedCheckBox.Enabled = false;
+                }
+                DynamicSourceDropDown.GetAdapterFromFactoryAsDataSource(dynamicSourceDropDownAdapterFactory);
+                DynamicSourceDropDown.ReceiveSystemObjectDrop().FilterByType<DynamicText>();
+                AlignmentDropDown.GetAdapterFromFactoryAsDataSource(alignmentDropDownAdapterFactory);
+                AlignmentDropDown.SelectByValue(TextInfo.DefaultAlignment);
+                if (!TextInfo.Alignable)
+                    AlignmentDropDown.Enabled = false;
+            }
+
+            public void Load(UmdText text)
+            {
+                Text = text;
+                UsedCheckBox.Checked = text.Used;
+                DynamicSourceDropDown.SelectByValue(text.Source);
+                UseStaticSourceCheckBox.Checked = text.UseStaticValue;
+                StaticSourceTextBox.Text = text.StaticValue;
+                AlignmentDropDown.SelectByValue(text.Alignment);
+            }
+
+            public void Write()
+            {
+                if (Text == null)
+                    return;
+                Text.Used = UsedCheckBox.Checked;
+                Text.Source = DynamicSourceDropDown.SelectedValue as DynamicText;
+                Text.UseStaticValue = UseStaticSourceCheckBox.Checked;
+                Text.StaticValue = StaticSourceTextBox.Text;
+                Text.Alignment = (UmdTextAlignment)AlignmentDropDown.SelectedValue;
+            }
+
         };
 
-        private TextControls[] textControls = null;
+        protected TextControls[] textControls = null;
 
         private void initTextsTab()
         {
@@ -202,32 +243,14 @@ namespace OpenSC.GUI.UMDs
                     for (int r = 0; r < 4; r++)
                         textsSourceAndAlignmentTable.CloneRow(r, TableLayoutHelpers.ROW_INDEX_LAST, new string[] { nameof(Visible) });
                 int rowBase = i * 4;
-                textControls[i] = new()
-                {
-                    NameLabel = (Label)textsSourceAndAlignmentTable.GetControlFromPosition(0, rowBase),
-                    UsedCheckBox = (CheckBox)textsSourceAndAlignmentTable.GetControlFromPosition(2, rowBase),
-                    DynamicSourceDropDown = (ComboBox)textsSourceAndAlignmentTable.GetControlFromPosition(3, rowBase + 1),
-                    UseStaticSourceCheckBox = (CheckBox)textsSourceAndAlignmentTable.GetControlFromPosition(2, rowBase + 2),
-                    StaticSourceTextBox = (TextBox)textsSourceAndAlignmentTable.GetControlFromPosition(3, rowBase + 2),
-                    AlignmentDropDown = (ComboBox)textsSourceAndAlignmentTable.GetControlFromPosition(3, rowBase + 3)
-                };
-            }
-            for (int i = 0; i < textCount; i++)
-            {
-                UmdTextInfo thisTextInfo = umd.TextInfo[i];
-                TextControls thisTextControls = textControls[i];
-                thisTextControls.NameLabel.Text = thisTextInfo.Name;
-                if (!thisTextInfo.Switchable)
-                {
-                    thisTextControls.UsedCheckBox.Checked = true;
-                    thisTextControls.UsedCheckBox.Enabled = false;
-                }
-                thisTextControls.DynamicSourceDropDown.GetAdapterFromFactoryAsDataSource(dynamicSourceDropDownAdapterFactory);
-                thisTextControls.DynamicSourceDropDown.ReceiveSystemObjectDrop().FilterByType<DynamicText>();
-                thisTextControls.AlignmentDropDown.GetAdapterFromFactoryAsDataSource(alignmentDropDownAdapterFactory);
-                thisTextControls.AlignmentDropDown.SelectByValue(thisTextInfo.DefaultAlignment);
-                if (!thisTextInfo.Alignable)
-                    thisTextControls.AlignmentDropDown.Enabled = false;
+                TextControls thisTextControls = new(this,
+                    (Label)textsSourceAndAlignmentTable.GetControlFromPosition(0, rowBase),
+                    (CheckBox)textsSourceAndAlignmentTable.GetControlFromPosition(2, rowBase),
+                    (ComboBox)textsSourceAndAlignmentTable.GetControlFromPosition(3, rowBase + 1),
+                    (CheckBox)textsSourceAndAlignmentTable.GetControlFromPosition(2, rowBase + 2),
+                    (TextBox)textsSourceAndAlignmentTable.GetControlFromPosition(3, rowBase + 2),
+                    (ComboBox)textsSourceAndAlignmentTable.GetControlFromPosition(3, rowBase + 3));
+                textControls[i] = thisTextControls;
             }
         }
 
@@ -242,14 +265,86 @@ namespace OpenSC.GUI.UMDs
         #endregion
 
         #region TabPage: Tallies
-        private class TallyControls
+        protected class TallyControls
         {
-            public Label NameLabel;
-            public ComboBox SourceDropDown;
-            public Button ColorButton;
+
+            private UmdEditorFormBase parentForm;
+            public readonly Label NameLabel;
+            public readonly ComboBox SourceDropDown;
+            public readonly Button ColorButton;
+
+            public TallyControls(UmdEditorFormBase parentForm, Label nameLabel, ComboBox sourceDropDown, Button colorButton)
+            {
+                this.parentForm = parentForm;
+                NameLabel = nameLabel;
+                SourceDropDown = sourceDropDown;
+                ColorButton = colorButton;
+                NameLabel.Tag = this;
+                SourceDropDown.Tag = this;
+                ColorButton.Tag = this;
+            }
+
+            public UmdTallyInfo TallyInfo { get; private set; }
+            public UmdTally Tally { get; private set; }
+
+            public void AssignInfo(UmdTallyInfo tallyInfo)
+            {
+                TallyInfo = tallyInfo;
+                NameLabel.Text = TallyInfo.Name;
+                SourceDropDown.CreateAdapterAsDataSource(BooleanRegister.Instance, BooleanRegister.Instance.ToStringMethod, true, "(not set)");
+                SourceDropDown.ReceiveSystemObjectDrop().FilterByType<IBoolean>();
+                setTallyColorButtonColor(TallyInfo.DefaultColor);
+                switch (TallyInfo.ColorMode)
+                {
+                    case UmdTallyInfo.ColorSettingMode.Fix:
+                        ColorButton.Text = "";
+                        parentForm.tallyColorButtonToolTip.SetToolTip(ColorButton, "The color of this tally indicator is fixed, it cannot be set.");
+                        break;
+                    case UmdTallyInfo.ColorSettingMode.LocalChangeable:
+                        ColorButton.Click += tallyColorButtonClick;
+                        parentForm.tallyColorButtonToolTip.SetToolTip(ColorButton, "The color of this tally indicator can be set, but only locally on the hardware. Changing here won't update this setting on the hardware.");
+                        break;
+                    case UmdTallyInfo.ColorSettingMode.RemoteChangeable:
+                        ColorButton.Click += tallyColorButtonClick;
+                        parentForm.tallyColorButtonToolTip.SetToolTip(ColorButton, "The color of this tally indicator displayed by the hardware can be set remotely. If you change it here, it will also update this setting on the hardware.");
+                        break;
+                }
+            }
+
+            public void Load(UmdTally tally)
+            {
+                Tally = tally;
+                SourceDropDown.SelectByValue(Tally.Source);
+                setTallyColorButtonColor(Tally.Color);
+            }
+
+            public void Write()
+            {
+                if (Tally == null)
+                    return;
+                Tally.Source = SourceDropDown.SelectedValue as IBoolean;
+                Tally.Color = ColorButton.BackColor;
+            }
+
+
+            private void tallyColorButtonClick(object sender, EventArgs e)
+            {
+                ColorDialog colorDialog = new ColorDialog();
+                colorDialog.AnyColor = true;
+                colorDialog.FullOpen = true;
+                if (colorDialog.ShowDialog() == DialogResult.OK)
+                    setTallyColorButtonColor(colorDialog.Color);
+            }
+
+            private void setTallyColorButtonColor(Color color)
+            {
+                ColorButton.BackColor = color;
+                ColorButton.ForeColor = (color.GetBrightness() > 0.5f) ? Color.Black : Color.White;
+            }
+
         };
 
-        private TallyControls[] tallyControls = null;
+        protected TallyControls[] tallyControls = null;
 
         private void initTalliesTab()
         {
@@ -259,56 +354,19 @@ namespace OpenSC.GUI.UMDs
             tallyControls = new TallyControls[tallyCount];
             for (int i = 0; i < tallyCount; i++)
             {
+                UmdTallyInfo thisTallyInfo = umd.TallyInfo[i];
                 if (i > 0)
                     talliesSourceAndColorTable.CloneRow(0, TableLayoutHelpers.ROW_INDEX_LAST, new string[] { nameof(Visible) });
-                tallyControls[i] = new()
-                {
-                    NameLabel = (Label)talliesSourceAndColorTable.GetControlFromPosition(0, i),
-                    SourceDropDown = (ComboBox)talliesSourceAndColorTable.GetControlFromPosition(1, i),
-                    ColorButton = (Button)talliesSourceAndColorTable.GetControlFromPosition(2, i)
-                };
+                TallyControls thisTallyControls = new(this,
+                    (Label)talliesSourceAndColorTable.GetControlFromPosition(0, i),
+                    (ComboBox)talliesSourceAndColorTable.GetControlFromPosition(1, i),
+                    (Button)talliesSourceAndColorTable.GetControlFromPosition(2, i));
+                tallyControls[i] = thisTallyControls;
             }
-            for (int i = 0; i < tallyCount; i++)
-            {
-                UmdTallyInfo thisTallyInfo = umd.TallyInfo[i];
-                TallyControls thisTallyControls = tallyControls[i];
-                thisTallyControls.NameLabel.Text = thisTallyInfo.Name;
-                thisTallyControls.SourceDropDown.CreateAdapterAsDataSource(BooleanRegister.Instance, BooleanRegister.Instance.ToStringMethod, true, "(not set)");
-                thisTallyControls.SourceDropDown.ReceiveSystemObjectDrop().FilterByType<IBoolean>();
-                Button thisTallyColorButton = thisTallyControls.ColorButton; 
-                setTallyColorButtonColor(thisTallyColorButton, thisTallyInfo.DefaultColor);
-                switch (thisTallyInfo.ColorMode)
-                {
-                    case UmdTallyInfo.ColorSettingMode.Fix:
-                        thisTallyColorButton.Text = "";
-                        tallyColorButtonToolTip.SetToolTip(thisTallyColorButton, "The color of this tally indicator is fixed, it cannot be set.");
-                        break;
-                    case UmdTallyInfo.ColorSettingMode.LocalChangeable:
-                        thisTallyColorButton.Click += tallyColorButtonClick;
-                        tallyColorButtonToolTip.SetToolTip(thisTallyColorButton, "The color of this tally indicator can be set, but only locally on the hardware. Changing here won't update this setting on the hardware.");
-                        break;
-                    case UmdTallyInfo.ColorSettingMode.RemoteChangeable:
-                        thisTallyColorButton.Click += tallyColorButtonClick;
-                        tallyColorButtonToolTip.SetToolTip(thisTallyColorButton, "The color of this tally indicator displayed by the hardware can be set remotely. If you change it here, it will also update this setting on the hardware.");
-                        break;
-                }
-            }
+            talliesTabInitialized();
         }
 
-        private void tallyColorButtonClick(object sender, EventArgs e)
-        {
-            ColorDialog colorDialog = new ColorDialog();
-            colorDialog.AnyColor = true;
-            colorDialog.FullOpen = true;
-            if (colorDialog.ShowDialog() == DialogResult.OK)
-                setTallyColorButtonColor((Button)sender, colorDialog.Color);
-        }
-
-        private void setTallyColorButtonColor(Button button, Color color)
-        {
-            button.BackColor = color;
-            button.ForeColor = (color.GetBrightness() > 0.5f) ? Color.Black : Color.White;
-        }
+        protected virtual void talliesTabInitialized() { }
         #endregion
 
         #region TabPage: Full static text
