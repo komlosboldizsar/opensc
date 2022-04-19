@@ -16,13 +16,6 @@ namespace OpenSC.Model.UMDs.McCurdy
     public class McCurdyUMD1 : Umd
     {
 
-        #region Instantiation, restoration, removation
-        public McCurdyUMD1()
-        {
-            columnWidths[0] = TotalColumnWidth;
-        }
-        #endregion
-
         #region Property: Port
         public event PropertyChangedTwoValuesDelegate<McCurdyUMD1, SerialPort> PortChanged;
 
@@ -60,27 +53,23 @@ namespace OpenSC.Model.UMDs.McCurdy
         }
         #endregion
 
-        #region Property: ColumnWidths
-        [PersistAs("column_widths")]
-        private int[] columnWidths = new int[] { 0, 0, 0 };
+        #region Texts
+        protected override Type textTypeGetter() => typeof(McCurdyUmd1Text);
+        protected override UmdText CreateText(Umd owner, int indexAtOwner, UmdTextInfo info) => new McCurdyUmd1Text(owner, indexAtOwner, info);
 
-        public int[] ColumnWidths
+        internal void NotifyTextColumnWidthChanged(UmdText text)
         {
-            get => columnWidths;
-            set
-            {
-                columnWidths = value;
+            if (!Updating && text.Used)
                 UpdateTexts();
-            }
         }
         #endregion
 
         #region Info
         public override UmdTextInfo[] TextInfo => new UmdTextInfo[]
         {
-           new("Text 1", true, true, true, UmdTextAlignment.Center),
-           new("Text 2", true, false, true, UmdTextAlignment.Center),
-           new("Text 3", true, false, true, UmdTextAlignment.Center),
+           new McCurdyUmd1TextInfo("Text 1", true, true, true, UmdTextAlignment.Center, 160),
+           new McCurdyUmd1TextInfo("Text 2", true, false, true, UmdTextAlignment.Center, 0),
+           new McCurdyUmd1TextInfo("Text 3", true, false, true, UmdTextAlignment.Center, 0),
         };
 
         public override UmdTallyInfo[] TallyInfo => new UmdTallyInfo[] { };
@@ -107,12 +96,12 @@ namespace OpenSC.Model.UMDs.McCurdy
                 {
                     if (Texts[i].Used)
                     {
-                        alignTextForRaw(Texts[i].CurrentValue, Texts[i].Alignment, columnWidths[i], rawTextPieces);
+                        alignTextForRaw(Texts[i].CurrentValue, Texts[i].Alignment, ((McCurdyUmd1Text)Texts[i]).ColumnWidth, rawTextPieces);
                         compactTextPieces.Add(Texts[i].CurrentValue);
                     }
                     else
                     {
-                        rawTextPieces.Add(new(columnWidths[i]));
+                        rawTextPieces.Add(new(((McCurdyUmd1Text)Texts[i]).ColumnWidth));
                     }
                 }
             }
@@ -240,9 +229,13 @@ namespace OpenSC.Model.UMDs.McCurdy
             for (; trimToChr < original.Length; trimToChr++)
             {
                 char chr = original[trimToChr];
-                newWidth += CHAR_WIDTHS[chr - CHAR_WIDTHS_START];
+                int chrWidth = CHAR_WIDTHS[chr - CHAR_WIDTHS_START];
+                newWidth += chrWidth;
                 if (newWidth > maxWidth)
+                {
+                    newWidth -= chrWidth;
                     break;
+                }
             }
             return original.Substring(0, trimToChr);
         }
@@ -265,6 +258,76 @@ namespace OpenSC.Model.UMDs.McCurdy
         }
 
         protected virtual string getCommandTextToSend() => string.Format("%{0}D{1}%Z", address, textToHardware);
+        #endregion
+
+        #region Column sizing
+        public int[] RealculateColumnWidths(int[] currentColumnWidths, bool[] usedStates, int? changeSource = null)
+        {
+            int cwLength = currentColumnWidths.Length;
+            if (cwLength != usedStates.Length)
+                throw new ArgumentException();
+            int[] newColumnWidths = new int[cwLength];
+            int sumNewColumnWidth = 0;
+            for (int i = 0; i < cwLength; i++)
+            {
+                if (usedStates[i])
+                {
+                    int newColumnWidth = currentColumnWidths[i];
+                    if (newColumnWidth < 0)
+                        newColumnWidth = 0;
+                    if (newColumnWidth > TotalColumnWidth)
+                        newColumnWidth = TotalColumnWidth;
+                    newColumnWidths[i] = newColumnWidth;
+                    sumNewColumnWidth += newColumnWidth;
+                }
+                else
+                {
+                    newColumnWidths[i] = 0;
+                }
+            }
+            int differenceToTotal = TotalColumnWidth - sumNewColumnWidth;
+            if (changeSource != null)
+            {
+                for (int j = 1; j <= cwLength; j++)
+                {
+                    int foreignIndex = ((int)changeSource + j) % cwLength;
+                    if (usedStates[foreignIndex] || (foreignIndex == changeSource))
+                    {
+                        recalculateColumnWidthWithMaxPossible(ref newColumnWidths[foreignIndex], ref differenceToTotal);
+                        if (differenceToTotal == 0)
+                            break;
+                    }
+                }
+            }
+            for (int j = 0; j < cwLength; j++)
+            {
+                if (usedStates[j])
+                {
+                    recalculateColumnWidthWithMaxPossible(ref newColumnWidths[j], ref differenceToTotal);
+                    if (differenceToTotal == 0)
+                        break;
+                }
+            }
+            for (int j = 0; j < cwLength; j++)
+            {
+                recalculateColumnWidthWithMaxPossible(ref newColumnWidths[j], ref differenceToTotal);
+                if (differenceToTotal == 0)
+                    break;
+            }
+            return newColumnWidths;
+        }
+
+        private void recalculateColumnWidthWithMaxPossible(ref int currentColumnWidth, ref int differenceToTotal)
+        {
+            int newColumnWidth = currentColumnWidth + differenceToTotal;
+            if (newColumnWidth < 0)
+                newColumnWidth = 0;
+            if (newColumnWidth > TotalColumnWidth)
+                newColumnWidth = TotalColumnWidth;
+            int localChange = newColumnWidth - currentColumnWidth;
+            currentColumnWidth = newColumnWidth;
+            differenceToTotal -= localChange;
+        }
         #endregion
 
     }
