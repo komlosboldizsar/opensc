@@ -39,7 +39,7 @@
             this.textColumnWidthLabelExample = new OpenSC.GUI.GeneralComponents.GoodOneLineLabel();
             this.textColumnWidthNumericFieldsTable = new System.Windows.Forms.TableLayoutPanel();
             this.textColumnWidthNumericFieldExample = new System.Windows.Forms.NumericUpDown();
-            this.label4 = new System.Windows.Forms.Label();
+            this.columnWidthsLabel = new System.Windows.Forms.Label();
             this.mainTabControl.SuspendLayout();
             this.textsTabPage.SuspendLayout();
             this.connectionTabPage.SuspendLayout();
@@ -220,7 +220,7 @@
             this.textColumnWidthNumericFieldsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.textColumnWidthNumericFieldsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.textColumnWidthNumericFieldsTable.Controls.Add(this.textColumnWidthNumericFieldExample, 1, 0);
-            this.textColumnWidthNumericFieldsTable.Controls.Add(this.label4, 0, 0);
+            this.textColumnWidthNumericFieldsTable.Controls.Add(this.columnWidthsLabel, 0, 0);
             this.textColumnWidthNumericFieldsTable.Dock = System.Windows.Forms.DockStyle.Top;
             this.textColumnWidthNumericFieldsTable.Location = new System.Drawing.Point(8, 25);
             this.textColumnWidthNumericFieldsTable.Name = "textColumnWidthNumericFieldsTable";
@@ -242,16 +242,16 @@
             this.textColumnWidthNumericFieldExample.Size = new System.Drawing.Size(144, 27);
             this.textColumnWidthNumericFieldExample.TabIndex = 0;
             // 
-            // label4
+            // columnWidthsLabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label4.Location = new System.Drawing.Point(3, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(110, 33);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "Column widths:";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.columnWidthsLabel.AutoSize = true;
+            this.columnWidthsLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.columnWidthsLabel.Location = new System.Drawing.Point(3, 0);
+            this.columnWidthsLabel.Name = "columnWidthsLabel";
+            this.columnWidthsLabel.Size = new System.Drawing.Size(110, 33);
+            this.columnWidthsLabel.TabIndex = 3;
+            this.columnWidthsLabel.Text = "Column widths:";
+            this.columnWidthsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // McCurdyUmd1EditorForm
             // 
@@ -297,7 +297,7 @@
         private System.Windows.Forms.TableLayoutPanel textColumnWidthLabelsTable;
         private System.Windows.Forms.TableLayoutPanel textColumnWidthNumericFieldsTable;
         private System.Windows.Forms.NumericUpDown textColumnWidthNumericFieldExample;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label columnWidthsLabel;
         private GeneralComponents.GoodOneLineLabel textColumnWidthLabelExample;
     }
 }
