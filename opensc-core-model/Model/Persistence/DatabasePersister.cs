@@ -237,8 +237,11 @@ namespace OpenSC.Model.Persistence
 
                 PersistSubclassAttribute persistSubclassAttribute = memberInfo.GetCustomAttributes<PersistSubclassAttribute>().FirstOrDefault();
                 if (persistSubclassAttribute != null) // should check if given type is subclass of member type
-                    serializeAsType = persistSubclassAttribute.SubclassType;
-                
+                {
+                    MethodInfo subclassTypeGetterMethodInfo = parentItem.GetType().GetMethod(persistSubclassAttribute.SubclassTypeGetterName, memberLookupBindingFlags);
+                    serializeAsType = subclassTypeGetterMethodInfo.Invoke(parentItem, null) as Type;
+                }
+
                 PolymorphFieldAttribute polymorphFieldAttribute = memberInfo.GetCustomAttributes<PolymorphFieldAttribute>().FirstOrDefault();
                 Dictionary<Type, string> typeStringDictionary = null;
                 string itemTypeString = null;
@@ -451,7 +454,10 @@ namespace OpenSC.Model.Persistence
                 
                 PersistSubclassAttribute persistSubclassAttribute = memberInfo.GetCustomAttributes<PersistSubclassAttribute>().FirstOrDefault();
                 if (persistSubclassAttribute != null) // should check if given type is subclass of member type
-                    deserializeAsType = persistSubclassAttribute.SubclassType;
+                {
+                    MethodInfo subclassTypeGetterMethodInfo = parentItem.GetType().GetMethod(persistSubclassAttribute.SubclassTypeGetterName, memberLookupBindingFlags);
+                    deserializeAsType = subclassTypeGetterMethodInfo.Invoke(parentItem, null) as Type;
+                }
 
                 PolymorphFieldAttribute polymorphFieldAttribute = memberInfo.GetCustomAttributes<PolymorphFieldAttribute>().FirstOrDefault();
                 Dictionary<Type, string> typeStringDictionary = null;
