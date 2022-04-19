@@ -31,8 +31,6 @@ namespace OpenSC.GUI.Helpers
                 sourceStyle = getSourceItemStyle();
             }
 
-            public const int DESTINATION_INDEX_LAST = -1;
-
             public void DoCloning(int destinationIndex = DESTINATION_INDEX_LAST, string[] excludeProperties = null)
             {
                 if (destinationIndex < 0)
@@ -61,6 +59,9 @@ namespace OpenSC.GUI.Helpers
                     }
                 }
             }
+
+            public const int DESTINATION_INDEX_LAST = -1;
+            public static readonly string[] EXCLUDE_VISIBILITY = Cloning.EXCLUDE_VISIBILITY;
 
             protected abstract int getItemCount();
             protected abstract void setItemCount(int value);

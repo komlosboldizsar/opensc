@@ -97,7 +97,7 @@ namespace OpenSC.GUI.UMDs
                 Label thisStatusMonitorTallyLabel = statusMonitorExampleTallyLabel;
                 if (i > 0)
                 {
-                    thisStatusMonitorTallyLabel = statusMonitorExampleTallyLabel.CloneT(new string[] { nameof(Control.Visible) });
+                    thisStatusMonitorTallyLabel = statusMonitorExampleTallyLabel.CloneT(Cloning.EXCLUDE_VISIBILITY);
                     statusMonitorTalliesPanel.Controls.Add(thisStatusMonitorTallyLabel);
                 }
                 statusMonitorTallyLabels[i] = thisStatusMonitorTallyLabel;
@@ -246,7 +246,7 @@ namespace OpenSC.GUI.UMDs
             {
                 if (i > 0)
                     for (int r = 0; r < textsSourceAndAlignmentTableRowsPerText; r++)
-                        textsSourceAndAlignmentTableRowCloners[r].DoCloning(TableLayoutHelpers.RowCloner.DESTINATION_INDEX_LAST, new string[] { nameof(Visible) });
+                        textsSourceAndAlignmentTableRowCloners[r].DoCloning(TableLayoutHelpers.RowCloner.DESTINATION_INDEX_LAST, TableLayoutHelpers.RowCloner.EXCLUDE_VISIBILITY);
                 int rowBase = i * textsSourceAndAlignmentTableRowsPerText;
                 TextControls thisTextControls = new(this,
                     (Label)textsSourceAndAlignmentTable.GetControlFromPosition(0, rowBase),
@@ -367,7 +367,7 @@ namespace OpenSC.GUI.UMDs
                 UmdTallyInfo thisTallyInfo = umd.TallyInfo[i];
                 if (i > 0)
                     for (int r = 0; r < talliesSourceAndColorTableRowsPerText; r++)
-                        talliesSourceAndColorTableRowCloners[r].DoCloning(TableLayoutHelpers.RowCloner.DESTINATION_INDEX_LAST, new string[] { nameof(Visible) });
+                        talliesSourceAndColorTableRowCloners[r].DoCloning(TableLayoutHelpers.RowCloner.DESTINATION_INDEX_LAST, TableLayoutHelpers.RowCloner.EXCLUDE_VISIBILITY);
                 int rowBase = i * talliesSourceAndColorTableRowsPerText;
                 TallyControls thisTallyControls = new(this,
                     (Label)talliesSourceAndColorTable.GetControlFromPosition(0, rowBase),
