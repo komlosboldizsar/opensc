@@ -21,14 +21,12 @@ namespace OpenSC.GUI.Helpers
             tableLayout.RowCount++; 
             RowStyle sourceStyle = tableLayout.RowStyles[sourceIndex];
             RowStyle destinationStyle = new RowStyle(sourceStyle.SizeType, sourceStyle.Height);
-            if (destinationIndex != ROW_INDEX_LAST)
-                tableLayout.RowStyles.Insert(destinationIndex, destinationStyle);
-            else
-                tableLayout.RowStyles.Add(destinationStyle);
+            if (destinationIndex < 0)
+                destinationIndex = tableLayout.RowCount + destinationIndex;
+            tableLayout.RowStyles.Insert(destinationIndex, destinationStyle);
             int newSourceIndex = sourceIndex;
-            if ((destinationIndex != ROW_INDEX_LAST) && (destinationIndex <= sourceIndex))
+            if (destinationIndex <= sourceIndex)
                 newSourceIndex++;
-            int newDestinationIndex = (destinationIndex == ROW_INDEX_LAST) ? (tableLayout.RowCount - 1) : destinationIndex;
             int columnIndex = 0; 
             while (columnIndex < tableLayout.ColumnCount)
             {
@@ -37,7 +35,7 @@ namespace OpenSC.GUI.Helpers
                 {
                     int columnSpan = tableLayout.GetColumnSpan(originalControl);
                     Control clonedControl = originalControl.CloneTypeOnly();
-                    tableLayout.Controls.Add(clonedControl, columnIndex, newDestinationIndex);
+                    tableLayout.Controls.Add(clonedControl, columnIndex, destinationIndex);
                     tableLayout.SetColumnSpan(clonedControl, columnSpan);
                     clonedControl.ClonePropertiesFrom(originalControl, excludeProperties);
                     columnIndex += columnSpan;
@@ -45,6 +43,41 @@ namespace OpenSC.GUI.Helpers
                 else
                 {
                     columnIndex++;
+                }
+            }
+        }
+
+        public const int COLUMN_INDEX_LAST = -1;
+
+        public static void CloneColumn(this TableLayoutPanel tableLayout, int sourceIndex, int destinationIndex = COLUMN_INDEX_LAST, string[] excludeProperties = null)
+        {
+            if (tableLayout.ColumnCount <= sourceIndex)
+                throw new ArgumentException();
+            tableLayout.ColumnCount++;
+            ColumnStyle sourceStyle = tableLayout.ColumnStyles[sourceIndex];
+            ColumnStyle destinationStyle = new ColumnStyle(sourceStyle.SizeType, sourceStyle.Width);
+            if (destinationIndex < 0)
+                destinationIndex = tableLayout.ColumnCount + destinationIndex;
+            tableLayout.ColumnStyles.Insert(destinationIndex, destinationStyle);
+            int newSourceIndex = sourceIndex;
+            if (destinationIndex <= sourceIndex)
+                newSourceIndex++;
+            int rowIndex = 0;
+            while (rowIndex < tableLayout.RowCount)
+            {
+                Control originalControl = tableLayout.GetControlFromPosition(newSourceIndex, rowIndex);
+                if (originalControl != null)
+                {
+                    int rowSpan = tableLayout.GetRowSpan(originalControl);
+                    Control clonedControl = originalControl.CloneTypeOnly();
+                    tableLayout.Controls.Add(clonedControl, destinationIndex, rowIndex);
+                    tableLayout.SetRowSpan(clonedControl, rowSpan);
+                    clonedControl.ClonePropertiesFrom(originalControl, excludeProperties);
+                    rowIndex += rowSpan;
+                }
+                else
+                {
+                    rowIndex++;
                 }
             }
         }
