@@ -69,42 +69,27 @@ namespace OpenSC.Model.UMDs.Tsl50
         #endregion
 
         #region Sending data to hardware
-        protected override void updateTextsToHardware()
-        {
-            calculateTextFields();
-            sendData(true);
-        }
-
-        protected override void updateTalliesToHardware()
-        {
-            calculateTallyFields();
-            sendData(false);
-        }
-
-        protected override void updateTotalToHardware()
-        {
-            calculateTextFields();
-            calculateTallyFields();
-            sendData(true);
-        }
-
-        protected byte[] textBytesToHardware = Array.Empty<byte>();
-
-        private void calculateTextFields()
+        protected override void calculateTextFields()
         {
             textBytesToHardware = Encoding.ASCII.GetBytes(DisplayableCompactText);
             DisplayableRawText = DisplayableCompactText;
         }
 
-        private byte tallyByteToHardware;
+        protected byte[] textBytesToHardware = Array.Empty<byte>();
 
-        private void calculateTallyFields()
+        protected override void calculateTallyFields()
         {
             tallyByteToHardware = 0;
             for (int i = 0, t = 32; i < TallyInfo.Length; i++, t /= 2)
                 if (Tallies[i].CurrentState)
                     tallyByteToHardware += (byte)t;
         }
+
+        private byte tallyByteToHardware;
+
+        protected override void sendTextsToHardware() => sendData(true);
+        protected override void sendTalliesToHardware() => sendData(false);
+        protected override void sendEverythingToHardware() => sendData(true);
 
         protected virtual byte[] getAllBytesToSend(bool sendText = true)
         {

@@ -53,19 +53,19 @@ namespace OpenSC.Model.UMDs
             if (oldValue != null)
                 oldValue.CurrentTextChanged -= sourceCurrentTextChangedHandler;
             if (newValue != null)
-            {
                 newValue.CurrentTextChanged += sourceCurrentTextChangedHandler;
-                CurrentValue = newValue.CurrentText;
-            }
-            else
-            {
-                CurrentValue = null;
-            }
+            if (!useStaticValue)
+                CurrentValue = newValue?.CurrentText;
         }
 
         internal string _tfk_globalId_source; // Temp foreign key
 
-        private void sourceCurrentTextChangedHandler(DynamicText item, string oldValue, string newValue) => CurrentValue = newValue;
+        private void sourceCurrentTextChangedHandler(DynamicText item, string oldValue, string newValue)
+        {
+            if (useStaticValue)
+                return;
+            CurrentValue = newValue;
+        }
         #endregion
 
         #region Property: StaticValue
@@ -74,7 +74,10 @@ namespace OpenSC.Model.UMDs
         public string StaticValue
         {
             get => staticValue;
-            set => this.setProperty(ref staticValue, value, StaticValueChanged, null, (_, _) => Owner?.NotifyTextStaticValueChanged(this));
+            set => this.setProperty(ref staticValue, value, StaticValueChanged, null, (_, nv) => {
+                if (useStaticValue)
+                    CurrentValue = nv;
+            });
         }
         #endregion
 
@@ -84,7 +87,9 @@ namespace OpenSC.Model.UMDs
         public bool UseStaticValue
         {
             get => useStaticValue;
-            set => this.setProperty(ref useStaticValue, value, UseStaticValueChanged, null, (_, _) => Owner?.NotifyTextUseStaticValueChanged(this));
+            set => this.setProperty(ref useStaticValue, value, UseStaticValueChanged, null, (_, nv) => {
+                CurrentValue = nv ? StaticValue : Source?.CurrentText;
+            });
         }
         #endregion
 
@@ -120,11 +125,11 @@ namespace OpenSC.Model.UMDs
 
         #region Property: CurrentValue
         public event PropertyChangedTwoValuesDelegate<UmdText, string> CurrentValueChanged;
-        private string currentValue;
+        private string currentValue = "";
         public string CurrentValue
         {
             get => currentValue;
-            set => this.setProperty(ref currentValue, value, CurrentValueChanged, null, (ov, nv) => Owner?.NotifyTextCurrentValueChanged(this));
+            set => this.setProperty(ref currentValue, value ?? "", CurrentValueChanged, null, (ov, nv) => Owner?.NotifyTextCurrentValueChanged(this));
         }
         #endregion
 

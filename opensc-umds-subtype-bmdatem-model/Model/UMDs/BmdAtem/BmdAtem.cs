@@ -92,7 +92,7 @@ namespace OpenSC.Model.UMDs.BmdAtem
             {
                 inputsSource = null;
             }
-            updateTextsToHardware();
+            UpdateTexts();
         }
         #endregion
 
@@ -108,21 +108,11 @@ namespace OpenSC.Model.UMDs.BmdAtem
         public override bool AlignableFullStaticText => false;
         #endregion
 
-        #region Sending data to hardware
-        protected override void updateTextsToHardware() => updateTotalToHardware(); // Has only texts
-
-        protected override void updateTalliesToHardware() { } // Has no tallies
-
-        protected override void updateTotalToHardware()
-        {
-            // Texts are already calculated by updateTexts()
-            sendData();
-        }
-
+        #region Calculating and sending data to hardware
         private const int LENGTH_SHORT = 4;
         private const int LENGTH_LONG = 16;
 
-        protected override void updateTexts()
+        protected override void calculateTextFields()
         {
             // To hardware
             string shortTextToHardware = Texts[0].CurrentValue;
@@ -164,6 +154,12 @@ namespace OpenSC.Model.UMDs.BmdAtem
 
         private string shortTextToHardware = "";
         private string longTextToHardware = "";
+
+        protected override void calculateTallyFields() { }
+
+        protected override void sendTextsToHardware() => sendData();
+        protected override void sendTalliesToHardware() => sendData();
+        protected override void sendEverythingToHardware() => sendData();
 
         private void sendData()
         {

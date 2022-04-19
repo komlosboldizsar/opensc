@@ -34,18 +34,39 @@
             this.addressLabel = new System.Windows.Forms.Label();
             this.addressNumericInput = new System.Windows.Forms.NumericUpDown();
             this.portDropDown = new System.Windows.Forms.ComboBox();
+            this.textsLayoutGroupBox = new System.Windows.Forms.GroupBox();
+            this.textColumnWidthLabelsTable = new System.Windows.Forms.TableLayoutPanel();
+            this.textColumnWidthLabelExample = new OpenSC.GUI.GeneralComponents.GoodOneLineLabel();
+            this.textColumnWidthNumericFieldsTable = new System.Windows.Forms.TableLayoutPanel();
+            this.textColumnWidthNumericFieldExample = new System.Windows.Forms.NumericUpDown();
+            this.columnWidthsLabel = new System.Windows.Forms.Label();
             this.mainTabControl.SuspendLayout();
+            this.textsTabPage.SuspendLayout();
             this.connectionTabPage.SuspendLayout();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.connectionGroupBox.SuspendLayout();
             this.connectionTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.addressNumericInput)).BeginInit();
+            this.textsLayoutGroupBox.SuspendLayout();
+            this.textColumnWidthLabelsTable.SuspendLayout();
+            this.textColumnWidthNumericFieldsTable.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textColumnWidthNumericFieldExample)).BeginInit();
             this.SuspendLayout();
             // 
             // mainTabControl
             // 
             this.mainTabControl.Size = new System.Drawing.Size(775, 402);
+            // 
+            // textsTabPage
+            // 
+            this.textsTabPage.Controls.Add(this.textsLayoutGroupBox);
+            this.textsTabPage.Size = new System.Drawing.Size(767, 369);
+            this.textsTabPage.Controls.SetChildIndex(this.textsLayoutGroupBox, 0);
+            // 
+            // fullStaticTextTabPage
+            // 
+            this.fullStaticTextTabPage.Size = new System.Drawing.Size(687, 254);
             // 
             // connectionTabPage
             // 
@@ -143,6 +164,95 @@
             this.portDropDown.Size = new System.Drawing.Size(305, 28);
             this.portDropDown.TabIndex = 3;
             // 
+            // textsLayoutGroupBox
+            // 
+            this.textsLayoutGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.textsLayoutGroupBox.Controls.Add(this.textColumnWidthLabelsTable);
+            this.textsLayoutGroupBox.Controls.Add(this.textColumnWidthNumericFieldsTable);
+            this.textsLayoutGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textsLayoutGroupBox.Location = new System.Drawing.Point(3, 165);
+            this.textsLayoutGroupBox.Margin = new System.Windows.Forms.Padding(10, 12, 10, 12);
+            this.textsLayoutGroupBox.Name = "textsLayoutGroupBox";
+            this.textsLayoutGroupBox.Padding = new System.Windows.Forms.Padding(8, 5, 8, 10);
+            this.textsLayoutGroupBox.Size = new System.Drawing.Size(761, 135);
+            this.textsLayoutGroupBox.TabIndex = 5;
+            this.textsLayoutGroupBox.TabStop = false;
+            this.textsLayoutGroupBox.Text = "Layout";
+            // 
+            // textColumnWidthLabelsTable
+            // 
+            this.textColumnWidthLabelsTable.ColumnCount = 1;
+            this.textColumnWidthLabelsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.textColumnWidthLabelsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.textColumnWidthLabelsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.textColumnWidthLabelsTable.Controls.Add(this.textColumnWidthLabelExample, 0, 0);
+            this.textColumnWidthLabelsTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textColumnWidthLabelsTable.Location = new System.Drawing.Point(8, 58);
+            this.textColumnWidthLabelsTable.Name = "textColumnWidthLabelsTable";
+            this.textColumnWidthLabelsTable.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.textColumnWidthLabelsTable.RowCount = 1;
+            this.textColumnWidthLabelsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.textColumnWidthLabelsTable.Size = new System.Drawing.Size(745, 67);
+            this.textColumnWidthLabelsTable.TabIndex = 1;
+            // 
+            // textColumnWidthLabelExample
+            // 
+            this.textColumnWidthLabelExample.BackColor = System.Drawing.Color.DarkBlue;
+            this.textColumnWidthLabelExample.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textColumnWidthLabelExample.ForeColor = System.Drawing.Color.White;
+            this.textColumnWidthLabelExample.Location = new System.Drawing.Point(2, 5);
+            this.textColumnWidthLabelExample.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.textColumnWidthLabelExample.Name = "textColumnWidthLabelExample";
+            this.textColumnWidthLabelExample.Padding = new System.Windows.Forms.Padding(5);
+            this.textColumnWidthLabelExample.Size = new System.Drawing.Size(741, 62);
+            this.textColumnWidthLabelExample.TabIndex = 0;
+            this.textColumnWidthLabelExample.Text = "Text #N";
+            this.textColumnWidthLabelExample.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // textColumnWidthNumericFieldsTable
+            // 
+            this.textColumnWidthNumericFieldsTable.AutoSize = true;
+            this.textColumnWidthNumericFieldsTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.textColumnWidthNumericFieldsTable.ColumnCount = 3;
+            this.textColumnWidthNumericFieldsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.textColumnWidthNumericFieldsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.textColumnWidthNumericFieldsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.textColumnWidthNumericFieldsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.textColumnWidthNumericFieldsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.textColumnWidthNumericFieldsTable.Controls.Add(this.textColumnWidthNumericFieldExample, 1, 0);
+            this.textColumnWidthNumericFieldsTable.Controls.Add(this.columnWidthsLabel, 0, 0);
+            this.textColumnWidthNumericFieldsTable.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textColumnWidthNumericFieldsTable.Location = new System.Drawing.Point(8, 25);
+            this.textColumnWidthNumericFieldsTable.Name = "textColumnWidthNumericFieldsTable";
+            this.textColumnWidthNumericFieldsTable.RowCount = 1;
+            this.textColumnWidthNumericFieldsTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.textColumnWidthNumericFieldsTable.Size = new System.Drawing.Size(745, 33);
+            this.textColumnWidthNumericFieldsTable.TabIndex = 0;
+            // 
+            // textColumnWidthNumericFieldExample
+            // 
+            this.textColumnWidthNumericFieldExample.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textColumnWidthNumericFieldExample.Location = new System.Drawing.Point(300, 3);
+            this.textColumnWidthNumericFieldExample.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.textColumnWidthNumericFieldExample.Name = "textColumnWidthNumericFieldExample";
+            this.textColumnWidthNumericFieldExample.Size = new System.Drawing.Size(144, 27);
+            this.textColumnWidthNumericFieldExample.TabIndex = 0;
+            // 
+            // columnWidthsLabel
+            // 
+            this.columnWidthsLabel.AutoSize = true;
+            this.columnWidthsLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.columnWidthsLabel.Location = new System.Drawing.Point(3, 0);
+            this.columnWidthsLabel.Name = "columnWidthsLabel";
+            this.columnWidthsLabel.Size = new System.Drawing.Size(110, 33);
+            this.columnWidthsLabel.TabIndex = 3;
+            this.columnWidthsLabel.Text = "Column widths:";
+            this.columnWidthsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // McCurdyUmd1EditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -153,6 +263,8 @@
             this.MinimumSize = new System.Drawing.Size(500, 661);
             this.Name = "McCurdyUmd1EditorForm";
             this.mainTabControl.ResumeLayout(false);
+            this.textsTabPage.ResumeLayout(false);
+            this.textsTabPage.PerformLayout();
             this.connectionTabPage.ResumeLayout(false);
             this.connectionTabPage.PerformLayout();
             this.customElementsPanel.ResumeLayout(false);
@@ -163,6 +275,12 @@
             this.connectionTable.ResumeLayout(false);
             this.connectionTable.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.addressNumericInput)).EndInit();
+            this.textsLayoutGroupBox.ResumeLayout(false);
+            this.textsLayoutGroupBox.PerformLayout();
+            this.textColumnWidthLabelsTable.ResumeLayout(false);
+            this.textColumnWidthNumericFieldsTable.ResumeLayout(false);
+            this.textColumnWidthNumericFieldsTable.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textColumnWidthNumericFieldExample)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -175,5 +293,11 @@
         private System.Windows.Forms.Label addressLabel;
         private System.Windows.Forms.NumericUpDown addressNumericInput;
         private System.Windows.Forms.ComboBox portDropDown;
+        private System.Windows.Forms.GroupBox textsLayoutGroupBox;
+        private System.Windows.Forms.TableLayoutPanel textColumnWidthLabelsTable;
+        private System.Windows.Forms.TableLayoutPanel textColumnWidthNumericFieldsTable;
+        private System.Windows.Forms.NumericUpDown textColumnWidthNumericFieldExample;
+        private System.Windows.Forms.Label columnWidthsLabel;
+        private GeneralComponents.GoodOneLineLabel textColumnWidthLabelExample;
     }
 }

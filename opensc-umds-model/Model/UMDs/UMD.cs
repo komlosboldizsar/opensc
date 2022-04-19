@@ -41,7 +41,7 @@ namespace OpenSC.Model.UMDs
         public override void TotallyRestored()
         {
             base.TotallyRestored();
-            updateTotalToHardware();
+            UpdateEverything();
         }
 
         public override void Removed()
@@ -94,7 +94,7 @@ namespace OpenSC.Model.UMDs
             set => this.setProperty(ref fullStaticText, value, FullStaticTextChanged, null, (_, _) =>
             {
                 if (useFullStaticText)
-                    updateTextsToHardware();
+                    UpdateTexts();
             });
         }
         #endregion
@@ -108,7 +108,7 @@ namespace OpenSC.Model.UMDs
         public bool UseFullStaticText
         {
             get => useFullStaticText;
-            set => this.setProperty(ref useFullStaticText, value, UseFullStaticTextChanged, null, (_, _) => updateTextsToHardware());
+            set => this.setProperty(ref useFullStaticText, value, UseFullStaticTextChanged, null, (_, _) => UpdateTexts());
         }
         #endregion
 
@@ -128,7 +128,7 @@ namespace OpenSC.Model.UMDs
                 this.setProperty(ref alignmentWithFullStaticText, value, AlignmentWithFullStaticTextChanged, null, (_, _) =>
                 {
                     if (useFullStaticText)
-                        updateTextsToHardware();
+                        UpdateTexts();
                 });
             }
         }
@@ -143,14 +143,18 @@ namespace OpenSC.Model.UMDs
         public abstract UmdTextInfo[] TextInfo { get; }
         [PersistAs("texts")]
         [PersistAs(null, 1)]
+        [PersistSubclass(nameof(textTypeGetter))]
         public readonly List<UmdText> Texts = new();
+        protected virtual Type textTypeGetter() => typeof(UmdText);
+        protected internal virtual UmdText CreateText(Umd owner, int indexAtOwner, UmdTextInfo info) => new(owner, indexAtOwner, info);
+
         private List<UmdText> textsByConstructor;
 
         private void initTextThings()
         {
             int i = 0;
             foreach (UmdTextInfo textInfo in TextInfo)
-                Texts.Add(new(this, i++, textInfo));
+                Texts.Add(CreateText(this, i++, textInfo));
             textsByConstructor = new(Texts);
         }
 
@@ -171,48 +175,53 @@ namespace OpenSC.Model.UMDs
             }
             if (textCount < textInfoLength)
                 for (int i = textCount; i < textInfoLength; i++)
-                    Texts.Add(new(this, i, TextInfo[i]));
+                    Texts.Add(CreateText(this, i, TextInfo[i]));
         }
 
-        internal void NotifyTextStaticValueChanged(UmdText text)
+        internal void NotifyTextUsedChanged(UmdText text)
         {
-            if (text.UseStaticValue)
-                notifyTextChanged(text);
+            if (!Updating)
+                UpdateTexts();
         }
 
-        internal void NotifyTextUseStaticValueChanged(UmdText text) => notifyTextChanged(text);
-        internal void NotifyTextUsedChanged(UmdText text) => notifyTextChanged(text);
-        internal void NotifyTextAlignmentChanged(UmdText text) => notifyTextChanged(text);
-        internal void NotifyTextCurrentValueChanged(UmdText text) => notifyTextChanged(text);
-
-        private void notifyTextChanged(UmdText text)
+        internal void NotifyTextAlignmentChanged(UmdText text)
         {
-            if (text.Used)
-                updateTexts();
+            if (!Updating && text.Used)
+                UpdateTexts();
         }
 
-        protected virtual void updateTexts()
+        internal void NotifyTextCurrentValueChanged(UmdText text)
         {
-            if (useFullStaticText)
-                DisplayableCompactText = fullStaticText;
-            else
-                DisplayableCompactText = string.Join(" | ", Texts.Where(t => t.Used).Select(t => t.CurrentValue));
-            updateTextsToHardware();
+            if (!Updating && text.Used)
+                UpdateTexts();
         }
+
+        public void UpdateTexts()
+        {
+            calculateTextFields();
+            sendTextsToHardware();
+        }
+
+        protected abstract void calculateTextFields();
+        protected abstract void sendTextsToHardware();
         #endregion
 
         #region Tallies
         public abstract UmdTallyInfo[] TallyInfo { get; }
         [PersistAs("tallies")]
         [PersistAs(null, 1)]
+        [PersistSubclass(nameof(tallyTypeGetter))]
         public readonly List<UmdTally> Tallies = new();
+        protected virtual Type tallyTypeGetter() => typeof(UmdTally);
+        protected internal virtual UmdTally CreateTally(Umd owner, int indexAtOwner, UmdTallyInfo info) => new(owner, indexAtOwner, info);
+
         private List<UmdTally> talliesByConstructor;
 
         private void initTallyThings()
         {
             int i = 0;
             foreach (UmdTallyInfo tallyInfo in TallyInfo)
-                Tallies.Add(new(this, i++, tallyInfo));
+                Tallies.Add(CreateTally(this, i++, tallyInfo));
             talliesByConstructor = new(Tallies);
         }
 
@@ -233,16 +242,45 @@ namespace OpenSC.Model.UMDs
             }
             if (tallyCount < tallyInfoLength)
                 for (int i = tallyCount; i < tallyInfoLength; i++)
-                    Tallies.Add(new(this, i, TallyInfo[i]));
+                    Tallies.Add(CreateTally(this, i, TallyInfo[i]));
         }
 
-        internal void NotifyTallyColorChanged(UmdTally tally) => updateTalliesToHardware();
-        internal void NotifyTallyCurrentStateChanged(UmdTally tally) => updateTalliesToHardware();
+        internal void NotifyTallyColorChanged(UmdTally tally)
+        {
+            if (!Updating)
+                UpdateTallies();
+        }
+
+        internal void NotifyTallyCurrentStateChanged(UmdTally tally)
+        {
+            if (!Updating)
+                UpdateTallies();
+        }
+
+        public void UpdateTallies()
+        {
+            calculateTallyFields();
+            sendTalliesToHardware();
+        }
+
+        protected abstract void calculateTallyFields();
+        protected abstract void sendTalliesToHardware();
         #endregion
 
-        protected abstract void updateTextsToHardware();
-        protected abstract void updateTalliesToHardware();
-        protected abstract void updateTotalToHardware();
+        public void UpdateEverything()
+        {
+            calculateTextFields();
+            calculateTallyFields();
+            sendEverythingToHardware();
+        }
+
+        protected abstract void sendEverythingToHardware();
+
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            UpdateEverything();
+        }
 
     }
 

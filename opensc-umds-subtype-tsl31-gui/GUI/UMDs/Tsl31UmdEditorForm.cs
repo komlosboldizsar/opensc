@@ -20,6 +20,7 @@ namespace OpenSC.GUI.UMDs
             InitializeComponent();
             if ((umd != null) && !(umd is Tsl31))
                 throw new ArgumentException($"Type of UMD should be {nameof(Tsl31)}.", nameof(umd));
+            initPortDropDown();
         }
 
         protected override IModelEditorFormDataManager createManager()
@@ -33,6 +34,8 @@ namespace OpenSC.GUI.UMDs
                 return;
             portDropDown.SelectByValue(tsl31.Port);
             addressNumericInput.Value = tsl31.Address;
+            tally1Overrides2CheckBox.Checked = tsl31.Tally1Overrides2;
+            tally3Overrides4CheckBox.Checked = tsl31.Tally3Overrides4;
         }
 
         protected override void writeFields()
@@ -43,6 +46,8 @@ namespace OpenSC.GUI.UMDs
                 return;
             tsl31.Port = portDropDown.SelectedValue as SerialPort;
             tsl31.Address = (int)addressNumericInput.Value;
+            tsl31.Tally1Overrides2 = tally1Overrides2CheckBox.Checked;
+            tsl31.Tally3Overrides4 = tally3Overrides4CheckBox.Checked;
         }
 
         protected override void validateFields()
