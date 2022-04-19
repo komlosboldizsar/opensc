@@ -237,12 +237,17 @@ namespace OpenSC.GUI.UMDs
             int textCount = umd.TextInfo.Length;
             textsTabPage.Controls.Remove((textCount == 0) ? textsSourceAndAlignmentGroupBox : textsTabPageNoTextLabel);
             textControls = new TextControls[textCount];
+            int textsSourceAndAlignmentTableRowsPerText = textsSourceAndAlignmentTable.RowCount;
+            TableLayoutHelpers.RowCloner[] textsSourceAndAlignmentTableRowCloners = new TableLayoutHelpers.RowCloner[textsSourceAndAlignmentTableRowsPerText];
+            if (textCount > 1)
+                for (int r = 0; r < textsSourceAndAlignmentTableRowsPerText; r++)
+                    textsSourceAndAlignmentTableRowCloners[r] = new(textsSourceAndAlignmentTable, r);
             for (int i = 0; i < textCount; i++)
             {
                 if (i > 0)
-                    for (int r = 0; r < 4; r++)
-                        textsSourceAndAlignmentTable.CloneRow(r, TableLayoutHelpers.ROW_INDEX_LAST, new string[] { nameof(Visible) });
-                int rowBase = i * 4;
+                    for (int r = 0; r < textsSourceAndAlignmentTableRowsPerText; r++)
+                        textsSourceAndAlignmentTableRowCloners[r].DoCloning(TableLayoutHelpers.RowCloner.DESTINATION_INDEX_LAST, new string[] { nameof(Visible) });
+                int rowBase = i * textsSourceAndAlignmentTableRowsPerText;
                 TextControls thisTextControls = new(this,
                     (Label)textsSourceAndAlignmentTable.GetControlFromPosition(0, rowBase),
                     (CheckBox)textsSourceAndAlignmentTable.GetControlFromPosition(2, rowBase),
@@ -352,15 +357,22 @@ namespace OpenSC.GUI.UMDs
             int tallyCount = umd.TallyInfo.Length;
             talliesTabPage.Controls.Remove((tallyCount == 0) ? talliesSourceAndColorGroupBox : talliesTabPageNoTallyLabel);
             tallyControls = new TallyControls[tallyCount];
+            int talliesSourceAndColorTableRowsPerText = talliesSourceAndColorTable.RowCount;
+            TableLayoutHelpers.RowCloner[] talliesSourceAndColorTableRowCloners = new TableLayoutHelpers.RowCloner[talliesSourceAndColorTableRowsPerText];
+            if (tallyCount > 1)
+                for (int r = 0; r < talliesSourceAndColorTableRowsPerText; r++)
+                    talliesSourceAndColorTableRowCloners[r] = new(talliesSourceAndColorTable, r);
             for (int i = 0; i < tallyCount; i++)
             {
                 UmdTallyInfo thisTallyInfo = umd.TallyInfo[i];
                 if (i > 0)
-                    talliesSourceAndColorTable.CloneRow(0, TableLayoutHelpers.ROW_INDEX_LAST, new string[] { nameof(Visible) });
+                    for (int r = 0; r < talliesSourceAndColorTableRowsPerText; r++)
+                        talliesSourceAndColorTableRowCloners[r].DoCloning(TableLayoutHelpers.RowCloner.DESTINATION_INDEX_LAST, new string[] { nameof(Visible) });
+                int rowBase = i * talliesSourceAndColorTableRowsPerText;
                 TallyControls thisTallyControls = new(this,
-                    (Label)talliesSourceAndColorTable.GetControlFromPosition(0, i),
-                    (ComboBox)talliesSourceAndColorTable.GetControlFromPosition(1, i),
-                    (Button)talliesSourceAndColorTable.GetControlFromPosition(2, i));
+                    (Label)talliesSourceAndColorTable.GetControlFromPosition(0, rowBase),
+                    (ComboBox)talliesSourceAndColorTable.GetControlFromPosition(1, rowBase),
+                    (Button)talliesSourceAndColorTable.GetControlFromPosition(2, rowBase));
                 tallyControls[i] = thisTallyControls;
             }
             talliesTabInitialized();

@@ -151,12 +151,14 @@ namespace OpenSC.GUI.UMDs
             textColumnWidthControls = new TextColumnWidthControls[textInfoLength];
             string[] EXCLUDE_CLONE_PROPERTIES = new string[] { nameof(Control.Visible) };
             ColumnStyle baseColumnStyle = textColumnWidthNumericFieldsTable.ColumnStyles[1];
+            TableLayoutHelpers.ColumnCloner textColumnWidthNumericFieldsTableColumnCloner = new(textColumnWidthNumericFieldsTable, 1);
+            TableLayoutHelpers.ColumnCloner textColumnWidthLabelsTableColumnCloner = new(textColumnWidthLabelsTable, 0);
             for (int i = 0; i < textInfoLength; i++)
             {
                 if (i > 0)
                 {
-                    textColumnWidthNumericFieldsTable.CloneColumn(1, -2, EXCLUDE_CLONE_PROPERTIES);
-                    textColumnWidthLabelsTable.CloneColumn(0, -1, EXCLUDE_CLONE_PROPERTIES);
+                    textColumnWidthNumericFieldsTableColumnCloner.DoCloning(-2, EXCLUDE_CLONE_PROPERTIES);
+                    textColumnWidthLabelsTableColumnCloner.DoCloning(-1, EXCLUDE_CLONE_PROPERTIES);
                 }
                 TextColumnWidthControls thisTextColumnWidthControls = new(this,
                     (NumericUpDown)textColumnWidthNumericFieldsTable.GetControlFromPosition(i + 1, 0),
