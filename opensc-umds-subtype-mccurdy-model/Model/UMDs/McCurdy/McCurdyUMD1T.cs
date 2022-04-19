@@ -18,7 +18,7 @@ namespace OpenSC.Model.UMDs.McCurdy
         {
             new("L+R red", UmdTallyInfo.ColorSettingMode.Fix, Color.Red)
         };
-        public override int TotalColumnWidth => 150;
+        public override int TotalColumnWidth => 149;
         #endregion
 
         #region Calculating and sending data to hardware
