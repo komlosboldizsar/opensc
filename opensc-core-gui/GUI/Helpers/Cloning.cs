@@ -18,7 +18,6 @@ namespace OpenSC.GUI.Helpers
             Control newInstance = baseInstance.CloneTypeOnly();
             newInstance.ClonePropertiesFrom(baseInstance, excludeProperties);
             return newInstance;
-            
         }
         
         public static T CloneT<T>(this T baseInstance, string[] excludeProperties = null)
@@ -40,6 +39,8 @@ namespace OpenSC.GUI.Helpers
                     if ((propInfo.Name != "WindowTarget") && (excludeProperties?.Contains(propInfo.Name) != true))
                         propInfo.SetValue(newInstance, propInfo.GetValue(baseInstance, null), null);
         }
+
+        public static readonly string[] EXCLUDE_VISIBILITY = new string[] { nameof(Control.Visible) };
 
     }
 
