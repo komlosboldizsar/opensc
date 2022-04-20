@@ -38,7 +38,8 @@ namespace OpenSC.GUI.Mixers
             DataGridViewCellStyle onPreviewColumnCellStyle = table.DefaultCellStyle.Clone();
             onPreviewColumnCellStyle.ForeColor = Color.ForestGreen;
 
-            // Column: ID, name
+            // Column: GlobalID, ID, name
+            globalIdColumnCreator(table, builderGetterMethod);
             idColumnCreator(table, builderGetterMethod);
             nameColumnCreator(table, builderGetterMethod);
 

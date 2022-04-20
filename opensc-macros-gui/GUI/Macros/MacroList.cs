@@ -30,7 +30,8 @@ namespace OpenSC.GUI.Macros
             runButtonCellStyle.Font = new Font(runButtonCellStyle.Font, FontStyle.Bold);
             runButtonCellStyle.BackColor = Color.FromArgb(255, 145, 61);
 
-            // Column: ID, name
+            // Column: GlobalID, ID, name
+            globalIdColumnCreator(table, builderGetterMethod);
             idColumnCreator(table, builderGetterMethod);
             nameColumnCreator(table, builderGetterMethod);
 

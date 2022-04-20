@@ -24,7 +24,8 @@ namespace OpenSC.GUI.Variables
 
             CustomDataGridViewColumnDescriptorBuilder<DynamicText> builder;
 
-            // Column: ID, name
+            // Column: GlobalID, ID, name
+            globalIdColumnCreator(table, builderGetterMethod);
             idColumnCreator(table, builderGetterMethod);
             nameColumnCreator(table, builderGetterMethod);
 

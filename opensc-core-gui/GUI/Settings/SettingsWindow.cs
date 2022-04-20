@@ -30,15 +30,18 @@ namespace OpenSC.GUI.Settings
         {
             foreach(var setting in SettingsManager.Instance.RegisteredSettings)
             {
-                ISettingEditorControl editorControl = SettingEditorTypeRegister.Instance.GetEditorForSetting(setting);
-                Control editorControlCasted = editorControl as Control;
-                if (editorControlCasted != null)
+                if (!setting.Hidden)
                 {
-                    editorControlCasted.Dock = DockStyle.Top;
-                    TabPage pageForCategory = getPageForCategory(setting.Category);
-                    Control.ControlCollection pagesControlCollection = pageForCategory.Controls;
-                    pagesControlCollection.Add(editorControlCasted);
-                    pagesControlCollection.SetChildIndex(editorControlCasted, 0);
+                    ISettingEditorControl editorControl = SettingEditorTypeRegister.Instance.GetEditorForSetting(setting);
+                    Control editorControlCasted = editorControl as Control;
+                    if (editorControlCasted != null)
+                    {
+                        editorControlCasted.Dock = DockStyle.Top;
+                        TabPage pageForCategory = getPageForCategory(setting.Category);
+                        Control.ControlCollection pagesControlCollection = pageForCategory.Controls;
+                        pagesControlCollection.Add(editorControlCasted);
+                        pagesControlCollection.SetChildIndex(editorControlCasted, 0);
+                    }
                 }
             }
         }
@@ -77,5 +80,16 @@ namespace OpenSC.GUI.Settings
         }
         #endregion
 
+        private void SettingsWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // @source https://stackoverflow.com/a/2021708
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                Hide();
+            }
+        }
+
     }
+
 }

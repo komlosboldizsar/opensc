@@ -4,12 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSC.Model.UMDs.McCurdy
+namespace OpenSC.GUI.GeneralComponents.DragDrop
 {
-    public enum ColumnCount
-    {
-        One,
-        Two,
-        Three
-    }
+    public class DragSourceEventArgs : EventArgs
+    { }
 }

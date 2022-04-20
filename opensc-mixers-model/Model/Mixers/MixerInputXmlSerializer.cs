@@ -16,7 +16,7 @@ namespace OpenSC.Model.Mixers
         private const string ATTRIBUTE_INDEX = "index";
         private const string ATTRIBUTE_SOURCE = "source";
 
-        public object DeserializeItem(XmlNode serializedItem, object parentItem)
+        public object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
         {
 
             if (serializedItem.LocalName != TAG_NAME)
@@ -37,7 +37,7 @@ namespace OpenSC.Model.Mixers
 
         }
 
-        public XElement SerializeItem(object item, object parentItem)
+        public XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
         {
 
             MixerInput input = item as MixerInput;

@@ -1,12 +1,13 @@
 ﻿using OpenSC.Model;
 using OpenSC.Model.General;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace OpenSC.GUI.GeneralComponents.Tables
 {
-    public class CustomDataGridView<T>: DataGridView
+    public class CustomDataGridView<T> : DataGridView
     {
 
         private IObservableEnumerable<T> boundCollection;
@@ -54,6 +55,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             CellContentClick += cellContentClickHandler;
             CellDoubleClick += cellDoubleClickHandler;
             CellEndEdit += cellEndEditHandler;
+            CellValueChanged += cellValueChangedHandler;
+            CellMouseDown += cellMouseDownHandler;
             AllowUserToAddRows = false;
             AllowUserToDeleteRows = false;
             AllowUserToOrderColumns = false;
@@ -66,6 +69,14 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 return;
             CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
             row?.HandleEndEdit(e);
+        }
+
+        private void cellValueChangedHandler(object sender, DataGridViewCellEventArgs e)
+        {
+            if ((e.RowIndex < 0) || (e.RowIndex >= Rows.Count))
+                return;
+            CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
+            row?.HandleValueChanged(e);
         }
 
         private void cellContentClickHandler(object sender, DataGridViewCellEventArgs e)
@@ -84,6 +95,28 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             row?.HandleDoubleClick(e);
         }
 
+        private void cellMouseDownHandler(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if ((e.RowIndex < 0) || (e.RowIndex >= Rows.Count))
+                return;
+            CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
+            DataGridViewColumn column = Columns[e.ColumnIndex];
+            CustomDataGridViewDragSourceEventArgs<T> dragEventArgs = new()
+            {
+                Table = this,
+                ColumnIndex = e.ColumnIndex,
+                Column = column,
+                RowIndex = e.RowIndex,
+                Row = row,
+                Cell = row.Cells[e.ColumnIndex]
+            };
+            DragHandlers.GetDragData(dragEventArgs, out DragDropEffects allowedEffects, out object draggedObject);
+            if (allowedEffects != DragDropEffects.None)
+                DoDragDrop(draggedObject, allowedEffects);
+        }
+
+        public CustomDataGridViewDragHandlerCollection<T> DragHandlers { get; } = new();
+
         private void itemsAddedHandler(IEnumerable<IObservableCollection<T>.ItemWithPosition> affectedItemsWithPositions)
             => affectedItemsWithPositions.Foreach(aiwp => Rows.Insert(aiwp.Position, new CustomDataGridViewRow<T>(this, aiwp.Item)));
 
@@ -99,10 +132,14 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 Rows.Add(new CustomDataGridViewRow<T>(this, item));
         }
 
-        public void AddColumn(CustomDataGridViewColumnDescriptor<T> columnDescriptor)
+        public DataGridViewColumn AddColumn(CustomDataGridViewColumnDescriptor<T> columnDescriptor)
         {
             columnDescriptors.Add(columnDescriptor);
             DataGridViewColumn column = getColumnByType(columnDescriptor.Type);
+            column.Tag = new CustomDataGridViewColumnTag()
+            {
+                ID = columnDescriptor.ID
+            };
             column.HeaderText = columnDescriptor.Header;
             column.Width = columnDescriptor.Width + columnDescriptor.DividerWidth;
             column.DividerWidth = columnDescriptor.DividerWidth;
@@ -110,12 +147,11 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 column.DefaultCellStyle = columnDescriptor.CellStyle;
             column.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
             Columns.Add(column);
+            columnDescriptor.Extensions?.Foreach(ext => ext.ColumnReady(this, column));
+            return column;
         }
 
-        public void ColumnChangeReady()
-        {
-            loadItems();
-        }
+        public void ColumnChangeReady() => loadItems();
 
         private static DataGridViewColumn getColumnByType(DataGridViewColumnType type)
         {

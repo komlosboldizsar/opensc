@@ -51,9 +51,21 @@ namespace OpenSC.GUI.Settings
         {
             openFileDialog.Filter = ((OpenFileSetting)setting).FileFilter;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
                 filePathTextBox.Text = openFileDialog.FileName;
-            }
+        }
+
+        private void filePathTextBox_DragOver(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+                return;
+            e.Effect = copyToProgramFolderCheckbox.Checked ? DragDropEffects.Copy : DragDropEffects.Link;
+        }
+
+        private void filePathTextBox_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files.Length == 1)
+                filePathTextBox.Text = files[0];
         }
 
     }

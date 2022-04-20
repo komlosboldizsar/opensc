@@ -203,6 +203,17 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             { }
         }
 
+        protected override void requestCrosspointUpdatesImpl(IEnumerable<RouterCrosspoint> crosspoints)
+        {
+            IEnumerable<BMD.Videohub.BlackMagicVideohub.Crosspoint> crosspointIndices = crosspoints.Select(cp => new BMD.Videohub.BlackMagicVideohub.Crosspoint(cp.Output.Index, cp.Input.Index));
+            try
+            {
+                videohub.SetCrosspoints(crosspointIndices);
+            }
+            catch (ArgumentOutOfRangeException)
+            { }
+        }
+
         protected override void queryAllStates()
         {
             videohub.QueryAllCrosspoints();

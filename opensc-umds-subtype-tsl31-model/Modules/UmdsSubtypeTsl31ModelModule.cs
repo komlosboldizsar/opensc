@@ -1,6 +1,6 @@
 ﻿using OpenSC.Model;
 using OpenSC.Model.UMDs;
-using OpenSC.Model.UMDs.TSL31;
+using OpenSC.Model.UMDs.Tsl31;
 
 namespace OpenSC.Modules
 {
@@ -12,7 +12,7 @@ namespace OpenSC.Modules
 
         protected override void registerModelTypes()
         {
-            UmdTypeRegister.Instance.RegisterType<TSL31>();
+            UmdTypeRegister.Instance.RegisterType<Tsl31>();
         }
 
         protected override void registerSerializers()

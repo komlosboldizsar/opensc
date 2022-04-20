@@ -29,7 +29,8 @@ namespace OpenSC.GUI.Signals
 
             CustomDataGridViewColumnDescriptorBuilder<ExternalSignalCategory> builder;
 
-            // Column: ID, name
+            // Column: GlobalID, ID, name
+            globalIdColumnCreator(table, builderGetterMethod);
             idColumnCreator(table, builderGetterMethod);
             nameColumnCreator(table, builderGetterMethod);
 

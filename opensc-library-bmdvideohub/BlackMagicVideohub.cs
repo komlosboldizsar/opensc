@@ -132,7 +132,7 @@ namespace BMD.Videohub
         #region Crosspoints
         private int?[] crosspoints = null;
 
-        CrosspointChangeRequest pendingCrosspointChangeRequest = null;
+        List<Crosspoint> pendingCrosspointChangeRequests = new List<Crosspoint>();
 
         public void SetCrosspoint(int output, int input)
         {
@@ -144,14 +144,35 @@ namespace BMD.Videohub
             if ((input < 0) || (input >= InputCount))
                 throw new ArgumentOutOfRangeException();
 
-            pendingCrosspointChangeRequest = new CrosspointChangeRequest()
-            {
-                Destination = output,
-                Source = input
-            };
+            pendingCrosspointChangeRequests.Clear();
+            pendingCrosspointChangeRequests.Add(new Crosspoint(output, input));
 
             socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_ROUTING);
             socketReceiver.SendLine(string.Format("{0} {1}", output, input));
+            socketReceiver.SendLine("");
+
+        }
+
+        public void SetCrosspoints(IEnumerable<Crosspoint> crosspoints)
+        {
+
+            if (!Connected)
+                throw new NotConnectedException();
+            foreach (Crosspoint crosspoint in crosspoints)
+            {
+                if ((crosspoint.Destination < 0) || (crosspoint.Destination >= OutputCount))
+                    throw new ArgumentOutOfRangeException();
+                if ((crosspoint.Source < 0) || (crosspoint.Source >= InputCount))
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            pendingCrosspointChangeRequests.Clear();
+            socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_ROUTING);
+            foreach (Crosspoint crosspoint in crosspoints)
+            {
+                socketReceiver.SendLine(string.Format("{0} {1}", crosspoint.Destination, crosspoint.Source));
+                pendingCrosspointChangeRequests.Add(crosspoint);
+            }
             socketReceiver.SendLine("");
 
         }
@@ -167,7 +188,7 @@ namespace BMD.Videohub
         {
             if (!Connected)
                 return;
-            if (pendingCrosspointChangeRequest != null)
+            if (pendingCrosspointChangeRequests.Count != 0)
                 return;
             socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_ROUTING);
             socketReceiver.SendLine("");
@@ -185,11 +206,7 @@ namespace BMD.Videohub
             CrosspointChanged?.Invoke(output, inputNullable);
         }
 
-        private class CrosspointChangeRequest
-        {
-            public int Destination;
-            public int Source;
-        }
+        public record Crosspoint(int Destination, int Source);
         #endregion
 
         #region Locks
@@ -235,7 +252,7 @@ namespace BMD.Videohub
         {
             if (!Connected)
                 return;
-            if (pendingCrosspointChangeRequest != null)
+            if (pendingCrosspointChangeRequests.Count != 0)
                 return;
             socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_LOCKS);
             socketReceiver.SendLine("");
@@ -340,10 +357,11 @@ namespace BMD.Videohub
 
             if (line == ACK)
             {
-                if (pendingCrosspointChangeRequest != null)
+                if (pendingCrosspointChangeRequests.Count != 0)
                 {
-                    updateCrosspoint(pendingCrosspointChangeRequest.Destination, pendingCrosspointChangeRequest.Source);
-                    pendingCrosspointChangeRequest = null;
+                    foreach (Crosspoint crosspoint in pendingCrosspointChangeRequests)
+                    updateCrosspoint(crosspoint.Destination, crosspoint.Source);
+                    pendingCrosspointChangeRequests.Clear();
                 }
                 return;
             }

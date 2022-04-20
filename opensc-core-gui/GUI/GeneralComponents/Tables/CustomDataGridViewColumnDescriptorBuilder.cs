@@ -16,6 +16,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private DataGridViewColumnType type;
 
+        private string id;
+
         private string header;
 
         private int width;
@@ -35,10 +37,11 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         private CustomDataGridViewColumnDescriptor<T>.CellDoubleClickHandlerMethodDelegate doubleClickHandlerMethod;
 
         private CustomDataGridViewColumnDescriptor<T>.CellEndEditHandlerMethodDelegate endEditHandlerMethod;
+        private CustomDataGridViewColumnDescriptor<T>.CellValueChangedHandlerMethodDelegate valueChangedHandlerMethod;
 
-        private List<string> changeEvents = new List<string>();
+        private List<string> changeEvents = new();
 
-        private List<string[]> multilevelChangeEvents = new List<string[]>();
+        private List<string[]> multilevelChangeEvents = new();
 
         private CustomDataGridViewColumnDescriptor<T>.ExternalUpdateEventSubscriberMethodDelegate externalUpdateEventSubscriberMethod;
 
@@ -58,23 +61,22 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private Padding iconPadding;
 
+        private List<CustomDataGridViewColumnDescriptorExtension<T>> extensions = new();
+
         public CustomDataGridViewColumnDescriptorBuilder()
         { }
 
-        public CustomDataGridViewColumnDescriptorBuilder(DataGridViewColumnType type)
-        {
-            this.type = type;
-        }
+        public CustomDataGridViewColumnDescriptorBuilder(DataGridViewColumnType type) => this.type = type;
 
-        public CustomDataGridViewColumnDescriptorBuilder(CustomDataGridView<T> table)
-        {
-            this.table = table;
-        }
+        public CustomDataGridViewColumnDescriptorBuilder(CustomDataGridView<T> table) => this.table = table;
+
+        public CustomDataGridViewColumnDescriptor<T> ReadyDescriptor { get; private set; }
 
         public CustomDataGridViewColumnDescriptor<T> Build()
         {
-            return new CustomDataGridViewColumnDescriptor<T>(
+            ReadyDescriptor = new CustomDataGridViewColumnDescriptor<T>(
                 type,
+                id,
                 header,
                 width,
                 dividerWidth,
@@ -85,6 +87,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 contentClickHandlerMethod,
                 doubleClickHandlerMethod,
                 endEditHandlerMethod,
+                valueChangedHandlerMethod,
                 changeEvents.ToArray(),
                 multilevelChangeEvents.ToArray(),
                 externalUpdateEventSubscriberMethod,
@@ -95,12 +98,15 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 iconShown,
                 iconColor,
                 iconType,
-                iconPadding);
+                iconPadding,
+                extensions.ToArray());
+            return ReadyDescriptor;
         }
 
-        public CustomDataGridViewColumnDescriptor<T> BuildAndAdd(CustomDataGridView<T> table) {
+        public CustomDataGridViewColumnDescriptor<T> BuildAndAdd(CustomDataGridView<T> table)
+        {
             var columnDescriptor = Build();
-            table.AddColumn(columnDescriptor);
+            columnDescriptor.AddToTable(table);
             return columnDescriptor;
         }
 
@@ -114,6 +120,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public CustomDataGridViewColumnDescriptorBuilder<T> Type(DataGridViewColumnType type)
         {
             this.type = type;
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> ID(string id)
+        {
+            this.id = id;
             return this;
         }
 
@@ -174,6 +186,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public CustomDataGridViewColumnDescriptorBuilder<T> CellEndEditHandlerMethod(CustomDataGridViewColumnDescriptor<T>.CellEndEditHandlerMethodDelegate endEditHandlerMethod)
         {
             this.endEditHandlerMethod = endEditHandlerMethod;
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> CellValueChangedHandlerMethod(CustomDataGridViewColumnDescriptor<T>.CellValueChangedHandlerMethodDelegate valueChangedHandlerMethod)
+        {
+            this.valueChangedHandlerMethod = valueChangedHandlerMethod;
             return this;
         }
 
@@ -243,5 +261,13 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             return this;
         }
 
+        public CustomDataGridViewColumnDescriptorBuilder<T> AddExtension(CustomDataGridViewColumnDescriptorExtension<T> extension)
+        {
+            extensions.Add(extension);
+            extension.AddedToBuilder(this);
+            return this;
+        }
+
     }
+
 }

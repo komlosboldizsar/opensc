@@ -31,7 +31,8 @@ namespace OpenSC.GUI.Signals.TallyCopying
 
             CustomDataGridViewColumnDescriptorBuilder<TallyCopy> builder;
 
-            // Column: ID, name
+            // Column: GlobalID, ID, name
+            globalIdColumnCreator(table, builderGetterMethod);
             idColumnCreator(table, builderGetterMethod);
             nameColumnCreator(table, builderGetterMethod);
 
@@ -40,9 +41,8 @@ namespace OpenSC.GUI.Signals.TallyCopying
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("From signal");
             builder.Width(150);
-            builder.UpdaterMethod((tallyCopy, cell) => { cell.Value = tallyCopy.FromSignal.SignalLabel; });
+            builder.UpdaterMethod((tallyCopy, cell) => { cell.Value = tallyCopy.FromSignal?.SignalLabel ?? ""; });
             builder.AddMultilevelChangeEvent(nameof(TallyCopy.FromSignal), nameof(ISignalSourceRegistered.SignalLabel));
-            builder.BuildAndAdd();
 
             // Column: from color
             builder = builderGetterMethod();
@@ -54,16 +54,14 @@ namespace OpenSC.GUI.Signals.TallyCopying
                 cell.Style.BackColor = tallyCopy.FromTallyColor.ConvertToLightColor();
             });
             builder.AddChangeEvent(nameof(TallyCopy.FromTallyColor));
-            builder.BuildAndAdd();
 
             // Column: to signal
             builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("To signal");
             builder.Width(150);
-            builder.UpdaterMethod((tallyCopy, cell) => { cell.Value = tallyCopy.ToSignal.SignalLabel; });
+            builder.UpdaterMethod((tallyCopy, cell) => { cell.Value = tallyCopy.ToSignal?.SignalLabel ?? ""; });
             builder.AddMultilevelChangeEvent(nameof(TallyCopy.ToSignal), nameof(ISignalSourceRegistered.SignalLabel));
-            builder.BuildAndAdd();
 
             // Column: to color
             builder = builderGetterMethod();

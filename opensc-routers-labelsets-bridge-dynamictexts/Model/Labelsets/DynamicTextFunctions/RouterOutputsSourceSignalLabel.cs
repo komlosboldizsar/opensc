@@ -54,7 +54,7 @@ namespace OpenSC.Model.Labelsets.DynamicTextFunctions
                     return;
                 }
 
-                output = router.GetOutput((int)argumentObjects[1]);
+                output = argumentObjects[1] as RouterOutput;
                 if (output == null)
                 {
                     CurrentValue = "?";

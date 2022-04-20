@@ -6,26 +6,22 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Macros
 {
-    public class MacroCommandArgumentDatabaseItem<TModel> : MacroCommandArgumentBase
-        where TModel : class, IModel
+
+    public abstract class MacroCommandArgumentRegisterItem<TKey, TObject> : MacroCommandArgumentBase
+        where TObject : class
     {
 
-        private readonly DatabaseBase<TModel> database;
+        private readonly ObjectRegisterBase<TKey, TObject> register;
 
-        public MacroCommandArgumentDatabaseItem(DatabaseBase<TModel> database) : base(typeof(TModel), MacroArgumentKeyType.Integer)
-        {
-            this.database = database;
-        }
+        public MacroCommandArgumentRegisterItem(ObjectRegisterBase<TKey, TObject> register) : base(typeof(TObject), MacroArgumentKeyType.String)
+            => this.register = register;
 
-        public override object GetObjectByKey(string key, object[] previousArgumentObjects)
-        {
-            if (!int.TryParse(key, out int objectId))
-                return null;
-            return database.GetTById(objectId);
-        }
-
-        public override string GetKeyByObject(object obj) => (obj as TModel)?.ID.ToString() ?? "0";
-        public override IEnumerable<object> GetPossibilities(object[] previousArgumentValues) => database;
+        public override object GetObjectByKey(string key, object[] previousArgumentObjects) => register[StringKeyToTypedKey(key)];
+        public override string GetKeyByObject(object obj) => TypedKeyToStringKey(register.GetKey(obj as TObject));
+        protected abstract TKey StringKeyToTypedKey(string stringKey);
+        protected string TypedKeyToStringKey(TKey typedKey) => typedKey?.ToString() ?? "";
+        public override IEnumerable<object> GetPossibilities(object[] previousArgumentValues) => register;
 
     }
+
 }

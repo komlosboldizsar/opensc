@@ -17,7 +17,7 @@ namespace OpenSC.Model.Routers.Mirrors
         private const string ATTRIBUTE_ITEM_A = "item_a";
         private const string ATTRIBUTE_ITEM_B = "item_b";
 
-        public object DeserializeItem(XmlNode serializedItem, object parentItem)
+        public object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
         {
             
             if (serializedItem.LocalName != TAG_NAME)
@@ -36,7 +36,7 @@ namespace OpenSC.Model.Routers.Mirrors
 
         }
 
-        public XElement SerializeItem(object item, object parentItem)
+        public XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
         {
 
             TSerialized itemCasted = item as TSerialized;

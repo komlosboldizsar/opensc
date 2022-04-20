@@ -11,11 +11,13 @@ namespace OpenSC.GUI.GeneralComponents.Tables
     public class CustomDataGridViewRow<T>: DataGridViewRow
     {
 
-        CustomDataGridView<T> table;
+        private CustomDataGridView<T> table;
 
-        List<DataGridViewCell> cells = new List<DataGridViewCell>();
+        private List<DataGridViewCell> cells = new List<DataGridViewCell>();
 
-        T item;
+        private T item;
+
+        public T Item => item;
 
         public CustomDataGridViewRow(CustomDataGridView<T> table, T item)
         {
@@ -164,6 +166,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
             columnDescriptor.InitializerMethod?.Invoke(item, cell);
             columnDescriptor.UpdaterMethod?.Invoke(item, cell);
+            columnDescriptor.Extensions?.Foreach(ext => ext.CellReady(table, cell));
 
             return cell;
 
@@ -216,6 +219,12 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         {
             int ci = eventArgs.ColumnIndex;
             getColumnDescriptor(ci).EndEditHandlerMethod?.Invoke(item, Cells[ci], eventArgs);
+        }
+
+        public void HandleValueChanged(DataGridViewCellEventArgs eventArgs)
+        {
+            int ci = eventArgs.ColumnIndex;
+            getColumnDescriptor(ci).ValueChangedHandlerMethod?.Invoke(item, Cells[ci], eventArgs);
         }
 
         private CustomDataGridViewColumnDescriptor<T> getColumnDescriptor(int columnIndex)

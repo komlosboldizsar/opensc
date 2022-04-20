@@ -1,14 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>opensc_routers_bridge_labelsets</RootNamespace>
+      <TargetFramework>net5.0</TargetFramework>
+      <RootNamespace>opensc_routers_bridge_labelsets</RootNamespace>
   </PropertyGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
-    <ProjectReference Include="..\opensc-labelsets-model\opensc-labelsets-model.csproj" />
-    <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj" />
+      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
+      <ProjectReference Include="..\opensc-labelsets-model\opensc-labelsets-model.csproj"/>
+      <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj"/>
   </ItemGroup>
-
+  <Import Project="..\GlobalCsproj\*.csproj"/>
 </Project>

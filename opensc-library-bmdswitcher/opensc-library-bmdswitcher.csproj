@@ -1,29 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0-windows7.0</TargetFramework>
-    <OutputType>Library</OutputType>
-    <RootNamespace>BMD.Switcher</RootNamespace>
-    <AssemblyName>BMD.Switcher</AssemblyName>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWindowsForms>true</UseWindowsForms>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+      <TargetFramework>net5.0-windows7.0</TargetFramework>
+      <OutputType>Library</OutputType>
+      <RootNamespace>BMD.Switcher</RootNamespace>
+      <AssemblyName>BMD.Switcher</AssemblyName>
+      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+      <UseWindowsForms>true</UseWindowsForms>
+      <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
-    <COMReference Include="BMDSwitcherAPI">
-      <Guid>{8A92B919-156C-4D61-94EF-03F9BE4004B0}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
+      <COMReference Include="BMDSwitcherAPI">
+         <Guid>{8A92B919-156C-4D61-94EF-03F9BE4004B0}</Guid>
+         <VersionMajor>1</VersionMajor>
+         <VersionMinor>0</VersionMinor>
+         <Lcid>0</Lcid>
+         <WrapperTool>tlbimp</WrapperTool>
+         <Isolated>False</Isolated>
+         <EmbedInteropTypes>True</EmbedInteropTypes>
+      </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ThreadHelpers\ThreadHelpers.csproj" />
+      <ProjectReference Include="..\ThreadHelpers\ThreadHelpers.csproj"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+      <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
+      <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
   </ItemGroup>
+  <Import Project="..\GlobalCsproj\*.csproj"/>
 </Project>

@@ -15,7 +15,7 @@ namespace OpenSC.Model.Labelsets
         public const string ATTRIBUTE_OBJECT = "object";
         private const string ATTRIBUTE_TEXT = "text";
 
-        public object DeserializeItem(XmlNode serializedItem, object parentItem)
+        public object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
         {
             if (serializedItem.LocalName != TAG_NAME)
                 return null;
@@ -24,7 +24,7 @@ namespace OpenSC.Model.Labelsets
             return label;
         }
 
-        public XElement SerializeItem(object item, object parentItem)
+        public XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
         {
             Label label = item as Label;
             if (label == null)

@@ -102,6 +102,30 @@ namespace OpenSC.Model.Mixers
             => OnPreviewInputNameChanged?.Invoke(this, newName);
         #endregion
 
+        #region Property: GivesRedTallyToSources, GivesGreenTallyToSources
+        public event PropertyChangedTwoValuesDelegate<Mixer, bool> GivesRedTallyToSourcesChanged;
+
+        [PersistAs("gives_red_tally")]
+        private bool givesRedTallyToSources;
+
+        public bool GivesRedTallyToSources
+        {
+            get => givesRedTallyToSources;
+            set => this.setProperty(ref givesRedTallyToSources, value, GivesRedTallyToSourcesChanged);
+        }
+
+        public event PropertyChangedTwoValuesDelegate<Mixer, bool> GivesGreenTallyToSourcesChanged;
+
+        [PersistAs("gives_green_tally")]
+        private bool givesGreenTallyToSources;
+
+        public bool GivesGreenTallyToSources
+        {
+            get => givesGreenTallyToSources;
+            set => this.setProperty(ref givesGreenTallyToSources, value, GivesGreenTallyToSourcesChanged);
+        }
+        #endregion
+
         #region Property: State
         public event PropertyChangedTwoValuesDelegate<Mixer, MixerState> StateChanged;
         

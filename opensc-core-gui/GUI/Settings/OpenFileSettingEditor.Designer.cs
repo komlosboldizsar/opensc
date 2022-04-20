@@ -91,10 +91,13 @@
             // 
             // filePathTextBox
             // 
+            this.filePathTextBox.AllowDrop = true;
             this.filePathTextBox.Location = new System.Drawing.Point(8, 8);
             this.filePathTextBox.Name = "filePathTextBox";
             this.filePathTextBox.Size = new System.Drawing.Size(252, 27);
             this.filePathTextBox.TabIndex = 6;
+            this.filePathTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.filePathTextBox_DragDrop);
+            this.filePathTextBox.DragOver += new System.Windows.Forms.DragEventHandler(this.filePathTextBox_DragOver);
             // 
             // browseButton
             // 

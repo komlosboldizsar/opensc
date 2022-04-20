@@ -15,7 +15,7 @@ namespace OpenSC.Model.Routers
         private const string ATTRIBUTE_INDEX = "index";
         private const string ATTRIBUTE_NAME = "name";
 
-        public virtual object DeserializeItem(XmlNode serializedItem, object parentItem)
+        public virtual object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
         {
 
             Router parentRouter = parentItem as Router;
@@ -30,7 +30,7 @@ namespace OpenSC.Model.Routers
 
         }
 
-        public virtual XElement SerializeItem(object item, object parentItem)
+        public virtual XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
         {
 
             RouterOutput output = item as RouterOutput;

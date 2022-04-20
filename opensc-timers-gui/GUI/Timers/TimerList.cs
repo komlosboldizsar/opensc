@@ -29,7 +29,8 @@ namespace OpenSC.GUI.Timers
 
             CustomDataGridViewColumnDescriptorBuilder<Timer> builder;
 
-            // Column: ID, name
+            // Column: GlobalID, ID, name
+            globalIdColumnCreator(table, builderGetterMethod);
             idColumnCreator(table, builderGetterMethod);
             nameColumnCreator(table, builderGetterMethod);
 
@@ -64,6 +65,7 @@ namespace OpenSC.GUI.Timers
                     cell.Value = timer.Running ? STATE_IMAGE_RUNNING : STATE_IMAGE_STOPPED;
             });
             builder.AddChangeEvent(nameof(Timer.Mode));
+            builder.AddChangeEvent(nameof(Timer.Running));
 
             // Column: current value
             builder = builderGetterMethod();

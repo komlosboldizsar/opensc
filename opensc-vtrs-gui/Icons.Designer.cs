@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OpenSC.GUI.VTRs {
+namespace OpenSC {
     using System;
     
     
@@ -57,6 +57,16 @@ namespace OpenSC.GUI.VTRs {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _16_vtr_cued {
+            get {
+                object obj = ResourceManager.GetObject("_16_vtr_cued", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -116,6 +126,16 @@ namespace OpenSC.GUI.VTRs {
         internal static System.Drawing.Bitmap _16_vtr_stopped {
             get {
                 object obj = ResourceManager.GetObject("_16_vtr_stopped", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _16_vtr_unknown {
+            get {
+                object obj = ResourceManager.GetObject("_16_vtr_unknown", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

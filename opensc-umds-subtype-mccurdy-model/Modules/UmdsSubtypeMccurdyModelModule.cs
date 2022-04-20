@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model;
+using OpenSC.Model.Persistence;
 using OpenSC.Model.UMDs;
 using OpenSC.Model.UMDs.McCurdy;
 
@@ -17,7 +18,9 @@ namespace OpenSC.Modules
         }
 
         protected override void registerSerializers()
-        { }
+        {
+            DatabasePersister<Umd>.RegisterSerializer(new McCurdyUmd1TextXmlSerializer());
+        }
 
     }
 

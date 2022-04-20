@@ -100,6 +100,8 @@ namespace OpenSC.GUI.Routers.Mirrors
             routerBdropDown.CreateAdapterAsDataSource(RouterDatabase.Instance, null, true, "(not associated)");
             routerAdropDown.SelectedIndexChanged += selectedRouterChangedHandler;
             routerBdropDown.SelectedIndexChanged += selectedRouterChangedHandler;
+            routerAdropDown.ReceiveSystemObjectDrop().FilterByType<Router>();
+            routerBdropDown.ReceiveSystemObjectDrop().FilterByType<Router>();
             // Synchronization mode
             EnumComboBoxAdapter<RouterMirrorSynchronizationMode> synchronizationBaseDropDownAdapter = new EnumComboBoxAdapter<RouterMirrorSynchronizationMode>(routerSynchronizationModeTranslations);
             synchronizationModeDropDown.SetAdapterAsDataSource(synchronizationBaseDropDownAdapter);

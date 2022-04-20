@@ -48,9 +48,10 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
         public object Clone()
             => new ComboBoxAdapter<T>(boundCollection, toStringFunction, ContainsNull, nullLabel);
 
-        private class ItemProxy
+        internal class ItemProxy : IComboBoxAdapter.IItemProxy
         {
 
+            public object ObjValue => Value;
             public T Value { get; private set; }
             public string Label { get; private set; }
 

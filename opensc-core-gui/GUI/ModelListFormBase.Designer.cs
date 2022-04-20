@@ -98,7 +98,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel topPanelInner;
+        protected System.Windows.Forms.Panel topPanelInner;
         private GeneralComponents.SplitButton addItemButton;
         private System.Windows.Forms.ContextMenuStrip addableItemTypesMenu;
     }

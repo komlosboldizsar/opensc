@@ -20,6 +20,8 @@ namespace OpenSC
         static void Main()
         {
 
+            AppDomain.CurrentDomain.UnhandledException += appDomainUnhandledExceptionHandler;
+
             // Logger
             string loggerDirectory = Application.StartupPath + Path.DirectorySeparatorChar + "log";
             FileLogger logger = new FileLogger(loggerDirectory, "opensc");
@@ -47,6 +49,23 @@ namespace OpenSC
             mainForm.Load += mainFormOpenedHandler;
             Application.Run(GUI.MainForm.Instance);
 
+        }
+
+        private static void appDomainUnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (!(e.ExceptionObject is Exception ex))
+                return;
+            string logMessage = string.Format("Unhandled exception: [{0}]", ex.Message ?? "");
+            LogDispatcher.E(LOG_TAG, logMessage);
+            string stackTrace = ex.StackTrace;
+            if (stackTrace != null)
+            {
+                string[] stackTraceLines = stackTrace.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                LogDispatcher.V(LOG_TAG, "-- STACK TRACE STARTS --");
+                foreach (string stackTraceLine in stackTraceLines)
+                    LogDispatcher.V(LOG_TAG, stackTraceLine);
+                LogDispatcher.V(LOG_TAG, "-- STACK TRACE ENDS --");
+            }
         }
 
         private static void mainFormOpenedHandler(object sender, EventArgs e)

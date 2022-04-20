@@ -195,6 +195,11 @@
             // 
             this.idNumericField.Location = new System.Drawing.Point(70, 4);
             this.idNumericField.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.idNumericField.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
             this.idNumericField.Name = "idNumericField";
             this.idNumericField.Size = new System.Drawing.Size(120, 27);
             this.idNumericField.TabIndex = 2;
