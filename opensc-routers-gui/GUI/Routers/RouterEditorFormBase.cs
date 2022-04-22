@@ -112,7 +112,7 @@ namespace OpenSC.GUI.Routers
             builder.Width(300);
             builder.InitializerMethod((input, cell) => { });
             builder.UpdaterMethod((input, cell) => { cell.Value = input.CurrentSource; });
-            builder.CellEndEditHandlerMethod((input, cell, eventargs) => { input.AssignSource(cell.Value as ISignalSource); });
+            builder.CellValueChangedHandlerMethod((input, cell, eventargs) => { input.AssignSource(cell.Value as ISignalSource); });
             builder.DropDownPopulatorMethod((input, cell) => sources);
             builder.ReceiveSystemObjectDrop().FilterByType<ISignalSourceRegistered>();
             builder.BuildAndAdd();

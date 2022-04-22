@@ -97,13 +97,13 @@ namespace OpenSC.Model.UMDs.Tsl50
         private byte[] getBytesForPacket(byte[] displayData)
         {
             int totalByteCount = 6 + displayData.Length;
-            byte[] totalBytes = new byte[totalByteCount];
-            totalBytes[0] = (byte)((totalByteCount >> 8) & 0xFF); // PBC
-            totalBytes[1] = (byte)(totalByteCount & 0xFF); // PBC
+            byte[] totalBytes = new byte[totalByteCount]; // LITTLE ENDIAN!
+            totalBytes[0] = (byte)(totalByteCount & 0xFF); // PBC LSB
+            totalBytes[1] = (byte)((totalByteCount >> 8) & 0xFF); // PBC MSB
             totalBytes[2] = 0; // VER
             totalBytes[3] = 0; // FLAGS (ASCII, DMSG)
-            totalBytes[4] = (byte)((index >> 8) & 0xFF);
-            totalBytes[5] = (byte)(index & 0xFF);
+            totalBytes[4] = (byte)(index & 0xFF); // SCREEN INDEX LSB
+            totalBytes[5] = (byte)((index >> 8) & 0xFF); // SCREEN INDEX MSB
             displayData.CopyTo(totalBytes, 6);
             return totalBytes;
         }

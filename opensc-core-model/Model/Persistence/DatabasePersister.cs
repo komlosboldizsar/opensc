@@ -180,7 +180,7 @@ namespace OpenSC.Model.Persistence
 
         }
 
-        private object serializeValue(MemberInfo memberInfo, Type memberType, object item, object parentItem, int arrayDimension = 0)
+        private object serializeValue(MemberInfo memberInfo, Type memberType, object item, object parentItem, int arrayDimension = 0, object[] indices = null)
         {
 
             if (item == null)
@@ -190,12 +190,18 @@ namespace OpenSC.Model.Persistence
             if ((itemAsSystemObject != null) && (memberInfo.GetCustomAttribute<PersistDetailedAttribute>() == null))
                 return itemAsSystemObject.GlobalID;
 
+            object[] extendedIndices = extendIndices(indices, arrayDimension);
+
             if (memberType.IsArray && (item is Array))
             {
                 Array array = item as Array;
                 List<XElement> arrayElements = new List<XElement>();
+                int elementIndex = 0;
                 foreach (var element in array)
-                    arrayElements.Add(serializeCollectionElement(memberInfo, memberType.GetElementType(), element, parentItem, arrayDimension));
+                {
+                    extendedIndices[arrayDimension] = elementIndex++;
+                    arrayElements.Add(serializeCollectionElement(memberInfo, memberType.GetElementType(), element, parentItem, arrayDimension, extendedIndices));
+                }
                 return arrayElements;
             }
 
@@ -214,8 +220,12 @@ namespace OpenSC.Model.Persistence
             {
                 IEnumerable enumerable = item as IEnumerable;
                 List<XElement> arrayElements = new List<XElement>();
+                int elementIndex = 0;
                 foreach (var element in enumerable)
-                    arrayElements.Add(serializeCollectionElement(memberInfo, elementType, element, parentItem, arrayDimension));
+                {
+                    extendedIndices[arrayDimension] = elementIndex++;
+                    arrayElements.Add(serializeCollectionElement(memberInfo, elementType, element, parentItem, arrayDimension, extendedIndices));
+                }
                 return arrayElements;
             }
 
@@ -227,8 +237,11 @@ namespace OpenSC.Model.Persistence
 
                 PersistSubclassAttribute persistSubclassAttribute = memberInfo.GetCustomAttributes<PersistSubclassAttribute>().FirstOrDefault();
                 if (persistSubclassAttribute != null) // should check if given type is subclass of member type
-                    serializeAsType = persistSubclassAttribute.SubclassType;
-                
+                {
+                    MethodInfo subclassTypeGetterMethodInfo = parentItem.GetType().GetMethod(persistSubclassAttribute.SubclassTypeGetterName, memberLookupBindingFlags);
+                    serializeAsType = subclassTypeGetterMethodInfo.Invoke(parentItem, null) as Type;
+                }
+
                 PolymorphFieldAttribute polymorphFieldAttribute = memberInfo.GetCustomAttributes<PolymorphFieldAttribute>().FirstOrDefault();
                 Dictionary<Type, string> typeStringDictionary = null;
                 string itemTypeString = null;
@@ -243,7 +256,7 @@ namespace OpenSC.Model.Persistence
                 IValueXmlSerializer serializer = GetSerializerForType(serializeAsType);
                 if (serializer == null)
                     return item.ToString();
-                XElement serializedItem = serializer.SerializeItem(item, parentItem);
+                XElement serializedItem = serializer.SerializeItem(item, parentItem, indices);
                 if ((polymorphFieldAttribute?.TypeAttributeName != null) && (itemTypeString != null))
                     serializedItem.SetAttributeValue(polymorphFieldAttribute.TypeAttributeName, itemTypeString);
                 return serializedItem;
@@ -254,7 +267,7 @@ namespace OpenSC.Model.Persistence
 
         }
 
-        private XElement serializeCollectionElement(MemberInfo memberInfo, Type memberType, object element, object parentItem, int arrayDimension)
+        private XElement serializeCollectionElement(MemberInfo memberInfo, Type memberType, object element, object parentItem, int arrayDimension, object[] indices)
         {
 
             object elementKey = null;
@@ -268,9 +281,10 @@ namespace OpenSC.Model.Persistence
                 elementKey = keyPropertyInfo.GetValue(element);
                 elementToSerialize = valuePropertyInfo.GetValue(element);
                 typeToSerialize = memberType.GetGenericArguments()[1];
+                indices[arrayDimension] = elementKey;
             }
 
-            object arrayElementValue = serializeValue(memberInfo, typeToSerialize, elementToSerialize, parentItem, arrayDimension + 1);
+            object arrayElementValue = serializeValue(memberInfo, typeToSerialize, elementToSerialize, parentItem, arrayDimension + 1, indices);
             PersistAsAttribute persistData = getPersistDataForMember(memberInfo, elementToSerialize, arrayDimension + 1);
             XElement returnElement = ((arrayElementValue is XElement) && (persistData?.TagName == null)) ? (XElement)arrayElementValue : new XElement(persistData?.TagName ?? UNDEFINED_ARRAY_ITEM_TAG, arrayElementValue);
             if (elementKey != null)
@@ -404,7 +418,7 @@ namespace OpenSC.Model.Persistence
             typeof(decimal)
         };
 
-        private object deserializeXmlElement(MemberInfo memberInfo, Type memberType, XmlElement xmlElement, object parentItem, int arrayDimension = 0)
+        private object deserializeXmlElement(MemberInfo memberInfo, Type memberType, XmlElement xmlElement, object parentItem, int arrayDimension = 0, object[] indices = null)
         {
 
             if (memberType == typeof(string))
@@ -420,7 +434,7 @@ namespace OpenSC.Model.Persistence
                 foreach (XmlNode childNode in xmlElement.ChildNodes)
                     if (childNode.NodeType == XmlNodeType.Element)
                         childElements.Add((XmlElement)childNode);
-                return deserializeArray(memberInfo, memberType, childElements, parentItem, arrayDimension);
+                return deserializeArray(memberInfo, memberType, childElements, parentItem, arrayDimension, indices);
             }
 
             if (memberType.IsEnum)
@@ -440,7 +454,10 @@ namespace OpenSC.Model.Persistence
                 
                 PersistSubclassAttribute persistSubclassAttribute = memberInfo.GetCustomAttributes<PersistSubclassAttribute>().FirstOrDefault();
                 if (persistSubclassAttribute != null) // should check if given type is subclass of member type
-                    deserializeAsType = persistSubclassAttribute.SubclassType;
+                {
+                    MethodInfo subclassTypeGetterMethodInfo = parentItem.GetType().GetMethod(persistSubclassAttribute.SubclassTypeGetterName, memberLookupBindingFlags);
+                    deserializeAsType = subclassTypeGetterMethodInfo.Invoke(parentItem, null) as Type;
+                }
 
                 PolymorphFieldAttribute polymorphFieldAttribute = memberInfo.GetCustomAttributes<PolymorphFieldAttribute>().FirstOrDefault();
                 Dictionary<Type, string> typeStringDictionary = null;
@@ -461,18 +478,19 @@ namespace OpenSC.Model.Persistence
                 XmlElement itemToDeserialize = xmlElement;
                 if (persistData.TagName != null)
                     itemToDeserialize = itemToDeserialize.OfType<XmlElement>().FirstOrDefault();
-                return serializer.DeserializeItem(itemToDeserialize, parentItem);
+                return serializer.DeserializeItem(itemToDeserialize, parentItem, indices);
             }
 
             return Convert.ChangeType(xmlElement.InnerText, deserializeAsType);
 
         }
 
-        private object deserializeArray(MemberInfo memberInfo, Type memberType, List<XmlElement> childElements, object parentItem, int arrayDimension)
+        private object deserializeArray(MemberInfo memberInfo, Type memberType, List<XmlElement> childElements, object parentItem, int arrayDimension, object[] indices)
         {
 
             int childElementCount = childElements.Count;
 
+            object[] extendedIndices = extendIndices(indices, arrayDimension);
             if (memberType.IsArray)
             {
                 Type arrayElementType = memberType.GetElementType();
@@ -480,12 +498,18 @@ namespace OpenSC.Model.Persistence
                 {
                     Array typedArray = Array.CreateInstance(arrayElementType, childElementCount);
                     for (int i = 0; i < childElementCount; i++)
-                        typedArray.SetValue(deserializeXmlElement(memberInfo, arrayElementType, childElements[i], arrayDimension + 1), i);
+                    {
+                        extendedIndices[arrayDimension] = i;
+                        typedArray.SetValue(deserializeXmlElement(memberInfo, arrayElementType, childElements[i], parentItem, arrayDimension + 1, extendedIndices), i);
+                    }
                     return typedArray;
                 }
                 object[] array = (object[])Activator.CreateInstance(memberType, new object[] { childElementCount });
                 for (int i = 0; i < childElementCount; i++)
-                    array[i] = deserializeXmlElement(memberInfo, memberType.GetElementType(), childElements[i], parentItem, arrayDimension + 1);
+                {
+                    extendedIndices[arrayDimension] = i;
+                    array[i] = deserializeXmlElement(memberInfo, memberType.GetElementType(), childElements[i], parentItem, arrayDimension + 1, extendedIndices);
+                }
                 return array;
             }
 
@@ -527,13 +551,19 @@ namespace OpenSC.Model.Persistence
                 MethodInfo addMethod = memberType.GetMethod(nameof(ICollection<object>.Add), addMethodTypes);
                 for (int i = 0; i < childElementCount; i++)
                 {
-                    object deserializedElement = deserializeXmlElement(memberInfo, elementType, childElements[i], parentItem, arrayDimension + 1);
+                    extendedIndices[arrayDimension] = i;
+                    object deserializedKey = null;
                     if (isDictionary)
                     {
                         PersistAsAttribute persistData = getPersistDataForMember(memberInfo, null, arrayDimension + 1);
                         if (persistData == null)
                             persistData = new PersistAsAttribute(UNDEFINED_ARRAY_ITEM_TAG);
-                        object deserializedKey = childElements[i].GetAttribute(persistData.KeyAttribute);
+                        deserializedKey = childElements[i].GetAttribute(persistData.KeyAttribute);
+                        extendedIndices[arrayDimension] = deserializedKey;
+                    }
+                    object deserializedElement = deserializeXmlElement(memberInfo, elementType, childElements[i], parentItem, arrayDimension + 1, extendedIndices);
+                    if (isDictionary)
+                    {
                         if (deserializedKey != null)
                             addMethod.Invoke(collection, new object[] { deserializedKey, deserializedElement });
                     }
@@ -804,6 +834,14 @@ namespace OpenSC.Model.Persistence
         }
 
         private Type getArrayBaseType(Type type) => (type.IsArray) ? getArrayBaseType(type.GetElementType()) : type;
+
+        private object[] extendIndices(object[] original, int arrayDimension)
+        {
+            object[] extendedIndices = new object[arrayDimension + 1];
+            for (int i = 0; i < arrayDimension; i++)
+                extendedIndices[i] = original[i];
+            return extendedIndices;
+        }
 
         private enum Workflow
         {

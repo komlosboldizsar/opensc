@@ -109,7 +109,7 @@ namespace OpenSC.GUI.Mixers
             builder.Width(300);
             builder.InitializerMethod((input, cell) => { });
             builder.UpdaterMethod((input, cell) => { cell.Value = input.Source; });
-            builder.CellEndEditHandlerMethod((input, cell, eventargs) => { input.Source = cell.Value as ISignalSourceRegistered; });
+            builder.CellValueChangedHandlerMethod((input, cell, eventargs) => { input.Source = cell.Value as ISignalSourceRegistered; });
             builder.DropDownPopulatorMethod((input, cell) => signals);
             builder.ReceiveSystemObjectDrop().FilterByType<ISignalSourceRegistered>();
             builder.BuildAndAdd();

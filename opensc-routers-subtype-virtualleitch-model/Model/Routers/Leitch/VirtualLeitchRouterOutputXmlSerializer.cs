@@ -15,9 +15,9 @@ namespace OpenSC.Model.Routers.Leitch
         private const string ATTRIBUTE_LOCK_STATUS = "lock_status";
         private const string ATTRIBUTE_LOCK_OWNER_PANEL_ID = "lock_owner_panel_id";
 
-        public override object DeserializeItem(XmlNode serializedItem, object parentItem)
+        public override object DeserializeItem(XmlNode serializedItem, object parentItem, object[] keysOrIndices)
         {
-            VirtualLeitchRouterOutput restoredOutput = base.DeserializeItem(serializedItem, parentItem) as VirtualLeitchRouterOutput;
+            VirtualLeitchRouterOutput restoredOutput = base.DeserializeItem(serializedItem, parentItem, keysOrIndices) as VirtualLeitchRouterOutput;
             if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_ASSOCIATED_INPUT]?.Value, out int associatedInput))
                 associatedInput = 0;
             restoredOutput._associatedInputIndex = associatedInput;
@@ -29,12 +29,12 @@ namespace OpenSC.Model.Routers.Leitch
             return restoredOutput;
         }
 
-        public override XElement SerializeItem(object item, object parentItem)
+        public override XElement SerializeItem(object item, object parentItem, object[] keysOrIndices)
         {
             VirtualLeitchRouterOutput output = item as VirtualLeitchRouterOutput;
             if (output == null)
                 return null;
-            XElement serializedOutput = base.SerializeItem(item, parentItem);
+            XElement serializedOutput = base.SerializeItem(item, parentItem, keysOrIndices);
             serializedOutput.SetAttributeValue(ATTRIBUTE_ASSOCIATED_INPUT, output.CurrentInput?.Index ?? 0);
             serializedOutput.SetAttributeValue(ATTRIBUTE_LOCK_STATUS, output.LockStatusCode);
             serializedOutput.SetAttributeValue(ATTRIBUTE_LOCK_OWNER_PANEL_ID, output.LockOwnerPanelId);
