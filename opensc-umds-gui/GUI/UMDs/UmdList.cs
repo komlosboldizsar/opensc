@@ -42,6 +42,7 @@ namespace OpenSC.GUI.UMDs
             builder.Header("Static text");
             builder.Width(200);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.FullStaticText; });
+            builder.CellEndEditHandlerMethod((umd, cell, e) => { umd.FullStaticText = cell.Value as string; });
             builder.AddChangeEvent(nameof(Umd.FullStaticText));
 
             // Column: use static text
@@ -59,8 +60,8 @@ namespace OpenSC.GUI.UMDs
             builder.Header("Current text");
             builder.Width(200);
             builder.CellStyle(monospaceTextCellStyle);
-            builder.UpdaterMethod((umd, cell) => { cell.Value = umd.DisplayableRawText; });
-            builder.AddChangeEvent(nameof(Umd.DisplayableRawText));
+            builder.UpdaterMethod((umd, cell) => { cell.Value = umd.DisplayableCompactText; });
+            builder.AddChangeEvent(nameof(Umd.DisplayableCompactText));
 
             // Column: tallies
             builder = builderGetterMethod();
