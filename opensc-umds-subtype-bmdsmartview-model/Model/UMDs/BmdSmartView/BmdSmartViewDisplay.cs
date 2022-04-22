@@ -71,14 +71,17 @@ namespace OpenSC.Model.UMDs.BmdSmartView
 
         public override UmdTallyInfo[] TallyInfo => new UmdTallyInfo[]
         {
-            new BmdSmartViewDisplayTallyInfo("Red", UmdTallyInfo.ColorSettingMode.Fix, Color.Red, 1, "red"),
-            new BmdSmartViewDisplayTallyInfo("Green", UmdTallyInfo.ColorSettingMode.Fix, Color.Green, 2, "green"),
-            new BmdSmartViewDisplayTallyInfo("Blue", UmdTallyInfo.ColorSettingMode.Fix, Color.Blue, 3, "blue"),
-            new BmdSmartViewDisplayTallyInfo("White", UmdTallyInfo.ColorSettingMode.Fix, Color.White, 4, "white")
+            new BmdSmartViewDisplayTallyInfo("Red", UmdTallyInfo.ColorSettingMode.Fix, Color.Red, 0, "red"),
+            new BmdSmartViewDisplayTallyInfo("Green", UmdTallyInfo.ColorSettingMode.Fix, Color.Green, 1, "green"),
+            new BmdSmartViewDisplayTallyInfo("Blue", UmdTallyInfo.ColorSettingMode.Fix, Color.Blue, 2, "blue"),
+            new BmdSmartViewDisplayTallyInfo("White", UmdTallyInfo.ColorSettingMode.Fix, Color.White, 3, "white")
         };
         #endregion
 
         #region Tallies
+        protected override Type tallyTypeGetter() => typeof(BmdSmartViewDisplayTally);
+        protected override UmdTally CreateTally(Umd owner, int indexAtOwner, UmdTallyInfo info) => new BmdSmartViewDisplayTally(owner, indexAtOwner, info);
+
         internal void NotifyTallyPriorityChanged(BmdSmartViewDisplayTally tally)
         {
             if (!Updating)
