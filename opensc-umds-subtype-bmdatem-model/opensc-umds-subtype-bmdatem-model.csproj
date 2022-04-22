@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows7.0</TargetFramework>
+    <RootNamespace>OpenSC</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
+    <ProjectReference Include="..\opensc-mixers-subtype-bmd-model\opensc-mixers-subtype-bmd-model.csproj" />
+    <ProjectReference Include="..\opensc-umds-model\opensc-umds-model.csproj" />
+  </ItemGroup>
+  <Import Project="..\GlobalCsproj\*.csproj" />
+</Project>
