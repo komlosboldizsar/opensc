@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows7.0</TargetFramework>
+    <RootNamespace>OpenSC</RootNamespace>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj" />
+    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
+    <ProjectReference Include="..\opensc-umds-gui\opensc-umds-gui.csproj" />
+    <ProjectReference Include="..\opensc-umds-subtype-bmdsmartview-model\opensc-umds-subtype-bmdsmartview-model.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="GUI\UMDs\BmdSmartViewUnitEditorForm.cs" />
+    <Compile Update="GUI\UMDs\BmdSmartViewUnitList.cs" />
+    <Compile Update="GUI\UMDs\BmdSmartViewDisplayEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="GUI\UMDs\BmdSmartViewUnitEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="GUI\UMDs\BmdSmartViewUnitList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="..\GlobalCsproj\*.csproj" />
+</Project>
