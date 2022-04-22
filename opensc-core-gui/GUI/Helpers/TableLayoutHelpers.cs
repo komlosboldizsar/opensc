@@ -24,17 +24,17 @@ namespace OpenSC.GUI.Helpers
             {
                 this.tableLayout = tableLayout;
                 this.sourceIndex = sourceIndex;
-                int itemCount = getItemCount();
-                if (itemCount <= sourceIndex)
+                if (getItemCount() <= sourceIndex)
                     throw new ArgumentException();
-                setItemCount(itemCount + 1);
                 sourceStyle = getSourceItemStyle();
             }
 
             public void DoCloning(int destinationIndex = DESTINATION_INDEX_LAST, string[] excludeProperties = null)
             {
+                int oldItemCount = getItemCount();
                 if (destinationIndex < 0)
-                    destinationIndex = getItemCount() + destinationIndex;
+                    destinationIndex = oldItemCount + destinationIndex + 1;
+                setItemCount(oldItemCount + 1);
                 cloneSourceItemStyleTo(destinationIndex);
                 int newSourceIndex = sourceIndex;
                 if (destinationIndex <= sourceIndex)
