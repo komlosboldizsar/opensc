@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BMD.Videohub
 {
@@ -9,6 +12,7 @@ namespace BMD.Videohub
 
         public BlackMagicVideohub(string ipAddress)
         {
+            startRequestSchedulerTask();
             this.ipAddress = ipAddress;
         }
 
@@ -16,7 +20,7 @@ namespace BMD.Videohub
 
         public string IpAddress
         {
-            get { return ipAddress; }
+            get => ipAddress;
             set
             {
                 if (value == ipAddress)
@@ -129,35 +133,87 @@ namespace BMD.Videohub
         }
         #endregion
 
+        #region Requests
+        private abstract class Request
+        {
+            public Request() => ValidUntil = DateTime.Now + ValidTime;
+            public abstract void Send(TcpSocketLineByLineReceiver socketReceiver);
+            public virtual void ACK() { }
+            public virtual void NAK() { }
+            public abstract TimeSpan ValidTime { get; }
+            public DateTime ValidUntil { get; init; }
+        }
+
+        private Request lastSentRequest = null;
+        private BlockingCollection<Request> requestFifo;
+        private CancellationTokenSource requestSchedulerTaskCancellationTokenSource;
+        private Task requestSchedulerTask;
+
+        private void startRequestSchedulerTask()
+        {
+            if (requestSchedulerTask != null)
+                return;
+            requestFifo = new();
+            requestSchedulerTaskCancellationTokenSource = new();
+            requestSchedulerTask = Task.Run(() => requestSchedulerTaskMethod());
+        }
+
+        private async void stopRequestSchedulerTask()
+        {
+            if (requestSchedulerTask == null)
+                return;
+            try
+            {
+                requestSchedulerTaskCancellationTokenSource.Cancel();
+                await requestSchedulerTask;
+                requestSchedulerTask.Dispose();
+                requestSchedulerTask = null;
+                requestSchedulerTaskCancellationTokenSource.Dispose();
+                requestSchedulerTaskCancellationTokenSource = null;
+            }
+            catch (ObjectDisposedException)
+            { }
+        }
+
+        private void requestSchedulerTaskMethod()
+        {
+            while (true)
+            {
+                try
+                {
+                    Request request = requestFifo.Take(requestSchedulerTaskCancellationTokenSource.Token);
+                    if ((request != null) && (request.ValidUntil >= DateTime.Now))
+                    {
+                        request.Send(socketReceiver);
+                        lastSentRequest = request;
+                    }
+                    else
+                    {
+                        // log or something
+                    }
+                }
+                catch (OperationCanceledException)
+                { }
+            }
+        }
+
+        private void scheduleRequest(Request request) => requestFifo.Add(request);
+        #endregion
+
         #region Crosspoints
         private int?[] crosspoints = null;
 
-        List<Crosspoint> pendingCrosspointChangeRequests = new List<Crosspoint>();
-
         public void SetCrosspoint(int output, int input)
         {
-
-            if (!Connected)
-                throw new NotConnectedException();
             if ((output < 0) || (output >= OutputCount))
                 throw new ArgumentOutOfRangeException();
             if ((input < 0) || (input >= InputCount))
                 throw new ArgumentOutOfRangeException();
-
-            pendingCrosspointChangeRequests.Clear();
-            pendingCrosspointChangeRequests.Add(new Crosspoint(output, input));
-
-            socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_ROUTING);
-            socketReceiver.SendLine(string.Format("{0} {1}", output, input));
-            socketReceiver.SendLine("");
-
+            scheduleRequest(new SetCrosspointsRequest(new Crosspoint(output, input)));
         }
 
         public void SetCrosspoints(IEnumerable<Crosspoint> crosspoints)
         {
-
-            if (!Connected)
-                throw new NotConnectedException();
             foreach (Crosspoint crosspoint in crosspoints)
             {
                 if ((crosspoint.Destination < 0) || (crosspoint.Destination >= OutputCount))
@@ -165,15 +221,26 @@ namespace BMD.Videohub
                 if ((crosspoint.Source < 0) || (crosspoint.Source >= InputCount))
                     throw new ArgumentOutOfRangeException();
             }
+            scheduleRequest(new SetCrosspointsRequest(crosspoints));
+        }
 
-            pendingCrosspointChangeRequests.Clear();
-            socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_ROUTING);
-            foreach (Crosspoint crosspoint in crosspoints)
+        private class SetCrosspointsRequest : Request
+        {
+
+            private List<Crosspoint> crosspoints;
+
+            public SetCrosspointsRequest(Crosspoint crosspoint) => this.crosspoints = new() { crosspoint };
+            public SetCrosspointsRequest(IEnumerable<Crosspoint> crosspoints) => this.crosspoints = new(crosspoints);
+
+            public override void Send(TcpSocketLineByLineReceiver socketReceiver)
             {
-                socketReceiver.SendLine(string.Format("{0} {1}", crosspoint.Destination, crosspoint.Source));
-                pendingCrosspointChangeRequests.Add(crosspoint);
+                socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_ROUTING);
+                foreach (Crosspoint crosspoint in crosspoints)
+                    socketReceiver.SendLine(string.Format("{0} {1}", crosspoint.Destination, crosspoint.Source));
+                socketReceiver.SendLine("");
             }
-            socketReceiver.SendLine("");
+
+            public override TimeSpan ValidTime => new(0, 0, 2);
 
         }
 
@@ -184,14 +251,11 @@ namespace BMD.Videohub
             return crosspoints[output];
         }
 
-        public void QueryAllCrosspoints()
+        public void QueryAllCrosspoints() => scheduleRequest(new QueryAllCrosspointsRequest());
+
+        private class QueryAllCrosspointsRequest : SetCrosspointsRequest
         {
-            if (!Connected)
-                return;
-            if (pendingCrosspointChangeRequests.Count != 0)
-                return;
-            socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_ROUTING);
-            socketReceiver.SendLine("");
+            public QueryAllCrosspointsRequest() : base(Array.Empty<Crosspoint>()) { }
         }
 
         public delegate void CrosspointChangedDelegate(int output, int? input);
@@ -216,21 +280,31 @@ namespace BMD.Videohub
 
         public void SetLockState(int output, bool state)
         {
-
-            if (!Connected)
-                throw new NotConnectedException();
             if ((output < 0) || (output >= OutputCount))
                 throw new ArgumentOutOfRangeException();
+            scheduleRequest(new SetLockStateRequest(output, state));
+        }
 
-            pendingLockChangeRequest = new LockChangeRequest()
+        private class SetLockStateRequest : Request
+        {
+
+            private int output;
+            private bool state;
+
+            public SetLockStateRequest(int output, bool state)
             {
-                Destination = output,
-                State = state
-            };
+                this.output = output;
+                this.state = state;
+            }
 
-            socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_LOCKS);
-            socketReceiver.SendLine(string.Format("{0} {1}", output, state ? 'O' : 'U'));
-            socketReceiver.SendLine("");
+            public override void Send(TcpSocketLineByLineReceiver socketReceiver)
+            {
+                socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_LOCKS);
+                socketReceiver.SendLine(string.Format("{0} {1}", output, state ? 'O' : 'U'));
+                socketReceiver.SendLine("");
+            }
+
+            public override TimeSpan ValidTime => new(0, 0, 2);
 
         }
 
@@ -248,14 +322,19 @@ namespace BMD.Videohub
             Taken
         }
 
-        public void QueryAllLockStates()
+        public void QueryAllLockStates() => scheduleRequest(new QueryAllLockStatesRequest());
+
+        private class QueryAllLockStatesRequest : Request
         {
-            if (!Connected)
-                return;
-            if (pendingCrosspointChangeRequests.Count != 0)
-                return;
-            socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_LOCKS);
-            socketReceiver.SendLine("");
+
+            public override void Send(TcpSocketLineByLineReceiver socketReceiver)
+            {
+                socketReceiver.SendLine(BLOCK_START_VIDEO_OUTPUT_LOCKS);
+                socketReceiver.SendLine("");
+            }
+
+            public override TimeSpan ValidTime => new(0, 0, 2);
+
         }
 
         public delegate void LockChangedDelegate(int output, LockState state);
@@ -307,6 +386,7 @@ namespace BMD.Videohub
         private const string BLOCK_START_VIDEO_OUTPUT_ROUTING = "VIDEO OUTPUT ROUTING:";
         private const string BLOCK_START_VIDEO_OUTPUT_LOCKS = "VIDEO OUTPUT LOCKS:";
         private const string ACK = "ACK";
+        private const string NAK = "NAK";
 
         private const string VHD_KEY_DEVICE_PRESENT = "Device present";
         private const string VHD_KEY_MODEL_NAME = "Model name";
@@ -357,12 +437,13 @@ namespace BMD.Videohub
 
             if (line == ACK)
             {
-                if (pendingCrosspointChangeRequests.Count != 0)
-                {
-                    foreach (Crosspoint crosspoint in pendingCrosspointChangeRequests)
-                    updateCrosspoint(crosspoint.Destination, crosspoint.Source);
-                    pendingCrosspointChangeRequests.Clear();
-                }
+                lastSentRequest?.ACK();
+                return;
+            }
+
+            if (line == NAK)
+            {
+                lastSentRequest?.NAK();
                 return;
             }
 
