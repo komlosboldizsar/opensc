@@ -11,18 +11,18 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
 
         public override Type Type => typeof(BmdVideohubOutput);
 
-        public override object DeserializeItem(XmlNode serializedItem, object parentItem)
+        public override object DeserializeItem(XmlNode serializedItem, object parentItem, object[] keysOrIndices)
         {
-            BmdVideohubOutput restoredOutput = base.DeserializeItem(serializedItem, parentItem) as BmdVideohubOutput;
+            BmdVideohubOutput restoredOutput = base.DeserializeItem(serializedItem, parentItem, keysOrIndices) as BmdVideohubOutput;
             return restoredOutput;
         }
 
-        public override XElement SerializeItem(object item, object parentItem)
+        public override XElement SerializeItem(object item, object parentItem, object[] keysOrIndices)
         {
             BmdVideohubOutput output = item as BmdVideohubOutput;
             if (output == null)
                 return null;
-            XElement serializedOutput = base.SerializeItem(item, parentItem);
+            XElement serializedOutput = base.SerializeItem(item, parentItem, keysOrIndices);
             return serializedOutput;
         }
 

@@ -15,18 +15,18 @@ namespace OpenSC.Model.UMDs.Macros
 
         protected override void _run(object[] argumentValues)
         {
-            UMD umd = argumentValues[0] as UMD;
+            Umd umd = argumentValues[0] as Umd;
             if (umd == null)
                 return;
             string text = argumentValues[1] as string;
             if (text == null)
                 return;
-            umd.StaticText = text;
-            umd.UseStaticText = true;
+            umd.FullStaticText = text;
+            umd.UseFullStaticText = true;
         }
 
         [MacroCommandArgument(0, "UMD", "The UMD to change mode and text.")]
-        public class Arg0 : MacroCommandArgumentDatabaseItem<UMD>
+        public class Arg0 : MacroCommandArgumentDatabaseItem<Umd>
         {
             public Arg0() : base(UmdDatabase.Instance)
             { }

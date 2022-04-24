@@ -1,5 +1,5 @@
 ﻿using OpenSC.GUI.UMDs;
-using OpenSC.Model.UMDs.TSL31;
+using OpenSC.Model.UMDs.Tsl31;
 
 namespace OpenSC.Modules
 {
@@ -14,7 +14,7 @@ namespace OpenSC.Modules
 
         protected override void registerSubtypeEditorWindowTypes()
         {
-            UmdEditorFormTypeRegister.Instance.RegisterFormType<TSL31, Tsl31UmdEditorForm>();
+            UmdEditorFormTypeRegister.Instance.RegisterFormType<Tsl31, Tsl31UmdEditorForm>();
         }
 
     }

@@ -26,6 +26,8 @@ namespace OpenSC.Model
         {
             get
             {
+                if (key == null)
+                    return null;
                 if (registeredItems.TryGetValue(key, out TObject value))
                     return value;
                 return null;

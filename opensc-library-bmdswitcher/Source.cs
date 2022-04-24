@@ -20,24 +20,28 @@ namespace BMD.Switcher
             ApiSource = apiSource;
             ApiSource.AddCallback(this);
             ID = ApiSource.GetSourceId();
+            initNames();
             initTallies();
-        }
-
-        private void initTallies()
-        {
-            InvokeHelper.Invoke(() =>
-            {
-                ApiSource.IsProgramTallied(out int isProgramTallied);
-                IsProgramTallied = (isProgramTallied != 0);
-                ApiSource.IsPreviewTallied(out int isPreviewTallied);
-                IsPreviewTallied = (isPreviewTallied != 0);
-            });
         }
 
         void IBMDSwitcherInputCallback.Notify(_BMDSwitcherInputEventType eventType)
         {
             switch (eventType)
             {
+                case _BMDSwitcherInputEventType.bmdSwitcherInputEventTypeShortNameChanged:
+                    InvokeHelper.Invoke(() =>
+                    {
+                        ApiSource.GetShortName(out string _shortName);
+                        ShortName = _shortName;
+                    });
+                    break;
+                case _BMDSwitcherInputEventType.bmdSwitcherInputEventTypeLongNameChanged:
+                    InvokeHelper.Invoke(() =>
+                    {
+                        ApiSource.GetShortName(out string _longName);
+                        LongName = _longName;
+                    });
+                    break;
                 case _BMDSwitcherInputEventType.bmdSwitcherInputEventTypeIsProgramTalliedChanged:
                     InvokeHelper.Invoke(() =>
                     {
@@ -59,8 +63,73 @@ namespace BMD.Switcher
         public void Dispose()
         {
             ApiSource.RemoveCallback(this);
+            ShortNameChanged = null;
+            LongNameChanged = null;
             IsProgramTalliedChanged = null;
             IsPreviewTalliedChanged = null;
+        }
+
+        #region Names
+        private void initNames()
+        {
+            InvokeHelper.Invoke(() =>
+            {
+                ApiSource.GetShortName(out string _shortName);
+                ShortName = _shortName;
+                ApiSource.GetLongName(out string _longName);
+                LongName = _longName;
+            });
+        }
+
+        public delegate void NameChangedDelegate(Source source, string newName);
+
+        #region Short name
+        public event NameChangedDelegate ShortNameChanged;
+
+        private string shortName;
+        public string ShortName
+        {
+            get => shortName;
+            private set
+            {
+                shortName = value;
+                ShortNameChanged?.Invoke(this, value);
+            }
+        }
+
+        public void UpdateShortName(string newShortName)
+            => InvokeHelper.Invoke(() => ApiSource.SetShortName(newShortName ?? ""));
+        #endregion
+
+        #region Long name
+        public event NameChangedDelegate LongNameChanged;
+
+        private string longName;
+        public string LongName
+        {
+            get => longName;
+            private set
+            {
+                longName = value;
+                LongNameChanged?.Invoke(this, value);
+            }
+        }
+
+        public void UpdateLongName(string newLongName)
+            => InvokeHelper.Invoke(() => ApiSource.SetLongName(newLongName ?? ""));
+        #endregion
+        #endregion
+
+        #region Tallies
+        private void initTallies()
+        {
+            InvokeHelper.Invoke(() =>
+            {
+                ApiSource.IsProgramTallied(out int isProgramTallied);
+                IsProgramTallied = (isProgramTallied != 0);
+                ApiSource.IsPreviewTallied(out int isPreviewTallied);
+                IsPreviewTallied = (isPreviewTallied != 0);
+            });
         }
 
         #region Program tally
@@ -99,6 +168,7 @@ namespace BMD.Switcher
                 IsPreviewTalliedChanged?.Invoke(ApiSource, this, value);
             }
         }
+        #endregion
         #endregion
 
     }
