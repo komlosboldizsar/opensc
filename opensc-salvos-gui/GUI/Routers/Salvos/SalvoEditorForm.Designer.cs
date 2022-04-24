@@ -33,7 +33,8 @@
             this.crosspointsTableContainerPanel = new System.Windows.Forms.Panel();
             this.crosspointsTable = new System.Windows.Forms.DataGridView();
             this.inputsButtonsPanel = new System.Windows.Forms.Panel();
-            this.addInputButton = new System.Windows.Forms.Button();
+            this.addCrosspointButton = new System.Windows.Forms.Button();
+            this.storeCurrentCrosspointsButton = new System.Windows.Forms.Button();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -107,7 +108,8 @@
             // 
             // inputsButtonsPanel
             // 
-            this.inputsButtonsPanel.Controls.Add(this.addInputButton);
+            this.inputsButtonsPanel.Controls.Add(this.storeCurrentCrosspointsButton);
+            this.inputsButtonsPanel.Controls.Add(this.addCrosspointButton);
             this.inputsButtonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.inputsButtonsPanel.Location = new System.Drawing.Point(3, 323);
             this.inputsButtonsPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -115,16 +117,29 @@
             this.inputsButtonsPanel.Size = new System.Drawing.Size(1048, 55);
             this.inputsButtonsPanel.TabIndex = 1;
             // 
-            // addInputButton
+            // addCrosspointButton
             // 
-            this.addInputButton.Location = new System.Drawing.Point(6, 8);
-            this.addInputButton.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.addInputButton.Name = "addInputButton";
-            this.addInputButton.Size = new System.Drawing.Size(126, 32);
-            this.addInputButton.TabIndex = 0;
-            this.addInputButton.Text = "Add crosspoint";
-            this.addInputButton.UseVisualStyleBackColor = true;
-            this.addInputButton.Click += new System.EventHandler(this.addCrosspointButton_Click);
+            this.addCrosspointButton.Location = new System.Drawing.Point(6, 8);
+            this.addCrosspointButton.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.addCrosspointButton.Name = "addCrosspointButton";
+            this.addCrosspointButton.Size = new System.Drawing.Size(126, 32);
+            this.addCrosspointButton.TabIndex = 0;
+            this.addCrosspointButton.Text = "Add crosspoint";
+            this.addCrosspointButton.UseVisualStyleBackColor = true;
+            this.addCrosspointButton.Click += new System.EventHandler(this.addCrosspointButton_Click);
+            // 
+            // storeCurrentCrosspointsButton
+            // 
+            this.storeCurrentCrosspointsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.storeCurrentCrosspointsButton.AutoSize = true;
+            this.storeCurrentCrosspointsButton.Location = new System.Drawing.Point(860, 8);
+            this.storeCurrentCrosspointsButton.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.storeCurrentCrosspointsButton.Name = "storeCurrentCrosspointsButton";
+            this.storeCurrentCrosspointsButton.Size = new System.Drawing.Size(182, 32);
+            this.storeCurrentCrosspointsButton.TabIndex = 1;
+            this.storeCurrentCrosspointsButton.Text = "Store current crosspoints";
+            this.storeCurrentCrosspointsButton.UseVisualStyleBackColor = true;
+            this.storeCurrentCrosspointsButton.Click += new System.EventHandler(this.storeCurrentCrosspointsButton_Click);
             // 
             // SalvoEditorForm
             // 
@@ -147,6 +162,7 @@
             this.crosspointsTableContainerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.crosspointsTable)).EndInit();
             this.inputsButtonsPanel.ResumeLayout(false);
+            this.inputsButtonsPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -155,8 +171,9 @@
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage crosspointsTabPage;
         private System.Windows.Forms.DataGridView crosspointsTable;
-        private System.Windows.Forms.Button addInputButton;
+        private System.Windows.Forms.Button addCrosspointButton;
         private System.Windows.Forms.Panel crosspointsTableContainerPanel;
         protected System.Windows.Forms.Panel inputsButtonsPanel;
+        private System.Windows.Forms.Button storeCurrentCrosspointsButton;
     }
 }

@@ -37,6 +37,8 @@ namespace OpenSC.Model.Routers.Salvos
             set => input = value;
         }
 
+        public void StoreCurrentInput() => Input = Output?.CurrentInput;
+
         internal void RestoreAssociations()
         {
             if (__routerId == null)

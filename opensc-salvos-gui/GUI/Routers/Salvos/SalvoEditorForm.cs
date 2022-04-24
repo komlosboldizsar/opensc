@@ -157,6 +157,7 @@ namespace OpenSC.GUI.Routers.Salvos
         }
 
         private void addCrosspointButton_Click(object sender, EventArgs e) => ((Salvo)EditedModel).AddCrosspoint();
+        private void storeCurrentCrosspointsButton_Click(object sender, EventArgs e) => ((Salvo)EditedModel).StoreCurrentCrosspoints();
 
         private void crosspointsTableSystemObjectDropReceiver(DataGridView table, IEnumerable<ISystemObject> systemObjects)
         {
@@ -170,8 +171,6 @@ namespace OpenSC.GUI.Routers.Salvos
                 return;
             }
         }
-
-
 
     }
 

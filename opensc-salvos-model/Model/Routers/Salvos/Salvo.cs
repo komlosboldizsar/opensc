@@ -64,6 +64,11 @@ namespace OpenSC.Model.Routers.Salvos
             }
         }
         
+        public void StoreCurrentCrosspoints()
+        {
+            foreach (SalvoCrosspoint crosspoint in crosspoints)
+                crosspoint.StoreCurrentInput();
+        }
 
     }
 
