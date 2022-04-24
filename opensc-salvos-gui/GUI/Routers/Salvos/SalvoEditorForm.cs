@@ -91,6 +91,7 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.DropDownPopulatorMethod((crosspoint, cell) => getArrayForDropDown<RouterOutput>(crosspoint.Router?.Outputs));
             builder.ReceiveSystemObjectDrop().FilterByType<RouterOutput>();
             builder.BindParent(routerBuilder, ro => ((RouterOutput)ro)?.Router);
+            builder.AddChangeEvent(nameof(SalvoCrosspoint.Output));
             builder.BuildAndAdd();
 
             // Column: input
@@ -104,6 +105,7 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.DropDownPopulatorMethod((crosspoint, cell) => getArrayForDropDown<RouterInput>(crosspoint.Router?.Inputs));
             builder.ReceiveSystemObjectDrop().FilterByType<RouterInput>();
             builder.BindParent(routerBuilder, ri => ((RouterInput)ri)?.Router);
+            builder.AddChangeEvent(nameof(SalvoCrosspoint.Input));
             builder.BuildAndAdd();
 
             // Column: delete button
