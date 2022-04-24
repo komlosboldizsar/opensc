@@ -29,7 +29,7 @@ namespace OpenSC.GUI.Routers
             BmdVideohub bmdVideohub = (BmdVideohub)EditedModel;
             if (bmdVideohub == null)
                 return;
-            ipAddressTextbox.Text = bmdVideohub.IpAddress;
+            ipAddressInput.Text = bmdVideohub.IpAddress;
             autoReconnectCheckbox.Checked = bmdVideohub.AutoReconnect;
             bmdVideohub.ConnectionStateChanged += connectionStateChangedHandler;
             connectButton.Enabled = !bmdVideohub.Connected;
@@ -42,7 +42,7 @@ namespace OpenSC.GUI.Routers
             BmdVideohub bmdVideohub = (BmdVideohub)EditedModel;
             if (bmdVideohub == null)
                 return;
-            bmdVideohub.IpAddress = ipAddressTextbox.Text;
+            bmdVideohub.IpAddress = ipAddressInput.Text;
             bmdVideohub.AutoReconnect = autoReconnectCheckbox.Checked;
         }
 
@@ -52,7 +52,7 @@ namespace OpenSC.GUI.Routers
             BmdVideohub bmdVideohub = (BmdVideohub)EditedModel;
             if (bmdVideohub == null)
                 return;
-            bmdVideohub.ValidateIpAddress(ipAddressTextbox.Text);
+            bmdVideohub.ValidateIpAddress(ipAddressInput.Text);
         }
 
         private void connectButton_Click(object sender, EventArgs e) => (EditedModel as BmdVideohub)?.Connect();

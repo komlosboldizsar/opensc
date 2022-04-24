@@ -33,7 +33,7 @@
             this.portNumericInput = new System.Windows.Forms.NumericUpDown();
             this.portLabel = new System.Windows.Forms.Label();
             this.ipAddressLabel = new System.Windows.Forms.Label();
-            this.ipAddressTextBox = new System.Windows.Forms.TextBox();
+            this.ipAddressInput = new OpenSC.GUI.GeneralComponents.IPAddressControl.IPv4AddressControl();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.connectionGroupBox.SuspendLayout();
@@ -79,7 +79,7 @@
             this.connectionTable.Controls.Add(this.portNumericInput, 1, 1);
             this.connectionTable.Controls.Add(this.portLabel, 0, 1);
             this.connectionTable.Controls.Add(this.ipAddressLabel, 0, 0);
-            this.connectionTable.Controls.Add(this.ipAddressTextBox, 1, 0);
+            this.connectionTable.Controls.Add(this.ipAddressInput, 1, 0);
             this.connectionTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.connectionTable.Location = new System.Drawing.Point(8, 25);
             this.connectionTable.Name = "connectionTable";
@@ -136,12 +136,20 @@
             this.ipAddressLabel.Text = "IP address";
             this.ipAddressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // ipAddressTextBox
+            // ipAddressInput
             // 
-            this.ipAddressTextBox.Location = new System.Drawing.Point(97, 3);
-            this.ipAddressTextBox.Name = "ipAddressTextBox";
-            this.ipAddressTextBox.Size = new System.Drawing.Size(256, 27);
-            this.ipAddressTextBox.TabIndex = 4;
+            this.ipAddressInput.AllowInternalTab = false;
+            this.ipAddressInput.AutoHeight = true;
+            this.ipAddressInput.BackColor = System.Drawing.SystemColors.Window;
+            this.ipAddressInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ipAddressInput.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.ipAddressInput.Dock = System.Windows.Forms.DockStyle.Left;
+            this.ipAddressInput.Location = new System.Drawing.Point(97, 3);
+            this.ipAddressInput.Name = "ipAddressInput";
+            this.ipAddressInput.ReadOnly = false;
+            this.ipAddressInput.Size = new System.Drawing.Size(212, 27);
+            this.ipAddressInput.TabIndex = 7;
+            this.ipAddressInput.Text = "...";
             // 
             // BmdSmartViewUnitEditorForm
             // 
@@ -173,8 +181,8 @@
         private System.Windows.Forms.GroupBox connectionGroupBox;
         private System.Windows.Forms.TableLayoutPanel connectionTable;
         private System.Windows.Forms.Label ipAddressLabel;
-        private System.Windows.Forms.TextBox ipAddressTextBox;
         private System.Windows.Forms.Label portLabel;
         private System.Windows.Forms.NumericUpDown portNumericInput;
+        private GeneralComponents.IPAddressControl.IPv4AddressControl ipAddressInput;
     }
 }

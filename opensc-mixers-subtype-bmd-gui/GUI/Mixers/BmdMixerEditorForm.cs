@@ -29,7 +29,7 @@ namespace OpenSC.GUI.Mixers
             BmdMixer bmdMixer = (BmdMixer)EditedModel;
             if (bmdMixer == null)
                 return;
-            ipAddressTextbox.Text = bmdMixer.IpAddress;
+            ipAddressInput.Text = bmdMixer.IpAddress;
             autoReconnectCheckbox.Checked = bmdMixer.AutoReconnect;
             bmdMixer.ConnectionStateChanged += connectionStateChangedHandler;
             connectButton.Enabled = !bmdMixer.ConnectionState;
@@ -42,7 +42,7 @@ namespace OpenSC.GUI.Mixers
             BmdMixer bmdMixer = (BmdMixer)EditedModel;
             if (bmdMixer == null)
                 return;
-            bmdMixer.IpAddress = ipAddressTextbox.Text;
+            bmdMixer.IpAddress = ipAddressInput.Text;
             bmdMixer.AutoReconnect = autoReconnectCheckbox.Checked;
         }
 
@@ -52,14 +52,11 @@ namespace OpenSC.GUI.Mixers
             BmdMixer bmdMixer = (BmdMixer)EditedModel;
             if (bmdMixer == null)
                 return;
-            bmdMixer.ValidateIpAddress(ipAddressTextbox.Text);
+            bmdMixer.ValidateIpAddress(ipAddressInput.Text);
         }
 
-        private void connectButton_Click(object sender, EventArgs e)
-            => (EditedModel as BmdMixer)?.Connect();
-
-        private void disconnectButton_Click(object sender, EventArgs e)
-            => (EditedModel as BmdMixer)?.Disconnect();
+        private void connectButton_Click(object sender, EventArgs e) => (EditedModel as BmdMixer)?.Connect();
+        private void disconnectButton_Click(object sender, EventArgs e) => (EditedModel as BmdMixer)?.Disconnect();
 
         private void connectionStateChangedHandler(BmdMixer mixer, bool oldState, bool newState)
         {

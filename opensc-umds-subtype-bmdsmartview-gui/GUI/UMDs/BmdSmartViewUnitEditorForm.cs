@@ -20,7 +20,7 @@ namespace OpenSC.GUI.UMDs
             BmdSmartViewUnit bmdSmartViewUnit = (BmdSmartViewUnit)EditedModel;
             if (bmdSmartViewUnit == null)
                 return;
-            ipAddressTextBox.Text = bmdSmartViewUnit.IpAddress;
+            ipAddressInput.Text = bmdSmartViewUnit.IpAddress;
             portNumericInput.Value = bmdSmartViewUnit.Port;
         }
 
@@ -30,7 +30,7 @@ namespace OpenSC.GUI.UMDs
             BmdSmartViewUnit bmdSmartViewUnit = (BmdSmartViewUnit)EditedModel;
             if (bmdSmartViewUnit == null)
                 return;
-            bmdSmartViewUnit.IpAddress = ipAddressTextBox.Text;
+            bmdSmartViewUnit.IpAddress = ipAddressInput.Text;
             bmdSmartViewUnit.Port = (int)portNumericInput.Value;
         }
 
