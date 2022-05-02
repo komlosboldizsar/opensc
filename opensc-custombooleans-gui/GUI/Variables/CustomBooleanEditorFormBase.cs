@@ -14,7 +14,12 @@ namespace OpenSC.GUI.Variables
     {
 
         public CustomBooleanEditorFormBase() : base() => InitializeComponent();
-        public CustomBooleanEditorFormBase(CustomBoolean customBoolean) : base(customBoolean) => InitializeComponent();
+        public CustomBooleanEditorFormBase(CustomBoolean customBoolean) : base(customBoolean)
+        {
+            InitializeComponent();
+            idNumericField.ValueChanged += idNumericField_ValueChanged;
+            nameTextBox.TextChanged += nameTextBox_TextChanged;
+        }
 
         protected override void loadData()
         {
@@ -86,8 +91,13 @@ namespace OpenSC.GUI.Variables
         {
             if (dataStore == null)
                 dataStore = new CustomBooleanDataStore();
+            dataStore.ID = (int)idNumericField.Value;
+            dataStore.Name = nameTextBox.Text;
             return dataStore;
         }
+
+        private void idNumericField_ValueChanged(object sender, EventArgs e) => updateNonUserEditableFields();
+        private void nameTextBox_TextChanged(object sender, EventArgs e) => updateNonUserEditableFields();
 
     }
 
