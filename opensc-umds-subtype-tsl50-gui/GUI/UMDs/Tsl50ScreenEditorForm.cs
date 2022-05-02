@@ -23,7 +23,7 @@ namespace OpenSC.GUI.UMDs
             Tsl50Screen tsl50screen = (Tsl50Screen)EditedModel;
             if (tsl50screen == null)
                 return;
-            ipAddressTextBox.Text = tsl50screen.IpAddress;
+            ipAddressInput.Text = tsl50screen.IpAddress;
             portNumericInput.Value = tsl50screen.Port;
             indexNumericInput.Value = tsl50screen.Index;
         }
@@ -34,7 +34,7 @@ namespace OpenSC.GUI.UMDs
             Tsl50Screen tsl50screen = (Tsl50Screen)EditedModel;
             if (tsl50screen == null)
                 return;
-            tsl50screen.IpAddress = ipAddressTextBox.Text;
+            tsl50screen.IpAddress = ipAddressInput.Text;
             tsl50screen.Port = (int)portNumericInput.Value;
             tsl50screen.Index = (int)indexNumericInput.Value;
         }
