@@ -89,6 +89,11 @@ namespace OpenSC.Model.Variables
         [PersistAs("input1")]
         private IBoolean input1;
 
+#pragma warning disable CS0169
+        [TempForeignKey(nameof(input1))]
+        private string _input1Id;
+#pragma warning restore CS0169
+
         public IBoolean Input1
         {
             get => input1;
@@ -115,6 +120,10 @@ namespace OpenSC.Model.Variables
         [PersistAs("input2")]
         private IBoolean input2;
 
+#pragma warning disable CS0169
+        [TempForeignKey(nameof(input2))]
+        private string _input2Id;
+#pragma warning restore CS0169
         public IBoolean Input2
         {
             get => input2;
