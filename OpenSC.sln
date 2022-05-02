@@ -190,6 +190,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-custombooleans-model
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-custombooleans-gui", "opensc-custombooleans-gui\opensc-custombooleans-gui.csproj", "{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-custombooleans-subtype-flipflop-model", "opensc-custombooleans-subtype-flipflop-model\opensc-custombooleans-subtype-flipflop-model.csproj", "{C003CA26-8806-41E6-9CB4-5EC90508960B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1280,6 +1282,18 @@ Global
 		{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}.Release|x64.Build.0 = Release|Any CPU
 		{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}.Release|x86.ActiveCfg = Release|Any CPU
 		{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}.Release|x86.Build.0 = Release|Any CPU
+		{C003CA26-8806-41E6-9CB4-5EC90508960B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C003CA26-8806-41E6-9CB4-5EC90508960B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C003CA26-8806-41E6-9CB4-5EC90508960B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C003CA26-8806-41E6-9CB4-5EC90508960B}.Debug|x64.Build.0 = Debug|Any CPU
+		{C003CA26-8806-41E6-9CB4-5EC90508960B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C003CA26-8806-41E6-9CB4-5EC90508960B}.Debug|x86.Build.0 = Debug|Any CPU
+		{C003CA26-8806-41E6-9CB4-5EC90508960B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C003CA26-8806-41E6-9CB4-5EC90508960B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C003CA26-8806-41E6-9CB4-5EC90508960B}.Release|x64.ActiveCfg = Release|Any CPU
+		{C003CA26-8806-41E6-9CB4-5EC90508960B}.Release|x64.Build.0 = Release|Any CPU
+		{C003CA26-8806-41E6-9CB4-5EC90508960B}.Release|x86.ActiveCfg = Release|Any CPU
+		{C003CA26-8806-41E6-9CB4-5EC90508960B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
