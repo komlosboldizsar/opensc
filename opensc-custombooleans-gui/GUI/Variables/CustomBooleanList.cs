@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace OpenSC.GUI.Routers
+namespace OpenSC.GUI.Variables
 {
 
     [WindowTypeName("booleans.custombooleanlist")]
