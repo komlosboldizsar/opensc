@@ -73,17 +73,19 @@ namespace OpenSC.GUI.Variables
                 setColorButtonColor(colorDialog.Color);
         }
 
+        private bool _updateNonUserEditableFieldsToDefault = false;
+
         protected void updateNonUserEditableFields()
         {
             CustomBoolean customBoolean = (CustomBoolean)EditedModel;
             if (customBoolean == null)
                 return;
             CustomBooleanDataStore dataStore = getDataStore();
-            if (!customBoolean.IdentifierUserEditable)
+            if (!customBoolean.IdentifierUserEditable || _updateNonUserEditableFieldsToDefault)
                 identifierTextBox.Text = customBoolean.GetIdentifierByData(dataStore);
-            if (!customBoolean.DescriptionUserEditable)
+            if (!customBoolean.DescriptionUserEditable || _updateNonUserEditableFieldsToDefault)
                 descriptionTextBox.Text = customBoolean.GetDescriptionByData(dataStore);
-            if (!customBoolean.ColorUserEditable)
+            if (!customBoolean.ColorUserEditable || _updateNonUserEditableFieldsToDefault)
                 setColorButtonColor(customBoolean.GetColorByData(dataStore));
         }
 

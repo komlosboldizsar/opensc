@@ -1,4 +1,4 @@
-﻿namespace OpenSC.GUI.Routers
+﻿namespace OpenSC.GUI.Variables
 {
     partial class CustomBooleanList
     {

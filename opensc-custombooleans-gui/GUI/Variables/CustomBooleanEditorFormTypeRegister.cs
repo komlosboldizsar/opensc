@@ -1,6 +1,6 @@
 ﻿using OpenSC.Model.Variables;
 
-namespace OpenSC.GUI.Routers
+namespace OpenSC.GUI.Variables
 {
     public class CustomBooleanEditorFormTypeRegister : ModelEditorFormTypeRegister<CustomBoolean>
     {

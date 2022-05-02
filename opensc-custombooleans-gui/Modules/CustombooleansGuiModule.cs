@@ -1,7 +1,6 @@
 ﻿using OpenSC.GUI.Menus;
-using OpenSC.GUI.Routers;
 using OpenSC.GUI.WorkspaceManager;
-using OpenSC.Model.Variables;
+using OpenSC.GUI.Variables;
 
 namespace OpenSC.Modules
 {
