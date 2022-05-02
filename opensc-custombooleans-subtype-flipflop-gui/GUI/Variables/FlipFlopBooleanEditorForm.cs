@@ -71,8 +71,8 @@ namespace OpenSC.GUI.Variables
         private void initDropDowns()
         {
             typeDropDown.SetAdapterAsDataSource(new EnumComboBoxAdapter<FlipFlopType>(FLIPFLOP_TYPE_TRANSLATIONS));
-            input1DropDown.CreateAdapterAsDataSource(BooleanRegister.Instance, null, true, "(not associated)");
-            input2DropDown.CreateAdapterAsDataSource(BooleanRegister.Instance, null, true, "(not associated)");
+            input1DropDown.CreateAdapterAsDataSource(BooleanRegister.Instance, b => b.Identifier, true, "(not associated)");
+            input2DropDown.CreateAdapterAsDataSource(BooleanRegister.Instance, b => b.Identifier, true, "(not associated)");
         }
 
         private static readonly Dictionary<FlipFlopType, string> FLIPFLOP_TYPE_TRANSLATIONS = new()
