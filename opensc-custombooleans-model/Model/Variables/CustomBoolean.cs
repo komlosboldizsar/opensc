@@ -129,6 +129,8 @@ namespace OpenSC.Model.Variables
         {
             if (dataStore == null)
                 dataStore = new CustomBooleanDataStore();
+            dataStore.ID = ID;
+            dataStore.Name = Name;
             return dataStore;
         }
 

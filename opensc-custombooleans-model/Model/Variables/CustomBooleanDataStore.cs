@@ -7,5 +7,8 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Variables
 {
     public class CustomBooleanDataStore
-    { }
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+    }
 }
