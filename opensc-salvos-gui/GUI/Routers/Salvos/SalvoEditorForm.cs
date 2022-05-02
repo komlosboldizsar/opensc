@@ -91,6 +91,7 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.DropDownPopulatorMethod((crosspoint, cell) => getArrayForDropDown<RouterOutput>(crosspoint.Router?.Outputs));
             builder.ReceiveSystemObjectDrop().FilterByType<RouterOutput>();
             builder.BindParent(routerBuilder, ro => ((RouterOutput)ro)?.Router);
+            builder.AddChangeEvent(nameof(SalvoCrosspoint.Output));
             builder.BuildAndAdd();
 
             // Column: input
@@ -104,6 +105,7 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.DropDownPopulatorMethod((crosspoint, cell) => getArrayForDropDown<RouterInput>(crosspoint.Router?.Inputs));
             builder.ReceiveSystemObjectDrop().FilterByType<RouterInput>();
             builder.BindParent(routerBuilder, ri => ((RouterInput)ri)?.Router);
+            builder.AddChangeEvent(nameof(SalvoCrosspoint.Input));
             builder.BuildAndAdd();
 
             // Column: delete button
@@ -157,6 +159,7 @@ namespace OpenSC.GUI.Routers.Salvos
         }
 
         private void addCrosspointButton_Click(object sender, EventArgs e) => ((Salvo)EditedModel).AddCrosspoint();
+        private void storeCurrentCrosspointsButton_Click(object sender, EventArgs e) => ((Salvo)EditedModel).StoreCurrentCrosspoints();
 
         private void crosspointsTableSystemObjectDropReceiver(DataGridView table, IEnumerable<ISystemObject> systemObjects)
         {
@@ -170,8 +173,6 @@ namespace OpenSC.GUI.Routers.Salvos
                 return;
             }
         }
-
-
 
     }
 
