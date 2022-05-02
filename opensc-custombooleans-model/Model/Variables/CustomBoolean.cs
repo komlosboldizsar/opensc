@@ -16,7 +16,12 @@ namespace OpenSC.Model.Variables
 
         public const string LOG_TAG = "CustomBoolean";
 
-        #region Persistence, instantiation
+        #region Instantiation, restoration, persistence, removation
+        public CustomBoolean()
+        {
+            setBaseFieldsDefaults();
+        }
+
         public override void Removed()
         {
             base.Removed();
@@ -34,25 +39,12 @@ namespace OpenSC.Model.Variables
                 register();
             CustomBooleanDatabase.Instance.ItemUpdated(this);
         }
-        #endregion
 
-        #region Restoration
         public override void TotallyRestored()
         {
             base.TotallyRestored();
             checkRestoredBaseFields();
             register();
-        }
-
-        private void checkRestoredBaseFields()
-        {
-            CustomBooleanDataStore dataStore = getDataStore();
-            if (!IdentifierUserEditable)
-                Identifier = GetIdentifierByData(dataStore);
-            if (!ColorUserEditable)
-                Color = GetColorByData(dataStore);
-            if (!DescriptionUserEditable)
-                Description = GetDescriptionByData(dataStore);
         }
         #endregion
 
@@ -125,6 +117,28 @@ namespace OpenSC.Model.Variables
         }
         #endregion
 
+        #region Base fields
+        private void setBaseFieldsDefaults()
+        {
+            CustomBooleanDataStore dataStore = getDataStore();
+            Identifier = GetIdentifierByData(dataStore);
+            Color = GetColorByData(dataStore);
+            Description = GetDescriptionByData(dataStore);
+        }
+
+        private void checkRestoredBaseFields()
+        {
+            CustomBooleanDataStore dataStore = getDataStore();
+            if (!IdentifierUserEditable)
+                Identifier = GetIdentifierByData(dataStore);
+            if (!ColorUserEditable)
+                Color = GetColorByData(dataStore);
+            if (!DescriptionUserEditable)
+                Description = GetDescriptionByData(dataStore);
+        }
+        #endregion
+
+        #region Data store
         protected virtual CustomBooleanDataStore getDataStore(CustomBooleanDataStore dataStore = null)
         {
             if (dataStore == null)
@@ -133,7 +147,9 @@ namespace OpenSC.Model.Variables
             dataStore.Name = Name;
             return dataStore;
         }
+        #endregion
 
+        #region Registration
         protected void register()
         {
             if (Registered)
@@ -151,6 +167,7 @@ namespace OpenSC.Model.Variables
         }
 
         protected bool Registered { get; private set; }
+        #endregion
 
     }
 
