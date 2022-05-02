@@ -32,19 +32,22 @@ namespace OpenSC.Model.Variables
             unregister();
         }
 
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
-            if (!Registered)
-                register();
-            CustomBooleanDatabase.Instance.ItemUpdated(this);
-        }
-
         public override void TotallyRestored()
         {
             base.TotallyRestored();
-            checkRestoredBaseFields();
+            checkBaseFields();
             register();
+        }
+        #endregion
+
+        #region Before & after update
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            checkBaseFields();
+            if (!Registered)
+                register();
+            CustomBooleanDatabase.Instance.ItemUpdated(this);
         }
         #endregion
 
@@ -126,7 +129,7 @@ namespace OpenSC.Model.Variables
             Description = GetDescriptionByData(dataStore);
         }
 
-        private void checkRestoredBaseFields()
+        private void checkBaseFields()
         {
             CustomBooleanDataStore dataStore = getDataStore();
             if (!IdentifierUserEditable)
