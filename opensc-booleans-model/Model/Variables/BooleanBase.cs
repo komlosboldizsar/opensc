@@ -10,26 +10,26 @@ namespace OpenSC.Model.Variables
         public BooleanBase()
         { }
 
-        public BooleanBase(string name, Color color, string description = "")
+        public BooleanBase(string identifier, Color color, string description = "")
         {
-            this.name = name;
+            this.identifier = identifier;
             this.color = color;
             this.description = description;
         }
 
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<IBoolean, string> NameChanged;
+        #region Property: Identifier
+        public event PropertyChangedTwoValuesDelegate<IBoolean, string> IdentifierChanged;
 
-        private string name;
+        private string identifier;
 
-        public string Name
+        public string Identifier
         {
-            get => name;
+            get => identifier;
             set
             {
-                if (!BooleanRegister.Instance.CanKeyBeUsedForItem(this, value, out IBoolean nameOwnerItem))
+                if (!BooleanRegister.Instance.CanKeyBeUsedForItem(this, value, out IBoolean identifierOwnerItem))
                     return;
-                if (!this.setProperty(ref name, value, NameChanged))
+                if (!this.setProperty(ref identifier, value, IdentifierChanged))
                     return;
             }
         }

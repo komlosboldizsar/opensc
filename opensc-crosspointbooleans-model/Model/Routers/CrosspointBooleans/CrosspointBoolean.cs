@@ -285,7 +285,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
             }
 
             private void updateName()
-                => Name = string.Format("crosspointboolean.{0}", parent.ID);
+                => Identifier = string.Format("crosspointboolean.{0}", parent.ID);
 
             internal void updateDescription()
             {

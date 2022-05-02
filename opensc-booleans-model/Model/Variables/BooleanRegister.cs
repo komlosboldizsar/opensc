@@ -19,17 +19,17 @@ namespace OpenSC.Model.Variables
         { }
         #endregion
 
-        public override string GetKey(IBoolean item) => item.Name;
+        public override string GetKey(IBoolean item) => item.Identifier;
 
-        protected override void keyChangedSubscribeMethod(IBoolean item) => item.NameChanged += itemNameChanged;
-        protected override void keyChangedUnsubscribeMethod(IBoolean item) => item.NameChanged -= itemNameChanged;
+        protected override void keyChangedSubscribeMethod(IBoolean item) => item.IdentifierChanged += itemNameChanged;
+        protected override void keyChangedUnsubscribeMethod(IBoolean item) => item.IdentifierChanged -= itemNameChanged;
         private void itemNameChanged(IBoolean item, string oldValue, string newValue) => ItemKeyChanged(item);
 
         protected override void itemRemovedSubscribeMethod(IBoolean item) { }
         protected override void itemRemovedUnsubscribeMethod(IBoolean item) { }
 
         public override string ToStringMethod(IBoolean item)
-            => string.Format("[{0}] {1}", item.Name, item.Description);
+            => string.Format("[{0}] {1}", item.Identifier, item.Description);
 
     }
 

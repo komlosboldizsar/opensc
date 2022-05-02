@@ -44,7 +44,7 @@ namespace OpenSC.Model.Signals.BooleanTallies
         [PersistAs("from_boolean")]
         private string fromBooleanUniqueId
         {
-            get => fromBoolean?.Name;
+            get => fromBoolean?.Identifier;
             set => _fromBooleanUniqueId = value;
         }
 

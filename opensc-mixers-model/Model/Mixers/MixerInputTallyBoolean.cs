@@ -40,7 +40,7 @@ namespace OpenSC.Model.Mixers
 
         public void Update()
         {
-            Name = getName(input, color);
+            Identifier = getName(input, color);
             Description = getDescription(input, color);
         }
 
@@ -51,7 +51,7 @@ namespace OpenSC.Model.Mixers
 
         private void indexChangedHandler(MixerInput output, int oldIndex, int newIndex)
         {
-            Name = getName(output, color);
+            Identifier = getName(output, color);
             Description = getDescription(output, color);
         }
 
@@ -61,7 +61,7 @@ namespace OpenSC.Model.Mixers
         }
         private void routerIdChangedHandler(IModel mixer, int oldValue, int newValue)
         {
-            Name = getName(input, color);
+            Identifier = getName(input, color);
             Description = getDescription(input, color);
         }
 

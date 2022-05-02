@@ -46,7 +46,7 @@ namespace OpenSC.Model.UMDs
             if (tally == null)
                 return null;
             XElement xmlElement = new XElement(TAG_NAME);
-            xmlElement.Value = tally.Source?.Name ?? "";
+            xmlElement.Value = tally.Source?.Identifier ?? "";
             if (thisTallyInfo.ColorMode != UmdTallyInfo.ColorSettingMode.Fix)
                 xmlElement.SetAttributeValue(ATTRIBUTE_COLOR, colorToString(tally.Color));
             return xmlElement;

@@ -30,7 +30,7 @@ namespace OpenSC.Model.Signals
         protected abstract string getName();
         protected abstract string getDescription();
 
-        protected void updateName() => Name = getName();
+        protected void updateName() => Identifier = getName();
         protected void updateDescription() => Description = getDescription();
         protected void updateFields()
         {
