@@ -248,7 +248,7 @@
         private System.Windows.Forms.TableLayoutPanel identifiersTable;
         private System.Windows.Forms.Label idLabel;
         private System.Windows.Forms.Label nameLabel;
-        private System.Windows.Forms.NumericUpDown idNumericField;
-        private System.Windows.Forms.TextBox nameTextBox;
+        protected System.Windows.Forms.NumericUpDown idNumericField;
+        protected System.Windows.Forms.TextBox nameTextBox;
     }
 }
