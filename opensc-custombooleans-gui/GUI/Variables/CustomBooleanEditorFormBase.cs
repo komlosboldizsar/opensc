@@ -33,6 +33,7 @@ namespace OpenSC.GUI.Variables
             identifierTextBox.Text = customBoolean.Identifier;
             descriptionTextBox.Text = customBoolean.Description;
             setColorButtonColor(customBoolean.Color);
+            updateNonUserEditableFields();
         }
 
         protected override void validateFields()
@@ -73,20 +74,20 @@ namespace OpenSC.GUI.Variables
                 setColorButtonColor(colorDialog.Color);
         }
 
-        private bool _updateNonUserEditableFieldsToDefault = false;
-
+        private bool _updateNonUserEditableFieldsFirst = true;
         protected void updateNonUserEditableFields()
         {
             CustomBoolean customBoolean = (CustomBoolean)EditedModel;
             if (customBoolean == null)
                 return;
             CustomBooleanDataStore dataStore = getDataStore();
-            if (!customBoolean.IdentifierUserEditable || _updateNonUserEditableFieldsToDefault)
+            if (!customBoolean.IdentifierUserEditable || (AddingNew && _updateNonUserEditableFieldsFirst))
                 identifierTextBox.Text = customBoolean.GetIdentifierByData(dataStore);
-            if (!customBoolean.DescriptionUserEditable || _updateNonUserEditableFieldsToDefault)
+            if (!customBoolean.DescriptionUserEditable || (AddingNew && _updateNonUserEditableFieldsFirst))
                 descriptionTextBox.Text = customBoolean.GetDescriptionByData(dataStore);
-            if (!customBoolean.ColorUserEditable || _updateNonUserEditableFieldsToDefault)
+            if (!customBoolean.ColorUserEditable || (AddingNew && _updateNonUserEditableFieldsFirst))
                 setColorButtonColor(customBoolean.GetColorByData(dataStore));
+            _updateNonUserEditableFieldsFirst = false;
         }
 
         protected virtual CustomBooleanDataStore getDataStore(CustomBooleanDataStore dataStore = null)
