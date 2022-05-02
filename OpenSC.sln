@@ -186,7 +186,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-umds-subtype-bmdsmar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-umds-subtype-bmdsmartview-gui", "opensc-umds-subtype-bmdsmartview-gui\opensc-umds-subtype-bmdsmartview-gui.csproj", "{B0109903-2D95-4EFD-9902-AD50FD37F7E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-custombooleans-model", "opensc-custombooleans-model\opensc-custombooleans-model.csproj", "{E56288E1-E22D-4103-8AB0-5EAD8759A63F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-custombooleans-model", "opensc-custombooleans-model\opensc-custombooleans-model.csproj", "{E56288E1-E22D-4103-8AB0-5EAD8759A63F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-custombooleans-gui", "opensc-custombooleans-gui\opensc-custombooleans-gui.csproj", "{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1266,6 +1268,18 @@ Global
 		{E56288E1-E22D-4103-8AB0-5EAD8759A63F}.Release|x64.Build.0 = Release|Any CPU
 		{E56288E1-E22D-4103-8AB0-5EAD8759A63F}.Release|x86.ActiveCfg = Release|Any CPU
 		{E56288E1-E22D-4103-8AB0-5EAD8759A63F}.Release|x86.Build.0 = Release|Any CPU
+		{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}.Debug|x64.Build.0 = Debug|Any CPU
+		{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}.Debug|x86.Build.0 = Debug|Any CPU
+		{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}.Release|x64.ActiveCfg = Release|Any CPU
+		{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}.Release|x64.Build.0 = Release|Any CPU
+		{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}.Release|x86.ActiveCfg = Release|Any CPU
+		{4B43639C-BC13-4EA9-930F-A74FD1ECB02D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
