@@ -14,6 +14,9 @@ namespace OpenSC.GUI.UMDs
         public BmdSmartViewUnitEditorForm() : base() => InitializeComponent();
         public BmdSmartViewUnitEditorForm(BmdSmartViewUnit bmdSmartViewUnit) : base(bmdSmartViewUnit) => InitializeComponent();
 
+        protected override IModelEditorFormDataManager createManager()
+            => new ModelEditorFormDataManager<BmdSmartViewUnit, BmdSmartViewUnit>(this, BmdSmartViewUnitDatabase.Instance);
+
         protected override void loadData()
         {
             base.loadData();

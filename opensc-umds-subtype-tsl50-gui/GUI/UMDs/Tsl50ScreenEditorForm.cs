@@ -14,6 +14,9 @@ namespace OpenSC.GUI.UMDs
         public Tsl50ScreenEditorForm() : base() => InitializeComponent();
         public Tsl50ScreenEditorForm(Tsl50Screen tsl50screen) : base(tsl50screen) =>InitializeComponent();
 
+        protected override IModelEditorFormDataManager createManager()
+            => new ModelEditorFormDataManager<Tsl50Screen, Tsl50Screen>(this, Tsl50ScreenDatabase.Instance);
+
         protected override void loadData()
         {
             base.loadData();

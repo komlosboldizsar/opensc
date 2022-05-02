@@ -10,6 +10,12 @@ namespace OpenSC.Modules
     public class UmdsSubtypeBmdsmartviewGuiModule : SubtypeGuiModuleBase<UmdsSubtypeBmdsmartviewModelModule>
     {
 
+		public override void Initialize()
+        {
+            base.Initialize();
+            registerMenus();
+        }
+
         protected override void registerPersistableWindowTypes()
         { }
 
