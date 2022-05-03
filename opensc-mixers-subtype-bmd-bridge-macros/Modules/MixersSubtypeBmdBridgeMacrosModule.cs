@@ -14,6 +14,7 @@ namespace OpenSC.Modules
         {
             MacroCommandRegister.Instance.RegisterCommand(new AutoTransitionMacroCommand());
             MacroCommandRegister.Instance.RegisterCommand(new CutTransitionMacroCommand());
+            MacroCommandRegister.Instance.RegisterCommand(new FadeToBlackMacroCommand());
             MacroCommandRegister.Instance.RegisterCommand(new SetPreviewSourceMacroCommand());
             MacroCommandRegister.Instance.RegisterCommand(new SetProgramSourceMacroCommand());
         }

@@ -269,6 +269,9 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
 
         public void CutTransition(int meBlockIndex)
             => ApiSwitcher.GetMixEffectBlock(meBlockIndex).PerformAutoTransition();
+
+        public void FadeToBlack(int meBlockIndex)
+            => ApiSwitcher.GetMixEffectBlock(meBlockIndex).PerformFadeToBlack();
         #endregion
 
     }

@@ -131,15 +131,9 @@ namespace BMD.Switcher
         #endregion
 
         #region Transitions
-        public void PerformAutoTransition()
-        {
-            ApiMixEffectBlock.PerformAutoTransition();
-        }
-
-        public void PerformCutTransition()
-        {
-            ApiMixEffectBlock.PerformCut();
-        }
+        public void PerformAutoTransition() => ApiMixEffectBlock.PerformAutoTransition();
+        public void PerformCutTransition() => ApiMixEffectBlock.PerformCut();
+        public void PerformFadeToBlack() => ApiMixEffectBlock.PerformFadeToBlack();
         #endregion
 
     }
