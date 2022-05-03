@@ -118,13 +118,21 @@ namespace OpenSC.Model.Variables
         public IBoolean Input1
         {
             get => input1;
-            set => this.setProperty(ref input1, value, Input1Changed, null, (ov, nv) => {
-                if (ov != null)
-                    ov.StateChanged -= input1StateChanged;
-                if (nv != null)
-                    nv.StateChanged += input1StateChanged;
-                recalculateState();
-            });
+            set
+            {
+                BeforeChangePropertyDelegate<IBoolean> beforeChangeDelegate = (ov, nv) =>
+                {
+                    if (ov != null)
+                        ov.StateChanged -= input1StateChanged;
+                };
+                AfterChangePropertyDelegate<IBoolean> afterChangeDelegate = (ov, nv) =>
+                {
+                    if (nv != null)
+                        nv.StateChanged += input1StateChanged;
+                    recalculateState();
+                };
+                this.setProperty(ref input1, value, Input1Changed, beforeChangeDelegate, afterChangeDelegate);
+            }
         }
         private void input1StateChanged(IBoolean item, bool oldValue, bool newValue) => recalculateState(1);
         #endregion
@@ -161,13 +169,21 @@ namespace OpenSC.Model.Variables
         public IBoolean Input2
         {
             get => input2;
-            set => this.setProperty(ref input2, value, Input2Changed, null, (ov, nv) => {
-                if (ov != null)
-                    ov.StateChanged -= input2StateChanged;
-                if (nv != null)
-                    nv.StateChanged += input2StateChanged;
-                recalculateState();
-            });
+            set
+            {
+                BeforeChangePropertyDelegate<IBoolean> beforeChangeDelegate = (ov, nv) =>
+                {
+                    if (ov != null)
+                        ov.StateChanged -= input2StateChanged;
+                };
+                AfterChangePropertyDelegate<IBoolean> afterChangeDelegate = (ov, nv) =>
+                {
+                    if (nv != null)
+                        nv.StateChanged += input2StateChanged;
+                    recalculateState();
+                };
+                this.setProperty(ref input2, value, Input2Changed, beforeChangeDelegate, afterChangeDelegate);
+            }
         }
 
         private void input2StateChanged(IBoolean item, bool oldValue, bool newValue) => recalculateState(2);
