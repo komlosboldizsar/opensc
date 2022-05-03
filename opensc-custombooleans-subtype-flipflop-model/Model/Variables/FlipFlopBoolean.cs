@@ -21,6 +21,22 @@ namespace OpenSC.Model.Variables
     public class FlipFlopBoolean : CustomBoolean
     {
 
+        #region Restoration
+        public override void RestoreCustomRelations()
+        {
+            base.RestoreCustomRelations();
+            restoreBooleans();
+        }
+
+        private void restoreBooleans()
+        {
+            if (_input1Identifier != null)
+                Input1 = BooleanRegister.Instance[_input1Identifier];
+            if (_input2Identifier != null)
+                Input2 = BooleanRegister.Instance[_input2Identifier];
+        }
+        #endregion
+
         #region Base properties
         public override bool IdentifierUserEditable => false;
         public override string GetIdentifierByData(CustomBooleanDataStore dataStore) => $"flipflop.{dataStore.ID}";
@@ -86,13 +102,18 @@ namespace OpenSC.Model.Variables
         #region Property: Input1
         public event PropertyChangedTwoValuesDelegate<FlipFlopBoolean, IBoolean> Input1Changed;
 
-        [PersistAs("input1")]
-        private IBoolean input1;
+        private string _input1Identifier; // "Temp foreign key"
 
 #pragma warning disable CS0169
-        [TempForeignKey(nameof(input1))]
-        private string _input1Id;
+        [PersistAs("input1")]
+        private string input1Identifier
+        {
+            get => input1?.Identifier;
+            set => _input1Identifier = value;
+        }
 #pragma warning restore CS0169
+
+        private IBoolean input1;
 
         public IBoolean Input1
         {
@@ -124,13 +145,19 @@ namespace OpenSC.Model.Variables
         #region Property: Input2
         public event PropertyChangedTwoValuesDelegate<FlipFlopBoolean, IBoolean> Input2Changed;
 
-        [PersistAs("input2")]
-        private IBoolean input2;
+        private string _input2Identifier; // "Temp foreign key"
 
 #pragma warning disable CS0169
-        [TempForeignKey(nameof(input2))]
-        private string _input2Id;
+        [PersistAs("input2")]
+        private string input2Identifier
+        {
+            get => input2?.Identifier;
+            set => _input2Identifier = value;
+        }
 #pragma warning restore CS0169
+
+        private IBoolean input2;
+
         public IBoolean Input2
         {
             get => input2;
