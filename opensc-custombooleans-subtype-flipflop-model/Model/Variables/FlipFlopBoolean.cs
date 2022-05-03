@@ -97,8 +97,15 @@ namespace OpenSC.Model.Variables
         public IBoolean Input1
         {
             get => input1;
-            set => this.setProperty(ref input1, value, Input1Changed, null, (_, _) => recalculateState(1));
+            set => this.setProperty(ref input1, value, Input1Changed, null, (ov, nv) => {
+                if (ov != null)
+                    ov.StateChanged -= input1StateChanged;
+                if (nv != null)
+                    nv.StateChanged += input1StateChanged;
+                recalculateState();
+            });
         }
+        private void input1StateChanged(IBoolean item, bool oldValue, bool newValue) => recalculateState(1);
         #endregion
 
         #region Property: Input1Inverted
@@ -127,8 +134,16 @@ namespace OpenSC.Model.Variables
         public IBoolean Input2
         {
             get => input2;
-            set => this.setProperty(ref input2, value, Input2Changed, null, (_, _) => recalculateState(2));
+            set => this.setProperty(ref input2, value, Input2Changed, null, (ov, nv) => {
+                if (ov != null)
+                    ov.StateChanged -= input2StateChanged;
+                if (nv != null)
+                    nv.StateChanged += input2StateChanged;
+                recalculateState();
+            });
         }
+
+        private void input2StateChanged(IBoolean item, bool oldValue, bool newValue) => recalculateState(2);
         #endregion
 
         #region Property: Input2Inverted
