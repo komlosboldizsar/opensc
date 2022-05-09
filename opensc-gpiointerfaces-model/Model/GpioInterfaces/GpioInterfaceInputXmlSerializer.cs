@@ -9,13 +9,13 @@ namespace OpenSC.Model.GpioInterfaces
     public class GpioInterfaceInputXmlSerializer : IValueXmlSerializer
     {
 
-        public Type Type => typeof(GpioInterfaceInput);
+        public virtual Type Type => typeof(GpioInterfaceInput);
 
         private const string TAG_NAME = "input";
         private const string ATTRIBUTE_INDEX = "index";
         private const string ATTRIBUTE_NAME = "name";
 
-        public object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
+        public virtual object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
         {
             GpioInterface parentGpioInterface = parentItem as GpioInterface;
             if (serializedItem.LocalName != TAG_NAME)
@@ -26,7 +26,7 @@ namespace OpenSC.Model.GpioInterfaces
             return restoredInput;
         }
 
-        public XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
+        public virtual XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
         {
             GpioInterfaceInput input = item as GpioInterfaceInput;
             if (input == null)
