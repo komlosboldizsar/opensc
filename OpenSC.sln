@@ -196,6 +196,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-custombooleans-subty
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-gpiointerfaces-model", "opensc-gpiointerfaces-model\opensc-gpiointerfaces-model.csproj", "{A3805540-B1AA-458B-BA10-F26CFA6751EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-gpiointerfaces-gui", "opensc-gpiointerfaces-gui\opensc-gpiointerfaces-gui.csproj", "{1B9B384F-B517-4748-AF92-F4C0DCD2520E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1322,6 +1324,18 @@ Global
 		{A3805540-B1AA-458B-BA10-F26CFA6751EB}.Release|x64.Build.0 = Release|Any CPU
 		{A3805540-B1AA-458B-BA10-F26CFA6751EB}.Release|x86.ActiveCfg = Release|Any CPU
 		{A3805540-B1AA-458B-BA10-F26CFA6751EB}.Release|x86.Build.0 = Release|Any CPU
+		{1B9B384F-B517-4748-AF92-F4C0DCD2520E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B9B384F-B517-4748-AF92-F4C0DCD2520E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B9B384F-B517-4748-AF92-F4C0DCD2520E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1B9B384F-B517-4748-AF92-F4C0DCD2520E}.Debug|x64.Build.0 = Debug|Any CPU
+		{1B9B384F-B517-4748-AF92-F4C0DCD2520E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1B9B384F-B517-4748-AF92-F4C0DCD2520E}.Debug|x86.Build.0 = Debug|Any CPU
+		{1B9B384F-B517-4748-AF92-F4C0DCD2520E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B9B384F-B517-4748-AF92-F4C0DCD2520E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B9B384F-B517-4748-AF92-F4C0DCD2520E}.Release|x64.ActiveCfg = Release|Any CPU
+		{1B9B384F-B517-4748-AF92-F4C0DCD2520E}.Release|x64.Build.0 = Release|Any CPU
+		{1B9B384F-B517-4748-AF92-F4C0DCD2520E}.Release|x86.ActiveCfg = Release|Any CPU
+		{1B9B384F-B517-4748-AF92-F4C0DCD2520E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
