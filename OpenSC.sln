@@ -192,7 +192,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-custombooleans-gui",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-custombooleans-subtype-flipflop-model", "opensc-custombooleans-subtype-flipflop-model\opensc-custombooleans-subtype-flipflop-model.csproj", "{C003CA26-8806-41E6-9CB4-5EC90508960B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-custombooleans-subtype-flipflop-gui", "opensc-custombooleans-subtype-flipflop-gui\opensc-custombooleans-subtype-flipflop-gui.csproj", "{19E0DA9D-FD53-41B6-AC4E-EFC0AB280E9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-custombooleans-subtype-flipflop-gui", "opensc-custombooleans-subtype-flipflop-gui\opensc-custombooleans-subtype-flipflop-gui.csproj", "{19E0DA9D-FD53-41B6-AC4E-EFC0AB280E9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-custombooleans-subtype-flipflop-bridge-macros", "opensc-custombooleans-subtype-flipflop-bridge-macros\opensc-custombooleans-subtype-flipflop-bridge-macros.csproj", "{4CDE6F53-7D46-498B-A7F2-A18AFF7DFE5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1308,6 +1310,18 @@ Global
 		{19E0DA9D-FD53-41B6-AC4E-EFC0AB280E9F}.Release|x64.Build.0 = Release|Any CPU
 		{19E0DA9D-FD53-41B6-AC4E-EFC0AB280E9F}.Release|x86.ActiveCfg = Release|Any CPU
 		{19E0DA9D-FD53-41B6-AC4E-EFC0AB280E9F}.Release|x86.Build.0 = Release|Any CPU
+		{4CDE6F53-7D46-498B-A7F2-A18AFF7DFE5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CDE6F53-7D46-498B-A7F2-A18AFF7DFE5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CDE6F53-7D46-498B-A7F2-A18AFF7DFE5A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4CDE6F53-7D46-498B-A7F2-A18AFF7DFE5A}.Debug|x64.Build.0 = Debug|Any CPU
+		{4CDE6F53-7D46-498B-A7F2-A18AFF7DFE5A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4CDE6F53-7D46-498B-A7F2-A18AFF7DFE5A}.Debug|x86.Build.0 = Debug|Any CPU
+		{4CDE6F53-7D46-498B-A7F2-A18AFF7DFE5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CDE6F53-7D46-498B-A7F2-A18AFF7DFE5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CDE6F53-7D46-498B-A7F2-A18AFF7DFE5A}.Release|x64.ActiveCfg = Release|Any CPU
+		{4CDE6F53-7D46-498B-A7F2-A18AFF7DFE5A}.Release|x64.Build.0 = Release|Any CPU
+		{4CDE6F53-7D46-498B-A7F2-A18AFF7DFE5A}.Release|x86.ActiveCfg = Release|Any CPU
+		{4CDE6F53-7D46-498B-A7F2-A18AFF7DFE5A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
