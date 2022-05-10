@@ -29,7 +29,15 @@ namespace OpenSC.Model.Macros
         private void lookupForArguments()
         {
             List<IMacroTriggerArgument> arguments = new List<IMacroTriggerArgument>();
-            Type[] nestedTypes = GetType().GetNestedTypes();
+            List<Type> nestedTypes = new();
+            Type outerType = GetType();
+            while (true)
+            {
+                nestedTypes.AddRange(outerType.GetNestedTypes());
+                outerType = outerType.BaseType;
+                if (outerType.IsGenericType && (outerType.GetGenericTypeDefinition() == typeof(MacroTriggerBase<>)))
+                    break;
+            }
             foreach (Type nestedType in nestedTypes)
             {
                 if (typeof(IMacroTriggerArgument).IsAssignableFrom(nestedType))

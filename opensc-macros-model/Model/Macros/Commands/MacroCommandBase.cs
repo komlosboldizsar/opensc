@@ -27,7 +27,13 @@ namespace OpenSC.Model.Macros
         private void lookupForArguments()
         {
             List<IMacroCommandArgument> arguments = new List<IMacroCommandArgument>();
-            Type[] nestedTypes = GetType().GetNestedTypes();
+            List<Type> nestedTypes = new();
+            Type outerType = GetType();
+            while (outerType != typeof(MacroCommandBase))
+            {
+                nestedTypes.AddRange(outerType.GetNestedTypes());
+                outerType = outerType.BaseType;
+            }
             foreach (Type nestedType in nestedTypes)
             {
                 if (typeof(IMacroCommandArgument).IsAssignableFrom(nestedType))
