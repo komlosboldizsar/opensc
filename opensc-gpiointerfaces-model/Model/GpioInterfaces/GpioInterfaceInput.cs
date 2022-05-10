@@ -19,8 +19,14 @@ namespace OpenSC.Model.GpioInterfaces
             this.name = name;
             this.GpioInterface = gpioInterface;
             this.Index = index;
+            this.Color = System.Drawing.Color.Blue;
             SystemObjectRegister.Instance.Register(this);
+            generateIdentifier();
+            generateDescription();
+            register();
             gpioInterface.GlobalIdChanged += (i, ov, nv) => generateGlobalId();
+            gpioInterface.IdChanged += (i, ov, nv) => generateDescription();
+            gpioInterface.NameChanged += (i, ov, nv) => generateDescription();
             generateGlobalId();
         }
 
@@ -36,23 +42,37 @@ namespace OpenSC.Model.GpioInterfaces
         }
         #endregion
 
+        #region Identifier generation
+        private void generateIdentifier()
+        {
+            if (GpioInterface == null)
+            {
+                Identifier = $"gpiointerface.unknown.input.{Index}";
+                return;
+            }
+            Identifier = $"gpiointerface.{GpioInterface.ID}.input.{Index}";
+        }
+        #endregion
+
+        #region Description generation
+        private void generateDescription()
+        {
+            if (GpioInterface == null)
+            {
+                Description = $"Input [(#{index}) {name}] of unknown GPIO interface.";
+                return;
+            }
+            Description = $"Input [(#{index}) {name}] of GPIO interface [(#{GpioInterface.ID}) {GpioInterface.Name}].";
+        }
+        #endregion
+
         #region Property: Name
         private string name;
 
         public string Name
         {
             get => name;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException();
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Name));
-            }
+            set => this.setProperty(ref name, value, NameChanged, null, (_, _) => generateDescription());
         }
 
         public event PropertyChangedTwoValuesDelegate<GpioInterfaceInput, string> NameChanged;
@@ -84,16 +104,12 @@ namespace OpenSC.Model.GpioInterfaces
         public int Index
         {
             get => index;
-            set
+            set => this.setProperty(ref index, value, IndexChanged, null, (_, _) =>
             {
-                if (value == index)
-                    return;
-                int oldValue = index;
-                index = value;
-                IndexChanged?.Invoke(this, oldValue, value);
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Index));
+                generateIdentifier();
+                generateDescription();
                 generateGlobalId();
-            }
+            });
         }
 
         public event PropertyChangedTwoValuesDelegate<GpioInterfaceInput, int> IndexChanged;
