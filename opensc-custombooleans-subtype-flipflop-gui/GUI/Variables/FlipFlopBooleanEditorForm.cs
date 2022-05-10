@@ -44,7 +44,7 @@ namespace OpenSC.GUI.Variables
             input2DropDown.SelectByValue(flipFlopBoolean.Input2);
             input1InvertCheckBox.Checked = flipFlopBoolean.Input1Inverted;
             input2InvertCheckBox.Checked = flipFlopBoolean.Input2Inverted;
-            setFieldsEnabledByType();
+            updateFieldsByType();
         }
 
         protected override void writeFields()
@@ -73,6 +73,8 @@ namespace OpenSC.GUI.Variables
             typeDropDown.SetAdapterAsDataSource(new EnumComboBoxAdapter<FlipFlopType>(FLIPFLOP_TYPE_TRANSLATIONS));
             input1DropDown.CreateAdapterAsDataSource(BooleanRegister.Instance, b => b.Identifier, true, "(not associated)");
             input2DropDown.CreateAdapterAsDataSource(BooleanRegister.Instance, b => b.Identifier, true, "(not associated)");
+            input1DropDown.ReceiveSystemObjectDrop().FilterByType<IBoolean>();
+            input2DropDown.ReceiveSystemObjectDrop().FilterByType<IBoolean>();
         }
 
         private static readonly Dictionary<FlipFlopType, string> FLIPFLOP_TYPE_TRANSLATIONS = new()
@@ -96,17 +98,19 @@ namespace OpenSC.GUI.Variables
 
         private void typeDropDown_SelectedValueChanged(object sender, EventArgs e)
         {
-            setFieldsEnabledByType();
+            updateFieldsByType();
             updateNonUserEditableFields();
         }
 
         private void inputXDropDown_SelectedValueChanged(object sender, EventArgs e) => updateNonUserEditableFields();
         private void inputXInvertCheckBox_CheckedChanged(object sender, EventArgs e) => updateNonUserEditableFields();
 
-        private void setFieldsEnabledByType()
+        private void updateFieldsByType()
         {
             FlipFlopType type = (FlipFlopType)typeDropDown.SelectedValue;
             FlipFlopTypeDescriptor typeDescriptor = FlipFlopBoolean.GetTypeDescriptorByType(type);
+            input1Label.Text = typeDescriptor.Input1Name;
+            input2Label.Text = typeDescriptor.Input2Name;
             input1DropDown.Enabled = typeDescriptor.Input1Used;
             input2DropDown.Enabled = typeDescriptor.Input2Used;
             input1InvertCheckBox.Enabled = (typeDescriptor.Input1Used && typeDescriptor.Input1Invertable);

@@ -21,6 +21,22 @@ namespace OpenSC.Model.Variables
     public class FlipFlopBoolean : CustomBoolean
     {
 
+        #region Restoration
+        public override void RestoreCustomRelations()
+        {
+            base.RestoreCustomRelations();
+            restoreBooleans();
+        }
+
+        private void restoreBooleans()
+        {
+            if (_input1Identifier != null)
+                Input1 = BooleanRegister.Instance[_input1Identifier];
+            if (_input2Identifier != null)
+                Input2 = BooleanRegister.Instance[_input2Identifier];
+        }
+        #endregion
+
         #region Base properties
         public override bool IdentifierUserEditable => false;
         public override string GetIdentifierByData(CustomBooleanDataStore dataStore) => $"flipflop.{dataStore.ID}";
@@ -86,14 +102,39 @@ namespace OpenSC.Model.Variables
         #region Property: Input1
         public event PropertyChangedTwoValuesDelegate<FlipFlopBoolean, IBoolean> Input1Changed;
 
+        private string _input1Identifier; // "Temp foreign key"
+
+#pragma warning disable CS0169
         [PersistAs("input1")]
+        private string input1Identifier
+        {
+            get => input1?.Identifier;
+            set => _input1Identifier = value;
+        }
+#pragma warning restore CS0169
+
         private IBoolean input1;
 
         public IBoolean Input1
         {
             get => input1;
-            set => this.setProperty(ref input1, value, Input1Changed, null, (_, _) => recalculateState(1));
+            set
+            {
+                BeforeChangePropertyDelegate<IBoolean> beforeChangeDelegate = (ov, nv) =>
+                {
+                    if (ov != null)
+                        ov.StateChanged -= input1StateChanged;
+                };
+                AfterChangePropertyDelegate<IBoolean> afterChangeDelegate = (ov, nv) =>
+                {
+                    if (nv != null)
+                        nv.StateChanged += input1StateChanged;
+                    recalculateState();
+                };
+                this.setProperty(ref input1, value, Input1Changed, beforeChangeDelegate, afterChangeDelegate);
+            }
         }
+        private void input1StateChanged(IBoolean item, bool oldValue, bool newValue) => recalculateState(1);
         #endregion
 
         #region Property: Input1Inverted
@@ -112,14 +153,40 @@ namespace OpenSC.Model.Variables
         #region Property: Input2
         public event PropertyChangedTwoValuesDelegate<FlipFlopBoolean, IBoolean> Input2Changed;
 
+        private string _input2Identifier; // "Temp foreign key"
+
+#pragma warning disable CS0169
         [PersistAs("input2")]
+        private string input2Identifier
+        {
+            get => input2?.Identifier;
+            set => _input2Identifier = value;
+        }
+#pragma warning restore CS0169
+
         private IBoolean input2;
 
         public IBoolean Input2
         {
             get => input2;
-            set => this.setProperty(ref input2, value, Input2Changed, null, (_, _) => recalculateState(2));
+            set
+            {
+                BeforeChangePropertyDelegate<IBoolean> beforeChangeDelegate = (ov, nv) =>
+                {
+                    if (ov != null)
+                        ov.StateChanged -= input2StateChanged;
+                };
+                AfterChangePropertyDelegate<IBoolean> afterChangeDelegate = (ov, nv) =>
+                {
+                    if (nv != null)
+                        nv.StateChanged += input2StateChanged;
+                    recalculateState();
+                };
+                this.setProperty(ref input2, value, Input2Changed, beforeChangeDelegate, afterChangeDelegate);
+            }
         }
+
+        private void input2StateChanged(IBoolean item, bool oldValue, bool newValue) => recalculateState(2);
         #endregion
 
         #region Property: Input2Inverted
