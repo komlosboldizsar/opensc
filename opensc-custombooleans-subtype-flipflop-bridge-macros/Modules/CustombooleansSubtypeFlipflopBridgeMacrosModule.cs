@@ -12,9 +12,9 @@ namespace OpenSC.Modules
 
         protected override void registerMacroCommands()
         {
-            MacroCommandRegister.Instance.RegisterCommand(new AutoTransitionMacroCommand());
-            MacroCommandRegister.Instance.RegisterCommand(new CutTransitionMacroCommand());
-            MacroCommandRegister.Instance.RegisterCommand(new SetPreviewSourceMacroCommand());
+            MacroCommandRegister.Instance.RegisterCommand(new SetMacroCommand());
+            MacroCommandRegister.Instance.RegisterCommand(new ResetMacroCommand());
+            MacroCommandRegister.Instance.RegisterCommand(new ToggleMacroCommand());
         }
 
         protected override void registerTriggerTypes()
