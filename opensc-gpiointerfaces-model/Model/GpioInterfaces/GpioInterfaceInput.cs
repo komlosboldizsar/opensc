@@ -100,7 +100,7 @@ namespace OpenSC.Model.GpioInterfaces
         #endregion
 
         #region State
-        internal void NotifyStateChanged(bool newValue) => CurrentState = newValue;
+        public void NotifyStateChanged(bool newValue) => CurrentState = newValue;
 
         internal virtual void QueryState()
         { }
