@@ -32,11 +32,16 @@ namespace OpenSC.Model.Variables
             unregister();
         }
 
+        public override void RestoredOwnFields()
+        {
+            base.RestoredOwnFields();
+            register();
+        }
+
         public override void TotallyRestored()
         {
             base.TotallyRestored();
             checkBaseFields();
-            register();
         }
         #endregion
 
