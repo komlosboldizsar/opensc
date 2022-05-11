@@ -200,10 +200,17 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                     {
                         while (acceptingConnections)
                         {
-                            Socket connectionSocket = await socket.AcceptAsync();
-                            Connection connection = new Connection(this, connectionSocket);
-                            connections.Add(connection);
-                            NewConnection?.Invoke(connection);
+                            try
+                            {
+                                Socket connectionSocket = await socket.AcceptAsync();
+                                Connection connection = new Connection(this, connectionSocket);
+                                if (connectionSocket.Connected)
+                                {
+                                    connections.Add(connection);
+                                    NewConnection?.Invoke(connection);
+                                }
+                            }
+                            catch { }
                         }
                     }
                 }
@@ -214,7 +221,8 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
             {
                 cts.Cancel();
                 acceptingConnections = false;
-                connections.ForEach(c => c.Close());
+                List<Connection> connectionsToClose = new(connections);
+                connectionsToClose.ForEach(c => c.Close());
                 NewConnection = null;
                 ConnectionClosed = null;
                 ConnectionReceivedLine = null;
