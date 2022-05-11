@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -206,6 +207,7 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                                 Connection connection = new Connection(this, connectionSocket);
                                 if (connectionSocket.Connected)
                                 {
+                                    setKeepAlive(connectionSocket);
                                     connections.Add(connection);
                                     NewConnection?.Invoke(connection);
                                 }
@@ -215,6 +217,16 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                     }
                 }
                 catch { }
+            }
+
+            private void setKeepAlive(Socket socket)
+            {
+                int size = Marshal.SizeOf((uint)0);
+                byte[] keepAlive = new byte[size * 3];
+                Buffer.BlockCopy(BitConverter.GetBytes((uint)1), 0, keepAlive, 0, size);
+                Buffer.BlockCopy(BitConverter.GetBytes((uint)500), 0, keepAlive, size, size);
+                Buffer.BlockCopy(BitConverter.GetBytes((uint)500), 0, keepAlive, size * 2, size);
+                socket.IOControl(IOControlCode.KeepAliveValues, keepAlive, null);
             }
 
             public void Close()
@@ -252,6 +264,7 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                 {
                     this.server = server;
                     this.connectionSocket = connectionSocket;
+                    startCheckState();
                     read();
                 }
 
@@ -327,6 +340,7 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                 {
                     try
                     {
+                        stopCheckState();
                         connectionSocket.Shutdown(SocketShutdown.Both);
                         connectionSocket.Close();
                         connectionSocket.Dispose();
@@ -335,6 +349,62 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                     finally
                     {
                         server.notifyConnectionClosed(this);
+                    }
+                }
+
+                private CancellationTokenSource checkStateTaskCancellationTokenSource;
+                private CancellationToken checkStateTaskCancellationToken;
+                private Task checkStateTask;
+
+                private void startCheckState()
+                {
+                    if (checkStateTask != null)
+                        return;
+                    checkStateTaskCancellationTokenSource = new();
+                    checkStateTaskCancellationToken = checkStateTaskCancellationTokenSource.Token;
+                    checkStateTask = Task.Run(checkStateTaskMethod);
+                }
+
+                private void stopCheckState()
+                {
+                    try
+                    {
+                        if (checkStateTaskCancellationTokenSource != null)
+                        {
+                            checkStateTaskCancellationTokenSource.Cancel();
+                            checkStateTaskCancellationTokenSource.Dispose();
+                            checkStateTaskCancellationTokenSource = null;
+                        }
+                        checkStateTask = null;
+                    }
+                    catch { }
+                }
+
+                private async Task checkStateTaskMethod()
+                {
+                    while (true)
+                    {
+                        if (checkStateTaskCancellationToken.IsCancellationRequested == true)
+                            return;
+                        if (!checkState())
+                            closed();
+                        await Task.Delay(500, checkStateTaskCancellationToken);
+                    }
+                }
+
+                private bool checkState()
+                {
+                    try
+                    {
+                        return !(connectionSocket.Poll(1, SelectMode.SelectRead) && connectionSocket.Available == 0);
+                    }
+                    catch (SocketException)
+                    {
+                        return false;
+                    }
+                    catch (ObjectDisposedException)
+                    {
+                        return false;
                     }
                 }
 
