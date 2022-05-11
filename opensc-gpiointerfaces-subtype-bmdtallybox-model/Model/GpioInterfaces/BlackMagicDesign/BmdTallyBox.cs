@@ -176,14 +176,14 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
             private List<Connection> connections = new();
             private bool acceptingConnections = false;
 
-            private CancellationTokenSource cts;
-            private CancellationToken ct;
+            private CancellationTokenSource listeningCancellationTokenSource;
+            private CancellationToken listeningCancellationToken;
 
             public void StartListening()
             {
-                cts = new();
-                ct = cts.Token;
-                Task.Run(StartListeningAsync, ct);
+                listeningCancellationTokenSource = new();
+                listeningCancellationToken = listeningCancellationTokenSource.Token;
+                Task.Run(StartListeningAsync, listeningCancellationToken);
             }
 
             public async Task StartListeningAsync()
@@ -196,7 +196,7 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                     socket.Bind(localEndPoint);
                     socket.Listen(10);
                     acceptingConnections = true;
-                    using (ct.Register(() => socket.Close()))
+                    using (listeningCancellationToken.Register(() => socket.Close()))
                     {
                         while (acceptingConnections)
                         {
@@ -219,7 +219,7 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
 
             public void Close()
             {
-                cts.Cancel();
+                listeningCancellationTokenSource.Cancel();
                 acceptingConnections = false;
                 List<Connection> connectionsToClose = new(connections);
                 connectionsToClose.ForEach(c => c.Close());
