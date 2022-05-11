@@ -194,15 +194,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-custombooleans-subty
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-custombooleans-subtype-flipflop-gui", "opensc-custombooleans-subtype-flipflop-gui\opensc-custombooleans-subtype-flipflop-gui.csproj", "{19E0DA9D-FD53-41B6-AC4E-EFC0AB280E9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-custombooleans-subtype-flipflop-bridge-macros", "opensc-custombooleans-subtype-flipflop-bridge-macros\opensc-custombooleans-subtype-flipflop-bridge-macros.csproj", "{4CDE6F53-7D46-498B-A7F2-A18AFF7DFE5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-custombooleans-subtype-flipflop-bridge-macros", "opensc-custombooleans-subtype-flipflop-bridge-macros\opensc-custombooleans-subtype-flipflop-bridge-macros.csproj", "{4CDE6F53-7D46-498B-A7F2-A18AFF7DFE5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-gpiointerfaces-model", "opensc-gpiointerfaces-model\opensc-gpiointerfaces-model.csproj", "{A3805540-B1AA-458B-BA10-F26CFA6751EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-gpiointerfaces-model", "opensc-gpiointerfaces-model\opensc-gpiointerfaces-model.csproj", "{A3805540-B1AA-458B-BA10-F26CFA6751EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-gpiointerfaces-gui", "opensc-gpiointerfaces-gui\opensc-gpiointerfaces-gui.csproj", "{1B9B384F-B517-4748-AF92-F4C0DCD2520E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-gpiointerfaces-gui", "opensc-gpiointerfaces-gui\opensc-gpiointerfaces-gui.csproj", "{1B9B384F-B517-4748-AF92-F4C0DCD2520E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-gpiointerfaces-subtype-bmdtallybox-model", "opensc-gpiointerfaces-subtype-bmdtallybox-model\opensc-gpiointerfaces-subtype-bmdtallybox-model.csproj", "{BF8C6878-05B0-414C-BBA3-577551917F13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-gpiointerfaces-subtype-bmdtallybox-model", "opensc-gpiointerfaces-subtype-bmdtallybox-model\opensc-gpiointerfaces-subtype-bmdtallybox-model.csproj", "{BF8C6878-05B0-414C-BBA3-577551917F13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-gpiointerfaces-subtype-bmdtallybox-gui", "opensc-gpiointerfaces-subtype-bmdtallybox-gui\opensc-gpiointerfaces-subtype-bmdtallybox-gui.csproj", "{58F95DB2-32A8-4EA8-9D6B-774F9D9AE409}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-gpiointerfaces-subtype-bmdtallybox-gui", "opensc-gpiointerfaces-subtype-bmdtallybox-gui\opensc-gpiointerfaces-subtype-bmdtallybox-gui.csproj", "{58F95DB2-32A8-4EA8-9D6B-774F9D9AE409}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-x32faders-model", "opensc-x32faders-model\opensc-x32faders-model.csproj", "{F422751C-F066-450A-8E35-E4A4CC30B718}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-x32faders-gui", "opensc-x32faders-gui\opensc-x32faders-gui.csproj", "{D790C3C1-5AD8-41D5-BC45-93FD1069F1E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-x32faders-bridge-macros", "opensc-x32faders-bridge-macros\opensc-x32faders-bridge-macros.csproj", "{1C14C7B6-5BD8-4F69-92B8-F5C8FFCE07BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1378,6 +1384,42 @@ Global
 		{58F95DB2-32A8-4EA8-9D6B-774F9D9AE409}.Release|x64.Build.0 = Release|Any CPU
 		{58F95DB2-32A8-4EA8-9D6B-774F9D9AE409}.Release|x86.ActiveCfg = Release|Any CPU
 		{58F95DB2-32A8-4EA8-9D6B-774F9D9AE409}.Release|x86.Build.0 = Release|Any CPU
+		{F422751C-F066-450A-8E35-E4A4CC30B718}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F422751C-F066-450A-8E35-E4A4CC30B718}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F422751C-F066-450A-8E35-E4A4CC30B718}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F422751C-F066-450A-8E35-E4A4CC30B718}.Debug|x64.Build.0 = Debug|Any CPU
+		{F422751C-F066-450A-8E35-E4A4CC30B718}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F422751C-F066-450A-8E35-E4A4CC30B718}.Debug|x86.Build.0 = Debug|Any CPU
+		{F422751C-F066-450A-8E35-E4A4CC30B718}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F422751C-F066-450A-8E35-E4A4CC30B718}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F422751C-F066-450A-8E35-E4A4CC30B718}.Release|x64.ActiveCfg = Release|Any CPU
+		{F422751C-F066-450A-8E35-E4A4CC30B718}.Release|x64.Build.0 = Release|Any CPU
+		{F422751C-F066-450A-8E35-E4A4CC30B718}.Release|x86.ActiveCfg = Release|Any CPU
+		{F422751C-F066-450A-8E35-E4A4CC30B718}.Release|x86.Build.0 = Release|Any CPU
+		{D790C3C1-5AD8-41D5-BC45-93FD1069F1E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D790C3C1-5AD8-41D5-BC45-93FD1069F1E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D790C3C1-5AD8-41D5-BC45-93FD1069F1E6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D790C3C1-5AD8-41D5-BC45-93FD1069F1E6}.Debug|x64.Build.0 = Debug|Any CPU
+		{D790C3C1-5AD8-41D5-BC45-93FD1069F1E6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D790C3C1-5AD8-41D5-BC45-93FD1069F1E6}.Debug|x86.Build.0 = Debug|Any CPU
+		{D790C3C1-5AD8-41D5-BC45-93FD1069F1E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D790C3C1-5AD8-41D5-BC45-93FD1069F1E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D790C3C1-5AD8-41D5-BC45-93FD1069F1E6}.Release|x64.ActiveCfg = Release|Any CPU
+		{D790C3C1-5AD8-41D5-BC45-93FD1069F1E6}.Release|x64.Build.0 = Release|Any CPU
+		{D790C3C1-5AD8-41D5-BC45-93FD1069F1E6}.Release|x86.ActiveCfg = Release|Any CPU
+		{D790C3C1-5AD8-41D5-BC45-93FD1069F1E6}.Release|x86.Build.0 = Release|Any CPU
+		{1C14C7B6-5BD8-4F69-92B8-F5C8FFCE07BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C14C7B6-5BD8-4F69-92B8-F5C8FFCE07BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C14C7B6-5BD8-4F69-92B8-F5C8FFCE07BA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1C14C7B6-5BD8-4F69-92B8-F5C8FFCE07BA}.Debug|x64.Build.0 = Debug|Any CPU
+		{1C14C7B6-5BD8-4F69-92B8-F5C8FFCE07BA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1C14C7B6-5BD8-4F69-92B8-F5C8FFCE07BA}.Debug|x86.Build.0 = Debug|Any CPU
+		{1C14C7B6-5BD8-4F69-92B8-F5C8FFCE07BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C14C7B6-5BD8-4F69-92B8-F5C8FFCE07BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C14C7B6-5BD8-4F69-92B8-F5C8FFCE07BA}.Release|x64.ActiveCfg = Release|Any CPU
+		{1C14C7B6-5BD8-4F69-92B8-F5C8FFCE07BA}.Release|x64.Build.0 = Release|Any CPU
+		{1C14C7B6-5BD8-4F69-92B8-F5C8FFCE07BA}.Release|x86.ActiveCfg = Release|Any CPU
+		{1C14C7B6-5BD8-4F69-92B8-F5C8FFCE07BA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
