@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ThreadHelpers;
 
 namespace OpenSC.Model.Mixers.BlackMagicDesign.Macros
 {
@@ -18,7 +19,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign.Macros
                 return;
             if (!int.TryParse(argumentObjects[1]?.ToString(), out int meBlockIndex))
                 return;
-            transition(mixer, meBlockIndex);
+            InvokeHelper.Invoke(() => transition(mixer, meBlockIndex));
         }
 
         protected abstract void transition(BmdMixer mixer, int meBlockIndex);
