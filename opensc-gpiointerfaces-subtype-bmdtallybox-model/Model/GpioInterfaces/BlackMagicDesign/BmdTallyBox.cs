@@ -269,8 +269,9 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                         {
                             string data = Encoding.ASCII.GetString(byteBuffer, 0, bytesRead);
                             stringBuffer += data;
-                            bool keepLast = !stringBuffer.EndsWith("\r\n");
-                            string[] lines = stringBuffer.Split("\r\n");
+                            stringBuffer = stringBuffer.Replace("\r\n", "\n").Replace("\r", "\n");
+                            bool keepLast = !stringBuffer.EndsWith("\n");
+                            string[] lines = stringBuffer.Split("\n");
                             int notifyAboutLines = lines.Length - 1;
                             stringBuffer = "";
                             if (keepLast)
@@ -346,10 +347,12 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                 return;
             StringBuilder sb = new();
             foreach(string s in strings)
-                sb.AppendLine(s);
-            sb.AppendLine();
+                sb.Append(s + "\n");
+            sb.Append("\n");
             tcpServerConnection.Send(sb.ToString());
         }
+
+        private const string PROTOCOL_BLOCK_PING = "PING:";
 
         private const string PROTOCOL_BLOCK_PROTOCOL_PREAMBLE = "PROTOCOL PREAMBLE:";
         private const string PROTOCOL_PP_VERSION = "Version: 2.3";
@@ -364,9 +367,9 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
         private const string PROTOCOL_BLOCK_DEVICE_INFORMATION = "VIDEOHUB DEVICE:";
         private const string PROTOCOL_DI_DEVICE_PRESENT = "Device present: true";
         private const string PROTOCOL_DI_MODEL_NAME = "Model name: Blackmagic Smart Videohub";
-        private const string PROTOCOL_DI_VIDEO_INPUTS = "Video inputs: 8";
+        private const string PROTOCOL_DI_VIDEO_INPUTS = "Video inputs: 16";
         private const string PROTOCOL_DI_VIDEO_PROCESSING_UNITS = "Video processing units: 0";
-        private const string PROTOCOL_DI_VIDEO_OUTPUTS = "Video outputs: 8";
+        private const string PROTOCOL_DI_VIDEO_OUTPUTS = "Video outputs: 16";
         private const string PROTOCOL_DI_VIDEO_MONITORING_OUTPUTS = "Video monitoring outputs: 0";
         private const string PROTOCOL_DI_SERIAL_PORTS = "Serial ports: 0";
         private static readonly string[] PROTOCOL_DI = new string[]
@@ -400,8 +403,8 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
             sendBlock(lines);
         }
 
-        private const int PROTOCOL_INPUT_INDEX_OFF = 1;
-        private const int PROTOCOL_INPUT_INDEX_ON = 8;
+        private const int PROTOCOL_INPUT_INDEX_OFF = 0;
+        private const int PROTOCOL_INPUT_INDEX_ON = 7;
         private static readonly string PROTOCOL_INPUT_INDEX_OFF_STR = PROTOCOL_INPUT_INDEX_OFF.ToString();
         private static readonly string PROTOCOL_INPUT_INDEX_ON_STR = PROTOCOL_INPUT_INDEX_ON.ToString();
 
@@ -422,6 +425,9 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
             }
             switch (currentBlockType)
             {
+                case BlockType.Ping:
+                    handlePing(line);
+                    break;
                 case BlockType.VideohubOutputRouting:
                     handleLineVideohubOutputRouting(line);
                     break;
@@ -430,6 +436,9 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                     break;
             }
         }
+
+        private void handlePing(string line)
+        { }
 
         private void handleLineVideohubOutputRouting(string line)
         {
@@ -449,6 +458,11 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
 
         private void handleLineOtherOrUnknown(string line)
         {
+            if (line == PROTOCOL_BLOCK_PING)
+            {
+                currentBlockType = BlockType.Ping;
+                return;
+            }
             if (line == PROTOCOL_BLOCK_VIDEO_OUTPUT_ROUTING)
             {
                 currentBlockType = BlockType.VideohubOutputRouting;
@@ -470,6 +484,7 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
 
         private enum BlockType
         {
+            Ping,
             VideohubOutputRouting,
             OtherOrUnknown
         }
