@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -176,14 +177,14 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
             private List<Connection> connections = new();
             private bool acceptingConnections = false;
 
-            private CancellationTokenSource cts;
-            private CancellationToken ct;
+            private CancellationTokenSource listeningCancellationTokenSource;
+            private CancellationToken listeningCancellationToken;
 
             public void StartListening()
             {
-                cts = new();
-                ct = cts.Token;
-                Task.Run(StartListeningAsync, ct);
+                listeningCancellationTokenSource = new();
+                listeningCancellationToken = listeningCancellationTokenSource.Token;
+                Task.Run(StartListeningAsync, listeningCancellationToken);
             }
 
             public async Task StartListeningAsync()
@@ -196,25 +197,44 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                     socket.Bind(localEndPoint);
                     socket.Listen(10);
                     acceptingConnections = true;
-                    using (ct.Register(() => socket.Close()))
+                    using (listeningCancellationToken.Register(() => socket.Close()))
                     {
                         while (acceptingConnections)
                         {
-                            Socket connectionSocket = await socket.AcceptAsync();
-                            Connection connection = new Connection(this, connectionSocket);
-                            connections.Add(connection);
-                            NewConnection?.Invoke(connection);
+                            try
+                            {
+                                Socket connectionSocket = await socket.AcceptAsync();
+                                Connection connection = new Connection(this, connectionSocket);
+                                if (connectionSocket.Connected)
+                                {
+                                    setKeepAlive(connectionSocket);
+                                    connections.Add(connection);
+                                    NewConnection?.Invoke(connection);
+                                }
+                            }
+                            catch { }
                         }
                     }
                 }
                 catch { }
             }
 
+            private void setKeepAlive(Socket socket)
+            {
+                int size = Marshal.SizeOf((uint)0);
+                byte[] keepAlive = new byte[size * 3];
+                Buffer.BlockCopy(BitConverter.GetBytes((uint)1), 0, keepAlive, 0, size);
+                Buffer.BlockCopy(BitConverter.GetBytes((uint)500), 0, keepAlive, size, size);
+                Buffer.BlockCopy(BitConverter.GetBytes((uint)500), 0, keepAlive, size * 2, size);
+                socket.IOControl(IOControlCode.KeepAliveValues, keepAlive, null);
+            }
+
             public void Close()
             {
-                cts.Cancel();
+                listeningCancellationTokenSource.Cancel();
                 acceptingConnections = false;
-                connections.ForEach(c => c.Close());
+                List<Connection> connectionsToClose = new(connections);
+                connectionsToClose.ForEach(c => c.Close());
                 NewConnection = null;
                 ConnectionClosed = null;
                 ConnectionReceivedLine = null;
@@ -244,6 +264,7 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                 {
                     this.server = server;
                     this.connectionSocket = connectionSocket;
+                    startCheckState();
                     read();
                 }
 
@@ -269,8 +290,9 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                         {
                             string data = Encoding.ASCII.GetString(byteBuffer, 0, bytesRead);
                             stringBuffer += data;
-                            bool keepLast = !stringBuffer.EndsWith("\r\n");
-                            string[] lines = stringBuffer.Split("\r\n");
+                            stringBuffer = stringBuffer.Replace("\r\n", "\n").Replace("\r", "\n");
+                            bool keepLast = !stringBuffer.EndsWith("\n");
+                            string[] lines = stringBuffer.Split("\n");
                             int notifyAboutLines = lines.Length - 1;
                             stringBuffer = "";
                             if (keepLast)
@@ -318,6 +340,7 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                 {
                     try
                     {
+                        stopCheckState();
                         connectionSocket.Shutdown(SocketShutdown.Both);
                         connectionSocket.Close();
                         connectionSocket.Dispose();
@@ -326,6 +349,62 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                     finally
                     {
                         server.notifyConnectionClosed(this);
+                    }
+                }
+
+                private CancellationTokenSource checkStateTaskCancellationTokenSource;
+                private CancellationToken checkStateTaskCancellationToken;
+                private Task checkStateTask;
+
+                private void startCheckState()
+                {
+                    if (checkStateTask != null)
+                        return;
+                    checkStateTaskCancellationTokenSource = new();
+                    checkStateTaskCancellationToken = checkStateTaskCancellationTokenSource.Token;
+                    checkStateTask = Task.Run(checkStateTaskMethod);
+                }
+
+                private void stopCheckState()
+                {
+                    try
+                    {
+                        if (checkStateTaskCancellationTokenSource != null)
+                        {
+                            checkStateTaskCancellationTokenSource.Cancel();
+                            checkStateTaskCancellationTokenSource.Dispose();
+                            checkStateTaskCancellationTokenSource = null;
+                        }
+                        checkStateTask = null;
+                    }
+                    catch { }
+                }
+
+                private async Task checkStateTaskMethod()
+                {
+                    while (true)
+                    {
+                        if (checkStateTaskCancellationToken.IsCancellationRequested == true)
+                            return;
+                        if (!checkState())
+                            closed();
+                        await Task.Delay(500, checkStateTaskCancellationToken);
+                    }
+                }
+
+                private bool checkState()
+                {
+                    try
+                    {
+                        return !(connectionSocket.Poll(1, SelectMode.SelectRead) && connectionSocket.Available == 0);
+                    }
+                    catch (SocketException)
+                    {
+                        return false;
+                    }
+                    catch (ObjectDisposedException)
+                    {
+                        return false;
                     }
                 }
 
@@ -346,10 +425,12 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                 return;
             StringBuilder sb = new();
             foreach(string s in strings)
-                sb.AppendLine(s);
-            sb.AppendLine();
+                sb.Append(s + "\n");
+            sb.Append("\n");
             tcpServerConnection.Send(sb.ToString());
         }
+
+        private const string PROTOCOL_BLOCK_PING = "PING:";
 
         private const string PROTOCOL_BLOCK_PROTOCOL_PREAMBLE = "PROTOCOL PREAMBLE:";
         private const string PROTOCOL_PP_VERSION = "Version: 2.3";
@@ -364,9 +445,9 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
         private const string PROTOCOL_BLOCK_DEVICE_INFORMATION = "VIDEOHUB DEVICE:";
         private const string PROTOCOL_DI_DEVICE_PRESENT = "Device present: true";
         private const string PROTOCOL_DI_MODEL_NAME = "Model name: Blackmagic Smart Videohub";
-        private const string PROTOCOL_DI_VIDEO_INPUTS = "Video inputs: 8";
+        private const string PROTOCOL_DI_VIDEO_INPUTS = "Video inputs: 16";
         private const string PROTOCOL_DI_VIDEO_PROCESSING_UNITS = "Video processing units: 0";
-        private const string PROTOCOL_DI_VIDEO_OUTPUTS = "Video outputs: 8";
+        private const string PROTOCOL_DI_VIDEO_OUTPUTS = "Video outputs: 16";
         private const string PROTOCOL_DI_VIDEO_MONITORING_OUTPUTS = "Video monitoring outputs: 0";
         private const string PROTOCOL_DI_SERIAL_PORTS = "Serial ports: 0";
         private static readonly string[] PROTOCOL_DI = new string[]
@@ -400,8 +481,8 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
             sendBlock(lines);
         }
 
-        private const int PROTOCOL_INPUT_INDEX_OFF = 1;
-        private const int PROTOCOL_INPUT_INDEX_ON = 8;
+        private const int PROTOCOL_INPUT_INDEX_OFF = 0;
+        private const int PROTOCOL_INPUT_INDEX_ON = 7;
         private static readonly string PROTOCOL_INPUT_INDEX_OFF_STR = PROTOCOL_INPUT_INDEX_OFF.ToString();
         private static readonly string PROTOCOL_INPUT_INDEX_ON_STR = PROTOCOL_INPUT_INDEX_ON.ToString();
 
@@ -422,6 +503,9 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
             }
             switch (currentBlockType)
             {
+                case BlockType.Ping:
+                    handlePing(line);
+                    break;
                 case BlockType.VideohubOutputRouting:
                     handleLineVideohubOutputRouting(line);
                     break;
@@ -430,6 +514,9 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
                     break;
             }
         }
+
+        private void handlePing(string line)
+        { }
 
         private void handleLineVideohubOutputRouting(string line)
         {
@@ -449,6 +536,11 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
 
         private void handleLineOtherOrUnknown(string line)
         {
+            if (line == PROTOCOL_BLOCK_PING)
+            {
+                currentBlockType = BlockType.Ping;
+                return;
+            }
             if (line == PROTOCOL_BLOCK_VIDEO_OUTPUT_ROUTING)
             {
                 currentBlockType = BlockType.VideohubOutputRouting;
@@ -470,6 +562,7 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
 
         private enum BlockType
         {
+            Ping,
             VideohubOutputRouting,
             OtherOrUnknown
         }
