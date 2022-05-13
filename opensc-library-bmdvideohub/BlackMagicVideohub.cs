@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -136,12 +137,29 @@ namespace BMD.Videohub
         #region Requests
         private abstract class Request
         {
+
             public Request() => ValidUntil = DateTime.Now + ValidTime;
             public abstract void Send(TcpSocketLineByLineReceiver socketReceiver);
-            public virtual void ACK() { }
-            public virtual void NAK() { }
+
+            public void ACK()
+            {
+                AckOrNakReceived.SetResult(true);
+                _ack();
+            }
+            protected virtual void _ack() { }
+
+            public void NAK()
+            {
+                AckOrNakReceived.SetResult(false);
+                _nak();
+            }
+            protected virtual void _nak() { }
+
             public abstract TimeSpan ValidTime { get; }
             public DateTime ValidUntil { get; init; }
+
+            public readonly TaskCompletionSource<bool> AckOrNakReceived = new();
+
         }
 
         private Request lastSentRequest = null;
@@ -155,7 +173,7 @@ namespace BMD.Videohub
                 return;
             requestFifo = new();
             requestSchedulerTaskCancellationTokenSource = new();
-            requestSchedulerTask = Task.Run(() => requestSchedulerTaskMethod());
+            requestSchedulerTask = Task.Run(requestSchedulerTaskMethod);
         }
 
         private async void stopRequestSchedulerTask()
@@ -165,6 +183,8 @@ namespace BMD.Videohub
             try
             {
                 requestSchedulerTaskCancellationTokenSource.Cancel();
+                if (lastSentRequest != null)
+                    lastSentRequest.AckOrNakReceived.SetCanceled();
                 await requestSchedulerTask;
                 requestSchedulerTask.Dispose();
                 requestSchedulerTask = null;
@@ -175,12 +195,14 @@ namespace BMD.Videohub
             { }
         }
 
-        private void requestSchedulerTaskMethod()
+        private async Task requestSchedulerTaskMethod()
         {
             while (true)
             {
                 try
                 {
+                    if (lastSentRequest != null)
+                        await lastSentRequest.AckOrNakReceived.Task;
                     Request request = requestFifo.Take(requestSchedulerTaskCancellationTokenSource.Token);
                     if ((request != null) && (request.ValidUntil >= DateTime.Now))
                     {
@@ -275,8 +297,6 @@ namespace BMD.Videohub
 
         #region Locks
         private LockState?[] locks = null;
-
-        LockChangeRequest pendingLockChangeRequest = null;
 
         public void SetLockState(int output, bool state)
         {
