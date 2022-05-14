@@ -229,7 +229,7 @@ namespace OpenSC.GUI.GpioInterfaces
         {
             public DriverDropDownItem(IBoolean value) : base(value)
             { }
-            public override string ToString() => $"[{Value.Identifier}] {Value.Description}";
+            public override string Label => $"[{Value.Identifier}] {Value.Description}";
         }
 
         private CustomDataGridViewComboBoxItem<IBoolean>[] getAllDrivers()

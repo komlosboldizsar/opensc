@@ -294,7 +294,7 @@ namespace OpenSC.GUI.Routers
         {
             public SourceDropDownItem(ISignalSourceRegistered value) : base(value)
             { }
-            public override string ToString() => Value.SignalLabel;
+            public override string Label => Value.SignalLabel;
         }
 
         private CustomDataGridViewComboBoxItem<ISignalSourceRegistered>[] getAllSources()
