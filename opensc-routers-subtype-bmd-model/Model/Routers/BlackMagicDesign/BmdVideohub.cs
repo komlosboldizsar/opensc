@@ -154,11 +154,11 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         }
         #endregion
 
-        private BMD.Videohub.BlackMagicVideohub videohub = null;
+        private Library.BmdVideohub.VideohubClient videohub = null;
 
         private void initVideohub()
         {
-            videohub = new BMD.Videohub.BlackMagicVideohub(ipAddress);
+            videohub = new Library.BmdVideohub.VideohubClient(ipAddress);
             videohub.ConnectionStateChanged += connectionStateChangedHandler;
             videohub.CrosspointChanged += crosspointChangedHandler;
             videohub.LockChanged += lockChangedHandler;
@@ -171,26 +171,30 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
                 queryAllStates();
         }
 
-        private void crosspointChangedHandler(int output, int? input)
+        private void crosspointChangedHandler(Library.BmdVideohub.Crosspoint crosspoint)
         {
-            if (input == null)
+            if ((crosspoint.Output == null) || (crosspoint.Input == null))
                 return;
             try
             {
-                notifyCrosspointChanged(output, (int)input);
+                notifyCrosspointChanged((int)crosspoint.Output, (int)crosspoint.Input);
             }
             catch { }
         }
 
-        private void lockChangedHandler(int output, BMD.Videohub.BlackMagicVideohub.LockState state)
-            => notifyLockChanged(output, RouterOutputLockType.Lock, LOCK_STATE_TRANSLATIONS[state]);
+        private void lockChangedHandler(Library.BmdVideohub.LockStateData lockStateData)
+        {
+            if ((lockStateData.Output == null) || (lockStateData.State == null))
+                return;
+            notifyLockChanged((int)lockStateData.Output, RouterOutputLockType.Lock, LOCK_STATE_TRANSLATIONS[(Library.BmdVideohub.LockState)state]);
+        }
 
-        private static readonly Dictionary<BMD.Videohub.BlackMagicVideohub.LockState, RouterOutputLockState> LOCK_STATE_TRANSLATIONS
-            = new Dictionary<BMD.Videohub.BlackMagicVideohub.LockState, RouterOutputLockState>()
+        private static readonly Dictionary<Library.BmdVideohub.LockState, RouterOutputLockState> LOCK_STATE_TRANSLATIONS
+            = new Dictionary<Library.BmdVideohub.LockState, RouterOutputLockState>()
             {
-                { BMD.Videohub.BlackMagicVideohub.LockState.Unlocked, RouterOutputLockState.Clear },
-                { BMD.Videohub.BlackMagicVideohub.LockState.Owned, RouterOutputLockState.LockedLocal },
-                { BMD.Videohub.BlackMagicVideohub.LockState.Taken, RouterOutputLockState.LockedRemote }
+                { Library.BmdVideohub.LockState.Unlocked, RouterOutputLockState.Clear },
+                { Library.BmdVideohub.LockState.Owned, RouterOutputLockState.LockedLocal },
+                { Library.BmdVideohub.LockState.Taken, RouterOutputLockState.LockedRemote }
             };
 
         protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)
@@ -205,7 +209,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
 
         protected override void requestCrosspointUpdatesImpl(IEnumerable<RouterCrosspoint> crosspoints)
         {
-            IEnumerable<BMD.Videohub.BlackMagicVideohub.Crosspoint> crosspointIndices = crosspoints.Select(cp => new BMD.Videohub.BlackMagicVideohub.Crosspoint(cp.Output.Index, cp.Input.Index));
+            IEnumerable<Library.BmdVideohub.Crosspoint> crosspointIndices = crosspoints.Select(cp => new Library.BmdVideohub.Crosspoint(cp.Output.Index, cp.Input.Index));
             try
             {
                 videohub.SetCrosspoints(crosspointIndices);
@@ -227,13 +231,13 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             switch (lockOperationType)
             {
                 case RouterOutputLockOperationType.Lock:
-                    videohub.SetLockState(output.Index, true);
+                    videohub.DoLockOperation(output.Index, Library.BmdVideohub.LockOperation.Lock);
                     break;
                 case RouterOutputLockOperationType.Unlock:
-                    videohub.SetLockState(output.Index, false);
+                    videohub.DoLockOperation(output.Index, Library.BmdVideohub.LockOperation.Lock);
                     break;
                 case RouterOutputLockOperationType.ForceUnlock:
-                    videohub.SetLockState(output.Index, false); // TODO
+                    videohub.DoLockOperation(output.Index, Library.BmdVideohub.LockOperation.ForceUnlock); // TODO
                     break;
             }
         }
