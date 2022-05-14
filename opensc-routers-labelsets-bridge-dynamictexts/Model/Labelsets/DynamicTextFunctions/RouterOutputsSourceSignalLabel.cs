@@ -91,7 +91,7 @@ namespace OpenSC.Model.Labelsets.DynamicTextFunctions
                 if (signalDestination != output)
                     return;
                 currentSource = newSource;
-                CurrentValue = labelset.GetLabel(currentSource).Text ?? "?";
+                CurrentValue = labelset.GetLabel(currentSource)?.Text ?? "?";
             }
 
         }
