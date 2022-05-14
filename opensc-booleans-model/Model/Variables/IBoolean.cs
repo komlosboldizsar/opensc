@@ -24,6 +24,8 @@ namespace OpenSC.Model.Variables
         bool CurrentState { get; }
         event PropertyChangedTwoValuesDelegate<IBoolean, bool> StateChanged;
 
+        string ToString() => $"[{Identifier}] {Description}";
+
     }
 
 }
