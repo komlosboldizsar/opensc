@@ -16,12 +16,12 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
 
         public static void Handle(
             CanHandleDelegate receiverCanHandle,
-            DragDesponderDelegate receiverDragDesponder,
+            DragDesponderDelegate receiverDragResponder,
             ValueSetterDelegate receiverValueSetter)
         {
             PartedDropAdapter<NoPart>.Instance.ReceiverPartSelector = (_, _) => null;
             PartedDropAdapter<NoPart>.Instance.ReceiverCanHandle = (r, rp, ea, t) => receiverCanHandle(r, ea, t);
-            PartedDropAdapter<NoPart>.Instance.ReceiverDragDesponder = (r, rp, ea, t) => receiverDragDesponder(r, ea, t);
+            PartedDropAdapter<NoPart>.Instance.ReceiverDragResponder = (r, rp, ea, t) => receiverDragResponder(r, ea, t);
             PartedDropAdapter<NoPart>.Instance.ReceiverValueSetter = (r, rp, so, ea, t) => receiverValueSetter(r, so, ea, t);
             PartedDropAdapter<NoPart>.Instance.EmptyPart = NoPart.EMPTY;
         }
@@ -36,7 +36,7 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
         {
             PartedDropAdapter<TReceiverPart>.Instance.ReceiverPartSelector = receiverChildSelector;
             PartedDropAdapter<TReceiverPart>.Instance.ReceiverCanHandle = receiverCanHandle;
-            PartedDropAdapter<TReceiverPart>.Instance.ReceiverDragDesponder = receiverDragDesponder;
+            PartedDropAdapter<TReceiverPart>.Instance.ReceiverDragResponder = receiverDragDesponder;
             PartedDropAdapter<TReceiverPart>.Instance.ReceiverValueSetter = receiverValueSetter;
             PartedDropAdapter<TReceiverPart>.Instance.EmptyPart = emptyPart;
         }
@@ -99,7 +99,7 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
 
             internal ReceiverPartSelectorDelegate<TReceiverPart> ReceiverPartSelector { get; set; }
             internal PartedCanHandleDelegate<TReceiverPart> ReceiverCanHandle { get; set; }
-            internal PartedDragDesponderDelegate<TReceiverPart> ReceiverDragDesponder { get; set; }
+            internal PartedDragDesponderDelegate<TReceiverPart> ReceiverDragResponder { get; set; }
             internal PartedValueSetterDelegate<TReceiverPart> ReceiverValueSetter { get; set; }
             internal TReceiverPart EmptyPart { get; set; }
 
@@ -203,7 +203,7 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
                     if (!myDropData.TypeFilters.Any(tf => tf.Is(firstObject)))
                         return false;
                 }
-                return ReceiverDragDesponder(myDropData.Receiver, myDropData.ReceiverPart, eventArgs, myDropData.Tag);
+                return ReceiverDragResponder(myDropData.Receiver, myDropData.ReceiverPart, eventArgs, myDropData.Tag);
             }
 
             public void SetValue(object sender, DragEventArgs eventArgs, IDropData dropData, IEnumerable<object> objects)
