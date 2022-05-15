@@ -1,4 +1,5 @@
-﻿using OpenSC.Logger;
+﻿using OpenSC.Library.TaskSchedulerQueue;
+using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using System;
@@ -23,12 +24,11 @@ namespace OpenSC.Model.SerialPorts
         #region Persistence, instantiation
         public SerialPort()
         {
-            startPacketSchedulerTaskMethod();
+            packetQueue = new(sendPacket, invalidPacket);
         }
 
         public override void RestoredOwnFields()
         {
-            startPacketSchedulerTaskMethod();
             Init();
         }
 
@@ -36,7 +36,6 @@ namespace OpenSC.Model.SerialPorts
         {
             base.Removed();
             DeInit();
-            stopPacketSchedulerTaskMethod();
             ComPortNameChanged = null;
             InitializedChanged = null;
             BaudRateChanged = null;
@@ -190,76 +189,19 @@ namespace OpenSC.Model.SerialPorts
 
         // <<<< ComPort properties
 
-        #region Scheduler and sender thread
-        private BlockingCollection<Packet> packetFifo;
-        private CancellationTokenSource packetSchedulerTaskCancellationTokenSource;
-        private Task packetSchedulerTask;
-
-        private void startPacketSchedulerTaskMethod()
-        {
-            if (packetSchedulerTask != null)
-                return;
-            packetFifo = new();
-            packetSchedulerTaskCancellationTokenSource = new();
-            packetSchedulerTask = Task.Run(() => packetSchedulerTaskMethod());
-        }
-
-        private async void stopPacketSchedulerTaskMethod()
-        {
-            if (packetSchedulerTask == null)
-                return;
-            try
-            {
-                packetSchedulerTaskCancellationTokenSource.Cancel();
-                await packetSchedulerTask;
-                packetSchedulerTask.Dispose();
-                packetSchedulerTask = null;
-                packetSchedulerTaskCancellationTokenSource.Dispose();
-                packetSchedulerTaskCancellationTokenSource = null;
-                packetSchedulerTask.Dispose();
-                packetSchedulerTask = null;
-            }
-            catch (ObjectDisposedException)
-            { }
-        }
-
-        private void packetSchedulerTaskMethod()
-        {
-            while (true)
-            {
-                try
-                {
-                    Packet packet = packetFifo.Take(packetSchedulerTaskCancellationTokenSource.Token);
-                    if ((packet != null) && packetIsValid(packet))
-                    {
-                        serialPort.Write(packet.Data, 0, packet.Data.Length);
-                    }
-                    else
-                    {
-                        string errorMessage = string.Format($"Dropped an invalid packet on port [{this}]");
-                        LogDispatcher.W(LOG_TAG, errorMessage);
-                    }
-                }
-                catch (OperationCanceledException)
-                { }
-            }
-        }
-        #endregion
-
         private System.IO.Ports.SerialPort serialPort;
 
         #region Init and DeInit
         public void Init()
         {
-
             if (string.IsNullOrEmpty(comPortName))
                 return;
-
             try
             {
                 serialPort = new System.IO.Ports.SerialPort(comPortName, baudRate, parity, dataBits, stopBits);
                 serialPort.Open();
                 serialPort.DataReceived += dataReceivedHandler;
+                packetQueue.Start();
                 Initialized = true;
             }
             catch (Exception ex)
@@ -268,14 +210,15 @@ namespace OpenSC.Model.SerialPorts
                     ID, baudRate, parity, dataBits, stopBits, ex.Message);
                 LogDispatcher.E(LOG_TAG, errorMessage);
             }
-
         }
 
         public void DeInit()
         {
             try
             {
-                if (serialPort != null) {
+                packetQueue.Stop();
+                if (serialPort != null)
+                {
                     serialPort.DataReceived -= dataReceivedHandler;
                     serialPort?.Close();
                     serialPort?.Dispose(); 
@@ -285,9 +228,7 @@ namespace OpenSC.Model.SerialPorts
             }
             catch (Exception ex)
             {
-                string errorMessage = string.Format("Couldn't deinitialize port (ID: {0}). Exception message: [{1}].",
-                        ID, ex.Message);
-                LogDispatcher.E(LOG_TAG, errorMessage);
+                LogDispatcher.E(LOG_TAG, $"Couldn't deinitialize port (ID: {ID}). Exception message: [{ex.Message}].");
             }
         }
 
@@ -299,24 +240,22 @@ namespace OpenSC.Model.SerialPorts
         #endregion
 
         #region Data sending
-        public void SendData(byte[] data, DateTime validUntil)
-            => SendData(new Packet() { Data = data, ValidUntil = validUntil });
+        private readonly TaskQueue<Packet> packetQueue;
+        private void sendPacket(Packet packet) => serialPort.Write(packet.Data, 0, packet.Data.Length);
+        private void invalidPacket(Packet packet) => LogDispatcher.W(LOG_TAG, $"Dropped an invalid packet on port [{this}]");
 
-        public void SendData(Packet packet)
+        public void SendData(byte[] data, DateTime validUntil) => packetQueue?.Enqueue(new(data, validUntil));
+
+        public class Packet : ImmediatelyReadyQueuedTask
         {
-            if (serialPort?.IsOpen != true)
-                return;
-            if (packetSchedulerTaskCancellationTokenSource.IsCancellationRequested)
-                return;
-            packetFifo?.Add(packet);
-        }
-
-        protected bool packetIsValid(Packet packet) => (packet.ValidUntil >= DateTime.Now);
-
-        public class Packet
-        {
-            public DateTime ValidUntil;
             public byte[] Data;
+            public DateTime ValidUntil;
+            public Packet(byte[] data, DateTime validUntil)
+            {
+                Data = data;
+                ValidUntil = validUntil;
+            }
+            protected override bool IsValid => (DateTime.Now >= ValidUntil);
         }
         #endregion
 
