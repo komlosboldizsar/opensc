@@ -1,9 +1,12 @@
-﻿using OpenSC.GUI.GeneralComponents.DropDowns;
+﻿using OpenSC.GUI.GeneralComponents.DragDrop;
+using OpenSC.GUI.GeneralComponents.DropDowns;
 using OpenSC.Model;
 using OpenSC.Model.Signals;
 using OpenSC.Model.Signals.BooleanTallies;
 using OpenSC.Model.Variables;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace OpenSC.GUI.Signals.BooleanTallies
@@ -24,6 +27,7 @@ namespace OpenSC.GUI.Signals.BooleanTallies
             initFromBooleanDropDown();
             initToSignalDropDown();
             initToColorDropDown();
+            initToTallyDrop();
         }
 
         protected override IModelEditorFormDataManager createManager()
@@ -77,6 +81,16 @@ namespace OpenSC.GUI.Signals.BooleanTallies
 
         private void initToColorDropDown() =>
             toColorDropDown.SetAdapterAsDataSource(new EnumComboBoxAdapter<SignalTallyColor>());
+
+        private void initToTallyDrop() =>
+            toSourceTable.ReceiveObjectDropCustom(toSourceTableDropValueSetter).FilterByType<ISignalTallyReceiver>();
+
+        private void toSourceTableDropValueSetter(TableLayoutPanel receiverParent, IEnumerable<object> objects, DragEventArgs eventArgs, object tag)
+        {
+            ISignalTallyReceiver tallyReceiver = objects.FirstOrDefault() as ISignalTallyReceiver;
+            toSignalDropDown.SelectByValue(tallyReceiver?.ParentSignalSource);
+            toColorDropDown.SelectByValue(tallyReceiver?.Color);
+        }
 
     }
 
