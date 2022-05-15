@@ -64,7 +64,7 @@ namespace OpenSC.GUI.UMDs
         private void initUnitDropDown()
         {
             unitDropDown.CreateAdapterAsDataSource(BmdSmartViewUnitDatabase.Instance, null, true, "(not associated)");
-            unitDropDown.ReceiveSystemObjectDrop().FilterByType<BmdSmartViewDisplay>();
+            unitDropDown.ReceiveObjectDrop().FilterByType<BmdSmartViewDisplay>();
         }
 
         private void setPositionToRadioButtons(BmdSmartViewDisplayPosition position)

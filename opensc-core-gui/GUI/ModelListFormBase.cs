@@ -85,7 +85,7 @@ namespace OpenSC.GUI
             builder.CellStyle(cellStyle);
             builder.UpdaterMethod((item, cell) => { cell.Value = item.GlobalID; });
             builder.AddChangeEvent(nameof(IModel.GlobalID));
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BindVisibilityToSetting(MainForm.SHOW_GLOBAL_ID_IN_TABLES_SETTING);
             return builder;
         }
@@ -102,7 +102,7 @@ namespace OpenSC.GUI
             builder.Width(30);
             builder.UpdaterMethod((item, cell) => { cell.Value = string.Format("#{0}", item.ID); });
             builder.AddChangeEvent(nameof(IModel.ID));
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             return builder;
         }
 
@@ -119,7 +119,7 @@ namespace OpenSC.GUI
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((item, cell) => { cell.Value = item.Name; });
             builder.AddChangeEvent(nameof(IModel.Name));
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             return builder;
         }
 

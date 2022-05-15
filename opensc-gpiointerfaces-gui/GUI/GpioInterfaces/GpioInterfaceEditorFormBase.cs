@@ -75,7 +75,7 @@ namespace OpenSC.GUI.GpioInterfaces
                     cell.Value = input.Index;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: name
@@ -98,7 +98,7 @@ namespace OpenSC.GUI.GpioInterfaces
                     cell.Value = input.Name;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: delete button
@@ -152,7 +152,7 @@ namespace OpenSC.GUI.GpioInterfaces
                     cell.Value = output.Index;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: name
@@ -175,7 +175,7 @@ namespace OpenSC.GUI.GpioInterfaces
                     cell.Value = output.Name;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: source
@@ -188,7 +188,7 @@ namespace OpenSC.GUI.GpioInterfaces
             builder.UpdaterMethod((output, cell) => { cell.Value = output.Driver; });
             builder.CellValueChangedHandlerMethod((output, cell, eventargs) => { output.Driver = cell.Value as IBoolean; });
             builder.DropDownPopulatorMethod((output, cell) => sources);
-            builder.ReceiveSystemObjectDrop().FilterByType<IBoolean>();
+            builder.ReceiveObjectDrop().FilterByType<IBoolean>();
             builder.BuildAndAdd();
 
             // Column: delete button
@@ -229,7 +229,7 @@ namespace OpenSC.GUI.GpioInterfaces
         {
             public DriverDropDownItem(IBoolean value) : base(value)
             { }
-            public override string ToString() => $"[{Value.Identifier}] {Value.Description}";
+            public override string Label => $"[{Value.Identifier}] {Value.Description}";
         }
 
         private CustomDataGridViewComboBoxItem<IBoolean>[] getAllDrivers()

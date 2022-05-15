@@ -204,7 +204,7 @@ namespace OpenSC.GUI.UMDs
                     UsedCheckBox.Enabled = false;
                 }
                 DynamicSourceDropDown.GetAdapterFromFactoryAsDataSource(dynamicSourceDropDownAdapterFactory);
-                DynamicSourceDropDown.ReceiveSystemObjectDrop().FilterByType<DynamicText>();
+                DynamicSourceDropDown.ReceiveObjectDrop().FilterByType<DynamicText>();
                 AlignmentDropDown.GetAdapterFromFactoryAsDataSource(alignmentDropDownAdapterFactory);
                 AlignmentDropDown.SelectByValue(TextInfo.DefaultAlignment);
                 if (!TextInfo.Alignable)
@@ -302,7 +302,7 @@ namespace OpenSC.GUI.UMDs
                 TallyInfo = tallyInfo;
                 NameLabel.Text = TallyInfo.Name;
                 SourceDropDown.CreateAdapterAsDataSource(BooleanRegister.Instance, BooleanRegister.Instance.ToStringMethod, true, "(not set)");
-                SourceDropDown.ReceiveSystemObjectDrop().FilterByType<IBoolean>();
+                SourceDropDown.ReceiveObjectDrop().FilterByType<IBoolean>();
                 setTallyColorButtonColor(TallyInfo.DefaultColor);
                 switch (TallyInfo.ColorMode)
                 {

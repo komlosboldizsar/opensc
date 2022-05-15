@@ -52,7 +52,7 @@ namespace OpenSC.GUI.Signals
         private void initCategoryDropDown()
         {
             categoryDropDown.CreateAdapterAsDataSource(ExternalSignalDatabases.Categories, null, true, "(not associated)");
-            categoryDropDown.ReceiveSystemObjectDrop().FilterByType<ExternalSignalCategory>();
+            categoryDropDown.ReceiveObjectDrop().FilterByType<ExternalSignalCategory>();
         }
 
     }

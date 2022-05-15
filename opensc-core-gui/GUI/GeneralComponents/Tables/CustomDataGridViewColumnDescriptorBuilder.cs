@@ -37,6 +37,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         private CustomDataGridViewColumnDescriptor<T>.CellDoubleClickHandlerMethodDelegate doubleClickHandlerMethod;
 
         private CustomDataGridViewColumnDescriptor<T>.CellEndEditHandlerMethodDelegate endEditHandlerMethod;
+
         private CustomDataGridViewColumnDescriptor<T>.CellValueChangedHandlerMethodDelegate valueChangedHandlerMethod;
 
         private List<string> changeEvents = new();

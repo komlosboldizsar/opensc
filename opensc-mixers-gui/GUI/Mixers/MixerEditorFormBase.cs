@@ -111,7 +111,7 @@ namespace OpenSC.GUI.Mixers
             builder.UpdaterMethod((input, cell) => { cell.Value = input.Source; });
             builder.CellValueChangedHandlerMethod((input, cell, eventargs) => { input.Source = cell.Value as ISignalSourceRegistered; });
             builder.DropDownPopulatorMethod((input, cell) => signals);
-            builder.ReceiveSystemObjectDrop().FilterByType<ISignalSourceRegistered>();
+            builder.ReceiveObjectDrop().FilterByType<ISignalSourceRegistered>();
             builder.BuildAndAdd();
 
             // Column: delete button
@@ -161,7 +161,7 @@ namespace OpenSC.GUI.Mixers
         {
             public SourceDropDownItem(ISignalSourceRegistered value) : base(value)
             { }
-            public override string ToString() => Value.SignalLabel;
+            public override string Label => Value.SignalLabel;
         }
 
         private void addInputButton_Click(object sender, EventArgs e) => ((Mixer)EditedModel).AddInput();

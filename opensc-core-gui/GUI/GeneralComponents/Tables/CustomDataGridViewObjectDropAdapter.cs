@@ -12,14 +12,14 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.GeneralComponents.DropDowns
 {
 
-    public static class CustomDataGridViewSystemObjectDropAdapter
+    public static class CustomDataGridViewObjectDropAdapter
     {
 
         private class Handlers
         {
 
             public static Handlers Instance { get; } = new();
-            private Handlers() => SystemObjectDropAdapter<DataGridView>.Handle(receiverCanHandle, receiverDragResponder, receiverValueSetter);
+            private Handlers() => ObjectDropAdapter<DataGridView>.Handle(receiverCanHandle, receiverDragResponder, receiverValueSetter);
             public void _() { }
 
             private static bool receiverCanHandle(DataGridView receiverParent, DragEventArgs eventArgs, object tag)
@@ -28,11 +28,11 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
             private static bool receiverDragResponder(DataGridView receiverParent, DragEventArgs eventArgs, object tag)
                 => true;
 
-            private static void receiverValueSetter(DataGridView receiverParent, IEnumerable<ISystemObject> systemObjects, DragEventArgs eventArgs, object tag)
+            private static void receiverValueSetter(DataGridView receiverParent, IEnumerable<object> objects, DragEventArgs eventArgs, object tag)
             {
                 if (!onEmptyArea(receiverParent, eventArgs))
                     return;
-                ((ObjectReceiverMethod)tag)(receiverParent, systemObjects);
+                ((ObjectReceiverMethod)tag)(receiverParent, objects);
             }
 
             private static bool onEmptyArea(DataGridView receiverParent, DragEventArgs eventArgs)
@@ -44,12 +44,12 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
 
         }
 
-        public delegate void ObjectReceiverMethod(DataGridView table, IEnumerable<ISystemObject> systemObjects);
+        public delegate void ObjectReceiverMethod(DataGridView table, IEnumerable<object> objects);
 
-        public static SystemObjectDropAdapter<DataGridView>.IDropSettingManager ReceiveSystemObjectDrop(this DataGridView table, ObjectReceiverMethod objectReceiverMethod)
+        public static ObjectDropAdapter<DataGridView>.IDropSettingManager ReceiveSystemObjectDrop(this DataGridView table, ObjectReceiverMethod objectReceiverMethod)
         {
             Handlers.Instance._();
-            return SystemObjectDropAdapter<DataGridView>.ReceiveSystemObjectDrop(table, objectReceiverMethod);
+            return ObjectDropAdapter<DataGridView>.ReceiveObjectDrop(table, objectReceiverMethod);
         }
 
     }

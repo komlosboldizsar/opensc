@@ -78,7 +78,7 @@ namespace OpenSC.GUI.Routers
                     cell.Value = input.Index;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: name
@@ -101,7 +101,7 @@ namespace OpenSC.GUI.Routers
                     cell.Value = input.Name;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: source
@@ -114,7 +114,7 @@ namespace OpenSC.GUI.Routers
             builder.UpdaterMethod((input, cell) => { cell.Value = input.CurrentSource; });
             builder.CellValueChangedHandlerMethod((input, cell, eventargs) => { input.AssignSource(cell.Value as ISignalSource); });
             builder.DropDownPopulatorMethod((input, cell) => sources);
-            builder.ReceiveSystemObjectDrop().FilterByType<ISignalSourceRegistered>();
+            builder.ReceiveObjectDrop().FilterByType<ISignalSourceRegistered>();
             builder.BuildAndAdd();
 
             // Column: tieline cost
@@ -230,7 +230,7 @@ namespace OpenSC.GUI.Routers
                     cell.Value = output.Index;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: name
@@ -253,7 +253,7 @@ namespace OpenSC.GUI.Routers
                     cell.Value = output.Name;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: delete button
@@ -294,7 +294,7 @@ namespace OpenSC.GUI.Routers
         {
             public SourceDropDownItem(ISignalSourceRegistered value) : base(value)
             { }
-            public override string ToString() => Value.SignalLabel;
+            public override string Label => Value.SignalLabel;
         }
 
         private CustomDataGridViewComboBoxItem<ISignalSourceRegistered>[] getAllSources()

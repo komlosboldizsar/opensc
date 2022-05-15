@@ -12,7 +12,7 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.GeneralComponents.DropDowns
 {
 
-    public static class CustomDataGridViewColumnSystemObjectDropAdapter
+    public static class CustomDataGridViewColumnObjectDropAdapter
     {
 
         private class Handlers
@@ -21,7 +21,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
             public static Handlers Instance { get; } = new();
 
             private Handlers()
-                => SystemObjectDropAdapter<DataGridView>.HandleParted<DataGridViewColumn>(receiverCanHandle, receiverChildSelector, receiverDragResponder, receiverValueSetter, new DataGridViewColumn());
+                => ObjectDropAdapter<DataGridView>.HandleParted<DataGridViewColumn>(receiverCanHandle, receiverChildSelector, receiverDragResponder, receiverValueSetter, new DataGridViewColumn());
             
             public void _() { }
 
@@ -44,7 +44,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
             private static bool receiverDragResponder(DataGridView receiverParent, DataGridViewColumn receiverChild, DragEventArgs eventArgs, object tag)
                 => true;
 
-            private static void receiverValueSetter(DataGridView receiverParent, DataGridViewColumn receiverChild, IEnumerable<ISystemObject> systemObjects, DragEventArgs eventArgs, object tag)
+            private static void receiverValueSetter(DataGridView receiverParent, DataGridViewColumn receiverChild, IEnumerable<object> objects, DragEventArgs eventArgs, object tag)
             {
                 DataGridView.HitTestInfo hitTestInfo = hitTest(receiverParent, eventArgs);
                 if ((hitTestInfo.ColumnIndex < 0) || (hitTestInfo.ColumnIndex >= receiverParent.ColumnCount))
@@ -53,7 +53,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
                     return;
                 DataGridViewCell cell = receiverParent.Rows[hitTestInfo.RowIndex].Cells[hitTestInfo.ColumnIndex];
                 if (cell is DataGridViewComboBoxCell comboBoxCell)
-                    comboBoxCell.SelectWithParentsHelp(systemObjects.First());
+                    comboBoxCell.SelectWithParentsHelp(objects.First());
                 // Other cell types not supported at the moment
             }
 
@@ -65,36 +65,36 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
 
         }
 
-        public static SystemObjectDropAdapter<DataGridView>.IDropSettingManager ReceiveSystemObjectDrop(this DataGridViewColumn dataGridViewColumn)
+        public static ObjectDropAdapter<DataGridView>.IDropSettingManager ReceiveObjectDrop(this DataGridViewColumn dataGridViewColumn)
         {
             Handlers.Instance._();
-            return SystemObjectDropAdapter<DataGridView>.ReceiveSystemObjectDropParted<DataGridViewColumn>(dataGridViewColumn.DataGridView, dataGridViewColumn);
+            return ObjectDropAdapter<DataGridView>.ReceiveObjectDropParted<DataGridViewColumn>(dataGridViewColumn.DataGridView, dataGridViewColumn);
         }
 
-        public static SystemObjectDropAdapter<DataGridView>.IDropSettingManager ReceiveSystemObjectDrop<T>(this CustomDataGridViewColumnDescriptorBuilder<T> dataGridViewColumnDescriptorBuilder)
+        public static ObjectDropAdapter<DataGridView>.IDropSettingManager ReceiveObjectDrop<T>(this CustomDataGridViewColumnDescriptorBuilder<T> dataGridViewColumnDescriptorBuilder)
         {
-            ReceiveSystemObjectDropDescriptorExtension<T> extension = new ReceiveSystemObjectDropDescriptorExtension<T>();
+            ReceiveSystemDropDescriptorExtension<T> extension = new ReceiveSystemDropDescriptorExtension<T>();
             dataGridViewColumnDescriptorBuilder.AddExtension(extension);
             return extension;
         }
 
-        private class ReceiveSystemObjectDropDescriptorExtension<T> : CustomDataGridViewColumnDescriptorExtension<T>, SystemObjectDropAdapter<DataGridView>.IDropSettingManager
+        private class ReceiveSystemDropDescriptorExtension<T> : CustomDataGridViewColumnDescriptorExtension<T>, ObjectDropAdapter<DataGridView>.IDropSettingManager
         {
 
             public override void ColumnReady(CustomDataGridView<T> table, DataGridViewColumn column)
             {
-                SystemObjectDropAdapter<DataGridView>.IDropSettingManager dropSettingManager = column.ReceiveSystemObjectDrop();
+                ObjectDropAdapter<DataGridView>.IDropSettingManager dropSettingManager = column.ReceiveObjectDrop();
                 dropSettingManager.EnableMulti(enableMulti);
                 typeFilters.ForEach(tf => tf.AddTo(dropSettingManager));
             }
 
-            public SystemObjectDropAdapter<DataGridView>.IDropSettingManager FilterByType<TFilter>()
+            public ObjectDropAdapter<DataGridView>.IDropSettingManager FilterByType<TFilter>()
             {
                 typeFilters.Add(new TypeFilter<TFilter>());
                 return this;
             }
 
-            public SystemObjectDropAdapter<DataGridView>.IDropSettingManager EnableMulti(bool enableMulti = true)
+            public ObjectDropAdapter<DataGridView>.IDropSettingManager EnableMulti(bool enableMulti = true)
             {
                 this.enableMulti = enableMulti;
                 return this;
@@ -106,12 +106,12 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
 
             private interface ITypeFilter
             {
-                void AddTo(SystemObjectDropAdapter<DataGridView>.IDropSettingManager dropSettingManager);
+                void AddTo(ObjectDropAdapter<DataGridView>.IDropSettingManager dropSettingManager);
             }
 
             private class TypeFilter<TFilter> : ITypeFilter
             {
-                public void AddTo(SystemObjectDropAdapter<DataGridView>.IDropSettingManager dropSettingManager)
+                public void AddTo(ObjectDropAdapter<DataGridView>.IDropSettingManager dropSettingManager)
                     => dropSettingManager.FilterByType<TFilter>();
             }
 
