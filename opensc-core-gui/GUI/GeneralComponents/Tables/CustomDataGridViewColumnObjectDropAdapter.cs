@@ -68,7 +68,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
         public static ObjectDropAdapter<DataGridView>.IDropSettingManager ReceiveObjectDrop(this DataGridViewColumn dataGridViewColumn)
         {
             Handlers.Instance._();
-            return ObjectDropAdapter<DataGridView>.ReceiveSystemObjectDropParted<DataGridViewColumn>(dataGridViewColumn.DataGridView, dataGridViewColumn);
+            return ObjectDropAdapter<DataGridView>.ReceiveObjectDropParted<DataGridViewColumn>(dataGridViewColumn.DataGridView, dataGridViewColumn);
         }
 
         public static ObjectDropAdapter<DataGridView>.IDropSettingManager ReceiveObjectDrop<T>(this CustomDataGridViewColumnDescriptorBuilder<T> dataGridViewColumnDescriptorBuilder)

@@ -62,7 +62,7 @@ namespace OpenSC.GUI.UMDs
         private void initPortDropDown()
         {
             portDropDown.CreateAdapterAsDataSource(SerialPortDatabase.Instance, null, true, "(not associated)");
-            portDropDown.ReceiveSystemObjectDrop().FilterByType<SerialPort>();
+            portDropDown.ReceiveObjectDrop().FilterByType<SerialPort>();
         }
 
     }

@@ -52,9 +52,9 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
         public delegate void PartedValueSetterDelegate<TReceiverPart>(TReceiver receiverParent, TReceiverPart receiverChild, IEnumerable<object> objects, DragEventArgs eventArgs, object tag);
 
         public static IDropSettingManager ReceiveObjectDrop(TReceiver receiver, object tag = null)
-            => ReceiveSystemObjectDropParted<NoPart>(receiver, null, tag);
+            => ReceiveObjectDropParted<NoPart>(receiver, null, tag);
 
-        public static IDropSettingManager ReceiveSystemObjectDropParted<TReceiverPart>(TReceiver receiver, TReceiverPart receiverPart, object tag = null)
+        public static IDropSettingManager ReceiveObjectDropParted<TReceiverPart>(TReceiver receiver, TReceiverPart receiverPart, object tag = null)
             where TReceiverPart : class
         {
             if (!knownObjects.Contains(receiver))
@@ -65,7 +65,7 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
                 receiver.DragDrop += dragDropHandler;
                 knownObjects.Add(receiver);
             }
-            return PartedDropAdapter<TReceiverPart>.Instance.ReceiveSystemObjectDrop(receiver, receiverPart, tag);
+            return PartedDropAdapter<TReceiverPart>.Instance.ReceiveObjectDrop(receiver, receiverPart, tag);
         }
 
         public static IDropSettingManager GetDropSettingManager(TReceiver receiver)
@@ -132,7 +132,7 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
 
             }
 
-            public IDropSettingManager ReceiveSystemObjectDrop(TReceiver receiver, TReceiverPart receiverPart, object tag)
+            public IDropSettingManager ReceiveObjectDrop(TReceiver receiver, TReceiverPart receiverPart, object tag)
             {
                 TReceiverPart receiverPartNotNull = receiverPart ?? EmptyPart;
                 if (!dropDataMasterDictionary.TryGetValue(receiver, out Dictionary<TReceiverPart, DropData> dropDataPartDictionary))

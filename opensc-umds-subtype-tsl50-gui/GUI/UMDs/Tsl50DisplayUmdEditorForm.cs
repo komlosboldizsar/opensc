@@ -57,7 +57,7 @@ namespace OpenSC.GUI.UMDs
         private void initScreenDropDown()
         {
             screenDropDown.CreateAdapterAsDataSource(Tsl50ScreenDatabase.Instance, null, true, "(not associated)");
-            screenDropDown.ReceiveSystemObjectDrop().FilterByType<Tsl50Screen>();
+            screenDropDown.ReceiveObjectDrop().FilterByType<Tsl50Screen>();
         }
 
     }

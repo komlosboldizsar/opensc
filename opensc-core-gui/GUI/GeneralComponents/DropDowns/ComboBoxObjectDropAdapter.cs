@@ -29,7 +29,7 @@ namespace OpenSC.GUI.GeneralComponents.DropDowns
 
         }
 
-        public static ObjectDropAdapter<ComboBox>.IDropSettingManager ReceiveSystemObjectDrop(this ComboBox comboBox)
+        public static ObjectDropAdapter<ComboBox>.IDropSettingManager ReceiveObjectDrop(this ComboBox comboBox)
         {
             Handlers.Instance._();
             return ObjectDropAdapter<ComboBox>.ReceiveObjectDrop(comboBox);

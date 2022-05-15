@@ -77,7 +77,7 @@ namespace OpenSC.GUI.UMDs
         {
             // Ports
             portDropDown.CreateAdapterAsDataSource(SerialPortDatabase.Instance, port => port.Name, true, "(not connected)");
-            portDropDown.ReceiveSystemObjectDrop().FilterByType<SerialPort>();
+            portDropDown.ReceiveObjectDrop().FilterByType<SerialPort>();
         }
 
         protected class TextColumnWidthControls

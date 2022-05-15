@@ -64,7 +64,7 @@ namespace OpenSC.GUI.Signals.TallyCopying
             dropDown.CreateAdapterAsDataSource(
                 SignalRegister.Instance, SignalRegister.Instance.ToStringMethod,
                 true, "(not associated)");
-            dropDown.ReceiveSystemObjectDrop().FilterByType<ISignalSourceRegistered>();
+            dropDown.ReceiveObjectDrop().FilterByType<ISignalSourceRegistered>();
         }
 
         private void initColorDropDown(ComboBox dropDown)

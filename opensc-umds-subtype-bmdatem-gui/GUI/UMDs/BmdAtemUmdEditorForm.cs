@@ -61,13 +61,13 @@ namespace OpenSC.GUI.UMDs
         private void initMixerDropDown()
         {
             mixerDropDown.CreateAdapterAsDataSource(MixerDatabase.Instance.OfType<BmdMixer>(), null, true, "(not associated)");
-            mixerDropDown.ReceiveSystemObjectDrop().FilterByType<Mixer>();
+            mixerDropDown.ReceiveObjectDrop().FilterByType<Mixer>();
         }
 
         private void initInputDropDown()
         {
             populateInputDropDown();
-            inputDropDown.ReceiveSystemObjectDrop().FilterByType<MixerInput>();
+            inputDropDown.ReceiveObjectDrop().FilterByType<MixerInput>();
             inputDropDown.BindParent(mixerDropDown, mi => ((MixerInput)mi)?.Mixer);
         }
 
