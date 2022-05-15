@@ -9,5 +9,6 @@ namespace OpenSC.Model.Signals
     public interface ISignalTallyStateOrReceiver
     {
         ISignalSource ParentSignalSource { get; }
+        SignalTallyColor Color { get; } 
     }
 }

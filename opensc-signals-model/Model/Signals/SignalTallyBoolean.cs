@@ -16,11 +16,10 @@ namespace OpenSC.Model.Signals
         protected SignalTallyColor color;
         protected bool registered = false;
 
-        public SignalTallyBoolean(ISignalTallyState tally, SignalTallyColor color) : base()
+        public SignalTallyBoolean(ISignalTallyState tally) : base()
         {
             this.tally = tally;
-            this.color = color;
-            Color = getColor(color);
+            Color = getColor(tally.Color);
             tally.StateChanged += signalTallyChangedHandler;
         }
 

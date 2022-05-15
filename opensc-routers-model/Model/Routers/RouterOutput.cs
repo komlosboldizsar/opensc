@@ -312,9 +312,9 @@ namespace OpenSC.Model.Routers
 
         private void createTallyBooleans()
         {
-            redTallyBoolean = new RouterOutputTallyBoolean(this, RedTally, SignalTallyColor.Red);
-            yellowTallyBoolean = new RouterOutputTallyBoolean(this, YellowTally, SignalTallyColor.Yellow);
-            greenTallyBoolean = new RouterOutputTallyBoolean(this, GreenTally, SignalTallyColor.Green);
+            redTallyBoolean = new RouterOutputTallyBoolean(this, RedTally);
+            yellowTallyBoolean = new RouterOutputTallyBoolean(this, YellowTally);
+            greenTallyBoolean = new RouterOutputTallyBoolean(this, GreenTally);
         }
         #endregion
 

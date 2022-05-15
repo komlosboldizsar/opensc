@@ -48,9 +48,9 @@ namespace OpenSC.Model.Signals
 
         private void createTallies()
         {
-            RedTally = new BidirectionalPassthroughSignalTally(this);
-            YellowTally = new BidirectionalPassthroughSignalTally(this);
-            GreenTally = new BidirectionalPassthroughSignalTally(this);
+            RedTally = new BidirectionalPassthroughSignalTally(this, SignalTallyColor.Red);
+            YellowTally = new BidirectionalPassthroughSignalTally(this, SignalTallyColor.Yellow);
+            GreenTally = new BidirectionalPassthroughSignalTally(this, SignalTallyColor.Green);
         }
         #endregion
 
