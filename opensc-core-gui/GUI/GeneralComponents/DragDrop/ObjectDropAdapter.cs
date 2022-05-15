@@ -10,7 +10,7 @@ using System.Windows.Forms;
 namespace OpenSC.GUI.GeneralComponents.DragDrop
 {
 
-    public class SystemObjectDropAdapter<TReceiver>
+    public class ObjectDropAdapter<TReceiver>
         where TReceiver : Control
     {
 
@@ -44,14 +44,14 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
 
         public delegate bool CanHandleDelegate(TReceiver receiverParent, DragEventArgs eventArgs, object tag);
         public delegate bool DragDesponderDelegate(TReceiver receiverParent, DragEventArgs eventArgs, object tag);
-        public delegate void ValueSetterDelegate(TReceiver receiverParent, IEnumerable<ISystemObject> systemObjects, DragEventArgs eventArgs, object tag);
+        public delegate void ValueSetterDelegate(TReceiver receiverParent, IEnumerable<object> objects, DragEventArgs eventArgs, object tag);
 
         public delegate TReceiverPart ReceiverPartSelectorDelegate<TReceiverPart>(TReceiver receiverParent, DragEventArgs eventArgs);
         public delegate bool PartedCanHandleDelegate<TReceiverPart>(TReceiver receiverParent, TReceiverPart receiverChild, DragEventArgs eventArgs, object tag);
         public delegate bool PartedDragDesponderDelegate<TReceiverPart>(TReceiver receiverParent, TReceiverPart receiverChild, DragEventArgs eventArgs, object tag);
-        public delegate void PartedValueSetterDelegate<TReceiverPart>(TReceiver receiverParent, TReceiverPart receiverChild, IEnumerable<ISystemObject> systemObjects, DragEventArgs eventArgs, object tag);
+        public delegate void PartedValueSetterDelegate<TReceiverPart>(TReceiver receiverParent, TReceiverPart receiverChild, IEnumerable<object> objects, DragEventArgs eventArgs, object tag);
 
-        public static IDropSettingManager ReceiveSystemObjectDrop(TReceiver receiver, object tag = null)
+        public static IDropSettingManager ReceiveObjectDrop(TReceiver receiver, object tag = null)
             => ReceiveSystemObjectDropParted<NoPart>(receiver, null, tag);
 
         public static IDropSettingManager ReceiveSystemObjectDropParted<TReceiverPart>(TReceiver receiver, TReceiverPart receiverPart, object tag = null)
@@ -87,7 +87,7 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
         {
             bool CanHandle(object sender, DragEventArgs eventArgs, ref IDropData dropData);
             bool GetResponse(object sender, DragEventArgs eventArgs, IDropData dropData);
-            void SetValue(object sender, DragEventArgs eventArgs, IDropData dropData, IEnumerable<ISystemObject> systemObjects);
+            void SetValue(object sender, DragEventArgs eventArgs, IDropData dropData, IEnumerable<object> objects);
         }
 
         private class PartedDropAdapter<TReceiverPart> : IPartedDropAdapter
@@ -95,7 +95,7 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
         {
 
             public static PartedDropAdapter<TReceiverPart> Instance { get; } = new();
-            private PartedDropAdapter() => SystemObjectDropAdapter<TReceiver>.RegisterPartedAdapter(this);
+            private PartedDropAdapter() => ObjectDropAdapter<TReceiver>.RegisterPartedAdapter(this);
 
             internal ReceiverPartSelectorDelegate<TReceiverPart> ReceiverPartSelector { get; set; }
             internal PartedCanHandleDelegate<TReceiverPart> ReceiverCanHandle { get; set; }
@@ -182,35 +182,35 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
             {
                 if (!(dropData is DropData myDropData))
                     return false;
-                bool singlePresent = eventArgs.Data.GetDataPresent(typeof(SystemObjectReference));
-                bool multiPresent = eventArgs.Data.GetDataPresent(typeof(SystemObjectReference[]));
+                bool singlePresent = eventArgs.Data.GetDataPresent(typeof(ObjectProxy));
+                bool multiPresent = eventArgs.Data.GetDataPresent(typeof(ObjectProxy[]));
                 if (!(singlePresent || (myDropData.EnableMulti && multiPresent)))
                     return false;
                 if (myDropData.TypeFilters.Count > 0)
                 {
-                    SystemObjectReference firstSystemObjectReference = null;
+                    ObjectProxy firstObjectProxy = null;
                     if (singlePresent)
                     {
-                        firstSystemObjectReference = eventArgs.Data.GetData(typeof(SystemObjectReference)) as SystemObjectReference;
+                        firstObjectProxy = eventArgs.Data.GetData(typeof(ObjectProxy)) as ObjectProxy;
                     }
                     else
                     {
-                        SystemObjectReference[] systemObjectReferences = eventArgs.Data.GetData(typeof(SystemObjectReference[])) as SystemObjectReference[];
-                        if (systemObjectReferences.Length > 0)
-                            firstSystemObjectReference = systemObjectReferences[0];
+                        ObjectProxy[] objectProxies = eventArgs.Data.GetData(typeof(ObjectProxy[])) as ObjectProxy[];
+                        if (objectProxies.Length > 0)
+                            firstObjectProxy = objectProxies[0];
                     }
-                    ISystemObject firstSystemObject = firstSystemObjectReference?.Object;
-                    if (!myDropData.TypeFilters.Any(tf => tf.Is(firstSystemObject)))
+                    object firstObject = firstObjectProxy?.Object;
+                    if (!myDropData.TypeFilters.Any(tf => tf.Is(firstObject)))
                         return false;
                 }
                 return ReceiverDragDesponder(myDropData.Receiver, myDropData.ReceiverPart, eventArgs, myDropData.Tag);
             }
 
-            public void SetValue(object sender, DragEventArgs eventArgs, IDropData dropData, IEnumerable<ISystemObject> systemObjects)
+            public void SetValue(object sender, DragEventArgs eventArgs, IDropData dropData, IEnumerable<object> objects)
             {
                 if (!(dropData is DropData myDropData))
                     return;
-                ReceiverValueSetter(myDropData.Receiver, myDropData.ReceiverPart, systemObjects, eventArgs, myDropData.Tag);
+                ReceiverValueSetter(myDropData.Receiver, myDropData.ReceiverPart, objects, eventArgs, myDropData.Tag);
             }
 
             private static Dictionary<TReceiver, Dictionary<TReceiverPart, DropData>> dropDataMasterDictionary = new();
@@ -250,14 +250,14 @@ namespace OpenSC.GUI.GeneralComponents.DragDrop
             IPartedDropAdapter handler = partedDropAdapters.FirstOrDefault(pda => pda.CanHandle(sender, eventArgs, ref dropData));
             if (handler == null)
                 return;
-            IEnumerable<ISystemObject> systemObjects = null;
-            if (eventArgs.Data.GetData(typeof(SystemObjectReference)) is SystemObjectReference singleReference)
-                systemObjects = new ISystemObject[] { singleReference.Object };
-            if (eventArgs.Data.GetData(typeof(SystemObjectReference[])) is SystemObjectReference[] multiReference)
-                systemObjects = multiReference.Select(sro => sro.Object);
-            if (systemObjects.Count() == 0)
+            IEnumerable<object> objects = null;
+            if (eventArgs.Data.GetData(typeof(ObjectProxy)) is ObjectProxy singleReference)
+                objects = new object[] { singleReference.Object };
+            if (eventArgs.Data.GetData(typeof(ObjectProxy[])) is ObjectProxy[] multiReference)
+                objects = multiReference.Select(sro => sro.Object);
+            if (objects.Count() == 0)
                 return;
-            handler.SetValue(sender, eventArgs, dropData, systemObjects);
+            handler.SetValue(sender, eventArgs, dropData, objects);
         }
 
         private class NoPart

@@ -188,7 +188,7 @@ namespace OpenSC.GUI.GpioInterfaces
             builder.UpdaterMethod((output, cell) => { cell.Value = output.Driver; });
             builder.CellValueChangedHandlerMethod((output, cell, eventargs) => { output.Driver = cell.Value as IBoolean; });
             builder.DropDownPopulatorMethod((output, cell) => sources);
-            builder.ReceiveSystemObjectDrop().FilterByType<IBoolean>();
+            builder.ReceiveObjectDrop().FilterByType<IBoolean>();
             builder.BuildAndAdd();
 
             // Column: delete button

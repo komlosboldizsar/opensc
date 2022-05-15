@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace OpenSC.GUI.GeneralComponents.Tables
 {
-    public static class CustomDataGridViewColumnSystemObjectDragAdapter
+    public static class CustomDataGridViewColumnObjectDragAdapter
     {
 
         public static void AllowSystemObjectDrag<T>(this CustomDataGridViewColumnDescriptorBuilder<T> customDataGridViewColumnDescriptorBuilder)
@@ -61,10 +61,10 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                         .Where(c => (c.ColumnIndex == eventArgs.ColumnIndex))
                         .Distinct(CellRowIndexEqualityComparer.Instance)
                         .OrderBy(c => c.RowIndex)
-                        .Select(c => new SystemObjectReference(((CustomDataGridViewRow<T>)c.OwningRow).Item as ISystemObject))
+                        .Select(c => new ObjectProxy(((CustomDataGridViewRow<T>)c.OwningRow).Item))
                         .ToArray();
                 }
-                return new SystemObjectReference(eventArgs.Row.Item as ISystemObject);
+                return new ObjectProxy(eventArgs.Row.Item);
             }
 
             private class CellRowIndexEqualityComparer : IEqualityComparer<DataGridViewCell>
