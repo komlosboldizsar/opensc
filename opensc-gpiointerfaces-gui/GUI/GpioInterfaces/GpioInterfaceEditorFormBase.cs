@@ -75,7 +75,7 @@ namespace OpenSC.GUI.GpioInterfaces
                     cell.Value = input.Index;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: name
@@ -98,7 +98,7 @@ namespace OpenSC.GUI.GpioInterfaces
                     cell.Value = input.Name;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: delete button
@@ -152,7 +152,7 @@ namespace OpenSC.GUI.GpioInterfaces
                     cell.Value = output.Index;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: name
@@ -175,7 +175,7 @@ namespace OpenSC.GUI.GpioInterfaces
                     cell.Value = output.Name;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: source

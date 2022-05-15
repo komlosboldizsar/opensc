@@ -12,42 +12,53 @@ namespace OpenSC.GUI.GeneralComponents.Tables
     public static class CustomDataGridViewColumnObjectDragAdapter
     {
 
-        public static void AllowSystemObjectDrag<T>(this CustomDataGridViewColumnDescriptorBuilder<T> customDataGridViewColumnDescriptorBuilder)
-            => customDataGridViewColumnDescriptorBuilder.AddExtension(new AllowSystemObjectDragDescriptorExtension<T>());
+        public delegate object DraggedObjectSelectorDelegate<T>(T item, DataGridViewCell cell);
 
-        private class AllowSystemObjectDragDescriptorExtension<T> : CustomDataGridViewColumnDescriptorExtension<T>
+        public static void AllowObjectDrag<T>(this CustomDataGridViewColumnDescriptorBuilder<T> customDataGridViewColumnDescriptorBuilder, DraggedObjectSelectorDelegate<T> draggedObjectSelector = null)
+            => customDataGridViewColumnDescriptorBuilder.AddExtension(new AllowObjectDragDescriptorExtension<T>(draggedObjectSelector));
+
+        private class AllowObjectDragDescriptorExtension<T> : CustomDataGridViewColumnDescriptorExtension<T>
         {
+
+            DraggedObjectSelectorDelegate<T> draggedObjectSelector;
+
+            public AllowObjectDragDescriptorExtension(DraggedObjectSelectorDelegate<T> draggedObjectSelector = null)
+            {
+                this.draggedObjectSelector = draggedObjectSelector;
+            }
+
             public override void ColumnReady(CustomDataGridView<T> table, DataGridViewColumn column)
             {
-                SystemObjectDragHandler<T> dragHandler = SystemObjectDragHandler<T>.Instance;
+                ObjectDragHandler<T> dragHandler = ObjectDragHandler<T>.Instance;
                 table.DragHandlers.AddHandler(dragHandler);
-                dragHandler.AddTableColumn(table, column);
+                dragHandler.AddTableColumn(table, column, draggedObjectSelector);
             }
+
         }
 
-        private class SystemObjectDragHandler<T> : CustomDataGridViewDragHandler<T>
+        private class ObjectDragHandler<T> : CustomDataGridViewDragHandler<T>
         {
 
-            internal static SystemObjectDragHandler<T> Instance { get; } = new();
+            internal static ObjectDragHandler<T> Instance { get; } = new();
 
-            private Dictionary<CustomDataGridView<T>, List<DataGridViewColumn>> handledTablesColumns = new();
+            private Dictionary<CustomDataGridView<T>, Dictionary<DataGridViewColumn, ColumnData>> handledTablesColumns = new();
 
-            public void AddTableColumn(CustomDataGridView<T> table, DataGridViewColumn column)
+            public void AddTableColumn(CustomDataGridView<T> table, DataGridViewColumn column, DraggedObjectSelectorDelegate<T> draggedObjectSelector)
             {
-                if (!handledTablesColumns.TryGetValue(table, out List<DataGridViewColumn> handledColumns))
+                if (!handledTablesColumns.TryGetValue(table, out Dictionary<DataGridViewColumn, ColumnData> handledColumns))
                 {
                     handledColumns = new();
                     handledTablesColumns.Add(table, handledColumns);
                 }
-                if (!handledColumns.Contains(column))
-                    handledColumns.Add(column);
+                if (!handledColumns.ContainsKey(column))
+                    handledColumns.Add(column, new(draggedObjectSelector));
             }
 
             public override DragDropEffects GetAllowedEffects(CustomDataGridViewDragSourceEventArgs<T> eventArgs)
             {
-                if (!handledTablesColumns.TryGetValue(eventArgs.Table, out List<DataGridViewColumn> handledColumns))
+                if (!handledTablesColumns.TryGetValue(eventArgs.Table, out Dictionary<DataGridViewColumn, ColumnData> handledColumns))
                     return DragDropEffects.None;
-                if (!handledColumns.Contains(eventArgs.Column))
+                if (!handledColumns.ContainsKey(eventArgs.Column))
                     return DragDropEffects.None;
                 return DragDropEffects.Link;
             }
@@ -55,17 +66,25 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             public override object GetDraggedObject(CustomDataGridViewDragSourceEventArgs<T> eventArgs)
             {
                 DataGridViewSelectedCellCollection selectedCells = eventArgs.Table.SelectedCells;
+                DraggedObjectSelectorDelegate<T> draggedObjectSelector = null;
+                if (handledTablesColumns.TryGetValue(eventArgs.Table, out Dictionary<DataGridViewColumn, ColumnData> handledColumns))
+                    if (handledColumns.TryGetValue(eventArgs.Column, out ColumnData columnData))
+                        draggedObjectSelector = columnData.DraggedObjectSelector;
+                if (draggedObjectSelector == null)
+                    draggedObjectSelector = defaultDraggedObjectSelector;
                 if ((selectedCells.Count > 1) && selectedCells.Contains(eventArgs.Cell))
                 {
                     return selectedCells.Cast<DataGridViewCell>()
                         .Where(c => (c.ColumnIndex == eventArgs.ColumnIndex))
                         .Distinct(CellRowIndexEqualityComparer.Instance)
                         .OrderBy(c => c.RowIndex)
-                        .Select(c => new ObjectProxy(((CustomDataGridViewRow<T>)c.OwningRow).Item))
+                        .Select(c => new ObjectProxy(defaultDraggedObjectSelector(((CustomDataGridViewRow<T>)c.OwningRow).Item, c)))
                         .ToArray();
                 }
-                return new ObjectProxy(eventArgs.Row.Item);
+                return new ObjectProxy(defaultDraggedObjectSelector(eventArgs.Row.Item, eventArgs.Cell));
             }
+
+            private static object defaultDraggedObjectSelector(T item, DataGridViewCell cell) => item;
 
             private class CellRowIndexEqualityComparer : IEqualityComparer<DataGridViewCell>
             {
@@ -73,6 +92,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 public bool Equals(DataGridViewCell x, DataGridViewCell y) => (x.RowIndex == y.RowIndex);
                 public int GetHashCode([DisallowNull] DataGridViewCell obj) => obj.GetHashCode();
             }
+
+            private record ColumnData(DraggedObjectSelectorDelegate<T> DraggedObjectSelector);
 
         }
 

@@ -78,7 +78,7 @@ namespace OpenSC.GUI.Routers
                     cell.Value = input.Index;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: name
@@ -101,7 +101,7 @@ namespace OpenSC.GUI.Routers
                     cell.Value = input.Name;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: source
@@ -230,7 +230,7 @@ namespace OpenSC.GUI.Routers
                     cell.Value = output.Index;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: name
@@ -253,7 +253,7 @@ namespace OpenSC.GUI.Routers
                     cell.Value = output.Name;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: delete button
