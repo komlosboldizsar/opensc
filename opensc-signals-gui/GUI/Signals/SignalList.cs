@@ -36,6 +36,7 @@ namespace OpenSC.GUI.Signals
             builder.CellStyle(BOLD_TEXT_CELL_STYLE);
             builder.UpdaterMethod((signal, cell) => { cell.Value = signal.SignalLabel; });
             builder.AddChangeEvent(nameof(ISignalSourceRegistered.SignalLabel));
+            builder.AllowObjectDrag();
 
             // Column: red tally
             builder = builderGetterMethod();

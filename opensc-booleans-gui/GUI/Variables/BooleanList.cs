@@ -35,6 +35,7 @@ namespace OpenSC.GUI.Variables
             builder.Width(220);
             builder.UpdaterMethod((boolean, cell) => { cell.Value = boolean.Identifier; });
             builder.AddChangeEvent(nameof(IBoolean.Identifier));
+            builder.AllowObjectDrag();
 
             // Column: description
             builder = builderGetterMethod();
