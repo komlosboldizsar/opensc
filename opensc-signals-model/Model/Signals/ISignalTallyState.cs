@@ -12,17 +12,9 @@ namespace OpenSC.Model.Signals
 
     public interface ISignalTallyState : ISignalTallyStateOrReceiver, INotifyPropertyChanged
     {
-
-        #region Property: ParentSignalSource
-        ISignalSource ParentSignalSource { get; }
-        #endregion
-
-        #region Property: State
         bool State { get; }
         bool GetState(List<object> recursionChain);
         event StateChangedHandler StateChanged;
-        #endregion
-
     }
 
 }

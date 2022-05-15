@@ -7,5 +7,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
     public interface ISignalTallyStateOrReceiver
-    { }
+    {
+        ISignalSource ParentSignalSource { get; }
+    }
 }

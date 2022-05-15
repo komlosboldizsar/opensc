@@ -15,7 +15,7 @@ namespace OpenSC.Model.Signals
         {
             ParentSignalSource = parentSignalSource;
             tallyState = new PassthroughSignalTallyState(ParentSignalSource);
-            tallyReceiver = new PassthroughSignalTallyReceiver();
+            tallyReceiver = new PassthroughSignalTallyReceiver(ParentSignalSource);
             tallyState.StateChanged += tallyStateChanged;
             tallyReceiver.Got += (r, rc) => Got?.Invoke(r, rc);
             tallyReceiver.Revoked += (r, rc) => Revoked?.Invoke(r, rc);

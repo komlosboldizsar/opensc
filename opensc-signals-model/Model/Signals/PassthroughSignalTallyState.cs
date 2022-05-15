@@ -12,7 +12,6 @@ namespace OpenSC.Model.Signals
     {
 
         public PassthroughSignalTallyState(ISignalSource parentSignalSource) => ParentSignalSource = parentSignalSource;
-
         public ISignalSource ParentSignalSource { get; private set; }
 
         #region Property: State
