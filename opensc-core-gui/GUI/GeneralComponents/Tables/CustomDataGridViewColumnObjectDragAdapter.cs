@@ -78,10 +78,10 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                         .Where(c => (c.ColumnIndex == eventArgs.ColumnIndex))
                         .Distinct(CellRowIndexEqualityComparer.Instance)
                         .OrderBy(c => c.RowIndex)
-                        .Select(c => new ObjectProxy(defaultDraggedObjectSelector(((CustomDataGridViewRow<T>)c.OwningRow).Item, c)))
+                        .Select(c => new ObjectProxy(draggedObjectSelector(((CustomDataGridViewRow<T>)c.OwningRow).Item, c)))
                         .ToArray();
                 }
-                return new ObjectProxy(defaultDraggedObjectSelector(eventArgs.Row.Item, eventArgs.Cell));
+                return new ObjectProxy(draggedObjectSelector(eventArgs.Row.Item, eventArgs.Cell));
             }
 
             private static object defaultDraggedObjectSelector(T item, DataGridViewCell cell) => item;
