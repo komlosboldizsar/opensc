@@ -11,9 +11,14 @@ namespace OpenSC.Model.Signals
     public class PassthroughSignalTallyState : ObjectBase, ISignalTallyState
     {
 
-        public PassthroughSignalTallyState(ISignalSource parentSignalSource) => ParentSignalSource = parentSignalSource;
+        public PassthroughSignalTallyState(ISignalSource parentSignalSource, SignalTallyColor color)
+        {
+            ParentSignalSource = parentSignalSource;
+            Color = color;
+        }
 
-        public ISignalSource ParentSignalSource { get; private set; }
+        public ISignalSource ParentSignalSource { get; private init; }
+        public SignalTallyColor Color { get; private init; }
 
         #region Property: State
         public bool State => previousElement?.State ?? false;

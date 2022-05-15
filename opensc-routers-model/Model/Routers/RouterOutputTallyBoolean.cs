@@ -15,8 +15,8 @@ namespace OpenSC.Model.Routers
 
         private RouterOutput routerOutput;
 
-        public RouterOutputTallyBoolean(RouterOutput routerOutput, ISignalTallyState tally, SignalTallyColor color) :
-            base(tally, color)
+        public RouterOutputTallyBoolean(RouterOutput routerOutput, ISignalTallyState tally) :
+            base(tally)
         {
             this.routerOutput = routerOutput;
             updateFields();
@@ -29,8 +29,7 @@ namespace OpenSC.Model.Routers
             register();
         }
 
-        private void routerNameChangedHandler(IModel router, string oldName, string newName)
-            => updateDescription();
+        private void routerNameChangedHandler(IModel router, string oldName, string newName) => updateDescription();
 
         private void routerIdChangedHandler(IModel router, int oldValue, int newValue)
         {
@@ -38,8 +37,7 @@ namespace OpenSC.Model.Routers
             updateDescription();
         }
 
-        private void routerOutputNameChangedHandler(RouterOutput output, string oldName, string newName)
-            => updateDescription();
+        private void routerOutputNameChangedHandler(RouterOutput output, string oldName, string newName) => updateDescription();
 
         private void routerOutputIndexChangedHandler(RouterOutput input, int oldIndex, int newIndex)
         {
@@ -47,11 +45,9 @@ namespace OpenSC.Model.Routers
             updateDescription();
         }
 
-        private void signalTallyChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState, List<object> recursionChain)
-            => CurrentState = newState;
+        private void signalTallyChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState, List<object> recursionChain) => CurrentState = newState;
 
-        private void routerOutputRemovedHandler(RouterOutput routerOutput)
-            => unregister();
+        private void routerOutputRemovedHandler(RouterOutput routerOutput) => unregister();
 
         protected override string getName()
             => string.Format("router.{0}.output.{1}.{2}tally", routerOutput.Router.ID, routerOutput.Index, getColorString(color));

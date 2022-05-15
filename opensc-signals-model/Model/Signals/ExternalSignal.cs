@@ -105,9 +105,9 @@ namespace OpenSC.Model.Signals
 
         private void createTallies()
         {
-            redTally = new ExternalSignalTally(this);
-            yellowTally = new ExternalSignalTally(this);
-            greenTally = new ExternalSignalTally(this);
+            redTally = new ExternalSignalTally(this, SignalTallyColor.Red);
+            yellowTally = new ExternalSignalTally(this, SignalTallyColor.Yellow);
+            greenTally = new ExternalSignalTally(this, SignalTallyColor.Green);
             createTallyBooleans();
         }
         #endregion
@@ -119,9 +119,9 @@ namespace OpenSC.Model.Signals
 
         private void createTallyBooleans()
         {
-            redTallyBoolean = new ExternalSignalTallyBoolean(this, redTally, SignalTallyColor.Red);
-            yellowTallyBoolean = new ExternalSignalTallyBoolean(this, yellowTally, SignalTallyColor.Yellow);
-            greenTallyBoolean = new ExternalSignalTallyBoolean(this, greenTally, SignalTallyColor.Green);
+            redTallyBoolean = new ExternalSignalTallyBoolean(redTally);
+            yellowTallyBoolean = new ExternalSignalTallyBoolean(yellowTally);
+            greenTallyBoolean = new ExternalSignalTallyBoolean(greenTally);
         }
         #endregion
 

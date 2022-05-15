@@ -11,15 +11,18 @@ namespace OpenSC.Model.Signals
     public class BidirectionalPassthroughSignalTally : ObjectBase, IBidirectionalSignalTally, ISignalTallySender
     {
 
-        public BidirectionalPassthroughSignalTally(ISignalSource parentSignalSource)
+        public BidirectionalPassthroughSignalTally(ISignalSource parentSignalSource, SignalTallyColor color)
         {
             ParentSignalSource = parentSignalSource;
-            tallyState = new PassthroughSignalTallyState(ParentSignalSource);
-            tallyReceiver = new PassthroughSignalTallyReceiver();
+            tallyState = new PassthroughSignalTallyState(ParentSignalSource, color);
+            tallyReceiver = new PassthroughSignalTallyReceiver(ParentSignalSource, color);
             tallyState.StateChanged += tallyStateChanged;
             tallyReceiver.Got += (r, rc) => Got?.Invoke(r, rc);
             tallyReceiver.Revoked += (r, rc) => Revoked?.Invoke(r, rc);
         }
+
+        public ISignalSource ParentSignalSource { get; private init; }
+        public SignalTallyColor Color { get; private init; }
 
         #region Composite elements
         private PassthroughSignalTallyState tallyState;
@@ -42,7 +45,6 @@ namespace OpenSC.Model.Signals
         #endregion
 
         #region ISignalTallyState interface
-        public ISignalSource ParentSignalSource { get; private set; }
         public bool State => tallyState.State;
         public bool GetState(List<object> recursionChain = null) => tallyState.GetState(recursionChain);
         public event StateChangedHandler StateChanged;

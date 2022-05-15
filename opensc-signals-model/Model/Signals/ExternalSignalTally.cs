@@ -11,13 +11,16 @@ namespace OpenSC.Model.Signals
     public class ExternalSignalTally :  ObjectBase, IBidirectionalSignalTally
     {
 
-        public ExternalSignalTally(ExternalSignal parentSignalSource)
+        public ExternalSignalTally(ExternalSignal parentSignalSource, SignalTallyColor color)
         {
             ParentSignalSource = parentSignalSource;
+            Color = color;
         }
 
+        public ISignalSource ParentSignalSource { get; private init; }
+        public SignalTallyColor Color { get; private init; }
+
         #region ISignalTallyState implementation
-        public ISignalSource ParentSignalSource { get; private set; }
 
         public event StateChangedHandler StateChanged;
 
