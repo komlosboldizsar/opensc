@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Library.TaskSchedulerQueue;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,6 +17,7 @@ namespace OpenSC.Library.BmdVideohub
 
         public VideohubClient(string ipAddress)
         {
+            requestScheduler = new(sendRequest, invalidRequest);
             createInterpreters();
             this.ipAddress = ipAddress;
         }
@@ -107,9 +109,9 @@ namespace OpenSC.Library.BmdVideohub
                     return;
                 connected = value;
                 if (value)
-                    startRequestSchedulerTask();
+                    requestScheduler.Start();
                 else
-                    stopRequestSchedulerTask();
+                    requestScheduler.Stop();
                 ConnectionStateChanged?.Invoke(connected);
             }
         }
@@ -228,72 +230,12 @@ namespace OpenSC.Library.BmdVideohub
         #endregion
 
         #region Request scheduler
-        private Request lastSentRequest = null;
-        private BufferBlock<Request> requestFifo;
-        private CancellationTokenSource requestSchedulerTaskCancellationTokenSource;
-        private Task requestSchedulerTask;
-
-        private void startRequestSchedulerTask()
-        {
-            if (requestSchedulerTask != null)
-                return;
-            requestFifo = new();
-            requestSchedulerTaskCancellationTokenSource = new();
-            requestSchedulerTask = Task.Run(requestSchedulerTaskMethod);
-        }
-
-        private async void stopRequestSchedulerTask()
-        {
-            if (requestSchedulerTask == null)
-                return;
-            try
-            {
-                requestSchedulerTaskCancellationTokenSource.Cancel();
-                if (lastSentRequest != null)
-                    lastSentRequest.AckOrNakReceived.SetCanceled();
-                await requestSchedulerTask;
-                requestSchedulerTask.Dispose();
-                requestSchedulerTask = null;
-                requestSchedulerTaskCancellationTokenSource.Dispose();
-                requestSchedulerTaskCancellationTokenSource = null;
-            }
-            catch (ObjectDisposedException)
-            { }
-        }
-
-        private async Task requestSchedulerTaskMethod()
-        {
-            while (true)
-            {
-                try
-                {
-                    if (lastSentRequest != null)
-                        await lastSentRequest.AckOrNakReceived.Task;
-                    Request request = await requestFifo.ReceiveAsync(requestSchedulerTaskCancellationTokenSource.Token);
-                    if ((request != null) && (request.ValidUntil >= DateTime.Now))
-                    {
-                        request.Send(this);
-                        lastSentRequest = request;
-                    }
-                    else
-                    {
-                        // log or something
-                    }
-                }
-                catch (OperationCanceledException)
-                { }
-            }
-        }
-
-        private void scheduleRequest(Request request)
-        {
-            if (!connected)
-                return;
-            requestFifo.Post(request);
-        }
-
-        public void AckLastRequest() => lastSentRequest?.ACK();
-        public void NakLastRequest() => lastSentRequest?.NAK();
+        private readonly TaskQueue<Request, bool> requestScheduler;
+        private void sendRequest(Request request) => request.Send(this);
+        private void invalidRequest(Request request) => Debug.WriteLine($"Dropped an invalid request for BMD Videohub [{IpAddress}]");
+        private void scheduleRequest(Request request) => requestScheduler.Enqueue(request);
+        internal void AckLastRequest() => requestScheduler.LastDequeuedTaskReady(true);
+        internal void NakLastRequest() => requestScheduler.LastDequeuedTaskReady(false);
         #endregion
 
         #region TCP receiver/sender socket

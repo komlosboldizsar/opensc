@@ -10,5 +10,8 @@
       <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
       <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-library-taskschedulerqueue\opensc-library-taskschedulerqueue.csproj" />
+  </ItemGroup>
   <Import Project="..\GlobalCsproj\*.csproj" />
 </Project>

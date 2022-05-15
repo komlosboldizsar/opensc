@@ -1,12 +1,11 @@
-﻿using System;
+﻿using OpenSC.Library.TaskSchedulerQueue;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenSC.Library.BmdVideohub
 {
-    internal abstract class Request
+
+    internal abstract class Request : QueuedTask<bool>
     {
 
         public Request() => ValidUntil = DateTime.Now + ValidTime;
@@ -21,24 +20,22 @@ namespace OpenSC.Library.BmdVideohub
 
         protected void sendBlock(string header, IEnumerable<string> lines) => videohubClient.SendBlock(header, lines);
 
-        public void ACK()
+        protected override void _ready(bool result)
         {
-            AckOrNakReceived.SetResult(true);
-            _ack();
+            base._ready(result);
+            if (result)
+                _ack();
+            else
+                _nak();
         }
-        protected virtual void _ack() { }
 
-        public void NAK()
-        {
-            AckOrNakReceived.SetResult(false);
-            _nak();
-        }
+        protected virtual void _ack() { }
         protected virtual void _nak() { }
 
         public virtual TimeSpan ValidTime { get; } = new(0, 0, 2);
         public DateTime ValidUntil { get; init; }
-
-        public readonly TaskCompletionSource<bool> AckOrNakReceived = new();
+        protected override bool IsValid => (ValidUntil >= DateTime.Now);
 
     }
+
 }
