@@ -19,6 +19,7 @@ namespace OpenSC.Model.Signals
         public SignalTallyBoolean(ISignalTallyState tally) : base()
         {
             this.tally = tally;
+            this.color = tally.Color;
             Color = getColor(tally.Color);
             tally.StateChanged += signalTallyChangedHandler;
         }
