@@ -165,7 +165,7 @@ namespace BMD.Switcher
         public MixEffectBlock GetMixEffectBlock(int index)
         {
             if (index >= mixEffectBlocks.Count)
-                throw new NotExistingMixEffectBlockException();
+                return null;
             return mixEffectBlocks[index];
         }
         #endregion
@@ -176,7 +176,7 @@ namespace BMD.Switcher
         public Source GetSource(long id)
         {
             if (!sources.TryGetValue(id, out Source source))
-                throw new NotExistingSourceException();
+                return null;
             return source;
         }
 
