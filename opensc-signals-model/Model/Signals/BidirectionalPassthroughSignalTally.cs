@@ -14,6 +14,7 @@ namespace OpenSC.Model.Signals
         public BidirectionalPassthroughSignalTally(ISignalSource parentSignalSource, SignalTallyColor color)
         {
             ParentSignalSource = parentSignalSource;
+            Color = color;
             tallyState = new PassthroughSignalTallyState(ParentSignalSource, color);
             tallyReceiver = new PassthroughSignalTallyReceiver(ParentSignalSource, color);
             tallyState.StateChanged += tallyStateChanged;
