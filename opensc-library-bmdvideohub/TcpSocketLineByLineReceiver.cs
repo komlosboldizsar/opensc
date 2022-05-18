@@ -3,11 +3,13 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace BMD.Videohub
+namespace OpenSC.Library.BmdVideohub
 {
 
     internal class TcpSocketLineByLineReceiver : IDisposable
     {
+
+
 
         private Socket socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
 
@@ -187,14 +189,14 @@ namespace BMD.Videohub
         #endregion
 
         #region Sending
-        public void SendLine(string line)
+        public void SendLine(string line) => Send(line + "\r\n");
+
+        public void Send(string str)
         {
-            string toSend = line + "\r\n";
-            byte[] bytesToSend = Encoding.ASCII.GetBytes(toSend);
+            byte[] bytesToSend = Encoding.ASCII.GetBytes(str);
             try
             {
                 socket.BeginSend(bytesToSend, 0, bytesToSend.Length, SocketFlags.None, sendCallback, null);
-                Console.Write(toSend);
             }
             catch (SocketException)
             {
