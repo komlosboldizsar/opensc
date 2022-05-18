@@ -24,6 +24,33 @@ namespace OpenSC.Model.UMDs.BmdAtem
             restoreInput();
         }
 
+        #region Property: Mixer
+        public event PropertyChangedTwoValuesDelegate<BmdAtem, Mixer> MixerChanged;
+
+        private Mixer mixer;
+
+        public Mixer Mixer
+        {
+            get => mixer;
+            set
+            {
+                BeforeChangePropertyDelegate<Mixer> beforeChangeDelegate = (ov, nv) =>
+                {
+                    if (ov != null)
+                        ov.StateChanged -= Mixer_StateChanged;
+                };
+                AfterChangePropertyDelegate<Mixer> afterChangeDelegate = (ov, nv) =>
+                {
+                    if (nv != null)
+                        nv.StateChanged += Mixer_StateChanged;
+                };
+                this.setProperty(ref mixer, value, MixerChanged, beforeChangeDelegate, afterChangeDelegate);
+            }
+        }
+
+        private void Mixer_StateChanged(Mixer item, MixerState oldValue, MixerState newValue) => updateInputsSource();
+        #endregion
+
         #region Property: Input
         public event PropertyChangedTwoValuesDelegate<BmdAtem, MixerInput> InputChanged;
 
@@ -32,7 +59,11 @@ namespace OpenSC.Model.UMDs.BmdAtem
         public MixerInput Input
         {
             get => input;
-            set => this.setProperty(ref input, value, InputChanged, null, (ov, nv) => updateInputsSource());
+            set => this.setProperty(ref input, value, InputChanged, null, (ov, nv) =>
+            {
+                Mixer = nv?.Mixer;
+                updateInputsSource();
+            });
         }
 
         [PersistAs("input")]

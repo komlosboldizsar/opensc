@@ -109,11 +109,15 @@ namespace OpenSC.Model.UMDs.Tsl31
             }
             else
             {
+                int textMaxLength = Texts[1].Used ? TEXT_DUAL_MAX_LENGTH : TEXT_SINGLE_MAX_LENGTH;
                 string[] textsToDisplay = getDynamicTextSources();
+                for (int i = 0; i < textsToDisplay.Length; i++)
+                    if (textsToDisplay[i].Length > textMaxLength)
+                        textsToDisplay[i] = textsToDisplay[i].Substring(0, textMaxLength);
                 DisplayableCompactText = string.Join(" | ", textsToDisplay);
                 string[] textsToDisplayAligned = new string[textsToDisplay.Length];
                 for (int i = 0; i < textsToDisplay.Length; i++)
-                    textsToDisplayAligned[i] = alignText(textsToDisplay[i], Texts[1].Used ? TEXT_DUAL_MAX_LENGTH : TEXT_SINGLE_MAX_LENGTH, Texts[i].Alignment);
+                    textsToDisplayAligned[i] = alignText(textsToDisplay[i], textMaxLength, Texts[i].Alignment);
                 string textToHardware = string.Join("", textsToDisplayAligned);
                 textBytesToHardware = Encoding.ASCII.GetBytes(textToHardware);
                 DisplayableRawText = textToHardware;
@@ -184,7 +188,11 @@ namespace OpenSC.Model.UMDs.Tsl31
             byte[] bytes = new byte[18];
             bytes[0] = (byte)(Address + 0x80);
             bytes[1] = tallyByteToHardware;
-            textBytesToHardware.CopyTo(bytes, 2);
+            int bytesToCopy = textBytesToHardware.Length;
+            if (bytesToCopy > 16)
+                bytesToCopy = 16;
+            for (int i = 0; i < bytesToCopy; i++)
+                bytes[i + 2] = textBytesToHardware[i];
             return bytes;
         }
         #endregion
