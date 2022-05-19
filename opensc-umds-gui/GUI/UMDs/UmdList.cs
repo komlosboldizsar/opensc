@@ -41,6 +41,7 @@ namespace OpenSC.GUI.UMDs
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Static text");
             builder.Width(200);
+            builder.TextEditable(true);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.FullStaticText; });
             builder.CellEndEditHandlerMethod((umd, cell, e) => { umd.FullStaticText = cell.Value as string; });
             builder.AddChangeEvent(nameof(Umd.FullStaticText));
