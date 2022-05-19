@@ -101,6 +101,29 @@ namespace OpenSC.GUI.GpioInterfaces
             builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
+            // Column: debounce time
+            builder = getColumnDescriptorBuilderForTable<GpioInterfaceInput>(inputsTableCDGV);
+            builder.Type(DataGridViewColumnType.TextBox);
+            builder.Header("Debounce time");
+            builder.Width(100);
+            builder.UpdaterMethod((input, cell) => { cell.Value = input.DebounceTime; });
+            builder.AddChangeEvent(nameof(GpioInterfaceInput.DebounceTime));
+            builder.TextEditable(true);
+            builder.CellEndEditHandlerMethod((input, cell, eventargs) =>
+            {
+                try
+                {
+                    input.DebounceTime = int.Parse(cell.Value.ToString());
+                }
+                catch (ArgumentException e)
+                {
+                    MessageBox.Show(e.Message, "Data validation error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    cell.Value = input.DebounceTime;
+                }
+            });
+            builder.AllowObjectDrag();
+            builder.BuildAndAdd();
+
             // Column: delete button
             builder = getColumnDescriptorBuilderForTable<GpioInterfaceInput>(inputsTableCDGV);
             builder.Type(DataGridViewColumnType.Button);
