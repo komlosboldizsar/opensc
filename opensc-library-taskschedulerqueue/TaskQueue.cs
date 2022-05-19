@@ -46,29 +46,35 @@ namespace OpenSC.Library.TaskSchedulerQueue
                 lastDequeuedTask?.Cancel();
                 await requestSchedulerTask;
                 requestSchedulerTask.Dispose();
-                requestSchedulerTask = null;
                 cancellationTokenSource.Dispose();
-                cancellationTokenSource = null;
             }
             catch (ObjectDisposedException)
             { }
+            finally
+            {
+                requestSchedulerTask = null;
+                cancellationTokenSource = null;
+            }
         }
 
         private async Task schedulerTaskMethod()
         {
             try
             {
-                if (lastDequeuedTask != null)
-                    await lastDequeuedTask.Wait();
-                TQueuedTask task = await fifo.ReceiveAsync(cancellationTokenSource.Token);
-                if ((task != null) && task.IsValid)
+                while (true)
                 {
-                    lastDequeuedTask = task;
-                    doTaskMethod(task);
-                }
-                else
-                {
-                    invalidTaskHandlerMethod(task);
+                    if (lastDequeuedTask != null)
+                        await lastDequeuedTask.Wait();
+                    TQueuedTask task = await fifo.ReceiveAsync(cancellationTokenSource.Token);
+                    if ((task != null) && task.IsValid)
+                    {
+                        lastDequeuedTask = task;
+                        doTaskMethod(task);
+                    }
+                    else
+                    {
+                        invalidTaskHandlerMethod(task);
+                    }
                 }
             }
             catch (OperationCanceledException)
