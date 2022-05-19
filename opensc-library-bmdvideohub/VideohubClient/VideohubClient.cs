@@ -142,7 +142,7 @@ namespace OpenSC.Library.BmdVideohub
         {
             if ((crosspoint.Output == null) || (crosspoint.Output < 0) || (crosspoint.Output >= outputCount))
                 return;
-            if ((crosspoint.Input >= 0) && (crosspoint.Input < inputCount))
+            if ((crosspoint.Input < 0) || (crosspoint.Input >= inputCount))
                 crosspoint = crosspoint with { Input = null };
             crosspoints[(int)crosspoint.Output] = crosspoint.Input;
             CrosspointChanged?.Invoke(crosspoint);
@@ -257,11 +257,7 @@ namespace OpenSC.Library.BmdVideohub
             socketReceiver.Dispose();
             socketReceiver = null;
         }
-        private void connectionStateOfTcpSocketChanged(bool state)
-        {
-            if (state == false)
-                Connected = false;
-        }
+        private void connectionStateOfTcpSocketChanged(bool state) => Connected = state;
         #endregion
 
         #region Protocol implementation
@@ -311,7 +307,7 @@ namespace OpenSC.Library.BmdVideohub
         internal void SendBlock(string header, IEnumerable<string> lines)
         {
             StringBuilder stringBuilder = new();
-            stringBuilder.AppendLine(header);
+            stringBuilder.AppendLine(header + ":");
             foreach (string line in lines)
                 stringBuilder.AppendLine(line);
             stringBuilder.AppendLine();

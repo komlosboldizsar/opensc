@@ -60,7 +60,7 @@ namespace OpenSC.Model.Labelsets.DynamicTextFunctions
                     CurrentValue = "?";
                     return;
                 }
-                output.CurrentSourceChanged += currentSourceChangedHandler;
+                output.RegisteredSourceSignalChanged += registeredSourceSignalChangedHandler;
 
                 labelset = argumentObjects[2] as Labelset;
                 if (labelset == null)
@@ -70,7 +70,7 @@ namespace OpenSC.Model.Labelsets.DynamicTextFunctions
                 }
                 labelset.LabelTextChanged += labelsetTextChangedHandler;
 
-                currentSource = output.CurrentSource;
+                currentSource = output.RegisteredSourceSignal;
                 if (currentSource == null)
                 {
                     CurrentValue = "?";
@@ -86,11 +86,11 @@ namespace OpenSC.Model.Labelsets.DynamicTextFunctions
                     CurrentValue = newValue ?? "?";
             }
 
-            private void currentSourceChangedHandler(ISignalDestination signalDestination, ISignalSource newSource)
+            private void registeredSourceSignalChangedHandler(ISignalSource signal, ISignalSourceRegistered registeredSignal, List<object> recursionChain)
             {
-                if (signalDestination != output)
+                if (signal != output)
                     return;
-                currentSource = newSource;
+                currentSource = registeredSignal;
                 CurrentValue = labelset.GetLabel(currentSource)?.Text ?? "?";
             }
 

@@ -36,7 +36,7 @@ namespace OpenSC.GUI.Helpers
             PropertyInfo[] controlProperties = baseType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (PropertyInfo propInfo in controlProperties)
                 if (propInfo.CanWrite)
-                    if ((propInfo.Name != "WindowTarget") && (excludeProperties?.Contains(propInfo.Name) != true))
+                    if ((propInfo.Name != "WindowTarget") && (propInfo.Name != "SelectionStart") && (propInfo.Name != "SelectionLength") && (excludeProperties?.Contains(propInfo.Name) != true))
                         propInfo.SetValue(newInstance, propInfo.GetValue(baseInstance, null), null);
         }
 

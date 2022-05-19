@@ -146,8 +146,8 @@ namespace OpenSC.Model.UMDs.BmdAtem
         protected override void calculateTextFields()
         {
             // To hardware
-            string shortTextToHardware = Texts[0].CurrentValue;
-            string longTextToHardware = Texts[1].CurrentValue;
+            shortTextToHardware = Texts[0].CurrentValue;
+            longTextToHardware = Texts[1].CurrentValue;
             if (UseFullStaticText)
             {
                 string[] fullStaticPieces = FullStaticText.Split('|');
@@ -163,9 +163,9 @@ namespace OpenSC.Model.UMDs.BmdAtem
                 }
             }
             if (shortTextToHardware.Length > LENGTH_SHORT)
-                shortTextToHardware.Substring(0, LENGTH_SHORT);
+                shortTextToHardware = shortTextToHardware.Substring(0, LENGTH_SHORT);
             if (longTextToHardware.Length > LENGTH_LONG)
-                longTextToHardware.Substring(0, LENGTH_LONG);
+                longTextToHardware = longTextToHardware.Substring(0, LENGTH_LONG);
             // Raw
             string _displayableRawText = "";
             if (Texts[0].Used)

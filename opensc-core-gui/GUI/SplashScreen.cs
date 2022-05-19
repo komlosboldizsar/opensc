@@ -17,18 +17,22 @@ namespace OpenSC.GUI
 
         public SplashScreen()
         {
+            this.FormClosing += SplashScreen_FormClosing;
+            this.Disposed += SplashScreen_Disposed;
             InitializeComponent();
         }
 
         private void SplashScreen_Load(object sender, EventArgs e)
-        {
-            LogDispatcher.Subscribe(this, LogMessageType.Info);
-        }
+            => LogDispatcher.Subscribe(this, LogMessageType.Info);
+
+        private void SplashScreen_FormClosing(object sender, FormClosingEventArgs e)
+            => LogDispatcher.Unsubscribe(this);
+
+        private void SplashScreen_Disposed(object sender, EventArgs e)
+            => LogDispatcher.Unsubscribe(this);
 
         public void ReceiveLogMessage(LogMessageType messageType, DateTime timestamp, string tag, string message)
-        {
-            Status = message;
-        }
+            => Status = message;
 
         public string Status
         {
@@ -37,6 +41,8 @@ namespace OpenSC.GUI
             {
                 if (InvokeRequired)
                 {
+                    if (IsDisposed)
+                        return;
                     Invoke(new Action(() => Status = value));
                     return;
                 }
