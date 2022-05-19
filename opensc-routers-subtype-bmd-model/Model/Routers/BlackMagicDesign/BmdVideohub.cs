@@ -186,7 +186,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         {
             if ((lockStateData.Output == null) || (lockStateData.State == null))
                 return;
-            notifyLockChanged((int)lockStateData.Output, RouterOutputLockType.Lock, LOCK_STATE_TRANSLATIONS[(Library.BmdVideohub.LockState)state]);
+            notifyLockChanged((int)lockStateData.Output, RouterOutputLockType.Lock, LOCK_STATE_TRANSLATIONS[(Library.BmdVideohub.LockState)lockStateData.State]);
         }
 
         private static readonly Dictionary<Library.BmdVideohub.LockState, RouterOutputLockState> LOCK_STATE_TRANSLATIONS
