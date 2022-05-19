@@ -255,7 +255,7 @@ namespace OpenSC.Model.SerialPorts
                 Data = data;
                 ValidUntil = validUntil;
             }
-            protected override bool IsValid => (DateTime.Now >= ValidUntil);
+            protected override bool IsValid => (ValidUntil >= DateTime.Now);
         }
         #endregion
 
