@@ -71,8 +71,10 @@ namespace OpenSC.Model.UMDs.Tsl50
         #region Sending data to hardware
         protected override void calculateTextFields()
         {
-            textBytesToHardware = Encoding.ASCII.GetBytes(DisplayableCompactText);
-            DisplayableRawText = DisplayableCompactText;
+            string text = UseFullStaticText ? FullStaticText : Texts[0].CurrentValue;
+            textBytesToHardware = Encoding.ASCII.GetBytes(text);
+            DisplayableCompactText = text;
+            DisplayableRawText = text;
         }
 
         protected byte[] textBytesToHardware = Array.Empty<byte>();
