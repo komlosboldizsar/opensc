@@ -47,6 +47,8 @@ namespace OpenSC.Model.Labelsets
 
         public Label GetLabel(ISystemObject forObject)
         {
+            if (forObject == null)
+                return null;
             if (labels.TryGetValue(forObject, out Label label))
                 return label;
             return null;
