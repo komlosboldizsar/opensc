@@ -2,6 +2,7 @@
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -116,7 +117,13 @@ namespace OpenSC.Model.GpioInterfaces
         #endregion
 
         #region State
-        public void NotifyStateChanged(bool newValue) => CurrentState = newValue;
+        public void NotifyStateChanged(bool newValue)
+        {
+            if ((newValue == CurrentState) || (DateTime.Now - lastStateChange).TotalMilliseconds < debounceTime)
+                return;
+            CurrentState = newValue;
+            lastStateChange = DateTime.Now;
+        }
 
         internal virtual void QueryState()
         { }
