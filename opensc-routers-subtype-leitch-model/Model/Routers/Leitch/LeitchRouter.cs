@@ -233,7 +233,7 @@ namespace OpenSC.Model.Routers.Leitch
                 else if (output.ProtectState != RouterOutputLockState.Clear)
                     notifyLockChanged(output, RouterOutputLockType.Protect, RouterOutputLockState.Clear);
 
-                output.LockProtectOwner = panelId;
+                output.LockProtectOwnerPanelId = panelId;
 
             }
             catch

@@ -188,28 +188,25 @@ namespace OpenSC.Model.Routers
         public event PropertyChangedOneValueDelegate<ISignalSourceRegistered, string> SignalUniqueIdChanged;
         #endregion
 
-        #region Property: LocksSupported, LockState
+        #region Info: LocksSupported, LockOwnerKnown, Properties: LockState, LockOwner
         public virtual bool LocksSupported => true;
-        public virtual bool LockOwnerKnown => true;
+        public virtual RouterOutputLockOwnerKnowLevel LockOwnerKnowLevel => RouterOutputLockOwnerKnowLevel.None;
 
+        public event PropertyChangedTwoValuesDelegate<RouterOutput, RouterOutputLockState> LockStateChanged;
         private RouterOutputLockState lockState;
-
         public RouterOutputLockState LockState
         {
             get => lockState;
-            protected set
-            {
-                if (value == lockState)
-                    return;
-                RouterOutputLockState oldValue = value;
-                lockState = value;
-                LockStateChanged?.Invoke(this, oldValue, value);
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(LockState));
-            }
+            protected set => this.setProperty(ref lockState, value, LockStateChanged);
         }
 
-        public delegate void LockStateChangedDelegate(RouterOutput output, RouterOutputLockState oldLockState, RouterOutputLockState newLockState);
-        public event LockStateChangedDelegate LockStateChanged;
+        public event PropertyChangedTwoValuesDelegate<RouterOutput, RouterOutputLockOwner> LockOwnerChanged;
+        private RouterOutputLockOwner lockOwner;
+        public RouterOutputLockOwner LockOwner
+        {
+            get => lockOwner;
+            protected set => this.setProperty(ref lockOwner, value, LockOwnerChanged);
+        }
 
         internal void LockStateUpdateFromRouter(RouterOutputLockState newState)
             => LockState = newState;
@@ -244,26 +241,23 @@ namespace OpenSC.Model.Routers
 
         #region Property: ProtectsSupported, ProtectState
         public virtual bool ProtectsSupported => false;
-        public virtual bool ProtectOwnerKnown => true;
+        public virtual RouterOutputLockOwnerKnowLevel ProtectOwnerKnowLevel => RouterOutputLockOwnerKnowLevel.None;
 
+        public event PropertyChangedTwoValuesDelegate<RouterOutput, RouterOutputLockState> ProtectStateChanged;
         private RouterOutputLockState protectState;
-
         public RouterOutputLockState ProtectState
         {
             get => protectState;
-            protected set
-            {
-                if (value == protectState)
-                    return;
-                RouterOutputLockState oldValue = value;
-                protectState = value;
-                ProtectStateChanged?.Invoke(this, oldValue, value);
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ProtectState));
-            }
+            protected set => this.setProperty(ref protectState, value, ProtectStateChanged);
         }
 
-        public delegate void ProtectStateChangedDelegate(RouterOutput output, RouterOutputLockState oldProtectState, RouterOutputLockState newProtectState);
-        public event ProtectStateChangedDelegate ProtectStateChanged;
+        public event PropertyChangedTwoValuesDelegate<RouterOutput, RouterOutputLockOwner> ProtectOwnerChanged;
+        private RouterOutputLockOwner protectOwner;
+        public RouterOutputLockOwner ProtectOwner
+        {
+            get => protectOwner;
+            protected set => this.setProperty(ref protectOwner, value, ProtectOwnerChanged);
+        }
 
         internal void ProtectStateUpdateFromRouter(RouterOutputLockState newState)
             => ProtectState = newState;

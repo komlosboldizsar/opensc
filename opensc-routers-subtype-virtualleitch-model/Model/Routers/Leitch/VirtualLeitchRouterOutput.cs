@@ -27,7 +27,7 @@ namespace OpenSC.Model.Routers.Leitch
         {
             if (LockState != RouterOutputLockState.Clear)
                 return;
-            if ((ProtectState != RouterOutputLockState.Clear) || (panelId != LockOwnerPanelId))
+            if ((ProtectState != RouterOutputLockState.Clear) || (panelId != LockProtectOwnerPanelId))
                 return;
             AssignSource(input);
         }
@@ -36,7 +36,7 @@ namespace OpenSC.Model.Routers.Leitch
         {
             if (LockState != RouterOutputLockState.Clear)
                 return;
-            if ((ProtectState != RouterOutputLockState.Clear) || (panelId != LockOwnerPanelId))
+            if ((ProtectState != RouterOutputLockState.Clear) || (panelId != LockProtectOwnerPanelId))
                 return;
             PresetInput = input;
         }
@@ -49,7 +49,24 @@ namespace OpenSC.Model.Routers.Leitch
 
         public int _associatedInputIndex;
 
-        public int LockOwnerPanelId { get; private set; } = -1;
+        private int lockProtectOwnerPanelId = -1;
+        public int LockProtectOwnerPanelId
+        {
+            get => lockProtectOwnerPanelId;
+            internal set
+            {
+                if (lockProtectOwnerPanelId == value)
+                    return;
+                lockProtectOwnerPanelId = value;
+                bool @locked = (LockState != RouterOutputLockState.Clear);
+                bool @protected = (ProtectState != RouterOutputLockState.Clear);
+                VirtualLeitchRouterOutputLockOwner lockProtectOwnerObject = null;
+                if (@locked || @protected)
+                    lockProtectOwnerObject = new VirtualLeitchRouterOutputLockOwner(value);
+                LockOwner = @locked ? lockProtectOwnerObject : null;
+                ProtectOwner = @protected ? lockProtectOwnerObject : null;
+            }
+        }
 
         public int LockStatusCode
         {
@@ -71,17 +88,17 @@ namespace OpenSC.Model.Routers.Leitch
                 case 0:
                     LockState = RouterOutputLockState.Clear;
                     ProtectState = RouterOutputLockState.Clear;
-                    LockOwnerPanelId = -1;
+                    LockProtectOwnerPanelId = -1;
                     break;
                 case 1:
                     LockState = lockOwned ? RouterOutputLockState.LockedLocal : RouterOutputLockState.LockedRemote;
                     ProtectState = RouterOutputLockState.Clear;
-                    LockOwnerPanelId = panelId;
+                    LockProtectOwnerPanelId = panelId;
                     break;
                 case 2:
                     LockState = RouterOutputLockState.Clear;
                     ProtectState = lockOwned ? RouterOutputLockState.LockedLocal : RouterOutputLockState.LockedRemote;
-                    LockOwnerPanelId = panelId;
+                    LockProtectOwnerPanelId = panelId;
                     break;
             }
         }
@@ -114,8 +131,8 @@ namespace OpenSC.Model.Routers.Leitch
         public override bool LocksSupported => true;
         public override bool ProtectsSupported => true;
 
-        public override bool LockOwnerKnown => true;
-        public override bool ProtectOwnerKnown => true;
+        public override RouterOutputLockOwnerKnowLevel LockOwnerKnowLevel => RouterOutputLockOwnerKnowLevel.Detailed;
+        public override RouterOutputLockOwnerKnowLevel ProtectOwnerKnowLevel => RouterOutputLockOwnerKnowLevel.Detailed;
         #endregion
 
     }

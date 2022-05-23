@@ -19,8 +19,8 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         public override bool LocksSupported => true;
         public override bool ProtectsSupported => false;
 
-        public override bool LockOwnerKnown => true;
-        public override bool ProtectOwnerKnown => false;
+        public override RouterOutputLockOwnerKnowLevel LockOwnerKnowLevel => RouterOutputLockOwnerKnowLevel.LocalOrRemote;
+        public override RouterOutputLockOwnerKnowLevel ProtectOwnerKnowLevel => RouterOutputLockOwnerKnowLevel.None;
         #endregion
 
     }
