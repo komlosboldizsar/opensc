@@ -247,27 +247,10 @@ namespace OpenSC.Model.Routers
         {
             if (!outputs.Contains(output))
                 throw new ArgumentException();
-            string logMessage = string.Format("Router output {0} request. Router: [(#{1}) #2], destination: {3}.",
-                translateLockOperation(lockType, lockOperationType), ID, Name, output.Index);
+            string logMessage = $"Router output {lockType.GetDoString(lockOperationType, false)} request. Router: [{this}], destination: [{output}].";
             LogDispatcher.I(LOG_TAG, logMessage);
             requestLockOperationImpl(output, lockType, lockOperationType);
         }
-
-        private static Dictionary<RouterOutputLockType, string> LOCK_TYPE_TRANSLATIONS = new Dictionary<RouterOutputLockType, string>()
-        {
-            { RouterOutputLockType.Lock, "lock" },
-            { RouterOutputLockType.Protect, "protect" },
-        };
-
-        private static Dictionary<RouterOutputLockOperationType, string> LOCK_OPERATION_TYPE_TRANSLATIONS = new Dictionary<RouterOutputLockOperationType, string>()
-        {
-            { RouterOutputLockOperationType.Lock, "{0}" },
-            { RouterOutputLockOperationType.Unlock, "un{0}" },
-            { RouterOutputLockOperationType.ForceUnlock, "force un{0}" },
-        };
-
-        private static string translateLockOperation(RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
-            => string.Format(LOCK_OPERATION_TYPE_TRANSLATIONS[lockOperationType], LOCK_TYPE_TRANSLATIONS[lockType]);
 
         protected abstract void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType);
 
@@ -275,15 +258,7 @@ namespace OpenSC.Model.Routers
         {
             if (!outputs.Contains(output))
                 throw new ArgumentException();
-            switch (lockType)
-            {
-                case RouterOutputLockType.Lock:
-                    output.LockStateUpdateFromRouter(lockState);
-                    break;
-                case RouterOutputLockType.Protect:
-                    output.ProtectStateUpdateFromRouter(lockState);
-                    break;
-            }
+            output.GetLock(lockType).StateUpdateFromRouter(lockState);
         }
 
         protected void notifyLockChanged(int outputIndex, RouterOutputLockType lockType, RouterOutputLockState lockState)

@@ -55,8 +55,6 @@
             this.protectButton.TabIndex = 2;
             this.protectButton.Text = "P";
             this.protectButton.UseVisualStyleBackColor = false;
-            this.protectButton.Click += new System.EventHandler(this.protectButton_Click);
-            this.protectButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.protectButton_MouseClick);
             // 
             // lockButton
             // 
@@ -70,8 +68,6 @@
             this.lockButton.TabIndex = 3;
             this.lockButton.Text = "L";
             this.lockButton.UseVisualStyleBackColor = false;
-            this.lockButton.Click += new System.EventHandler(this.lockButton_Click);
-            this.lockButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lockButton_MouseClick);
             // 
             // RouterOutputControl
             // 

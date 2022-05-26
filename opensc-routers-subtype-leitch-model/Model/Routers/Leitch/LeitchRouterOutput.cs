@@ -24,23 +24,18 @@ namespace OpenSC.Model.Routers.Leitch
                 if (lockProtectOwnerPanelId == value)
                     return;
                 lockProtectOwnerPanelId = value;
-                bool @locked = (LockState != RouterOutputLockState.Clear);
-                bool @protected = (ProtectState != RouterOutputLockState.Clear);
+                bool @locked = (Lock.State != RouterOutputLockState.Clear);
+                bool @protected = (Protect.State != RouterOutputLockState.Clear);
                 LeitchRouterOutputLockOwner lockProtectOwnerObject = null;
                 if (@locked || @protected)
                     lockProtectOwnerObject = new LeitchRouterOutputLockOwner(value);
-                LockOwner = @locked ? lockProtectOwnerObject : null;
-                ProtectOwner = @protected ? lockProtectOwnerObject : null;
+                Lock.Owner = @locked ? lockProtectOwnerObject : null;
+                Protect.Owner = @protected ? lockProtectOwnerObject : null;
             }
         }
 
-        #region Supported lock operations
-        public override bool LocksSupported => true;
-        public override bool ProtectsSupported => true;
-
-        public override RouterOutputLockOwnerKnowLevel LockOwnerKnowLevel => RouterOutputLockOwnerKnowLevel.Detailed;
-        public override RouterOutputLockOwnerKnowLevel ProtectOwnerKnowLevel => RouterOutputLockOwnerKnowLevel.Detailed;
-        #endregion
+        protected override RouterOutputLockInfo LockInfo { get; } = new RouterOutputLockInfo(true, RouterOutputLockOwnerKnowLevel.Detailed);
+        protected override RouterOutputLockInfo ProtectInfo { get; } = new RouterOutputLockInfo(true, RouterOutputLockOwnerKnowLevel.Detailed);
 
     }
 

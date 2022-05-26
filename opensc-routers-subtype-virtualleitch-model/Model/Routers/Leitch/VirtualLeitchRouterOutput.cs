@@ -25,18 +25,18 @@ namespace OpenSC.Model.Routers.Leitch
 
         public void AssignInput(RouterInput input, int panelId)
         {
-            if (LockState != RouterOutputLockState.Clear)
+            if (Lock.State != RouterOutputLockState.Clear)
                 return;
-            if ((ProtectState != RouterOutputLockState.Clear) || (panelId != LockProtectOwnerPanelId))
+            if ((Protect.State != RouterOutputLockState.Clear) || (panelId != LockProtectOwnerPanelId))
                 return;
             AssignSource(input);
         }
 
         public void AssignPreset(RouterInput input, int panelId)
         {
-            if (LockState != RouterOutputLockState.Clear)
+            if (Lock.State != RouterOutputLockState.Clear)
                 return;
-            if ((ProtectState != RouterOutputLockState.Clear) || (panelId != LockProtectOwnerPanelId))
+            if ((Protect.State != RouterOutputLockState.Clear) || (panelId != LockProtectOwnerPanelId))
                 return;
             PresetInput = input;
         }
@@ -58,13 +58,13 @@ namespace OpenSC.Model.Routers.Leitch
                 if (lockProtectOwnerPanelId == value)
                     return;
                 lockProtectOwnerPanelId = value;
-                bool @locked = (LockState != RouterOutputLockState.Clear);
-                bool @protected = (ProtectState != RouterOutputLockState.Clear);
+                bool @locked = (Lock.State != RouterOutputLockState.Clear);
+                bool @protected = (Protect.State != RouterOutputLockState.Clear);
                 VirtualLeitchRouterOutputLockOwner lockProtectOwnerObject = null;
                 if (@locked || @protected)
                     lockProtectOwnerObject = new VirtualLeitchRouterOutputLockOwner(value);
-                LockOwner = @locked ? lockProtectOwnerObject : null;
-                ProtectOwner = @protected ? lockProtectOwnerObject : null;
+                Lock.Owner = @locked ? lockProtectOwnerObject : null;
+                Protect.Owner = @protected ? lockProtectOwnerObject : null;
             }
         }
 
@@ -72,9 +72,9 @@ namespace OpenSC.Model.Routers.Leitch
         {
             get
             {
-                if (LockState != RouterOutputLockState.Clear)
+                if (Lock.State != RouterOutputLockState.Clear)
                     return 1;
-                if (ProtectState != RouterOutputLockState.Clear)
+                if (Protect.State != RouterOutputLockState.Clear)
                     return 2;
                 return 0;
             }
@@ -86,18 +86,18 @@ namespace OpenSC.Model.Routers.Leitch
             switch (state)
             {
                 case 0:
-                    LockState = RouterOutputLockState.Clear;
-                    ProtectState = RouterOutputLockState.Clear;
+                    Lock.State = RouterOutputLockState.Clear;
+                    Protect.State = RouterOutputLockState.Clear;
                     LockProtectOwnerPanelId = -1;
                     break;
                 case 1:
-                    LockState = lockOwned ? RouterOutputLockState.LockedLocal : RouterOutputLockState.LockedRemote;
-                    ProtectState = RouterOutputLockState.Clear;
+                    Lock.State = lockOwned ? RouterOutputLockState.LockedLocal : RouterOutputLockState.LockedRemote;
+                    Protect.State = RouterOutputLockState.Clear;
                     LockProtectOwnerPanelId = panelId;
                     break;
                 case 2:
-                    LockState = RouterOutputLockState.Clear;
-                    ProtectState = lockOwned ? RouterOutputLockState.LockedLocal : RouterOutputLockState.LockedRemote;
+                    Lock.State = RouterOutputLockState.Clear;
+                    Protect.State = lockOwned ? RouterOutputLockState.LockedLocal : RouterOutputLockState.LockedRemote;
                     LockProtectOwnerPanelId = panelId;
                     break;
             }
@@ -127,13 +127,8 @@ namespace OpenSC.Model.Routers.Leitch
             }
         }
 
-        #region Supported lock operations
-        public override bool LocksSupported => true;
-        public override bool ProtectsSupported => true;
-
-        public override RouterOutputLockOwnerKnowLevel LockOwnerKnowLevel => RouterOutputLockOwnerKnowLevel.Detailed;
-        public override RouterOutputLockOwnerKnowLevel ProtectOwnerKnowLevel => RouterOutputLockOwnerKnowLevel.Detailed;
-        #endregion
+        protected override RouterOutputLockInfo LockInfo { get; } = new RouterOutputLockInfo(true, RouterOutputLockOwnerKnowLevel.Detailed);
+        protected override RouterOutputLockInfo ProtectInfo { get; } = new RouterOutputLockInfo(true, RouterOutputLockOwnerKnowLevel.Detailed);
 
     }
 
