@@ -36,5 +36,13 @@
         public const string BLOCK__VIDEO_OUTPUT_LOCKS = "VIDEO OUTPUT LOCKS";
         #endregion
 
+        #region Block: Output labels
+        public const string BLOCK__OUTPUT_LABELS = "OUTPUT LABELS";
+        #endregion
+
+        #region Block: Input labels
+        public const string BLOCK__INPUT_LABELS = "INPUT LABELS";
+        #endregion
+
     }
 }
