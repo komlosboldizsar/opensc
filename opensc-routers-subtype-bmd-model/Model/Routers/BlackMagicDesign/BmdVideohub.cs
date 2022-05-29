@@ -222,6 +222,8 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         {
             videohub.QueryAllCrosspoints();
             videohub.QueryAllLockStates();
+            videohub.QueryAllOutputLabels();
+            videohub.QueryAllInputLabels();
         }
 
         protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
@@ -252,6 +254,50 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         };
 
         protected override Dictionary<Type, string> OutputTypesDictionaryGetter() => OUTPUT_TYPES;
+        #endregion
+
+        #region Names - info properties
+        public override bool CanSetRemoteInputNames { get; } = true;
+        public override bool CanGetRemoteInputNames { get; } = true;
+        public override bool CanGetRemoteInputNameChangeNotifications { get; } = true;
+
+        public override bool CanSetRemoteOutputNames { get; } = true;
+        public override bool CanGetRemoteOutputNames { get; } = true;
+        public override bool CanGetRemoteOutputNameChangeNotifications { get; } = true;
+        #endregion
+
+        #region Names - operations
+        protected override string getRemoteInputName(RouterInput input) => videohub.GetInputLabel(input.Index);
+
+        protected override Dictionary<RouterInput, string> getRemoteInputNames(IEnumerable<RouterInput> inputs)
+        {
+            Dictionary<RouterInput, string> names = new();
+            foreach (RouterInput input in inputs)
+                names.Add(input, videohub.GetInputLabel(input.Index));
+            return names;
+        }
+
+        protected override void setRemoteInputName(RouterInput input, string name)
+            => videohub.SetInputLabel(input.Index, name);
+
+        protected override void setRemoteInputNames(Dictionary<RouterInput, string> names)
+            => videohub.SetInputLabel(names.Select(kvp => new Library.BmdVideohub.Label(kvp.Key.Index, kvp.Value)));
+
+        protected override string getRemoteOutputName(RouterOutput output) => videohub.GetOutputLabel(output.Index);
+
+        protected override Dictionary<RouterOutput, string> getRemoteOutputNames(IEnumerable<RouterOutput> outputs)
+        {
+            Dictionary<RouterOutput, string> names = new();
+            foreach (RouterOutput output in outputs)
+                names.Add(output, videohub.GetOutputLabel(output.Index));
+            return names;
+        }
+
+        protected override void setRemoteOutputName(RouterOutput output, string name)
+            => videohub.SetOutputLabel(output.Index, name);
+
+        protected override void setRemoteOutputNames(Dictionary<RouterOutput, string> names)
+            => videohub.SetOutputLabel(names.Select(kvp => new Library.BmdVideohub.Label(kvp.Key.Index, kvp.Value)));
         #endregion
 
     }
