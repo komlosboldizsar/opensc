@@ -17,19 +17,22 @@ namespace OpenSC.GUI.Routers
     public partial class RouterControlForm : ChildWindowWithTitle
     {
 
+        public RouterControlForm() => InitializeComponent();
+        public RouterControlForm(Router router) : this() => this._routerTempRef = router;
+        private void RouterControlForm_Load(object sender, EventArgs e) => router = _routerTempRef;
+
+        #region Router
         private Router _routerTempRef;
 
         private Router _router;
 
         private Router router
         {
-            get { return _router; }
+            get => _router;
             set
             {
-
                 if (value == _router)
                     return;
-
                 if (_router != null)
                 {
                     _router.Inputs.ItemsAdded -= inputsChangedHandler;
@@ -38,9 +41,7 @@ namespace OpenSC.GUI.Routers
                     _router.Outputs.ItemsRemoved -= outputsChangedHandler;
                     Text = HeaderText = "Router crosspoints: ?";
                 }
-
                 _router = value;
-
                 if (_router != null)
                 {
 
@@ -51,29 +52,13 @@ namespace OpenSC.GUI.Routers
                     _router.Outputs.ItemsAdded += outputsChangedHandler;
                     _router.Outputs.ItemsRemoved += outputsChangedHandler;
                 }
-
                 loadInputs();
                 loadOutputs();
-
             }
         }
+        #endregion
 
-        public RouterControlForm()
-        {
-            InitializeComponent();
-        }
-
-        public RouterControlForm(Router router)
-        {
-            InitializeComponent();
-            this._routerTempRef = router;
-        }
-
-        private void RouterControlForm_Load(object sender, EventArgs e)
-        {
-            router = _routerTempRef;
-        }      
-
+        #region Inputs
         private Dictionary<RouterInput, RouterInputControl> inputControls = new Dictionary<RouterInput, RouterInputControl>();
 
         private void loadInputs()
@@ -82,7 +67,8 @@ namespace OpenSC.GUI.Routers
             inputControls.Clear();
             if (router == null)
                 return;
-            foreach (RouterInput input in router.Inputs) {
+            foreach (RouterInput input in router.Inputs)
+            {
                 RouterInputControl control = new RouterInputControl(input, this);
                 flowLayoutPanel1.Controls.Add(control);
                 inputControls.Add(input, control);
@@ -92,13 +78,14 @@ namespace OpenSC.GUI.Routers
         private void inputsChangedHandler(IEnumerable<Model.General.IObservableEnumerable<RouterInput>.ItemWithPosition> affectedItemsWithPositions)
             => loadInputs();
 
-        public void InputClicked(RouterInputControl input) => SelectedInput = input.Input;
-
+        public void InputClicked(RouterInputControl input)
+            => SelectedInput = (SelectedInput == input.Input) ? null : input.Input;
+        
         private RouterInput selectedInput = null;
 
         private RouterInput SelectedInput
         {
-            get { return selectedInput; }
+            get => selectedInput;
             set
             {
                 selectedInput = value;
@@ -106,7 +93,9 @@ namespace OpenSC.GUI.Routers
                     inputControl.Selected = (inputControl.Input == value);
             }
         }
+        #endregion
 
+        #region Outputs
         private Dictionary<RouterOutput, RouterOutputControl> outputControls = new Dictionary<RouterOutput, RouterOutputControl>();
 
         private void loadOutputs()
@@ -143,6 +132,23 @@ namespace OpenSC.GUI.Routers
             foreach (RouterOutputControl control in outputControls.Values)
                 control.Selected = false;
         }
+        #endregion
+
+        #region Take
+        private void takeButton_Click(object sender, EventArgs e) => take();
+
+        private void take()
+        {
+            if ((router == null) || (SelectedInput == null))
+                return;
+            List<RouterCrosspoint> crosspoints = new List<RouterCrosspoint>();
+            foreach (RouterOutput output in selectedOutputs)
+                crosspoints.Add(new RouterCrosspoint(output, SelectedInput));
+            router.RequestCrosspointUpdates(crosspoints);
+            SelectedInput = null;
+            selectNoOutput();
+        }
+        #endregion
 
         #region Persistence
         private const string PERSISTENCE_KEY_ROUTER_ID = "router_id";
@@ -160,23 +166,6 @@ namespace OpenSC.GUI.Routers
             return dict;
         }
         #endregion
-
-        private void takeButton_Click(object sender, EventArgs e)
-        {
-            take();
-        }
-
-        private void take()
-        {
-            if ((router == null) || (SelectedInput == null))
-                return;
-            List<RouterCrosspoint> crosspoints = new List<RouterCrosspoint>();
-            foreach (RouterOutput output in selectedOutputs)
-                crosspoints.Add(new RouterCrosspoint(output, SelectedInput));
-            router.RequestCrosspointUpdates(crosspoints);
-            SelectedInput = null;
-            selectNoOutput();
-        }
 
     }
 

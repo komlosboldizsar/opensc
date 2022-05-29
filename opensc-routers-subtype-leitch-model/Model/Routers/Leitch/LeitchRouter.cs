@@ -225,15 +225,15 @@ namespace OpenSC.Model.Routers.Leitch
                 
                 if (lockOpCode == 1)
                     notifyLockChanged(output, RouterOutputLockType.Lock, lockState);
-                else if (output.LockState != RouterOutputLockState.Clear)
+                else if (output.Lock.State != RouterOutputLockState.Clear)
                     notifyLockChanged(output, RouterOutputLockType.Lock, RouterOutputLockState.Clear);
 
                 if (lockOpCode == 2)
                     notifyLockChanged(output, RouterOutputLockType.Protect, lockState);
-                else if (output.ProtectState != RouterOutputLockState.Clear)
+                else if (output.Protect.State != RouterOutputLockState.Clear)
                     notifyLockChanged(output, RouterOutputLockType.Protect, RouterOutputLockState.Clear);
 
-                output.LockProtectOwner = panelId;
+                output.LockProtectOwnerPanelId = panelId;
 
             }
             catch
@@ -244,10 +244,7 @@ namespace OpenSC.Model.Routers.Leitch
             }
         }
 
-        private void enableReporting()
-        {
-            sendSerialCommand("@ ?");
-        }
+        private void enableReporting() => sendSerialCommand("@ ?");
         #endregion
 
         #region Settings

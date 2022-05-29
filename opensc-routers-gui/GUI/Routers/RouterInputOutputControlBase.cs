@@ -12,9 +12,6 @@ namespace OpenSC.GUI.Routers
 {
     public partial class RouterInputOutputControlBase : UserControl
     {
-        public RouterInputOutputControlBase()
-        {
-            InitializeComponent();
-        }
+        public RouterInputOutputControlBase() => InitializeComponent();
     }
 }

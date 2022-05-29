@@ -16,6 +16,7 @@ namespace OpenSC.Model.Routers
 
         public RouterOutput() : base()
         {
+            createAllLocks();
             this.CurrentSourceChanged += currentSourceChangedHandler;
             SystemObjectRegister.Instance.Register(this);
         }
@@ -23,6 +24,7 @@ namespace OpenSC.Model.Routers
         public RouterOutput(string name, Router router, int index)
             : base()
         {
+            createAllLocks();
             this.name = name;
             this.Router = router;
             this.Index = index;
@@ -188,112 +190,28 @@ namespace OpenSC.Model.Routers
         public event PropertyChangedOneValueDelegate<ISignalSourceRegistered, string> SignalUniqueIdChanged;
         #endregion
 
-        #region Property: LocksSupported, LockState
-        public virtual bool LocksSupported => true;
-        public virtual bool LockOwnerKnown => true;
+        #region Locks
+        public RouterOutputLock Lock { get; private set; }
+        public RouterOutputLock Protect { get; private set; }
 
-        private RouterOutputLockState lockState;
-
-        public RouterOutputLockState LockState
+        private void createAllLocks()
         {
-            get => lockState;
-            protected set
-            {
-                if (value == lockState)
-                    return;
-                RouterOutputLockState oldValue = value;
-                lockState = value;
-                LockStateChanged?.Invoke(this, oldValue, value);
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(LockState));
-            }
+            Lock = new RouterOutputLock(this, RouterOutputLockType.Lock, LockInfo);
+            Protect = new RouterOutputLock(this, RouterOutputLockType.Protect, ProtectInfo);
+            AllLocks = new RouterOutputLock[] { Lock, Protect };
         }
 
-        public delegate void LockStateChangedDelegate(RouterOutput output, RouterOutputLockState oldLockState, RouterOutputLockState newLockState);
-        public event LockStateChangedDelegate LockStateChanged;
+        internal RouterOutputLock[] AllLocks { get; private set; }
 
-        internal void LockStateUpdateFromRouter(RouterOutputLockState newState)
-            => LockState = newState;
+        protected virtual RouterOutputLockInfo LockInfo { get; } = RouterOutputLockInfo.NotSupported;
+        protected virtual RouterOutputLockInfo ProtectInfo { get; } = RouterOutputLockInfo.NotSupported;
 
-        public void RequestLock()
+        public RouterOutputLock GetLock(RouterOutputLockType type) => type switch
         {
-            if ((LockState == RouterOutputLockState.Locked) || (LockState == RouterOutputLockState.LockedLocal))
-                return;
-            if (ProtectState != RouterOutputLockState.Clear)
-                throw new Exception("This output is locked! You must force unprotect before locking.");
-            if (LockState == RouterOutputLockState.LockedRemote)
-                throw new Exception("This output is already locked by another user! You must force unlock before.");
-            Router.RequestLockOperation(this, RouterOutputLockType.Lock, RouterOutputLockOperationType.Lock);
-        }
-
-        public void RequestUnlock()
-        {
-            if (LockState == RouterOutputLockState.Clear)
-                return;
-            if (LockState == RouterOutputLockState.LockedRemote)
-                throw new Exception("This output is locked by another user! You must use the force unlock function.");
-            Router.RequestLockOperation(this, RouterOutputLockType.Lock, RouterOutputLockOperationType.Unlock);
-        }
-
-        public void RequestForceUnlock()
-        {
-            if (LockState == RouterOutputLockState.Clear)
-                return;
-            Router.RequestLockOperation(this, RouterOutputLockType.Lock, RouterOutputLockOperationType.ForceUnlock);
-        }
-        #endregion
-
-        #region Property: ProtectsSupported, ProtectState
-        public virtual bool ProtectsSupported => false;
-        public virtual bool ProtectOwnerKnown => true;
-
-        private RouterOutputLockState protectState;
-
-        public RouterOutputLockState ProtectState
-        {
-            get => protectState;
-            protected set
-            {
-                if (value == protectState)
-                    return;
-                RouterOutputLockState oldValue = value;
-                protectState = value;
-                ProtectStateChanged?.Invoke(this, oldValue, value);
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ProtectState));
-            }
-        }
-
-        public delegate void ProtectStateChangedDelegate(RouterOutput output, RouterOutputLockState oldProtectState, RouterOutputLockState newProtectState);
-        public event ProtectStateChangedDelegate ProtectStateChanged;
-
-        internal void ProtectStateUpdateFromRouter(RouterOutputLockState newState)
-            => ProtectState = newState;
-
-        public void RequestProtect()
-        {
-            if ((ProtectState == RouterOutputLockState.Locked) || (ProtectState == RouterOutputLockState.LockedLocal))
-                return;
-            if (LockState != RouterOutputLockState.Clear)
-                throw new Exception("This output is locked! You must force unlock before protecting.");
-            if (ProtectState == RouterOutputLockState.LockedRemote)
-                throw new Exception("This output is already protected by another user! You must force unprotect before.");
-            Router.RequestLockOperation(this, RouterOutputLockType.Protect, RouterOutputLockOperationType.Lock);
-        }
-
-        public void RequestUnprotect()
-        {
-            if (ProtectState == RouterOutputLockState.Clear)
-                return;
-            if (ProtectState == RouterOutputLockState.LockedRemote)
-                throw new Exception("This output is protected by another user! You must use the force unprotect function.");
-            Router.RequestLockOperation(this, RouterOutputLockType.Protect, RouterOutputLockOperationType.Unlock);
-        }
-
-        public void RequestForceUnprotect()
-        {
-            if (ProtectState == RouterOutputLockState.Clear)
-                return;
-            Router.RequestLockOperation(this, RouterOutputLockType.Protect, RouterOutputLockOperationType.ForceUnlock);
-        }
+            RouterOutputLockType.Lock => Lock,
+            RouterOutputLockType.Protect => Protect,
+            _ => null
+        };
         #endregion
 
         #region ToString()

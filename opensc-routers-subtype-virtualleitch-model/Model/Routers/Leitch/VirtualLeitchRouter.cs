@@ -249,8 +249,8 @@ namespace OpenSC.Model.Routers.Leitch
         private void sendOutputLockReport(RouterOutput output)
         {
             VirtualLeitchRouterOutput outputCasted = output as VirtualLeitchRouterOutput;
-            int lockState = ((outputCasted.LockState == RouterOutputLockState.Clear) && (outputCasted.ProtectState == RouterOutputLockState.Clear)) ? 0 : 1;
-            sendSerialMessage("@ W!{0:X}{1:X},{2:X},{3}", level, output.Index, outputCasted.LockOwnerPanelId, lockState);
+            int lockState = ((outputCasted.Lock.State == RouterOutputLockState.Clear) && (outputCasted.Protect.State == RouterOutputLockState.Clear)) ? 0 : 1;
+            sendSerialMessage("@ W!{0:X}{1:X},{2:X},{3}", level, output.Index, outputCasted.LockProtectOwnerPanelId, lockState);
         }
 
         private void sendOutputFullStatusReport(RouterOutput output)

@@ -82,8 +82,6 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Inputs
-
-        
         private ObservableList<RouterInput> inputs = new ObservableList<RouterInput>();
         public ObservableList<RouterInput> Inputs => inputs;
 
@@ -247,27 +245,10 @@ namespace OpenSC.Model.Routers
         {
             if (!outputs.Contains(output))
                 throw new ArgumentException();
-            string logMessage = string.Format("Router output {0} request. Router: [(#{1}) #2], destination: {3}.",
-                translateLockOperation(lockType, lockOperationType), ID, Name, output.Index);
+            string logMessage = $"Router output {lockType.GetDoString(lockOperationType, false)} request. Router: [{this}], destination: [{output}].";
             LogDispatcher.I(LOG_TAG, logMessage);
             requestLockOperationImpl(output, lockType, lockOperationType);
         }
-
-        private static Dictionary<RouterOutputLockType, string> LOCK_TYPE_TRANSLATIONS = new Dictionary<RouterOutputLockType, string>()
-        {
-            { RouterOutputLockType.Lock, "lock" },
-            { RouterOutputLockType.Protect, "protect" },
-        };
-
-        private static Dictionary<RouterOutputLockOperationType, string> LOCK_OPERATION_TYPE_TRANSLATIONS = new Dictionary<RouterOutputLockOperationType, string>()
-        {
-            { RouterOutputLockOperationType.Lock, "{0}" },
-            { RouterOutputLockOperationType.Unlock, "un{0}" },
-            { RouterOutputLockOperationType.ForceUnlock, "force un{0}" },
-        };
-
-        private static string translateLockOperation(RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
-            => string.Format(LOCK_OPERATION_TYPE_TRANSLATIONS[lockOperationType], LOCK_TYPE_TRANSLATIONS[lockType]);
 
         protected abstract void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType);
 
@@ -275,15 +256,7 @@ namespace OpenSC.Model.Routers
         {
             if (!outputs.Contains(output))
                 throw new ArgumentException();
-            switch (lockType)
-            {
-                case RouterOutputLockType.Lock:
-                    output.LockStateUpdateFromRouter(lockState);
-                    break;
-                case RouterOutputLockType.Protect:
-                    output.ProtectStateUpdateFromRouter(lockState);
-                    break;
-            }
+            output.GetLock(lockType).StateUpdateFromRouter(lockState);
         }
 
         protected void notifyLockChanged(int outputIndex, RouterOutputLockType lockType, RouterOutputLockState lockState)
@@ -314,6 +287,152 @@ namespace OpenSC.Model.Routers
         {
             get => stateString;
             protected set => this.setProperty(ref stateString, value, StateStringChanged);
+        }
+        #endregion
+
+        #region Names
+        #region Info properties: inputs
+        public virtual bool CanSetRemoteInputNames { get; } = false;
+        public virtual bool CanGetRemoteInputNames { get; } = false;
+        public virtual bool CanGetRemoteInputNameChangeNotifications { get; } = false;
+        #endregion
+
+        #region Property: ExportInputNamesOnLocalUpdate
+        public event PropertyChangedTwoValuesDelegate<Router, bool> ExportInputNamesOnLocalUpdateChanged;
+
+        [PersistAs("export_input_names")]
+        private bool exportInputNamesOnLocalUpdate;
+
+        public bool ExportInputNamesOnLocalUpdate
+        {
+            get => exportInputNamesOnLocalUpdate;
+            set => this.setProperty(ref exportInputNamesOnLocalUpdate, value, ExportInputNamesOnLocalUpdateChanged);
+        }
+        #endregion
+
+        #region Property: ImportInputNamesOnRemoteChange
+        public event PropertyChangedTwoValuesDelegate<Router, bool> ImportInputNamesOnRemoteUpdateChanged;
+
+        [PersistAs("import_input_names")]
+        private bool importInputNamesOnRemoteUpdate;
+
+        public bool ImportInputNamesOnRemoteUpdate
+        {
+            get => importInputNamesOnRemoteUpdate;
+            set => this.setProperty(ref importInputNamesOnRemoteUpdate, value, ImportInputNamesOnRemoteUpdateChanged);
+        }
+        #endregion
+
+        public void DoImportInputNames()
+        {
+            if (!CanGetRemoteInputNames)
+                throw new InvalidOperationException();
+            Dictionary<RouterInput, string> inputNameDictionary = getRemoteInputNames(Inputs);
+            foreach (KeyValuePair<RouterInput, string> inputNameKVP in inputNameDictionary)
+                inputNameKVP.Key.Name = inputNameKVP.Value;
+        }
+
+        public void DoExportInputNames()
+        {
+            if (!CanSetRemoteInputNames)
+                throw new InvalidOperationException();
+            Dictionary<RouterInput, string> inputNameDictionary = new();
+            foreach (RouterInput input in Inputs)
+                inputNameDictionary.Add(input, input.Name);
+            setRemoteInputNames(inputNameDictionary);
+        }
+
+        protected virtual string getRemoteInputName(RouterInput input) => throw new NotImplementedException();
+        protected virtual Dictionary<RouterInput, string> getRemoteInputNames(IEnumerable<RouterInput> inputs) => throw new NotImplementedException();
+        protected virtual void setRemoteInputName(RouterInput input, string name) => throw new NotImplementedException();
+        protected virtual void setRemoteInputNames(Dictionary<RouterInput, string> names) => throw new NotImplementedException();
+
+        protected void notifyRemoteInputNameChanged(RouterInput input, string newName)
+        {
+            if (inputs.Contains(input))
+                throw new ArgumentException();
+            if (importInputNamesOnRemoteUpdate)
+                input.Name = newName;
+        }
+
+        protected void notifyRemoteInputNameChanged(int inputIndex, string newName)
+        {
+            RouterInput input = inputs.FirstOrDefault(ri => (ri.Index == inputIndex));
+            if (input == null)
+                throw new ArgumentException();
+            notifyRemoteInputNameChanged(input, newName);
+        }
+
+        #region Info properties: outputs
+        public virtual bool CanSetRemoteOutputNames { get; } = false;
+        public virtual bool CanGetRemoteOutputNames { get; } = false;
+        public virtual bool CanGetRemoteOutputNameChangeNotifications { get; } = false;
+        #endregion
+
+        #region Property: ExportOutputNamesOnLocalUpdate
+        public event PropertyChangedTwoValuesDelegate<Router, bool> ExportOutputNamesOnLocalUpdateChanged;
+
+        [PersistAs("export_output_names")]
+        private bool exportOutputNamesOnLocalUpdate;
+
+        public bool ExportOutputNamesOnLocalUpdate
+        {
+            get => exportOutputNamesOnLocalUpdate;
+            set => this.setProperty(ref exportOutputNamesOnLocalUpdate, value, ExportOutputNamesOnLocalUpdateChanged);
+        }
+        #endregion
+
+        #region Property: ImportOutputNamesOnRemoteUpdate
+        public event PropertyChangedTwoValuesDelegate<Router, bool> importOutputNamesOnRemoteUpdateChanged;
+
+        [PersistAs("import_output_names")]
+        private bool importOutputNamesOnRemoteUpdate;
+
+        public bool ImportOutputNamesOnRemoteUpdate
+        {
+            get => importOutputNamesOnRemoteUpdate;
+            set => this.setProperty(ref importOutputNamesOnRemoteUpdate, value, importOutputNamesOnRemoteUpdateChanged);
+        }
+        #endregion
+
+        public void DoImportOutputNames()
+        {
+            if (!CanGetRemoteOutputNames)
+                throw new InvalidOperationException();
+            Dictionary<RouterOutput, string> outputNameDictionary = getRemoteOutputNames(Outputs);
+            foreach (KeyValuePair<RouterOutput, string> outputNameKVP in outputNameDictionary)
+                outputNameKVP.Key.Name = outputNameKVP.Value;
+        }
+
+        public void DoExportOutputNames()
+        {
+            if (!CanSetRemoteOutputNames)
+                throw new InvalidOperationException();
+            Dictionary<RouterOutput, string> outputNameDictionary = new();
+            foreach (RouterOutput output in Outputs)
+                outputNameDictionary.Add(output, output.Name);
+            setRemoteOutputNames(outputNameDictionary);
+        }
+
+        protected virtual string getRemoteOutputName(RouterOutput output) => throw new NotImplementedException();
+        protected virtual Dictionary<RouterOutput, string> getRemoteOutputNames(IEnumerable<RouterOutput> outputs) => throw new NotImplementedException();
+        protected virtual void setRemoteOutputName(RouterOutput output, string name) => throw new NotImplementedException();
+        protected virtual void setRemoteOutputNames(Dictionary<RouterOutput, string> names) => throw new NotImplementedException();
+
+        protected void notifyRemoteOutputNameChanged(RouterOutput output, string newName)
+        {
+            if (outputs.Contains(output))
+                throw new ArgumentException();
+            if (importOutputNamesOnRemoteUpdate)
+                output.Name = newName;
+        }
+
+        protected void notifyRemoteOutputNameChanged(int outputIndex, string newName)
+        {
+            RouterOutput output = outputs.FirstOrDefault(ro => (ro.Index == outputIndex));
+            if (output == null)
+                throw new ArgumentException();
+            notifyRemoteOutputNameChanged(output, newName);
         }
         #endregion
 

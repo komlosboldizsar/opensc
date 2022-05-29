@@ -229,6 +229,96 @@ namespace OpenSC.Library.BmdVideohub
         public void QueryAllLockStates() => scheduleRequest(new VideoOutputLocksRequest(Array.Empty<LockOperationData>()));
         #endregion
 
+        #region Output labels
+        private string[] outputLabels = null;
+
+        internal void NotifyOutputLabelChanged(Label label)
+        {
+            if ((label.Index == null) || (label.Index < 0) || (label.Index >= outputCount))
+                return;
+            outputLabels[(int)label.Index] = label.Text;
+            OutputLabelChanged?.Invoke(label);
+        }
+
+        public delegate void OutputLabelChangedDelegate(Label label);
+        public event OutputLabelChangedDelegate OutputLabelChanged;
+
+        public string GetOutputLabel(int output)
+        {
+            if ((output < 0) || (output >= OutputCount))
+                throw new ArgumentOutOfRangeException();
+            return outputLabels[output];
+        }
+
+        public void SetOutputLabel(int output, string text) => SetOutputLabel(new Label(output, text));
+
+        public void SetOutputLabel(Label label)
+        {
+            checkOutputLabelBeforeSet(label);
+            scheduleRequest(new OutputLabelsRequest(label));
+        }
+
+        public void SetOutputLabel(IEnumerable<Label> labels)
+        {
+            foreach (Label label in labels)
+                checkOutputLabelBeforeSet(label);
+            scheduleRequest(new OutputLabelsRequest(labels));
+        }
+
+        private void checkOutputLabelBeforeSet(Label label)
+        {
+            if ((label.Index == null) || (label.Index < 0) || (label.Index >= OutputCount))
+                throw new ArgumentOutOfRangeException();
+        }
+
+        public void QueryAllOutputLabels() => scheduleRequest(new OutputLabelsRequest(Array.Empty<Label>()));
+        #endregion
+
+        #region Input labels
+        private string[] inputLabels = null;
+
+        internal void NotifyInputLabelChanged(Label label)
+        {
+            if ((label.Index == null) || (label.Index < 0) || (label.Index >= inputCount))
+                return;
+            inputLabels[(int)label.Index] = label.Text;
+            InputLabelChanged?.Invoke(label);
+        }
+
+        public delegate void InputLabelChangedDelegate(Label label);
+        public event InputLabelChangedDelegate InputLabelChanged;
+
+        public string GetInputLabel(int input)
+        {
+            if ((input < 0) || (input >= InputCount))
+                throw new ArgumentOutOfRangeException();
+            return inputLabels[input];
+        }
+
+        public void SetInputLabel(int input, string text) => SetInputLabel(new Label(input, text));
+
+        public void SetInputLabel(Label label)
+        {
+            checkInputLabelBeforeSet(label);
+            scheduleRequest(new InputLabelsRequest(label));
+        }
+
+        public void SetInputLabel(IEnumerable<Label> labels)
+        {
+            foreach (Label label in labels)
+                checkInputLabelBeforeSet(label);
+            scheduleRequest(new InputLabelsRequest(labels));
+        }
+
+        private void checkInputLabelBeforeSet(Label label)
+        {
+            if ((label.Index == null) || (label.Index < 0) || (label.Index >= InputCount))
+                throw new ArgumentOutOfRangeException();
+        }
+
+        public void QueryAllInputLabels() => scheduleRequest(new InputLabelsRequest(Array.Empty<Label>()));
+        #endregion
+
         #region Request scheduler
         private readonly TaskQueue<Request, bool> requestScheduler;
         private void sendRequest(Request request) => request.Send(this);
@@ -274,6 +364,8 @@ namespace OpenSC.Library.BmdVideohub
                 new VideohubDeviceNotificationInterpreter(this),
                 new VideoOutputRoutingNotificationInterpreter(this),
                 new VideoOutputLocksStateNotificationInterpreter(this),
+                new OutputLabelsNofiticationInterpreter(this),
+                new InputLabelsNofiticationInterpreter(this),
                 new AnyMessageInterpreter()
             };
         }

@@ -24,7 +24,9 @@ namespace OpenSC.GUI.Routers
             if (router == null)
                 return;
             initInputsTable();
+            initInputsNameButtonAndMenu();
             initOutputsTable();
+            initOutputsNameButtonAndMenu();
         }
 
         protected override void validateFields()
@@ -308,6 +310,76 @@ namespace OpenSC.GUI.Routers
 
         private void addInputButton_Click(object sender, EventArgs e) => ((Router)EditedModel).AddInput();
         private void addOutputButton_Click(object sender, EventArgs e) => ((Router)EditedModel).AddOutput();
+
+        private void initInputsNameButtonAndMenu()
+        {
+            Router router = (Router)EditedModel;
+            importInputNamesFromRemoteToLocalMenuItem.Enabled = router.CanGetRemoteInputNames;
+            exportInputNamesToRemoteFromLocalMenuItem.Enabled = router.CanSetRemoteInputNames;
+            followLocalInputNameChangesMenuItem.Enabled = router.CanGetRemoteInputNameChangeNotifications;
+            followRemoteInputNameChangesMenuItem.Enabled = router.CanSetRemoteInputNames;
+            followLocalInputNameChangesMenuItem.Checked = router.ImportInputNamesOnRemoteUpdate;
+            followRemoteInputNameChangesMenuItem.Checked = router.ExportInputNamesOnLocalUpdate;
+        }
+
+        private void importInputNamesFromRemoteToLocalMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ((Router)EditedModel).DoImportInputNames();
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Importing input failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void exportInputNamesToRemoteFromLocalMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ((Router)EditedModel).DoExportInputNames();
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Exporting input names failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void initOutputsNameButtonAndMenu()
+        {
+            Router router = (Router)EditedModel;
+            importOutputNamesFromRemoteToLocalMenuItem.Enabled = router.CanGetRemoteOutputNames;
+            exportOutputNamesToRemoteFromLocalMenuItem.Enabled = router.CanSetRemoteOutputNames;
+            followLocalOutputNameChangesMenuItem.Enabled = router.CanGetRemoteOutputNameChangeNotifications;
+            followRemoteOutputNameChangesMenuItem.Enabled = router.CanSetRemoteOutputNames;
+            followLocalOutputNameChangesMenuItem.Checked = router.ImportOutputNamesOnRemoteUpdate;
+            followRemoteOutputNameChangesMenuItem.Checked = router.ExportOutputNamesOnLocalUpdate;
+        }
+
+        private void importOutputNamesFromRemoteToLocalMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ((Router)EditedModel).DoImportOutputNames();
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Importing output names failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void exportOutputNamesToRemoteFromLocalMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ((Router)EditedModel).DoExportOutputNames();
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Exporting output names failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
     }
 

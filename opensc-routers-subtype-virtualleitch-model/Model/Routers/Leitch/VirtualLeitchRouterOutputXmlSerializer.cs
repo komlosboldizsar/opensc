@@ -37,7 +37,7 @@ namespace OpenSC.Model.Routers.Leitch
             XElement serializedOutput = base.SerializeItem(item, parentItem, keysOrIndices);
             serializedOutput.SetAttributeValue(ATTRIBUTE_ASSOCIATED_INPUT, output.CurrentInput?.Index ?? 0);
             serializedOutput.SetAttributeValue(ATTRIBUTE_LOCK_STATUS, output.LockStatusCode);
-            serializedOutput.SetAttributeValue(ATTRIBUTE_LOCK_OWNER_PANEL_ID, output.LockOwnerPanelId);
+            serializedOutput.SetAttributeValue(ATTRIBUTE_LOCK_OWNER_PANEL_ID, output.LockProtectOwnerPanelId);
             return serializedOutput;
         }
 
