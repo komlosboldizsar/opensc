@@ -72,6 +72,14 @@ namespace OpenSC.GUI.UMDs
             builder.UpdaterMethod((umd, cell) => { cell.Value = "TODO"; });
             //builder.AddChangeEvent(nameof(UMD.TallyStates));
 
+            // Column: update now button
+            builder = builderGetterMethod();
+            builder.Type(DataGridViewColumnType.Button);
+            builder.Header("Update now");
+            builder.Width(100);
+            builder.ButtonText("Update now");
+            builder.CellContentClickHandlerMethod((umd, cell, e) => umd.UpdateEverything());
+
             // Column: edit, delete
             editButtonColumnCreator(table, builderGetterMethod);
             deleteButtonColumnCreator(table, builderGetterMethod);
