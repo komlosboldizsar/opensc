@@ -40,7 +40,7 @@ namespace OpenSC.GUI.UMDs
             builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Static text");
-            builder.Width(200);
+            builder.Width(150);
             builder.TextEditable(true);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.FullStaticText; });
             builder.CellEndEditHandlerMethod((umd, cell, e) => { umd.FullStaticText = cell.Value as string; });
@@ -59,18 +59,24 @@ namespace OpenSC.GUI.UMDs
             builder = builderGetterMethod();
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Current text");
-            builder.Width(200);
+            builder.Width(150);
             builder.CellStyle(monospaceTextCellStyle);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.DisplayableCompactText; });
             builder.AddChangeEvent(nameof(Umd.DisplayableCompactText));
 
             // Column: tallies
             builder = builderGetterMethod();
-            builder.Type(DataGridViewColumnType.TextBox);
+            builder.CustomType(CustomDataGridViewUmdListTallyMonitorColumnDescriptor.Default);
             builder.Header("Tallies");
+            builder.Width(200);
+
+            // Column: update now button
+            builder = builderGetterMethod();
+            builder.Type(DataGridViewColumnType.Button);
+            builder.Header("Update now");
             builder.Width(100);
-            builder.UpdaterMethod((umd, cell) => { cell.Value = "TODO"; });
-            //builder.AddChangeEvent(nameof(UMD.TallyStates));
+            builder.ButtonText("Update now");
+            builder.CellContentClickHandlerMethod((umd, cell, e) => umd.UpdateEverything());
 
             // Column: edit, delete
             editButtonColumnCreator(table, builderGetterMethod);

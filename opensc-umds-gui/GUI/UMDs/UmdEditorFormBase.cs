@@ -150,16 +150,10 @@ namespace OpenSC.GUI.UMDs
             }
             else
             {
-                thisStatusMonitorTallyLabel.BackColor = STATUS_MONITOR_TALLY_LABEL_INACTIVE_BG;
-                thisStatusMonitorTallyLabel.ForeColor = STATUS_MONITOR_TALLY_LABEL_INACTIVE_FG;
-                thisStatusMonitorTallyLabel.BorderStyle = STATUS_MONITOR_TALLY_LABEL_INACTIVE_BS;
+                thisStatusMonitorTallyLabel.BackColor = UmdGuiConstants.TALLY_MONITOR_INACTIVE_BG;
+                thisStatusMonitorTallyLabel.ForeColor = UmdGuiConstants.TALLY_MONITOR_INACTIVE_FG;
             }
         }
-
-        private static readonly BorderStyle STATUS_MONITOR_TALLY_LABEL_ACTIVE_BS = BorderStyle.FixedSingle;
-        private static readonly Color STATUS_MONITOR_TALLY_LABEL_INACTIVE_BG = SystemColors.ControlDark;
-        private static readonly Color STATUS_MONITOR_TALLY_LABEL_INACTIVE_FG = SystemColors.Control;
-        private static readonly BorderStyle STATUS_MONITOR_TALLY_LABEL_INACTIVE_BS = BorderStyle.None;
         #endregion
 
         #region TabPage: Texts
