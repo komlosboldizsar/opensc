@@ -58,6 +58,19 @@ namespace OpenSC.Model.UMDs
         public override sealed IDatabaseBase OwnerDatabase { get; } = UmdDatabase.Instance;
         #endregion
 
+        #region Property: Enabled
+        public event PropertyChangedTwoValuesDelegate<Umd, bool> EnabledChanged;
+
+        [PersistAs("enabled")]
+        private bool enabled = true;
+
+        public bool Enabled
+        {
+            get => enabled;
+            set => this.setProperty(ref enabled, value, EnabledChanged);
+        }
+        #endregion
+
         #region Property: DisplayableRawText
         public event PropertyChangedTwoValuesDelegate<Umd, string> DisplayableRawTextChanged;
 
@@ -134,6 +147,34 @@ namespace OpenSC.Model.UMDs
         }
         #endregion
 
+        #region Property: PeriodicUpdateEnabled
+        public event PropertyChangedTwoValuesDelegate<Umd, bool> PeriodicUpdateEnabledChanged;
+
+        [PersistAs("periodic_update_enabled")]
+        private bool periodicUpdateEnabled = true;
+
+        public bool PeriodicUpdateEnabled
+        {
+            get => periodicUpdateEnabled;
+            set => this.setProperty(ref periodicUpdateEnabled, value, PeriodicUpdateEnabledChanged);
+        }
+        #endregion
+
+        #region Property: PeriodicUpdateInterval
+        public event PropertyChangedTwoValuesDelegate<Umd, int> PeriodicUpdateIntervalChanged;
+
+        [PersistAs("periodic_update_interval")]
+        private int periodicUpdateInterval = 15;
+
+        public int PeriodicUpdateInterval
+        {
+            get => periodicUpdateInterval;
+            set => this.setProperty(ref periodicUpdateInterval, value, PeriodicUpdateIntervalChanged);
+        }
+        #endregion
+
+        internal int secondsSinceLastPeriodicUpdate = 0;
+
         #region Read-only full static text settings
         public virtual bool AlignableFullStaticText { get; } = false;
         public virtual UmdTextAlignment DefaultAlignmentWithFullStaticText { get; } = UmdTextAlignment.Left;
@@ -199,6 +240,8 @@ namespace OpenSC.Model.UMDs
         public void UpdateTexts()
         {
             calculateTextFields();
+            if (!enabled)
+                return;
             sendTextsToHardware();
         }
 
@@ -260,6 +303,8 @@ namespace OpenSC.Model.UMDs
         public void UpdateTallies()
         {
             calculateTallyFields();
+            if (!enabled)
+                return;
             sendTalliesToHardware();
         }
 
@@ -271,6 +316,8 @@ namespace OpenSC.Model.UMDs
         {
             calculateTextFields();
             calculateTallyFields();
+            if (!enabled)
+                return;
             sendEverythingToHardware();
         }
 

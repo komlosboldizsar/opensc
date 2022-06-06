@@ -61,6 +61,15 @@
             this.useStaticTextCheckBox = new System.Windows.Forms.CheckBox();
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.connectionTabPage = new System.Windows.Forms.TabPage();
+            this.updateTabPage = new System.Windows.Forms.TabPage();
+            this.updateTextTalliesGroupBox = new System.Windows.Forms.GroupBox();
+            this.updateTextTalliesTable = new System.Windows.Forms.TableLayoutPanel();
+            this.enabledLabel = new System.Windows.Forms.Label();
+            this.periodicUpdateLabel = new System.Windows.Forms.Label();
+            this.enabledCheckBox = new System.Windows.Forms.CheckBox();
+            this.periodicUpdateCheckBox = new System.Windows.Forms.CheckBox();
+            this.periodicUpdateNumericField = new System.Windows.Forms.NumericUpDown();
+            this.periodicUpdateSecondsLabel = new System.Windows.Forms.Label();
             this.fullStaticTextTabPage = new System.Windows.Forms.TabPage();
             this.statusMonitorGroupBox = new System.Windows.Forms.GroupBox();
             this.statusMonitorTable = new System.Windows.Forms.TableLayoutPanel();
@@ -84,6 +93,10 @@
             this.fullStaticTextGroupBox.SuspendLayout();
             this.fullStaticTextTable.SuspendLayout();
             this.mainTabControl.SuspendLayout();
+            this.updateTabPage.SuspendLayout();
+            this.updateTextTalliesGroupBox.SuspendLayout();
+            this.updateTextTalliesTable.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.periodicUpdateNumericField)).BeginInit();
             this.fullStaticTextTabPage.SuspendLayout();
             this.statusMonitorGroupBox.SuspendLayout();
             this.statusMonitorTable.SuspendLayout();
@@ -299,7 +312,7 @@
             this.talliesTabPage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.talliesTabPage.Name = "talliesTabPage";
             this.talliesTabPage.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.talliesTabPage.Size = new System.Drawing.Size(687, 254);
+            this.talliesTabPage.Size = new System.Drawing.Size(490, 42);
             this.talliesTabPage.TabIndex = 2;
             this.talliesTabPage.Text = "Tallies";
             // 
@@ -309,7 +322,7 @@
             this.talliesTabPageNoTallyLabel.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.talliesTabPageNoTallyLabel.Location = new System.Drawing.Point(3, 75);
             this.talliesTabPageNoTallyLabel.Name = "talliesTabPageNoTallyLabel";
-            this.talliesTabPageNoTallyLabel.Size = new System.Drawing.Size(681, 175);
+            this.talliesTabPageNoTallyLabel.Size = new System.Drawing.Size(463, 0);
             this.talliesTabPageNoTallyLabel.TabIndex = 3;
             this.talliesTabPageNoTallyLabel.Text = "This UMD has no tallies.";
             this.talliesTabPageNoTallyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -324,7 +337,7 @@
             this.talliesSourceAndColorGroupBox.Margin = new System.Windows.Forms.Padding(10, 12, 10, 12);
             this.talliesSourceAndColorGroupBox.Name = "talliesSourceAndColorGroupBox";
             this.talliesSourceAndColorGroupBox.Padding = new System.Windows.Forms.Padding(8, 5, 8, 10);
-            this.talliesSourceAndColorGroupBox.Size = new System.Drawing.Size(681, 71);
+            this.talliesSourceAndColorGroupBox.Size = new System.Drawing.Size(463, 71);
             this.talliesSourceAndColorGroupBox.TabIndex = 2;
             this.talliesSourceAndColorGroupBox.TabStop = false;
             this.talliesSourceAndColorGroupBox.Text = "Sources and colors";
@@ -347,7 +360,7 @@
             this.talliesSourceAndColorTable.Name = "talliesSourceAndColorTable";
             this.talliesSourceAndColorTable.RowCount = 1;
             this.talliesSourceAndColorTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.talliesSourceAndColorTable.Size = new System.Drawing.Size(665, 36);
+            this.talliesSourceAndColorTable.Size = new System.Drawing.Size(447, 36);
             this.talliesSourceAndColorTable.TabIndex = 0;
             // 
             // tallyNameExampleLabel
@@ -369,7 +382,7 @@
             this.tallySourceExampleComboBox.FormattingEnabled = true;
             this.tallySourceExampleComboBox.Location = new System.Drawing.Point(80, 3);
             this.tallySourceExampleComboBox.Name = "tallySourceExampleComboBox";
-            this.tallySourceExampleComboBox.Size = new System.Drawing.Size(438, 28);
+            this.tallySourceExampleComboBox.Size = new System.Drawing.Size(220, 28);
             this.tallySourceExampleComboBox.TabIndex = 4;
             // 
             // tallyColorExampleButton
@@ -377,7 +390,7 @@
             this.tallyColorExampleButton.BackColor = System.Drawing.Color.White;
             this.tallyColorExampleButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tallyColorExampleButton.ForeColor = System.Drawing.Color.Black;
-            this.tallyColorExampleButton.Location = new System.Drawing.Point(524, 3);
+            this.tallyColorExampleButton.Location = new System.Drawing.Point(306, 3);
             this.tallyColorExampleButton.Name = "tallyColorExampleButton";
             this.tallyColorExampleButton.Size = new System.Drawing.Size(138, 30);
             this.tallyColorExampleButton.TabIndex = 5;
@@ -491,6 +504,7 @@
             // mainTabControl
             // 
             this.mainTabControl.Controls.Add(this.connectionTabPage);
+            this.mainTabControl.Controls.Add(this.updateTabPage);
             this.mainTabControl.Controls.Add(this.textsTabPage);
             this.mainTabControl.Controls.Add(this.talliesTabPage);
             this.mainTabControl.Controls.Add(this.fullStaticTextTabPage);
@@ -510,6 +524,124 @@
             this.connectionTabPage.Size = new System.Drawing.Size(687, 254);
             this.connectionTabPage.TabIndex = 3;
             this.connectionTabPage.Text = "Connection";
+            // 
+            // updateTabPage
+            // 
+            this.updateTabPage.BackColor = System.Drawing.SystemColors.Control;
+            this.updateTabPage.Controls.Add(this.updateTextTalliesGroupBox);
+            this.updateTabPage.Location = new System.Drawing.Point(4, 29);
+            this.updateTabPage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.updateTabPage.Name = "updateTabPage";
+            this.updateTabPage.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.updateTabPage.Size = new System.Drawing.Size(687, 254);
+            this.updateTabPage.TabIndex = 4;
+            this.updateTabPage.Text = "Update";
+            // 
+            // updateTextTalliesGroupBox
+            // 
+            this.updateTextTalliesGroupBox.AutoSize = true;
+            this.updateTextTalliesGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.updateTextTalliesGroupBox.Controls.Add(this.updateTextTalliesTable);
+            this.updateTextTalliesGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.updateTextTalliesGroupBox.Location = new System.Drawing.Point(3, 4);
+            this.updateTextTalliesGroupBox.Margin = new System.Windows.Forms.Padding(10, 12, 10, 12);
+            this.updateTextTalliesGroupBox.Name = "updateTextTalliesGroupBox";
+            this.updateTextTalliesGroupBox.Padding = new System.Windows.Forms.Padding(8, 5, 8, 10);
+            this.updateTextTalliesGroupBox.Size = new System.Drawing.Size(681, 101);
+            this.updateTextTalliesGroupBox.TabIndex = 0;
+            this.updateTextTalliesGroupBox.TabStop = false;
+            this.updateTextTalliesGroupBox.Text = "Updating text && tallies";
+            // 
+            // updateTextTalliesTable
+            // 
+            this.updateTextTalliesTable.AutoSize = true;
+            this.updateTextTalliesTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.updateTextTalliesTable.ColumnCount = 4;
+            this.updateTextTalliesTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.updateTextTalliesTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.updateTextTalliesTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.updateTextTalliesTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.updateTextTalliesTable.Controls.Add(this.enabledLabel, 0, 0);
+            this.updateTextTalliesTable.Controls.Add(this.periodicUpdateLabel, 0, 1);
+            this.updateTextTalliesTable.Controls.Add(this.enabledCheckBox, 1, 0);
+            this.updateTextTalliesTable.Controls.Add(this.periodicUpdateCheckBox, 1, 1);
+            this.updateTextTalliesTable.Controls.Add(this.periodicUpdateNumericField, 2, 1);
+            this.updateTextTalliesTable.Controls.Add(this.periodicUpdateSecondsLabel, 3, 1);
+            this.updateTextTalliesTable.Dock = System.Windows.Forms.DockStyle.Top;
+            this.updateTextTalliesTable.Location = new System.Drawing.Point(8, 25);
+            this.updateTextTalliesTable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.updateTextTalliesTable.Name = "updateTextTalliesTable";
+            this.updateTextTalliesTable.RowCount = 2;
+            this.updateTextTalliesTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.updateTextTalliesTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.updateTextTalliesTable.Size = new System.Drawing.Size(665, 66);
+            this.updateTextTalliesTable.TabIndex = 0;
+            // 
+            // enabledLabel
+            // 
+            this.enabledLabel.AutoSize = true;
+            this.enabledLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.enabledLabel.Location = new System.Drawing.Point(3, 0);
+            this.enabledLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.enabledLabel.Name = "enabledLabel";
+            this.enabledLabel.Size = new System.Drawing.Size(63, 33);
+            this.enabledLabel.TabIndex = 0;
+            this.enabledLabel.Text = "Enabled";
+            this.enabledLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // periodicUpdateLabel
+            // 
+            this.periodicUpdateLabel.AutoSize = true;
+            this.periodicUpdateLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.periodicUpdateLabel.Location = new System.Drawing.Point(3, 33);
+            this.periodicUpdateLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.periodicUpdateLabel.Name = "periodicUpdateLabel";
+            this.periodicUpdateLabel.Size = new System.Drawing.Size(113, 33);
+            this.periodicUpdateLabel.TabIndex = 1;
+            this.periodicUpdateLabel.Text = "Periodic update";
+            this.periodicUpdateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // enabledCheckBox
+            // 
+            this.enabledCheckBox.AutoSize = true;
+            this.enabledCheckBox.Dock = System.Windows.Forms.DockStyle.Left;
+            this.enabledCheckBox.Location = new System.Drawing.Point(134, 3);
+            this.enabledCheckBox.Margin = new System.Windows.Forms.Padding(3, 3, 15, 3);
+            this.enabledCheckBox.Name = "enabledCheckBox";
+            this.enabledCheckBox.Size = new System.Drawing.Size(18, 27);
+            this.enabledCheckBox.TabIndex = 2;
+            this.enabledCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // periodicUpdateCheckBox
+            // 
+            this.periodicUpdateCheckBox.AutoSize = true;
+            this.periodicUpdateCheckBox.Dock = System.Windows.Forms.DockStyle.Left;
+            this.periodicUpdateCheckBox.Location = new System.Drawing.Point(134, 36);
+            this.periodicUpdateCheckBox.Margin = new System.Windows.Forms.Padding(3, 3, 15, 3);
+            this.periodicUpdateCheckBox.Name = "periodicUpdateCheckBox";
+            this.periodicUpdateCheckBox.Size = new System.Drawing.Size(18, 27);
+            this.periodicUpdateCheckBox.TabIndex = 3;
+            this.periodicUpdateCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // periodicUpdateNumericField
+            // 
+            this.periodicUpdateNumericField.Dock = System.Windows.Forms.DockStyle.Left;
+            this.periodicUpdateNumericField.Location = new System.Drawing.Point(170, 36);
+            this.periodicUpdateNumericField.Margin = new System.Windows.Forms.Padding(3, 3, 8, 3);
+            this.periodicUpdateNumericField.Name = "periodicUpdateNumericField";
+            this.periodicUpdateNumericField.Size = new System.Drawing.Size(118, 27);
+            this.periodicUpdateNumericField.TabIndex = 4;
+            // 
+            // periodicUpdateSecondsLabel
+            // 
+            this.periodicUpdateSecondsLabel.AutoSize = true;
+            this.periodicUpdateSecondsLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.periodicUpdateSecondsLabel.Location = new System.Drawing.Point(299, 33);
+            this.periodicUpdateSecondsLabel.Name = "periodicUpdateSecondsLabel";
+            this.periodicUpdateSecondsLabel.Size = new System.Drawing.Size(72, 33);
+            this.periodicUpdateSecondsLabel.TabIndex = 5;
+            this.periodicUpdateSecondsLabel.Text = "second(s)";
+            this.periodicUpdateSecondsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // fullStaticTextTabPage
             // 
@@ -685,6 +817,13 @@
             this.fullStaticTextTable.ResumeLayout(false);
             this.fullStaticTextTable.PerformLayout();
             this.mainTabControl.ResumeLayout(false);
+            this.updateTabPage.ResumeLayout(false);
+            this.updateTabPage.PerformLayout();
+            this.updateTextTalliesGroupBox.ResumeLayout(false);
+            this.updateTextTalliesGroupBox.PerformLayout();
+            this.updateTextTalliesTable.ResumeLayout(false);
+            this.updateTextTalliesTable.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.periodicUpdateNumericField)).EndInit();
             this.fullStaticTextTabPage.ResumeLayout(false);
             this.fullStaticTextTabPage.PerformLayout();
             this.statusMonitorGroupBox.ResumeLayout(false);
@@ -742,5 +881,14 @@
         private System.Windows.Forms.Label talliesTabPageNoTallyLabel;
         private System.Windows.Forms.Label textsTabPageNoTextLabel;
         protected System.Windows.Forms.TabPage connectionTabPage;
+        private System.Windows.Forms.TabPage updateTabPage;
+        private System.Windows.Forms.GroupBox updateTextTalliesGroupBox;
+        private System.Windows.Forms.TableLayoutPanel updateTextTalliesTable;
+        private System.Windows.Forms.Label enabledLabel;
+        private System.Windows.Forms.Label periodicUpdateLabel;
+        private System.Windows.Forms.CheckBox enabledCheckBox;
+        private System.Windows.Forms.CheckBox periodicUpdateCheckBox;
+        private System.Windows.Forms.NumericUpDown periodicUpdateNumericField;
+        private System.Windows.Forms.Label periodicUpdateSecondsLabel;
     }
 }

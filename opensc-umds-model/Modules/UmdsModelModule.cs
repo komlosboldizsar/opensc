@@ -10,6 +10,12 @@ namespace OpenSC.Modules
     public class UmdsModelModule : BasetypeModuleBase
     {
 
+        public override void Initialize()
+        {
+            base.Initialize();
+            UmdPeriodicUpdater.Start();
+        }
+
         protected override void registerDatabases()
         {
             MasterDatabase.Instance.RegisterSingletonDatabase(typeof(UmdDatabase));
