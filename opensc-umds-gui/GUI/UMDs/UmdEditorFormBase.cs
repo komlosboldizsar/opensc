@@ -146,7 +146,6 @@ namespace OpenSC.GUI.UMDs
                 Color tallyColor = tally.Color;
                 thisStatusMonitorTallyLabel.BackColor = tallyColor;
                 thisStatusMonitorTallyLabel.ForeColor = (tallyColor.GetBrightness() > 0.5f) ? Color.Black : Color.White;
-                thisStatusMonitorTallyLabel.BorderStyle = STATUS_MONITOR_TALLY_LABEL_ACTIVE_BS;
             }
             else
             {
