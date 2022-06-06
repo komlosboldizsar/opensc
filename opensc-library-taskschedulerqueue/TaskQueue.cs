@@ -83,7 +83,7 @@ namespace OpenSC.Library.TaskSchedulerQueue
 
         public void Enqueue(TQueuedTask item)
         {
-            if (fifo == null)
+            if ((fifo == null) || !Running)
                 return;
             if (cancellationTokenSource.IsCancellationRequested)
                 return;
