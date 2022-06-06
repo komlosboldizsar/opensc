@@ -146,16 +146,14 @@ namespace OpenSC.GUI.UMDs
                 Color tallyColor = tally.Color;
                 thisStatusMonitorTallyLabel.BackColor = tallyColor;
                 thisStatusMonitorTallyLabel.ForeColor = (tallyColor.GetBrightness() > 0.5f) ? Color.Black : Color.White;
+                thisStatusMonitorTallyLabel.BorderStyle = STATUS_MONITOR_TALLY_LABEL_ACTIVE_BS;
             }
             else
             {
-                thisStatusMonitorTallyLabel.BackColor = STATUS_MONITOR_TALLY_LABEL_INACTIVE_BG;
-                thisStatusMonitorTallyLabel.ForeColor = STATUS_MONITOR_TALLY_LABEL_INACTIVE_FG;
+                thisStatusMonitorTallyLabel.BackColor = UmdGuiConstants.TALLY_MONITOR_INACTIVE_BG;
+                thisStatusMonitorTallyLabel.ForeColor = UmdGuiConstants.TALLY_MONITOR_INACTIVE_FG;
             }
         }
-
-        private static readonly Color STATUS_MONITOR_TALLY_LABEL_INACTIVE_BG = SystemColors.ControlDark;
-        private static readonly Color STATUS_MONITOR_TALLY_LABEL_INACTIVE_FG = SystemColors.Control;
         #endregion
 
         #region TabPage: Texts
