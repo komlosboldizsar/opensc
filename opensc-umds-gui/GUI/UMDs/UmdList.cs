@@ -52,7 +52,7 @@ namespace OpenSC.GUI.UMDs
             builder.Header("Static");
             builder.Width(50);
             builder.UpdaterMethod((umd, cell) => { cell.Value = umd.UseFullStaticText; });
-            builder.CellContentClickHandlerMethod((umd, cell, e) => { umd.UseFullStaticText = !(bool)cell.Value; });
+            builder.CellValueChangedHandlerMethod((umd, cell, e) => { umd.UseFullStaticText = (bool)cell.Value; });
             builder.AddChangeEvent(nameof(Umd.UseFullStaticText));
 
             // Column: current text
