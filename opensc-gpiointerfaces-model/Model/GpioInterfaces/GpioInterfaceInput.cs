@@ -115,18 +115,31 @@ namespace OpenSC.Model.GpioInterfaces
 
         public event PropertyChangedTwoValuesDelegate<GpioInterfaceInput, int> IndexChanged;
         #endregion
+        
+        #region Property: DebounceTime
+        public event PropertyChangedTwoValuesDelegate<GpioInterfaceInput, int> DebounceTimeChanged;
+
+        private int debounceTime;
+
+        public int DebounceTime
+        {
+            get => debounceTime;
+            set => this.setProperty(ref debounceTime, value, DebounceTimeChanged);
+        }
+        #endregion
 
         #region State
         public void NotifyStateChanged(bool newValue)
         {
-            if ((newValue == CurrentState) || (DateTime.Now - lastStateChange).TotalMilliseconds < debounceTime)
+            if ((newValue == CurrentState) || (DateTime.Now - lastStateChange).TotalMilliseconds<debounceTime)
                 return;
             CurrentState = newValue;
             lastStateChange = DateTime.Now;
         }
 
-        internal virtual void QueryState()
-        { }
+        internal virtual void QueryState() { }
+
+        private DateTime lastStateChange = DateTime.Now;
         #endregion
 
         #region ToString()
