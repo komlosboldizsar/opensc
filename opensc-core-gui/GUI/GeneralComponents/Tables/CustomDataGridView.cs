@@ -135,7 +135,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public DataGridViewColumn AddColumn(CustomDataGridViewColumnDescriptor<T> columnDescriptor)
         {
             columnDescriptors.Add(columnDescriptor);
-            DataGridViewColumn column = getColumnByType(columnDescriptor.Type);
+            DataGridViewColumn column = getColumnByType(columnDescriptor.Type, columnDescriptor.CustomTypeDescriptor);
             column.Tag = new CustomDataGridViewColumnTag()
             {
                 ID = columnDescriptor.ID
@@ -153,7 +153,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         public void ColumnChangeReady() => loadItems();
 
-        private static DataGridViewColumn getColumnByType(DataGridViewColumnType type)
+        private static DataGridViewColumn getColumnByType(DataGridViewColumnType type, CustomDataGridViewCustomColumnTypeDescriptor customTypeDescriptor)
         {
             switch (type)
             {
@@ -175,6 +175,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                     return new DataGridViewButtonColumn();
                 case DataGridViewColumnType.SmallIcon:
                     return new DataGridViewTextBoxColumn();
+                case DataGridViewColumnType.Custom:
+                    return customTypeDescriptor.CreateColumn();
             }
             return null;
         }

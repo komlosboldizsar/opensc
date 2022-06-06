@@ -101,7 +101,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         private DataGridViewCell createAndInitCell(CustomDataGridViewColumnDescriptor<T> columnDescriptor)
         {
 
-            DataGridViewCell cell = getCellByType(columnDescriptor.Type);
+            DataGridViewCell cell = getCellByType(columnDescriptor.Type, columnDescriptor.CustomTypeDescriptor);
 
             if (columnDescriptor.Type == DataGridViewColumnType.CheckBox)
             {
@@ -152,6 +152,11 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 typedCell.Items.AddRange(columnDescriptor.DropDownPopulatorMethod?.Invoke(item, cell));
             }
 
+            if (columnDescriptor.Type == DataGridViewColumnType.Custom)
+            {
+                columnDescriptor.CustomTypeDescriptor.BeforeAddToRow(cell);
+            }
+
             Cells.Add(cell);
 
             if (columnDescriptor.Type == DataGridViewColumnType.TextBox)
@@ -164,7 +169,16 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                 cell.ReadOnly = true;
             }
 
+            if (columnDescriptor.Type == DataGridViewColumnType.Custom)
+            {
+                columnDescriptor.CustomTypeDescriptor.AfterAddToRow(cell);
+            }
+
+            if (columnDescriptor.Type == DataGridViewColumnType.Custom)
+                columnDescriptor.CustomTypeDescriptor.Initialize(cell);
             columnDescriptor.InitializerMethod?.Invoke(item, cell);
+            if (columnDescriptor.Type == DataGridViewColumnType.Custom)
+                columnDescriptor.CustomTypeDescriptor.Update(cell);
             columnDescriptor.UpdaterMethod?.Invoke(item, cell);
             columnDescriptor.Extensions?.Foreach(ext => ext.CellReady(table, cell));
 
@@ -177,7 +191,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
             getColumnDescriptor(columnIndex).UpdaterMethod?.Invoke(item, Cells[columnIndex]);
         }
 
-        private static DataGridViewCell getCellByType(DataGridViewColumnType type)
+        private static DataGridViewCell getCellByType(DataGridViewColumnType type, CustomDataGridViewCustomColumnTypeDescriptor customTypeDescriptor)
         {
             switch (type)
             {
@@ -199,6 +213,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
                     return new DataGridViewImageButtonCell();
                 case DataGridViewColumnType.SmallIcon:
                     return new DataGridViewSmallIconCell();
+                case DataGridViewColumnType.Custom:
+                    return customTypeDescriptor.CreateCell();
             }
             return null;
         }
