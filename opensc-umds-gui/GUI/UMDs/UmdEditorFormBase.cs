@@ -18,6 +18,7 @@ namespace OpenSC.GUI.UMDs
         {
             InitializeComponent();
             initStatusMonitor();
+            initUpdateTab();
             initTextsTab();
             initTalliesTab();
             initFullStaticTextTab();
@@ -39,6 +40,11 @@ namespace OpenSC.GUI.UMDs
                 updateStatusMonitorTallyLabel(umd.Tallies[i]);
                 umd.Tallies[i].CurrentStateChanged += tallyStateChanged;
             }
+            // Tab: Update
+            enabledCheckBox.Checked = umd.Enabled;
+            periodicUpdateCheckBox.Checked = umd.PeriodicUpdateEnabled;
+            periodicUpdateNumericField.Value = umd.PeriodicUpdateInterval;
+            setUpdateTabFieldsEnabledState();
             // Tab: Texts
             for (int i = 0; i < umd.TextInfo.Length; i++)
             {
@@ -71,6 +77,10 @@ namespace OpenSC.GUI.UMDs
             Umd umd = (Umd)EditedModel;
             if (umd == null)
                 return;
+            // Tab: Update
+            umd.Enabled = enabledCheckBox.Checked;
+            umd.PeriodicUpdateEnabled = periodicUpdateCheckBox.Checked;
+            umd.PeriodicUpdateInterval = (int)periodicUpdateNumericField.Value;
             // Tab: Texts
             for (int i = 0; i < umd.TextInfo.Length; i++)
                 textControls[i].Write();
@@ -152,6 +162,21 @@ namespace OpenSC.GUI.UMDs
                 thisStatusMonitorTallyLabel.BackColor = UmdGuiConstants.TALLY_MONITOR_INACTIVE_BG;
                 thisStatusMonitorTallyLabel.ForeColor = UmdGuiConstants.TALLY_MONITOR_INACTIVE_FG;
             }
+        }
+        #endregion
+
+        #region TabPage: Update
+        private void initUpdateTab()
+        {
+            EventHandler handler = (sender, e) => setUpdateTabFieldsEnabledState();
+            enabledCheckBox.CheckedChanged += handler;
+            periodicUpdateCheckBox.CheckedChanged += handler;
+        }
+
+        private void setUpdateTabFieldsEnabledState()
+        {
+            periodicUpdateCheckBox.Enabled = enabledCheckBox.Checked;
+            periodicUpdateNumericField.Enabled = (enabledCheckBox.Checked && periodicUpdateCheckBox.Checked);
         }
         #endregion
 

@@ -61,8 +61,12 @@ namespace OpenSC.GUI.UMDs
             builder.Header("Current text");
             builder.Width(150);
             builder.CellStyle(monospaceTextCellStyle);
-            builder.UpdaterMethod((umd, cell) => { cell.Value = umd.DisplayableCompactText; });
+            builder.UpdaterMethod((umd, cell) => {
+                cell.Value = umd.DisplayableCompactText;
+                cell.Style.ForeColor = umd.Enabled ? Color.Black : Color.SlateGray;
+            });
             builder.AddChangeEvent(nameof(Umd.DisplayableCompactText));
+            builder.AddChangeEvent(nameof(Umd.Enabled));
 
             // Column: tallies
             builder = builderGetterMethod();
