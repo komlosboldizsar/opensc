@@ -1,6 +1,6 @@
 ﻿namespace OpenSC.Library.BmdVideohub
 {
-    internal sealed class InputLabelsNofiticationInterpreter : OutputLabelsMessageInterpreter
+    internal sealed class InputLabelsNofiticationInterpreter : InputLabelsMessageInterpreter
     {
         private VideohubClient videohubClient;
         public InputLabelsNofiticationInterpreter(VideohubClient videohubClient) => this.videohubClient = videohubClient;

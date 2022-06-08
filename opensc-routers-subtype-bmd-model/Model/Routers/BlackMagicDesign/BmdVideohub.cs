@@ -162,6 +162,8 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             videohub.ConnectionStateChanged += connectionStateChangedHandler;
             videohub.CrosspointChanged += crosspointChangedHandler;
             videohub.LockChanged += lockChangedHandler;
+            videohub.InputLabelChanged += inputLabelChangedHandler;
+            videohub.OutputLabelChanged += outputLabelChangedHandler;
         }
 
         private void connectionStateChangedHandler(bool state)
@@ -236,7 +238,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
                     videohub.DoLockOperation(output.Index, Library.BmdVideohub.LockOperation.Lock);
                     break;
                 case RouterOutputLockOperationType.Unlock:
-                    videohub.DoLockOperation(output.Index, Library.BmdVideohub.LockOperation.Lock);
+                    videohub.DoLockOperation(output.Index, Library.BmdVideohub.LockOperation.Unlock);
                     break;
                 case RouterOutputLockOperationType.ForceUnlock:
                     videohub.DoLockOperation(output.Index, Library.BmdVideohub.LockOperation.ForceUnlock); // TODO
@@ -299,6 +301,22 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         protected override void setRemoteOutputNames(Dictionary<RouterOutput, string> names)
             => videohub.SetOutputLabel(names.Select(kvp => new Library.BmdVideohub.Label(kvp.Key.Index, kvp.Value)));
         #endregion
+
+
+
+        private void outputLabelChangedHandler(Library.BmdVideohub.Label label)
+        {
+            if ((label.Index == null) || (label.Text == null))
+                return;
+            notifyRemoteOutputNameChanged((int)label.Index, label.Text);
+        }
+
+        private void inputLabelChangedHandler(Library.BmdVideohub.Label label)
+        {
+            if ((label.Index == null) || (label.Text == null))
+                return;
+            notifyRemoteInputNameChanged((int)label.Index, label.Text);
+        }
 
     }
 

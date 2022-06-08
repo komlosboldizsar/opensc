@@ -53,6 +53,7 @@ namespace OpenSC.Library.BmdVideohub
                 if (value == inputCount)
                     return;
                 inputCount = value;
+                inputLabels = new string[inputCount];
                 InputCountChanged?.Invoke(inputCount);
             }
         }
@@ -72,6 +73,7 @@ namespace OpenSC.Library.BmdVideohub
                 outputCount = value;
                 crosspoints = new int?[outputCount];
                 locks = new LockState?[outputCount];
+                outputLabels = new string[outputCount];
                 OutputCountChanged?.Invoke(outputCount);
             }
         }

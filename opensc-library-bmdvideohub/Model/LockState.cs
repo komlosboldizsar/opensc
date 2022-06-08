@@ -16,7 +16,7 @@
             {
                 LockState.Unlocked => 'U',
                 LockState.Owned => 'O',
-                LockState.Taken => 'D',
+                LockState.Taken => 'L',
                 _ => 'X'
             };
 
@@ -25,7 +25,7 @@
             {
                 'U' => LockState.Unlocked,
                 'O' => LockState.Owned,
-                'D' => LockState.Taken,
+                'L' => LockState.Taken,
                 _ => null
             };
 
