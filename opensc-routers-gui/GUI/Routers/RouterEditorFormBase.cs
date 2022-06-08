@@ -43,6 +43,10 @@ namespace OpenSC.GUI.Routers
             Router router = (Router)EditedModel;
             if (router == null)
                 return;
+            router.ImportInputNamesOnRemoteUpdate = followRemoteInputNameChangesMenuItem.Checked;
+            router.ExportInputNamesOnLocalUpdate = followLocalInputNameChangesMenuItem.Checked;
+            router.ImportOutputNamesOnRemoteUpdate = followRemoteOutputNameChangesMenuItem.Checked;
+            router.ExportOutputNamesOnLocalUpdate = followLocalOutputNameChangesMenuItem.Checked;
         }
 
         private static readonly Color CELL_COST_BACK_IS_TIELINE = Color.White;
@@ -318,8 +322,8 @@ namespace OpenSC.GUI.Routers
             exportInputNamesToRemoteFromLocalMenuItem.Enabled = router.CanSetRemoteInputNames;
             followLocalInputNameChangesMenuItem.Enabled = router.CanGetRemoteInputNameChangeNotifications;
             followRemoteInputNameChangesMenuItem.Enabled = router.CanSetRemoteInputNames;
-            followLocalInputNameChangesMenuItem.Checked = router.ImportInputNamesOnRemoteUpdate;
-            followRemoteInputNameChangesMenuItem.Checked = router.ExportInputNamesOnLocalUpdate;
+            followLocalInputNameChangesMenuItem.Checked = router.ExportInputNamesOnLocalUpdate;
+            followRemoteInputNameChangesMenuItem.Checked = router.ImportInputNamesOnRemoteUpdate;
         }
 
         private void importInputNamesFromRemoteToLocalMenuItem_Click(object sender, EventArgs e)
@@ -353,8 +357,8 @@ namespace OpenSC.GUI.Routers
             exportOutputNamesToRemoteFromLocalMenuItem.Enabled = router.CanSetRemoteOutputNames;
             followLocalOutputNameChangesMenuItem.Enabled = router.CanGetRemoteOutputNameChangeNotifications;
             followRemoteOutputNameChangesMenuItem.Enabled = router.CanSetRemoteOutputNames;
-            followLocalOutputNameChangesMenuItem.Checked = router.ImportOutputNamesOnRemoteUpdate;
-            followRemoteOutputNameChangesMenuItem.Checked = router.ExportOutputNamesOnLocalUpdate;
+            followLocalOutputNameChangesMenuItem.Checked = router.ExportOutputNamesOnLocalUpdate;
+            followRemoteOutputNameChangesMenuItem.Checked = router.ImportOutputNamesOnRemoteUpdate;
         }
 
         private void importOutputNamesFromRemoteToLocalMenuItem_Click(object sender, EventArgs e)
