@@ -3,6 +3,7 @@ using OpenSC.Model.Persistence;
 using OpenSC.Model.SerialPorts;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -122,7 +123,6 @@ namespace OpenSC.Model.UMDs.Tsl31
                 textBytesToHardware = Encoding.ASCII.GetBytes(textToHardware);
                 DisplayableRawText = textToHardware;
             }
-            sendData();
         }
 
         protected byte[] textBytesToHardware;
@@ -189,6 +189,8 @@ namespace OpenSC.Model.UMDs.Tsl31
             bytes[0] = (byte)(Address + 0x80);
             bytes[1] = tallyByteToHardware;
             int bytesToCopy = textBytesToHardware.Length;
+            for (int i = 2; i < 18; i++)
+                bytes[i] = (byte)' ';
             if (bytesToCopy > 16)
                 bytesToCopy = 16;
             for (int i = 0; i < bytesToCopy; i++)
