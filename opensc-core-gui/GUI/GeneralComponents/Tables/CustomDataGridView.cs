@@ -52,51 +52,57 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private void init()
         {
-            CellContentClick += cellContentClickHandler;
-            CellDoubleClick += cellDoubleClickHandler;
-            CellEndEdit += cellEndEditHandler;
-            CellValueChanged += cellValueChangedHandler;
-            CellMouseDown += cellMouseDownHandler;
             AllowUserToAddRows = false;
             AllowUserToDeleteRows = false;
             AllowUserToOrderColumns = false;
             saveHeaderProperties();
         }
 
-        private void cellEndEditHandler(object sender, DataGridViewCellEventArgs e)
+        protected override void OnCellEndEdit(DataGridViewCellEventArgs e)
         {
+            base.OnCellEndEdit(e);
             if ((e.RowIndex < 0) || (e.RowIndex >= Rows.Count))
                 return;
             CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
             row?.HandleEndEdit(e);
         }
 
-        private void cellValueChangedHandler(object sender, DataGridViewCellEventArgs e)
+        protected override void OnCellValueChanged(DataGridViewCellEventArgs e)
         {
+            base.OnCellValueChanged(e);
             if ((e.RowIndex < 0) || (e.RowIndex >= Rows.Count))
                 return;
             CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
             row?.HandleValueChanged(e);
         }
 
-        private void cellContentClickHandler(object sender, DataGridViewCellEventArgs e)
+        protected override void OnCellContentClick(DataGridViewCellEventArgs e)
         {
+            base.OnCellContentClick(e);
             if ((e.RowIndex < 0) || (e.RowIndex >= Rows.Count))
                 return;
             CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
+            DataGridViewCell cell = row.Cells[e.ColumnIndex];
+            if (cell is DataGridViewCheckBoxCell checkBoxCell)
+                cell.Value = !(bool)cell.Value;
             row?.HandleContentClick(e);
         }
 
-        private void cellDoubleClickHandler(object sender, DataGridViewCellEventArgs e)
+        protected override void OnCellDoubleClick(DataGridViewCellEventArgs e)
         {
+            base.OnCellDoubleClick(e);
             if ((e.RowIndex < 0) || (e.RowIndex >= Rows.Count))
                 return;
             CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
+            DataGridViewCell cell = row.Cells[e.ColumnIndex];
+            if (cell is DataGridViewCheckBoxCell checkBoxCell)
+                cell.Value = !(bool)cell.Value;
             row?.HandleDoubleClick(e);
         }
 
-        private void cellMouseDownHandler(object sender, DataGridViewCellMouseEventArgs e)
+        protected override void OnCellMouseDown(DataGridViewCellMouseEventArgs e)
         {
+            base.OnCellMouseDown(e);
             if ((e.RowIndex < 0) || (e.RowIndex >= Rows.Count))
                 return;
             CustomDataGridViewRow<T> row = Rows[e.RowIndex] as CustomDataGridViewRow<T>;
