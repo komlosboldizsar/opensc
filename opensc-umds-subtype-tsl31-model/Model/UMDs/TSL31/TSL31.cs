@@ -54,24 +54,24 @@ namespace OpenSC.Model.UMDs.Tsl31
         #endregion
 
         #region Properties: Tally1Overrides2, Tally3Overrides4
-        public event PropertyChangedTwoValuesDelegate<Tsl31, bool> Tally1Overrides2Changed;
-        public event PropertyChangedTwoValuesDelegate<Tsl31, bool> Tally3Overrides4Changed;
+        public event PropertyChangedTwoValuesDelegate<Tsl31, TallyOverrideMode> Tally12OverrideModeChanged;
+        public event PropertyChangedTwoValuesDelegate<Tsl31, TallyOverrideMode> Tally34OverrideModeChanged;
 
-        [PersistAs("tally1overrides2")]
-        private bool tally1overrides2 = false;
-        [PersistAs("tally3overrides4")]
-        private bool tally3overrides4 = false;
+        [PersistAs("tally_12_override_mode")]
+        private TallyOverrideMode tally12OverrideMode = TallyOverrideMode.NoOverride;
+        [PersistAs("tally_34_override_mode")]
+        private TallyOverrideMode tally34OverrideMode = TallyOverrideMode.NoOverride;
 
-        public bool Tally1Overrides2
+        public TallyOverrideMode Tally12OverrideMode
         {
-            get => tally1overrides2;
-            set => this.setProperty(ref tally1overrides2, value, Tally1Overrides2Changed, null, (_, _) => UpdateTallies());
+            get => tally12OverrideMode;
+            set => this.setProperty(ref tally12OverrideMode, value, Tally12OverrideModeChanged, null, (_, _) => UpdateTallies());
         }
 
-        public bool Tally3Overrides4
+        public TallyOverrideMode Tally34OverrideMode
         {
-            get => tally3overrides4;
-            set => this.setProperty(ref tally3overrides4, value, Tally3Overrides4Changed, null, (_, _) => UpdateTallies());
+            get => tally34OverrideMode;
+            set => this.setProperty(ref tally34OverrideMode, value, Tally34OverrideModeChanged, null, (_, _) => UpdateTallies());
         }
         #endregion
 
@@ -165,10 +165,20 @@ namespace OpenSC.Model.UMDs.Tsl31
             for (int i = 0, t = 1; i < TallyInfo.Length; i++, t *= 2)
                 if (Tallies[i].CurrentState)
                     tallyByteToHardware += (byte)t;
-            if (Tallies[0].CurrentState && tally1overrides2)
-                tallyByteToHardware &= (0xFF ^ 0x02);
-            if (Tallies[2].CurrentState && tally3overrides4)
-                tallyByteToHardware &= (0xFF ^ 0x08);
+            if (Tallies[0].CurrentState && Tallies[1].CurrentState)
+                tallyByteToHardware &= tally12OverrideMode switch
+                {
+                    TallyOverrideMode.AOverridesB => (0xFF ^ 0x02),
+                    TallyOverrideMode.BOverridesA => (0xFF ^ 0x01),
+                    _ => 0xFF
+                };
+            if (Tallies[2].CurrentState && Tallies[3].CurrentState)
+                tallyByteToHardware &= tally34OverrideMode switch
+                {
+                    TallyOverrideMode.AOverridesB => (0xFF ^ 0x08),
+                    TallyOverrideMode.BOverridesA => (0xFF ^ 0x04),
+                    _ => 0xFF
+                };
         }
 
         protected override void sendTextsToHardware() => sendData();

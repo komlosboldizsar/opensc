@@ -3,6 +3,7 @@ using OpenSC.Model.SerialPorts;
 using OpenSC.Model.UMDs;
 using OpenSC.Model.UMDs.Tsl31;
 using System;
+using System.Windows.Forms;
 
 namespace OpenSC.GUI.UMDs
 {
@@ -34,8 +35,8 @@ namespace OpenSC.GUI.UMDs
                 return;
             portDropDown.SelectByValue(tsl31.Port);
             addressNumericInput.Value = tsl31.Address;
-            tally1Overrides2CheckBox.Checked = tsl31.Tally1Overrides2;
-            tally3Overrides4CheckBox.Checked = tsl31.Tally3Overrides4;
+            loadTallyOverrideRadioButtonGroup(tsl31.Tally12OverrideMode, tally12paralellRadioButton, tally1overrides2RadioButton, tally2overrides1RadioButton);
+            loadTallyOverrideRadioButtonGroup(tsl31.Tally34OverrideMode, tally34paralellRadioButton, tally3overrides4RadioButton, tally4overrides3RadioButton);
         }
 
         protected override void writeFields()
@@ -46,8 +47,8 @@ namespace OpenSC.GUI.UMDs
                 return;
             tsl31.Port = portDropDown.SelectedValue as SerialPort;
             tsl31.Address = (int)addressNumericInput.Value;
-            tsl31.Tally1Overrides2 = tally1Overrides2CheckBox.Checked;
-            tsl31.Tally3Overrides4 = tally3Overrides4CheckBox.Checked;
+            tsl31.Tally12OverrideMode = getTallyOverrideModeFromRadioButtonGroup(tally1overrides2RadioButton, tally2overrides1RadioButton);
+            tsl31.Tally34OverrideMode = getTallyOverrideModeFromRadioButtonGroup(tally3overrides4RadioButton, tally4overrides3RadioButton);
         }
 
         protected override void validateFields()
@@ -63,6 +64,22 @@ namespace OpenSC.GUI.UMDs
         {
             portDropDown.CreateAdapterAsDataSource(SerialPortDatabase.Instance, null, true, "(not associated)");
             portDropDown.ReceiveObjectDrop().FilterByType<SerialPort>();
+        }
+
+        private void loadTallyOverrideRadioButtonGroup(TallyOverrideMode overrideMode, RadioButton noOverrideRadioButton, RadioButton aOverridesBRadioButton, RadioButton bOverridesARadioButton)
+        {
+            noOverrideRadioButton.Checked = (overrideMode == TallyOverrideMode.NoOverride);
+            aOverridesBRadioButton.Checked = (overrideMode == TallyOverrideMode.AOverridesB);
+            bOverridesARadioButton.Checked = (overrideMode == TallyOverrideMode.BOverridesA);
+        }
+
+        private TallyOverrideMode getTallyOverrideModeFromRadioButtonGroup(RadioButton aOverridesBRadioButton, RadioButton bOverridesARadioButton)
+        {
+            if (aOverridesBRadioButton.Checked)
+                return TallyOverrideMode.AOverridesB;
+            if (bOverridesARadioButton.Checked)
+                return TallyOverrideMode.BOverridesA;
+            return TallyOverrideMode.NoOverride;
         }
 
     }
