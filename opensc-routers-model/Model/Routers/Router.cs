@@ -349,7 +349,7 @@ namespace OpenSC.Model.Routers
 
         protected void notifyRemoteInputNameChanged(RouterInput input, string newName)
         {
-            if (inputs.Contains(input))
+            if (!inputs.Contains(input))
                 throw new ArgumentException();
             if (importInputNamesOnRemoteUpdate)
                 input.Name = newName;
@@ -361,6 +361,12 @@ namespace OpenSC.Model.Routers
             if (input == null)
                 throw new ArgumentException();
             notifyRemoteInputNameChanged(input, newName);
+        }
+
+        internal protected void NotifyLocalInputNameChanged(RouterInput input)
+        {
+            if (exportInputNamesOnLocalUpdate)
+                setRemoteInputName(input, input.Name);
         }
 
         #region Info properties: outputs
@@ -421,7 +427,7 @@ namespace OpenSC.Model.Routers
 
         protected void notifyRemoteOutputNameChanged(RouterOutput output, string newName)
         {
-            if (outputs.Contains(output))
+            if (!outputs.Contains(output))
                 throw new ArgumentException();
             if (importOutputNamesOnRemoteUpdate)
                 output.Name = newName;
@@ -433,6 +439,12 @@ namespace OpenSC.Model.Routers
             if (output == null)
                 throw new ArgumentException();
             notifyRemoteOutputNameChanged(output, newName);
+        }
+
+        internal protected void NotifyLocalOutputNameChanged(RouterOutput output)
+        {
+            if (exportOutputNamesOnLocalUpdate)
+                setRemoteOutputName(output, output.Name);
         }
         #endregion
 

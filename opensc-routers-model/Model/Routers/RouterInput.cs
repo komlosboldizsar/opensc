@@ -64,6 +64,7 @@ namespace OpenSC.Model.Routers
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
                 ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Name));
+                Router?.NotifyLocalInputNameChanged(this);
             }
         }
 

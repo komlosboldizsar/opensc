@@ -82,6 +82,7 @@ namespace OpenSC.Model.Routers
                 ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Name));
                 SignalLabelChanged?.Invoke(this, getSignalLabel());
                 ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
+                Router?.NotifyLocalOutputNameChanged(this);
             }
         }
 
