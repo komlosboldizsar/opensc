@@ -104,56 +104,65 @@ namespace OpenSC.Model.Persistence
 
         }
 
-        private const BindingFlags memberLookupBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         private static readonly Type storedType = typeof(T);
+
+        #region Member store
+        private static Dictionary<Type, MemberInfo[]> memberInfosForTypes = new();
+
+        private static MemberInfo[] getMembersInfoForType(Type type)
+        {
+            if (type == null)
+                return Array.Empty<MemberInfo>();
+            if (memberInfosForTypes.TryGetValue(type, out MemberInfo[] memberInfos))
+                return memberInfos;
+            MemberInfo[] newMemberInfos = collectMemberInfosForType(type);
+            memberInfosForTypes.Add(type, newMemberInfos);
+            return newMemberInfos;
+        }
+
+        private const BindingFlags memberCollectLookupBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
+
+        private static MemberInfo[] collectMemberInfosForType(Type type)
+        {
+            List<MemberInfo> memberInfos = new();
+            memberInfos.AddRange(getMembersInfoForType(type.BaseType));
+            IEnumerable<MemberInfo> membersOfType = type.GetMembers(memberCollectLookupBindingFlags).Where(mi => filterMember(mi));
+            memberInfos.AddRange(membersOfType);
+            return memberInfos.ToArray();
+        }
+
+        private static bool filterMember(MemberInfo memberInfo) {
+            if (!(memberInfo is FieldInfo) && !(memberInfo is PropertyInfo))
+                return false;
+            IEnumerable<PersistAsAttribute> persistAsAttributes = memberInfo.GetCustomAttributes<PersistAsAttribute>();
+            PersistAsAttribute persistAsAttribute0 = persistAsAttributes.FirstOrDefault(attr => (attr.Dimension == 0));
+            TempForeignKeyAttribute tempForeignKeyAttribute = memberInfo.GetCustomAttributes<TempForeignKeyAttribute>().FirstOrDefault();
+            if ((persistAsAttribute0 == null) && (tempForeignKeyAttribute == null))
+                return false;
+            return true;
+        }
+        #endregion
+
+        private const BindingFlags memberLookupBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
         #region Serialization
         private XElement serializeItem(T item)
         {
-
             XElement xmlElement = new XElement(itemTag);
-            Type itemType = item.GetType();
-
+            Type typeToSerialize = storedType;
             xmlElement.SetAttributeValue(ATTRIBUTE_ID, item.ID);
             if (isPolymorph)
-                xmlElement.SetAttributeValue(ATTRIBUTE_TYPE, typeRegister.ConvertTypeToString(itemType));
-
-            // Get fields
-            foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
-                storeValueOfFieldOrProperty(fieldInfo, ref item, ref xmlElement);
-
-            if (isPolymorph)
             {
-                Type currentType = itemType;
-                do
-                {
-                    foreach (FieldInfo fieldInfo in currentType.GetFields(memberLookupBindingFlags))
-                        storeValueOfFieldOrProperty(fieldInfo, ref item, ref xmlElement);
-                    currentType = currentType.BaseType;
-                } while (!currentType.Equals(storedType));
+                Type itemType = item.GetType();
+                xmlElement.SetAttributeValue(ATTRIBUTE_TYPE, typeRegister.ConvertTypeToString(itemType));
+                typeToSerialize = itemType;
             }
-
-
-            // Get properties
-            foreach (PropertyInfo propertyInfo in storedType.GetProperties(memberLookupBindingFlags))
-                storeValueOfFieldOrProperty(propertyInfo, ref item, ref xmlElement);
-
-            if (isPolymorph)
-            { 
-                Type currentType = itemType;
-                do
-                {
-                    foreach (PropertyInfo propertyInfo in currentType.GetProperties(memberLookupBindingFlags))
-                        storeValueOfFieldOrProperty(propertyInfo, ref item, ref xmlElement);
-                    currentType = currentType.BaseType;
-                } while (!currentType.Equals(storedType));
-            }
-
+            foreach (MemberInfo memberInfo in getMembersInfoForType(typeToSerialize))
+                storeValueOfMember(memberInfo, ref item, ref xmlElement);
             return xmlElement;
-
         }
 
-        private void storeValueOfFieldOrProperty(MemberInfo memberInfo, ref T item, ref XElement xmlElement)
+        private void storeValueOfMember(MemberInfo memberInfo, ref T item, ref XElement xmlElement)
         {
 
             FieldInfo fieldInfo = memberInfo as FieldInfo;
@@ -304,16 +313,16 @@ namespace OpenSC.Model.Persistence
             if (xmlElement.NodeType != XmlNodeType.Element)
                 return null;
 
-            Type type = typeof(T);
+            Type typeToDeserialize = typeof(T);
             if (isPolymorph)
             {
                 string typeStr = xmlElement.Attributes[ATTRIBUTE_TYPE]?.Value;
-                type = typeRegister.ConvertStringToType(typeStr);
-                if (type == null)
+                typeToDeserialize = typeRegister.ConvertStringToType(typeStr);
+                if (typeToDeserialize == null)
                     return null;
             }
 
-            foreach (ConstructorInfo ctor in type.GetConstructors())
+            foreach (ConstructorInfo ctor in typeToDeserialize.GetConstructors())
             {
                 if (ctor.GetParameters().Length == 0)
                     try
@@ -336,41 +345,14 @@ namespace OpenSC.Model.Persistence
                 if (node.NodeType == XmlNodeType.Element)
                     persistedValues[node.LocalName] = (XmlElement)node;
 
-            // Set fields
-            foreach (FieldInfo fieldInfo in storedType.GetFields(memberLookupBindingFlags))
-                restoreValueForFieldOrProperty(fieldInfo, persistedValues, ref item);
-
-            if (isPolymorph)
-            {
-                Type currentType = type;
-                do
-                {
-                    foreach (FieldInfo fieldInfo in currentType.GetFields(memberLookupBindingFlags))
-                        restoreValueForFieldOrProperty(fieldInfo, persistedValues, ref item);
-                    currentType = currentType.BaseType;
-                } while (!currentType.Equals(storedType));
-            }
-
-            // Set properties
-            foreach (PropertyInfo propertyInfo in storedType.GetProperties(memberLookupBindingFlags))
-                restoreValueForFieldOrProperty(propertyInfo, persistedValues, ref item);
-
-            if (isPolymorph)
-            {
-                Type currentType = type;
-                do
-                {
-                    foreach (PropertyInfo propertyInfo in currentType.GetProperties(memberLookupBindingFlags))
-                        restoreValueForFieldOrProperty(propertyInfo, persistedValues, ref item);
-                    currentType = currentType.BaseType;
-                } while (!currentType.Equals(storedType));
-            }
+            foreach (MemberInfo memberInfo in getMembersInfoForType(typeToDeserialize))
+                restoreValueForMember(memberInfo, persistedValues, ref item);
 
             return item;
 
         }
 
-        private void restoreValueForFieldOrProperty(MemberInfo memberInfo, Dictionary<string, XmlElement> persistedValues, ref T item)
+        private void restoreValueForMember(MemberInfo memberInfo, Dictionary<string, XmlElement> persistedValues, ref T item)
         {
 
             FieldInfo fieldInfo = memberInfo as FieldInfo;
