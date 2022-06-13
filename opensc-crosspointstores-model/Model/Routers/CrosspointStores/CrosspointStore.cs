@@ -29,15 +29,6 @@ namespace OpenSC.Model.Routers.CrosspointStores
         }
         #endregion
 
-        #region Restoration
-        public override void TotallyRestored()
-        {
-            base.TotallyRestored();
-            restoreStoredInput();
-            restoreStoredOutput();
-        }
-        #endregion
-
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = CrosspointStoreDatabase.Instance;
         #endregion
@@ -45,15 +36,7 @@ namespace OpenSC.Model.Routers.CrosspointStores
         #region Property: StoredInput
         public event PropertyChangedTwoValuesDelegate<CrosspointStore, RouterInput> StoredInputChanged;
 
-        private string __storedInputId; // "Temp foreign key"
-
         [PersistAs("stored_input")]
-        private string _storedInputId
-        {
-            get => (storedInput != null) ? string.Format("router.{0}.input.{1}", storedInput.Router.ID, storedInput.Index) : null;
-            set { __storedInputId = value; }
-        }
-
         private RouterInput storedInput;
 
         public RouterInput StoredInput
@@ -67,34 +50,12 @@ namespace OpenSC.Model.Routers.CrosspointStores
                     Take();
             }
         }
-
-        private void restoreStoredInput()
-        {
-            string[] storedInputIdParts = __storedInputId?.Split('.');
-            if (storedInputIdParts?.Length != 4)
-                return;
-            if ((storedInputIdParts[0] != "router") || (storedInputIdParts[2] != "input"))
-                return;
-            if (!int.TryParse(storedInputIdParts[1], out int storedInputRouterId))
-                return;
-            if (!int.TryParse(storedInputIdParts[3], out int storedInputIndex))
-                return;
-            StoredInput = RouterDatabase.Instance.GetTById(storedInputRouterId)?.GetInput(storedInputIndex);
-        }
         #endregion
 
         #region Property: StoredOutput
         public event PropertyChangedTwoValuesDelegate<CrosspointStore, RouterOutput> StoredOutputChanged;
 
-        private string __storedOutputId; // "Temp foreign key"
-
         [PersistAs("stored_output")]
-        private string _storedOutputId
-        {
-            get => (storedOutput != null) ? string.Format("router.{0}.output.{1}", storedOutput.Router.ID, storedInput.Index) : null;
-            set { __storedOutputId = value; }
-        }
-
         private RouterOutput storedOutput;
 
         public RouterOutput StoredOutput
@@ -109,20 +70,6 @@ namespace OpenSC.Model.Routers.CrosspointStores
                 };
                 this.setProperty(ref storedOutput, value, StoredOutputChanged, null, afterChangeDelegate);
             }
-        }
-
-        private void restoreStoredOutput()
-        {
-            string[] storedOutputIdParts = __storedOutputId?.Split('.');
-            if (storedOutputIdParts?.Length != 4)
-                return;
-            if ((storedOutputIdParts[0] != "router") || (storedOutputIdParts[2] != "output"))
-                return;
-            if (!int.TryParse(storedOutputIdParts[1], out int storedOutputRouterId))
-                return;
-            if (!int.TryParse(storedOutputIdParts[3], out int storedOutputIndex))
-                return;
-            StoredOutput = RouterDatabase.Instance.GetTById(storedOutputRouterId)?.GetOutput(storedOutputIndex);
         }
         #endregion
 

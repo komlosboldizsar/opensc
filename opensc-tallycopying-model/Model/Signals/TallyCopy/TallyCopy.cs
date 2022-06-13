@@ -24,7 +24,6 @@ namespace OpenSC.Model.Signals.TallyCopying
         public override void TotallyRestored()
         {
             base.TotallyRestored();
-            restoreSources();
             updateToTally();
             updateFromTally();
         }
@@ -37,15 +36,7 @@ namespace OpenSC.Model.Signals.TallyCopying
         #region Property: FromSignal
         public event PropertyChangedTwoValuesDelegate<TallyCopy, ISignalSourceRegistered> FromSignalChanged;
 
-        private string _fromSignalUniqueId; // "Temp foreign key"
-
         [PersistAs("from_signal")]
-        private string fromSignalUniqueId
-        {
-            get => fromSignal?.SignalUniqueId;
-            set => _fromSignalUniqueId = value;
-        }
-
         private ISignalSourceRegistered fromSignal;
 
         public ISignalSourceRegistered FromSignal
@@ -104,15 +95,7 @@ namespace OpenSC.Model.Signals.TallyCopying
         #region Property: ToSignal
         public event PropertyChangedTwoValuesDelegate<TallyCopy, ISignalSourceRegistered> ToSignalChanged;
 
-        private string _toSignalUniqueId; // "Temp foreign key"
-
         [PersistAs("to_signal")]
-        private string toSignalUniqueId
-        {
-            get => toSignal?.SignalUniqueId;
-            set => _toSignalUniqueId = value;
-        }
-
         private ISignalSourceRegistered toSignal;
 
         public ISignalSourceRegistered ToSignal
@@ -155,16 +138,6 @@ namespace OpenSC.Model.Signals.TallyCopying
 
         private void updateToTally()
             => ToTally = toSignal?.GetTally(toTallyColor);
-        #endregion
-
-        #region Source restoration
-        private void restoreSources()
-        {
-            if (_fromSignalUniqueId != null)
-                FromSignal = SignalRegister.Instance[_fromSignalUniqueId];
-            if (_toSignalUniqueId != null)
-                ToSignal = SignalRegister.Instance[_toSignalUniqueId];
-        }
         #endregion
 
         #region Handle tally events

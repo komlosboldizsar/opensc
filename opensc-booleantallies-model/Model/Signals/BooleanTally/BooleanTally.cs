@@ -27,7 +27,7 @@ namespace OpenSC.Model.Signals.BooleanTallies
         public override void TotallyRestored()
         {
             base.TotallyRestored();
-            restoreBooleanAndSource();
+            restoreBoolean();
             updateToTally();
         }
         #endregion
@@ -71,15 +71,7 @@ namespace OpenSC.Model.Signals.BooleanTallies
         #region Property: ToSignal
         public event PropertyChangedTwoValuesDelegate<BooleanTally, ISignalSourceRegistered> ToSignalChanged;
 
-        private string _toSignalUniqueId; // "Temp foreign key"
-
         [PersistAs("to_signal")]
-        private string toSignalUniqueId
-        {
-            get => toSignal?.SignalUniqueId;
-            set => _toSignalUniqueId = value;
-        }
-
         private ISignalSourceRegistered toSignal;
 
         public ISignalSourceRegistered ToSignal
@@ -123,12 +115,10 @@ namespace OpenSC.Model.Signals.BooleanTallies
         #endregion
 
         #region Source and boolean restoration
-        private void restoreBooleanAndSource()
+        private void restoreBoolean()
         {
             if (_fromBooleanUniqueId != null)
                 FromBoolean = BooleanRegister.Instance[_fromBooleanUniqueId];
-            if (_toSignalUniqueId != null)
-                ToSignal = SignalRegister.Instance[_toSignalUniqueId];
         }
         #endregion
 

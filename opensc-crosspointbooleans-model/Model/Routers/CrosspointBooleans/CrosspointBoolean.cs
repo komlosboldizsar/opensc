@@ -19,28 +19,15 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
 
         #region Persistence, instantiation
         public CrosspointBoolean()
-        { }
+        {
+            cpActiveBoolean = new CrosspointActiveBoolean(this);
+        }
 
         public override void Removed()
         {
             base.Removed();
             WatchedInputChanged = null;
             WatchedOutputChanged = null;
-        }
-        #endregion
-
-        #region Restoration
-        public override void RestoredOwnFields()
-        {
-            base.RestoredOwnFields();
-            cpActiveBoolean = new CrosspointActiveBoolean(this);
-        }
-
-        public override void TotallyRestored()
-        {
-            base.TotallyRestored();
-            restoreWatchedInput();
-            restoreWatchedOutput();
         }
         #endregion
 
@@ -70,17 +57,9 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
         #region Property: WatchedInput
         public event PropertyChangedTwoValuesDelegate<CrosspointBoolean, RouterInput> WatchedInputChanged;
 
-        private string __watchedInputId; // "Temp foreign key"
-
-        [PersistAs("watched_input")]
-        private string _watchedInputId
-        {
-            get => (watchedInput != null) ? string.Format("router.{0}.input.{1}", watchedInput.Router.ID, watchedInput.Index) : null;
-            set { __watchedInputId = value; }
-        }
-
         private RouterInput watchedInput;
 
+        [PersistAs("watched_input")]
         public RouterInput WatchedInput
         {
             get => watchedInput;
@@ -93,43 +72,21 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
                     });
             }
         }
-
-        private void restoreWatchedInput()
-        {
-            string[] watchedInputIdParts = __watchedInputId?.Split('.');
-            if (watchedInputIdParts?.Length != 4)
-                return;
-            if ((watchedInputIdParts[0] != "router") || (watchedInputIdParts[2] != "input"))
-                return;
-            if (!int.TryParse(watchedInputIdParts[1], out int storedInputRouterId))
-                return;
-            if (!int.TryParse(watchedInputIdParts[3], out int storedInputIndex))
-                return;
-            WatchedInput = RouterDatabase.Instance.GetTById(storedInputRouterId)?.GetInput(storedInputIndex);
-        }
         #endregion
 
         #region Property: WatchedOutput
         public event PropertyChangedTwoValuesDelegate<CrosspointBoolean, RouterOutput> WatchedOutputChanged;
 
-        private string __watchedOutputId; // "Temp foreign key"
-
-        [PersistAs("watched_output")]
-        private string _watchedOutputId
-        {
-            get => (watchedOutput != null) ? string.Format("router.{0}.output.{1}", watchedOutput.Router.ID, watchedInput.Index) : null;
-            set { __watchedOutputId = value; }
-        }
-
         private RouterOutput watchedOutput;
 
+        [PersistAs("watched_output")]
         public RouterOutput WatchedOutput
         {
             get => watchedOutput;
             set
             {
                 this.setProperty(ref watchedOutput, value, WatchedOutputChanged, null,
-                    (ov, nv)=> {
+                    (ov, nv) => {
                         updateWatchedRouter();
                         updateIsValid();
                     });
@@ -140,20 +97,6 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
         public string Description { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public bool CurrentState => throw new NotImplementedException();
-
-        private void restoreWatchedOutput()
-        {
-            string[] watchedOutputIdParts = __watchedOutputId?.Split('.');
-            if (watchedOutputIdParts?.Length != 4)
-                return;
-            if ((watchedOutputIdParts[0] != "router") || (watchedOutputIdParts[2] != "output"))
-                return;
-            if (!int.TryParse(watchedOutputIdParts[1], out int storedOutputRouterId))
-                return;
-            if (!int.TryParse(watchedOutputIdParts[3], out int storedOutputIndex))
-                return;
-            WatchedOutput = RouterDatabase.Instance.GetTById(storedOutputRouterId)?.GetOutput(storedOutputIndex);
-        }
         #endregion
 
         #region Property: IsValid
