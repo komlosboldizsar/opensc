@@ -67,11 +67,6 @@ namespace OpenSC.Model.Routers.Mirrors
         [PersistAs("router_a")]
         private Router routerA;
 
-#pragma warning disable CS0169
-        [TempForeignKey(nameof(routerA))]
-        private string _routerAid;
-#pragma warning restore CS0169
-
         public Router RouterA
         {
             get => routerA;
@@ -99,11 +94,6 @@ namespace OpenSC.Model.Routers.Mirrors
 
         [PersistAs("router_b")]
         private Router routerB;
-
-#pragma warning disable CS0169
-        [TempForeignKey(nameof(routerB))]
-        private string _routerBid;
-#pragma warning restore CS0169
 
         public Router RouterB
         {

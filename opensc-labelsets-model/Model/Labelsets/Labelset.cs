@@ -40,9 +40,6 @@ namespace OpenSC.Model.Labelsets
         private ObservableDictionary<ISystemObject, Label> labels = new();
         public ObservableDictionary<ISystemObject, Label> Labels => labels;
 
-        [TempForeignKey(nameof(labels))]
-        private ObservableDictionary<string, Label> _labels = new();
-
         public Label CreateLabel() => new(this);
 
         public Label GetLabel(ISystemObject forObject)

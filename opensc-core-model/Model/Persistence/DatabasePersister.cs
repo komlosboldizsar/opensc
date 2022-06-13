@@ -93,6 +93,7 @@ namespace OpenSC.Model.Persistence
         #region Member store
         private static Dictionary<Type, ExtendedMemberInfo[]> extendedMemberInfosForTypes = new();
         private static Dictionary<Type, Dictionary<string, ExtendedMemberInfo>> extendedMemberInfosByNameForTypes = new();
+        private Dictionary<T, Dictionary<string, object>> foreignKeys = new();
 
         private class ExtendedMemberInfo
         {
@@ -105,7 +106,6 @@ namespace OpenSC.Model.Persistence
             public readonly PersistDetailedAttribute PersistDetailedAttribute;
             public readonly PersistSubclassAttribute PersistSubclassAttribute;
             public readonly PolymorphFieldAttribute PolymorphFieldAttribute;
-            public readonly TempForeignKeyAttribute TempForeignKeyAttribute;
             public readonly bool IsAssociationMember;
 
             public ExtendedMemberInfo(MemberInfo memberInfo)
@@ -129,8 +129,7 @@ namespace OpenSC.Model.Persistence
                 PersistDetailedAttribute = memberInfo.GetCustomAttribute<PersistDetailedAttribute>();
                 PersistSubclassAttribute = memberInfo.GetCustomAttribute<PersistSubclassAttribute>();
                 PolymorphFieldAttribute = memberInfo.GetCustomAttribute<PolymorphFieldAttribute>();
-                TempForeignKeyAttribute = memberInfo.GetCustomAttribute<TempForeignKeyAttribute>();
-                IsAssociationMember = ((getArrayBaseType(ValueType).GetInterfaces().Any(iface => (iface == typeof(ISystemObject)))) && (PersistDetailedAttribute == null));
+                IsAssociationMember = (isAssociationType(ValueType) && (PersistDetailedAttribute == null));
             }
 
             public PersistAsAttribute GetPersistAsAttributeForDimension(int dimension)
@@ -148,6 +147,18 @@ namespace OpenSC.Model.Persistence
             }
 
         };
+
+        private static bool isAssociationType(Type type)
+        {
+            if (type.IsArray)
+                return isAssociationType(type.GetElementType());
+            CollectionDetails collectionDetails = getCollectionDetails(type);
+            if ((collectionDetails.KeyType != null) && isAssociationType(collectionDetails.KeyType))
+                return true;
+            if ((collectionDetails.ElementType != null) && isAssociationType(collectionDetails.ElementType))
+                return true;
+            return ((type == typeof(ISystemObject)) || type.GetInterfaces().Any(iface => (iface == typeof(ISystemObject))));
+        }
 
         private static ExtendedMemberInfo[] getExtendedMemberInfosForType(Type type)
         {
@@ -171,7 +182,7 @@ namespace OpenSC.Model.Persistence
 
         private static ExtendedMemberInfo getExtendedMemberInfoByNameForType(Type type, string name)
         {
-            getExtendedMemberInfosByNameForType(type).TryGetValue(name, out ExtendedMemberInfo extendedMemberInfo));
+            getExtendedMemberInfosByNameForType(type).TryGetValue(name, out ExtendedMemberInfo extendedMemberInfo);
             return extendedMemberInfo;
         }
 
@@ -181,9 +192,9 @@ namespace OpenSC.Model.Persistence
         {
             IEnumerable<ExtendedMemberInfo> membersOfType = type
                 .GetMembers(memberCollectLookupBindingFlags)
-                .Where(filterMemberInfo1)
+                .Where(mi => ((mi is FieldInfo) || (mi is PropertyInfo)))
                 .Select(mi => new ExtendedMemberInfo(mi))
-                .Where(filterExtendedMemberInfo2);
+                .Where(emi => (emi.GetPersistAsAttributeForDimension(0) != null));
             List<ExtendedMemberInfo> extendedMemberInfos = new();
             extendedMemberInfos.AddRange(getExtendedMemberInfosForType(type.BaseType));
             extendedMemberInfos.AddRange(membersOfType);
@@ -194,14 +205,17 @@ namespace OpenSC.Model.Persistence
             extendedMemberInfosByNameForTypes.Add(type, extendedMemberInfosByName);
         }
 
-        private static bool filterMemberInfo1(MemberInfo memberInfo)
-            => ((memberInfo is FieldInfo) || (memberInfo is PropertyInfo));
-
-        private static bool filterExtendedMemberInfo2(ExtendedMemberInfo extendedMemberInfo)
-            => ((extendedMemberInfo.GetPersistAsAttributeForDimension(0) != null) || (extendedMemberInfo.TempForeignKeyAttribute != null));
-
         private const BindingFlags memberLookupBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         #endregion
+
+        private Dictionary<string, object> getForeignKeyCollectionForItem(T item)
+        {
+            if (foreignKeys.TryGetValue(item, out Dictionary<string, object> foreignKeyCollection))
+                return foreignKeyCollection;
+            Dictionary<string, object> newForeignKeyCollection = new();
+            foreignKeys.Add(item, newForeignKeyCollection);
+            return newForeignKeyCollection;
+        }
 
         #region Serialization
         private XElement serializeItem(T item)
@@ -225,8 +239,6 @@ namespace OpenSC.Model.Persistence
             if ((extendedMemberInfo.FieldInfo == null) && (extendedMemberInfo.PropertyInfo == null))
                 return;
             if ((extendedMemberInfo.PropertyInfo != null) && !(extendedMemberInfo.PropertyInfo.CanRead && extendedMemberInfo.PropertyInfo.CanWrite))
-                return;
-            if (extendedMemberInfo.TempForeignKeyAttribute != null)
                 return;
             object xmlElementInner = serializeValue(extendedMemberInfo, extendedMemberInfo.ValueType, extendedMemberInfo.GetValue(item), item);
             xmlElement.Add(new XElement(extendedMemberInfo.PersistAsAttributes[0].TagName, xmlElementInner));
@@ -366,20 +378,18 @@ namespace OpenSC.Model.Persistence
             }
 
             foreach (ConstructorInfo ctor in typeToDeserialize.GetConstructors())
-            {
                 if (ctor.GetParameters().Length == 0)
                     try
                     {
                         item = (T)ctor.Invoke(new object[] { });
                     }
                     catch { }
-            }
 
             if (item == null)
                 return null;
 
             string idStr = xmlElement.Attributes[ATTRIBUTE_ID].Value;
-            if (!int.TryParse(idStr, out int id) || id <= 0)
+            if (!int.TryParse(idStr, out int id) || (id <= 0))
                 return null;
             item.ID = id;
 
@@ -401,27 +411,18 @@ namespace OpenSC.Model.Persistence
                 return;
             if ((extendedMemberInfo.PropertyInfo != null) && !(extendedMemberInfo.PropertyInfo.CanRead && extendedMemberInfo.PropertyInfo.CanWrite))
                 return;
-            if (extendedMemberInfo.IsAssociationMember)
-                return;
-
             PersistAsAttribute persistData = extendedMemberInfo.GetPersistAsAttributeForDimension(0);
-            if ((persistData == null) && (extendedMemberInfo.TempForeignKeyAttribute != null))
-            {
-                string originalFieldName = extendedMemberInfo.TempForeignKeyAttribute.OriginalFieldName;
-                persistData = getExtendedMemberInfoByNameForType(extendedMemberInfo.MemberInfo.DeclaringType, originalFieldName).GetPersistAsAttributeForDimension(0);
-            }
             if (!persistedValues.TryGetValue(persistData.TagName, out XmlElement xmlElement))
                 return;
+            object value = deserializeXmlElement(extendedMemberInfo, extendedMemberInfo.ValueType, xmlElement, item);
             try
             {
-                object value = deserializeXmlElement(extendedMemberInfo, extendedMemberInfo.ValueType, xmlElement, item);
-                try
-                {
+                if (extendedMemberInfo.IsAssociationMember)
+                    getForeignKeyCollectionForItem(item).Add(extendedMemberInfo.MemberInfo.Name, value);
+                else
                     extendedMemberInfo.SetValue(item, value);
-                }
-                catch { }
             }
-            catch (WillRestoreValueLaterException) { }
+            catch { }
         }
 
         private static readonly Type[] PRIMITIVE_TYPES_NULL_IS_0 = new Type[]
@@ -437,7 +438,6 @@ namespace OpenSC.Model.Persistence
 
             if (memberType == typeof(string))
                 return xmlElement.InnerText;
-
             if ((xmlElement.InnerText == string.Empty) && PRIMITIVE_TYPES_NULL_IS_0.Contains(memberType))
                 return 0;
 
@@ -485,19 +485,38 @@ namespace OpenSC.Model.Persistence
                         deserializeAsType = foundTypeData.Key;
                 }
 
-                IValueXmlSerializer serializer = GetSerializerForType(deserializeAsType);
-                if (serializer == null)
-                    return xmlElement.InnerText;
-                PersistAsAttribute persistData = extendedMemberInfo.GetPersistAsAttributeForDimension(arrayDimension);
-                if ((persistData == null) && (extendedMemberInfo.TempForeignKeyAttribute != null))
+                bool isKVP = false;
+                Type kvpKeyType = null, kvpValueType = null;
+                if (extendedMemberInfo.IsAssociationMember && memberType.IsGenericType && (memberType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>)))
                 {
-                    string originalFieldName = extendedMemberInfo.TempForeignKeyAttribute.OriginalFieldName;
-                    persistData = getExtendedMemberInfoByNameForType(extendedMemberInfo.MemberInfo.DeclaringType, originalFieldName).GetPersistAsAttributeForDimension(arrayDimension);
+                    isKVP = true;
+                    Type[] genericArguments = memberType.GetGenericArguments();
+                    kvpKeyType = isAssociationType(genericArguments[0]) ? typeof(string) : genericArguments[0];
+                    kvpValueType = isAssociationType(genericArguments[1]) ? typeof(string) : genericArguments[1];
                 }
+
+                PersistAsAttribute persistData = extendedMemberInfo.GetPersistAsAttributeForDimension(arrayDimension);
+                object deserializedValue = xmlElement.InnerText;
                 XmlElement itemToDeserialize = xmlElement;
-                if (persistData.TagName != null)
-                    itemToDeserialize = itemToDeserialize.OfType<XmlElement>().FirstOrDefault();
-                return serializer.DeserializeItem(itemToDeserialize, parentItem, indices);
+                IValueXmlSerializer serializer = GetSerializerForType(deserializeAsType);
+                if (serializer != null)
+                {
+                    if (persistData.TagName != null)
+                        itemToDeserialize = itemToDeserialize.OfType<XmlElement>().FirstOrDefault();
+                    deserializedValue = serializer.DeserializeItem(itemToDeserialize, parentItem, indices);
+                }
+
+                if (isKVP)
+                {
+                    Type kvpType = typeof(KeyValuePair<,>).GetGenericTypeDefinition().MakeGenericType(new Type[] { kvpKeyType, kvpValueType });
+                    string keyValue = itemToDeserialize.Attributes[persistData?.KeyAttribute ?? "key"].Value;
+                    return Activator.CreateInstance(kvpType, new object[] { Convert.ChangeType(keyValue, kvpKeyType), deserializedValue });
+                }
+                else
+                {
+                    return deserializedValue;
+                }
+
             }
 
             return Convert.ChangeType(xmlElement.InnerText, deserializeAsType);
@@ -532,69 +551,40 @@ namespace OpenSC.Model.Persistence
                 return array;
             }
 
-            bool isCollection = false;
-            bool isDictionary = false;
-            Type keyType = null;
-            Type elementType = null;
-            foreach (Type interfaceType in memberType.GetInterfaces())
-            {
-                if (interfaceType.IsGenericType)
-                {
-                    if (interfaceType.GetGenericTypeDefinition() == typeof(IDictionary<,>))
-                    {
-                        isDictionary = true;
-                        isCollection = true;
-                        keyType = interfaceType.GetGenericArguments()[0];
-                        elementType = interfaceType.GetGenericArguments()[1];
-                        break;
-                    }
-                    if (interfaceType.GetGenericTypeDefinition() == typeof(ICollection<>))
-                    {
-                        isCollection = true;
-                        elementType = interfaceType.GetGenericArguments()[0];
-                        break;
-                    }
-                }
-            }
-            if (isCollection)
+            CollectionDetails collectionDetails = getCollectionDetails(memberType);
+
+            if (collectionDetails.IsCollection)
             {
                 if (extendedMemberInfo.PersistDetailedAttribute == null)
                 {
-                    if (elementType.IsAssignableTo(typeof(ISystemObject)) || (keyType?.IsAssignableTo(typeof(ISystemObject)) == true))
-                        throw new WillRestoreValueLaterException();
-                    Type[] genericParams = (keyType != null) ? new Type[] { keyType, elementType } : new Type[] { elementType };
-                    memberType = memberType.GetGenericTypeDefinition().MakeGenericType(genericParams);
+                    Type keyType = collectionDetails.KeyType;
+                    Type elementType = collectionDetails.ElementType;
+                    if (keyType?.IsAssignableTo(typeof(ISystemObject)) == true)
+                        keyType = typeof(string);
+                    if (elementType.IsAssignableTo(typeof(ISystemObject)))
+                        elementType = typeof(string);
+                    collectionDetails = collectionDetails with { KeyType = keyType, ElementType = elementType };
+                    memberType = memberType.GetGenericTypeDefinition().MakeGenericType(collectionDetails.AsTypeArray);
                 }
                 object collection = Activator.CreateInstance(memberType, new object[] { });
-                Type[] addMethodTypes = isDictionary ? new Type[] { keyType, elementType } : new Type[] { elementType };
-                MethodInfo addMethod = memberType.GetMethod(nameof(ICollection<object>.Add), addMethodTypes);
+                MethodInfo addMethod = memberType.GetMethod(nameof(ICollection<object>.Add), collectionDetails.AsTypeArray);
                 for (int i = 0; i < childElementCount; i++)
                 {
                     extendedIndices[arrayDimension] = i;
                     object deserializedKey = null;
-                    if (isDictionary)
+                    if (collectionDetails.IsDictionary)
                     {
                         PersistAsAttribute persistData = extendedMemberInfo.GetPersistAsAttributeForDimension(arrayDimension + 1);
-                        if ((persistData == null) && (extendedMemberInfo.TempForeignKeyAttribute != null))
-                        {
-                            string originalFieldName = extendedMemberInfo.TempForeignKeyAttribute.OriginalFieldName;
-                            persistData = getExtendedMemberInfoByNameForType(extendedMemberInfo.MemberInfo.DeclaringType, originalFieldName).GetPersistAsAttributeForDimension(arrayDimension + 1);
-                        }
                         if (persistData == null)
                             persistData = new PersistAsAttribute(UNDEFINED_ARRAY_ITEM_TAG);
                         deserializedKey = childElements[i].GetAttribute(persistData.KeyAttribute);
                         extendedIndices[arrayDimension] = deserializedKey;
                     }
-                    object deserializedElement = deserializeXmlElement(extendedMemberInfo, elementType, childElements[i], parentItem, arrayDimension + 1, extendedIndices);
-                    if (isDictionary)
-                    {
-                        if (deserializedKey != null)
-                            addMethod.Invoke(collection, new object[] { deserializedKey, deserializedElement });
-                    }
-                    else
-                    {
+                    object deserializedElement = deserializeXmlElement(extendedMemberInfo, collectionDetails.ElementType, childElements[i], parentItem, arrayDimension + 1, extendedIndices);
+                    if ((collectionDetails.IsDictionary) && (deserializedKey != null))
+                        addMethod.Invoke(collection, new object[] { deserializedKey, deserializedElement });
+                    else if (!collectionDetails.IsDictionary)
                         addMethod.Invoke(collection, new object[] { deserializedElement });
-                    }
                 }
                 return collection; 
             }
@@ -602,74 +592,30 @@ namespace OpenSC.Model.Persistence
             return null;
 
         }
-
-        private class WillRestoreValueLaterException : Exception { }
         #endregion
 
         #region Relations/associations
         public void BuildRelationsByForeignKeys(IDictionary<int, T> items)
         {
-            FieldInfo[] baseFields = storedType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
             foreach (T item in items.Values)
             {
-                foreach (FieldInfo foreignKeyField in baseFields)
-                    buildRelationForField(item, foreignKeyField, ref items);
-                if (isPolymorph)
-                {
-                    Type currentType = item.GetType();
-                    do
-                    {
-                        FieldInfo[] extendedFields = currentType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
-                        foreach (FieldInfo foreignKeyField in extendedFields)
-                            buildRelationForField(item, foreignKeyField, ref items);
-                        currentType = currentType.BaseType;
-                    } while (!currentType.Equals(storedType));
-                }
+                Type typeToRetrieve = isPolymorph ? item.GetType() : storedType;
+                foreach (ExtendedMemberInfo extendedMemberInfo in getExtendedMemberInfosForType(typeToRetrieve))
+                    buildRelationForField(item, extendedMemberInfo, ref items);
                 item.RestoreCustomRelations();
             }
-
         }
 
-        private void buildRelationForField(T item, FieldInfo foreignKeyField, ref IDictionary<int, T> items)
+        private void buildRelationForField(T item, ExtendedMemberInfo extendedMemberInfo, ref IDictionary<int, T> items)
         {
-
-            TempForeignKeyAttribute attr = foreignKeyField.GetCustomAttribute<TempForeignKeyAttribute>();
-            if (attr == null)
+            if (!extendedMemberInfo.IsAssociationMember)
                 return;
-
-            FieldInfo originalField = storedType.GetField(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-            PropertyInfo originalProperty = null;
-            if (originalField == null)
-                originalProperty = storedType.GetProperty(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-            if (isPolymorph && (originalField == null) && (originalField == null))
-            {
-                Type currentType = item.GetType();
-                do
-                {
-                    originalField = currentType.GetField(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-                    if (originalField == null)
-                        originalProperty = currentType.GetProperty(attr.OriginalFieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-                    currentType = currentType.BaseType;
-                } while (!currentType.Equals(storedType) && (originalField == null) && (originalProperty == null));
-            }
-            if ((originalField == null) && (originalProperty == null))
+            if (!getForeignKeyCollectionForItem(item).TryGetValue(extendedMemberInfo.MemberInfo.Name, out object foreignKeys))
                 return;
-
-            object foreignKeys = foreignKeyField.GetValue(item);
             if (foreignKeys == null)
                 return;
-
-            if (originalProperty != null)
-            {
-                object foreignObjects = getAssociatedObjects(foreignKeyField.FieldType, originalProperty.PropertyType, foreignKeys);
-                originalProperty.SetValue(item, foreignObjects);
-            }
-            else
-            {
-                object foreignObjects = getAssociatedObjects(foreignKeyField.FieldType, originalField.FieldType, foreignKeys);
-                originalField.SetValue(item, foreignObjects);
-            }
-
+            object foreignObjects = getAssociatedObjects(foreignKeys.GetType(), extendedMemberInfo.ValueType, foreignKeys);
+            extendedMemberInfo.SetValue(item, foreignObjects);
         }
 
         private object getAssociatedObjects(Type memberType, Type originalType, object foreignKeys)
@@ -685,6 +631,7 @@ namespace OpenSC.Model.Persistence
                     associatedObjects[i] = getAssociatedObjects(memberType.GetElementType(), originalType.GetElementType(), foreignKeysArray[i]);
                 return Convert.ChangeType(associatedObjects, originalType);
             }
+
             if(memberType.IsArray)
             {
                 string[] foreignKeysArray = foreignKeys as string[];
@@ -700,58 +647,13 @@ namespace OpenSC.Model.Persistence
                 return associatedObjects;
             }
 
-            bool isCollection = false;
-            bool isDictionary = false;
-            Type memberKeyType = null;
-            Type memberElementType = null;
-            foreach (Type interfaceType in memberType.GetInterfaces())
-            {
-                if (interfaceType.IsGenericType)
-                {
-                    if (interfaceType.GetGenericTypeDefinition() == typeof(IDictionary<,>))
-                    {
-                        isDictionary = true;
-                        isCollection = true;
-                        memberKeyType = interfaceType.GetGenericArguments()[0];
-                        memberElementType = interfaceType.GetGenericArguments()[1];
-                        break;
-                    }
-                    if (interfaceType.GetGenericTypeDefinition() == typeof(ICollection<>))
-                    {
-                        isCollection = true;
-                        memberElementType = interfaceType.GetGenericArguments()[0];
-                        break;
-                    }
-                }
-            }
-            Type originalKeyType = null;
-            Type originalElementType = null;
-            foreach (Type interfaceType in originalType.GetInterfaces())
-            {
-                if (interfaceType.IsGenericType)
-                {
-                    if (interfaceType.GetGenericTypeDefinition() == typeof(IDictionary<,>))
-                    {
-                        isDictionary = true;
-                        isCollection = true;
-                        originalKeyType = interfaceType.GetGenericArguments()[0];
-                        originalElementType = interfaceType.GetGenericArguments()[1];
-                        break;
-                    }
-                    if (interfaceType.GetGenericTypeDefinition() == typeof(ICollection<>))
-                    {
-                        isCollection = true;
-                        originalElementType = interfaceType.GetGenericArguments()[0];
-                        break;
-                    }
-                }
-            }
+            CollectionDetails memberTypeCollectionDetails = getCollectionDetails(memberType);
+            CollectionDetails originalTypeCollectionDetails = getCollectionDetails(originalType);
 
-            if (isCollection)
+            if (originalTypeCollectionDetails.IsCollection)
             {
                 object associatedObjects = Activator.CreateInstance(originalType, new object[] { });
-                Type[] addMethodTypes = isDictionary ? new Type[] { originalKeyType, originalElementType } : new Type[] { originalElementType };
-                MethodInfo addMethod = originalType.GetMethod(nameof(ICollection<object>.Add), addMethodTypes);
+                MethodInfo addMethod = originalType.GetMethod(nameof(ICollection<object>.Add), originalTypeCollectionDetails.AsTypeArray);
                 IEnumerable foreignKeysEnumerable = foreignKeys as IEnumerable;
                 if (foreignKeysEnumerable == null)
                     return null;
@@ -759,7 +661,7 @@ namespace OpenSC.Model.Persistence
                 {
                     object foreignKeyValue = foreignKey;
                     object foreignKeyKey = null;
-                    if (isDictionary)
+                    if (originalTypeCollectionDetails.IsDictionary)
                     {
                         Type foreignKeyType = foreignKey.GetType();
                         PropertyInfo keyProperty = foreignKeyType.GetProperty(nameof(KeyValuePair<object, object>.Key), BindingFlags.Public | BindingFlags.Instance);
@@ -768,9 +670,9 @@ namespace OpenSC.Model.Persistence
                         foreignKeyValue = valueProperty.GetValue(foreignKey);
                     }
                     object associatedObject = null;
-                    if (memberElementType != typeof(string))
+                    if (memberTypeCollectionDetails.ElementType != typeof(string))
                     {                        
-                        associatedObject = getAssociatedObjects(memberElementType, originalElementType, foreignKeyValue);
+                        associatedObject = getAssociatedObjects(memberTypeCollectionDetails.ElementType, originalTypeCollectionDetails.ElementType, foreignKeyValue);
                     }
                     else
                     {
@@ -779,11 +681,11 @@ namespace OpenSC.Model.Persistence
                         if (foreignKeyString != null)
                             associatedObject = SystemObjectRegister.Instance[foreignKeyString];
                     }
-                    if (isDictionary)
+                    if (originalTypeCollectionDetails.IsDictionary)
                     {
                         if (foreignKeyKey != null)
                         {
-                            if (originalKeyType.IsAssignableTo(typeof(ISystemObject)))
+                            if (originalTypeCollectionDetails.KeyType.IsAssignableTo(typeof(ISystemObject)))
                             {
                                 string foreignKeyKeyString = foreignKeyKey as string;
                                 if (foreignKeyKeyString != null)
@@ -810,10 +712,41 @@ namespace OpenSC.Model.Persistence
             return SystemObjectRegister.Instance[_foreignKeyString];
 
         }
-
         #endregion
 
-        private static Type getArrayBaseType(Type type) => (type.IsArray) ? getArrayBaseType(type.GetElementType()) : type;
+        private static CollectionDetails getCollectionDetails(Type type)
+        {
+            bool isDictionary = false;
+            bool isCollection = false;
+            Type keyType = null;
+            Type elementType = null;
+            foreach (Type interfaceType in type.GetInterfaces())
+            {
+                if (interfaceType.IsGenericType)
+                {
+                    if (interfaceType.GetGenericTypeDefinition() == typeof(IDictionary<,>))
+                    {
+                        isDictionary = true;
+                        isCollection = true;
+                        keyType = interfaceType.GetGenericArguments()[0];
+                        elementType = interfaceType.GetGenericArguments()[1];
+                        break;
+                    }
+                    if (interfaceType.GetGenericTypeDefinition() == typeof(ICollection<>))
+                    {
+                        isCollection = true;
+                        elementType = interfaceType.GetGenericArguments()[0];
+                        break;
+                    }
+                }
+            }
+            return new(type, isDictionary, isCollection, keyType, elementType);
+        }
+
+        private record CollectionDetails(Type Type, bool IsDictionary, bool IsCollection, Type KeyType, Type ElementType)
+        {
+            public Type[] AsTypeArray => IsDictionary ? new Type[] { KeyType, ElementType } : new Type[] { ElementType };
+        }
 
         private object[] extendIndices(object[] original, int arrayDimension)
         {

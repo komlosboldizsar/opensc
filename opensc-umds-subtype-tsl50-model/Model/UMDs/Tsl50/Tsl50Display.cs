@@ -20,11 +20,6 @@ namespace OpenSC.Model.UMDs.Tsl50
         [PersistAs("screen")]
         private Tsl50Screen screen;
 
-#pragma warning disable CS0169
-        [TempForeignKey(nameof(screen))]
-        private string _screenId;
-#pragma warning restore CS0169
-
         public Tsl50Screen Screen
         {
             get => screen;

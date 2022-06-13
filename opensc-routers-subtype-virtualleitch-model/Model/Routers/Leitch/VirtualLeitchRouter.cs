@@ -75,11 +75,6 @@ namespace OpenSC.Model.Routers.Leitch
         [PersistAs("port")]
         private SerialPort port;
 
-#pragma warning disable CS0169
-        [TempForeignKey(nameof(port))]
-        private string _portId;
-#pragma warning restore CS0169
-
         public SerialPort Port
         {
             get => port;

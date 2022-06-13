@@ -33,11 +33,6 @@ namespace OpenSC.Model.UMDs.BmdSmartView
         [PersistAs("unit")]
         private BmdSmartViewUnit unit;
 
-#pragma warning disable CS0169
-        [TempForeignKey(nameof(unit))]
-        private string _unitId;
-#pragma warning restore CS0169
-
         public BmdSmartViewUnit Unit
         {
             get => unit;
