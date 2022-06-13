@@ -105,9 +105,9 @@ namespace OpenSC.Model.Mixers
         #region Property: GivesRedTallyToSources, GivesGreenTallyToSources
         public event PropertyChangedTwoValuesDelegate<Mixer, bool> GivesRedTallyToSourcesChanged;
 
-        [PersistAs("gives_red_tally")]
         private bool givesRedTallyToSources;
 
+        [PersistAs("gives_red_tally")]
         public bool GivesRedTallyToSources
         {
             get => givesRedTallyToSources;
@@ -116,9 +116,9 @@ namespace OpenSC.Model.Mixers
 
         public event PropertyChangedTwoValuesDelegate<Mixer, bool> GivesGreenTallyToSourcesChanged;
 
-        [PersistAs("gives_green_tally")]
         private bool givesGreenTallyToSources;
 
+        [PersistAs("gives_green_tally")]
         public bool GivesGreenTallyToSources
         {
             get => givesGreenTallyToSources;

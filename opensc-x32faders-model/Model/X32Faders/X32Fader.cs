@@ -30,9 +30,9 @@ namespace OpenSC.Model.X32Faders
         #region Property: IpAddress
         public event PropertyChangedTwoValuesDelegate<X32Fader, string> IpAddressChanged;
 
-        [PersistAs("ip_address")]
         private string ipAddress = "192.168.10.41";
 
+        [PersistAs("ip_address")]
         public string IpAddress
         {
             get => ipAddress;
@@ -43,9 +43,9 @@ namespace OpenSC.Model.X32Faders
         #region Property: OscPath
         public event PropertyChangedTwoValuesDelegate<X32Fader, string> OscPathChanged;
 
-        [PersistAs("osc_path")]
         private string oscPath = "";
 
+        [PersistAs("osc_path")]
         public string OscPath
         {
             get => oscPath;
@@ -56,9 +56,9 @@ namespace OpenSC.Model.X32Faders
         #region Property: TargetLevel
         public event PropertyChangedTwoValuesDelegate<X32Fader, decimal> TargetLevelChanged;
 
-        [PersistAs("target_level")]
         private decimal targetLevel = 1.0m;
 
+        [PersistAs("target_level")]
         public decimal TargetLevel
         {
             get => targetLevel;
@@ -75,9 +75,9 @@ namespace OpenSC.Model.X32Faders
         #region Property: Time
         public event PropertyChangedTwoValuesDelegate<X32Fader, int> TimeChanged;
 
-        [PersistAs("time")]
         private int time = 1000;
 
+        [PersistAs("time")]
         public int Time
         {
             get => time;
@@ -94,9 +94,9 @@ namespace OpenSC.Model.X32Faders
         #region Property: ReferenceLevelForTime
         public event PropertyChangedTwoValuesDelegate<X32Fader, decimal> ReferenceLevelForTimeChanged;
 
-        [PersistAs("reference_level_for_time")]
         private decimal referenceLevelForTime = 0.0m;
 
+        [PersistAs("reference_level_for_time")]
         public decimal ReferenceLevelForTime
         {
             get => referenceLevelForTime;
@@ -113,9 +113,9 @@ namespace OpenSC.Model.X32Faders
         #region Property: UseReferenceLevelForTime
         public event PropertyChangedTwoValuesDelegate<X32Fader, bool> UseReferenceLevelForTimeChanged;
 
-        [PersistAs("use_reference_level_for_time")]
         private bool useReferenceLevelForTime = false;
 
+        [PersistAs("use_reference_level_for_time")]
         public bool UseReferenceLevelForTime
         {
             get => useReferenceLevelForTime;
@@ -126,9 +126,9 @@ namespace OpenSC.Model.X32Faders
         #region Property: TimeStep
         public event PropertyChangedTwoValuesDelegate<X32Fader, int> TimeStepChanged;
 
-        [PersistAs("time_step")]
         private int timeStep = 50;
 
+        [PersistAs("time_step")]
         public int TimeStep
         {
             get => timeStep;

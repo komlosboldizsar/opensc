@@ -61,9 +61,9 @@ namespace OpenSC.Model.UMDs
         #region Property: Enabled
         public event PropertyChangedTwoValuesDelegate<Umd, bool> EnabledChanged;
 
-        [PersistAs("enabled")]
         private bool enabled = true;
 
+        [PersistAs("enabled")]
         public bool Enabled
         {
             get => enabled;
@@ -98,9 +98,9 @@ namespace OpenSC.Model.UMDs
         #region Property: FullStaticText
         public event PropertyChangedTwoValuesDelegate<Umd, string> FullStaticTextChanged;
 
-        [PersistAs("full_static_text")]
         private string fullStaticText;
 
+        [PersistAs("full_static_text")]
         public string FullStaticText
         {
             get => fullStaticText;
@@ -115,9 +115,9 @@ namespace OpenSC.Model.UMDs
         #region Property: UseFullStaticText
         public event PropertyChangedTwoValuesDelegate<Umd, bool> UseFullStaticTextChanged;
 
-        [PersistAs("use_full_static_text")]
         private bool useFullStaticText = false;
 
+        [PersistAs("use_full_static_text")]
         public bool UseFullStaticText
         {
             get => useFullStaticText;
@@ -128,9 +128,9 @@ namespace OpenSC.Model.UMDs
         #region Property: AlignmentWithFullStaticText
         public event PropertyChangedTwoValuesDelegate<Umd, UmdTextAlignment> AlignmentWithFullStaticTextChanged;
 
-        [PersistAs("alignment_with_full_static_text")]
         private UmdTextAlignment alignmentWithFullStaticText = UmdTextAlignment.Left;
 
+        [PersistAs("alignment_with_full_static_text")]
         public UmdTextAlignment AlignmentWithFullStaticText
         {
             get => alignmentWithFullStaticText;
@@ -150,9 +150,9 @@ namespace OpenSC.Model.UMDs
         #region Property: PeriodicUpdateEnabled
         public event PropertyChangedTwoValuesDelegate<Umd, bool> PeriodicUpdateEnabledChanged;
 
-        [PersistAs("periodic_update_enabled")]
         private bool periodicUpdateEnabled = true;
 
+        [PersistAs("periodic_update_enabled")]
         public bool PeriodicUpdateEnabled
         {
             get => periodicUpdateEnabled;
@@ -163,9 +163,9 @@ namespace OpenSC.Model.UMDs
         #region Property: PeriodicUpdateInterval
         public event PropertyChangedTwoValuesDelegate<Umd, int> PeriodicUpdateIntervalChanged;
 
-        [PersistAs("periodic_update_interval")]
         private int periodicUpdateInterval = 15;
 
+        [PersistAs("periodic_update_interval")]
         public int PeriodicUpdateInterval
         {
             get => periodicUpdateInterval;

@@ -63,9 +63,9 @@ namespace OpenSC.Model.Variables
         #region Property: Identifier
         public event PropertyChangedTwoValuesDelegate<IBoolean, string> IdentifierChanged;
 
-        [PersistAs("identifier")]
         private string identifier;
 
+        [PersistAs("identifier")]
         public string Identifier
         {
             get => identifier;
@@ -85,9 +85,9 @@ namespace OpenSC.Model.Variables
         #region Property: Color
         public event PropertyChangedTwoValuesDelegate<IBoolean, Color> ColorChanged;
 
-        [PersistAs("color")]
         private Color color;
 
+        [PersistAs("color")]
         public Color Color
         {
             get => color;
@@ -103,6 +103,7 @@ namespace OpenSC.Model.Variables
 
         private string description;
 
+        [PersistAs("description")]
         public string Description
         {
             get => description;

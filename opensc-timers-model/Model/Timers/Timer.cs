@@ -64,8 +64,9 @@ namespace OpenSC.Model.Timers
         #region Property: CountdownSeconds
         public event PropertyChangedTwoValuesDelegate<Timer, int> CountdownSecondsChanged;
 
-        [PersistAs("countdown_seconds")]
         private int countdownSeconds = 5;
+
+        [PersistAs("countdown_seconds")]
         public int CountdownSeconds
         {
             get => countdownSeconds;
@@ -102,9 +103,9 @@ namespace OpenSC.Model.Timers
         #region Propety: Mode
         public event PropertyChangedTwoValuesDelegate<Timer, TimerMode> ModeChanged;
 
-        [PersistAs("mode")]
         private TimerMode mode = TimerMode.Backwards;
 
+        [PersistAs("mode")]
         public TimerMode Mode
         {
             get => mode;

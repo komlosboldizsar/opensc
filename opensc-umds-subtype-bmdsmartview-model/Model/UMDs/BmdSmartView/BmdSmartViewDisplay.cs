@@ -30,9 +30,9 @@ namespace OpenSC.Model.UMDs.BmdSmartView
         #region Property: Unit
         public event PropertyChangedTwoValuesDelegate<BmdSmartViewDisplay, BmdSmartViewUnit> UnitChanged;
 
-        [PersistAs("unit")]
         private BmdSmartViewUnit unit;
 
+        [PersistAs("unit")]
         public BmdSmartViewUnit Unit
         {
             get => unit;

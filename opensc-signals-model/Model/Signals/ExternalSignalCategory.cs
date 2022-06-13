@@ -28,9 +28,9 @@ namespace OpenSC.Model.Signals
         #region Property: Color
         public event PropertyChangedTwoValuesDelegate<ExternalSignalCategory, Color> ColorChanged;
 
-        [PersistAs("color")]
         private Color color;
 
+        [PersistAs("color")]
         public Color Color
         {
             get => color;

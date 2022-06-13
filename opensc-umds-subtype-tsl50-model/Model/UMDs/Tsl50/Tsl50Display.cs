@@ -17,9 +17,9 @@ namespace OpenSC.Model.UMDs.Tsl50
         #region Property: Screen
         public event PropertyChangedTwoValuesDelegate<Tsl50Display, Tsl50Screen> ScreenChanged;
 
-        [PersistAs("screen")]
         private Tsl50Screen screen;
 
+        [PersistAs("screen")]
         public Tsl50Screen Screen
         {
             get => screen;
@@ -30,9 +30,9 @@ namespace OpenSC.Model.UMDs.Tsl50
         #region Property: Index
         public event PropertyChangedTwoValuesDelegate<Tsl50Display, int> IndexChanged;
 
-        [PersistAs("index")]
         private int index = 1;
 
+        [PersistAs("index")]
         public int Index
         {
             get => index;

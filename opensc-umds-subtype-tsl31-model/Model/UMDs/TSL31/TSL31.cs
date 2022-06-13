@@ -19,9 +19,9 @@ namespace OpenSC.Model.UMDs.Tsl31
         #region Property: Port
         public event PropertyChangedTwoValuesDelegate<Tsl31, SerialPort> PortChanged;
 
-        [PersistAs("port")]
         private SerialPort port;
 
+        [PersistAs("port")]
         public SerialPort Port
         {
             get => port;
@@ -32,9 +32,9 @@ namespace OpenSC.Model.UMDs.Tsl31
         #region Property: Address
         public event PropertyChangedTwoValuesDelegate<Tsl31, int> AddressChanged;
 
-        [PersistAs("address")]
         private int address = 1;
 
+        [PersistAs("address")]
         public int Address
         {
             get => address;
@@ -52,17 +52,17 @@ namespace OpenSC.Model.UMDs.Tsl31
         public event PropertyChangedTwoValuesDelegate<Tsl31, bool> Tally1Overrides2Changed;
         public event PropertyChangedTwoValuesDelegate<Tsl31, bool> Tally3Overrides4Changed;
 
-        [PersistAs("tally1overrides2")]
         private bool tally1overrides2 = false;
-        [PersistAs("tally3overrides4")]
         private bool tally3overrides4 = false;
 
+        [PersistAs("tally1overrides2")]
         public bool Tally1Overrides2
         {
             get => tally1overrides2;
             set => this.setProperty(ref tally1overrides2, value, Tally1Overrides2Changed, null, (_, _) => UpdateTallies());
         }
 
+        [PersistAs("tally3overrides4")]
         public bool Tally3Overrides4
         {
             get => tally3overrides4;

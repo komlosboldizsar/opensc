@@ -23,18 +23,6 @@ namespace OpenSC.Model.Routers.Leitch
         public LeitchRouter()
         { }
 
-        public override void TotallyRestored()
-        {
-            base.TotallyRestored();
-            if (port != null)
-            {
-                port.ReceivedDataAsciiLine += receivedLineFromPort;
-                port.InitializedChanged += portInitializedChangedHandler;
-                if (port.Initialized)
-                    initSerial();
-            }
-        }
-
         public override void Removed()
         {
             base.Removed();
@@ -45,20 +33,28 @@ namespace OpenSC.Model.Routers.Leitch
         #region Property: Port
         public event PropertyChangedTwoValuesDelegate<LeitchRouter, SerialPort> PortChanged;
         
-        [PersistAs("port")]
         private SerialPort port;
 
+        [PersistAs("port")]
         public SerialPort Port
         {
             get => port;
             set
             {
                 BeforeChangePropertyDelegate<SerialPort> beforeChangeDelegate = (ov, nv) => {
-                    ov.ReceivedDataAsciiLine -= receivedLineFromPort;
-                    ov.InitializedChanged -= portInitializedChangedHandler;
+                    if (ov != null)
+                    {
+                        ov.ReceivedDataAsciiLine -= receivedLineFromPort;
+                        ov.InitializedChanged -= portInitializedChangedHandler;
+                    }
                 };
                 AfterChangePropertyDelegate<SerialPort> afterChangeDelegate = (ov, nv) => {
-                    port.ReceivedDataAsciiString += receivedLineFromPort;
+                    if (nv != null)
+                    {
+                        nv.ReceivedDataAsciiString += receivedLineFromPort;
+                        nv.InitializedChanged += portInitializedChangedHandler;
+                        initSerial();
+                    }
                 };
                 this.setProperty(ref port, value, PortChanged, beforeChangeDelegate, afterChangeDelegate);
             }
@@ -80,9 +76,9 @@ namespace OpenSC.Model.Routers.Leitch
         #region Property: Level
         public event PropertyChangedTwoValuesDelegate<LeitchRouter, int> LevelChanged;
 
-        [PersistAs("level")]
         private int level;
 
+        [PersistAs("level")]
         public int Level
         {
             get => level;

@@ -36,9 +36,9 @@ namespace OpenSC.Model.Routers.CrosspointStores
         #region Property: StoredInput
         public event PropertyChangedTwoValuesDelegate<CrosspointStore, RouterInput> StoredInputChanged;
 
-        [PersistAs("stored_input")]
         private RouterInput storedInput;
 
+        [PersistAs("stored_input")]
         public RouterInput StoredInput
         {
             get => storedInput;
@@ -55,9 +55,9 @@ namespace OpenSC.Model.Routers.CrosspointStores
         #region Property: StoredOutput
         public event PropertyChangedTwoValuesDelegate<CrosspointStore, RouterOutput> StoredOutputChanged;
 
-        [PersistAs("stored_output")]
         private RouterOutput storedOutput;
 
+        [PersistAs("stored_output")]
         public RouterOutput StoredOutput
         {
             get => storedOutput;
@@ -76,9 +76,9 @@ namespace OpenSC.Model.Routers.CrosspointStores
         #region Property: ClearInputAfterTake
         public event PropertyChangedTwoValuesDelegate<CrosspointStore, bool> ClearInputAfterTakeChanged;
 
-        [PersistAs("clear_input_after_take")]
         private bool clearInputAfterTake;
 
+        [PersistAs("clear_input_after_take")]
         public bool ClearInputAfterTake
         {
             get => clearInputAfterTake;
@@ -89,9 +89,9 @@ namespace OpenSC.Model.Routers.CrosspointStores
         #region Property: ClearOutputAfterTake
         public event PropertyChangedTwoValuesDelegate<CrosspointStore, bool> ClearOutputAfterTakeChanged;
 
-        [PersistAs("clear_output_after_take")]
         private bool clearOutputAfterTake;
 
+        [PersistAs("clear_output_after_take")]
         public bool ClearOutputAfterTake
         {
             get => clearOutputAfterTake;
@@ -102,9 +102,9 @@ namespace OpenSC.Model.Routers.CrosspointStores
         #region Property: ImportInputAfterOutputSet
         public event PropertyChangedTwoValuesDelegate<CrosspointStore, bool> ImportInputAfterOutputSetChanged;
 
-        [PersistAs("import_input_after_output_set")]
         private bool importInputAfterOutputSet;
 
+        [PersistAs("import_input_after_output_set")]
         public bool ImportInputAfterOutputSet
         {
             get => importInputAfterOutputSet;
@@ -117,6 +117,7 @@ namespace OpenSC.Model.Routers.CrosspointStores
 
         private bool autotake;
 
+        [PersistAs("autotake")]
         public bool Autotake
         {
             get => autotake;

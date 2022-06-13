@@ -109,9 +109,9 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         #region Property: IpAddress
         public event PropertyChangedTwoValuesDelegate<BmdMixer, string> IpAddressChanged;
 
-        [PersistAs("ip_address")]
         private string ipAddress;
 
+        [PersistAs("ip_address")]
         public string IpAddress
         {
             get => ipAddress;
@@ -165,9 +165,9 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign
         #region Property: AutoReconnect
         public event PropertyChangedTwoValuesDelegate<BmdMixer, bool> AutoReconnectChanged;
 
-        [PersistAs("auto_reconnect")]
         private bool autoReconnect;
 
+        [PersistAs("auto_reconnect")]
         public bool AutoReconnect
         {
             get => autoReconnect;

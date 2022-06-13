@@ -55,9 +55,9 @@ namespace OpenSC.Model.Signals
         #region Property: Category
         public event PropertyChangedTwoValuesDelegate<ExternalSignal, ExternalSignalCategory> CategoryChanged;
 
-        [PersistAs("category")]
         private ExternalSignalCategory category;
 
+        [PersistAs("category")]
         public ExternalSignalCategory Category
         {
             get => category;

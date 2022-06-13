@@ -57,9 +57,9 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         #region Property: IpAddress
         public event PropertyChangedTwoValuesDelegate<BmdVideohub, string> IpAddressChanged;
 
-        [PersistAs("ip_address")]
         private string ipAddress;
 
+        [PersistAs("ip_address")]
         public string IpAddress
         {
             get => ipAddress;
@@ -108,9 +108,9 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         #region Auto reconnect
         public event PropertyChangedTwoValuesDelegate<BmdVideohub, bool> AutoReconnectChanged;
 
-        [PersistAs("auto_reconnect")]
         private bool autoReconnect;
 
+        [PersistAs("auto_reconnect")]
         public bool AutoReconnect
         {
             get => autoReconnect;

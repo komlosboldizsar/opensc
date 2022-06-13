@@ -20,13 +20,6 @@ namespace OpenSC.Model.Signals.TallyCopying
             base.Removed();
             Name = null;
         }
-
-        public override void TotallyRestored()
-        {
-            base.TotallyRestored();
-            updateToTally();
-            updateFromTally();
-        }
         #endregion
 
         #region Owner database
@@ -36,9 +29,9 @@ namespace OpenSC.Model.Signals.TallyCopying
         #region Property: FromSignal
         public event PropertyChangedTwoValuesDelegate<TallyCopy, ISignalSourceRegistered> FromSignalChanged;
 
-        [PersistAs("from_signal")]
         private ISignalSourceRegistered fromSignal;
 
+        [PersistAs("from_signal")]
         public ISignalSourceRegistered FromSignal
         {
             get => fromSignal;
@@ -49,9 +42,9 @@ namespace OpenSC.Model.Signals.TallyCopying
         #region Property: FromTallyColor
         public event PropertyChangedTwoValuesDelegate<TallyCopy, SignalTallyColor> FromTallyColorChanged;
 
-        [PersistAs("from_tally_color")]
         private SignalTallyColor fromTallyColor;
 
+        [PersistAs("from_tally_color")]
         public SignalTallyColor FromTallyColor
         {
             get => fromTallyColor;
@@ -95,9 +88,9 @@ namespace OpenSC.Model.Signals.TallyCopying
         #region Property: ToSignal
         public event PropertyChangedTwoValuesDelegate<TallyCopy, ISignalSourceRegistered> ToSignalChanged;
 
-        [PersistAs("to_signal")]
         private ISignalSourceRegistered toSignal;
 
+        [PersistAs("to_signal")]
         public ISignalSourceRegistered ToSignal
         {
             get => toSignal;
@@ -108,9 +101,9 @@ namespace OpenSC.Model.Signals.TallyCopying
         #region Property: ToTallyColor
         public event PropertyChangedTwoValuesDelegate<TallyCopy, SignalTallyColor> ToTallyColorChanged;
 
-        [PersistAs("to_tally_color")]
         private SignalTallyColor toTallyColor;
 
+        [PersistAs("to_tally_color")]
         public SignalTallyColor ToTallyColor
         {
             get => toTallyColor;

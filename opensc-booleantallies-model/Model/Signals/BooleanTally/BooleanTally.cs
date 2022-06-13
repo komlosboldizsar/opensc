@@ -71,9 +71,9 @@ namespace OpenSC.Model.Signals.BooleanTallies
         #region Property: ToSignal
         public event PropertyChangedTwoValuesDelegate<BooleanTally, ISignalSourceRegistered> ToSignalChanged;
 
-        [PersistAs("to_signal")]
         private ISignalSourceRegistered toSignal;
 
+        [PersistAs("to_signal")]
         public ISignalSourceRegistered ToSignal
         {
             get => toSignal;
@@ -84,9 +84,9 @@ namespace OpenSC.Model.Signals.BooleanTallies
         #region Property: ToTallyColor
         public event PropertyChangedTwoValuesDelegate<BooleanTally, SignalTallyColor> ToTallyColorChanged;
 
-        [PersistAs("to_tally_color")]
         private SignalTallyColor toTallyColor;
 
+        [PersistAs("to_tally_color")]
         public SignalTallyColor ToTallyColor
         {
             get => toTallyColor;
@@ -114,7 +114,7 @@ namespace OpenSC.Model.Signals.BooleanTallies
         private void updateToTally() => ToTally = toSignal?.GetTally(toTallyColor);
         #endregion
 
-        #region Source and boolean restoration
+        #region Boolean restoration
         private void restoreBoolean()
         {
             if (_fromBooleanUniqueId != null)

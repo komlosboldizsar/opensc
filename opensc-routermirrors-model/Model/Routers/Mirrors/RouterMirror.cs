@@ -28,21 +28,6 @@ namespace OpenSC.Model.Routers.Mirrors
         #endregion
 
         #region Restoration
-        public override void RestoredBasicRelations()
-        {
-            base.RestoredBasicRelations();
-            if (routerA != null)
-            {
-                routerA.StateChanged += routerAstateChangedHandler;
-                routerAstate = routerA.State;
-            }
-            if (routerB != null)
-            {
-                routerB.StateChanged += routerBstateChangedHandler;
-                routerBstate = routerB.State;
-            }
-        }
-
         public override void TotallyRestored()
         {
             base.TotallyRestored();
@@ -64,9 +49,9 @@ namespace OpenSC.Model.Routers.Mirrors
         #region Property: Routers
         public event PropertyChangedTwoValuesDelegate<RouterMirror, Router> RouterAChanged;
 
-        [PersistAs("router_a")]
         private Router routerA;
 
+        [PersistAs("router_a")]
         public Router RouterA
         {
             get => routerA;
@@ -92,9 +77,9 @@ namespace OpenSC.Model.Routers.Mirrors
 
         public event PropertyChangedTwoValuesDelegate<RouterMirror, Router> RouterBChanged;
 
-        [PersistAs("router_b")]
         private Router routerB;
 
+        [PersistAs("router_b")]
         public Router RouterB
         {
             get => routerB;
@@ -122,9 +107,9 @@ namespace OpenSC.Model.Routers.Mirrors
         #region Property: SynchronizationMode
         public event PropertyChangedTwoValuesDelegate<RouterMirror, RouterMirrorSynchronizationMode> SynchronizationModeChanged;
 
-        [PersistAs("synchronization_mode")]
         private RouterMirrorSynchronizationMode synchronizationMode;
 
+        [PersistAs("synchronization_mode")]
         public RouterMirrorSynchronizationMode SynchronizationMode
         {
             get => synchronizationMode;

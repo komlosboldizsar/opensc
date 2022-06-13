@@ -70,9 +70,9 @@ namespace OpenSC.Model.Variables
         #region Property: Type
         public event PropertyChangedTwoValuesDelegate<FlipFlopBoolean, FlipFlopType> TypeChanged;
 
-        [PersistAs("type")]
         private FlipFlopType type;
 
+        [PersistAs("type")]
         public FlipFlopType Type
         {
             get => type;
@@ -205,9 +205,9 @@ namespace OpenSC.Model.Variables
         #region Property: EnableSetByUser
         public event PropertyChangedTwoValuesDelegate<FlipFlopBoolean, bool> EnableSetByUserChanged;
 
-        [PersistAs("enable_set_by_user")]
         private bool enableSetByUser;
 
+        [PersistAs("enable_set_by_user")]
         public bool EnableSetByUser
         {
             get => enableSetByUser;
@@ -218,9 +218,9 @@ namespace OpenSC.Model.Variables
         #region Property: EnableResetByUser
         public event PropertyChangedTwoValuesDelegate<FlipFlopBoolean, bool> EnableResetByUserChanged;
 
-        [PersistAs("enable_reset_by_user")]
         private bool enableResetByUser;
 
+        [PersistAs("enable_reset_by_user")]
         public bool EnableResetByUser
         {
             get => enableResetByUser;
@@ -231,9 +231,9 @@ namespace OpenSC.Model.Variables
         #region Property: EnableToggleByUser
         public event PropertyChangedTwoValuesDelegate<FlipFlopBoolean, bool> EnableToggleByUserChanged;
 
-        [PersistAs("enable_toggle_by_user")]
         private bool enableToggleByUser;
 
+        [PersistAs("enable_toggle_by_user")]
         public bool EnableToggleByUser
         {
             get => enableToggleByUser;

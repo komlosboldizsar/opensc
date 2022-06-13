@@ -37,8 +37,6 @@ namespace OpenSC.Model.Routers.Leitch
         public override void TotallyRestored()
         {
             base.TotallyRestored();
-            if (port != null)
-                port.ReceivedDataAsciiLine += receivedLineFromPort;
             State = RouterState.Ok;
             StateString = "OK";
         }
@@ -72,20 +70,28 @@ namespace OpenSC.Model.Routers.Leitch
         #region Property: Port
         public event PropertyChangedTwoValuesDelegate<VirtualLeitchRouter, SerialPort> PortChanged;
 
-        [PersistAs("port")]
         private SerialPort port;
 
+        [PersistAs("port")]
         public SerialPort Port
         {
             get => port;
             set => this.setProperty(ref port, value, PortChanged,
                 (ov, nv) => {
                     if (ov != null)
+                    {
                         ov.ReceivedDataAsciiString -= receivedLineFromPort;
+                        ov.InitializedChanged -= portInitializedChanged;
+                    }
                 },
                 (ov, nv) => {
                     if (nv != null)
-                        port.ReceivedDataAsciiString += receivedLineFromPort;
+                    {
+                        nv.ReceivedDataAsciiString += receivedLineFromPort;
+                        nv.InitializedChanged += portInitializedChanged;
+                        if (nv.Initialized)
+                            reportEverything();
+                    }
                 });
         }
 

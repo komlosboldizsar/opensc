@@ -19,9 +19,9 @@ namespace OpenSC.Model.UMDs.McCurdy
         #region Property: Port
         public event PropertyChangedTwoValuesDelegate<McCurdyUMD1, SerialPort> PortChanged;
 
-        [PersistAs("port")]
         private SerialPort port;
 
+        [PersistAs("port")]
         public SerialPort Port
         {
             get => port;
@@ -32,9 +32,9 @@ namespace OpenSC.Model.UMDs.McCurdy
         #region Property: Address
         public event PropertyChangedTwoValuesDelegate<McCurdyUMD1, int> AddressChanged;
 
-        [PersistAs("address")]
         private int address = 1;
 
+        [PersistAs("address")]
         public int Address
         {
             get => address;

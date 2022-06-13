@@ -28,7 +28,6 @@ namespace OpenSC.Model.VTRs
         public override void RestoredOwnFields()
         {
             base.RestoredOwnFields();
-            CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
             initStillClearUnknownStateDetection();
         }
 
@@ -43,9 +42,9 @@ namespace OpenSC.Model.VTRs
         #region Property: ListenedIP
         public event PropertyChangedTwoValuesDelegate<CasparCgPlayout, string> ListenedIpChanged;
 
-        [PersistAs("listened_ip")]
         private string listenedIp = "127.0.0.1";
 
+        [PersistAs("listened_ip")]
         public string ListenedIp
         {
             get => listenedIp;
@@ -61,9 +60,9 @@ namespace OpenSC.Model.VTRs
         #region Property: WatchedChannel
         public event PropertyChangedTwoValuesDelegate<CasparCgPlayout, int> WatchedChannelChanged;
 
-        [PersistAs("watched_channel")]
         private int watchedChannel = 1;
 
+        [PersistAs("watched_channel")]
         public int WatchedChannel
         {
             get => watchedChannel;
@@ -79,9 +78,9 @@ namespace OpenSC.Model.VTRs
         #region Property: WatchedLayer
         public event PropertyChangedTwoValuesDelegate<CasparCgPlayout, int> WatchedLayerChanged;
 
-        [PersistAs("watched_layer")]
         private int watchedLayer = 10;
 
+        [PersistAs("watched_layer")]
         public int WatchedLayer
         {
             get => watchedLayer;

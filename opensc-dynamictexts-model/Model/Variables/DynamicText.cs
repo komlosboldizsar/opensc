@@ -45,9 +45,9 @@ namespace OpenSC.Model.Variables
         #region Property: Formula
         public event PropertyChangedTwoValuesDelegate<DynamicText, string> FormulaChanged;
 
-        [PersistAs("formula")]
         private string formula;
 
+        [PersistAs("formula")]
         public string Formula
         {
             get => formula;

@@ -43,9 +43,9 @@ namespace OpenSC.Model.MidiControllers
         #region Property: DeviceId
         public event PropertyChangedTwoValuesDelegate<MidiController, int> DeviceIdChanged;
 
-        [PersistAs("device_id")]
         private int deviceId;
 
+        [PersistAs("device_id")]
         public int DeviceId
         {
             get => deviceId;

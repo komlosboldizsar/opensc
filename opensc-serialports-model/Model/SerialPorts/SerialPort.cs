@@ -54,9 +54,9 @@ namespace OpenSC.Model.SerialPorts
         #region Property: ComPortName
         public event PropertyChangedTwoValuesDelegate<SerialPort, string> ComPortNameChanged;
 
-        [PersistAs("port_name")]
         protected string comPortName;
 
+        [PersistAs("port_name")]
         public string ComPortName
         {
             get => comPortName;
@@ -106,9 +106,9 @@ namespace OpenSC.Model.SerialPorts
         #region Property: BaudRate
         public event PropertyChangedTwoValuesDelegate<SerialPort, int> BaudRateChanged;
 
-        [PersistAs("baudrate")]
         private int baudRate = DEFAULT_BAUDRATE;
 
+        [PersistAs("baudrate")]
         public int BaudRate
         {
             get => baudRate;
@@ -130,9 +130,9 @@ namespace OpenSC.Model.SerialPorts
         #region Property: Parity
         public event PropertyChangedTwoValuesDelegate<SerialPort, Parity> ParityChanged;
 
-        [PersistAs("parity")]
         private Parity parity = DEFAULT_PARITY;
 
+        [PersistAs("parity")]
         public Parity Parity
         {
             get => parity;
@@ -148,9 +148,9 @@ namespace OpenSC.Model.SerialPorts
         #region Property: DataBits
         public event PropertyChangedTwoValuesDelegate<SerialPort, int> DataBitsChanged;
 
-        [PersistAs("databits")]
         private int dataBits = DEFAULT_DATABITS;
 
+        [PersistAs("databits")]
         public int DataBits
         {
             get => dataBits;
@@ -172,9 +172,9 @@ namespace OpenSC.Model.SerialPorts
         #region Property: StopBits
         public event PropertyChangedTwoValuesDelegate<SerialPort, StopBits> StopBitsChanged;
 
-        [PersistAs("stopbits")]
         private StopBits stopBits = DEFAULT_STOPBITS;
 
+        [PersistAs("stopbits")]
         public StopBits StopBits
         {
             get => stopBits;
