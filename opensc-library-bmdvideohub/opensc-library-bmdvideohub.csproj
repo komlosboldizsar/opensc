@@ -1,10 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
       <TargetFramework>net5.0</TargetFramework>
       <OutputType>Library</OutputType>
-      <RootNamespace>OpenSC.Library.BmdVideohub</RootNamespace>
-      <AssemblyName>OpenSC.Library.BmdVideohub</AssemblyName>
-      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+      <RootNamespace>OpenSC</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
       <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
@@ -13,5 +11,5 @@
   <ItemGroup>
     <ProjectReference Include="..\opensc-library-taskschedulerqueue\opensc-library-taskschedulerqueue.csproj" />
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj" />
+  <Import Project="..\CommonCsproj\Global\*.csproj"/>
 </Project>

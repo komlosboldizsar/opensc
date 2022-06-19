@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.X32Faders
 {
 
-    public class X32Fader : ModelBase
+    public partial class X32Fader : ModelBase
     {
 
         public const string LOG_TAG = "X32Fader";

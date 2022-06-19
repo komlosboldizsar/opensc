@@ -3,14 +3,14 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>OpenSC</RootNamespace>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj" />
-    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
+    <None Include="GpiointerfacesSubtypeGuiModuleBase.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\opensc-gpiointerfaces-model\opensc-gpiointerfaces-model.csproj" />
     <ProjectReference Include="..\opensc-booleans-model\opensc-booleans-model.csproj" />
   </ItemGroup>
@@ -19,12 +19,8 @@
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="GUI\GpioInterfaces\GpioInterfaceEditorFormBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="GUI\GpioInterfaces\GpioInterfaceList.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="GUI\GpioInterfaces\GpioInterfaceEditorFormBase.cs" />
+    <Compile Update="GUI\GpioInterfaces\GpioInterfaceList.cs" />
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj" />
+  <Import Project="..\CommonCsproj\GuiModuleBase.csproj" />
 </Project>

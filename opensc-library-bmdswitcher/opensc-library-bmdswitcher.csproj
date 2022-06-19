@@ -1,10 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
       <TargetFramework>net5.0-windows7.0</TargetFramework>
       <OutputType>Library</OutputType>
-      <RootNamespace>BMD.Switcher</RootNamespace>
-      <AssemblyName>BMD.Switcher</AssemblyName>
-      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+      <RootNamespace>OpenSC</RootNamespace>
       <UseWindowsForms>true</UseWindowsForms>
       <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
@@ -26,5 +24,5 @@
       <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
       <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj"/>
+  <Import Project="..\CommonCsproj\Global\*.csproj"/>
 </Project>

@@ -1,0 +1,6 @@
+﻿<Project ToolsVersion="Current">
+  <Import Project="ModelModuleBase.csproj" />
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,23 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
       <TargetFramework>net5.0-windows</TargetFramework>
       <OutputType>Library</OutputType>
-      <RootNamespace>opensc_mixers_subtype_bmd_gui</RootNamespace>
-      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+      <RootNamespace>Opensc</RootNamespace>
       <UseWindowsForms>true</UseWindowsForms>
       <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
       <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj"/>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
-      <ProjectReference Include="..\opensc-mixers-gui\opensc-mixers-gui.csproj"/>
-      <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj"/>
-      <ProjectReference Include="..\opensc-mixers-subtype-bmd-model\opensc-mixers-subtype-bmd-model.csproj"/>
+      <ProjectReference Include="..\opensc-mixers-subtype-bmd-model\opensc-mixers-subtype-bmd-model.csproj" />
   </ItemGroup>
   <ItemGroup>
-      <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
-      <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
+      <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+      <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj"/>
+  <Import Project="..\opensc-mixers-gui\MixersSubtypeGuiModuleBase.csproj"/>
 </Project>

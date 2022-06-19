@@ -1,0 +1,9 @@
+<Project>
+  <Import Project="Global\*.csproj"/>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
+    <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj"/>
+    <ProjectReference Include="..\opensc-booleans-model\opensc-booleans-model.csproj" />
+    <ProjectReference Include="..\opensc-signals-model\opensc-signals-model.csproj" />
+  </ItemGroup>
+</Project>

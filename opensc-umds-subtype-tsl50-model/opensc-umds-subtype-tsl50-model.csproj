@@ -1,11 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
       <TargetFramework>net5.0</TargetFramework>
       <RootNamespace>OpenSC</RootNamespace>
   </PropertyGroup>
-  <ItemGroup>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
-      <ProjectReference Include="..\opensc-umds-model\opensc-umds-model.csproj"/>
-  </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj"/>
+  <Import Project="..\opensc-umds-model\UmdsSubtypeModelModuleBase.csproj"/>
 </Project>

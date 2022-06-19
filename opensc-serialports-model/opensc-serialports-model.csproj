@@ -1,12 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
       <TargetFramework>net5.0</TargetFramework>
       <OutputType>Library</OutputType>
       <RootNamespace>OpenSC</RootNamespace>
-      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
       <ProjectReference Include="..\opensc-library-taskschedulerqueue\opensc-library-taskschedulerqueue.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -14,5 +12,5 @@
       <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
       <PackageReference Include="System.IO.Ports" Version="5.0.1" />
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj" />
+  <Import Project="..\CommonCsproj\ModelModuleBase.csproj"/>
 </Project>

@@ -3,15 +3,16 @@
     <TargetFramework>net5.0</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>OpenSC</RootNamespace>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
-    <ProjectReference Include="..\opensc-booleans-model\opensc-booleans-model.csproj"/>
+    <None Include="CustombooleansSubtypeModelModuleBase.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
+    <ProjectReference Include="..\opensc-booleans-model\opensc-booleans-model.csproj" />
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj"/>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
+  <Import Project="..\CommonCsproj\ModelModuleBase.csproj" />
 </Project>

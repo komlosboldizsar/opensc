@@ -1,0 +1,8 @@
+<Project>
+  <Import Project="..\CommonCsproj\GuiModuleBase.csproj"/>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj"/>
+    <ProjectReference Include="..\opensc-mixers-gui\opensc-mixers-gui.csproj"/>
+    <ProjectReference Include="..\opensc-signals-model\opensc-signals-model.csproj" />
+  </ItemGroup>
+</Project>

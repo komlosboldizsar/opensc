@@ -1,0 +1,7 @@
+<Project>
+  <Import Project="Global\*.csproj"/>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
+    <ProjectReference Include="..\opensc-streams-model\opensc-streams-model.csproj"/>
+  </ItemGroup>
+</Project>

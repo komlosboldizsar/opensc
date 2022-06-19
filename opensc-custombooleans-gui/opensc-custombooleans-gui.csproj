@@ -1,16 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>OpenSC</RootNamespace>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj" />
-    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj" />
+    <None Include="CustombooleansSubtypeGuiModuleBase.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\opensc-custombooleans-model\opensc-custombooleans-model.csproj" />
     <ProjectReference Include="..\opensc-booleans-model\opensc-booleans-model.csproj" />
   </ItemGroup>
@@ -19,12 +19,8 @@
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="GUI\Variables\CustomBooleanEditorFormBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="GUI\Variables\CustomBooleanList.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="GUI\Variables\CustomBooleanEditorFormBase.cs" />
+    <Compile Update="GUI\Variables\CustomBooleanList.cs" />
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj" />
+  <Import Project="..\CommonCsproj\GuiModuleBase.csproj" />
 </Project>

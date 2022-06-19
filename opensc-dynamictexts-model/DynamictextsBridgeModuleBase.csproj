@@ -1,0 +1,6 @@
+﻿<Project>
+    <ItemGroup>
+        <ProjectReference Include="..\opensc-dynamictexts-model\opensc-dynamictexts-model.csproj"/>
+    </ItemGroup>
+    <Import Project="..\CommonCsproj\Global\*.csproj" />
+</Project>

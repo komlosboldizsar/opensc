@@ -1,0 +1,7 @@
+<Project>
+  <Import Project="..\CommonCsproj\GuiModuleBase.csproj"/>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-streams-model\opensc-streams-model.csproj"/>
+    <ProjectReference Include="..\opensc-streams-gui\opensc-streams-gui.csproj"/>
+  </ItemGroup>
+</Project>

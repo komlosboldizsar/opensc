@@ -1,0 +1,6 @@
+﻿<Project>
+  <Import Project="..\CommonCsproj\ModeLModuleBase.csproj" />
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-macros-model\opensc-macros-model.csproj"/>
+  </ItemGroup>
+</Project>
