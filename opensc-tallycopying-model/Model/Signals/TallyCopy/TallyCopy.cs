@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,7 +9,7 @@ using System.Linq;
 namespace OpenSC.Model.Signals.TallyCopying
 {
 
-    public class TallyCopy : ModelBase, ISignalTallySender
+    public partial class TallyCopy : ModelBase, ISignalTallySender
     {
 
         #region Persistence, instantiation
@@ -27,110 +28,96 @@ namespace OpenSC.Model.Signals.TallyCopying
         #endregion
 
         #region Property: FromSignal
-        public event PropertyChangedTwoValuesDelegate<TallyCopy, ISignalSourceRegistered> FromSignalChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_fromSignal_afterChange))]
+        [PersistAs("from_signal")]
         private ISignalSourceRegistered fromSignal;
 
-        [PersistAs("from_signal")]
-        public ISignalSourceRegistered FromSignal
-        {
-            get => fromSignal;
-            set => this.setProperty(ref fromSignal, value, FromSignalChanged, null, (ov, nv) => updateFromTally());
-        }
+        private void _fromSignal_afterChange(ISignalSourceRegistered oldValue, ISignalSourceRegistered newValue) => updateFromTally();
         #endregion
 
         #region Property: FromTallyColor
-        public event PropertyChangedTwoValuesDelegate<TallyCopy, SignalTallyColor> FromTallyColorChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_fromTallyColor_afterChange))]
+        [PersistAs("from_tally_color")]
         private SignalTallyColor fromTallyColor;
 
-        [PersistAs("from_tally_color")]
-        public SignalTallyColor FromTallyColor
-        {
-            get => fromTallyColor;
-            set => this.setProperty(ref fromTallyColor, value, FromTallyColorChanged, null, (ov, nv) => updateFromTally());
-        }
+        private void _fromTallyColor_afterChange(SignalTallyColor oldValue, SignalTallyColor newValue) => updateFromTally();
         #endregion
 
         #region Property: FromTally
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_fromTally_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_fromTally_afterChange))]
         private IBidirectionalSignalTally fromTally;
 
-        private IBidirectionalSignalTally FromTally
+        private void _fromTally_beforeChange(IBidirectionalSignalTally oldValue, IBidirectionalSignalTally newValue, BeforeChangePropertyArgs args)
         {
-            get => fromTally;
-            set
+            if (oldValue != null)
             {
-                if (fromTally != null)
-                {
-                    fromTally.Got -= fromSideGotTally;
-                    fromTally.Revoked -= fromSideRevokedTally;
-                }
-                if (toTally != null)
-                {
-                    foreach (List<ISignalTallySender> extendedRecursionChain in recursionChains.Values)
-                        toTally.Revoke(extendedRecursionChain);
-                }
-                fromTally = value;
-                if (fromTally != null)
-                {
-                    foreach (List<ISignalTallySender> recursionChain in fromTally.CurrentRecursionChains)
-                        fromSideGotTally(fromTally, recursionChain);
-                    fromTally.Got += fromSideGotTally;
-                    fromTally.Revoked += fromSideRevokedTally;
-                }
+                oldValue.Got -= fromSideGotTally;
+                oldValue.Revoked -= fromSideRevokedTally;
+            }
+            if (toTally != null)
+            {
+                foreach (List<ISignalTallySender> extendedRecursionChain in recursionChains.Values)
+                    toTally.Revoke(extendedRecursionChain);
             }
         }
 
-        private void updateFromTally()
-            => FromTally = fromSignal?.GetTally(fromTallyColor);
+        private void _fromTally_afterChange(IBidirectionalSignalTally oldValue, IBidirectionalSignalTally newValue)
+        {
+            if (newValue != null)
+            {
+                foreach (List<ISignalTallySender> recursionChain in newValue.CurrentRecursionChains)
+                    fromSideGotTally(newValue, recursionChain);
+                newValue.Got += fromSideGotTally;
+                newValue.Revoked += fromSideRevokedTally;
+            }
+        }
+
+        private void updateFromTally() => FromTally = fromSignal?.GetTally(fromTallyColor);
         #endregion
 
         #region Property: ToSignal
-        public event PropertyChangedTwoValuesDelegate<TallyCopy, ISignalSourceRegistered> ToSignalChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_toSignal_afterChange))]
+        [PersistAs("to_signal")]
         private ISignalSourceRegistered toSignal;
 
-        [PersistAs("to_signal")]
-        public ISignalSourceRegistered ToSignal
-        {
-            get => toSignal;
-            set => this.setProperty(ref toSignal, value, ToSignalChanged, null, (ov, nv) => updateToTally());
-        }
+        private void _toSignal_afterChange(ISignalSourceRegistered oldValue, ISignalSourceRegistered newValue) => updateToTally();
         #endregion
 
         #region Property: ToTallyColor
-        public event PropertyChangedTwoValuesDelegate<TallyCopy, SignalTallyColor> ToTallyColorChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_toTallyColor_afterChange))]
+        [PersistAs("to_tally_color")]
         private SignalTallyColor toTallyColor;
 
-        [PersistAs("to_tally_color")]
-        public SignalTallyColor ToTallyColor
-        {
-            get => toTallyColor;
-            set => this.setProperty(ref toTallyColor, value, ToTallyColorChanged, null, (ov, nv) => updateToTally());
-        }
+        private void _toTallyColor_afterChange(SignalTallyColor oldValue, SignalTallyColor newValue) => updateToTally();
         #endregion
 
         #region Property: ToTally
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_toTally_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_toTally_afterChange))]
         private IBidirectionalSignalTally toTally;
 
-        private IBidirectionalSignalTally ToTally
+        private void _toTally_beforeChange(IBidirectionalSignalTally oldValue, IBidirectionalSignalTally newValue, BeforeChangePropertyArgs args)
         {
-            get => toTally;
-            set
-            {
-                if (toTally != null)
-                    foreach (List<ISignalTallySender> extendedRecursionChain in recursionChains.Values)
-                        toTally.Revoke(extendedRecursionChain);
-                toTally = value;
-                if (toTally != null)
-                    foreach (List<ISignalTallySender> extendedRecursionChain in recursionChains.Values)
-                        toTally.Give(extendedRecursionChain);
-            }
+            if (oldValue != null)
+                foreach (List<ISignalTallySender> extendedRecursionChain in recursionChains.Values)
+                    oldValue.Revoke(extendedRecursionChain);
         }
 
-        private void updateToTally()
-            => ToTally = toSignal?.GetTally(toTallyColor);
+        private void _toTally_afterChange(IBidirectionalSignalTally oldValue, IBidirectionalSignalTally newValue)
+        {
+            if (newValue != null)
+                foreach (List<ISignalTallySender> extendedRecursionChain in recursionChains.Values)
+                    newValue.Give(extendedRecursionChain);
+        }
+
+        private void updateToTally() => ToTally = toSignal?.GetTally(toTallyColor);
         #endregion
 
         #region Handle tally events

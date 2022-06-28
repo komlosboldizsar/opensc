@@ -46,8 +46,8 @@ namespace OpenSC.GUI.Macros
             MacroPanel macroPanel = (MacroPanel)EditedModel;
             if (macroPanel == null)
                 return;
-            macroPanel.SizeW = elementsPanel.Width;
-            macroPanel.SizeH = elementsPanel.Height;
+            macroPanel.Width = elementsPanel.Width;
+            macroPanel.Height = elementsPanel.Height;
             saveElements();
         }
 
@@ -257,7 +257,7 @@ namespace OpenSC.GUI.Macros
         {
             MacroPanel macroPanel = (MacroPanel)EditedModel;
             Size elementsPanelOriginalSize = elementsPanel.Size;
-            Size elementsPanelNewSize = new Size(macroPanel.SizeW, macroPanel.SizeH);
+            Size elementsPanelNewSize = new Size(macroPanel.Width, macroPanel.Height);
             Size difference = elementsPanelNewSize - elementsPanelOriginalSize;
             Size += difference;
         }

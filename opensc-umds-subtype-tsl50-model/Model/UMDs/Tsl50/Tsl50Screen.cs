@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.UMDs.Tsl50
 {
 
-    public class Tsl50Screen : ModelBase
+    public partial class Tsl50Screen : ModelBase
     {
 
         #region Instantiation, restoration
@@ -41,29 +42,22 @@ namespace OpenSC.Model.UMDs.Tsl50
         #endregion
 
         #region Property: IpAddress
-        public event PropertyChangedTwoValuesDelegate<Tsl50Screen, string> IpAddressChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_ipAddress_afterChange))]
         [PersistAs("ipaddress")]
         private string ipAddress;
 
-        public string IpAddress
-        {
-            get => ipAddress;
-            set => this.setProperty(ref ipAddress, value, IpAddressChanged, null, (ov, nv) => updateEndpoint());
-        }
+        private void _ipAddress_afterChange(string oldValue, string newValue) => updateEndpoint();
         #endregion
 
         #region Property: Port
-        public event PropertyChangedTwoValuesDelegate<Tsl50Screen, int> PortChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_port_afterChange))]
+        [AutoProperty.Validator(nameof(ValidatePort))]
         [PersistAs("port")]
         private int port = 1024;
 
-        public int Port
-        {
-            get => port;
-            set => this.setProperty(ref port, value, PortChanged, null, (ov, nv) => updateEndpoint(), ValidatePort);
-        }
+        private void _port_afterChange(int oldValue, int newValue) => updateEndpoint();
 
         public void ValidatePort(int port)
         {
@@ -73,16 +67,10 @@ namespace OpenSC.Model.UMDs.Tsl50
         #endregion
 
         #region Property: Index
-        public event PropertyChangedTwoValuesDelegate<Tsl50Screen, int> IndexChanged;
-
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateIndex))]
         [PersistAs("index")]
         private int index = 1;
-
-        public int Index
-        {
-            get => index;
-            set => this.setProperty(ref index, value, IndexChanged, validator: ValidateIndex);
-        }
 
         public void ValidateIndex(int index)
         {

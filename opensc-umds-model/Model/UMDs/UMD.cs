@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.UMDs
 {
 
-    public abstract class Umd : ModelBase
+    public abstract partial class Umd : ModelBase
     {
 
         #region Instantiation, restoration, persistence, removation
@@ -59,118 +60,73 @@ namespace OpenSC.Model.UMDs
         #endregion
 
         #region Property: Enabled
-        public event PropertyChangedTwoValuesDelegate<Umd, bool> EnabledChanged;
-
-        private bool enabled = true;
-
+        [AutoProperty]
         [PersistAs("enabled")]
-        public bool Enabled
-        {
-            get => enabled;
-            set => this.setProperty(ref enabled, value, EnabledChanged);
-        }
+        private bool enabled = true;
         #endregion
 
         #region Property: DisplayableRawText
-        public event PropertyChangedTwoValuesDelegate<Umd, string> DisplayableRawTextChanged;
-
+        [AutoProperty]
         protected string displayableRawText = "";
-
-        public string DisplayableRawText
-        {
-            get => displayableRawText;
-            set => this.setProperty(ref displayableRawText, value, DisplayableRawTextChanged);
-        }
         #endregion
 
         #region Property: DisplayableCompactText
-        public event PropertyChangedTwoValuesDelegate<Umd, string> DisplayableCompactTextChanged;
-
+        [AutoProperty]
         protected string displayableCompactText = "";
-
-        public string DisplayableCompactText
-        {
-            get => displayableCompactText;
-            set => this.setProperty(ref displayableCompactText, value, DisplayableCompactTextChanged);
-        }
         #endregion
 
         #region Property: FullStaticText
-        public event PropertyChangedTwoValuesDelegate<Umd, string> FullStaticTextChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_fullStaticText_afterChange))]
+        [PersistAs("full_static_text")]
         private string fullStaticText;
 
-        [PersistAs("full_static_text")]
-        public string FullStaticText
+        private void _fullStaticText_afterChange(string oldValue, string newValue)
         {
-            get => fullStaticText;
-            set => this.setProperty(ref fullStaticText, value, FullStaticTextChanged, null, (_, _) =>
-            {
-                if (useFullStaticText)
-                    UpdateTexts();
-            });
+            if (useFullStaticText)
+                UpdateTexts();
         }
         #endregion
 
         #region Property: UseFullStaticText
-        public event PropertyChangedTwoValuesDelegate<Umd, bool> UseFullStaticTextChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_useFullStaticText_afterChange))]
+        [PersistAs("use_full_static_text")]
         private bool useFullStaticText = false;
 
-        [PersistAs("use_full_static_text")]
-        public bool UseFullStaticText
-        {
-            get => useFullStaticText;
-            set => this.setProperty(ref useFullStaticText, value, UseFullStaticTextChanged, null, (_, _) => UpdateTexts());
-        }
+        private void _useFullStaticText_afterChange(bool oldValue, bool newValue) => UpdateTexts();
         #endregion
 
         #region Property: AlignmentWithFullStaticText
-        public event PropertyChangedTwoValuesDelegate<Umd, UmdTextAlignment> AlignmentWithFullStaticTextChanged;
-
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_alignmentWithFullStaticText_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_alignmentWithFullStaticText_afterChange))]
+        [PersistAs("alignment_with_full_static_text")]
         private UmdTextAlignment alignmentWithFullStaticText = UmdTextAlignment.Left;
 
-        [PersistAs("alignment_with_full_static_text")]
-        public UmdTextAlignment AlignmentWithFullStaticText
+        private void _alignmentWithFullStaticText_beforeChange(UmdTextAlignment oldValue, UmdTextAlignment newValue, BeforeChangePropertyArgs args)
         {
-            get => alignmentWithFullStaticText;
-            set
-            {
-                if (!AlignableFullStaticText)
-                    return;
-                this.setProperty(ref alignmentWithFullStaticText, value, AlignmentWithFullStaticTextChanged, null, (_, _) =>
-                {
-                    if (useFullStaticText)
-                        UpdateTexts();
-                });
-            }
+            if (!AlignableFullStaticText)
+                args.Cancel();
+        }
+
+        private void _alignmentWithFullStaticText_afterChange(UmdTextAlignment oldValue, UmdTextAlignment newValue)
+        {
+            if (useFullStaticText)
+                UpdateTexts();
         }
         #endregion
 
         #region Property: PeriodicUpdateEnabled
-        public event PropertyChangedTwoValuesDelegate<Umd, bool> PeriodicUpdateEnabledChanged;
-
-        private bool periodicUpdateEnabled = true;
-
+        [AutoProperty]
         [PersistAs("periodic_update_enabled")]
-        public bool PeriodicUpdateEnabled
-        {
-            get => periodicUpdateEnabled;
-            set => this.setProperty(ref periodicUpdateEnabled, value, PeriodicUpdateEnabledChanged);
-        }
+        private bool periodicUpdateEnabled = true;
         #endregion
 
         #region Property: PeriodicUpdateInterval
-        public event PropertyChangedTwoValuesDelegate<Umd, int> PeriodicUpdateIntervalChanged;
-
-        private int periodicUpdateInterval = 15;
-
+        [AutoProperty]
         [PersistAs("periodic_update_interval")]
-        public int PeriodicUpdateInterval
-        {
-            get => periodicUpdateInterval;
-            set => this.setProperty(ref periodicUpdateInterval, value, PeriodicUpdateIntervalChanged);
-        }
+        private int periodicUpdateInterval = 15;
         #endregion
 
         internal int secondsSinceLastPeriodicUpdate = 0;

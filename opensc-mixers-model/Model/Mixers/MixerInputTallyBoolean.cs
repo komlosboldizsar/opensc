@@ -44,10 +44,7 @@ namespace OpenSC.Model.Mixers
             Description = getDescription(input, color);
         }
 
-        private void tallyChangedHandler(MixerInput output, bool newState)
-        {
-            CurrentState = newState;
-        }
+        private void tallyChangedHandler(MixerInput output, bool oldState, bool newState) => CurrentState = newState;
 
         private void indexChangedHandler(MixerInput output, int oldIndex, int newIndex)
         {

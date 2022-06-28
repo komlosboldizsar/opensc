@@ -1,5 +1,6 @@
 ﻿using OpenSC.Logger;
 using OpenSC.Model.General;
+using OpenSC.Model.SourceGenerators;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.GpioInterfaces
 {
 
-    public abstract class GpioInterfaceOutput : SystemObjectBase
+    public abstract partial class GpioInterfaceOutput : SystemObjectBase
     {
 
         public GpioInterfaceOutput(string name, GpioInterface gpioInterface, int index) : base()
@@ -84,53 +85,34 @@ namespace OpenSC.Model.GpioInterfaces
         #endregion
 
         #region Property: Index
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_index_afterChange))]
         private int index;
 
-        public int Index
-        {
-            get => index;
-            set
-            {
-                if (value == index)
-                    return;
-                int oldValue = index;
-                index = value;
-                IndexChanged?.Invoke(this, oldValue, value);
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Index));
-                generateGlobalId();
-            }
-        }
-
-        public event PropertyChangedTwoValuesDelegate<GpioInterfaceOutput, int> IndexChanged;
+        private void _index_afterChange(int oldValue, int newValue) => generateGlobalId();
         #endregion
 
         #region Property: Driver
-        public event PropertyChangedTwoValuesDelegate<GpioInterfaceOutput, IBoolean> DriverChanged;
-
 #pragma warning disable CS0169
         internal string _driverIdentifier; // "Temp foreign key"
 #pragma warning restore CS0169
 
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_driver_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_driver_afterChange))]
         private IBoolean driver;
 
-        public IBoolean Driver
+        private void _driver_beforeChange(IBoolean oldValue, IBoolean newValue, BeforeChangePropertyArgs args)
         {
-            get => driver;
-            set
-            {
-                BeforeChangePropertyDelegate<IBoolean> beforeChangeDelegate = (ov, nv) =>
-                {
-                    if (ov != null)
-                        ov.StateChanged -= driverStateChanged;
-                };
-                AfterChangePropertyDelegate<IBoolean> afterChangeDelegate = (ov, nv) =>
-                {
-                    if (nv != null)
-                        nv.StateChanged += driverStateChanged;
-                    sendState();
-                };
-                this.setProperty(ref driver, value, DriverChanged, beforeChangeDelegate, afterChangeDelegate);
-            }
+            if (oldValue != null)
+                oldValue.StateChanged -= driverStateChanged;
+        }
+
+        private void _driver_afterChange(IBoolean oldValue, IBoolean newValue)
+        {
+            if (newValue != null)
+                newValue.StateChanged += driverStateChanged;
+            sendState();
         }
 
         internal void RestoreDriver()

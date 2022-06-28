@@ -1,6 +1,7 @@
 ﻿using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers.Mirrors
 {
 
-    public class RouterMirror : ModelBase
+    public partial class RouterMirror : ModelBase
     {
 
         public const string LOG_TAG = "RouterMirror";
@@ -47,74 +48,53 @@ namespace OpenSC.Model.Routers.Mirrors
         #endregion
 
         #region Property: Routers
-        public event PropertyChangedTwoValuesDelegate<RouterMirror, Router> RouterAChanged;
+        private void _routerX_beforeChange(Router oldValue, PropertyChangedTwoValuesDelegate<Router, RouterState> stateChangedHandler, ref RouterState stateVariable)
+        {
+            if (oldValue != null)
+                oldValue.StateChanged -= stateChangedHandler;
+            stateVariable = RouterState.Unknown;
+        }
 
+        private void _routerX_afterChange(Router newValue, PropertyChangedTwoValuesDelegate<Router, RouterState> stateChangedHandler, ref RouterState stateVariable)
+        {
+            if (newValue != null)
+            {
+                newValue.StateChanged += stateChangedHandler;
+                stateVariable = newValue.State;
+            }
+            ClearInputAssociations();
+            ClearOutputAssociations();
+        }
+
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_routerA_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_routerA_afterChange))]
+        [PersistAs("router_a")]
         private Router routerA;
 
-        [PersistAs("router_a")]
-        public Router RouterA
-        {
-            get => routerA;
-            set
-            {
-                BeforeChangePropertyDelegate<Router> beforeChangeDelegate = (ov, nv) => {
-                    if (ov != null)
-                        ov.StateChanged -= routerAstateChangedHandler;
-                    routerAstate = RouterState.Unknown;
-                };
-                AfterChangePropertyDelegate<Router> afterChangeProperty = (ov, nv) => {
-                    if (nv != null)
-                    {
-                        nv.StateChanged += routerAstateChangedHandler;
-                        routerAstate = nv.State;
-                    }
-                    ClearInputAssociations();
-                    ClearOutputAssociations();
-                };
-                this.setProperty(ref routerA, value, RouterAChanged);
-            }
-        }
+        private void _routerA_beforeChange(Router oldValue, Router newValue, BeforeChangePropertyArgs args)
+            => _routerX_beforeChange(oldValue, routerAstateChangedHandler, ref routerAstate);
 
-        public event PropertyChangedTwoValuesDelegate<RouterMirror, Router> RouterBChanged;
+        private void _routerA_afterChange(Router oldValue, Router newValue)
+            => _routerX_afterChange(newValue, routerAstateChangedHandler, ref routerAstate);
 
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_routerB_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_routerB_afterChange))]
+        [PersistAs("router_b")]
         private Router routerB;
 
-        [PersistAs("router_b")]
-        public Router RouterB
-        {
-            get => routerB;
-            set
-            {
-                BeforeChangePropertyDelegate<Router> beforeChangeDelegate = (ov, nv) => {
-                    if (ov != null)
-                        ov.StateChanged -= routerBstateChangedHandler;
-                    routerBstate = RouterState.Unknown;
-                };
-                AfterChangePropertyDelegate<Router> afterChangeProperty = (ov, nv) => {
-                    if (nv != null)
-                    {
-                        nv.StateChanged += routerBstateChangedHandler;
-                        routerBstate = nv.State;
-                    }
-                    ClearInputAssociations();
-                    ClearOutputAssociations();
-                };
-                this.setProperty(ref routerB, value, RouterBChanged);
-            }
-        }
+        private void _routerB_beforeChange(Router oldValue, Router newValue, BeforeChangePropertyArgs args)
+            => _routerX_beforeChange(oldValue, routerBstateChangedHandler, ref routerBstate);
+
+        private void _routerB_afterChange(Router oldValue, Router newValue)
+            => _routerX_afterChange(newValue, routerBstateChangedHandler, ref routerBstate);
         #endregion
 
         #region Property: SynchronizationMode
-        public event PropertyChangedTwoValuesDelegate<RouterMirror, RouterMirrorSynchronizationMode> SynchronizationModeChanged;
-
-        private RouterMirrorSynchronizationMode synchronizationMode;
-
+        [AutoProperty]
         [PersistAs("synchronization_mode")]
-        public RouterMirrorSynchronizationMode SynchronizationMode
-        {
-            get => synchronizationMode;
-            set => this.setProperty(ref synchronizationMode, value, SynchronizationModeChanged);
-        }
+        private RouterMirrorSynchronizationMode synchronizationMode;
         #endregion
 
         #region Input associations

@@ -1,10 +1,11 @@
 ﻿using OpenSC.Model.General;
+using OpenSC.Model.SourceGenerators;
 using System.Drawing;
 
 namespace OpenSC.Model.Variables
 {
 
-    public class BooleanBase : SystemObjectBase, IBoolean
+    public partial class BooleanBase : SystemObjectBase, IBoolean
     {
 
         public BooleanBase()
@@ -17,58 +18,22 @@ namespace OpenSC.Model.Variables
             this.description = description;
         }
 
-        #region Property: Identifier
-        public event PropertyChangedTwoValuesDelegate<IBoolean, string> IdentifierChanged;
-
+        #region Properties from IBoolean
+        [AutoProperty]
+        [AutoProperty.Event(typeof(IBoolean))]
         private string identifier;
 
-        public string Identifier
-        {
-            get => identifier;
-            set
-            {
-                if (!BooleanRegister.Instance.CanKeyBeUsedForItem(this, value, out IBoolean identifierOwnerItem))
-                    return;
-                if (!this.setProperty(ref identifier, value, IdentifierChanged))
-                    return;
-            }
-        }
-        #endregion
-
-        #region Property: Color
-        public event PropertyChangedTwoValuesDelegate<IBoolean, Color> ColorChanged;
-
+        [AutoProperty]
+        [AutoProperty.Event(typeof(IBoolean))]
         private Color color;
 
-        public Color Color
-        {
-            get => color;
-            set => this.setProperty(ref color, value, ColorChanged);
-        }
-        #endregion
-
-        #region Property: Description
-        public event PropertyChangedTwoValuesDelegate<IBoolean, string> DescriptionChanged;
-
+        [AutoProperty]
+        [AutoProperty.Event(typeof(IBoolean))]
         private string description;
 
-        public string Description
-        {
-            get => description;
-            set => this.setProperty(ref description, value, DescriptionChanged);
-        }
-        #endregion
-
-        #region Property: CurrentState
-        public event PropertyChangedTwoValuesDelegate<IBoolean, bool> StateChanged;
-
+        [AutoProperty]
+        [AutoProperty.Event(SenderType = typeof(IBoolean), EventName = nameof(IBoolean.StateChanged))]
         private bool currentState;
-
-        public bool CurrentState
-        {
-            get => currentState;
-            protected set => this.setProperty(ref currentState, value, StateChanged);
-        }
         #endregion
 
         protected void register()

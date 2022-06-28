@@ -1,0 +1,10 @@
+﻿using OpenSC.Model.General;
+using OpenSC.Model.SourceGenerators;
+
+namespace {namespaceName}
+{
+    public partial class {className}
+    {
+        __CLASSBODY__
+    }
+}

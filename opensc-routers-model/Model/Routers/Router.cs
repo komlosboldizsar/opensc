@@ -1,6 +1,8 @@
-﻿using OpenSC.Logger;
+﻿using Microsoft.CodeAnalysis;
+using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public abstract class Router : ModelBase
+    public abstract partial class Router : ModelBase
     {
 
         public const string LOG_TAG = "Router";
@@ -267,27 +269,13 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Property: State
-        public event PropertyChangedTwoValuesDelegate<Router, RouterState> StateChanged;
-
+        [AutoProperty(SetterAccessibility = Accessibility.Protected)]
         private RouterState state = RouterState.Unknown;
-
-        public RouterState State
-        {
-            get => state;
-            protected set => this.setProperty(ref state, value, StateChanged);
-        }
         #endregion
 
         #region Property: StateString
-        public event PropertyChangedTwoValuesDelegate<Router, string> StateStringChanged;
-
+        [AutoProperty(SetterAccessibility = Accessibility.Protected)]
         private string stateString = "?";
-
-        public string StateString
-        {
-            get => stateString;
-            protected set => this.setProperty(ref stateString, value, StateStringChanged);
-        }
         #endregion
 
         #region Names
@@ -298,29 +286,15 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Property: ExportInputNamesOnLocalUpdate
-        public event PropertyChangedTwoValuesDelegate<Router, bool> ExportInputNamesOnLocalUpdateChanged;
-
+        [AutoProperty]
         [PersistAs("export_input_names")]
         private bool exportInputNamesOnLocalUpdate;
-
-        public bool ExportInputNamesOnLocalUpdate
-        {
-            get => exportInputNamesOnLocalUpdate;
-            set => this.setProperty(ref exportInputNamesOnLocalUpdate, value, ExportInputNamesOnLocalUpdateChanged);
-        }
         #endregion
 
         #region Property: ImportInputNamesOnRemoteChange
-        public event PropertyChangedTwoValuesDelegate<Router, bool> ImportInputNamesOnRemoteUpdateChanged;
-
+        [AutoProperty]
         [PersistAs("import_input_names")]
         private bool importInputNamesOnRemoteUpdate;
-
-        public bool ImportInputNamesOnRemoteUpdate
-        {
-            get => importInputNamesOnRemoteUpdate;
-            set => this.setProperty(ref importInputNamesOnRemoteUpdate, value, ImportInputNamesOnRemoteUpdateChanged);
-        }
         #endregion
 
         public void DoImportInputNames()
@@ -376,29 +350,15 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Property: ExportOutputNamesOnLocalUpdate
-        public event PropertyChangedTwoValuesDelegate<Router, bool> ExportOutputNamesOnLocalUpdateChanged;
-
+        [AutoProperty]
         [PersistAs("export_output_names")]
         private bool exportOutputNamesOnLocalUpdate;
-
-        public bool ExportOutputNamesOnLocalUpdate
-        {
-            get => exportOutputNamesOnLocalUpdate;
-            set => this.setProperty(ref exportOutputNamesOnLocalUpdate, value, ExportOutputNamesOnLocalUpdateChanged);
-        }
         #endregion
 
         #region Property: ImportOutputNamesOnRemoteUpdate
-        public event PropertyChangedTwoValuesDelegate<Router, bool> importOutputNamesOnRemoteUpdateChanged;
-
+        [AutoProperty]
         [PersistAs("import_output_names")]
         private bool importOutputNamesOnRemoteUpdate;
-
-        public bool ImportOutputNamesOnRemoteUpdate
-        {
-            get => importOutputNamesOnRemoteUpdate;
-            set => this.setProperty(ref importOutputNamesOnRemoteUpdate, value, importOutputNamesOnRemoteUpdateChanged);
-        }
         #endregion
 
         public void DoImportOutputNames()

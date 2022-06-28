@@ -1,6 +1,8 @@
-﻿using OpenSC.Logger;
+﻿using Microsoft.CodeAnalysis;
+using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +18,7 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
 
     [TypeLabel("BMD Tally Box")]
     [TypeCode("bmdtallybox")]
-    public class BmdTallyBox : GpioInterface
+    public partial class BmdTallyBox : GpioInterface
     {
 
         private new const string LOG_TAG = "GpioInterface/BMD";
@@ -42,16 +44,13 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
         }
 
         #region Property: IpAddress
-        public event PropertyChangedTwoValuesDelegate<BmdTallyBox, string> IpAddressChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_ipAddress_afterChange))]
+        [AutoProperty.Validator(nameof(ValidateIpAddress))]
         [PersistAs("ip_address")]
         private string ipAddress;
 
-        public string IpAddress
-        {
-            get => ipAddress;
-            set => this.setProperty(ref ipAddress, value, IpAddressChanged, null, (_, _) => reinitTcpServer(), validator: ValidateIpAddress);
-        }
+        private void _ipAddress_afterChange(string oldValue, string newValue) => reinitTcpServer();
 
         public void ValidateIpAddress(string ipAddress)
         {
@@ -60,31 +59,24 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
         #endregion
 
         #region Property: Connected
-        public event PropertyChangedTwoValuesDelegate<BmdTallyBox, bool> ConnectionStateChanged;
-
+        [AutoProperty(SetterAccessibility = Accessibility.Protected)]
+        [AutoProperty.Event("ConnectionStateChanged")]
+        [AutoProperty.AfterChange(nameof(_connected_afterChange))]
         private bool connected;
 
-        public bool Connected
+        private void _connected_afterChange(bool oldValue, bool newValue)
         {
-            get => connected;
-            protected set
+            if (newValue)
             {
-                AfterChangePropertyDelegate<bool> afterChangeDelegate = (ov, nv) =>
-                {
-                    if (nv)
-                    {
-                        State = GpioInterfaceState.Ok;
-                        StateString = "connected";
-                        LogDispatcher.I(LOG_TAG, $"BlackMagic Design Tally Box (ID: {ID}) connected to application from {IpAddress}.");
-                    }
-                    else
-                    {
-                        State = GpioInterfaceState.Warning;
-                        StateString = "disconnected";
-                        LogDispatcher.I(LOG_TAG, $"BlackMagic Design Tally Box (ID: {ID}) disconnected from application from {IpAddress}.");
-                    }
-                };
-                this.setProperty(ref connected, value, ConnectionStateChanged, null, afterChangeDelegate);
+                State = GpioInterfaceState.Ok;
+                StateString = "connected";
+                LogDispatcher.I(LOG_TAG, $"BlackMagic Design Tally Box (ID: {ID}) connected to application from {IpAddress}.");
+            }
+            else
+            {
+                State = GpioInterfaceState.Warning;
+                StateString = "disconnected";
+                LogDispatcher.I(LOG_TAG, $"BlackMagic Design Tally Box (ID: {ID}) disconnected from application from {IpAddress}.");
             }
         }
         #endregion

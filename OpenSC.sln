@@ -205,8 +205,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-x32faders-bridge-mac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-library-taskschedulerqueue", "opensc-library-taskschedulerqueue\opensc-library-taskschedulerqueue.csproj", "{C8653A81-0D92-4021-9AA4-DFF5C3FCBBC5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "autonotify", "autonotify\autonotify.csproj", "{6EB96107-2B51-4FEC-94DE-6AD865046617}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonCsproj", "CommonCsproj", "{5DF624B4-7B25-4699-8852-18F2ADC9425E}"
 	ProjectSection(SolutionItems) = preProject
 		CommonCsproj\GuiModuleBase.csproj = CommonCsproj\GuiModuleBase.csproj
@@ -217,6 +215,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Global", "Global", "{AFCB9C
 	ProjectSection(SolutionItems) = preProject
 		CommonCsproj\Global\CopyToOutput.csproj = CommonCsproj\Global\CopyToOutput.csproj
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-core-model-sourcegenerators", "opensc-core-model-sourcegenerators\opensc-core-model-sourcegenerators.csproj", "{49A5E97F-2CEB-4ED5-8D70-488964C590FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1440,18 +1440,18 @@ Global
 		{C8653A81-0D92-4021-9AA4-DFF5C3FCBBC5}.Release|x64.Build.0 = Release|Any CPU
 		{C8653A81-0D92-4021-9AA4-DFF5C3FCBBC5}.Release|x86.ActiveCfg = Release|Any CPU
 		{C8653A81-0D92-4021-9AA4-DFF5C3FCBBC5}.Release|x86.Build.0 = Release|Any CPU
-		{6EB96107-2B51-4FEC-94DE-6AD865046617}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6EB96107-2B51-4FEC-94DE-6AD865046617}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6EB96107-2B51-4FEC-94DE-6AD865046617}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{6EB96107-2B51-4FEC-94DE-6AD865046617}.Debug|x64.Build.0 = Debug|Any CPU
-		{6EB96107-2B51-4FEC-94DE-6AD865046617}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6EB96107-2B51-4FEC-94DE-6AD865046617}.Debug|x86.Build.0 = Debug|Any CPU
-		{6EB96107-2B51-4FEC-94DE-6AD865046617}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6EB96107-2B51-4FEC-94DE-6AD865046617}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6EB96107-2B51-4FEC-94DE-6AD865046617}.Release|x64.ActiveCfg = Release|Any CPU
-		{6EB96107-2B51-4FEC-94DE-6AD865046617}.Release|x64.Build.0 = Release|Any CPU
-		{6EB96107-2B51-4FEC-94DE-6AD865046617}.Release|x86.ActiveCfg = Release|Any CPU
-		{6EB96107-2B51-4FEC-94DE-6AD865046617}.Release|x86.Build.0 = Release|Any CPU
+		{49A5E97F-2CEB-4ED5-8D70-488964C590FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49A5E97F-2CEB-4ED5-8D70-488964C590FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49A5E97F-2CEB-4ED5-8D70-488964C590FD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{49A5E97F-2CEB-4ED5-8D70-488964C590FD}.Debug|x64.Build.0 = Debug|Any CPU
+		{49A5E97F-2CEB-4ED5-8D70-488964C590FD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{49A5E97F-2CEB-4ED5-8D70-488964C590FD}.Debug|x86.Build.0 = Debug|Any CPU
+		{49A5E97F-2CEB-4ED5-8D70-488964C590FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49A5E97F-2CEB-4ED5-8D70-488964C590FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49A5E97F-2CEB-4ED5-8D70-488964C590FD}.Release|x64.ActiveCfg = Release|Any CPU
+		{49A5E97F-2CEB-4ED5-8D70-488964C590FD}.Release|x64.Build.0 = Release|Any CPU
+		{49A5E97F-2CEB-4ED5-8D70-488964C590FD}.Release|x86.ActiveCfg = Release|Any CPU
+		{49A5E97F-2CEB-4ED5-8D70-488964C590FD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

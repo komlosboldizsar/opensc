@@ -1,6 +1,7 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.SerialPorts;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,33 +14,20 @@ namespace OpenSC.Model.UMDs.Tsl31
 {
     [TypeLabel("TSL 3.1")]
     [TypeCode("tsl31")]
-    public class Tsl31 : Umd
+    public partial class Tsl31 : Umd
     {
 
         #region Property: Port
-        public event PropertyChangedTwoValuesDelegate<Tsl31, SerialPort> PortChanged;
-
-        private SerialPort port;
-
+        [AutoProperty]
         [PersistAs("port")]
-        public SerialPort Port
-        {
-            get => port;
-            set => this.setProperty(ref port, value, PortChanged);
-        }
+        private SerialPort port;
         #endregion
 
         #region Property: Address
-        public event PropertyChangedTwoValuesDelegate<Tsl31, int> AddressChanged;
-
-        private int address = 1;
-
         [PersistAs("address")]
-        public int Address
-        {
-            get => address;
-            set => this.setProperty(ref address, value, AddressChanged, validator: ValidateAddress);
-        }
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateAddress))]
+        private int address = 1;
 
         public void ValidateAddress(int address)
         {
@@ -49,25 +37,19 @@ namespace OpenSC.Model.UMDs.Tsl31
         #endregion
 
         #region Properties: Tally1Overrides2, Tally3Overrides4
-        public event PropertyChangedTwoValuesDelegate<Tsl31, bool> Tally1Overrides2Changed;
-        public event PropertyChangedTwoValuesDelegate<Tsl31, bool> Tally3Overrides4Changed;
-
-        private bool tally1overrides2 = false;
-        private bool tally3overrides4 = false;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_tally1overrides2_afterChange))]
         [PersistAs("tally1overrides2")]
-        public bool Tally1Overrides2
-        {
-            get => tally1overrides2;
-            set => this.setProperty(ref tally1overrides2, value, Tally1Overrides2Changed, null, (_, _) => UpdateTallies());
-        }
+        private bool tally1Overrides2 = false;
 
+        private void _tally1overrides2_afterChange(bool oldValue, bool newValue) => UpdateTallies();
+
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_tally3overrides4_afterChange))]
         [PersistAs("tally3overrides4")]
-        public bool Tally3Overrides4
-        {
-            get => tally3overrides4;
-            set => this.setProperty(ref tally3overrides4, value, Tally3Overrides4Changed, null, (_, _) => UpdateTallies());
-        }
+        private bool tally3Overrides4 = false;
+
+        private void _tally3overrides4_afterChange(bool oldValue, bool newValue) => UpdateTallies();
         #endregion
 
         #region Info
@@ -160,9 +142,9 @@ namespace OpenSC.Model.UMDs.Tsl31
             for (int i = 0, t = 1; i < TallyInfo.Length; i++, t *= 2)
                 if (Tallies[i].CurrentState)
                     tallyByteToHardware += (byte)t;
-            if (Tallies[0].CurrentState && tally1overrides2)
+            if (Tallies[0].CurrentState && tally1Overrides2)
                 tallyByteToHardware &= (0xFF ^ 0x02);
-            if (Tallies[2].CurrentState && tally3overrides4)
+            if (Tallies[2].CurrentState && tally3Overrides4)
                 tallyByteToHardware &= (0xFF ^ 0x08);
         }
 

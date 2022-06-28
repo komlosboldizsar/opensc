@@ -1,0 +1,7 @@
+﻿{copiedAttributes}
+[AutoProperty.GeneratedForField(nameof({fieldName}))]
+{propertyAccessibility#}{virtualModifier#}{fieldType#}{propertyName}
+{
+    {getterAccessibility#}get => {fieldName};
+    {setterAccessibility#}set => this.setProperty(ref {fieldName}, value, {eventName}, beforeChange: {beforeChange}, afterChange: {afterChange}, validator: {validator});
+}

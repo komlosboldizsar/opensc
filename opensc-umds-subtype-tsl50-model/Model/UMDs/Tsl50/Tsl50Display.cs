@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,33 +12,20 @@ namespace OpenSC.Model.UMDs.Tsl50
 {
     [TypeLabel("TSL 5.0")]
     [TypeCode("tsl50")]
-    public class Tsl50Display : Umd
+    public partial class Tsl50Display : Umd
     {
 
         #region Property: Screen
-        public event PropertyChangedTwoValuesDelegate<Tsl50Display, Tsl50Screen> ScreenChanged;
-
-        private Tsl50Screen screen;
-
+        [AutoProperty]
         [PersistAs("screen")]
-        public Tsl50Screen Screen
-        {
-            get => screen;
-            set => this.setProperty(ref screen, value, ScreenChanged);
-        }
+        private Tsl50Screen screen;
         #endregion
 
         #region Property: Index
-        public event PropertyChangedTwoValuesDelegate<Tsl50Display, int> IndexChanged;
-
-        private int index = 1;
-
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateIndex))]
         [PersistAs("index")]
-        public int Index
-        {
-            get => index;
-            set => this.setProperty(ref index, value, IndexChanged, validator: ValidateIndex);
-        }
+        private int index = 1;
 
         public void ValidateIndex(int index)
         {

@@ -1,5 +1,7 @@
-﻿using OpenSC.Model.General;
+﻿using Microsoft.CodeAnalysis;
+using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.VTRs
 {
 
-    public class Vtr : ModelBase
+    public partial class Vtr : ModelBase
     {
 
         #region Persistence, instantiation
@@ -40,84 +42,49 @@ namespace OpenSC.Model.VTRs
         #endregion
 
         #region Property: Title
-        public event PropertyChangedTwoValuesDelegate<Vtr, string> TitleChanged;
-
+        [AutoProperty(SetterAccessibility = Accessibility.Protected)]
         private string title;
-
-        public string Title
-        {
-            get => title;
-            protected set => this.setProperty(ref title, value, TitleChanged);
-        }
         #endregion
 
         #region Property: State
-        public event PropertyChangedTwoValuesDelegate<Vtr, VtrState> StateChanged;
-
+        [AutoProperty(SetterAccessibility = Accessibility.Protected)]
         private VtrState state = VtrState.Unknown;
-
-        public VtrState State
-        {
-            get => state;
-            protected set => this.setProperty(ref state, value, StateChanged);
-        }
         #endregion
 
         #region Property: SecondsFull, TimeFull
-        public event PropertyChangedTwoValuesDelegate<Vtr, int> SecondsFullChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_secondsFull_afterChange))]
         private int secondsFull;
 
-        public int SecondsFull
-        {
-            get => secondsFull;
-            protected set
-            {
-                if (!this.setProperty(ref secondsFull, value, SecondsFullChanged))
-                    return;
-                RaisePropertyChanged(nameof(TimeFull));
-            }
-        }
+        private void _secondsFull_afterChange(int oldValue, int newValue)
+            => TimeFull = TimeSpan.FromSeconds(newValue);
 
-        public TimeSpan TimeFull => TimeSpan.FromSeconds(secondsFull);
+        [AutoProperty]
+        private TimeSpan timeFull;
         #endregion
 
         #region Property: SecondsElapsed, TimeElapsed
-        public event PropertyChangedTwoValuesDelegate<Vtr, int> SecondsElapsedChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_secondsElapsed_afterChange))]
         private int secondsElapsed;
 
-        public int SecondsElapsed
-        {
-            get => secondsElapsed;
-            protected set
-            {
-                if (!this.setProperty(ref secondsElapsed, value, SecondsElapsedChanged))
-                    return;
-                RaisePropertyChanged(nameof(TimeElapsed));
-            }
-        }
+        private void _secondsElapsed_afterChange(int oldValue, int newValue)
+            => TimeElapsed = TimeSpan.FromSeconds(newValue);
 
-        public TimeSpan TimeElapsed => TimeSpan.FromSeconds(secondsElapsed);
+        [AutoProperty]
+        private TimeSpan timeElapsed;
         #endregion
 
         #region Property: SecondsRemaining, TimeRemaining
-        public event PropertyChangedTwoValuesDelegate<Vtr, int> SecondsRemainingChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_secondsRemaining_afterChange))]
         private int secondsRemaining;
 
-        public int SecondsRemaining
-        {
-            get => secondsRemaining;
-            protected set
-            {
-                if (!this.setProperty(ref secondsRemaining, value, SecondsRemainingChanged))
-                    return;
-                RaisePropertyChanged(nameof(TimeRemaining));
-            }
-        }
+        private void _secondsRemaining_afterChange(int oldValue, int newValue)
+            => TimeRemaining = TimeSpan.FromSeconds(newValue);
 
-        public TimeSpan TimeRemaining => TimeSpan.FromSeconds(secondsRemaining);
+        [AutoProperty]
+        private TimeSpan timeRemaining;
         #endregion
 
         protected void resetStateAndData(VtrState baseState = VtrState.Unknown)

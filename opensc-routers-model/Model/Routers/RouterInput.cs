@@ -1,5 +1,7 @@
-﻿using OpenSC.Model.General;
+﻿using Microsoft.CodeAnalysis;
+using OpenSC.Model.General;
 using OpenSC.Model.Signals;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public class RouterInput : SignalForwarder, ISystemObject
+    public partial class RouterInput : SignalForwarder, ISystemObject
     {
 
         public RouterInput() : base() => SystemObjectRegister.Instance.Register(this);
@@ -93,45 +95,16 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Property: Index
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_index_afterChange))]
         private int index;
 
-        public int Index
-        {
-            get => index;
-            set
-            {
-                if (value == index)
-                    return;
-                int oldValue = index;
-                index = value;
-                IndexChanged?.Invoke(this, oldValue, value);
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Index));
-                generateGlobalId();
-            }
-        }
-
-        public delegate void IndexChangedDelegate(RouterInput input, int oldIndex, int newIndex);
-        public event IndexChangedDelegate IndexChanged;
+        private void _index_afterChange(int oldValue, int newValue) => generateGlobalId();
         #endregion
 
         #region Property: IsTieline
+        [AutoProperty(SetterAccessibility = Accessibility.Private)]
         private bool isTieline;
-
-        public bool IsTieline
-        {
-            get => isTieline;
-            private set
-            {
-                if (value == isTieline)
-                    return;
-                isTieline = value;
-                IsTielineChanged?.Invoke(this, !isTieline, isTieline);
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(IsTieline));
-            }
-        }
-
-        public delegate void IsTielineChangedDelegate(RouterInput input, bool oldValue, bool newValue);
-        public event IsTielineChangedDelegate IsTielineChanged;
         #endregion
 
         #region Property: TielineCost

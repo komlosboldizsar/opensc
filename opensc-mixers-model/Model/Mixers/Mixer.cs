@@ -1,5 +1,7 @@
-﻿using OpenSC.Model.General;
+﻿using Microsoft.CodeAnalysis;
+using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Mixers
 {
 
-    public abstract class Mixer : ModelBase
+    public abstract partial class Mixer : ModelBase
     {
 
         public Mixer()
@@ -39,115 +41,87 @@ namespace OpenSC.Model.Mixers
         #endregion
 
         #region Property: OnProgramInput, OnProgramInputName
-        public event PropertyChangedTwoValuesDelegate<Mixer, MixerInput> OnProgramInputChanged;
-        public event PropertyChangedOneValueDelegate<Mixer, string> OnProgramInputNameChanged;
-
+        [AutoProperty(SetterAccessibility = Accessibility.Protected)]
+        [AutoProperty.BeforeChange(nameof(_onProgramInput_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_onProgramInput_afterChange))]
         private MixerInput onProgramInput;
 
-        public MixerInput OnProgramInput
+        private void _onProgramInput_beforeChange(MixerInput oldValue, MixerInput newValue, BeforeChangePropertyArgs args)
         {
-            get => onProgramInput;
-            protected set
+            if (oldValue != null)
+                oldValue.NameChanged -= onProgramInputNameChangedHandler;
+        }
+
+        private void _onProgramInput_afterChange(MixerInput oldValue, MixerInput newValue)
+        {
+            if (newValue != null)
             {
-                BeforeChangePropertyDelegate<MixerInput> beforeChangeDelegate = (ov, nv) => {
-                    if (ov != null)
-                        ov.NameChanged -= onProgramInputNameChangedHandler;
-                };
-                AfterChangePropertyDelegate<MixerInput> afterChangeDelegate = (ov, nv) => {
-                    if (nv != null)
-                        nv.NameChanged += onProgramInputNameChangedHandler;
-                };
-                if (!this.setProperty(ref onProgramInput, value, OnProgramInputChanged, beforeChangeDelegate, afterChangeDelegate))
-                    return;
-                OnProgramInputNameChanged?.Invoke(this, onProgramInput?.Name);
-                RaisePropertyChanged(nameof(OnProgramInputName));
+                newValue.NameChanged += onProgramInputNameChangedHandler;
+                OnProgramInputName = newValue.Name;
+            }
+            else
+            {
+                OnProgramInputName = null;
             }
         }
 
-        public string OnProgramInputName => onProgramInput?.Name;
+        [AutoProperty(SetterAccessibility = Accessibility.Private)]
+        private string onProgramInputName;
 
-        private void onProgramInputNameChangedHandler(MixerInput input, string oldName, string newName)
-            => OnProgramInputNameChanged?.Invoke(this, newName);
+        private void onProgramInputNameChangedHandler(MixerInput input, string oldValue, string newValue)
+            => OnProgramInputName = newValue;
         #endregion
 
         #region Property: OnPreviewInput, OnPreviewInputName
-        public event PropertyChangedTwoValuesDelegate<Mixer, MixerInput> OnPreviewInputChanged;
-        public event PropertyChangedOneValueDelegate<Mixer, string> OnPreviewInputNameChanged;
-
+        [AutoProperty(SetterAccessibility = Accessibility.Protected)]
+        [AutoProperty.BeforeChange(nameof(_onPreviewInput_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_onPreviewInput_afterChange))]
         private MixerInput onPreviewInput;
 
-        public MixerInput OnPreviewInput
+        private void _onPreviewInput_beforeChange(MixerInput oldValue, MixerInput newValue, BeforeChangePropertyArgs args)
         {
-            get => onPreviewInput;
-            protected set
+            if (oldValue != null)
+                oldValue.NameChanged -= onPreviewInputNameChangedHandler;
+        }
+
+        private void _onPreviewInput_afterChange(MixerInput oldValue, MixerInput newValue)
+        {
+            if (newValue != null)
             {
-                BeforeChangePropertyDelegate<MixerInput> beforeChangeDelegate = (ov, nv) => {
-                    if (ov != null)
-                        ov.NameChanged -= onPreviewInputNameChangedHandler;
-                };
-                AfterChangePropertyDelegate<MixerInput> afterChangeDelegate = (ov, nv) => {
-                    if (nv != null)
-                        nv.NameChanged += onPreviewInputNameChangedHandler;
-                };
-                if (!this.setProperty(ref onPreviewInput, value, OnPreviewInputChanged, beforeChangeDelegate, afterChangeDelegate))
-                    return;
-                OnPreviewInputNameChanged?.Invoke(this, onPreviewInput?.Name);
-                RaisePropertyChanged(nameof(OnPreviewInput));
+                newValue.NameChanged += onPreviewInputNameChangedHandler;
+                OnPreviewInputName = newValue.Name;
+            }
+            else
+            {
+                OnPreviewInputName = null;
             }
         }
 
-        public string OnPreviewInputName => onPreviewInput?.Name;
+        [AutoProperty(SetterAccessibility = Accessibility.Private)]
+        private string onPreviewInputName;
 
-        private void onPreviewInputNameChangedHandler(MixerInput input, string oldName, string newName)
-            => OnPreviewInputNameChanged?.Invoke(this, newName);
+        private void onPreviewInputNameChangedHandler(MixerInput input, string oldValue, string newValue)
+            => OnPreviewInputName = newValue;
         #endregion
 
         #region Property: GivesRedTallyToSources, GivesGreenTallyToSources
-        public event PropertyChangedTwoValuesDelegate<Mixer, bool> GivesRedTallyToSourcesChanged;
-
+        [AutoProperty]
+        [PersistAs("gives_red_tally")]
         private bool givesRedTallyToSources;
 
-        [PersistAs("gives_red_tally")]
-        public bool GivesRedTallyToSources
-        {
-            get => givesRedTallyToSources;
-            set => this.setProperty(ref givesRedTallyToSources, value, GivesRedTallyToSourcesChanged);
-        }
-
-        public event PropertyChangedTwoValuesDelegate<Mixer, bool> GivesGreenTallyToSourcesChanged;
-
-        private bool givesGreenTallyToSources;
-
+        [AutoProperty]
         [PersistAs("gives_green_tally")]
-        public bool GivesGreenTallyToSources
-        {
-            get => givesGreenTallyToSources;
-            set => this.setProperty(ref givesGreenTallyToSources, value, GivesGreenTallyToSourcesChanged);
-        }
+        private bool givesGreenTallyToSources;
         #endregion
 
         #region Property: State
-        public event PropertyChangedTwoValuesDelegate<Mixer, MixerState> StateChanged;
-        
+        [AutoProperty(SetterAccessibility = Accessibility.Protected)]
         private MixerState state = MixerState.Unknown;
-
-        public MixerState State
-        {
-            get => state;
-            protected set => this.setProperty(ref state, value, StateChanged);
-        }
         #endregion
 
         #region Property: StateString
-        public event PropertyChangedTwoValuesDelegate<Mixer, string> StateStringChanged;
-
+        [AutoProperty(SetterAccessibility = Accessibility.Protected)]
         private string stateString = "?";
-
-        public string StateString
-        {
-            get => stateString;
-            protected set => this.setProperty(ref stateString, value, StateStringChanged);
-        }
         #endregion
 
         #region Inputs

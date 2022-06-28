@@ -34,7 +34,7 @@ namespace OpenSC.Model.Mixers.DynamicTextFunctions
                 CurrentValue = mixer.OnPreviewInputName;
             }
 
-            private void onPreviewInputNameChangedHandler(Mixer mixer, string newName) => CurrentValue = newName;
+            private void onPreviewInputNameChangedHandler(Mixer mixer, string oldName, string newName) => CurrentValue = newName;
 
         }
 

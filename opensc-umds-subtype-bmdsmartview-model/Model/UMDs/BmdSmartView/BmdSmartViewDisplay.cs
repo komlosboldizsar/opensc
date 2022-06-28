@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,7 +12,7 @@ namespace OpenSC.Model.UMDs.BmdSmartView
 {
     [TypeLabel("BMD SmartView Display")]
     [TypeCode("bmdsmartview")]
-    public class BmdSmartViewDisplay : Umd
+    public partial class BmdSmartViewDisplay : Umd
     {
 
         #region Instantiation, restoration, persistence, removation
@@ -28,29 +29,15 @@ namespace OpenSC.Model.UMDs.BmdSmartView
         #endregion
 
         #region Property: Unit
-        public event PropertyChangedTwoValuesDelegate<BmdSmartViewDisplay, BmdSmartViewUnit> UnitChanged;
-
-        private BmdSmartViewUnit unit;
-
+        [AutoProperty]
         [PersistAs("unit")]
-        public BmdSmartViewUnit Unit
-        {
-            get => unit;
-            set => this.setProperty(ref unit, value, UnitChanged);
-        }
+        private BmdSmartViewUnit unit;
         #endregion
 
         #region Property: Position
-        public event PropertyChangedTwoValuesDelegate<BmdSmartViewDisplay, BmdSmartViewDisplayPosition> PositionChanged;
-
+        [AutoProperty]
         [PersistAs("position")]
         private BmdSmartViewDisplayPosition position = BmdSmartViewDisplayPosition.Single;
-
-        public BmdSmartViewDisplayPosition Position
-        {
-            get => position;
-            set => this.setProperty(ref position, value, PositionChanged);
-        }
         #endregion
 
         #region Before & after update

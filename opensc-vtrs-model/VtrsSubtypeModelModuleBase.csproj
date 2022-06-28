@@ -1,7 +1,6 @@
 <Project>
-  <Import Project="Global\*.csproj"/>
+  <Import Project="..\CommonCsproj\ModelModuleBase.csproj"/>
   <ItemGroup>
-    <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
     <ProjectReference Include="..\opensc-vtrs-model\opensc-vtrs-model.csproj"/>
   </ItemGroup>
 </Project>

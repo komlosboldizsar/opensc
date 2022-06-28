@@ -1,6 +1,7 @@
 ﻿using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Signals;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public class RouterOutput : SignalForwarder, ISignalSourceRegistered, ISystemObject
+    public partial class RouterOutput : SignalForwarder, ISignalSourceRegistered, ISystemObject
     {
 
         public RouterOutput() : base()
@@ -65,29 +66,23 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Property: Name
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_name_afterChange))]
+        [AutoProperty.Validator(nameof(ValidateName))]
         private string name;
 
-        public string Name
+        private void _name_afterChange(string oldValue, string newValue)
         {
-            get { return name; }
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException();
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Name));
-                SignalLabelChanged?.Invoke(this, getSignalLabel());
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
-                Router?.NotifyLocalOutputNameChanged(this);
-            }
+            SignalLabelChanged?.Invoke(this, getSignalLabel());
+            ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
+            Router?.NotifyLocalOutputNameChanged(this);
         }
 
-        public delegate void NameChangedDelegate(RouterOutput output, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
+        public void ValidateName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException();
+        }
         #endregion
 
         #region Property: Router
@@ -112,29 +107,18 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Property: Index
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_index_afterChange))]
         private int index;
 
-        public int Index
+        private void _index_afterChange(int oldValue, int newValue)
         {
-            get => index;
-            set
-            {
-                if (value == index)
-                    return;
-                int oldValue = index;
-                index = value;
-                IndexChanged?.Invoke(this, oldValue, value);
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Index));
-                SignalLabelChanged?.Invoke(this, getSignalLabel());
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
-                SignalUniqueIdChanged?.Invoke(this, SignalUniqueId);
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalUniqueId));
-                generateGlobalId();
-            }
+            SignalLabelChanged?.Invoke(this, getSignalLabel());
+            ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
+            SignalUniqueIdChanged?.Invoke(this, SignalUniqueId);
+            ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalUniqueId));
+            generateGlobalId();
         }
-
-        public delegate void IndexChangedDelegate(RouterOutput input, int oldIndex, int newIndex);
-        public event IndexChangedDelegate IndexChanged;
         #endregion
         
         #region Source assignment
@@ -155,10 +139,7 @@ namespace OpenSC.Model.Routers
             CurrentInputChanged?.Invoke(this, source as RouterInput);
         }
 
-        public void RequestCrosspointUpdate(RouterInput input)
-        {
-            Router?.RequestCrosspointUpdate(this, input);
-        }
+        public void RequestCrosspointUpdate(RouterInput input) => Router?.RequestCrosspointUpdate(this, input);
         #endregion
 
         #region Property: CurrentInput

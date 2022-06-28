@@ -1,6 +1,8 @@
-﻿using OpenSC.Logger;
+﻿using Microsoft.CodeAnalysis;
+using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,7 +13,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Variables
 {
 
-    public abstract class CustomBoolean : ModelBase, IBoolean
+    public abstract partial class CustomBoolean : ModelBase, IBoolean
     {
 
         public const string LOG_TAG = "CustomBoolean";
@@ -61,21 +63,16 @@ namespace OpenSC.Model.Variables
         #endregion
 
         #region Property: Identifier
-        public event PropertyChangedTwoValuesDelegate<IBoolean, string> IdentifierChanged;
-
+        [AutoProperty]
+        [AutoProperty.Event(typeof(IBoolean))]
+        [AutoProperty.BeforeChange(nameof(_identifier_beforeChange))]
+        [PersistAs("identifier")]
         private string identifier;
 
-        [PersistAs("identifier")]
-        public string Identifier
+        private void _identifier_beforeChange(string oldValue, string newValue, BeforeChangePropertyArgs args)
         {
-            get => identifier;
-            set
-            {
-                if (!BooleanRegister.Instance.CanKeyBeUsedForItem(this, value, out IBoolean identifierOwnerItem))
-                    return;
-                if (!this.setProperty(ref identifier, value, IdentifierChanged))
-                    return;
-            }
+            if (!BooleanRegister.Instance.CanKeyBeUsedForItem(this, newValue, out IBoolean identifierOwnerItem))
+                args.Cancel();
         }
 
         public abstract bool IdentifierUserEditable { get; }
@@ -83,47 +80,29 @@ namespace OpenSC.Model.Variables
         #endregion
 
         #region Property: Color
-        public event PropertyChangedTwoValuesDelegate<IBoolean, Color> ColorChanged;
-
-        private Color color;
-
+        [AutoProperty]
+        [AutoProperty.Event(typeof(IBoolean))]
         [PersistAs("color")]
-        public Color Color
-        {
-            get => color;
-            set => this.setProperty(ref color, value, ColorChanged);
-        }
+        private Color color;
 
         public abstract bool ColorUserEditable { get; }
         public abstract Color GetColorByData(CustomBooleanDataStore dataStore);
         #endregion
 
         #region Property: Description
-        public event PropertyChangedTwoValuesDelegate<IBoolean, string> DescriptionChanged;
-
-        private string description;
-
+        [AutoProperty]
+        [AutoProperty.Event(typeof(IBoolean))]
         [PersistAs("description")]
-        public string Description
-        {
-            get => description;
-            set => this.setProperty(ref description, value, DescriptionChanged);
-        }
+        private string description;
 
         public abstract bool DescriptionUserEditable { get; }
         public abstract string GetDescriptionByData(CustomBooleanDataStore dataStore);
         #endregion
 
         #region Property: CurrentState
-        public event PropertyChangedTwoValuesDelegate<IBoolean, bool> StateChanged;
-
+        [AutoProperty(SetterAccessibility = Accessibility.Protected)]
+        [AutoProperty.Event(EventName = nameof(IBoolean.StateChanged), SenderType = typeof(IBoolean))]
         private bool currentState;
-
-        public bool CurrentState
-        {
-            get => currentState;
-            protected set => this.setProperty(ref currentState, value, StateChanged);
-        }
         #endregion
 
         #region Base fields

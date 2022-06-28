@@ -1,6 +1,7 @@
 ﻿using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,42 +29,22 @@ namespace OpenSC.Model.X32Faders
         #endregion
 
         #region Property: IpAddress
-        public event PropertyChangedTwoValuesDelegate<X32Fader, string> IpAddressChanged;
-
-        private string ipAddress = "192.168.10.41";
-
+        [AutoProperty]
         [PersistAs("ip_address")]
-        public string IpAddress
-        {
-            get => ipAddress;
-            set => this.setProperty(ref ipAddress, value, IpAddressChanged);
-        }
+        private string ipAddress;
         #endregion
 
         #region Property: OscPath
-        public event PropertyChangedTwoValuesDelegate<X32Fader, string> OscPathChanged;
-
-        private string oscPath = "";
-
+        [AutoProperty]
         [PersistAs("osc_path")]
-        public string OscPath
-        {
-            get => oscPath;
-            set => this.setProperty(ref oscPath, value, OscPathChanged);
-        }
+        private string oscPath = "";
         #endregion
 
         #region Property: TargetLevel
-        public event PropertyChangedTwoValuesDelegate<X32Fader, decimal> TargetLevelChanged;
-
-        private decimal targetLevel = 1.0m;
-
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateTargetLevel))]
         [PersistAs("target_level")]
-        public decimal TargetLevel
-        {
-            get => targetLevel;
-            set => this.setProperty(ref targetLevel, value, TargetLevelChanged, validator: ValidateTargetLevel);
-        }
+        private decimal targetLevel = 1.0m;
 
         public void ValidateTargetLevel(decimal level)
         {
@@ -73,16 +54,10 @@ namespace OpenSC.Model.X32Faders
         #endregion
 
         #region Property: Time
-        public event PropertyChangedTwoValuesDelegate<X32Fader, int> TimeChanged;
-
-        private int time = 1000;
-
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateTime))]
         [PersistAs("time")]
-        public int Time
-        {
-            get => time;
-            set => this.setProperty(ref time, value, TimeChanged, validator: ValidateTime);
-        }
+        private int time = 1000;
 
         public void ValidateTime(int time)
         {
@@ -92,16 +67,10 @@ namespace OpenSC.Model.X32Faders
         #endregion
 
         #region Property: ReferenceLevelForTime
-        public event PropertyChangedTwoValuesDelegate<X32Fader, decimal> ReferenceLevelForTimeChanged;
-
-        private decimal referenceLevelForTime = 0.0m;
-
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateReferenceLevelForTime))]
         [PersistAs("reference_level_for_time")]
-        public decimal ReferenceLevelForTime
-        {
-            get => referenceLevelForTime;
-            set => this.setProperty(ref referenceLevelForTime, value, ReferenceLevelForTimeChanged, validator: ValidateReferenceLevelForTime);
-        }
+        private decimal referenceLevelForTime = 0.0m;
 
         public void ValidateReferenceLevelForTime(decimal referenceLevelForTime)
         {
@@ -111,29 +80,16 @@ namespace OpenSC.Model.X32Faders
         #endregion
 
         #region Property: UseReferenceLevelForTime
-        public event PropertyChangedTwoValuesDelegate<X32Fader, bool> UseReferenceLevelForTimeChanged;
-
-        private bool useReferenceLevelForTime = false;
-
+        [AutoProperty]
         [PersistAs("use_reference_level_for_time")]
-        public bool UseReferenceLevelForTime
-        {
-            get => useReferenceLevelForTime;
-            set => this.setProperty(ref useReferenceLevelForTime, value, UseReferenceLevelForTimeChanged);
-        }
+        private bool useReferenceLevelForTime = false;
         #endregion
 
         #region Property: TimeStep
-        public event PropertyChangedTwoValuesDelegate<X32Fader, int> TimeStepChanged;
-
-        private int timeStep = 50;
-
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateTimeStep))]
         [PersistAs("time_step")]
-        public int TimeStep
-        {
-            get => timeStep;
-            set => this.setProperty(ref timeStep, value, TimeStepChanged, validator: ValidateTimeStep);
-        }
+        private int timeStep = 50;
 
         public void ValidateTimeStep(int timeStep)
         {

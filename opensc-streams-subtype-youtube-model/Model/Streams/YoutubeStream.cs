@@ -3,6 +3,7 @@ using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.Settings;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,7 +18,7 @@ namespace OpenSC.Model.Streams
 {
     [TypeLabel("YouTube stream")]
     [TypeCode("youtube")]
-    public class YoutubeStream: Stream
+    public partial class YoutubeStream: Stream
     {
 
         #region Persistence, instantiation
@@ -51,29 +52,16 @@ namespace OpenSC.Model.Streams
         #endregion
 
         #region Property: VideoId
-        public event PropertyChangedTwoValuesDelegate<YoutubeStream, string> VideoIdChanged;
-
+        [AutoProperty]
         [PersistAs("video_id")]
         private string videoId;
-
-        public string VideoId
-        {
-            get => videoId;
-            set => this.setProperty(ref videoId, value, VideoIdChanged);
-        }
         #endregion
 
         #region Property: RefreshRate
-        public event PropertyChangedTwoValuesDelegate<YoutubeStream, int> RefreshRateChanged;
-
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateRefreshRate))]
         [PersistAs("refresh_rate")]
         private int refreshRate = 5;
-
-        public int RefreshRate
-        {
-            get => refreshRate;
-            set => this.setProperty(ref refreshRate, value, RefreshRateChanged, validator: ValidateRefreshRate);
-        }
 
         public void ValidateRefreshRate(int refreshRate)
         {

@@ -2,6 +2,7 @@
 using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,7 +18,7 @@ namespace OpenSC.Model.VTRs
 
     [TypeLabel("CasparCG playout")]
     [TypeCode("casparcg")]
-    public class CasparCgPlayout: Vtr
+    public partial class CasparCgPlayout: Vtr
     {
 
         #region Constants
@@ -40,56 +41,53 @@ namespace OpenSC.Model.VTRs
         #endregion
 
         #region Property: ListenedIP
-        public event PropertyChangedTwoValuesDelegate<CasparCgPlayout, string> ListenedIpChanged;
-
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_listenedIp_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_listenedIp_afterChange))]
+        [PersistAs("listened_ip")]
         private string listenedIp = "127.0.0.1";
 
-        [PersistAs("listened_ip")]
-        public string ListenedIp
+        private void _listenedIp_beforeChange(string oldValue, string newValue, BeforeChangePropertyArgs args)
+            => CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this);
+
+        private void _listenedIp_afterChange(string oldValue, string newValue)
         {
-            get => listenedIp;
-            set => this.setProperty(ref listenedIp, value, ListenedIpChanged,
-                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this),
-                (ov, nv) => {
-                    resetStateAndData();
-                    CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
-                });
+            resetStateAndData();
+            CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
         }
         #endregion
 
         #region Property: WatchedChannel
-        public event PropertyChangedTwoValuesDelegate<CasparCgPlayout, int> WatchedChannelChanged;
-
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_watchedChannel_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_watchedChannel_afterChange))]
+        [PersistAs("watched_channel")]
         private int watchedChannel = 1;
 
-        [PersistAs("watched_channel")]
-        public int WatchedChannel
+        private void _watchedChannel_beforeChange(int oldValue, int newValue, BeforeChangePropertyArgs args)
+            => CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this);
+
+        private void _watchedChannel_afterChange(int oldValue, int newValue)
         {
-            get => watchedChannel;
-            set => this.setProperty(ref watchedChannel, value, WatchedChannelChanged,
-                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this),
-                (ov, nv) => {
-                    resetStateAndData();
-                    CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
-                });
+            resetStateAndData();
+            CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
         }
         #endregion
 
         #region Property: WatchedLayer
-        public event PropertyChangedTwoValuesDelegate<CasparCgPlayout, int> WatchedLayerChanged;
-
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_watchedLayer_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_watchedLayer_afterChange))]
+        [PersistAs("watched_layer")]
         private int watchedLayer = 10;
 
-        [PersistAs("watched_layer")]
-        public int WatchedLayer
+        private void _watchedLayer_beforeChange(int oldValue, int newValue, BeforeChangePropertyArgs args)
+            => CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this);
+
+        private void _watchedLayer_afterChange(int oldValue, int newValue)
         {
-            get => watchedLayer;
-            set => this.setProperty(ref watchedLayer, value, WatchedLayerChanged,
-                (ov, nv) => CasparCgPlayoutCommons.Instance.UnsubscribeFromIpChannelLayer(this),
-                (ov, nv) => {
-                    resetStateAndData();
-                    CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
-                });
+            resetStateAndData();
+            CasparCgPlayoutCommons.Instance.SubscribeToIpChannelLayer(this);
         }
         #endregion
 

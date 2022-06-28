@@ -3,6 +3,7 @@ using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.SerialPorts;
 using OpenSC.Model.Settings;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace OpenSC.Model.Routers.Leitch
 
     [TypeLabel("Leitch")]
     [TypeCode("leitch")]
-    public class LeitchRouter : Router
+    public partial class LeitchRouter : Router
     {
 
         private new const string LOG_TAG = "Router/Leitch";
@@ -31,32 +32,28 @@ namespace OpenSC.Model.Routers.Leitch
         }
 
         #region Property: Port
-        public event PropertyChangedTwoValuesDelegate<LeitchRouter, SerialPort> PortChanged;
-        
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_port_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_port_afterChange))]
+        [PersistAs("port")]
         private SerialPort port;
 
-        [PersistAs("port")]
-        public SerialPort Port
+        private void _port_beforeChange(SerialPort oldValue, SerialPort newValue, BeforeChangePropertyArgs args)
         {
-            get => port;
-            set
+            if (oldValue != null)
             {
-                BeforeChangePropertyDelegate<SerialPort> beforeChangeDelegate = (ov, nv) => {
-                    if (ov != null)
-                    {
-                        ov.ReceivedDataAsciiLine -= receivedLineFromPort;
-                        ov.InitializedChanged -= portInitializedChangedHandler;
-                    }
-                };
-                AfterChangePropertyDelegate<SerialPort> afterChangeDelegate = (ov, nv) => {
-                    if (nv != null)
-                    {
-                        nv.ReceivedDataAsciiString += receivedLineFromPort;
-                        nv.InitializedChanged += portInitializedChangedHandler;
-                        initSerial();
-                    }
-                };
-                this.setProperty(ref port, value, PortChanged, beforeChangeDelegate, afterChangeDelegate);
+                oldValue.ReceivedDataAsciiLine -= receivedLineFromPort;
+                oldValue.InitializedChanged -= portInitializedChangedHandler;
+            }
+        }
+
+        private void _port_afterChange(SerialPort oldValue, SerialPort newValue)
+        {
+            if (newValue != null)
+            {
+                newValue.ReceivedDataAsciiString += receivedLineFromPort;
+                newValue.InitializedChanged += portInitializedChangedHandler;
+                initSerial();
             }
         }
 
@@ -74,16 +71,10 @@ namespace OpenSC.Model.Routers.Leitch
         #endregion
 
         #region Property: Level
-        public event PropertyChangedTwoValuesDelegate<LeitchRouter, int> LevelChanged;
-
-        private int level;
-
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateLevel))]
         [PersistAs("level")]
-        public int Level
-        {
-            get => level;
-            set => this.setProperty(ref level, value, LevelChanged, validator: ValidateLevel);
-        }
+        private int level;
 
         public void ValidateLevel(int level)
         {

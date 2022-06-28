@@ -1,6 +1,7 @@
 ﻿using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers.CrosspointStores
 {
 
-    public class CrosspointStore : ModelBase
+    public partial class CrosspointStore : ModelBase
     {
 
         public const string LOG_TAG = "CrosspointStore";
@@ -34,95 +35,53 @@ namespace OpenSC.Model.Routers.CrosspointStores
         #endregion
 
         #region Property: StoredInput
-        public event PropertyChangedTwoValuesDelegate<CrosspointStore, RouterInput> StoredInputChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_storedInput_afterChange))]
+        [PersistAs("stored_input")]
         private RouterInput storedInput;
 
-        [PersistAs("stored_input")]
-        public RouterInput StoredInput
+        private void _storedInput_afterChange(RouterInput oldValue, RouterInput newValue)
         {
-            get => storedInput;
-            set
-            {
-                if (!this.setProperty(ref storedInput, value, StoredInputChanged))
-                    return;
-                if (Autotake)
-                    Take();
-            }
+            if (Autotake)
+                Take();
         }
         #endregion
 
         #region Property: StoredOutput
-        public event PropertyChangedTwoValuesDelegate<CrosspointStore, RouterOutput> StoredOutputChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_storedOutput_afterChange))]
+        [PersistAs("stored_output")]
         private RouterOutput storedOutput;
 
-        [PersistAs("stored_output")]
-        public RouterOutput StoredOutput
+        private void _storedOutput_afterChange(RouterOutput oldValue, RouterOutput newValue)
         {
-            get => storedOutput;
-            set
-            {
-                AfterChangePropertyDelegate<RouterOutput> afterChangeDelegate = (ov, nv) =>
-                {
-                    if (importInputAfterOutputSet)
-                        StoredInput = nv?.CurrentInput;
-                };
-                this.setProperty(ref storedOutput, value, StoredOutputChanged, null, afterChangeDelegate);
-            }
+            if (importInputAfterOutputSet)
+                StoredInput = newValue?.CurrentInput;
         }
         #endregion
 
         #region Property: ClearInputAfterTake
-        public event PropertyChangedTwoValuesDelegate<CrosspointStore, bool> ClearInputAfterTakeChanged;
-
-        private bool clearInputAfterTake;
-
+        [AutoProperty]
         [PersistAs("clear_input_after_take")]
-        public bool ClearInputAfterTake
-        {
-            get => clearInputAfterTake;
-            set => this.setProperty(ref clearInputAfterTake, value, ClearInputAfterTakeChanged);
-        }
+        private bool clearInputAfterTake;
         #endregion
 
         #region Property: ClearOutputAfterTake
-        public event PropertyChangedTwoValuesDelegate<CrosspointStore, bool> ClearOutputAfterTakeChanged;
-
-        private bool clearOutputAfterTake;
-
+        [AutoProperty]
         [PersistAs("clear_output_after_take")]
-        public bool ClearOutputAfterTake
-        {
-            get => clearOutputAfterTake;
-            set => this.setProperty(ref clearOutputAfterTake, value, ClearOutputAfterTakeChanged);
-        }
+        private bool clearOutputAfterTake;
         #endregion
 
         #region Property: ImportInputAfterOutputSet
-        public event PropertyChangedTwoValuesDelegate<CrosspointStore, bool> ImportInputAfterOutputSetChanged;
-
-        private bool importInputAfterOutputSet;
-
+        [AutoProperty]
         [PersistAs("import_input_after_output_set")]
-        public bool ImportInputAfterOutputSet
-        {
-            get => importInputAfterOutputSet;
-            set => this.setProperty(ref importInputAfterOutputSet, value, ImportInputAfterOutputSetChanged);
-        }
+        private bool importInputAfterOutputSet;
         #endregion
 
         #region Property: Autotake
-        public event PropertyChangedTwoValuesDelegate<CrosspointStore, bool> AutotakeChanged;
-
-        private bool autotake;
-
+        [AutoProperty]
         [PersistAs("autotake")]
-        public bool Autotake
-        {
-            get => autotake;
-            set => this.setProperty(ref autotake, value, AutotakeChanged);
-        }
+        private bool autotake;
         #endregion
 
         public void Take()

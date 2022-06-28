@@ -1,6 +1,7 @@
 ﻿using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using Sanford.Multimedia.Midi;
 using Sanford.Threading;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.MidiControllers
 {
-    public class MidiController : ModelBase
+    public partial class MidiController : ModelBase
     {
 
         #region Constants
@@ -41,37 +42,21 @@ namespace OpenSC.Model.MidiControllers
         #endregion
 
         #region Property: DeviceId
-        public event PropertyChangedTwoValuesDelegate<MidiController, int> DeviceIdChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_deviceId_afterChange))]
+        [PersistAs("device_id")]
         private int deviceId;
 
-        [PersistAs("device_id")]
-        public int DeviceId
+        private void _deviceId_afterChange(int oldValue, int newValue)
         {
-            get => deviceId;
-            set
-            {
-                AfterChangePropertyDelegate<int> afterChangeDelegate = (ov, nv) =>
-                {
-                    if (Initialized && !Updating)
-                        ReInit();
-                };
-                if (!this.setProperty(ref deviceId, value, DeviceIdChanged, null, afterChangeDelegate))
-                    return;
-            }
+            if (Initialized && !Updating)
+                ReInit();
         }
         #endregion
 
         #region Property: Initialized
-        public event PropertyChangedTwoValuesDelegate<MidiController, bool> InitializedChanged;
-
+        [AutoProperty]
         protected bool initialized;
-
-        public bool Initialized
-        {
-            get => initialized;
-            set => this.setProperty(ref initialized, value, InitializedChanged);
-        }
         #endregion
 
         private InputDevice inputDevice = null;

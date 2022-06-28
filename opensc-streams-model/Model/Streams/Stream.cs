@@ -1,11 +1,13 @@
-﻿using OpenSC.Model.General;
+﻿using Microsoft.CodeAnalysis;
+using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 
 namespace OpenSC.Model.Streams
 {
 
-    public abstract class Stream : ModelBase
+    public abstract partial class Stream : ModelBase
     {
 
         #region Persistence, instantiation
@@ -22,27 +24,13 @@ namespace OpenSC.Model.Streams
         #endregion
 
         #region Property: State
-        public event PropertyChangedTwoValuesDelegate<Stream, StreamState> StateChanged;
-
+        [AutoProperty(SetterAccessibility = Accessibility.Protected)]
         private StreamState state;
-
-        public StreamState State
-        {
-            get => state;
-            protected set => this.setProperty(ref state, value, StateChanged);
-        }
         #endregion
 
         #region Property: ViewerCount
-        public event PropertyChangedTwoValuesDelegate<Stream, int?> ViewerCountChanged;
-
+        [AutoProperty(SetterAccessibility = Accessibility.Protected)]
         private int? viewerCount = null;
-
-        public int? ViewerCount
-        {
-            get => viewerCount;
-            protected set => this.setProperty(ref viewerCount, value, ViewerCountChanged);
-        }
         #endregion
 
     }

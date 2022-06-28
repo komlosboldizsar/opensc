@@ -1,5 +1,7 @@
-﻿using OpenSC.Model.General;
+﻿using Microsoft.CodeAnalysis;
+using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
@@ -9,7 +11,7 @@ using System.Linq;
 namespace OpenSC.Model.Signals.BooleanTallies
 {
 
-    public class BooleanTally : ModelBase, ISignalTallySender
+    public partial class BooleanTally : ModelBase, ISignalTallySender
     {
 
         #region Persistence, instantiation
@@ -37,8 +39,6 @@ namespace OpenSC.Model.Signals.BooleanTallies
         #endregion
 
         #region Property: FromBoolean
-        public event PropertyChangedTwoValuesDelegate<BooleanTally, IBoolean> FromBooleanChanged;
-
         private string _fromBooleanUniqueId; // "Temp foreign key"
 
         [PersistAs("from_boolean")]
@@ -48,67 +48,55 @@ namespace OpenSC.Model.Signals.BooleanTallies
             set => _fromBooleanUniqueId = value;
         }
 
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_fromBoolean_afterChange))]
         private IBoolean fromBoolean;
 
-        public IBoolean FromBoolean
+        private void _fromBoolean_afterChange(IBoolean oldValue, IBoolean newValue)
         {
-            get => fromBoolean;
-            set
-            {
-                AfterChangePropertyDelegate<IBoolean> afterChangeDelegate = (ov, nv) => {
-                    bool oldState = ov?.CurrentState ?? false;
-                    bool newState = nv?.CurrentState ?? false;
-                    if (!oldState && newState)
-                        toTally?.Give(myRecursionChain);
-                    if (oldState && !newState)
-                        toTally?.Revoke(myRecursionChain);
-                };
-                this.setProperty(ref fromBoolean, value, FromBooleanChanged, null, afterChangeDelegate);
-            }
+            bool oldState = oldValue?.CurrentState ?? false;
+            bool newState = newValue?.CurrentState ?? false;
+            if (!oldState && newState)
+                toTally?.Give(myRecursionChain);
+            if (oldState && !newState)
+                toTally?.Revoke(myRecursionChain);
         }
         #endregion
 
         #region Property: ToSignal
-        public event PropertyChangedTwoValuesDelegate<BooleanTally, ISignalSourceRegistered> ToSignalChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_toSignal_afterChange))]
+        [PersistAs("to_signal")]
         private ISignalSourceRegistered toSignal;
 
-        [PersistAs("to_signal")]
-        public ISignalSourceRegistered ToSignal
-        {
-            get => toSignal;
-            set => this.setProperty(ref toSignal, value, ToSignalChanged, null, (ov, nv) => updateToTally());
-        }
+        private void _toSignal_afterChange(ISignalSourceRegistered oldValue, ISignalSourceRegistered newValue) => updateToTally();
         #endregion
 
         #region Property: ToTallyColor
-        public event PropertyChangedTwoValuesDelegate<BooleanTally, SignalTallyColor> ToTallyColorChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_toTallyColor_afterChange))]
+        [PersistAs("to_tally_color")]
         private SignalTallyColor toTallyColor;
 
-        [PersistAs("to_tally_color")]
-        public SignalTallyColor ToTallyColor
-        {
-            get => toTallyColor;
-            set => this.setProperty(ref toTallyColor, value, ToTallyColorChanged, null, (ov, nv) => updateToTally());
-        }
+        private void _toTallyColor_afterChange(SignalTallyColor oldValue, SignalTallyColor newValue) => updateToTally();
         #endregion
 
         #region Property: ToTally
+        [AutoProperty(PropertyAccessibility = Accessibility.Private)]
+        [AutoProperty.BeforeChange(nameof(_toTally_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_toTally_afterChange))]
         private IBidirectionalSignalTally toTally;
 
-        private IBidirectionalSignalTally ToTally
+        private void _toTally_beforeChange(IBidirectionalSignalTally oldValue, IBidirectionalSignalTally newValue, BeforeChangePropertyArgs args)
         {
-            get => toTally;
-            set
-            {
-                if (toTally != null)
-                    toTally.Revoke(myRecursionChain);
-                toTally = value;
-                if (toTally != null)
-                    if (fromBoolean?.CurrentState == true)
-                        toTally.Give(myRecursionChain);
-            }
+            if (oldValue != null)
+                oldValue.Revoke(myRecursionChain);
+        }
+
+        private void _toTally_afterChange(IBidirectionalSignalTally oldValue, IBidirectionalSignalTally newValue)
+        {
+            if ((newValue != null) && (fromBoolean?.CurrentState == true))
+                newValue.Give(myRecursionChain);
         }
 
         private void updateToTally() => ToTally = toSignal?.GetTally(toTallyColor);

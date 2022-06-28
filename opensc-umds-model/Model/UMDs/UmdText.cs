@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.General;
+using OpenSC.Model.SourceGenerators;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.UMDs
 {
 
-    public class UmdText : ObjectBase
+    public partial class UmdText : ObjectBase
     {
 
         public Umd Owner { get; private set; }
@@ -40,18 +41,20 @@ namespace OpenSC.Model.UMDs
         #endregion
 
         #region Property: Source
-        public event PropertyChangedTwoValuesDelegate<UmdText, DynamicText> SourceChanged;
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_source_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_source_afterChange))]
         private DynamicText source;
-        public DynamicText Source
-        {
-            get => source;
-            set => this.setProperty(ref source, value, SourceChanged, null, afterSourceChange);
-        }
 
-        private void afterSourceChange(DynamicText oldValue, DynamicText newValue)
+        private void _source_beforeChange(DynamicText oldValue, DynamicText newValue, BeforeChangePropertyArgs args)
         {
             if (oldValue != null)
                 oldValue.CurrentTextChanged -= sourceCurrentTextChangedHandler;
+        }
+
+        private void _source_afterChange(DynamicText oldValue, DynamicText newValue)
+        {
+            
             if (newValue != null)
                 newValue.CurrentTextChanged += sourceCurrentTextChangedHandler;
             if (!useStaticValue)
@@ -69,58 +72,54 @@ namespace OpenSC.Model.UMDs
         #endregion
 
         #region Property: StaticValue
-        public event PropertyChangedTwoValuesDelegate<UmdText, string> StaticValueChanged;
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_staticValue_afterChange))]
         private string staticValue;
-        public string StaticValue
+
+        private void _staticValue_afterChange(string oldValue, string newValue)
         {
-            get => staticValue;
-            set => this.setProperty(ref staticValue, value, StaticValueChanged, null, (_, nv) => {
-                if (useStaticValue)
-                    CurrentValue = nv;
-            });
+            if (useStaticValue)
+                CurrentValue = newValue;
         }
         #endregion
 
         #region Property: UseStaticValue
-        public event PropertyChangedTwoValuesDelegate<UmdText, bool> UseStaticValueChanged;
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_useStaticValue_afterChange))]
         private bool useStaticValue;
-        public bool UseStaticValue
-        {
-            get => useStaticValue;
-            set => this.setProperty(ref useStaticValue, value, UseStaticValueChanged, null, (_, nv) => {
-                CurrentValue = nv ? StaticValue : Source?.CurrentText;
-            });
-        }
+
+        private void _useStaticValue_afterChange(bool oldValue, bool newValue)
+            => CurrentValue = newValue ? StaticValue : Source?.CurrentText;
         #endregion
 
         #region Property: Used
-        public event PropertyChangedTwoValuesDelegate<UmdText, bool> UsedChanged;
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_used_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_used_afterChange))]
         private bool used;
-        public bool Used
+
+        private void _used_beforeChange(bool oldValue, bool newValue, BeforeChangePropertyArgs args)
         {
-            get => used;
-            set
-            {
-                if (!Info.Switchable)
-                    return;
-                this.setProperty(ref used, value, UsedChanged, null, (ov, nv) => Owner?.NotifyTextUsedChanged(this));
-            }
+            if (!Info.Switchable)
+                args.Cancel();
         }
+
+        private void _used_afterChange(bool oldValue, bool newValue) => Owner?.NotifyTextUsedChanged(this);
         #endregion
 
         #region Property: Alignment
-        public event PropertyChangedTwoValuesDelegate<UmdText, UmdTextAlignment> AlignmentChanged;
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_alignment_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_alignment_afterChange))]
         private UmdTextAlignment alignment;
-        public UmdTextAlignment Alignment
+
+        private void _alignment_beforeChange(UmdTextAlignment oldValue, UmdTextAlignment newValue, BeforeChangePropertyArgs args)
         {
-            get => alignment;
-            set
-            {
-                if (!Info.Alignable)
-                    return;
-                this.setProperty(ref alignment, value, AlignmentChanged, null, (ov, nv) => Owner?.NotifyTextAlignmentChanged(this));
-            }
+            if (!Info.Alignable)
+                args.Cancel();
         }
+
+        private void _alignment_afterChange(UmdTextAlignment oldValue, UmdTextAlignment newValue) => Owner?.NotifyTextAlignmentChanged(this);
         #endregion
 
         #region Property: CurrentValue

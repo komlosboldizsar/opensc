@@ -1,6 +1,8 @@
-﻿using OpenSC.Logger;
+﻿using Microsoft.CodeAnalysis;
+using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.GpioInterfaces
 {
 
-    public abstract class GpioInterface : ModelBase
+    public abstract partial class GpioInterface : ModelBase
     {
 
         public const string LOG_TAG = "GpioInterface";
@@ -174,27 +176,13 @@ namespace OpenSC.Model.GpioInterfaces
         #endregion
 
         #region Property: State
-        public event PropertyChangedTwoValuesDelegate<GpioInterface, GpioInterfaceState> StateChanged;
-
+        [AutoProperty(SetterAccessibility = Accessibility.Protected)]
         private GpioInterfaceState state = GpioInterfaceState.Unknown;
-
-        public GpioInterfaceState State
-        {
-            get => state;
-            protected set => this.setProperty(ref state, value, StateChanged);
-        }
         #endregion
 
         #region Property: StateString
-        public event PropertyChangedTwoValuesDelegate<GpioInterface, string> StateStringChanged;
-
+        [AutoProperty(SetterAccessibility = Accessibility.Protected)]
         private string stateString = "?";
-
-        public string StateString
-        {
-            get => stateString;
-            protected set => this.setProperty(ref stateString, value, StateStringChanged);
-        }
         #endregion
 
     }

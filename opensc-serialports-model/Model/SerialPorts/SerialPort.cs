@@ -2,6 +2,7 @@
 using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.SerialPorts
 {
 
-    public class SerialPort : ModelBase
+    public partial class SerialPort : ModelBase
     {
 
         #region Constants
@@ -52,37 +53,24 @@ namespace OpenSC.Model.SerialPorts
         #endregion
 
         #region Property: ComPortName
-        public event PropertyChangedTwoValuesDelegate<SerialPort, string> ComPortNameChanged;
-
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_comPortName_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_comPortName_afterChange))]
+        [PersistAs("port_name")]
         protected string comPortName;
 
-        [PersistAs("port_name")]
-        public string ComPortName
+        private void _comPortName_beforeChange(string oldValue, string newValue, BeforeChangePropertyArgs args)
         {
-            get => comPortName;
-            set
-            {
-                BeforeChangePropertyDelegate<string> beforeChangeDelegate = (ov, nv) => {
-                    if (serialPort?.IsOpen == true)
-                        DeInit();
-                };
-                if (!this.setProperty(ref comPortName, value, ComPortNameChanged, beforeChangeDelegate))
-                    return;
-                Init();
-            }
+            if (serialPort?.IsOpen == true)
+                DeInit();
         }
+
+        private void _comPortName_afterChange(string oldValue, string newValue) => Init();
         #endregion
 
         #region Property: Initialized
-        public event PropertyChangedTwoValuesDelegate<SerialPort, bool> InitializedChanged;
-        
+        [AutoProperty]
         protected bool initialized;
-
-        public bool Initialized
-        {
-            get => initialized;
-            set => this.setProperty(ref initialized, value, InitializedChanged);
-        }
         #endregion
 
         // >>>> ComPort properties
@@ -104,22 +92,14 @@ namespace OpenSC.Model.SerialPorts
         }
 
         #region Property: BaudRate
-        public event PropertyChangedTwoValuesDelegate<SerialPort, int> BaudRateChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_baudRate_afterChange))]
+        [AutoProperty.Validator(nameof(ValidateBaudRate))]
+        [PersistAs("baudrate")]
         private int baudRate = DEFAULT_BAUDRATE;
 
-        [PersistAs("baudrate")]
-        public int BaudRate
-        {
-            get => baudRate;
-            set
-            {
-                if (!this.setProperty(ref baudRate, value, BaudRateChanged, validator: ValidateBaudRate))
-                    return;
-                afterPortPropertyChanged();
-            }
-        }
-        
+        private void _baudRate_afterChange(int oldValue, int newValue) => afterPortPropertyChanged();
+
         public void ValidateBaudRate(int baudRate)
         {
             if (baudRate <= 0)
@@ -128,39 +108,22 @@ namespace OpenSC.Model.SerialPorts
         #endregion
 
         #region Property: Parity
-        public event PropertyChangedTwoValuesDelegate<SerialPort, Parity> ParityChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_parity_afterChange))]
+        [PersistAs("parity")]
         private Parity parity = DEFAULT_PARITY;
 
-        [PersistAs("parity")]
-        public Parity Parity
-        {
-            get => parity;
-            set
-            {
-                if (!this.setProperty(ref parity, value, ParityChanged))
-                    return;
-                afterPortPropertyChanged();
-            }
-        }
+        private void _parity_afterChange(Parity oldValue, Parity newValue) => afterPortPropertyChanged();
         #endregion
 
         #region Property: DataBits
-        public event PropertyChangedTwoValuesDelegate<SerialPort, int> DataBitsChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_dataBits_afterChange))]
+        [AutoProperty.Validator(nameof(ValidateDataBits))]
+        [PersistAs("databits")]
         private int dataBits = DEFAULT_DATABITS;
 
-        [PersistAs("databits")]
-        public int DataBits
-        {
-            get => dataBits;
-            set
-            {
-                if (!this.setProperty(ref dataBits, value, DataBitsChanged, validator: ValidateDataBits))
-                    return;
-                afterPortPropertyChanged();
-            }
-        }
+        private void _dataBits_afterChange(int oldValue, int newValue) => afterPortPropertyChanged();
 
         public void ValidateDataBits(int dataBits)
         {
@@ -170,21 +133,12 @@ namespace OpenSC.Model.SerialPorts
         #endregion
 
         #region Property: StopBits
-        public event PropertyChangedTwoValuesDelegate<SerialPort, StopBits> StopBitsChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_stopBits_afterChange))]
+        [PersistAs("stopbits")]
         private StopBits stopBits = DEFAULT_STOPBITS;
 
-        [PersistAs("stopbits")]
-        public StopBits StopBits
-        {
-            get => stopBits;
-            set
-            {
-                if (!this.setProperty(ref stopBits, value, StopBitsChanged))
-                    return;
-                afterPortPropertyChanged();
-            }
-        }
+        private void _stopBits_afterChange(StopBits oldValue, StopBits newValue) => afterPortPropertyChanged();
         #endregion
 
         // <<<< ComPort properties

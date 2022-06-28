@@ -1,6 +1,7 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.SerialPorts;
+using OpenSC.Model.SourceGenerators;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
@@ -13,33 +14,20 @@ namespace OpenSC.Model.UMDs.McCurdy
 {
     [TypeLabel("McCurdy UMD-1")]
     [TypeCode("mccurdy")]
-    public class McCurdyUMD1 : Umd
+    public partial class McCurdyUMD1 : Umd
     {
 
         #region Property: Port
-        public event PropertyChangedTwoValuesDelegate<McCurdyUMD1, SerialPort> PortChanged;
-
-        private SerialPort port;
-
+        [AutoProperty]
         [PersistAs("port")]
-        public SerialPort Port
-        {
-            get => port;
-            set => this.setProperty(ref port, value, PortChanged);
-        }
+        private SerialPort port;
         #endregion
 
         #region Property: Address
-        public event PropertyChangedTwoValuesDelegate<McCurdyUMD1, int> AddressChanged;
-
-        private int address = 1;
-
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateAddress))]
         [PersistAs("address")]
-        public int Address
-        {
-            get => address;
-            set => this.setProperty(ref address, value, AddressChanged, validator: ValidateAddress);
-        }
+        private int address = 1;
 
         public void ValidateAddress(int address)
         {

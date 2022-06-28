@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Signals;
+using OpenSC.Model.SourceGenerators;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,15 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Mixers
 {
 
-    public class MixerInput : ObjectBase, ISignalTallySender
+    public partial class MixerInput : ObjectBase, ISignalTallySender
     {
 
         public MixerInput()
-        { }
+        {
+            createMyRecursionChain();
+        }
 
-        public MixerInput(string name, Mixer mixer, int index)
+        public MixerInput(string name, Mixer mixer, int index) : this()
         {
             this.name = name;
             this.Mixer = mixer;
@@ -63,19 +66,9 @@ namespace OpenSC.Model.Mixers
         }
 
         #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<MixerInput, string> NameChanged;
-
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateName))]
         private string name;
-
-        public string Name
-        {
-            get => name;
-            set
-            {
-                ValidateName(value);
-                this.setProperty(ref name, value, NameChanged);
-            }
-        }
 
         public void ValidateName(string name)
         {
@@ -85,54 +78,41 @@ namespace OpenSC.Model.Mixers
         #endregion
 
         #region Property: Index
-        public event PropertyChangedTwoValuesDelegate<MixerInput, int> IndexChanged;
-
+        [AutoProperty]
         private int index;
-
-        public int Index
-        {
-            get => index;
-            set => this.setProperty(ref index, value, IndexChanged);
-        }
         #endregion
 
         #region Property: Source
-        public event PropertyChangedTwoValuesDelegate<MixerInput, ISignalSourceRegistered> SourceChanged;
-
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_source_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_source_afterChange))]
         private ISignalSourceRegistered source;
 
-        public ISignalSourceRegistered Source
+        private void _source_beforeChange(ISignalSourceRegistered oldValue, ISignalSourceRegistered newValue, BeforeChangePropertyArgs args)
         {
-            get => source;
-            set
+            if (oldValue != null)
             {
-                List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
-                recursionChain.Add(this);
-                BeforeChangePropertyDelegate<ISignalSourceRegistered> beforeChangeDelegate = (ov, nv) => {
-                    if (ov != null)
-                    {
-                        ov.SignalLabelChanged -= signalLabelChangedHandler;
-                        ov.RedTally.Revoke(recursionChain);
-                        ov.YellowTally.Revoke(recursionChain);
-                        ov.GreenTally.Revoke(recursionChain);
-                    }
-                };
-                AfterChangePropertyDelegate<ISignalSourceRegistered> afterChangeDelegate = (ov, nv) => {
-                    if (nv != null)
-                    {
-                        nv.SignalLabelChanged += signalLabelChangedHandler;
-                        if (RedTally)
-                            nv.RedTally.Give(recursionChain);
-                        /* if (YellowTally)
-                            nv.YellowTally.Give(recursionChain); */
-                        if (GreenTally)
-                            nv.GreenTally.Give(recursionChain);
-                    }
-                };
-                this.setProperty(ref source, value, SourceChanged, beforeChangeDelegate, afterChangeDelegate);
-                SourceSignalLabelChanged?.Invoke(this, source?.SignalLabel);
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(SourceName));
+                oldValue.SignalLabelChanged -= signalLabelChangedHandler;
+                oldValue.RedTally.Revoke(myRecursionChain);
+                oldValue.YellowTally.Revoke(myRecursionChain);
+                oldValue.GreenTally.Revoke(myRecursionChain);
             }
+        }
+
+        private void _source_afterChange(ISignalSourceRegistered oldValue, ISignalSourceRegistered newValue)
+        {
+            if (newValue != null)
+            {
+                newValue.SignalLabelChanged += signalLabelChangedHandler;
+                if (RedTally)
+                    newValue.RedTally.Give(myRecursionChain);
+                /* if (YellowTally)
+                    nv.YellowTally.Give(myRecursionChain); */
+                if (GreenTally)
+                    newValue.GreenTally.Give(myRecursionChain);
+            }
+            SourceSignalLabelChanged?.Invoke(this, source?.SignalLabel);
+            ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(SourceName));
         }
         #endregion
 
@@ -145,6 +125,11 @@ namespace OpenSC.Model.Mixers
         public PropertyChangedOneValueDelegate<MixerInput, string> SourceSignalLabelChanged;
         #endregion
 
+        #region My recursion chain
+        private List<ISignalTallySender> myRecursionChain;
+        private void createMyRecursionChain() => myRecursionChain = new List<ISignalTallySender>() { this };
+        #endregion
+
         // "Temp foreign key"
         public string _sourceSignalUniqueId;
 
@@ -154,63 +139,37 @@ namespace OpenSC.Model.Mixers
                 Source = SignalRegister.Instance[_sourceSignalUniqueId];
         }
 
-        public event PropertyChangedOneValueDelegate<MixerInput, bool> RedTallyChanged;
-
+        #region Property: RedTally
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_redTally_afterChange))]
         private bool redTally;
 
-        public bool RedTally
-        {
-            get => redTally;
-            set
-            {
-                if (!this.setProperty(ref redTally, value, RedTallyChanged))
-                    return;
-                updateRedTally();
-            }
-        }
+        private void _redTally_afterChange(bool oldValue, bool newValue) => updateRedTally();
 
         private void updateRedTally()
         {
-
-            List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
-            recursionChain.Add(this);
             if (redTally && Mixer.GivesRedTallyToSources)
-                source?.RedTally.Give(recursionChain);
+                source?.RedTally.Give(myRecursionChain);
             else
-                source?.RedTally.Revoke(recursionChain);
+                source?.RedTally.Revoke(myRecursionChain);
         }
+        #endregion
 
-        public event PropertyChangedOneValueDelegate<MixerInput, bool> GreenTallyChanged;
-
+        #region Property: GreenTally
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_greenTally_afterChange))]
         private bool greenTally;
 
-        public bool GreenTally
-        {
-            get => greenTally;
-            set
-            {
-                if (!this.setProperty(ref greenTally, value, GreenTallyChanged))
-                    return;
-                List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
-                recursionChain.Add(this);
-                if (value && Mixer.GivesGreenTallyToSources)
-                    source?.GreenTally.Give(recursionChain);
-                else
-                    source?.GreenTally.Revoke(recursionChain);
-
-            }
-        }
+        private void _greenTally_afterChange(bool oldValue, bool newValue) => updateGreenTally();
 
         private void updateGreenTally()
         {
-
-            List<ISignalTallySender> recursionChain = new List<ISignalTallySender>();
-            recursionChain.Add(this);
             if (greenTally && Mixer.GivesGreenTallyToSources)
-                source?.GreenTally.Give(recursionChain);
+                source?.RedTally.Give(myRecursionChain);
             else
-                source?.GreenTally.Revoke(recursionChain);
+                source?.RedTally.Revoke(myRecursionChain);
         }
+        #endregion
 
         #region Tally booleans
         private IBoolean redTallyBoolean = null;

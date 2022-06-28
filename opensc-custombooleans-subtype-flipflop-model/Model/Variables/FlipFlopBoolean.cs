@@ -2,6 +2,7 @@
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.Settings;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,7 +19,7 @@ namespace OpenSC.Model.Variables
 
     [TypeLabel("Flip-flop/latch")]
     [TypeCode("flipflop")]
-    public class FlipFlopBoolean : CustomBoolean
+    public partial class FlipFlopBoolean : CustomBoolean
     {
 
         #region Restoration
@@ -68,18 +69,15 @@ namespace OpenSC.Model.Variables
         #endregion
 
         #region Property: Type
-        public event PropertyChangedTwoValuesDelegate<FlipFlopBoolean, FlipFlopType> TypeChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_type_afterChange))]
+        [PersistAs("type")]
         private FlipFlopType type;
 
-        [PersistAs("type")]
-        public FlipFlopType Type
+        private void _type_afterChange(FlipFlopType oldValue, FlipFlopType newValue)
         {
-            get => type;
-            set => this.setProperty(ref type, value, TypeChanged, null, (ov, nv) => {
-                TypeDescriptor = GetTypeDescriptorByType(nv);
-                recalculateState();
-            });
+            TypeDescriptor = GetTypeDescriptorByType(newValue);
+            recalculateState();
         }
 
         protected FlipFlopTypeDescriptor TypeDescriptor { get; private set; }
@@ -100,8 +98,6 @@ namespace OpenSC.Model.Variables
         #endregion
 
         #region Property: Input1
-        public event PropertyChangedTwoValuesDelegate<FlipFlopBoolean, IBoolean> Input1Changed;
-
         private string _input1Identifier; // "Temp foreign key"
 
 #pragma warning disable CS0169
@@ -113,46 +109,34 @@ namespace OpenSC.Model.Variables
         }
 #pragma warning restore CS0169
 
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_input1_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_input1_afterChange))]
         private IBoolean input1;
 
-        public IBoolean Input1
+        private void _input1_beforeChange(IBoolean oldValue, IBoolean newValue, BeforeChangePropertyArgs args)
         {
-            get => input1;
-            set
-            {
-                BeforeChangePropertyDelegate<IBoolean> beforeChangeDelegate = (ov, nv) =>
-                {
-                    if (ov != null)
-                        ov.StateChanged -= input1StateChanged;
-                };
-                AfterChangePropertyDelegate<IBoolean> afterChangeDelegate = (ov, nv) =>
-                {
-                    if (nv != null)
-                        nv.StateChanged += input1StateChanged;
-                    recalculateState();
-                };
-                this.setProperty(ref input1, value, Input1Changed, beforeChangeDelegate, afterChangeDelegate);
-            }
+            if (oldValue != null)
+                oldValue.StateChanged -= input1StateChanged;
         }
+
+        private void _input1_afterChange(IBoolean oldValue, IBoolean newValue)
+        {
+            if (newValue != null)
+                newValue.StateChanged += input1StateChanged;
+            recalculateState();
+        }
+
         private void input1StateChanged(IBoolean item, bool oldValue, bool newValue) => recalculateState(1);
         #endregion
 
         #region Property: Input1Inverted
-        public event PropertyChangedTwoValuesDelegate<FlipFlopBoolean, bool> Input1InvertedChanged;
-
+        [AutoProperty]
         [PersistAs("input1_inverted")]
-        private bool input1inverted;
-
-        public bool Input1Inverted
-        {
-            get => input1inverted;
-            set => this.setProperty(ref input1inverted, value, Input1InvertedChanged);
-        }
+        private bool input1Inverted;
         #endregion
 
         #region Property: Input2
-        public event PropertyChangedTwoValuesDelegate<FlipFlopBoolean, IBoolean> Input2Changed;
-
         private string _input2Identifier; // "Temp foreign key"
 
 #pragma warning disable CS0169
@@ -164,81 +148,49 @@ namespace OpenSC.Model.Variables
         }
 #pragma warning restore CS0169
 
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_input2_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_input2_afterChange))]
         private IBoolean input2;
 
-        public IBoolean Input2
+        private void _input2_beforeChange(IBoolean oldValue, IBoolean newValue, BeforeChangePropertyArgs args)
         {
-            get => input2;
-            set
-            {
-                BeforeChangePropertyDelegate<IBoolean> beforeChangeDelegate = (ov, nv) =>
-                {
-                    if (ov != null)
-                        ov.StateChanged -= input2StateChanged;
-                };
-                AfterChangePropertyDelegate<IBoolean> afterChangeDelegate = (ov, nv) =>
-                {
-                    if (nv != null)
-                        nv.StateChanged += input2StateChanged;
-                    recalculateState();
-                };
-                this.setProperty(ref input2, value, Input2Changed, beforeChangeDelegate, afterChangeDelegate);
-            }
+            if (oldValue != null)
+                oldValue.StateChanged -= input2StateChanged;
+        }
+
+        private void _input2_afterChange(IBoolean oldValue, IBoolean newValue)
+        {
+            if (newValue != null)
+                newValue.StateChanged += input2StateChanged;
+            recalculateState();
         }
 
         private void input2StateChanged(IBoolean item, bool oldValue, bool newValue) => recalculateState(2);
         #endregion
 
         #region Property: Input2Inverted
-        public event PropertyChangedTwoValuesDelegate<FlipFlopBoolean, bool> Input2InvertedChanged;
-
+        [AutoProperty]
         [PersistAs("input2_inverted")]
-        private bool input2inverted;
-
-        public bool Input2Inverted
-        {
-            get => input2inverted;
-            set => this.setProperty(ref input2inverted, value, Input2InvertedChanged);
-        }
+        private bool input2Inverted;
         #endregion
 
         #region Property: EnableSetByUser
-        public event PropertyChangedTwoValuesDelegate<FlipFlopBoolean, bool> EnableSetByUserChanged;
-
-        private bool enableSetByUser;
-
+        [AutoProperty]
         [PersistAs("enable_set_by_user")]
-        public bool EnableSetByUser
-        {
-            get => enableSetByUser;
-            set => this.setProperty(ref enableSetByUser, value, EnableSetByUserChanged);
-        }
+        private bool enableSetByUser;
         #endregion
 
         #region Property: EnableResetByUser
-        public event PropertyChangedTwoValuesDelegate<FlipFlopBoolean, bool> EnableResetByUserChanged;
-
-        private bool enableResetByUser;
-
+        [AutoProperty]
         [PersistAs("enable_reset_by_user")]
-        public bool EnableResetByUser
-        {
-            get => enableResetByUser;
-            set => this.setProperty(ref enableResetByUser, value, EnableResetByUserChanged);
-        }
+        private bool enableResetByUser;
         #endregion
 
         #region Property: EnableToggleByUser
-        public event PropertyChangedTwoValuesDelegate<FlipFlopBoolean, bool> EnableToggleByUserChanged;
-
-        private bool enableToggleByUser;
-
+        [AutoProperty]
         [PersistAs("enable_toggle_by_user")]
-        public bool EnableToggleByUser
-        {
-            get => enableToggleByUser;
-            set => this.setProperty(ref enableToggleByUser, value, EnableToggleByUserChanged);
-        }
+        private bool enableToggleByUser;
         #endregion
 
         #region  State modifier methods
@@ -251,8 +203,8 @@ namespace OpenSC.Model.Variables
             if (TypeDescriptor == null)
                 return;
             TypeDescriptor.CalculateState(CurrentState,
-                input1?.CurrentState ?? false, input1inverted, (edge == 1),
-                Input2?.CurrentState ?? false, input2inverted, (edge == 2));
+                input1?.CurrentState ?? false, input1Inverted, (edge == 1),
+                Input2?.CurrentState ?? false, input2Inverted, (edge == 2));
         }
         #endregion
 

@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,7 +8,7 @@ using System.Drawing;
 namespace OpenSC.Model.Signals
 {
 
-    public class ExternalSignal : ModelBase, ISignalSourceRegistered
+    public partial class ExternalSignal : ModelBase, ISignalSourceRegistered
     {
 
         #region Persistence, instantiation
@@ -53,16 +54,9 @@ namespace OpenSC.Model.Signals
         #endregion
 
         #region Property: Category
-        public event PropertyChangedTwoValuesDelegate<ExternalSignal, ExternalSignalCategory> CategoryChanged;
-
-        private ExternalSignalCategory category;
-
+        [AutoProperty]
         [PersistAs("category")]
-        public ExternalSignalCategory Category
-        {
-            get => category;
-            set => this.setProperty(ref category, value, CategoryChanged);
-        }
+        private ExternalSignalCategory category;
         #endregion
 
         #region Property: RegisteredSourceSignalName

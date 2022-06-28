@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.General;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.Routers
 {
-    public class RouterOutputLock : INotifyPropertyChanged
+    public partial class RouterOutputLock : INotifyPropertyChanged
     {
 
         public readonly RouterOutput Output;
@@ -29,25 +30,13 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Property: State
-        public event PropertyChangedTwoValuesDelegate<RouterOutputLock, RouterOutputLockState> StateChanged;
+        [AutoProperty]
         private RouterOutputLockState state;
-
-        public RouterOutputLockState State
-        {
-            get => state;
-            set => this.setProperty(ref state, value, StateChanged);
-        }
         #endregion
 
         #region Property: Owner
-        public event PropertyChangedTwoValuesDelegate<RouterOutputLock, RouterOutputLockOwner> OwnerChanged;
+        [AutoProperty]
         private RouterOutputLockOwner owner;
-
-        public RouterOutputLockOwner Owner
-        {
-            get => owner;
-            set => this.setProperty(ref owner, value, OwnerChanged);
-        }
         #endregion
 
         #region Operations: do, undo, force undo

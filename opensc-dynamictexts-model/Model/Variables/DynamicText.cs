@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Variables
 {
 
-    public class DynamicText : ModelBase
+    public partial class DynamicText : ModelBase
     {
 
         public override void TotallyRestored()
@@ -31,33 +32,17 @@ namespace OpenSC.Model.Variables
         #endregion
 
         #region Property: CurrentText
-        public event PropertyChangedTwoValuesDelegate<DynamicText, string> CurrentTextChanged;
-
+        [AutoProperty]
         private string currentText = "";
-
-        public string CurrentText
-        {
-            get => currentText;
-            private set => this.setProperty(ref currentText, value, CurrentTextChanged);
-        }
         #endregion
 
         #region Property: Formula
-        public event PropertyChangedTwoValuesDelegate<DynamicText, string> FormulaChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_formula_afterChange))]
+        [PersistAs("formula")]
         private string formula;
 
-        [PersistAs("formula")]
-        public string Formula
-        {
-            get => formula;
-            set
-            {
-                if (!this.setProperty(ref formula, value, FormulaChanged))
-                    return;
-                formulaUpdated();
-            }
-        }
+        private void _formula_afterChange(string oldValue, string newValue) => formulaUpdated();
 
         private void formulaUpdated()
         {

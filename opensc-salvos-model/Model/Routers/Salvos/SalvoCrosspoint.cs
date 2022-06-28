@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.General;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers.Salvos
 {
 
-    public class SalvoCrosspoint : ObjectBase
+    public partial class SalvoCrosspoint : ObjectBase
     {
 
         public SalvoCrosspoint(RouterOutput output = null, RouterInput input = null)
@@ -24,21 +25,11 @@ namespace OpenSC.Model.Routers.Salvos
 
         public Router Router => output?.Router;
 
-        public event PropertyChangedTwoValuesDelegate<SalvoCrosspoint, RouterOutput> OutputChanged;
+        [AutoProperty]
         private RouterOutput output;
-        public RouterOutput Output
-        {
-            get => output;
-            set => this.setProperty(ref output, value, OutputChanged);
-        }
 
-        public event PropertyChangedTwoValuesDelegate<SalvoCrosspoint, RouterInput> InputChanged;
+        [AutoProperty]
         private RouterInput input;
-        public RouterInput Input
-        {
-            get => input;
-            set => this.setProperty(ref input, value, InputChanged);
-        }
 
         public void StoreCurrentInput() => Input = Output?.CurrentInput;
 

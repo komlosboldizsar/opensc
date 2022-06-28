@@ -3,6 +3,7 @@ using OpenSC.Model.General;
 using OpenSC.Model.Mixers;
 using OpenSC.Model.Mixers.BlackMagicDesign;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -15,7 +16,7 @@ namespace OpenSC.Model.UMDs.BmdAtem
 
     [TypeLabel("BMD ATEM")]
     [TypeCode("bmdatem")]
-    public class BmdAtem : Umd
+    public partial class BmdAtem : Umd
     {
 
         public override void RestoreCustomRelations()
@@ -25,45 +26,35 @@ namespace OpenSC.Model.UMDs.BmdAtem
         }
 
         #region Property: Mixer
-        public event PropertyChangedTwoValuesDelegate<BmdAtem, Mixer> MixerChanged;
-
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_mixer_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_mixer_afterChange))]
         private Mixer mixer;
 
-        public Mixer Mixer
+        private void _mixer_beforeChange(Mixer oldValue, Mixer newValue, BeforeChangePropertyArgs args)
         {
-            get => mixer;
-            set
-            {
-                BeforeChangePropertyDelegate<Mixer> beforeChangeDelegate = (ov, nv) =>
-                {
-                    if (ov != null)
-                        ov.StateChanged -= Mixer_StateChanged;
-                };
-                AfterChangePropertyDelegate<Mixer> afterChangeDelegate = (ov, nv) =>
-                {
-                    if (nv != null)
-                        nv.StateChanged += Mixer_StateChanged;
-                };
-                this.setProperty(ref mixer, value, MixerChanged, beforeChangeDelegate, afterChangeDelegate);
-            }
+            if (oldValue != null)
+                oldValue.StateChanged -= Mixer_StateChanged;
+        }
+
+        private void _mixer_afterChange(Mixer oldValue, Mixer newValue)
+        {
+            if (newValue != null)
+                newValue.StateChanged += Mixer_StateChanged;
         }
 
         private void Mixer_StateChanged(Mixer item, MixerState oldValue, MixerState newValue) => updateInputsSource();
         #endregion
 
         #region Property: Input
-        public event PropertyChangedTwoValuesDelegate<BmdAtem, MixerInput> InputChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_input_afterChange))]
         private MixerInput input;
 
-        public MixerInput Input
+        private void _input_afterChange(MixerInput oldValue, MixerInput newValue)
         {
-            get => input;
-            set => this.setProperty(ref input, value, InputChanged, null, (ov, nv) =>
-            {
-                Mixer = nv?.Mixer;
-                updateInputsSource();
-            });
+            Mixer = newValue?.Mixer;
+            updateInputsSource();
         }
 
         [PersistAs("input")]

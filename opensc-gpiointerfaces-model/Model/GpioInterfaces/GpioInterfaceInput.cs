@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.General;
+using OpenSC.Model.SourceGenerators;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.GpioInterfaces
 {
 
-    public class GpioInterfaceInput : BooleanBase, ISystemObject
+    public partial class GpioInterfaceInput : BooleanBase, ISystemObject
     {
 
         public GpioInterfaceInput() : base() => SystemObjectRegister.Instance.Register(this);
@@ -68,15 +69,11 @@ namespace OpenSC.Model.GpioInterfaces
         #endregion
 
         #region Property: Name
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_name_afterChange))]
         private string name;
 
-        public string Name
-        {
-            get => name;
-            set => this.setProperty(ref name, value, NameChanged, null, (_, _) => generateDescription());
-        }
-
-        public event PropertyChangedTwoValuesDelegate<GpioInterfaceInput, string> NameChanged;
+        private void _name_afterChange(string oldValue, string newValue) => generateDescription();
         #endregion
 
         #region Property: GpioInterface
@@ -100,32 +97,21 @@ namespace OpenSC.Model.GpioInterfaces
         #endregion
 
         #region Property: Index
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_index_afterChange))]
         private int index;
 
-        public int Index
+        private void _index_afterChange(int oldValue, int newValue)
         {
-            get => index;
-            set => this.setProperty(ref index, value, IndexChanged, null, (_, _) =>
-            {
-                generateIdentifier();
-                generateDescription();
-                generateGlobalId();
-            });
+            generateIdentifier();
+            generateDescription();
+            generateGlobalId();
         }
-
-        public event PropertyChangedTwoValuesDelegate<GpioInterfaceInput, int> IndexChanged;
         #endregion
         
         #region Property: DebounceTime
-        public event PropertyChangedTwoValuesDelegate<GpioInterfaceInput, int> DebounceTimeChanged;
-
+        [AutoProperty]
         private int debounceTime;
-
-        public int DebounceTime
-        {
-            get => debounceTime;
-            set => this.setProperty(ref debounceTime, value, DebounceTimeChanged);
-        }
         #endregion
 
         #region State
