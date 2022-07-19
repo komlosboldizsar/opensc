@@ -20,12 +20,15 @@ namespace OpenSC.Model.SourceGenerators
     {
 
         [TemplateFileName("Class")]
+        [SuppressMessage(SuppressIDE0044.CATEGORY, SuppressIDE0044.CHECKID, Justification = SuppressIDE0044.JUSTIFICATION)]
         private Template classTemplate = null;
 
         [TemplateFileName("Property")]
+        [SuppressMessage(SuppressIDE0044.CATEGORY, SuppressIDE0044.CHECKID, Justification = SuppressIDE0044.JUSTIFICATION)]
         private Template propertyTemplate = null;
 
         [TemplateFileName("Event")]
+        [SuppressMessage(SuppressIDE0044.CATEGORY, SuppressIDE0044.CHECKID, Justification = SuppressIDE0044.JUSTIFICATION)]
         private Template eventTemplate = null;
 
         private class MyAttributeSymbolDataCollection : AttributeSymbolDataCollection<MyAttributeSymbolDataCollection>
