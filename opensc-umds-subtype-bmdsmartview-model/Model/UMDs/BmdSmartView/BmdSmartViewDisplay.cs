@@ -30,12 +30,14 @@ namespace OpenSC.Model.UMDs.BmdSmartView
 
         #region Property: Unit
         [AutoProperty]
+        [AutoProperty.AfterChange(nameof(UpdateEverything))]
         [PersistAs("unit")]
         private BmdSmartViewUnit unit;
         #endregion
 
         #region Property: Position
         [AutoProperty]
+        [AutoProperty.AfterChange(nameof(UpdateEverything))]
         [PersistAs("position")]
         private BmdSmartViewDisplayPosition position = BmdSmartViewDisplayPosition.Single;
         #endregion

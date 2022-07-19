@@ -141,10 +141,8 @@ namespace OpenSC.Model.Mixers
 
         #region Property: RedTally
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_redTally_afterChange))]
+        [AutoProperty.AfterChange(nameof(updateRedTally))]
         private bool redTally;
-
-        private void _redTally_afterChange(bool oldValue, bool newValue) => updateRedTally();
 
         private void updateRedTally()
         {
@@ -157,10 +155,8 @@ namespace OpenSC.Model.Mixers
 
         #region Property: GreenTally
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_greenTally_afterChange))]
+        [AutoProperty.AfterChange(nameof(updateGreenTally))]
         private bool greenTally;
-
-        private void _greenTally_afterChange(bool oldValue, bool newValue) => updateGreenTally();
 
         private void updateGreenTally()
         {

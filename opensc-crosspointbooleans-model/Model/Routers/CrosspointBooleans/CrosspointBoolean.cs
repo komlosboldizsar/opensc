@@ -49,28 +49,16 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
 
         #region Property: WatchedInput
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_watchedInput_afterChange))]
+        [AutoProperty.AfterChange(nameof(updateCalculated))]
         [PersistAs("watched_input")]
         private RouterInput watchedInput;
-
-        private void _watchedInput_afterChange(RouterInput oldValue, RouterInput newValue)
-        {
-            updateWatchedRouter();
-            updateIsValid();
-        }
         #endregion
 
         #region Property: WatchedOutput
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_watchedOutput_afterChange))]
+        [AutoProperty.AfterChange(nameof(updateCalculated))]
         [PersistAs("watched_output")]
         private RouterOutput watchedOutput;
-
-        private void _watchedOutput_afterChange(RouterOutput oldValue, RouterOutput newValue)
-        {
-            updateWatchedRouter();
-            updateIsValid();
-        }
         #endregion
 
         #region Property: IsValid
@@ -79,6 +67,12 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
 
         private void updateIsValid() => IsValid = ((watchedRouter != null) && (watchedInput != null) && (watchedOutput != null));
         #endregion
+
+        private void updateCalculated()
+        {
+            updateWatchedRouter();
+            updateIsValid();
+        }
 
         #region CrosspointActiveBoolean class, IBoolean implementation
         private CrosspointActiveBoolean cpActiveBoolean;

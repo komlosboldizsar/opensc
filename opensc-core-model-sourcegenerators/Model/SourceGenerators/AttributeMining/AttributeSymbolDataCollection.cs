@@ -48,6 +48,7 @@ namespace OpenSC.Model.SourceGenerators
             {
                 AttributeSymbolData attributeSymbolData = Activator.CreateInstance(fieldInfo.FieldType) as AttributeSymbolData;
                 INamedTypeSymbol attributeSymbol = (fieldInfo.GetValue(this) as AttributeSymbolData).Symbol;
+                attributeSymbolData.Symbol = attributeSymbol;
                 AttributeData attributeData = fieldSymbol.GetAttributes().FirstOrDefault(ad => ad.AttributeClass.Equals(attributeSymbol, SymbolEqualityComparer.Default));
                 if (attributeData != null)
                 {

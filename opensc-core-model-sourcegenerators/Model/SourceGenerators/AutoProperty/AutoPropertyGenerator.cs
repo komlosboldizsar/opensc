@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +10,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using OpenSC.Model.SourceGenerators.Templating;
 
 namespace OpenSC.Model.SourceGenerators
 {
@@ -112,8 +114,8 @@ namespace OpenSC.Model.SourceGenerators
             Accessibility setterAccessibilityValue = mainAttributeData.ArgumentCollection.GetValue<Accessibility>(nameof(AutoProperty.SetterAccessibility));
             string setterAccessibility = accessibilityString(propertyAccessibilityValue, setterAccessibilityValue);
             bool isVirtual = mainAttributeData.ArgumentCollection.GetValue<bool>(nameof(AutoProperty.IsVirtual));
-            string beforeChange = (AutoPropertyCollection.beforeChangeAttribute?.ArgumentCollection.GetString(nameof(AutoProperty.BeforeChange.MethodName))).NullAsString();
-            string afterChange = (AutoPropertyCollection.afterChangeAttribute?.ArgumentCollection.GetString(nameof(AutoProperty.BeforeChange.MethodName))).NullAsString();
+            string beforeChange = getChangeDelegate(executionContext, fieldSymbol, AutoPropertyCollection.beforeChangeAttribute, nameof(AutoProperty.BeforeChange.MethodName), convertBeforeChangeDelegate);
+            string afterChange = getChangeDelegate(executionContext, fieldSymbol, AutoPropertyCollection.afterChangeAttribute, nameof(AutoProperty.AfterChange.MethodName), convertAfterChangeDelegate);
             string validator = (AutoPropertyCollection.validatorAttribute?.ArgumentCollection.GetString(nameof(AutoProperty.Validator.MethodName))).NullAsString();
             string[] notCopiedAttributeTypeStrings = AutoPropertyCollection.dontCopyAttributeTypeAttribute?.ArgumentCollection.GetStringArray(nameof(AutoProperty.DontCopyAttributeType.Types));
             List<string> copiedAttributesList = new List<string>();
@@ -144,6 +146,109 @@ namespace OpenSC.Model.SourceGenerators
 
         private string accessibilityString(Accessibility propertyAccessibility, Accessibility accessorAccessibility)
             => ((accessorAccessibility != Accessibility.NotApplicable) && (accessorAccessibility != propertyAccessibility)) ? accessorAccessibility.ToCode() : string.Empty;
+
+        private string getChangeDelegate(GeneratorExecutionContext executionContext, IFieldSymbol fieldSymbol, AttributeSymbolData attributeSymbolData, string methodNameFieldName, Func<string, int, string> converterMethod)
+        {
+            string methodName = attributeSymbolData?.ArgumentCollection.GetString(methodNameFieldName);
+            return convertChangeDelegate(executionContext, fieldSymbol, attributeSymbolData, methodName, converterMethod).NullAsString();
+        }
+
+        private string convertChangeDelegate(GeneratorExecutionContext executionContext, IFieldSymbol fieldSymbol, AttributeSymbolData attributeSymbolData, string methodName, Func<string, int, string> converterMethod)
+        {
+            if (methodName == null)
+                return null;
+            void reportDiagnostic(DiagnosticDescriptor descriptor) => executionContext.ReportDiagnostic(Diagnostic.Create(descriptor,
+                attributeSymbolData.Symbol.Locations[0],
+                methodName, attributeSymbolData.Symbol.Name, fieldSymbol.ContainingType.Name, fieldSymbol.Name));
+            try
+            {
+                IMethodSymbol foundMethod = getMethodByName(fieldSymbol.ContainingType, methodName);
+                if (foundMethod == null)
+                {
+                    reportDiagnostic(DIAGNOSTIC_DESCRIPTOR_OG1001);
+                    return null;
+                }
+                return converterMethod(methodName, foundMethod.Parameters.Length);
+            }
+            catch (AmbiguousMatchException)
+            {
+                reportDiagnostic(DIAGNOSTIC_DESCRIPTOR_OG1002);
+            }
+            catch (MethodTypeMismatchException)
+            {
+                reportDiagnostic(DIAGNOSTIC_DESCRIPTOR_OG1003);
+            }
+            return null;
+        }
+
+        private static readonly DiagnosticDescriptor DIAGNOSTIC_DESCRIPTOR_OG1001 = new DiagnosticDescriptor(
+            "OG1001", "Delegate not found", "Delegate declared with the name '{0}' requested by '{1}' attribute of field '{2}.{3}' is not found",
+            "AutoProperties", DiagnosticSeverity.Warning, true);
+
+        private static readonly DiagnosticDescriptor DIAGNOSTIC_DESCRIPTOR_OG1002 = new DiagnosticDescriptor(
+            "OG1002", "Ambiguous delegate name", "Multiple delegates declared with the name '{0}' requested by '{1}' attribute of field '{2}.{3}' were found",
+            "AutoProperties", DiagnosticSeverity.Warning, true);
+
+        private static readonly DiagnosticDescriptor DIAGNOSTIC_DESCRIPTOR_OG1003 = new DiagnosticDescriptor(
+            "OG1003", "Couldn't convert delegate", "Couldn't convert delegate with the name '{0}' requested by '{1}' attribute of field '{2}.{3}' to the signature needed by the attribute and it's overlying event",
+            "AutoProperties", DiagnosticSeverity.Warning, true);
+
+        private IMethodSymbol getMethodByName(INamedTypeSymbol classSymbol, string methodName)
+        {
+            INamedTypeSymbol classForLookup = classSymbol;
+            IMethodSymbol lastFoundMethod = null;
+            while (classForLookup != null)
+            {
+                IEnumerable<IMethodSymbol> methodsOfClass = classForLookup.GetMembers(methodName).OfType<IMethodSymbol>();
+                IEnumerator<IMethodSymbol> methodsOfClassEnumerator = methodsOfClass.GetEnumerator();
+                if (methodsOfClassEnumerator.MoveNext()) // found > 0
+                {
+                    IMethodSymbol foundMethod = methodsOfClassEnumerator.Current;
+                    if (lastFoundMethod == null)
+                        lastFoundMethod = foundMethod;
+                    else if ((lastFoundMethod.OverriddenMethod == null) || !SymbolEqualityComparer.Default.Equals(foundMethod, lastFoundMethod.OverriddenMethod))
+                        throw new AmbiguousMatchException();
+                    if (methodsOfClassEnumerator.MoveNext()) // found > 1
+                        throw new AmbiguousMatchException();
+                }
+                classForLookup = classForLookup.BaseType;
+            }
+            return lastFoundMethod;
+        }
+
+        private class MethodTypeMismatchException : Exception { }
+
+        private string convertBeforeChangeDelegate(string methodName, int paramsLength)
+        {
+            switch (paramsLength)
+            {
+                case 0:
+                    return $"(ov, nv, a) => {methodName}()";
+                case 1:
+                    return $"(ov, nv, a) => {methodName}(nv)";
+                case 2:
+                    return $"(ov, nv, a) => {methodName}(ov, nv)";
+                case 3:
+                    return methodName;
+                default:
+                    throw new MethodTypeMismatchException();
+            }
+        }
+
+        private string convertAfterChangeDelegate(string methodName, int paramsLength)
+        {
+            switch (paramsLength)
+            {
+                case 0:
+                    return $"(ov, nv) => {methodName}()";
+                case 1:
+                    return $"(ov, nv) => {methodName}(nv)";
+                case 2:
+                    return methodName;
+                default:
+                    throw new MethodTypeMismatchException();
+            }
+        }
 
         private void generateEvent(GeneratorExecutionContext executionContext, StringBuilder sourceBuilder, IFieldSymbol fieldSymbol, PropertyCommonData propertyCommonData, AttributeSymbolData eventAttributeData)
         {
@@ -187,7 +292,7 @@ namespace OpenSC.Model.SourceGenerators
         {
 
             public List<IFieldSymbol> Fields { get; } = new List<IFieldSymbol>();
-
+  
             public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
             {
                 if ((context.Node is FieldDeclarationSyntax fieldDeclarationSyntax) && (fieldDeclarationSyntax.AttributeLists.Count > 0))

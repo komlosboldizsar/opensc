@@ -17,12 +17,14 @@ namespace OpenSC.Model.UMDs.Tsl50
 
         #region Property: Screen
         [AutoProperty]
+        [AutoProperty.AfterChange(nameof(UpdateEverything))]
         [PersistAs("screen")]
         private Tsl50Screen screen;
         #endregion
 
         #region Property: Index
         [AutoProperty]
+        [AutoProperty.AfterChange(nameof(UpdateEverything))]
         [AutoProperty.Validator(nameof(ValidateIndex))]
         [PersistAs("index")]
         private int index = 1;

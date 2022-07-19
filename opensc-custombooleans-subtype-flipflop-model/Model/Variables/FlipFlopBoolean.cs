@@ -114,7 +114,7 @@ namespace OpenSC.Model.Variables
         [AutoProperty.AfterChange(nameof(_input1_afterChange))]
         private IBoolean input1;
 
-        private void _input1_beforeChange(IBoolean oldValue, IBoolean newValue, BeforeChangePropertyArgs args)
+        private void _input1_beforeChange(IBoolean oldValue, IBoolean newValue)
         {
             if (oldValue != null)
                 oldValue.StateChanged -= input1StateChanged;
@@ -153,7 +153,7 @@ namespace OpenSC.Model.Variables
         [AutoProperty.AfterChange(nameof(_input2_afterChange))]
         private IBoolean input2;
 
-        private void _input2_beforeChange(IBoolean oldValue, IBoolean newValue, BeforeChangePropertyArgs args)
+        private void _input2_beforeChange(IBoolean oldValue, IBoolean newValue)
         {
             if (oldValue != null)
                 oldValue.StateChanged -= input2StateChanged;

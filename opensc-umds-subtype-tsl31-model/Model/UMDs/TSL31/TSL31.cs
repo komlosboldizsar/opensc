@@ -19,6 +19,7 @@ namespace OpenSC.Model.UMDs.Tsl31
 
         #region Property: Port
         [AutoProperty]
+        [AutoProperty.AfterChange(nameof(UpdateEverything))]
         [PersistAs("port")]
         private SerialPort port;
         #endregion
@@ -26,6 +27,7 @@ namespace OpenSC.Model.UMDs.Tsl31
         #region Property: Address
         [PersistAs("address")]
         [AutoProperty]
+        [AutoProperty.AfterChange(nameof(UpdateEverything))]
         [AutoProperty.Validator(nameof(ValidateAddress))]
         private int address = 1;
 
@@ -38,18 +40,14 @@ namespace OpenSC.Model.UMDs.Tsl31
 
         #region Properties: Tally1Overrides2, Tally3Overrides4
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_tally1overrides2_afterChange))]
+        [AutoProperty.AfterChange(nameof(UpdateTallies))]
         [PersistAs("tally1overrides2")]
         private bool tally1Overrides2 = false;
 
-        private void _tally1overrides2_afterChange(bool oldValue, bool newValue) => UpdateTallies();
-
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_tally3overrides4_afterChange))]
+        [AutoProperty.AfterChange(nameof(UpdateTallies))]
         [PersistAs("tally3overrides4")]
         private bool tally3Overrides4 = false;
-
-        private void _tally3overrides4_afterChange(bool oldValue, bool newValue) => UpdateTallies();
         #endregion
 
         #region Info

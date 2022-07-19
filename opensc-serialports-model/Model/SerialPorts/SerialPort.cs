@@ -55,7 +55,7 @@ namespace OpenSC.Model.SerialPorts
         #region Property: ComPortName
         [AutoProperty]
         [AutoProperty.BeforeChange(nameof(_comPortName_beforeChange))]
-        [AutoProperty.AfterChange(nameof(_comPortName_afterChange))]
+        [AutoProperty.AfterChange(nameof(Init))]
         [PersistAs("port_name")]
         protected string comPortName;
 
@@ -64,8 +64,6 @@ namespace OpenSC.Model.SerialPorts
             if (serialPort?.IsOpen == true)
                 DeInit();
         }
-
-        private void _comPortName_afterChange(string oldValue, string newValue) => Init();
         #endregion
 
         #region Property: Initialized
@@ -93,12 +91,10 @@ namespace OpenSC.Model.SerialPorts
 
         #region Property: BaudRate
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_baudRate_afterChange))]
+        [AutoProperty.AfterChange(nameof(afterPortPropertyChanged))]
         [AutoProperty.Validator(nameof(ValidateBaudRate))]
         [PersistAs("baudrate")]
         private int baudRate = DEFAULT_BAUDRATE;
-
-        private void _baudRate_afterChange(int oldValue, int newValue) => afterPortPropertyChanged();
 
         public void ValidateBaudRate(int baudRate)
         {
@@ -109,21 +105,17 @@ namespace OpenSC.Model.SerialPorts
 
         #region Property: Parity
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_parity_afterChange))]
+        [AutoProperty.AfterChange(nameof(afterPortPropertyChanged))]
         [PersistAs("parity")]
         private Parity parity = DEFAULT_PARITY;
-
-        private void _parity_afterChange(Parity oldValue, Parity newValue) => afterPortPropertyChanged();
         #endregion
 
         #region Property: DataBits
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_dataBits_afterChange))]
+        [AutoProperty.AfterChange(nameof(afterPortPropertyChanged))]
         [AutoProperty.Validator(nameof(ValidateDataBits))]
         [PersistAs("databits")]
         private int dataBits = DEFAULT_DATABITS;
-
-        private void _dataBits_afterChange(int oldValue, int newValue) => afterPortPropertyChanged();
 
         public void ValidateDataBits(int dataBits)
         {
@@ -134,11 +126,9 @@ namespace OpenSC.Model.SerialPorts
 
         #region Property: StopBits
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_stopBits_afterChange))]
+        [AutoProperty.AfterChange(nameof(afterPortPropertyChanged))]
         [PersistAs("stopbits")]
         private StopBits stopBits = DEFAULT_STOPBITS;
-
-        private void _stopBits_afterChange(StopBits oldValue, StopBits newValue) => afterPortPropertyChanged();
         #endregion
 
         // <<<< ComPort properties
@@ -223,7 +213,7 @@ namespace OpenSC.Model.SerialPorts
         public delegate void ReceivedDataAsciiLineDelegate(SerialPort port, string asciiLine);
         public event ReceivedDataAsciiLineDelegate ReceivedDataAsciiLine;
 
-        private string asciiLineBuffer = "";
+        private string asciiLineBuffer = string.Empty;
 
         private void dataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {

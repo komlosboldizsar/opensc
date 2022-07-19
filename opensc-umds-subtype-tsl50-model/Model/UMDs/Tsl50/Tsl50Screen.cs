@@ -43,21 +43,17 @@ namespace OpenSC.Model.UMDs.Tsl50
 
         #region Property: IpAddress
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_ipAddress_afterChange))]
+        [AutoProperty.AfterChange(nameof(updateEndpoint))]
         [PersistAs("ipaddress")]
         private string ipAddress;
-
-        private void _ipAddress_afterChange(string oldValue, string newValue) => updateEndpoint();
         #endregion
 
         #region Property: Port
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_port_afterChange))]
+        [AutoProperty.AfterChange(nameof(updateEndpoint))]
         [AutoProperty.Validator(nameof(ValidatePort))]
         [PersistAs("port")]
         private int port = 1024;
-
-        private void _port_afterChange(int oldValue, int newValue) => updateEndpoint();
 
         public void ValidatePort(int port)
         {

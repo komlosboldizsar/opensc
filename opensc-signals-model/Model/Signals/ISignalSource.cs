@@ -20,7 +20,7 @@ namespace OpenSC.Model.Signals
         event RegisteredSourceSignalNameChangedDelegate RegisteredSourceSignalNameChanged;
         #endregion
 
-        #region Propety: RegisteredSourceSignal
+        #region Property: RegisteredSourceSignal
         ISignalSourceRegistered RegisteredSourceSignal { get; }
         ISignalSourceRegistered GetRegisteredSourceSignal(List<object> recursionChain = null);
         event RegisteredSourceSignalChangedDelegate RegisteredSourceSignalChanged;

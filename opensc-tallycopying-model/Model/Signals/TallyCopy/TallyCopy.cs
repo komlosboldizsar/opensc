@@ -29,20 +29,16 @@ namespace OpenSC.Model.Signals.TallyCopying
 
         #region Property: FromSignal
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_fromSignal_afterChange))]
+        [AutoProperty.AfterChange(nameof(updateFromTally))]
         [PersistAs("from_signal")]
         private ISignalSourceRegistered fromSignal;
-
-        private void _fromSignal_afterChange(ISignalSourceRegistered oldValue, ISignalSourceRegistered newValue) => updateFromTally();
         #endregion
 
         #region Property: FromTallyColor
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_fromTallyColor_afterChange))]
+        [AutoProperty.AfterChange(nameof(updateFromTally))]
         [PersistAs("from_tally_color")]
         private SignalTallyColor fromTallyColor;
-
-        private void _fromTallyColor_afterChange(SignalTallyColor oldValue, SignalTallyColor newValue) => updateFromTally();
         #endregion
 
         #region Property: FromTally
@@ -81,20 +77,16 @@ namespace OpenSC.Model.Signals.TallyCopying
 
         #region Property: ToSignal
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_toSignal_afterChange))]
+        [AutoProperty.AfterChange(nameof(updateToTally))]
         [PersistAs("to_signal")]
         private ISignalSourceRegistered toSignal;
-
-        private void _toSignal_afterChange(ISignalSourceRegistered oldValue, ISignalSourceRegistered newValue) => updateToTally();
         #endregion
 
         #region Property: ToTallyColor
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_toTallyColor_afterChange))]
+        [AutoProperty.AfterChange(nameof(updateToTally))]
         [PersistAs("to_tally_color")]
         private SignalTallyColor toTallyColor;
-
-        private void _toTallyColor_afterChange(SignalTallyColor oldValue, SignalTallyColor newValue) => updateToTally();
         #endregion
 
         #region Property: ToTally

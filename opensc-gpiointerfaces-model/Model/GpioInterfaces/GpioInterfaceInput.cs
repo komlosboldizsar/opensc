@@ -70,10 +70,8 @@ namespace OpenSC.Model.GpioInterfaces
 
         #region Property: Name
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_name_afterChange))]
+        [AutoProperty.AfterChange(nameof(generateDescription))]
         private string name;
-
-        private void _name_afterChange(string oldValue, string newValue) => generateDescription();
         #endregion
 
         #region Property: GpioInterface

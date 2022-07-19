@@ -42,26 +42,15 @@ namespace OpenSC.Model.GpioInterfaces
         #endregion
 
         #region Property: Name
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateName))]
         private string name;
 
-        public string Name
+        public void ValidateName(string name)
         {
-            get => name;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException();
-                if (value == name)
-                    return;
-                string oldName = name;
-                name = value;
-                NameChanged?.Invoke(this, oldName, value);
-                ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Name));
-            }
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException();
         }
-
-        public delegate void NameChangedDelegate(GpioInterfaceOutput output, string oldName, string newName);
-        public event NameChangedDelegate NameChanged;
         #endregion
 
         #region Property: GpioInterface
@@ -86,10 +75,8 @@ namespace OpenSC.Model.GpioInterfaces
 
         #region Property: Index
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_index_afterChange))]
+        [AutoProperty.AfterChange(nameof(generateGlobalId))]
         private int index;
-
-        private void _index_afterChange(int oldValue, int newValue) => generateGlobalId();
         #endregion
 
         #region Property: Driver
@@ -102,7 +89,7 @@ namespace OpenSC.Model.GpioInterfaces
         [AutoProperty.AfterChange(nameof(_driver_afterChange))]
         private IBoolean driver;
 
-        private void _driver_beforeChange(IBoolean oldValue, IBoolean newValue, BeforeChangePropertyArgs args)
+        private void _driver_beforeChange(IBoolean oldValue, IBoolean newValue)
         {
             if (oldValue != null)
                 oldValue.StateChanged -= driverStateChanged;

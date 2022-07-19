@@ -65,20 +65,16 @@ namespace OpenSC.Model.Signals.BooleanTallies
 
         #region Property: ToSignal
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_toSignal_afterChange))]
+        [AutoProperty.AfterChange(nameof(updateToTally))]
         [PersistAs("to_signal")]
         private ISignalSourceRegistered toSignal;
-
-        private void _toSignal_afterChange(ISignalSourceRegistered oldValue, ISignalSourceRegistered newValue) => updateToTally();
         #endregion
 
         #region Property: ToTallyColor
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_toTallyColor_afterChange))]
+        [AutoProperty.AfterChange(nameof(updateToTally))]
         [PersistAs("to_tally_color")]
         private SignalTallyColor toTallyColor;
-
-        private void _toTallyColor_afterChange(SignalTallyColor oldValue, SignalTallyColor newValue) => updateToTally();
         #endregion
 
         #region Property: ToTally
@@ -87,7 +83,7 @@ namespace OpenSC.Model.Signals.BooleanTallies
         [AutoProperty.AfterChange(nameof(_toTally_afterChange))]
         private IBidirectionalSignalTally toTally;
 
-        private void _toTally_beforeChange(IBidirectionalSignalTally oldValue, IBidirectionalSignalTally newValue, BeforeChangePropertyArgs args)
+        private void _toTally_beforeChange(IBidirectionalSignalTally oldValue, IBidirectionalSignalTally newValue)
         {
             if (oldValue != null)
                 oldValue.Revoke(myRecursionChain);

@@ -56,8 +56,7 @@ namespace OpenSC.Model.VTRs
         [AutoProperty.AfterChange(nameof(_secondsFull_afterChange))]
         private int secondsFull;
 
-        private void _secondsFull_afterChange(int oldValue, int newValue)
-            => TimeFull = TimeSpan.FromSeconds(newValue);
+        private void _secondsFull_afterChange(int oldValue, int newValue) => TimeFull = TimeSpan.FromSeconds(newValue);
 
         [AutoProperty]
         private TimeSpan timeFull;
@@ -68,8 +67,7 @@ namespace OpenSC.Model.VTRs
         [AutoProperty.AfterChange(nameof(_secondsElapsed_afterChange))]
         private int secondsElapsed;
 
-        private void _secondsElapsed_afterChange(int oldValue, int newValue)
-            => TimeElapsed = TimeSpan.FromSeconds(newValue);
+        private void _secondsElapsed_afterChange(int oldValue, int newValue) => TimeElapsed = TimeSpan.FromSeconds(newValue);
 
         [AutoProperty]
         private TimeSpan timeElapsed;
@@ -80,8 +78,7 @@ namespace OpenSC.Model.VTRs
         [AutoProperty.AfterChange(nameof(_secondsRemaining_afterChange))]
         private int secondsRemaining;
 
-        private void _secondsRemaining_afterChange(int oldValue, int newValue)
-            => TimeRemaining = TimeSpan.FromSeconds(newValue);
+        private void _secondsRemaining_afterChange(int oldValue, int newValue) => TimeRemaining = TimeSpan.FromSeconds(newValue);
 
         [AutoProperty]
         private TimeSpan timeRemaining;

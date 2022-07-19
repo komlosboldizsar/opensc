@@ -45,12 +45,10 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
 
         #region Property: IpAddress
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_ipAddress_afterChange))]
+        [AutoProperty.AfterChange(nameof(reinitTcpServer))]
         [AutoProperty.Validator(nameof(ValidateIpAddress))]
         [PersistAs("ip_address")]
         private string ipAddress;
-
-        private void _ipAddress_afterChange(string oldValue, string newValue) => reinitTcpServer();
 
         public void ValidateIpAddress(string ipAddress)
         {

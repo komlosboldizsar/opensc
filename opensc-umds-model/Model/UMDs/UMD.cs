@@ -61,18 +61,19 @@ namespace OpenSC.Model.UMDs
 
         #region Property: Enabled
         [AutoProperty]
+        [AutoProperty.AfterChange(nameof(UpdateEverything))]
         [PersistAs("enabled")]
         private bool enabled = true;
         #endregion
 
         #region Property: DisplayableRawText
         [AutoProperty]
-        protected string displayableRawText = "";
+        protected string displayableRawText = string.Empty;
         #endregion
 
         #region Property: DisplayableCompactText
         [AutoProperty]
-        protected string displayableCompactText = "";
+        protected string displayableCompactText = string.Empty;
         #endregion
 
         #region Property: FullStaticText
@@ -90,11 +91,9 @@ namespace OpenSC.Model.UMDs
 
         #region Property: UseFullStaticText
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_useFullStaticText_afterChange))]
+        [AutoProperty.AfterChange(nameof(UpdateTexts))]
         [PersistAs("use_full_static_text")]
         private bool useFullStaticText = false;
-
-        private void _useFullStaticText_afterChange(bool oldValue, bool newValue) => UpdateTexts();
         #endregion
 
         #region Property: AlignmentWithFullStaticText

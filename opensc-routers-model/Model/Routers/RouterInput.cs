@@ -96,10 +96,8 @@ namespace OpenSC.Model.Routers
 
         #region Property: Index
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_index_afterChange))]
+        [AutoProperty.AfterChange(nameof(generateGlobalId))]
         private int index;
-
-        private void _index_afterChange(int oldValue, int newValue) => generateGlobalId();
         #endregion
 
         #region Property: IsTieline

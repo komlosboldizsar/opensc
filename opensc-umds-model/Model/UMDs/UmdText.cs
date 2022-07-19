@@ -124,7 +124,7 @@ namespace OpenSC.Model.UMDs
 
         #region Property: CurrentValue
         public event PropertyChangedTwoValuesDelegate<UmdText, string> CurrentValueChanged;
-        private string currentValue = "";
+        private string currentValue = string.Empty;
         public string CurrentValue
         {
             get => currentValue;

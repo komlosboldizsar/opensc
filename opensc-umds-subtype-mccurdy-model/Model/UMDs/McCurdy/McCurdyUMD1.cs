@@ -19,12 +19,14 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         #region Property: Port
         [AutoProperty]
+        [AutoProperty.AfterChange(nameof(UpdateEverything))]
         [PersistAs("port")]
         private SerialPort port;
         #endregion
 
         #region Property: Address
         [AutoProperty]
+        [AutoProperty.AfterChange(nameof(UpdateEverything))]
         [AutoProperty.Validator(nameof(ValidateAddress))]
         [PersistAs("address")]
         private int address = 1;

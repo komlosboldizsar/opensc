@@ -38,11 +38,9 @@ namespace OpenSC.Model.Variables
 
         #region Property: Formula
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(_formula_afterChange))]
+        [AutoProperty.AfterChange(nameof(formulaUpdated))]
         [PersistAs("formula")]
         private string formula;
-
-        private void _formula_afterChange(string oldValue, string newValue) => formulaUpdated();
 
         private void formulaUpdated()
         {
