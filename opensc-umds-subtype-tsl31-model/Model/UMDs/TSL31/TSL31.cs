@@ -25,10 +25,10 @@ namespace OpenSC.Model.UMDs.Tsl31
         #endregion
 
         #region Property: Address
-        [PersistAs("address")]
         [AutoProperty]
         [AutoProperty.AfterChange(nameof(UpdateEverything))]
         [AutoProperty.Validator(nameof(ValidateAddress))]
+        [PersistAs("address")]
         private int address = 1;
 
         public void ValidateAddress(int address)
@@ -41,13 +41,13 @@ namespace OpenSC.Model.UMDs.Tsl31
         #region Properties: Tally1Overrides2, Tally3Overrides4
         [AutoProperty]
         [AutoProperty.AfterChange(nameof(UpdateTallies))]
-        [PersistAs("tally1overrides2")]
-        private bool tally1Overrides2 = false;
+        [PersistAs("tally_12_override_mode")]
+        private TallyOverrideMode tally12OverrideMode = TallyOverrideMode.NoOverride;
 
         [AutoProperty]
         [AutoProperty.AfterChange(nameof(UpdateTallies))]
-        [PersistAs("tally3overrides4")]
-        private bool tally3Overrides4 = false;
+        [PersistAs("tally_34_override_mode")]
+        private TallyOverrideMode tally34OverrideMode = TallyOverrideMode.NoOverride;
         #endregion
 
         #region Info
@@ -140,10 +140,20 @@ namespace OpenSC.Model.UMDs.Tsl31
             for (int i = 0, t = 1; i < TallyInfo.Length; i++, t *= 2)
                 if (Tallies[i].CurrentState)
                     tallyByteToHardware += (byte)t;
-            if (Tallies[0].CurrentState && tally1Overrides2)
-                tallyByteToHardware &= (0xFF ^ 0x02);
-            if (Tallies[2].CurrentState && tally3Overrides4)
-                tallyByteToHardware &= (0xFF ^ 0x08);
+            if (Tallies[0].CurrentState && Tallies[1].CurrentState)
+                tallyByteToHardware &= tally12OverrideMode switch
+                {
+                    TallyOverrideMode.AOverridesB => (0xFF ^ 0x02),
+                    TallyOverrideMode.BOverridesA => (0xFF ^ 0x01),
+                    _ => 0xFF
+                };
+            if (Tallies[2].CurrentState && Tallies[3].CurrentState)
+                tallyByteToHardware &= tally34OverrideMode switch
+                {
+                    TallyOverrideMode.AOverridesB => (0xFF ^ 0x08),
+                    TallyOverrideMode.BOverridesA => (0xFF ^ 0x04),
+                    _ => 0xFF
+                };
         }
 
         protected override void sendTextsToHardware() => sendData();
