@@ -119,7 +119,7 @@ namespace OpenSC.Model.Persistence
             object value = deserializeXmlElement(extendedMemberInfo, extendedMemberInfo.ValueType, xmlElement, item);
             try
             {
-                if (extendedMemberInfo.IsAssociationMember)
+                if (extendedMemberInfo.RequiresRelationBuilding)
                     foreignKeysOfItem.Add(extendedMemberInfo.MemberInfo.Name, value);
                 else
                     extendedMemberInfo.SetValue(item, value);
@@ -156,11 +156,7 @@ namespace OpenSC.Model.Persistence
             bool isCollection = memberType.GetInterfaces().Any(interfaceType => interfaceType.IsGenericType && (interfaceType.GetGenericTypeDefinition() == typeof(ICollection<>)));
             if (!memberType.IsArray && !isCollection)
                 return false;
-            List<XmlElement> childElements = new();
-            foreach (XmlNode childNode in xmlElement.ChildNodes)
-                if (childNode.NodeType == XmlNodeType.Element)
-                    childElements.Add((XmlElement)childNode);
-            result = deserializeCollection(extendedMemberInfo, memberType, childElements, parentItem, arrayDimension, indices);
+            result = deserializeCollection(extendedMemberInfo, memberType, xmlElement.ChildNodes.OfType<XmlElement>().ToList(), parentItem, arrayDimension, indices);
             return true;
         }
 
@@ -282,14 +278,15 @@ namespace OpenSC.Model.Persistence
             object deserializedValue = xmlElement.InnerText;
             XmlElement itemToDeserialize = xmlElement;
             IValueXmlSerializer serializer = SerializerRegister.GetSerializerForType(deserializeAsType);
+
             if (serializer != null)
             {
                 if ((persistData.TagName != null) && (persistData.Dimension > 0))
                     itemToDeserialize = itemToDeserialize.OfType<XmlElement>().FirstOrDefault();
-                deserializedValue = serializer.DeserializeItem(itemToDeserialize, parentItem, indices);
+                deserializedValue = extendedMemberInfo.CanDeserializeElement ? serializer.DeserializeItem(itemToDeserialize, parentItem, indices) : itemToDeserialize.InnerText;
             }
 
-            if (extendedMemberInfo.IsAssociationMember && memberType.IsKeyValuePair(out Type kvpKeyType, out Type kvpValueType))
+            if (extendedMemberInfo.RequiresRelationBuilding && memberType.IsKeyValuePair(out Type kvpKeyType, out Type kvpValueType))
             {
                 Type kvpType = TypeHelpers.MakeKeyValuePairType(kvpKeyType, kvpValueType);
                 string keyValue = itemToDeserialize.Attributes[persistData?.KeyAttribute ?? DatabasePersisterConstants.UNDEFINED_DICTIONARY_ITEM_KEY].Value;

@@ -41,7 +41,7 @@ namespace OpenSC.Model.Persistence
 
         private void buildRelationForField(T item, ExtendedMemberInfo extendedMemberInfo, Dictionary<string, object> foreignKeysOfItem)
         {
-            if (!extendedMemberInfo.IsAssociationMember)
+            if (!extendedMemberInfo.RequiresRelationBuilding)
                 return;
             if (!foreignKeysOfItem.TryGetValue(extendedMemberInfo.MemberInfo.Name, out object foreignKeys))
                 return;

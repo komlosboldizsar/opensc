@@ -10,16 +10,35 @@ namespace OpenSC.Model.Persistence
     {
 
         public static bool IsAssociationType(this Type type)
+            => IsAssociationTypeComplex(type).TypeIs;
+
+        public static AssociationTypeData IsAssociationTypeComplex(this Type type)
         {
+            bool typeIs = false;
+            bool? keyIs = null, elementIs = null;
             if (type.IsArray)
-                return type.GetElementType().IsAssociationType();
+            {
+                elementIs = type.GetElementType().IsAssociationType();
+                return new((bool)elementIs, null, elementIs);
+            }
             CollectionDetails collectionDetails = type.GetCollectionDetails();
-            if ((collectionDetails.KeyType != null) && collectionDetails.KeyType.IsAssociationType())
-                return true;
-            if ((collectionDetails.ElementType != null) && collectionDetails.ElementType.IsAssociationType())
-                return true;
-            return ((type == typeof(ISystemObject)) || type.GetInterfaces().Any(iface => (iface == typeof(ISystemObject))));
+            if (collectionDetails.KeyType != null) {
+                keyIs = collectionDetails.KeyType.IsAssociationType();
+                if (keyIs == true)
+                    typeIs = true;
+            }
+            if (collectionDetails.ElementType != null)
+            {
+                elementIs = collectionDetails.ElementType.IsAssociationType();
+                if (elementIs == true)
+                    typeIs = true;
+            }
+            if ((type == typeof(ISystemObject)) || type.GetInterfaces().Any(iface => iface == typeof(ISystemObject)))
+                typeIs = true;
+            return new(typeIs, keyIs, elementIs);
         }
+
+        public record AssociationTypeData(bool TypeIs, bool? KeyIs, bool? ElementIs);
 
         public static bool IsKeyValuePair(this Type type, out Type keyType, out Type valueType)
         {

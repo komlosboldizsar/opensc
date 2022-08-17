@@ -18,7 +18,8 @@ namespace OpenSC.Model.Persistence
         public readonly PersistDetailedAttribute PersistDetailedAttribute;
         public readonly PersistSubclassAttribute PersistSubclassAttribute;
         public readonly PolymorphFieldAttribute PolymorphFieldAttribute;
-        public readonly bool IsAssociationMember;
+        public readonly bool RequiresRelationBuilding;
+        public readonly bool CanDeserializeElement;
 
         public ExtendedMemberInfo(MemberInfo memberInfo)
         {
@@ -41,7 +42,10 @@ namespace OpenSC.Model.Persistence
             PersistDetailedAttribute = memberInfo.GetCustomAttribute<PersistDetailedAttribute>();
             PersistSubclassAttribute = memberInfo.GetCustomAttribute<PersistSubclassAttribute>();
             PolymorphFieldAttribute = memberInfo.GetCustomAttribute<PolymorphFieldAttribute>();
-            IsAssociationMember = (ValueType.IsAssociationType() && (PersistDetailedAttribute == null));
+            var associationTypeData = ValueType.IsAssociationTypeComplex();
+            bool hasPersistDetailedAttribute = PersistDetailedAttribute != null;
+            RequiresRelationBuilding = associationTypeData.TypeIs && !hasPersistDetailedAttribute;
+            CanDeserializeElement = !associationTypeData.TypeIs || (associationTypeData.ElementIs == false) || hasPersistDetailedAttribute;
         }
 
         public PersistAsAttribute GetPersistAsAttributeForDimension(int dimension)
