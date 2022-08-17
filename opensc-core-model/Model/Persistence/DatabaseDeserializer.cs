@@ -47,12 +47,12 @@ namespace OpenSC.Model.Persistence
             {
                 XmlDocument doc = new();
                 doc.Load(fileToRead.Stream);
-                XmlNode root = doc.DocumentElement;
+                XmlElement root = doc.DocumentElement;
                 if (root.LocalName != rootTag)
                     return null;
-                foreach (XmlNode node in root.ChildNodes)
+                foreach (XmlElement itemElement in root.ChildNodes.OfType<XmlElement>())
                 {
-                    T item = deserializeItem(node, foreignKeyCollection);
+                    T item = deserializeItem(itemElement, foreignKeyCollection);
                     if (item != null)
                         items.Add(item.ID, item);
                 }
@@ -61,7 +61,7 @@ namespace OpenSC.Model.Persistence
             return new(items, foreignKeyCollection);
         }
 
-        private T deserializeItem(XmlNode xmlElement, ForeignKeyCollection<T> foreignKeyCollection)
+        private T deserializeItem(XmlElement xmlElement, ForeignKeyCollection<T> foreignKeyCollection)
         {
 
             T item = null;
@@ -94,27 +94,22 @@ namespace OpenSC.Model.Persistence
                 return null;
             item.ID = id;
 
-            Dictionary<string, XmlElement> persistedValues = new();
-            foreach (XmlNode node in xmlElement.ChildNodes)
-                if (node.NodeType == XmlNodeType.Element)
-                    persistedValues[node.LocalName] = (XmlElement)node;
-
             Dictionary<string, object> foreignKeysOfItem = foreignKeyCollection.GetCollectionForItem(item);
             foreach (ExtendedMemberInfo extendedMemberInfo in typeToDeserialize.GetExtendedMemberInfos())
-                restoreValueForMember(extendedMemberInfo, persistedValues, foreignKeysOfItem, item);
+                restoreValueForMember(extendedMemberInfo, xmlElement, foreignKeysOfItem, item);
 
             return item;
 
         }
 
-        private void restoreValueForMember(ExtendedMemberInfo extendedMemberInfo, Dictionary<string, XmlElement> persistedValues, Dictionary<string, object> foreignKeysOfItem, T item)
+        private void restoreValueForMember(ExtendedMemberInfo extendedMemberInfo, XmlElement itemElement, Dictionary<string, object> foreignKeysOfItem, T item)
         {
             if ((extendedMemberInfo.FieldInfo == null) && (extendedMemberInfo.PropertyInfo == null))
                 return;
             if ((extendedMemberInfo.PropertyInfo != null) && !(extendedMemberInfo.PropertyInfo.CanRead && extendedMemberInfo.PropertyInfo.CanWrite))
                 return;
             PersistAsAttribute persistData = extendedMemberInfo.GetPersistAsAttributeForDimension(0);
-            if (!persistedValues.TryGetValue(persistData.TagName, out XmlElement xmlElement))
+            if (itemElement.SelectSingleNode(persistData.TagName) is not XmlElement xmlElement)
                 return;
             object value = deserializeXmlElement(extendedMemberInfo, extendedMemberInfo.ValueType, xmlElement, item);
             try
