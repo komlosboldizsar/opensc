@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.SourceGenerators;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -47,14 +48,19 @@ namespace OpenSC.Model.Persistence
                 .GetMembers(memberCollectLookupBindingFlags)
                 .Where(mi => ((mi is FieldInfo) || (mi is PropertyInfo)))
                 .Select(mi => new ExtendedMemberInfo(mi))
-                .Where(emi => (emi.GetPersistAsAttributeForDimension(0) != null));
+                .Where(emi => emi.GetPersistAsAttributeForDimension(0) != null);
             List<ExtendedMemberInfo> extendedMemberInfos = new();
             extendedMemberInfos.AddRange(type.BaseType.GetExtendedMemberInfos());
             extendedMemberInfos.AddRange(membersOfType);
-            extendedMemberInfosForTypes.Add(type, extendedMemberInfos.ToArray());
             Dictionary<string, ExtendedMemberInfo> extendedMemberInfosByName = new();
             foreach (ExtendedMemberInfo extendedMemberInfo in extendedMemberInfos)
                 extendedMemberInfosByName[extendedMemberInfo.MemberInfo.Name] = extendedMemberInfo;
+            IEnumerable<AutoProperty.GeneratedForField> generatedForFieldAttributes = extendedMemberInfos
+                .Where(emi => emi.GeneratedForFieldAttribute != null)
+                .Select(emi => emi.GeneratedForFieldAttribute);
+            foreach (AutoProperty.GeneratedForField generatedForFieldAttribute in generatedForFieldAttributes)
+                extendedMemberInfosByName.Remove(generatedForFieldAttribute.FieldName);
+            extendedMemberInfosForTypes.Add(type, extendedMemberInfosByName.Values.ToArray());
             extendedMemberInfosByNameForTypes.Add(type, extendedMemberInfosByName);
         }
 

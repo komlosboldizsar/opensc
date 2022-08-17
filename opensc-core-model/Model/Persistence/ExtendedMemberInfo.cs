@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.SourceGenerators;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -15,6 +16,7 @@ namespace OpenSC.Model.Persistence
         public readonly PropertyInfo PropertyInfo;
         public readonly Type ValueType;
         public readonly PersistAsAttribute[] PersistAsAttributes;
+        public readonly AutoProperty.GeneratedForField GeneratedForFieldAttribute;
         public readonly PersistDetailedAttribute PersistDetailedAttribute;
         public readonly PersistSubclassAttribute PersistSubclassAttribute;
         public readonly PolymorphFieldAttribute PolymorphFieldAttribute;
@@ -39,6 +41,7 @@ namespace OpenSC.Model.Persistence
             {
                 PersistAsAttributes = null;
             }
+            GeneratedForFieldAttribute = memberInfo.GetCustomAttribute<AutoProperty.GeneratedForField>();
             PersistDetailedAttribute = memberInfo.GetCustomAttribute<PersistDetailedAttribute>();
             PersistSubclassAttribute = memberInfo.GetCustomAttribute<PersistSubclassAttribute>();
             PolymorphFieldAttribute = memberInfo.GetCustomAttribute<PolymorphFieldAttribute>();

@@ -9,5 +9,8 @@
       <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
       <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-core-model-sourcegenerators\opensc-core-model-sourcegenerators.csproj" />
+  </ItemGroup>
   <Import Project="..\CommonCsproj\Global\*.csproj" />
 </Project>
