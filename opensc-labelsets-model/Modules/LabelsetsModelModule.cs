@@ -17,7 +17,7 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            DatabasePersister<Labelset>.RegisterSerializer(new LabelXmlSerializer());
+            SerializerRegister.RegisterSerializer(new LabelXmlSerializer());
         }
 
     }

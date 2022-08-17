@@ -17,8 +17,8 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            DatabasePersister<GpioInterface>.RegisterSerializer(new BmdTallyBoxInputXmlSerializer());
-            DatabasePersister<GpioInterface>.RegisterSerializer(new BmdTallyBoxOutputXmlSerializer());
+            SerializerRegister.RegisterSerializer(new BmdTallyBoxInputXmlSerializer());
+            SerializerRegister.RegisterSerializer(new BmdTallyBoxOutputXmlSerializer());
         }
 
     }

@@ -17,7 +17,7 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            DatabasePersister<Router>.RegisterSerializer(new BmdVideohubOutputXmlSerializer());
+            SerializerRegister.RegisterSerializer(new BmdVideohubOutputXmlSerializer());
         }
 
     }

@@ -17,7 +17,7 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            DatabasePersister<MacroPanel>.RegisterSerializer(new MacroPanelElementXmlSerializer());
+            SerializerRegister.RegisterSerializer(new MacroPanelElementXmlSerializer());
         }
 
     }

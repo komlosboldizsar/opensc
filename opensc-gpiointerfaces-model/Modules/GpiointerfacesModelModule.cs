@@ -17,8 +17,8 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            DatabasePersister<GpioInterface>.RegisterSerializer(new GpioInterfaceInputXmlSerializer());
-            DatabasePersister<GpioInterface>.RegisterSerializer(new GpioInterfaceOutputXmlSerializer());
+            SerializerRegister.RegisterSerializer(new GpioInterfaceInputXmlSerializer());
+            SerializerRegister.RegisterSerializer(new GpioInterfaceOutputXmlSerializer());
         }
 
     }
