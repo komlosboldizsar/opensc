@@ -25,13 +25,10 @@ namespace OpenSC.Model.SerialPorts
         #region Persistence, instantiation
         public SerialPort()
         {
-            packetQueue = new(sendPacket, invalidPacket);
+            createPacketQueue();
         }
 
-        public override void RestoredOwnFields()
-        {
-            Init();
-        }
+        public override void RestoredOwnFields() => Init();
 
         public override void Removed()
         {
@@ -46,6 +43,8 @@ namespace OpenSC.Model.SerialPorts
             ReceivedDataBytes = null;
             ReceivedDataAsciiString = null;
         }
+
+        protected override void afterUpdate() => ReInit();
         #endregion
 
         #region Owner database
@@ -54,16 +53,9 @@ namespace OpenSC.Model.SerialPorts
 
         #region Property: ComPortName
         [AutoProperty]
-        [AutoProperty.BeforeChange(nameof(_comPortName_beforeChange))]
-        [AutoProperty.AfterChange(nameof(Init))]
+        [AutoProperty.AfterChange(nameof(ReInit))]
         [PersistAs("port_name")]
         protected string comPortName;
-
-        private void _comPortName_beforeChange(string oldValue, string newValue, BeforeChangePropertyArgs args)
-        {
-            if (serialPort?.IsOpen == true)
-                DeInit();
-        }
         #endregion
 
         #region Property: Initialized
@@ -80,18 +72,9 @@ namespace OpenSC.Model.SerialPorts
         private const StopBits DEFAULT_STOPBITS = StopBits.One;
         #endregion
 
-        private void afterPortPropertyChanged()
-        {
-            if (Initialized && !Updating)
-            {
-                DeInit();
-                Init();
-            }
-        }
-
         #region Property: BaudRate
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(afterPortPropertyChanged))]
+        [AutoProperty.AfterChange(nameof(ReInit))]
         [AutoProperty.Validator(nameof(ValidateBaudRate))]
         [PersistAs("baudrate")]
         private int baudRate = DEFAULT_BAUDRATE;
@@ -105,14 +88,14 @@ namespace OpenSC.Model.SerialPorts
 
         #region Property: Parity
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(afterPortPropertyChanged))]
+        [AutoProperty.AfterChange(nameof(ReInit))]
         [PersistAs("parity")]
         private Parity parity = DEFAULT_PARITY;
         #endregion
 
         #region Property: DataBits
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(afterPortPropertyChanged))]
+        [AutoProperty.AfterChange(nameof(ReInit))]
         [AutoProperty.Validator(nameof(ValidateDataBits))]
         [PersistAs("databits")]
         private int dataBits = DEFAULT_DATABITS;
@@ -126,7 +109,7 @@ namespace OpenSC.Model.SerialPorts
 
         #region Property: StopBits
         [AutoProperty]
-        [AutoProperty.AfterChange(nameof(afterPortPropertyChanged))]
+        [AutoProperty.AfterChange(nameof(ReInit))]
         [PersistAs("stopbits")]
         private StopBits stopBits = DEFAULT_STOPBITS;
         #endregion
@@ -138,6 +121,12 @@ namespace OpenSC.Model.SerialPorts
         #region Init and DeInit
         public void Init()
         {
+            LogDispatcher.I(LOG_TAG, $"Initializing port [{this}]...");
+            if (Initialized)
+            {
+                LogDispatcher.W(LOG_TAG, $"Couldn't initialize port ({this}). It was already initialized.");
+                return;
+            }
             if (string.IsNullOrEmpty(comPortName))
                 return;
             try
@@ -147,17 +136,22 @@ namespace OpenSC.Model.SerialPorts
                 serialPort.DataReceived += dataReceivedHandler;
                 packetQueue.Start();
                 Initialized = true;
+                LogDispatcher.I(LOG_TAG, $"Initializing port [{this}] successful.");
             }
             catch (Exception ex)
             {
-                string errorMessage = string.Format("Couldn't initialize port (ID: {0}) with settings [baudrate: {1}, parity: {2}, databits: {3}, stopbits: {4}]. Exception message: [{5}].",
-                    ID, baudRate, parity, dataBits, stopBits, ex.Message);
-                LogDispatcher.E(LOG_TAG, errorMessage);
+                LogDispatcher.W(LOG_TAG, $"Couldn't initialize port [{this}] with settings [name: {comPortName}, baudrate: {baudRate}, parity: {parity}, databits: {dataBits}, stopbits: {stopBits}]. Exception message: [{ex.Message}].");
             }
         }
 
         public void DeInit()
         {
+            LogDispatcher.I(LOG_TAG, $"Deinitializing port [{this}]...");
+            if (!Initialized)
+            {
+                LogDispatcher.W(LOG_TAG, $"Couldn't deinitialize port [{this}]. It was not initialized.");
+                return;
+            }
             try
             {
                 packetQueue.Stop();
@@ -169,6 +163,7 @@ namespace OpenSC.Model.SerialPorts
                 }
                 serialPort = null;
                 Initialized = false;
+                LogDispatcher.I(LOG_TAG, $"Deinitializing port [{this}] successful.");
             }
             catch (Exception ex)
             {
@@ -178,15 +173,19 @@ namespace OpenSC.Model.SerialPorts
 
         public void ReInit()
         {
-            DeInit();
-            Init();
+            if (Initialized && !Updating)
+            {
+                DeInit();
+                Init();
+            }
         }
         #endregion
 
         #region Data sending
-        private readonly TaskQueue<Packet> packetQueue;
+        private /*readonly*/ TaskQueue<Packet> packetQueue;
+        private void createPacketQueue() => packetQueue = new(sendPacket, invalidPacket);
         private void sendPacket(Packet packet) => serialPort.Write(packet.Data, 0, packet.Data.Length);
-        private void invalidPacket(Packet packet) => LogDispatcher.W(LOG_TAG, $"Dropped an invalid packet on port [{this}]");
+        private void invalidPacket(Packet packet) => LogDispatcher.W(LOG_TAG, $"Dropped an invalid packet on port [{this}].");
 
         public void SendData(byte[] data, DateTime validUntil) => packetQueue?.Enqueue(new(data, validUntil));
 
