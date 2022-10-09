@@ -184,8 +184,22 @@ namespace OpenSC.Model.SerialPorts
         #region Data sending
         private /*readonly*/ TaskQueue<Packet> packetQueue;
         private void createPacketQueue() => packetQueue = new(sendPacket, invalidPacket);
-        private void sendPacket(Packet packet) => serialPort.Write(packet.Data, 0, packet.Data.Length);
-        private void invalidPacket(Packet packet) => LogDispatcher.W(LOG_TAG, $"Dropped an invalid packet on port [{this}].");
+
+        private void sendPacket(Packet packet)
+        {
+            serialPort.Write(packet.Data, 0, packet.Data.Length);
+            SentPacket?.Invoke(this, packet);
+        }
+
+        private void invalidPacket(Packet packet)
+        {
+            LogDispatcher.W(LOG_TAG, $"Dropped an invalid packet on port [{this}].");
+            DroppedInvalidPacket?.Invoke(this, packet);
+        }
+
+        public delegate void PacketEventDelegate(SerialPort port, Packet packet);
+        public event PacketEventDelegate SentPacket;
+        public event PacketEventDelegate DroppedInvalidPacket;
 
         public void SendData(byte[] data, DateTime validUntil) => packetQueue?.Enqueue(new(data, validUntil));
 
@@ -216,16 +230,20 @@ namespace OpenSC.Model.SerialPorts
 
         private void dataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
-
             if (serialPort == null)
                 return;
-
             int bytesToRead = serialPort.BytesToRead;
             byte[] receivedBytes = new byte[bytesToRead];
             for (int i = 0; i < bytesToRead; i++)
                 receivedBytes[i] = (byte)serialPort.ReadByte();
+            bytesReceivedHandler(receivedBytes);
+        }
+
+        private void bytesReceivedHandler(byte[] receivedBytes)
+        {
 
             ReceivedDataBytes?.Invoke(this, receivedBytes);
+
             string receivedAsciiString = Encoding.ASCII.GetString(receivedBytes);
             ReceivedDataAsciiString?.Invoke(this, receivedAsciiString);
 
@@ -245,6 +263,8 @@ namespace OpenSC.Model.SerialPorts
             asciiLineBuffer = lastHalfLine;
 
         }
+
+        public void SimulateReceiveBytes(byte[] bytes) => bytesReceivedHandler(bytes);
         #endregion
 
     }
