@@ -28,18 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.comPortDataPanel = new System.Windows.Forms.Panel();
-            this.comPortDataGroupBox = new System.Windows.Forms.GroupBox();
-            this.comPortDataTable = new System.Windows.Forms.TableLayoutPanel();
-            this.parityDropDowm = new System.Windows.Forms.ComboBox();
-            this.parityLabel = new System.Windows.Forms.Label();
-            this.stopBitsDropDown = new System.Windows.Forms.ComboBox();
-            this.stopBitsLabel = new System.Windows.Forms.Label();
-            this.dataBitsNumericField = new System.Windows.Forms.NumericUpDown();
-            this.dataBitsLabel = new System.Windows.Forms.Label();
-            this.baudRateNumericField = new System.Windows.Forms.NumericUpDown();
-            this.baudRateLabel = new System.Windows.Forms.Label();
-            this.portNameDropDown = new System.Windows.Forms.ComboBox();
             this.table = new System.Windows.Forms.TableLayoutPanel();
             this.simulateSendingEncodingDropDown = new System.Windows.Forms.ComboBox();
             this.sendDataButton = new System.Windows.Forms.Button();
@@ -87,16 +75,11 @@
             this.receivedTextAutoScrollCheckBox = new System.Windows.Forms.CheckBox();
             this.sentTextScrollLabel = new System.Windows.Forms.Label();
             this.sentTextClearLabel = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.bothLabel = new System.Windows.Forms.Label();
             this.bothTextClearOnPortInitCheckBox = new System.Windows.Forms.CheckBox();
             this.bothTextClearOnMonitoringStartCheckBox = new System.Windows.Forms.CheckBox();
             this.bothTextAutoScrollCheckBox = new System.Windows.Forms.CheckBox();
             this.mainContainer.SuspendLayout();
-            this.comPortDataPanel.SuspendLayout();
-            this.comPortDataGroupBox.SuspendLayout();
-            this.comPortDataTable.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataBitsNumericField)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.baudRateNumericField)).BeginInit();
             this.table.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -104,178 +87,7 @@
             // 
             this.mainContainer.Controls.Add(this.table);
             this.mainContainer.Padding = new System.Windows.Forms.Padding(10);
-            this.mainContainer.Size = new System.Drawing.Size(990, 932);
-            // 
-            // comPortDataPanel
-            // 
-            this.comPortDataPanel.AutoSize = true;
-            this.comPortDataPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.comPortDataPanel.Controls.Add(this.comPortDataGroupBox);
-            this.comPortDataPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.comPortDataPanel.Location = new System.Drawing.Point(0, 27);
-            this.comPortDataPanel.Name = "comPortDataPanel";
-            this.comPortDataPanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
-            this.comPortDataPanel.Size = new System.Drawing.Size(500, 184);
-            this.comPortDataPanel.TabIndex = 3;
-            // 
-            // comPortDataGroupBox
-            // 
-            this.comPortDataGroupBox.AutoSize = true;
-            this.comPortDataGroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.comPortDataGroupBox.Controls.Add(this.comPortDataTable);
-            this.comPortDataGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.comPortDataGroupBox.Location = new System.Drawing.Point(0, 0);
-            this.comPortDataGroupBox.Margin = new System.Windows.Forms.Padding(10);
-            this.comPortDataGroupBox.Name = "comPortDataGroupBox";
-            this.comPortDataGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.comPortDataGroupBox.Size = new System.Drawing.Size(500, 170);
-            this.comPortDataGroupBox.TabIndex = 1;
-            this.comPortDataGroupBox.TabStop = false;
-            this.comPortDataGroupBox.Text = "COM port properties";
-            // 
-            // comPortDataTable
-            // 
-            this.comPortDataTable.AutoSize = true;
-            this.comPortDataTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.comPortDataTable.ColumnCount = 2;
-            this.comPortDataTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.comPortDataTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.comPortDataTable.Controls.Add(this.parityDropDowm, 1, 4);
-            this.comPortDataTable.Controls.Add(this.parityLabel, 0, 4);
-            this.comPortDataTable.Controls.Add(this.stopBitsDropDown, 1, 3);
-            this.comPortDataTable.Controls.Add(this.stopBitsLabel, 0, 3);
-            this.comPortDataTable.Controls.Add(this.dataBitsNumericField, 1, 2);
-            this.comPortDataTable.Controls.Add(this.dataBitsLabel, 0, 2);
-            this.comPortDataTable.Controls.Add(this.baudRateNumericField, 1, 1);
-            this.comPortDataTable.Controls.Add(this.baudRateLabel, 0, 1);
-            this.comPortDataTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.comPortDataTable.Location = new System.Drawing.Point(8, 28);
-            this.comPortDataTable.Name = "comPortDataTable";
-            this.comPortDataTable.RowCount = 5;
-            this.comPortDataTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.comPortDataTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.comPortDataTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.comPortDataTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.comPortDataTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.comPortDataTable.Size = new System.Drawing.Size(484, 134);
-            this.comPortDataTable.TabIndex = 0;
-            // 
-            // parityDropDowm
-            // 
-            this.parityDropDowm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.parityDropDowm.FormattingEnabled = true;
-            this.parityDropDowm.Location = new System.Drawing.Point(94, 103);
-            this.parityDropDowm.Name = "parityDropDowm";
-            this.parityDropDowm.Size = new System.Drawing.Size(228, 28);
-            this.parityDropDowm.TabIndex = 11;
-            // 
-            // parityLabel
-            // 
-            this.parityLabel.AutoSize = true;
-            this.parityLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.parityLabel.Location = new System.Drawing.Point(3, 100);
-            this.parityLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.parityLabel.Name = "parityLabel";
-            this.parityLabel.Size = new System.Drawing.Size(45, 34);
-            this.parityLabel.TabIndex = 10;
-            this.parityLabel.Text = "Parity";
-            this.parityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // stopBitsDropDown
-            // 
-            this.stopBitsDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.stopBitsDropDown.FormattingEnabled = true;
-            this.stopBitsDropDown.Location = new System.Drawing.Point(94, 69);
-            this.stopBitsDropDown.Name = "stopBitsDropDown";
-            this.stopBitsDropDown.Size = new System.Drawing.Size(228, 28);
-            this.stopBitsDropDown.TabIndex = 9;
-            // 
-            // stopBitsLabel
-            // 
-            this.stopBitsLabel.AutoSize = true;
-            this.stopBitsLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.stopBitsLabel.Location = new System.Drawing.Point(3, 66);
-            this.stopBitsLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.stopBitsLabel.Name = "stopBitsLabel";
-            this.stopBitsLabel.Size = new System.Drawing.Size(68, 34);
-            this.stopBitsLabel.TabIndex = 8;
-            this.stopBitsLabel.Text = "Stop bits";
-            this.stopBitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // dataBitsNumericField
-            // 
-            this.dataBitsNumericField.Location = new System.Drawing.Point(94, 36);
-            this.dataBitsNumericField.Maximum = new decimal(new int[] {
-            8,
-            0,
-            0,
-            0});
-            this.dataBitsNumericField.Minimum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.dataBitsNumericField.Name = "dataBitsNumericField";
-            this.dataBitsNumericField.Size = new System.Drawing.Size(120, 27);
-            this.dataBitsNumericField.TabIndex = 7;
-            this.dataBitsNumericField.Value = new decimal(new int[] {
-            8,
-            0,
-            0,
-            0});
-            // 
-            // dataBitsLabel
-            // 
-            this.dataBitsLabel.AutoSize = true;
-            this.dataBitsLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.dataBitsLabel.Location = new System.Drawing.Point(3, 33);
-            this.dataBitsLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.dataBitsLabel.Name = "dataBitsLabel";
-            this.dataBitsLabel.Size = new System.Drawing.Size(69, 33);
-            this.dataBitsLabel.TabIndex = 6;
-            this.dataBitsLabel.Text = "Data bits";
-            this.dataBitsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // baudRateNumericField
-            // 
-            this.baudRateNumericField.Location = new System.Drawing.Point(94, 3);
-            this.baudRateNumericField.Maximum = new decimal(new int[] {
-            115200,
-            0,
-            0,
-            0});
-            this.baudRateNumericField.Minimum = new decimal(new int[] {
-            9600,
-            0,
-            0,
-            0});
-            this.baudRateNumericField.Name = "baudRateNumericField";
-            this.baudRateNumericField.Size = new System.Drawing.Size(120, 27);
-            this.baudRateNumericField.TabIndex = 5;
-            this.baudRateNumericField.Value = new decimal(new int[] {
-            9600,
-            0,
-            0,
-            0});
-            // 
-            // baudRateLabel
-            // 
-            this.baudRateLabel.AutoSize = true;
-            this.baudRateLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.baudRateLabel.Location = new System.Drawing.Point(3, 0);
-            this.baudRateLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.baudRateLabel.Name = "baudRateLabel";
-            this.baudRateLabel.Size = new System.Drawing.Size(73, 33);
-            this.baudRateLabel.TabIndex = 1;
-            this.baudRateLabel.Text = "Baud rate";
-            this.baudRateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // portNameDropDown
-            // 
-            this.portNameDropDown.Location = new System.Drawing.Point(0, 0);
-            this.portNameDropDown.Name = "portNameDropDown";
-            this.portNameDropDown.Size = new System.Drawing.Size(121, 28);
-            this.portNameDropDown.TabIndex = 0;
+            this.mainContainer.Size = new System.Drawing.Size(990, 683);
             // 
             // table
             // 
@@ -332,7 +144,7 @@
             this.table.Controls.Add(this.receivedTextAutoScrollCheckBox, 2, 6);
             this.table.Controls.Add(this.sentTextScrollLabel, 0, 6);
             this.table.Controls.Add(this.sentTextClearLabel, 0, 3);
-            this.table.Controls.Add(this.label1, 3, 0);
+            this.table.Controls.Add(this.bothLabel, 3, 0);
             this.table.Controls.Add(this.bothTextClearOnPortInitCheckBox, 3, 4);
             this.table.Controls.Add(this.bothTextClearOnMonitoringStartCheckBox, 3, 5);
             this.table.Controls.Add(this.bothTextAutoScrollCheckBox, 3, 6);
@@ -359,7 +171,7 @@
             this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.table.Size = new System.Drawing.Size(970, 912);
+            this.table.Size = new System.Drawing.Size(970, 663);
             this.table.TabIndex = 0;
             // 
             // simulateSendingEncodingDropDown
@@ -889,16 +701,16 @@
             this.sentTextClearLabel.Text = "Clear:";
             this.sentTextClearLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label1
+            // bothLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(684, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(283, 20);
-            this.label1.TabIndex = 61;
-            this.label1.Text = "Both";
+            this.bothLabel.AutoSize = true;
+            this.bothLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.bothLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.bothLabel.Location = new System.Drawing.Point(684, 0);
+            this.bothLabel.Name = "bothLabel";
+            this.bothLabel.Size = new System.Drawing.Size(283, 20);
+            this.bothLabel.TabIndex = 61;
+            this.bothLabel.Text = "Both";
             // 
             // bothTextClearOnPortInitCheckBox
             // 
@@ -934,7 +746,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(990, 1002);
+            this.ClientSize = new System.Drawing.Size(990, 753);
             this.HeaderText = "Serial port monitor";
             this.Margin = new System.Windows.Forms.Padding(3, 6, 3, 6);
             this.MinimumSize = new System.Drawing.Size(500, 538);
@@ -943,14 +755,6 @@
             this.Load += new System.EventHandler(this.SerialPortMonitorForm_Load);
             this.mainContainer.ResumeLayout(false);
             this.mainContainer.PerformLayout();
-            this.comPortDataPanel.ResumeLayout(false);
-            this.comPortDataPanel.PerformLayout();
-            this.comPortDataGroupBox.ResumeLayout(false);
-            this.comPortDataGroupBox.PerformLayout();
-            this.comPortDataTable.ResumeLayout(false);
-            this.comPortDataTable.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataBitsNumericField)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.baudRateNumericField)).EndInit();
             this.table.ResumeLayout(false);
             this.table.PerformLayout();
             this.ResumeLayout(false);
@@ -958,18 +762,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.Panel comPortDataPanel;
-        private System.Windows.Forms.GroupBox comPortDataGroupBox;
-        private System.Windows.Forms.TableLayoutPanel comPortDataTable;
-        private System.Windows.Forms.Label baudRateLabel;
-        private System.Windows.Forms.ComboBox portNameDropDown;
-        private System.Windows.Forms.Label dataBitsLabel;
-        private System.Windows.Forms.NumericUpDown baudRateNumericField;
-        private System.Windows.Forms.ComboBox parityDropDowm;
-        private System.Windows.Forms.Label parityLabel;
-        private System.Windows.Forms.ComboBox stopBitsDropDown;
-        private System.Windows.Forms.Label stopBitsLabel;
-        private System.Windows.Forms.NumericUpDown dataBitsNumericField;
         private System.Windows.Forms.TableLayoutPanel table;
         private System.Windows.Forms.TextBox bothTextBox;
         private System.Windows.Forms.Label sentLabel;
@@ -1017,7 +809,7 @@
         private System.Windows.Forms.CheckBox receivedTextAutoScrollCheckBox;
         private System.Windows.Forms.Label sentTextScrollLabel;
         private System.Windows.Forms.Label sentTextClearLabel;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label bothLabel;
         private System.Windows.Forms.CheckBox bothTextClearOnPortInitCheckBox;
         private System.Windows.Forms.CheckBox bothTextClearOnMonitoringStartCheckBox;
         private System.Windows.Forms.CheckBox bothTextAutoScrollCheckBox;
