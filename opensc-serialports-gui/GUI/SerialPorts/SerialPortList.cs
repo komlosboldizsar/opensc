@@ -96,7 +96,7 @@ namespace OpenSC.GUI.SerialPorts
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("Stop bits");
             builder.Width(70);
-            builder.UpdaterMethod((port, cell) => { cell.Value = stopBitsToStringConverter.Convert(port.StopBits); });
+            builder.UpdaterMethod((port, cell) => { cell.Value = SerialPortSettingTranslators.STOPBITS.Convert(port.StopBits); });
             builder.AddChangeEvent(nameof(SerialPort.StopBits));
 
             // Column: parity
@@ -105,7 +105,7 @@ namespace OpenSC.GUI.SerialPorts
             builder.Header("Parity");
             builder.Width(70);
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
-            builder.UpdaterMethod((port, cell) => { cell.Value = parityToStringConverter.Convert(port.Parity); });
+            builder.UpdaterMethod((port, cell) => { cell.Value = SerialPortSettingTranslators.PARITY.Convert(port.Parity); });
             builder.AddChangeEvent(nameof(SerialPort.Parity));
 
             // Column: edit, delete
@@ -114,20 +114,7 @@ namespace OpenSC.GUI.SerialPorts
 
         }
 
-        private static readonly EnumToStringConverter<System.IO.Ports.Parity> parityToStringConverter = new EnumToStringConverter<System.IO.Ports.Parity>() {
-            { System.IO.Ports.Parity.None, "none" },
-            { System.IO.Ports.Parity.Even, "even" },
-            { System.IO.Ports.Parity.Odd, "odd" },
-            { System.IO.Ports.Parity.Mark, "mark" },
-            { System.IO.Ports.Parity.Space, "space" }
-        };
-
-        private static readonly EnumToStringConverter<System.IO.Ports.StopBits> stopBitsToStringConverter = new EnumToStringConverter<System.IO.Ports.StopBits>() {
-            { System.IO.Ports.StopBits.None, "none" },
-            { System.IO.Ports.StopBits.One, "1" },
-            { System.IO.Ports.StopBits.OnePointFive, "1.5" },
-            { System.IO.Ports.StopBits.Two, "2" },
-        };
+        
 
     }
 

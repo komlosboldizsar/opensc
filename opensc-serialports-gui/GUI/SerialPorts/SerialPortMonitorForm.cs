@@ -2,6 +2,7 @@
 using OpenSC.Model.SerialPorts;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -26,12 +27,9 @@ namespace OpenSC.GUI.SerialPorts
         private void SerialPortMonitorForm_Load(object sender, EventArgs e)
         {
             HeaderText = $"Serial port monitor: {port}";
-            monitoringSinceLabel.Text = $"Monitoring since {DateTime.Now:yyyy. MM. dd. HH:mm:ss}";
-            if (port != null)
-            {
-                port.SentPacket += Port_SentPacket;
-                port.ReceivedDataBytes += Port_ReceivedDataBytes;
-            }
+            subscribePortStatusSettingEvents();
+            showPortStatusAndSettings();
+            monitoringStatus = true;
         }
 
         private void initDropDowns()
@@ -46,6 +44,56 @@ namespace OpenSC.GUI.SerialPorts
             {
                 dropDown.GetAdapterFromFactoryAsDataSource(enumComboBoxAdapterFactory);
                 dropDown.SelectByValue(DataFormat.ASCII);
+            }
+        }
+        #endregion
+
+        #region On/off monitoring
+        private bool _monitoringOn;
+        private DateTime _monitoringSince;
+
+        private bool monitoringStatus
+        {
+            get => _monitoringOn;
+            set
+            {
+                if (_monitoringOn == value)
+                    return;
+                _monitoringOn = value;
+                if (value)
+                {
+                    _monitoringSince = DateTime.Now;
+                    if (port != null)
+                    {
+                        port.SentPacket += Port_SentPacket;
+                        port.ReceivedDataBytes += Port_ReceivedDataBytes;
+                    }
+                }
+                else
+                {
+                    if (port != null)
+                    {
+                        port.SentPacket -= Port_SentPacket;
+                        port.ReceivedDataBytes -= Port_ReceivedDataBytes;
+                    }
+                }
+                showMonitoringStatus();
+            }
+        }
+
+        private void showMonitoringStatus()
+        {
+            if (monitoringStatus)
+            {
+                monitoringStatusValueLabel.Text = $"on, since {_monitoringSince:yyyy. MM. dd. HH:mm:ss}";
+                monitoringStatusValueLabel.ForeColor = COLOR_ON;
+                startStopMonitoringButton.Text = "Stop monitoring";
+            }
+            else
+            {
+                monitoringStatusValueLabel.Text = "off";
+                monitoringStatusValueLabel.ForeColor = COLOR_OFF;
+                startStopMonitoringButton.Text = "Start monitoring";
             }
         }
         #endregion
@@ -77,7 +125,7 @@ namespace OpenSC.GUI.SerialPorts
         };
         #endregion
 
-        #region Serial port event handlers
+        #region Serial port send/receive event handlers
         private void Port_ReceivedDataBytes(SerialPort port, byte[] data)
             => serialPortEventHandler(receivedBytes, data, showReceived);
 
@@ -86,6 +134,8 @@ namespace OpenSC.GUI.SerialPorts
 
         private void serialPortEventHandler(List<byte> eventTotalBytes, byte[] newData, Action showDelegate)
         {
+            if (!monitoringStatus)
+                return;
             eventTotalBytes.AddRange(newData);
             Action action = () =>
             {
@@ -97,6 +147,82 @@ namespace OpenSC.GUI.SerialPorts
             else
                 action();
         }
+        #endregion
+
+        #region Serial port settings/status
+        private void subscribePortStatusSettingEvents()
+        {
+            if (port == null)
+                return;
+            port.InitializedChanged += Port_InitializedChanged;
+            port.ComPortNameChanged += Port_ComPortNameChanged;
+            port.BaudRateChanged += Port_BaudRateChanged;
+            port.DataBitsChanged += Port_DataBitsChanged;
+            port.StopBitsChanged += Port_StopBitsChanged;
+            port.ParityChanged += Port_ParityChanged;
+        }
+
+        private void showPortStatusAndSettings()
+        {
+            if (port == null)
+            {
+                portStatusValueLabel.Text = "-";
+                portStatusValueLabel.ForeColor = COLOR_UNKNOWN;
+                portInitDeinitButton.Text = "-";
+                portNameValueLabel.Text = "-";
+                portBaudrateValueLabel.Text = "-";
+                portDatabitsValueLabel.Text = "-";
+                portStopbitsValueLabel.Text = "-";
+                portParityValueLabel.Text = "-";
+                return;
+            }
+            showPortStatus();
+            showPortName();
+            showPortBaudrate();
+            showPortDatabits();
+            showPortStopbits();
+            showPortParity();
+        }
+
+        private void showPortStatus()
+        {
+            portStatusValueLabel.Text = port.Initialized ? "initialized" : "deinitialized";
+            portStatusValueLabel.ForeColor = port.Initialized ? COLOR_ON : COLOR_OFF;
+            portInitDeinitButton.Text = port.Initialized ? "Deinitialize port" : "Initialize port";
+        }
+
+        private void Port_InitializedChanged(SerialPort item, bool oldValue, bool newValue)
+            => showPortStatus();
+
+        private void showPortName()
+            => portNameValueLabel.Text = port.Name;
+
+        private void Port_ComPortNameChanged(SerialPort item, string oldValue, string newValue)
+            => showPortName();
+
+        private void showPortBaudrate()
+            => portBaudrateValueLabel.Text = port.BaudRate.ToString();
+
+        private void Port_BaudRateChanged(SerialPort item, int oldValue, int newValue)
+            => showPortBaudrate();
+
+        private void showPortDatabits()
+            => portDatabitsValueLabel.Text = port.DataBits.ToString();
+
+        private void Port_DataBitsChanged(SerialPort item, int oldValue, int newValue)
+            => showPortDatabits();
+
+        private void showPortStopbits()
+            => portStopbitsValueLabel.Text = SerialPortSettingTranslators.STOPBITS.Convert(port.StopBits);
+
+        private void Port_StopBitsChanged(SerialPort item, System.IO.Ports.StopBits oldValue, System.IO.Ports.StopBits newValue)
+            => showPortStopbits();
+
+        private void showPortParity()
+            => portParityValueLabel.Text = SerialPortSettingTranslators.PARITY.Convert(port.Parity);
+
+        private void Port_ParityChanged(SerialPort item, System.IO.Ports.Parity oldValue, System.IO.Ports.Parity newValue)
+            => showPortParity();
         #endregion
 
         #region Show serial streams in text boxes
@@ -198,6 +324,26 @@ namespace OpenSC.GUI.SerialPorts
 
         private void receivedTextBoxEncodingDropDown_SelectedIndexChanged(object sender, EventArgs e)
             => showReceived();
+
+
+        private void initDeinitPortButton_Click(object sender, EventArgs e)
+        {
+            if (port == null)
+                return;
+            if (port.Initialized)
+                port.DeInit();
+            else
+                port.Init();
+        }
+
+        private void startStopMonitoringButton_Click(object sender, EventArgs e)
+            => monitoringStatus = !monitoringStatus;
+        #endregion
+
+        #region Color constants
+        private static readonly Color COLOR_OFF = Color.DarkRed;
+        private static readonly Color COLOR_ON = Color.DarkGreen;
+        private static readonly Color COLOR_UNKNOWN = SystemColors.ControlText;
         #endregion
 
         #region Bytes to hex
@@ -273,6 +419,7 @@ namespace OpenSC.GUI.SerialPorts
 
 
         #endregion
+
     }
 
 }
