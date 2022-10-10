@@ -25,6 +25,7 @@ namespace OpenSC.GUI.SerialPorts
 
         private void SerialPortMonitorForm_Load(object sender, EventArgs e)
         {
+            HeaderText = $"Serial port monitor: {port}";
             monitoringSinceLabel.Text = $"Monitoring since {DateTime.Now:yyyy. MM. dd. HH:mm:ss}";
             if (port != null)
             {
