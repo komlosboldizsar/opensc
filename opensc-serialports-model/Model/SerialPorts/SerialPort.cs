@@ -250,8 +250,9 @@ namespace OpenSC.Model.SerialPorts
             asciiLineBuffer += receivedAsciiString;
             char lastAsciiChar = asciiLineBuffer[asciiLineBuffer.Length - 1];
             bool noHalfLine = ((lastAsciiChar == '\r') || (lastAsciiChar == '\n'));
-            string[] asciiLinesSplit = asciiLineBuffer.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            List<string> asciiLines = asciiLinesSplit.ToList();
+            List<string> asciiLines = asciiLineBuffer
+                .Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                .ToList();
             string lastHalfLine = "";
             if (!noHalfLine)
             {
