@@ -242,6 +242,7 @@
             this.bothTextBox.Multiline = true;
             this.bothTextBox.Name = "bothTextBox";
             this.bothTextBox.ReadOnly = true;
+            this.bothTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.bothTextBox.Size = new System.Drawing.Size(283, 200);
             this.bothTextBox.TabIndex = 0;
             // 
@@ -277,6 +278,7 @@
             this.sentTextBox.Multiline = true;
             this.sentTextBox.Name = "sentTextBox";
             this.sentTextBox.ReadOnly = true;
+            this.sentTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.sentTextBox.Size = new System.Drawing.Size(282, 200);
             this.sentTextBox.TabIndex = 3;
             // 
@@ -290,6 +292,7 @@
             this.receivedTextBox.Multiline = true;
             this.receivedTextBox.Name = "receivedTextBox";
             this.receivedTextBox.ReadOnly = true;
+            this.receivedTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.receivedTextBox.Size = new System.Drawing.Size(282, 200);
             this.receivedTextBox.TabIndex = 4;
             // 
