@@ -658,6 +658,8 @@
             // sentTextAutoScrollCheckBox
             // 
             this.sentTextAutoScrollCheckBox.AutoSize = true;
+            this.sentTextAutoScrollCheckBox.Checked = true;
+            this.sentTextAutoScrollCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.sentTextAutoScrollCheckBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.sentTextAutoScrollCheckBox.Location = new System.Drawing.Point(108, 358);
             this.sentTextAutoScrollCheckBox.Name = "sentTextAutoScrollCheckBox";
@@ -669,6 +671,8 @@
             // receivedTextAutoScrollCheckBox
             // 
             this.receivedTextAutoScrollCheckBox.AutoSize = true;
+            this.receivedTextAutoScrollCheckBox.Checked = true;
+            this.receivedTextAutoScrollCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.receivedTextAutoScrollCheckBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.receivedTextAutoScrollCheckBox.Location = new System.Drawing.Point(396, 358);
             this.receivedTextAutoScrollCheckBox.Name = "receivedTextAutoScrollCheckBox";
@@ -735,6 +739,8 @@
             // bothTextAutoScrollCheckBox
             // 
             this.bothTextAutoScrollCheckBox.AutoSize = true;
+            this.bothTextAutoScrollCheckBox.Checked = true;
+            this.bothTextAutoScrollCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.bothTextAutoScrollCheckBox.Location = new System.Drawing.Point(684, 358);
             this.bothTextAutoScrollCheckBox.Name = "bothTextAutoScrollCheckBox";
             this.bothTextAutoScrollCheckBox.Size = new System.Drawing.Size(63, 24);
