@@ -63,9 +63,17 @@ namespace OpenSC.GUI.SerialPorts
             builder.Type(DataGridViewColumnType.Button);
             builder.Header("Deinitialize");
             builder.Width(70);
-            builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.ButtonText("Deinitialize");
             builder.CellContentClickHandlerMethod((port, cell, e) => port.DeInit());
+
+            // Column: monitor button
+            builder = builderGetterMethod();
+            builder.Type(DataGridViewColumnType.Button);
+            builder.Header("Monitor");
+            builder.Width(70);
+            builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
+            builder.ButtonText("Monitor");
+            builder.CellContentClickHandlerMethod((port, cell, e) => (new SerialPortMonitorForm(port)).ShowAsChild());
 
             // Column: baudrate
             builder = builderGetterMethod();
