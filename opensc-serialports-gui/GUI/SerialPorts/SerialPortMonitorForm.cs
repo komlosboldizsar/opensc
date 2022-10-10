@@ -238,7 +238,7 @@ namespace OpenSC.GUI.SerialPorts
             byte[] eventTotalBytesArray = eventTotalBytes.ToArray();
             if (dataFormat == DataFormat.RawBytes)
             {
-                textBox.Text = byteArrayToHexString(eventTotalBytesArray);
+                textBox.Text = byteArrayToHexString(eventTotalBytesArray, true);
                 scrollToEnd(textBox);
                 return;
             }
