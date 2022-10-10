@@ -136,6 +136,7 @@ namespace OpenSC.GUI.SerialPorts
         {
             if (!monitoringStatus)
                 return;
+            bothBytes.AddRange(newData);
             eventTotalBytes.AddRange(newData);
             Action action = () =>
             {
@@ -238,10 +239,16 @@ namespace OpenSC.GUI.SerialPorts
             if (dataFormat == DataFormat.RawBytes)
             {
                 textBox.Text = byteArrayToHexString(eventTotalBytesArray);
+                scrollToEnd(textBox);
                 return;
             }
             Encoding encoding = dataFormatToEncoding((DataFormat)dataFormat);
             textBox.Text = encoding?.GetString(eventTotalBytesArray) ?? string.Empty;
+            scrollToEnd(textBox);
+        }
+
+        private void scrollToEnd(TextBox textBox)
+        {
             textBox.SelectionStart = textBox.TextLength;
             textBox.ScrollToCaret();
         }
