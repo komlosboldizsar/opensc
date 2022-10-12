@@ -79,6 +79,9 @@
             this.bothTextClearOnPortInitCheckBox = new System.Windows.Forms.CheckBox();
             this.bothTextClearOnMonitoringStartCheckBox = new System.Windows.Forms.CheckBox();
             this.bothTextAutoScrollCheckBox = new System.Windows.Forms.CheckBox();
+            this.packetEndLabel = new System.Windows.Forms.Label();
+            this.simulateSendingPacketEndingDropDown = new System.Windows.Forms.ComboBox();
+            this.simulateReceivingPacketEndingDropDown = new System.Windows.Forms.ComboBox();
             this.mainContainer.SuspendLayout();
             this.table.SuspendLayout();
             this.SuspendLayout();
@@ -97,9 +100,8 @@
             this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.table.Controls.Add(this.simulateSendingEncodingDropDown, 1, 9);
-            this.table.Controls.Add(this.sendDataButton, 1, 10);
+            this.table.Controls.Add(this.sendDataButton, 1, 11);
             this.table.Controls.Add(this.simulateSendingEncodingLabel, 0, 9);
             this.table.Controls.Add(this.simulateSendingDataLabel, 0, 8);
             this.table.Controls.Add(this.simulateSendingLabel, 0, 7);
@@ -109,7 +111,7 @@
             this.table.Controls.Add(this.sentTextBox, 1, 1);
             this.table.Controls.Add(this.receivedTextBox, 2, 1);
             this.table.Controls.Add(this.simulateSendingDataTextBox, 1, 8);
-            this.table.Controls.Add(this.receiveDataButton, 2, 10);
+            this.table.Controls.Add(this.receiveDataButton, 2, 11);
             this.table.Controls.Add(this.sentTextClearButton, 1, 3);
             this.table.Controls.Add(this.receivedTextClearButton, 2, 3);
             this.table.Controls.Add(this.sentTextBoxEncodingLabel, 0, 2);
@@ -119,23 +121,23 @@
             this.table.Controls.Add(this.simulateReceivingDataTextBox, 2, 8);
             this.table.Controls.Add(this.bothTextBoxEncodingDropDown, 3, 2);
             this.table.Controls.Add(this.bothTextClearButton, 3, 3);
-            this.table.Controls.Add(this.portSettingsLabel, 0, 11);
-            this.table.Controls.Add(this.portNameLabel, 0, 12);
-            this.table.Controls.Add(this.portBaudrateLabel, 0, 13);
-            this.table.Controls.Add(this.portDatabitsLabel, 0, 14);
-            this.table.Controls.Add(this.portNameValueLabel, 1, 12);
-            this.table.Controls.Add(this.portBaudrateValueLabel, 1, 13);
-            this.table.Controls.Add(this.portDatabitsValueLabel, 1, 14);
-            this.table.Controls.Add(this.portStatusLabel, 2, 11);
-            this.table.Controls.Add(this.portStatusValueLabel, 2, 12);
-            this.table.Controls.Add(this.portInitDeinitButton, 2, 13);
-            this.table.Controls.Add(this.portStopbitsLabel, 0, 16);
-            this.table.Controls.Add(this.portParityLabel, 0, 17);
-            this.table.Controls.Add(this.portStopbitsValueLabel, 1, 16);
-            this.table.Controls.Add(this.portParityValueLabel, 1, 17);
-            this.table.Controls.Add(this.monitoringStatusLabel, 3, 11);
-            this.table.Controls.Add(this.startStopMonitoringButton, 3, 13);
-            this.table.Controls.Add(this.monitoringStatusValueLabel, 3, 12);
+            this.table.Controls.Add(this.portSettingsLabel, 0, 12);
+            this.table.Controls.Add(this.portNameLabel, 0, 13);
+            this.table.Controls.Add(this.portBaudrateLabel, 0, 14);
+            this.table.Controls.Add(this.portDatabitsLabel, 0, 15);
+            this.table.Controls.Add(this.portNameValueLabel, 1, 13);
+            this.table.Controls.Add(this.portBaudrateValueLabel, 1, 14);
+            this.table.Controls.Add(this.portDatabitsValueLabel, 1, 15);
+            this.table.Controls.Add(this.portStatusLabel, 2, 12);
+            this.table.Controls.Add(this.portStatusValueLabel, 2, 13);
+            this.table.Controls.Add(this.portInitDeinitButton, 2, 14);
+            this.table.Controls.Add(this.portStopbitsLabel, 0, 17);
+            this.table.Controls.Add(this.portParityLabel, 0, 18);
+            this.table.Controls.Add(this.portStopbitsValueLabel, 1, 17);
+            this.table.Controls.Add(this.portParityValueLabel, 1, 18);
+            this.table.Controls.Add(this.monitoringStatusLabel, 3, 12);
+            this.table.Controls.Add(this.startStopMonitoringButton, 3, 14);
+            this.table.Controls.Add(this.monitoringStatusValueLabel, 3, 13);
             this.table.Controls.Add(this.sentTextClearOnPortInitCheckBox, 1, 4);
             this.table.Controls.Add(this.sentTextClearOnMonitoringStartCheckBox, 1, 5);
             this.table.Controls.Add(this.receivedTextClearOnPortInitCheckBox, 2, 4);
@@ -148,10 +150,14 @@
             this.table.Controls.Add(this.bothTextClearOnPortInitCheckBox, 3, 4);
             this.table.Controls.Add(this.bothTextClearOnMonitoringStartCheckBox, 3, 5);
             this.table.Controls.Add(this.bothTextAutoScrollCheckBox, 3, 6);
+            this.table.Controls.Add(this.packetEndLabel, 0, 10);
+            this.table.Controls.Add(this.simulateSendingPacketEndingDropDown, 1, 10);
+            this.table.Controls.Add(this.simulateReceivingPacketEndingDropDown, 2, 10);
             this.table.Dock = System.Windows.Forms.DockStyle.Fill;
             this.table.Location = new System.Drawing.Point(10, 10);
             this.table.Name = "table";
-            this.table.RowCount = 19;
+            this.table.RowCount = 20;
+            this.table.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.table.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.table.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.table.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -183,11 +189,12 @@
             this.simulateSendingEncodingDropDown.Name = "simulateSendingEncodingDropDown";
             this.simulateSendingEncodingDropDown.Size = new System.Drawing.Size(282, 28);
             this.simulateSendingEncodingDropDown.TabIndex = 12;
+            this.simulateSendingEncodingDropDown.SelectedIndexChanged += new System.EventHandler(this.simulateSendingEncodingDropDown_SelectedIndexChanged);
             // 
             // sendDataButton
             // 
             this.sendDataButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.sendDataButton.Location = new System.Drawing.Point(108, 488);
+            this.sendDataButton.Location = new System.Drawing.Point(108, 522);
             this.sendDataButton.Name = "sendDataButton";
             this.sendDataButton.Size = new System.Drawing.Size(282, 29);
             this.sendDataButton.TabIndex = 11;
@@ -308,7 +315,7 @@
             // receiveDataButton
             // 
             this.receiveDataButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.receiveDataButton.Location = new System.Drawing.Point(396, 488);
+            this.receiveDataButton.Location = new System.Drawing.Point(396, 522);
             this.receiveDataButton.Name = "receiveDataButton";
             this.receiveDataButton.Size = new System.Drawing.Size(282, 29);
             this.receiveDataButton.TabIndex = 17;
@@ -381,6 +388,7 @@
             this.simulateReceivingEncodingDropDown.Name = "simulateReceivingEncodingDropDown";
             this.simulateReceivingEncodingDropDown.Size = new System.Drawing.Size(282, 28);
             this.simulateReceivingEncodingDropDown.TabIndex = 24;
+            this.simulateReceivingEncodingDropDown.SelectedIndexChanged += new System.EventHandler(this.simulateReceivingEncodingDropDown_SelectedIndexChanged);
             // 
             // simulateReceivingDataTextBox
             // 
@@ -418,7 +426,7 @@
             this.portSettingsLabel.AutoSize = true;
             this.portSettingsLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.portSettingsLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.portSettingsLabel.Location = new System.Drawing.Point(3, 530);
+            this.portSettingsLabel.Location = new System.Drawing.Point(3, 564);
             this.portSettingsLabel.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
             this.portSettingsLabel.Name = "portSettingsLabel";
             this.portSettingsLabel.Size = new System.Drawing.Size(99, 20);
@@ -429,7 +437,7 @@
             // 
             this.portNameLabel.AutoSize = true;
             this.portNameLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.portNameLabel.Location = new System.Drawing.Point(3, 550);
+            this.portNameLabel.Location = new System.Drawing.Point(3, 584);
             this.portNameLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.portNameLabel.Name = "portNameLabel";
             this.portNameLabel.Size = new System.Drawing.Size(52, 20);
@@ -441,7 +449,7 @@
             // 
             this.portBaudrateLabel.AutoSize = true;
             this.portBaudrateLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.portBaudrateLabel.Location = new System.Drawing.Point(3, 570);
+            this.portBaudrateLabel.Location = new System.Drawing.Point(3, 604);
             this.portBaudrateLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.portBaudrateLabel.Name = "portBaudrateLabel";
             this.portBaudrateLabel.Size = new System.Drawing.Size(72, 20);
@@ -453,7 +461,7 @@
             // 
             this.portDatabitsLabel.AutoSize = true;
             this.portDatabitsLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.portDatabitsLabel.Location = new System.Drawing.Point(3, 590);
+            this.portDatabitsLabel.Location = new System.Drawing.Point(3, 624);
             this.portDatabitsLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.portDatabitsLabel.Name = "portDatabitsLabel";
             this.portDatabitsLabel.Size = new System.Drawing.Size(72, 20);
@@ -465,7 +473,7 @@
             // 
             this.portNameValueLabel.AutoSize = true;
             this.portNameValueLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.portNameValueLabel.Location = new System.Drawing.Point(108, 550);
+            this.portNameValueLabel.Location = new System.Drawing.Point(108, 584);
             this.portNameValueLabel.Name = "portNameValueLabel";
             this.portNameValueLabel.Size = new System.Drawing.Size(50, 20);
             this.portNameValueLabel.TabIndex = 35;
@@ -476,7 +484,7 @@
             // 
             this.portBaudrateValueLabel.AutoSize = true;
             this.portBaudrateValueLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.portBaudrateValueLabel.Location = new System.Drawing.Point(108, 570);
+            this.portBaudrateValueLabel.Location = new System.Drawing.Point(108, 604);
             this.portBaudrateValueLabel.Name = "portBaudrateValueLabel";
             this.portBaudrateValueLabel.Size = new System.Drawing.Size(41, 20);
             this.portBaudrateValueLabel.TabIndex = 36;
@@ -487,7 +495,7 @@
             // 
             this.portDatabitsValueLabel.AutoSize = true;
             this.portDatabitsValueLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.portDatabitsValueLabel.Location = new System.Drawing.Point(108, 590);
+            this.portDatabitsValueLabel.Location = new System.Drawing.Point(108, 624);
             this.portDatabitsValueLabel.Name = "portDatabitsValueLabel";
             this.portDatabitsValueLabel.Size = new System.Drawing.Size(17, 20);
             this.portDatabitsValueLabel.TabIndex = 37;
@@ -499,7 +507,7 @@
             this.portStatusLabel.AutoSize = true;
             this.portStatusLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.portStatusLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.portStatusLabel.Location = new System.Drawing.Point(396, 530);
+            this.portStatusLabel.Location = new System.Drawing.Point(396, 564);
             this.portStatusLabel.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
             this.portStatusLabel.Name = "portStatusLabel";
             this.portStatusLabel.Size = new System.Drawing.Size(282, 20);
@@ -512,7 +520,7 @@
             this.portStatusValueLabel.AutoSize = true;
             this.portStatusValueLabel.Dock = System.Windows.Forms.DockStyle.Left;
             this.portStatusValueLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.portStatusValueLabel.Location = new System.Drawing.Point(396, 550);
+            this.portStatusValueLabel.Location = new System.Drawing.Point(396, 584);
             this.portStatusValueLabel.Name = "portStatusValueLabel";
             this.portStatusValueLabel.Size = new System.Drawing.Size(91, 20);
             this.portStatusValueLabel.TabIndex = 41;
@@ -522,7 +530,7 @@
             // portInitDeinitButton
             // 
             this.portInitDeinitButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.portInitDeinitButton.Location = new System.Drawing.Point(396, 573);
+            this.portInitDeinitButton.Location = new System.Drawing.Point(396, 607);
             this.portInitDeinitButton.Name = "portInitDeinitButton";
             this.table.SetRowSpan(this.portInitDeinitButton, 2);
             this.portInitDeinitButton.Size = new System.Drawing.Size(282, 29);
@@ -535,7 +543,7 @@
             // 
             this.portStopbitsLabel.AutoSize = true;
             this.portStopbitsLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.portStopbitsLabel.Location = new System.Drawing.Point(3, 610);
+            this.portStopbitsLabel.Location = new System.Drawing.Point(3, 644);
             this.portStopbitsLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.portStopbitsLabel.Name = "portStopbitsLabel";
             this.portStopbitsLabel.Size = new System.Drawing.Size(71, 20);
@@ -547,7 +555,7 @@
             // 
             this.portParityLabel.AutoSize = true;
             this.portParityLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.portParityLabel.Location = new System.Drawing.Point(3, 630);
+            this.portParityLabel.Location = new System.Drawing.Point(3, 664);
             this.portParityLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
             this.portParityLabel.Name = "portParityLabel";
             this.portParityLabel.Size = new System.Drawing.Size(48, 20);
@@ -559,7 +567,7 @@
             // 
             this.portStopbitsValueLabel.AutoSize = true;
             this.portStopbitsValueLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.portStopbitsValueLabel.Location = new System.Drawing.Point(108, 610);
+            this.portStopbitsValueLabel.Location = new System.Drawing.Point(108, 644);
             this.portStopbitsValueLabel.Name = "portStopbitsValueLabel";
             this.portStopbitsValueLabel.Size = new System.Drawing.Size(17, 20);
             this.portStopbitsValueLabel.TabIndex = 45;
@@ -570,7 +578,7 @@
             // 
             this.portParityValueLabel.AutoSize = true;
             this.portParityValueLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.portParityValueLabel.Location = new System.Drawing.Point(108, 630);
+            this.portParityValueLabel.Location = new System.Drawing.Point(108, 664);
             this.portParityValueLabel.Name = "portParityValueLabel";
             this.portParityValueLabel.Size = new System.Drawing.Size(28, 20);
             this.portParityValueLabel.TabIndex = 46;
@@ -582,7 +590,7 @@
             this.monitoringStatusLabel.AutoSize = true;
             this.monitoringStatusLabel.Dock = System.Windows.Forms.DockStyle.Left;
             this.monitoringStatusLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.monitoringStatusLabel.Location = new System.Drawing.Point(684, 530);
+            this.monitoringStatusLabel.Location = new System.Drawing.Point(684, 564);
             this.monitoringStatusLabel.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
             this.monitoringStatusLabel.Name = "monitoringStatusLabel";
             this.monitoringStatusLabel.Size = new System.Drawing.Size(135, 20);
@@ -593,7 +601,7 @@
             // startStopMonitoringButton
             // 
             this.startStopMonitoringButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.startStopMonitoringButton.Location = new System.Drawing.Point(684, 573);
+            this.startStopMonitoringButton.Location = new System.Drawing.Point(684, 607);
             this.startStopMonitoringButton.Name = "startStopMonitoringButton";
             this.table.SetRowSpan(this.startStopMonitoringButton, 2);
             this.startStopMonitoringButton.Size = new System.Drawing.Size(283, 29);
@@ -607,7 +615,7 @@
             this.monitoringStatusValueLabel.AutoSize = true;
             this.monitoringStatusValueLabel.Dock = System.Windows.Forms.DockStyle.Left;
             this.monitoringStatusValueLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.monitoringStatusValueLabel.Location = new System.Drawing.Point(684, 550);
+            this.monitoringStatusValueLabel.Location = new System.Drawing.Point(684, 584);
             this.monitoringStatusValueLabel.Name = "monitoringStatusValueLabel";
             this.monitoringStatusValueLabel.Size = new System.Drawing.Size(28, 20);
             this.monitoringStatusValueLabel.TabIndex = 49;
@@ -751,6 +759,38 @@
             this.bothTextAutoScrollCheckBox.Text = "Auto";
             this.bothTextAutoScrollCheckBox.UseVisualStyleBackColor = true;
             // 
+            // packetEndLabel
+            // 
+            this.packetEndLabel.AutoSize = true;
+            this.packetEndLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.packetEndLabel.Location = new System.Drawing.Point(3, 485);
+            this.packetEndLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.packetEndLabel.Name = "packetEndLabel";
+            this.packetEndLabel.Size = new System.Drawing.Size(83, 34);
+            this.packetEndLabel.TabIndex = 65;
+            this.packetEndLabel.Text = "Packet end:";
+            this.packetEndLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // simulateSendingPacketEndDropDown
+            // 
+            this.simulateSendingPacketEndingDropDown.Dock = System.Windows.Forms.DockStyle.Top;
+            this.simulateSendingPacketEndingDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.simulateSendingPacketEndingDropDown.FormattingEnabled = true;
+            this.simulateSendingPacketEndingDropDown.Location = new System.Drawing.Point(108, 488);
+            this.simulateSendingPacketEndingDropDown.Name = "simulateSendingPacketEndDropDown";
+            this.simulateSendingPacketEndingDropDown.Size = new System.Drawing.Size(282, 28);
+            this.simulateSendingPacketEndingDropDown.TabIndex = 66;
+            // 
+            // simulateReceivingPacketEndDropDown
+            // 
+            this.simulateReceivingPacketEndingDropDown.Dock = System.Windows.Forms.DockStyle.Top;
+            this.simulateReceivingPacketEndingDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.simulateReceivingPacketEndingDropDown.FormattingEnabled = true;
+            this.simulateReceivingPacketEndingDropDown.Location = new System.Drawing.Point(396, 488);
+            this.simulateReceivingPacketEndingDropDown.Name = "simulateReceivingPacketEndDropDown";
+            this.simulateReceivingPacketEndingDropDown.Size = new System.Drawing.Size(282, 28);
+            this.simulateReceivingPacketEndingDropDown.TabIndex = 67;
+            // 
             // SerialPortMonitorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -822,5 +862,8 @@
         private System.Windows.Forms.CheckBox bothTextClearOnPortInitCheckBox;
         private System.Windows.Forms.CheckBox bothTextClearOnMonitoringStartCheckBox;
         private System.Windows.Forms.CheckBox bothTextAutoScrollCheckBox;
+        private System.Windows.Forms.Label packetEndLabel;
+        private System.Windows.Forms.ComboBox simulateSendingPacketEndingDropDown;
+        private System.Windows.Forms.ComboBox simulateReceivingPacketEndingDropDown;
     }
 }

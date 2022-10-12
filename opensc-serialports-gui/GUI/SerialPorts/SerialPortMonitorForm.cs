@@ -34,16 +34,26 @@ namespace OpenSC.GUI.SerialPorts
 
         private void initDropDowns()
         {
-            IComboBoxAdapterFactory enumComboBoxAdapterFactory = new EnumComboBoxAdapterFactory<DataFormat>(dataFormatEnumTranslations);
-            ComboBox[] dropDowns = new[]
+            IComboBoxAdapterFactory dataFormatComboBoxAdapterFactor = new EnumComboBoxAdapterFactory<DataFormat>(dataFormatEnumTranslations);
+            ComboBox[] dataFormatDropDowns = new[]
             { 
                 bothTextBoxEncodingDropDown, sentTextBoxEncodingDropDown, receivedTextBoxEncodingDropDown,
                 simulateSendingEncodingDropDown, simulateReceivingEncodingDropDown 
             };
-            foreach (ComboBox dropDown in dropDowns)
+            foreach (ComboBox dataFormatDropDown in dataFormatDropDowns)
             {
-                dropDown.GetAdapterFromFactoryAsDataSource(enumComboBoxAdapterFactory);
-                dropDown.SelectByValue(DataFormat.ASCII);
+                dataFormatDropDown.GetAdapterFromFactoryAsDataSource(dataFormatComboBoxAdapterFactor);
+                dataFormatDropDown.SelectByValue(DataFormat.ASCII);
+            }
+            IComboBoxAdapterFactory packetEndingComboBoxAdapterFactor = new EnumComboBoxAdapterFactory<PacketEnding>(dataFormatEnumTranslations);
+            ComboBox[] packetEndingDropDowns = new[]
+            {
+                simulateSendingPacketEndingDropDown, simulateReceivingPacketEndingDropDown
+            };
+            foreach (ComboBox packetEndingDropDown in packetEndingDropDowns)
+            {
+                packetEndingDropDown.GetAdapterFromFactoryAsDataSource(packetEndingComboBoxAdapterFactor);
+                packetEndingDropDown.SelectByValue(PacketEnding.None);
             }
         }
         #endregion
@@ -218,6 +228,33 @@ namespace OpenSC.GUI.SerialPorts
         };
         #endregion
 
+        #region Packet ending
+        private enum PacketEnding
+        {
+            None,
+            CR,
+            LF,
+            CRLF
+        }
+
+        private string packetEndingToString(PacketEnding packetEnding)
+            => packetEnding switch
+            {
+                PacketEnding.CR => "\r",
+                PacketEnding.LF => "\n",
+                PacketEnding.CRLF => "\r\n",
+                _ => ""
+            };
+
+        private Dictionary<PacketEnding, string> packetEndingEnumTranslations = new()
+        {
+            { PacketEnding.None, "none" },
+            { PacketEnding.CR, "CR (0x13)" },
+            { PacketEnding.LF, "LF (0x10)" },
+            { PacketEnding.CRLF, "CR (0x13) + LF (0x10)" }
+        };
+        #endregion
+
         #region Serial port send/receive event handlers
         private void Port_ReceivedDataBytes(SerialPort port, byte[] data)
             => serialPortEventHandler(receivedBytes, data, showReceived);
@@ -304,7 +341,7 @@ namespace OpenSC.GUI.SerialPorts
         #endregion
 
         #region Simulate sending/receiving
-        private void sendReceiveBase(ComboBox dataFormatDropDown, TextBox inputTextBox, string processName, Action<byte[]> action)
+        private void sendReceiveBase(ComboBox dataFormatDropDown, ComboBox packetEndingDropDown, TextBox inputTextBox, string processName, Action<byte[]> action)
         {
             DataFormat? dataFormat = dataFormatDropDown.SelectedValue as DataFormat?;
             string text = inputTextBox.Text;
@@ -328,7 +365,8 @@ namespace OpenSC.GUI.SerialPorts
                     MessageBox.Show($"No valid encoding selected for simulated {processName}", "Setting error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                action(enc.GetBytes(text));
+                string packetEnding = packetEndingToString((PacketEnding)packetEndingDropDown.SelectedValue);
+                action(enc.GetBytes(text + packetEnding));
             }
         }
         #endregion
@@ -344,11 +382,11 @@ namespace OpenSC.GUI.SerialPorts
             => clearBoth();
 
         private void sendDataButton_Click(object sender, EventArgs e)
-           => sendReceiveBase(simulateSendingEncodingDropDown, simulateSendingDataTextBox, "sending",
+           => sendReceiveBase(simulateSendingEncodingDropDown, simulateSendingPacketEndingDropDown, simulateSendingDataTextBox, "sending",
                (bytes) => port.SendData(bytes, DateTime.Now + new TimeSpan(0, 0, 2)));
 
         private void receiveDataButton_Click(object sender, EventArgs e)
-            => sendReceiveBase(simulateReceivingEncodingDropDown, simulateReceivingDataTextBox, "receiving",
+            => sendReceiveBase(simulateReceivingEncodingDropDown, simulateReceivingPacketEndingDropDown, simulateReceivingDataTextBox, "receiving",
                 (bytes) => port.SimulateReceiveBytes(bytes));
 
         private void sentTextBoxEncodingDropDown_SelectedIndexChanged(object sender, EventArgs e)
@@ -359,6 +397,15 @@ namespace OpenSC.GUI.SerialPorts
 
         private void bothTextBoxEncodingDropDown_SelectedIndexChanged(object sender, EventArgs e)
             => showBoth();
+
+        private void simulateSendingEncodingDropDown_SelectedIndexChanged(object sender, EventArgs e)
+            => enablePacketEndingDropDownByDataFormatDropDown(simulateSendingPacketEndingDropDown, simulateSendingEncodingDropDown);
+
+        private void simulateReceivingEncodingDropDown_SelectedIndexChanged(object sender, EventArgs e)
+            => enablePacketEndingDropDownByDataFormatDropDown(simulateReceivingPacketEndingDropDown, simulateReceivingEncodingDropDown);
+
+        private void enablePacketEndingDropDownByDataFormatDropDown(ComboBox packetEndingDropDown, ComboBox dataFormatDropDown)
+            => packetEndingDropDown.Enabled = !DataFormat.RawBytes.Equals(dataFormatDropDown.SelectedValue);
 
         private void initDeinitPortButton_Click(object sender, EventArgs e)
         {
@@ -449,9 +496,6 @@ namespace OpenSC.GUI.SerialPorts
             }
             return lut;
         }
-
-
-
         #endregion
 
     }
