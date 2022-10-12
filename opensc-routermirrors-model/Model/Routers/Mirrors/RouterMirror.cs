@@ -55,15 +55,18 @@ namespace OpenSC.Model.Routers.Mirrors
             stateVariable = RouterState.Unknown;
         }
 
-        private void _routerX_afterChange(Router newValue, PropertyChangedTwoValuesDelegate<Router, RouterState> stateChangedHandler, ref RouterState stateVariable)
+        private void _routerX_afterChange(Router oldValue, Router newValue, PropertyChangedTwoValuesDelegate<Router, RouterState> stateChangedHandler, ref RouterState stateVariable)
         {
             if (newValue != null)
             {
                 newValue.StateChanged += stateChangedHandler;
                 stateVariable = newValue.State;
             }
-            ClearInputAssociations();
-            ClearOutputAssociations();
+            if (oldValue != null)
+            {
+                ClearInputAssociations();
+                ClearOutputAssociations();
+            }
         }
 
         [AutoProperty]
@@ -76,7 +79,7 @@ namespace OpenSC.Model.Routers.Mirrors
             => _routerX_beforeChange(oldValue, routerAstateChangedHandler, ref routerAstate);
 
         private void _routerA_afterChange(Router oldValue, Router newValue)
-            => _routerX_afterChange(newValue, routerAstateChangedHandler, ref routerAstate);
+            => _routerX_afterChange(oldValue, newValue, routerAstateChangedHandler, ref routerAstate);
 
         [AutoProperty]
         [AutoProperty.BeforeChange(nameof(_routerB_beforeChange))]
@@ -88,7 +91,7 @@ namespace OpenSC.Model.Routers.Mirrors
             => _routerX_beforeChange(oldValue, routerBstateChangedHandler, ref routerBstate);
 
         private void _routerB_afterChange(Router oldValue, Router newValue)
-            => _routerX_afterChange(newValue, routerBstateChangedHandler, ref routerBstate);
+            => _routerX_afterChange(oldValue, newValue, routerBstateChangedHandler, ref routerBstate);
         #endregion
 
         #region Property: SynchronizationMode
