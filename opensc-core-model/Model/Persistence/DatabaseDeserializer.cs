@@ -276,7 +276,7 @@ namespace OpenSC.Model.Persistence
 
             if (serializer != null)
             {
-                if ((persistData.TagName != null) && (persistData.Dimension > 0))
+                if ((persistData.TagName != null) && (persistData.Dimension == 0))
                     itemToDeserialize = itemToDeserialize.OfType<XmlElement>().FirstOrDefault();
                 deserializedValue = extendedMemberInfo.CanDeserializeElement ? serializer.DeserializeItem(itemToDeserialize, parentItem, indices) : itemToDeserialize.InnerText;
             }
