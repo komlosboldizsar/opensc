@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.table = new System.Windows.Forms.TableLayoutPanel();
-            this.simulateSendingEncodingDropDown = new System.Windows.Forms.ComboBox();
+            this.simulateSendingDataFormatDropDown = new System.Windows.Forms.ComboBox();
             this.sendDataButton = new System.Windows.Forms.Button();
-            this.simulateSendingEncodingLabel = new System.Windows.Forms.Label();
+            this.simulateSendingDataFormatLabel = new System.Windows.Forms.Label();
             this.simulateSendingDataLabel = new System.Windows.Forms.Label();
             this.simulateSendingLabel = new System.Windows.Forms.Label();
             this.bothTextBox = new System.Windows.Forms.TextBox();
@@ -44,11 +44,11 @@
             this.sentTextClearButton = new System.Windows.Forms.Button();
             this.receivedTextClearButton = new System.Windows.Forms.Button();
             this.sentTextBoxEncodingLabel = new System.Windows.Forms.Label();
-            this.sentTextBoxEncodingDropDown = new System.Windows.Forms.ComboBox();
-            this.receivedTextBoxEncodingDropDown = new System.Windows.Forms.ComboBox();
-            this.simulateReceivingEncodingDropDown = new System.Windows.Forms.ComboBox();
+            this.sentTextBoxDataFormatDropDown = new System.Windows.Forms.ComboBox();
+            this.receivedTextBoxDataFormatDropDown = new System.Windows.Forms.ComboBox();
+            this.simulateReceivingDataFormatDropDown = new System.Windows.Forms.ComboBox();
             this.simulateReceivingDataTextBox = new System.Windows.Forms.TextBox();
-            this.bothTextBoxEncodingDropDown = new System.Windows.Forms.ComboBox();
+            this.bothTextBoxDataFormatDropDown = new System.Windows.Forms.ComboBox();
             this.bothTextClearButton = new System.Windows.Forms.Button();
             this.portSettingsLabel = new System.Windows.Forms.Label();
             this.portNameLabel = new System.Windows.Forms.Label();
@@ -79,7 +79,7 @@
             this.bothTextClearOnPortInitCheckBox = new System.Windows.Forms.CheckBox();
             this.bothTextClearOnMonitoringStartCheckBox = new System.Windows.Forms.CheckBox();
             this.bothTextAutoScrollCheckBox = new System.Windows.Forms.CheckBox();
-            this.packetEndLabel = new System.Windows.Forms.Label();
+            this.packetEndingLabel = new System.Windows.Forms.Label();
             this.simulateSendingPacketEndingDropDown = new System.Windows.Forms.ComboBox();
             this.simulateReceivingPacketEndingDropDown = new System.Windows.Forms.ComboBox();
             this.mainContainer.SuspendLayout();
@@ -100,9 +100,9 @@
             this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.table.Controls.Add(this.simulateSendingEncodingDropDown, 1, 9);
+            this.table.Controls.Add(this.simulateSendingDataFormatDropDown, 1, 9);
             this.table.Controls.Add(this.sendDataButton, 1, 11);
-            this.table.Controls.Add(this.simulateSendingEncodingLabel, 0, 9);
+            this.table.Controls.Add(this.simulateSendingDataFormatLabel, 0, 9);
             this.table.Controls.Add(this.simulateSendingDataLabel, 0, 8);
             this.table.Controls.Add(this.simulateSendingLabel, 0, 7);
             this.table.Controls.Add(this.bothTextBox, 3, 1);
@@ -115,11 +115,11 @@
             this.table.Controls.Add(this.sentTextClearButton, 1, 3);
             this.table.Controls.Add(this.receivedTextClearButton, 2, 3);
             this.table.Controls.Add(this.sentTextBoxEncodingLabel, 0, 2);
-            this.table.Controls.Add(this.sentTextBoxEncodingDropDown, 1, 2);
-            this.table.Controls.Add(this.receivedTextBoxEncodingDropDown, 2, 2);
-            this.table.Controls.Add(this.simulateReceivingEncodingDropDown, 2, 9);
+            this.table.Controls.Add(this.sentTextBoxDataFormatDropDown, 1, 2);
+            this.table.Controls.Add(this.receivedTextBoxDataFormatDropDown, 2, 2);
+            this.table.Controls.Add(this.simulateReceivingDataFormatDropDown, 2, 9);
             this.table.Controls.Add(this.simulateReceivingDataTextBox, 2, 8);
-            this.table.Controls.Add(this.bothTextBoxEncodingDropDown, 3, 2);
+            this.table.Controls.Add(this.bothTextBoxDataFormatDropDown, 3, 2);
             this.table.Controls.Add(this.bothTextClearButton, 3, 3);
             this.table.Controls.Add(this.portSettingsLabel, 0, 12);
             this.table.Controls.Add(this.portNameLabel, 0, 13);
@@ -150,7 +150,7 @@
             this.table.Controls.Add(this.bothTextClearOnPortInitCheckBox, 3, 4);
             this.table.Controls.Add(this.bothTextClearOnMonitoringStartCheckBox, 3, 5);
             this.table.Controls.Add(this.bothTextAutoScrollCheckBox, 3, 6);
-            this.table.Controls.Add(this.packetEndLabel, 0, 10);
+            this.table.Controls.Add(this.packetEndingLabel, 0, 10);
             this.table.Controls.Add(this.simulateSendingPacketEndingDropDown, 1, 10);
             this.table.Controls.Add(this.simulateReceivingPacketEndingDropDown, 2, 10);
             this.table.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -180,16 +180,16 @@
             this.table.Size = new System.Drawing.Size(970, 663);
             this.table.TabIndex = 0;
             // 
-            // simulateSendingEncodingDropDown
+            // simulateSendingDataFormatDropDown
             // 
-            this.simulateSendingEncodingDropDown.Dock = System.Windows.Forms.DockStyle.Top;
-            this.simulateSendingEncodingDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.simulateSendingEncodingDropDown.FormattingEnabled = true;
-            this.simulateSendingEncodingDropDown.Location = new System.Drawing.Point(108, 454);
-            this.simulateSendingEncodingDropDown.Name = "simulateSendingEncodingDropDown";
-            this.simulateSendingEncodingDropDown.Size = new System.Drawing.Size(282, 28);
-            this.simulateSendingEncodingDropDown.TabIndex = 12;
-            this.simulateSendingEncodingDropDown.SelectedIndexChanged += new System.EventHandler(this.simulateSendingEncodingDropDown_SelectedIndexChanged);
+            this.simulateSendingDataFormatDropDown.Dock = System.Windows.Forms.DockStyle.Top;
+            this.simulateSendingDataFormatDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.simulateSendingDataFormatDropDown.FormattingEnabled = true;
+            this.simulateSendingDataFormatDropDown.Location = new System.Drawing.Point(108, 454);
+            this.simulateSendingDataFormatDropDown.Name = "simulateSendingDataFormatDropDown";
+            this.simulateSendingDataFormatDropDown.Size = new System.Drawing.Size(282, 28);
+            this.simulateSendingDataFormatDropDown.TabIndex = 12;
+            this.simulateSendingDataFormatDropDown.SelectedIndexChanged += new System.EventHandler(this.simulateSendingDataFormatDropDown_SelectedIndexChanged);
             // 
             // sendDataButton
             // 
@@ -202,17 +202,17 @@
             this.sendDataButton.UseVisualStyleBackColor = true;
             this.sendDataButton.Click += new System.EventHandler(this.sendDataButton_Click);
             // 
-            // simulateSendingEncodingLabel
+            // simulateSendingDataFormatLabel
             // 
-            this.simulateSendingEncodingLabel.AutoSize = true;
-            this.simulateSendingEncodingLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.simulateSendingEncodingLabel.Location = new System.Drawing.Point(3, 451);
-            this.simulateSendingEncodingLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.simulateSendingEncodingLabel.Name = "simulateSendingEncodingLabel";
-            this.simulateSendingEncodingLabel.Size = new System.Drawing.Size(74, 34);
-            this.simulateSendingEncodingLabel.TabIndex = 10;
-            this.simulateSendingEncodingLabel.Text = "Encoding:";
-            this.simulateSendingEncodingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.simulateSendingDataFormatLabel.AutoSize = true;
+            this.simulateSendingDataFormatLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.simulateSendingDataFormatLabel.Location = new System.Drawing.Point(3, 451);
+            this.simulateSendingDataFormatLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.simulateSendingDataFormatLabel.Name = "simulateSendingDataFormatLabel";
+            this.simulateSendingDataFormatLabel.Size = new System.Drawing.Size(74, 34);
+            this.simulateSendingDataFormatLabel.TabIndex = 10;
+            this.simulateSendingDataFormatLabel.Text = "Encoding:";
+            this.simulateSendingDataFormatLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // simulateSendingDataLabel
             // 
@@ -357,38 +357,38 @@
             this.sentTextBoxEncodingLabel.Text = "Encoding:";
             this.sentTextBoxEncodingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // sentTextBoxEncodingDropDown
+            // sentTextBoxDataFormatDropDown
             // 
-            this.sentTextBoxEncodingDropDown.Dock = System.Windows.Forms.DockStyle.Top;
-            this.sentTextBoxEncodingDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.sentTextBoxEncodingDropDown.FormattingEnabled = true;
-            this.sentTextBoxEncodingDropDown.Location = new System.Drawing.Point(108, 229);
-            this.sentTextBoxEncodingDropDown.Name = "sentTextBoxEncodingDropDown";
-            this.sentTextBoxEncodingDropDown.Size = new System.Drawing.Size(282, 28);
-            this.sentTextBoxEncodingDropDown.TabIndex = 21;
-            this.sentTextBoxEncodingDropDown.SelectedIndexChanged += new System.EventHandler(this.sentTextBoxEncodingDropDown_SelectedIndexChanged);
+            this.sentTextBoxDataFormatDropDown.Dock = System.Windows.Forms.DockStyle.Top;
+            this.sentTextBoxDataFormatDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.sentTextBoxDataFormatDropDown.FormattingEnabled = true;
+            this.sentTextBoxDataFormatDropDown.Location = new System.Drawing.Point(108, 229);
+            this.sentTextBoxDataFormatDropDown.Name = "sentTextBoxDataFormatDropDown";
+            this.sentTextBoxDataFormatDropDown.Size = new System.Drawing.Size(282, 28);
+            this.sentTextBoxDataFormatDropDown.TabIndex = 21;
+            this.sentTextBoxDataFormatDropDown.SelectedIndexChanged += new System.EventHandler(this.sentTextBoxDataFormatDropDown_SelectedIndexChanged);
             // 
-            // receivedTextBoxEncodingDropDown
+            // receivedTextBoxDataFormatDropDown
             // 
-            this.receivedTextBoxEncodingDropDown.Dock = System.Windows.Forms.DockStyle.Top;
-            this.receivedTextBoxEncodingDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.receivedTextBoxEncodingDropDown.FormattingEnabled = true;
-            this.receivedTextBoxEncodingDropDown.Location = new System.Drawing.Point(396, 229);
-            this.receivedTextBoxEncodingDropDown.Name = "receivedTextBoxEncodingDropDown";
-            this.receivedTextBoxEncodingDropDown.Size = new System.Drawing.Size(282, 28);
-            this.receivedTextBoxEncodingDropDown.TabIndex = 22;
-            this.receivedTextBoxEncodingDropDown.SelectedIndexChanged += new System.EventHandler(this.receivedTextBoxEncodingDropDown_SelectedIndexChanged);
+            this.receivedTextBoxDataFormatDropDown.Dock = System.Windows.Forms.DockStyle.Top;
+            this.receivedTextBoxDataFormatDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.receivedTextBoxDataFormatDropDown.FormattingEnabled = true;
+            this.receivedTextBoxDataFormatDropDown.Location = new System.Drawing.Point(396, 229);
+            this.receivedTextBoxDataFormatDropDown.Name = "receivedTextBoxDataFormatDropDown";
+            this.receivedTextBoxDataFormatDropDown.Size = new System.Drawing.Size(282, 28);
+            this.receivedTextBoxDataFormatDropDown.TabIndex = 22;
+            this.receivedTextBoxDataFormatDropDown.SelectedIndexChanged += new System.EventHandler(this.receivedTextBoxDataFormatDropDown_SelectedIndexChanged);
             // 
-            // simulateReceivingEncodingDropDown
+            // simulateReceivingDataFormatDropDown
             // 
-            this.simulateReceivingEncodingDropDown.Dock = System.Windows.Forms.DockStyle.Top;
-            this.simulateReceivingEncodingDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.simulateReceivingEncodingDropDown.FormattingEnabled = true;
-            this.simulateReceivingEncodingDropDown.Location = new System.Drawing.Point(396, 454);
-            this.simulateReceivingEncodingDropDown.Name = "simulateReceivingEncodingDropDown";
-            this.simulateReceivingEncodingDropDown.Size = new System.Drawing.Size(282, 28);
-            this.simulateReceivingEncodingDropDown.TabIndex = 24;
-            this.simulateReceivingEncodingDropDown.SelectedIndexChanged += new System.EventHandler(this.simulateReceivingEncodingDropDown_SelectedIndexChanged);
+            this.simulateReceivingDataFormatDropDown.Dock = System.Windows.Forms.DockStyle.Top;
+            this.simulateReceivingDataFormatDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.simulateReceivingDataFormatDropDown.FormattingEnabled = true;
+            this.simulateReceivingDataFormatDropDown.Location = new System.Drawing.Point(396, 454);
+            this.simulateReceivingDataFormatDropDown.Name = "simulateReceivingDataFormatDropDown";
+            this.simulateReceivingDataFormatDropDown.Size = new System.Drawing.Size(282, 28);
+            this.simulateReceivingDataFormatDropDown.TabIndex = 24;
+            this.simulateReceivingDataFormatDropDown.SelectedIndexChanged += new System.EventHandler(this.simulateReceivingDataFormatDropDown_SelectedIndexChanged);
             // 
             // simulateReceivingDataTextBox
             // 
@@ -399,16 +399,16 @@
             this.simulateReceivingDataTextBox.Size = new System.Drawing.Size(282, 25);
             this.simulateReceivingDataTextBox.TabIndex = 25;
             // 
-            // bothTextBoxEncodingDropDown
+            // bothTextBoxDataFormatDropDown
             // 
-            this.bothTextBoxEncodingDropDown.Dock = System.Windows.Forms.DockStyle.Top;
-            this.bothTextBoxEncodingDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.bothTextBoxEncodingDropDown.FormattingEnabled = true;
-            this.bothTextBoxEncodingDropDown.Location = new System.Drawing.Point(684, 229);
-            this.bothTextBoxEncodingDropDown.Name = "bothTextBoxEncodingDropDown";
-            this.bothTextBoxEncodingDropDown.Size = new System.Drawing.Size(283, 28);
-            this.bothTextBoxEncodingDropDown.TabIndex = 28;
-            this.bothTextBoxEncodingDropDown.SelectedIndexChanged += new System.EventHandler(this.bothTextBoxEncodingDropDown_SelectedIndexChanged);
+            this.bothTextBoxDataFormatDropDown.Dock = System.Windows.Forms.DockStyle.Top;
+            this.bothTextBoxDataFormatDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.bothTextBoxDataFormatDropDown.FormattingEnabled = true;
+            this.bothTextBoxDataFormatDropDown.Location = new System.Drawing.Point(684, 229);
+            this.bothTextBoxDataFormatDropDown.Name = "bothTextBoxDataFormatDropDown";
+            this.bothTextBoxDataFormatDropDown.Size = new System.Drawing.Size(283, 28);
+            this.bothTextBoxDataFormatDropDown.TabIndex = 28;
+            this.bothTextBoxDataFormatDropDown.SelectedIndexChanged += new System.EventHandler(this.bothTextBoxDataFormatDropDown_SelectedIndexChanged);
             // 
             // bothTextClearButton
             // 
@@ -759,35 +759,35 @@
             this.bothTextAutoScrollCheckBox.Text = "Auto";
             this.bothTextAutoScrollCheckBox.UseVisualStyleBackColor = true;
             // 
-            // packetEndLabel
+            // packetEndingLabel
             // 
-            this.packetEndLabel.AutoSize = true;
-            this.packetEndLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.packetEndLabel.Location = new System.Drawing.Point(3, 485);
-            this.packetEndLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
-            this.packetEndLabel.Name = "packetEndLabel";
-            this.packetEndLabel.Size = new System.Drawing.Size(83, 34);
-            this.packetEndLabel.TabIndex = 65;
-            this.packetEndLabel.Text = "Packet end:";
-            this.packetEndLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.packetEndingLabel.AutoSize = true;
+            this.packetEndingLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.packetEndingLabel.Location = new System.Drawing.Point(3, 485);
+            this.packetEndingLabel.Margin = new System.Windows.Forms.Padding(3, 0, 15, 0);
+            this.packetEndingLabel.Name = "packetEndingLabel";
+            this.packetEndingLabel.Size = new System.Drawing.Size(83, 34);
+            this.packetEndingLabel.TabIndex = 65;
+            this.packetEndingLabel.Text = "Packet end:";
+            this.packetEndingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // simulateSendingPacketEndDropDown
+            // simulateSendingPacketEndingDropDown
             // 
             this.simulateSendingPacketEndingDropDown.Dock = System.Windows.Forms.DockStyle.Top;
             this.simulateSendingPacketEndingDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.simulateSendingPacketEndingDropDown.FormattingEnabled = true;
             this.simulateSendingPacketEndingDropDown.Location = new System.Drawing.Point(108, 488);
-            this.simulateSendingPacketEndingDropDown.Name = "simulateSendingPacketEndDropDown";
+            this.simulateSendingPacketEndingDropDown.Name = "simulateSendingPacketEndingDropDown";
             this.simulateSendingPacketEndingDropDown.Size = new System.Drawing.Size(282, 28);
             this.simulateSendingPacketEndingDropDown.TabIndex = 66;
             // 
-            // simulateReceivingPacketEndDropDown
+            // simulateReceivingPacketEndingDropDown
             // 
             this.simulateReceivingPacketEndingDropDown.Dock = System.Windows.Forms.DockStyle.Top;
             this.simulateReceivingPacketEndingDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.simulateReceivingPacketEndingDropDown.FormattingEnabled = true;
             this.simulateReceivingPacketEndingDropDown.Location = new System.Drawing.Point(396, 488);
-            this.simulateReceivingPacketEndingDropDown.Name = "simulateReceivingPacketEndDropDown";
+            this.simulateReceivingPacketEndingDropDown.Name = "simulateReceivingPacketEndingDropDown";
             this.simulateReceivingPacketEndingDropDown.Size = new System.Drawing.Size(282, 28);
             this.simulateReceivingPacketEndingDropDown.TabIndex = 67;
             // 
@@ -817,9 +817,9 @@
         private System.Windows.Forms.Label receivedLabel;
         private System.Windows.Forms.TextBox sentTextBox;
         private System.Windows.Forms.TextBox receivedTextBox;
-        private System.Windows.Forms.ComboBox simulateSendingEncodingDropDown;
+        private System.Windows.Forms.ComboBox simulateSendingDataFormatDropDown;
         private System.Windows.Forms.Button sendDataButton;
-        private System.Windows.Forms.Label simulateSendingEncodingLabel;
+        private System.Windows.Forms.Label simulateSendingDataFormatLabel;
         private System.Windows.Forms.Label simulateSendingDataLabel;
         private System.Windows.Forms.Label simulateSendingLabel;
         private System.Windows.Forms.TextBox simulateSendingDataTextBox;
@@ -827,11 +827,11 @@
         private System.Windows.Forms.Button sentTextClearButton;
         private System.Windows.Forms.Button receivedTextClearButton;
         private System.Windows.Forms.Label sentTextBoxEncodingLabel;
-        private System.Windows.Forms.ComboBox sentTextBoxEncodingDropDown;
-        private System.Windows.Forms.ComboBox receivedTextBoxEncodingDropDown;
-        private System.Windows.Forms.ComboBox simulateReceivingEncodingDropDown;
+        private System.Windows.Forms.ComboBox sentTextBoxDataFormatDropDown;
+        private System.Windows.Forms.ComboBox receivedTextBoxDataFormatDropDown;
+        private System.Windows.Forms.ComboBox simulateReceivingDataFormatDropDown;
         private System.Windows.Forms.TextBox simulateReceivingDataTextBox;
-        private System.Windows.Forms.ComboBox bothTextBoxEncodingDropDown;
+        private System.Windows.Forms.ComboBox bothTextBoxDataFormatDropDown;
         private System.Windows.Forms.Button bothTextClearButton;
         private System.Windows.Forms.Label portSettingsLabel;
         private System.Windows.Forms.Label portNameLabel;
@@ -862,7 +862,7 @@
         private System.Windows.Forms.CheckBox bothTextClearOnPortInitCheckBox;
         private System.Windows.Forms.CheckBox bothTextClearOnMonitoringStartCheckBox;
         private System.Windows.Forms.CheckBox bothTextAutoScrollCheckBox;
-        private System.Windows.Forms.Label packetEndLabel;
+        private System.Windows.Forms.Label packetEndingLabel;
         private System.Windows.Forms.ComboBox simulateSendingPacketEndingDropDown;
         private System.Windows.Forms.ComboBox simulateReceivingPacketEndingDropDown;
     }

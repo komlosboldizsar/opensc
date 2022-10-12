@@ -37,8 +37,8 @@ namespace OpenSC.GUI.SerialPorts
             IComboBoxAdapterFactory dataFormatComboBoxAdapterFactor = new EnumComboBoxAdapterFactory<DataFormat>(dataFormatEnumTranslations);
             ComboBox[] dataFormatDropDowns = new[]
             { 
-                bothTextBoxEncodingDropDown, sentTextBoxEncodingDropDown, receivedTextBoxEncodingDropDown,
-                simulateSendingEncodingDropDown, simulateReceivingEncodingDropDown 
+                bothTextBoxDataFormatDropDown, sentTextBoxDataFormatDropDown, receivedTextBoxDataFormatDropDown,
+                simulateSendingDataFormatDropDown, simulateReceivingDataFormatDropDown 
             };
             foreach (ComboBox dataFormatDropDown in dataFormatDropDowns)
             {
@@ -210,8 +210,8 @@ namespace OpenSC.GUI.SerialPorts
             RawBytes
         }
 
-        private Encoding dataFormatToEncoding(DataFormat enum1)
-            => enum1 switch
+        private Encoding dataFormatToEncoding(DataFormat dataFormat)
+            => dataFormat switch
             {
                 DataFormat.ASCII => Encoding.ASCII,
                 DataFormat.UTF8 => Encoding.UTF8,
@@ -219,7 +219,7 @@ namespace OpenSC.GUI.SerialPorts
                 _ => null
             };
 
-        private Dictionary<DataFormat, string> dataFormatEnumTranslations = new()
+        private readonly Dictionary<DataFormat, string> dataFormatEnumTranslations = new()
         {
             { DataFormat.ASCII, "ASCII" },
             { DataFormat.UTF8, "UTF-8" },
@@ -246,7 +246,7 @@ namespace OpenSC.GUI.SerialPorts
                 _ => ""
             };
 
-        private Dictionary<PacketEnding, string> packetEndingEnumTranslations = new()
+        private readonly Dictionary<PacketEnding, string> packetEndingEnumTranslations = new()
         {
             { PacketEnding.None, "none" },
             { PacketEnding.CR, "CR (0x13)" },
@@ -281,9 +281,9 @@ namespace OpenSC.GUI.SerialPorts
         #endregion
 
         #region Show serial streams in text boxes
-        private void showSent() => showBase(sentTextBoxEncodingDropDown, sentTextBox, sentTextAutoScrollCheckBox, sentBytes);
-        private void showReceived() => showBase(receivedTextBoxEncodingDropDown, receivedTextBox, receivedTextAutoScrollCheckBox, receivedBytes);
-        private void showBoth() => showBase(bothTextBoxEncodingDropDown, bothTextBox, bothTextAutoScrollCheckBox, bothBytes);
+        private void showSent() => showBase(sentTextBoxDataFormatDropDown, sentTextBox, sentTextAutoScrollCheckBox, sentBytes);
+        private void showReceived() => showBase(receivedTextBoxDataFormatDropDown, receivedTextBox, receivedTextAutoScrollCheckBox, receivedBytes);
+        private void showBoth() => showBase(bothTextBoxDataFormatDropDown, bothTextBox, bothTextAutoScrollCheckBox, bothBytes);
         
         private void showBase(ComboBox dataFormatDropDown, TextBox textBox, CheckBox autoScrollCheckBox, List<byte> eventTotalBytes)
         {
@@ -335,9 +335,9 @@ namespace OpenSC.GUI.SerialPorts
             showBoth();
         }
 
-        private List<byte> sentBytes = new();
-        private List<byte> receivedBytes = new();
-        private List<byte> bothBytes = new();
+        private readonly List<byte> sentBytes = new();
+        private readonly List<byte> receivedBytes = new();
+        private readonly List<byte> bothBytes = new();
         #endregion
 
         #region Simulate sending/receiving
@@ -381,31 +381,31 @@ namespace OpenSC.GUI.SerialPorts
         private void bothTextClearButton_Click(object sender, EventArgs e)
             => clearBoth();
 
-        private void sendDataButton_Click(object sender, EventArgs e)
-           => sendReceiveBase(simulateSendingEncodingDropDown, simulateSendingPacketEndingDropDown, simulateSendingDataTextBox, "sending",
-               (bytes) => port.SendData(bytes, DateTime.Now + new TimeSpan(0, 0, 2)));
-
-        private void receiveDataButton_Click(object sender, EventArgs e)
-            => sendReceiveBase(simulateReceivingEncodingDropDown, simulateReceivingPacketEndingDropDown, simulateReceivingDataTextBox, "receiving",
-                (bytes) => port.SimulateReceiveBytes(bytes));
-
-        private void sentTextBoxEncodingDropDown_SelectedIndexChanged(object sender, EventArgs e)
+        private void sentTextBoxDataFormatDropDown_SelectedIndexChanged(object sender, EventArgs e)
             => showSent();
 
-        private void receivedTextBoxEncodingDropDown_SelectedIndexChanged(object sender, EventArgs e)
+        private void receivedTextBoxDataFormatDropDown_SelectedIndexChanged(object sender, EventArgs e)
             => showReceived();
 
-        private void bothTextBoxEncodingDropDown_SelectedIndexChanged(object sender, EventArgs e)
+        private void bothTextBoxDataFormatDropDown_SelectedIndexChanged(object sender, EventArgs e)
             => showBoth();
 
-        private void simulateSendingEncodingDropDown_SelectedIndexChanged(object sender, EventArgs e)
-            => enablePacketEndingDropDownByDataFormatDropDown(simulateSendingPacketEndingDropDown, simulateSendingEncodingDropDown);
+        private void simulateSendingDataFormatDropDown_SelectedIndexChanged(object sender, EventArgs e)
+            => enablePacketEndingDropDownByDataFormatDropDown(simulateSendingPacketEndingDropDown, simulateSendingDataFormatDropDown);
 
-        private void simulateReceivingEncodingDropDown_SelectedIndexChanged(object sender, EventArgs e)
-            => enablePacketEndingDropDownByDataFormatDropDown(simulateReceivingPacketEndingDropDown, simulateReceivingEncodingDropDown);
+        private void simulateReceivingDataFormatDropDown_SelectedIndexChanged(object sender, EventArgs e)
+            => enablePacketEndingDropDownByDataFormatDropDown(simulateReceivingPacketEndingDropDown, simulateReceivingDataFormatDropDown);
 
         private void enablePacketEndingDropDownByDataFormatDropDown(ComboBox packetEndingDropDown, ComboBox dataFormatDropDown)
             => packetEndingDropDown.Enabled = !DataFormat.RawBytes.Equals(dataFormatDropDown.SelectedValue);
+
+        private void sendDataButton_Click(object sender, EventArgs e)
+           => sendReceiveBase(simulateSendingDataFormatDropDown, simulateSendingPacketEndingDropDown, simulateSendingDataTextBox, "sending",
+               (bytes) => port.SendData(bytes, DateTime.Now + new TimeSpan(0, 0, 2)));
+
+        private void receiveDataButton_Click(object sender, EventArgs e)
+            => sendReceiveBase(simulateReceivingDataFormatDropDown, simulateReceivingPacketEndingDropDown, simulateReceivingDataTextBox, "receiving",
+                (bytes) => port.SimulateReceiveBytes(bytes));
 
         private void initDeinitPortButton_Click(object sender, EventArgs e)
         {
