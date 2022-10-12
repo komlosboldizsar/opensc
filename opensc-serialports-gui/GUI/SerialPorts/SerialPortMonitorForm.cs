@@ -1,4 +1,5 @@
-﻿using OpenSC.GUI.GeneralComponents.DropDowns;
+﻿using OpenSC.Extensions;
+using OpenSC.GUI.GeneralComponents.DropDowns;
 using OpenSC.Model.SerialPorts;
 using System;
 using System.Collections.Generic;
@@ -296,7 +297,7 @@ namespace OpenSC.GUI.SerialPorts
             byte[] eventTotalBytesArray = eventTotalBytes.ToArray();
             if (dataFormat == DataFormat.RawBytes)
             {
-                textBox.Text = byteArrayToHexString(eventTotalBytesArray, true);
+                textBox.Text = eventTotalBytesArray.ToHexString(true);
                 autoScroll(textBox, autoScrollCheckBox);
                 return;
             }
@@ -349,7 +350,7 @@ namespace OpenSC.GUI.SerialPorts
             {
                 try
                 {
-                    action(hexStringToByteArray(text));
+                    action(text.HexToBytes());
                 }
                 catch (ArgumentException ex)
                 {
@@ -425,77 +426,6 @@ namespace OpenSC.GUI.SerialPorts
         private static readonly Color COLOR_OFF = Color.DarkRed;
         private static readonly Color COLOR_ON = Color.DarkGreen;
         private static readonly Color COLOR_UNKNOWN = SystemColors.ControlText;
-        #endregion
-
-        #region Bytes to hex
-        private static string byteArrayToHexString(byte[] bytes, bool spaces = false)
-        {
-            var lookup32 = _lookupByteToHex;
-            char[] result = new char[bytes.Length * (spaces ? 3 : 2)];
-            for (int i = 0, t = 0; i < bytes.Length; i++)
-            {
-                uint charValue = lookup32[bytes[i]];
-                result[t++] = (char)charValue;
-                result[t++] = (char)(charValue >> 16);
-                if (spaces)
-                    result[t++] = ' ';
-            }
-            return new string(result);
-        }
-
-        private static readonly uint[] _lookupByteToHex = _createLookupByteToHex();
-
-        private static uint[] _createLookupByteToHex()
-        {
-            uint[] result = new uint[256];
-            for (int i = 0; i < 256; i++)
-            {
-                string s = i.ToString("X2");
-                result[i] = ((uint)s[0]) + ((uint)s[1] << 16);
-            }
-            return result;
-        }
-        #endregion
-
-        #region Hex to bytes
-        private byte[] hexStringToByteArray(string text)
-        {
-            text = text.Replace(" ", "").Replace("\t", "");
-            int textLength = text.Length;
-            if (textLength % 2 != 0)
-                throw new ArgumentException("Odd number of hex characters", nameof(text));
-            int bytesLength = textLength / 2;
-            byte[] byteArray = new byte[bytesLength];
-            for (int b = 0, c = 0; b < byteArray.Length; b++)
-            {
-                uint nibbleH = _lookupHexToUint[text[c++]];
-                uint nibbleL = _lookupHexToUint[text[c++]];
-                if ((nibbleH == LUT_HEXTOUINT_INVALID) || (nibbleL == LUT_HEXTOUINT_INVALID))
-                    throw new ArgumentException($"Invalid hex character", nameof(text));
-                byteArray[b] = (byte)((nibbleH << 4) + nibbleL);
-            }
-            return byteArray;
-        }
-
-        private const int LUT_HEXTOUINT_INVALID = 255;
-        private static readonly uint[] _lookupHexToUint = _createLookupHexToUint();
-
-        private static uint[] _createLookupHexToUint()
-        {
-            uint[] lut = new uint[256];
-            for (int chr = 0; chr < 256; chr++)
-            {
-                if ((chr >= '0') && (chr <= '9'))
-                    lut[chr] = (uint)(chr - '0');
-                else if ((chr >= 'a') && (chr <= 'f'))
-                    lut[chr] = (uint)(chr - 'a' + 10);
-                else if ((chr >= 'A') && (chr <= 'F'))
-                    lut[chr] = (uint)(chr - 'A' + 10);
-                else
-                    lut[chr] = LUT_HEXTOUINT_INVALID;
-            }
-            return lut;
-        }
         #endregion
 
     }
