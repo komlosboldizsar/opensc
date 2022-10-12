@@ -51,7 +51,7 @@ namespace OpenSC.Model.Routers.Leitch
         {
             if (newValue != null)
             {
-                newValue.ReceivedDataAsciiString += receivedLineFromPort;
+                newValue.ReceivedDataAsciiLine += receivedLineFromPort;
                 newValue.InitializedChanged += portInitializedChangedHandler;
                 initSerial();
             }
@@ -148,6 +148,7 @@ namespace OpenSC.Model.Routers.Leitch
 
         private void receivedLineFromPort(SerialPort port, string asciiLine)
         {
+            LogDispatcher.W(LOG_TAG, "RECEIVED FROM SERIAL: " + asciiLine);
             if (string.IsNullOrWhiteSpace(asciiLine))
                 return;
             if (asciiLine.Length < 2)
@@ -172,7 +173,7 @@ namespace OpenSC.Model.Routers.Leitch
                 int levelIndex = int.Parse(statusString[2].ToString(), System.Globalization.NumberStyles.HexNumber);
                 if (levelIndex != level)
                     return;
-                string destinationSourceString = statusString.Substring(3);
+                string destinationSourceString = statusString[3..];
                 string[] destinationSourceStringParts = destinationSourceString.Split(',');
                 int sourceIndex = int.Parse(destinationSourceStringParts[1], System.Globalization.NumberStyles.HexNumber);
                 int destinationIndex = int.Parse(destinationSourceStringParts[0], System.Globalization.NumberStyles.HexNumber);
