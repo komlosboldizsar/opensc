@@ -90,7 +90,7 @@
             // 
             this.mainContainer.Controls.Add(this.table);
             this.mainContainer.Padding = new System.Windows.Forms.Padding(10);
-            this.mainContainer.Size = new System.Drawing.Size(990, 683);
+            this.mainContainer.Size = new System.Drawing.Size(990, 711);
             // 
             // table
             // 
@@ -177,7 +177,7 @@
             this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.table.Size = new System.Drawing.Size(970, 663);
+            this.table.Size = new System.Drawing.Size(970, 691);
             this.table.TabIndex = 0;
             // 
             // simulateSendingDataFormatDropDown
@@ -795,7 +795,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(990, 753);
+            this.ClientSize = new System.Drawing.Size(990, 781);
             this.HeaderText = "Serial port monitor";
             this.Margin = new System.Windows.Forms.Padding(3, 6, 3, 6);
             this.MinimumSize = new System.Drawing.Size(500, 538);

@@ -45,7 +45,7 @@ namespace OpenSC.GUI.SerialPorts
                 dataFormatDropDown.GetAdapterFromFactoryAsDataSource(dataFormatComboBoxAdapterFactor);
                 dataFormatDropDown.SelectByValue(DataFormat.ASCII);
             }
-            IComboBoxAdapterFactory packetEndingComboBoxAdapterFactor = new EnumComboBoxAdapterFactory<PacketEnding>(dataFormatEnumTranslations);
+            IComboBoxAdapterFactory packetEndingComboBoxAdapterFactor = new EnumComboBoxAdapterFactory<PacketEnding>(packetEndingEnumTranslations);
             ComboBox[] packetEndingDropDowns = new[]
             {
                 simulateSendingPacketEndingDropDown, simulateReceivingPacketEndingDropDown
