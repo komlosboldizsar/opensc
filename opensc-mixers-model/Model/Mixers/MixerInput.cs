@@ -161,9 +161,9 @@ namespace OpenSC.Model.Mixers
         private void updateGreenTally()
         {
             if (greenTally && Mixer.GivesGreenTallyToSources)
-                source?.RedTally.Give(myRecursionChain);
+                source?.GreenTally.Give(myRecursionChain);
             else
-                source?.RedTally.Revoke(myRecursionChain);
+                source?.GreenTally.Revoke(myRecursionChain);
         }
         #endregion
 
