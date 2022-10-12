@@ -79,7 +79,7 @@ namespace OpenSC.Model.Routers.Leitch
         {
             if (oldValue != null)
             {
-                oldValue.ReceivedDataAsciiString -= receivedLineFromPort;
+                oldValue.ReceivedDataAsciiLine -= receivedLineFromPort;
                 oldValue.InitializedChanged -= portInitializedChanged;
             }
         }
@@ -88,7 +88,7 @@ namespace OpenSC.Model.Routers.Leitch
         {
             if (newValue != null)
             {
-                newValue.ReceivedDataAsciiString += receivedLineFromPort;
+                newValue.ReceivedDataAsciiLine += receivedLineFromPort;
                 newValue.InitializedChanged += portInitializedChanged;
                 if (newValue.Initialized)
                     reportEverything();
@@ -170,8 +170,8 @@ namespace OpenSC.Model.Routers.Leitch
                 return;
             if (line.Length < 2)
                 return;
-            string details = line.Substring(2);
-            switch (line.Substring(0, 2))
+            string details = line[2..];
+            switch (line[..2])
             {
                 case "z:":
                     handleResetLevelsMessage(details);
