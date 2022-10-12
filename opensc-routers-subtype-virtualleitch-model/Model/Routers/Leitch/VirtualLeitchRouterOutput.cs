@@ -49,8 +49,8 @@ namespace OpenSC.Model.Routers.Leitch
 
         public int _associatedInputIndex;
 
-        private long lockProtectOwnerPanelId = -1;
-        public long LockProtectOwnerPanelId
+        private int lockProtectOwnerPanelId = -1;
+        public int LockProtectOwnerPanelId
         {
             get => lockProtectOwnerPanelId;
             internal set
