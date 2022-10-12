@@ -161,6 +161,12 @@ namespace OpenSC.GUI
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            string messageBoxText = "Are you sure you want to close and stop the studio controller application?\nClosing this window also stops the background processes.";
+            if (MessageBox.Show(messageBoxText, "Closing OpenSC", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+            {
+                e.Cancel = true;
+                return;
+            }
             ApplicationEvents.FireExitingEvent(this, e);
             MasterDatabase.Instance.SaveEverything();
         }
