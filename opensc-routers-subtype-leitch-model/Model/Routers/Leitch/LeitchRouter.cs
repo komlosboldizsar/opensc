@@ -148,7 +148,6 @@ namespace OpenSC.Model.Routers.Leitch
 
         private void receivedLineFromPort(SerialPort port, string asciiLine)
         {
-            LogDispatcher.W(LOG_TAG, "RECEIVED FROM SERIAL: " + asciiLine);
             if (string.IsNullOrWhiteSpace(asciiLine))
                 return;
             if (asciiLine.Length < 2)
