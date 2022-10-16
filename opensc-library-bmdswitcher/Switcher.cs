@@ -2,6 +2,7 @@
 using BMDSwitcherAPI;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace BMD.Switcher
@@ -97,47 +98,12 @@ namespace BMD.Switcher
 
         private void switcherConnectedHandler(IBMDSwitcher connectedSwitcher)
         {
-
             ApiSwitcher = connectedSwitcher;
             ApiSwitcher.AddCallback(this);
-
-            mixEffectBlocks.Clear();
-            int mixEffectBlockIndex = 0;
-            foreach (IBMDSwitcherMixEffectBlock apiMixEffectBlock in ApiSwitcher.GetAllMixEffectBlocks())
-            {
-                mixEffectBlocks.Add(new MixEffectBlock(this, apiMixEffectBlock, mixEffectBlockIndex));
-                mixEffectBlockIndex++;
-            }
-
-            sources.Clear();
-            foreach (IBMDSwitcherInput apiPort in ApiSwitcher.GetPorts())
-            {
-                apiPort.GetPortType(out _BMDSwitcherPortType portType);
-                switch (portType)
-                {
-                    case _BMDSwitcherPortType.bmdSwitcherPortTypeExternal:
-                    case _BMDSwitcherPortType.bmdSwitcherPortTypeBlack:
-                    case _BMDSwitcherPortType.bmdSwitcherPortTypeColorBars:
-                    case _BMDSwitcherPortType.bmdSwitcherPortTypeColorGenerator:
-                    case _BMDSwitcherPortType.bmdSwitcherPortTypeMediaPlayerFill:
-                    case _BMDSwitcherPortType.bmdSwitcherPortTypeMediaPlayerCut:
-                    case _BMDSwitcherPortType.bmdSwitcherPortTypeSuperSource:
-                        Source source = new Source(this, apiPort);
-                        sources.Add(source.ID, source);
-                        break;
-                    case _BMDSwitcherPortType.bmdSwitcherPortTypeAuxOutput:
-                        AuxOutput auxOutput = new AuxOutput(this, apiPort as IBMDSwitcherInputAux, 0);
-                        break;
-                    case _BMDSwitcherPortType.bmdSwitcherPortTypeKeyCutOutput:
-                        break;
-                    case _BMDSwitcherPortType.bmdSwitcherPortTypeMixEffectBlockOutput:
-                        break;
-                }
-                
-            }
-
+            lookupMixEffectBlocks();
+            lookupSources();
+            lookupMultiviews();
             Connected = true;
-
         }
 
         private void switcherDisconnectedHandler()
@@ -168,6 +134,17 @@ namespace BMD.Switcher
                 return null;
             return mixEffectBlocks[index];
         }
+
+        private void lookupMixEffectBlocks()
+        {
+            mixEffectBlocks.Clear();
+            int mixEffectBlockIndex = 0;
+            foreach (IBMDSwitcherMixEffectBlock apiMixEffectBlock in ApiSwitcher.GetAllMixEffectBlocks())
+            {
+                mixEffectBlocks.Add(new MixEffectBlock(this, apiMixEffectBlock, mixEffectBlockIndex));
+                mixEffectBlockIndex++;
+            }
+        }
         #endregion
 
         #region Sources (external inputs, media players, etc.)
@@ -182,6 +159,36 @@ namespace BMD.Switcher
 
         public Dictionary<long, Source> GetSources()
             => sources;
+
+        private void lookupSources()
+        {
+            sources.Clear();
+            foreach (IBMDSwitcherInput apiPort in ApiSwitcher.GetPorts())
+            {
+                apiPort.GetPortType(out _BMDSwitcherPortType portType);
+                switch (portType)
+                {
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeExternal:
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeBlack:
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeColorBars:
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeColorGenerator:
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeMediaPlayerFill:
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeMediaPlayerCut:
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeSuperSource:
+                        Source source = new Source(this, apiPort);
+                        sources.Add(source.ID, source);
+                        break;
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeAuxOutput:
+                        AuxOutput auxOutput = new AuxOutput(this, apiPort as IBMDSwitcherInputAux, 0);
+                        break;
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeKeyCutOutput:
+                        break;
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeMixEffectBlockOutput:
+                        break;
+                }
+
+            }
+        }
         #endregion
 
         #region Aux outputs
@@ -192,6 +199,30 @@ namespace BMD.Switcher
             if (index >= auxOutputs.Count)
                 throw new NotExistingAuxOutputException();
             return auxOutputs[index];
+        }
+        #endregion
+
+        #region Multiviews
+        private readonly List<Multiview> multiviews = new();
+
+        public Multiview GetMultiview(int index)
+        {
+            if (index >= multiviews.Count)
+                return null;
+            return multiviews[index];
+        }
+
+        public List<Multiview> GetAllMultiviews() => multiviews;
+
+        private void lookupMultiviews()
+        {
+            multiviews.Clear();
+            int multiviewIndex = 0;
+            foreach (IBMDSwitcherMultiView apiMultiview in ApiSwitcher.GetAllMultiviews())
+            {
+                multiviews.Add(new Multiview(this, apiMultiview, multiviewIndex));
+                multiviewIndex++;
+            }
         }
         #endregion
 
