@@ -112,34 +112,25 @@ namespace OpenSC.Model.Routers.BmdAtemMv
 
         protected override void queryAllStates()
         {
-            RouterInput unknownInput = getUnknownInput();
             int multiviewIndex = 0;
             foreach (Multiview multiview in multiviews)
             {
                 long[] windowSourceIds = multiview.GetAllWindowSourceIds();
                 for (int windowIndex = 0; windowIndex < windowSourceIds.Length; windowIndex++)
-                    handleWindowSourceChange(multiviewIndex, windowIndex, windowSourceIds[windowIndex], true, unknownInput);
+                    handleWindowSourceChange(multiviewIndex, windowIndex, windowSourceIds[windowIndex]);
                 multiviewIndex++;
             }
         }
 
-        private void handleWindowSourceChange(int multiviewIndex, int windowIndex, long sourceId, bool unknownInputGiven = false, RouterInput unknownInput = null)
+        private void handleWindowSourceChange(int multiviewIndex, int windowIndex, long sourceId)
         {
-            if (!unknownInputGiven)
-                unknownInput = getUnknownInput();
             int outputIndex = multiviewIndex * 100 + windowIndex;
             RouterOutput output = Outputs.FirstOrDefault(o => o.Index == outputIndex);
-            if (output != null)
-            {
-                RouterInput input = Inputs.FirstOrDefault(i => i.Index == sourceId);
-                output.AssignSource(input ?? unknownInput);
-            }
+            if (output == null)
+                return;
+            RouterInput input = Inputs.FirstOrDefault(i => i.Index == sourceId);
+            output.AssignSource(input);
         }
-
-        private RouterInput getUnknownInput()
-            => Inputs.FirstOrDefault(i => i.Index == UNKNOWN_INPUT_INDEX);
-
-        public const int UNKNOWN_INPUT_INDEX = 999;
 
         protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
             => throw new NotImplementedException();
