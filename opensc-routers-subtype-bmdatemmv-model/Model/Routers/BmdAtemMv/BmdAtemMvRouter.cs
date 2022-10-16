@@ -40,7 +40,10 @@ namespace OpenSC.Model.Routers.BmdAtemMv
         private void _mixer_beforeChange(Mixer oldValue, Mixer newValue, BeforeChangePropertyArgs args)
         {
             if (oldValue != null)
+            {
                 oldValue.StateChanged -= Mixer_StateChanged;
+                oldValue.StateStringChanged -= Mixer_StateStringChanged;
+            }
         }
 
         private void _mixer_afterChange(Mixer oldValue, Mixer newValue)
@@ -48,15 +51,52 @@ namespace OpenSC.Model.Routers.BmdAtemMv
             if (newValue != null)
             {
                 newValue.StateChanged += Mixer_StateChanged;
+                newValue.StateStringChanged += Mixer_StateStringChanged;
+                updateFullState();
                 getMultiviews();
+            }
+            else
+            {
+                updateFullState();
             }
         }
 
         private void Mixer_StateChanged(Mixer item, MixerState oldValue, MixerState newValue)
-            => getMultiviews();
+        {
+            updateState();
+            getMultiviews();
+        }
+
+        private void Mixer_StateStringChanged(Mixer item, string oldValue, string newValue)
+            => updateStateString();
 
         private void Multiview_WindowSourceChanged(BMDSwitcherAPI.IBMDSwitcherMultiView apiMultiview, Multiview multiview, uint windowIndex, long sourceId)
             => handleWindowSourceChange(multiview.Index, (int)windowIndex, sourceId);
+
+        private void updateState()
+        {
+            if (mixer == null)
+            {
+                State = RouterState.Unknown;
+                return;
+            }
+            State = mixer.State switch
+            {
+                MixerState.Ok => RouterState.Ok,
+                MixerState.Warning => RouterState.Warning,
+                MixerState.Error => RouterState.Error,
+                _ => RouterState.Unknown
+            };
+        }
+
+        private void updateStateString()
+            => StateString = (mixer == null) ? "no mixer" : mixer.StateString;
+
+        private void updateFullState()
+        {
+            updateState();
+            updateStateString();
+        }
         #endregion
 
         #region Multiviews of mixer
