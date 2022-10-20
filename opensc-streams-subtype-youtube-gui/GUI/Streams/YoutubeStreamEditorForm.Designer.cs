@@ -32,7 +32,7 @@
             this.youtubeStreamDataGroupBox = new System.Windows.Forms.GroupBox();
             this.youtubeStreamDataTable = new System.Windows.Forms.TableLayoutPanel();
             this.videoIdLabel = new System.Windows.Forms.Label();
-            this.videoIdTextBox = new System.Windows.Forms.TextBox();
+            this.videoIdTextBox = new OpenSC.GUI.Streams.StreamIdPasteTextBox();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.youtubeStreamDataPanel.SuspendLayout();
@@ -45,13 +45,13 @@
             this.customElementsPanel.Controls.Add(this.youtubeStreamDataPanel);
             this.customElementsPanel.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.customElementsPanel.Padding = new System.Windows.Forms.Padding(10, 24, 10, 0);
-            this.customElementsPanel.Size = new System.Drawing.Size(482, 296);
+            this.customElementsPanel.Size = new System.Drawing.Size(482, 329);
             this.customElementsPanel.Controls.SetChildIndex(this.youtubeStreamDataPanel, 0);
             // 
             // mainContainer
             // 
             this.mainContainer.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
-            this.mainContainer.Size = new System.Drawing.Size(482, 382);
+            this.mainContainer.Size = new System.Drawing.Size(482, 415);
             // 
             // youtubeStreamDataPanel
             // 
@@ -59,7 +59,7 @@
             this.youtubeStreamDataPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.youtubeStreamDataPanel.Controls.Add(this.youtubeStreamDataGroupBox);
             this.youtubeStreamDataPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.youtubeStreamDataPanel.Location = new System.Drawing.Point(10, 199);
+            this.youtubeStreamDataPanel.Location = new System.Drawing.Point(10, 220);
             this.youtubeStreamDataPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.youtubeStreamDataPanel.Name = "youtubeStreamDataPanel";
             this.youtubeStreamDataPanel.Size = new System.Drawing.Size(462, 75);
@@ -123,7 +123,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(482, 452);
+            this.ClientSize = new System.Drawing.Size(482, 485);
             this.DeleteButtonVisible = true;
             this.Margin = new System.Windows.Forms.Padding(3, 12, 3, 12);
             this.MinimumSize = new System.Drawing.Size(500, 421);
@@ -148,6 +148,6 @@
         private System.Windows.Forms.GroupBox youtubeStreamDataGroupBox;
         private System.Windows.Forms.TableLayoutPanel youtubeStreamDataTable;
         private System.Windows.Forms.Label videoIdLabel;
-        private System.Windows.Forms.TextBox videoIdTextBox;
+        private StreamIdPasteTextBox videoIdTextBox;
     }
 }
