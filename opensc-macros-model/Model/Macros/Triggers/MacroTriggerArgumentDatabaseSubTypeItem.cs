@@ -18,7 +18,7 @@ namespace OpenSC.Model.Macros
 
         public override object GetObjectByKey(string key, object[] previousArgumentObjects) => base.GetObjectByKey(key, previousArgumentObjects) as TModelSubType;
         public override string GetKeyByObject(object obj) => (obj as TModelSubType)?.ID.ToString() ?? "0";
-        public override IEnumerable<object> GetPossibilities(object[] previousArgumentValues) => GetPossibilities(previousArgumentValues).OfType<TModelSubType>();
+        public override IEnumerable<object> GetPossibilities(object[] previousArgumentValues) => base.GetPossibilities(previousArgumentValues).OfType<TModelSubType>();
 
     }
 }
