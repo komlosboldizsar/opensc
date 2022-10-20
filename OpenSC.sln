@@ -220,7 +220,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-core-model-sourcegen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routers-subtype-bmdatemmv-model", "opensc-routers-subtype-bmdatemmv-model\opensc-routers-subtype-bmdatemmv-model.csproj", "{4CBF1C5A-F92D-4B9F-A03C-E7ABE795F93E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-routers-subtype-bmdatemmv-gui", "opensc-routers-subtype-bmdatemmv-gui\opensc-routers-subtype-bmdatemmv-gui.csproj", "{45168E85-5EFB-45D8-9782-54C6152750AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routers-subtype-bmdatemmv-gui", "opensc-routers-subtype-bmdatemmv-gui\opensc-routers-subtype-bmdatemmv-gui.csproj", "{45168E85-5EFB-45D8-9782-54C6152750AD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-salvos-bridge-macros", "opensc-salvos-bridge-macros\opensc-salvos-bridge-macros.csproj", "{7B3CA8B7-5E98-41F1-9B85-C233BAC5C788}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1480,6 +1482,18 @@ Global
 		{45168E85-5EFB-45D8-9782-54C6152750AD}.Release|x64.Build.0 = Release|Any CPU
 		{45168E85-5EFB-45D8-9782-54C6152750AD}.Release|x86.ActiveCfg = Release|Any CPU
 		{45168E85-5EFB-45D8-9782-54C6152750AD}.Release|x86.Build.0 = Release|Any CPU
+		{7B3CA8B7-5E98-41F1-9B85-C233BAC5C788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B3CA8B7-5E98-41F1-9B85-C233BAC5C788}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B3CA8B7-5E98-41F1-9B85-C233BAC5C788}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7B3CA8B7-5E98-41F1-9B85-C233BAC5C788}.Debug|x64.Build.0 = Debug|Any CPU
+		{7B3CA8B7-5E98-41F1-9B85-C233BAC5C788}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7B3CA8B7-5E98-41F1-9B85-C233BAC5C788}.Debug|x86.Build.0 = Debug|Any CPU
+		{7B3CA8B7-5E98-41F1-9B85-C233BAC5C788}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B3CA8B7-5E98-41F1-9B85-C233BAC5C788}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B3CA8B7-5E98-41F1-9B85-C233BAC5C788}.Release|x64.ActiveCfg = Release|Any CPU
+		{7B3CA8B7-5E98-41F1-9B85-C233BAC5C788}.Release|x64.Build.0 = Release|Any CPU
+		{7B3CA8B7-5E98-41F1-9B85-C233BAC5C788}.Release|x86.ActiveCfg = Release|Any CPU
+		{7B3CA8B7-5E98-41F1-9B85-C233BAC5C788}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
