@@ -165,6 +165,8 @@ namespace BMD.Switcher
             sources.Clear();
             foreach (IBMDSwitcherInput apiPort in ApiSwitcher.GetPorts())
             {
+                Source source = new Source(this, apiPort);
+                sources.Add(source.ID, source);
                 apiPort.GetPortType(out _BMDSwitcherPortType portType);
                 switch (portType)
                 {
@@ -175,15 +177,11 @@ namespace BMD.Switcher
                     case _BMDSwitcherPortType.bmdSwitcherPortTypeMediaPlayerFill:
                     case _BMDSwitcherPortType.bmdSwitcherPortTypeMediaPlayerCut:
                     case _BMDSwitcherPortType.bmdSwitcherPortTypeSuperSource:
-                        Source source = new Source(this, apiPort);
-                        sources.Add(source.ID, source);
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeKeyCutOutput:
+                    case _BMDSwitcherPortType.bmdSwitcherPortTypeMixEffectBlockOutput:
                         break;
                     case _BMDSwitcherPortType.bmdSwitcherPortTypeAuxOutput:
                         AuxOutput auxOutput = new AuxOutput(this, apiPort as IBMDSwitcherInputAux, 0);
-                        break;
-                    case _BMDSwitcherPortType.bmdSwitcherPortTypeKeyCutOutput:
-                        break;
-                    case _BMDSwitcherPortType.bmdSwitcherPortTypeMixEffectBlockOutput:
                         break;
                 }
 
