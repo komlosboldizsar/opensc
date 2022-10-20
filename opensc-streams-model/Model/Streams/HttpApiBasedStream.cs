@@ -95,16 +95,22 @@ namespace OpenSC.Model.Streams
 
         private void update1sTick()
         {
-            if (refreshEnabled && ((secondsSinceLastUpdate == -1) || (secondsSinceLastUpdate >= refreshRate)))
+            if (_updateImmediately || (refreshEnabled && ((secondsSinceLastUpdate == -1) || (secondsSinceLastUpdate >= refreshRate))))
             {
                 doHttpRequest();
                 secondsSinceLastUpdate = 0;
+                _updateImmediately = false;
             }
             else
             {
                 secondsSinceLastUpdate++;
             }
         }
+
+        public void UpdateImmediately()
+            => _updateImmediately = true;
+
+        private bool _updateImmediately = false;
         #endregion
 
         #region Update HTTP request and response processing
