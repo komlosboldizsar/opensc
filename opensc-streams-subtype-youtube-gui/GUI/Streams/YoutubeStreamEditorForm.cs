@@ -75,10 +75,13 @@ namespace OpenSC.GUI.Streams
                 if (YOUTUBE_URI_REGEX_START.IsMatch(clipboardTextWithProtocol))
                     clipboardTextWithProtocol = $"https://{clipboardTextWithProtocol}";
                 Uri uri = new(clipboardTextWithProtocol);
-                string videoId = HttpUtility.ParseQueryString(uri.Query).Get("v");
-                if (!YOUTUBE_URI_REGEX_FULL.IsMatch(uri.Host) || (uri.LocalPath != "/watch") || (videoId == null) || !VIDEO_ID_REGEX.IsMatch(videoId))
-                    throw new StreamIdPasteTextBox.PastedTextConversionException($"Pasted text [{clipboardText}] is not a valid YouTube video URL.");
-                return videoId;
+                string videoId = convertUriPublic(uri);
+                if (videoId != null)
+                    return videoId;
+                videoId = convertUriStudio(uri);
+                if (videoId != null)
+                    return videoId;
+                throw new StreamIdPasteTextBox.PastedTextConversionException($"Pasted text [{clipboardText}] is not a valid YouTube video URL.");
             }
             catch (UriFormatException)
             {
@@ -87,9 +90,40 @@ namespace OpenSC.GUI.Streams
         }
 
         private readonly Regex VIDEO_ID_REGEX = new("^[a-zA-Z0-9_]{11}$");
-        private const string YOUTUBE_URI_REGEX_STR = "((www|m)\\.)?youtube.com";
-        private readonly Regex YOUTUBE_URI_REGEX_START = new("^" + YOUTUBE_URI_REGEX_STR);
-        private readonly Regex YOUTUBE_URI_REGEX_FULL = new("^" + YOUTUBE_URI_REGEX_STR + "$");
+        private readonly Regex YOUTUBE_URI_REGEX_START = new("^((www|m|studio)\\.)?youtube.com");
+
+        private string convertUriPublic(Uri uri)
+        {
+            string videoId = HttpUtility.ParseQueryString(uri.Query).Get("v");
+            if (!YOUTUBE_PUBLIC_HOST_REGEX.IsMatch(uri.Host))
+                return null;
+            if (uri.LocalPath != "/watch")
+                return null;
+            if (videoId == null)
+                return null;
+            if (!VIDEO_ID_REGEX.IsMatch(videoId))
+                return null;
+            return videoId;
+        }
+
+        private readonly Regex YOUTUBE_PUBLIC_HOST_REGEX = new("^((www|m)\\.)?youtube.com$");
+
+        private string convertUriStudio(Uri uri)
+        {
+            if (uri.Host != YOUTUBE_STUDIO_HOST)
+                return null;
+            if (uri.Segments.Length < 3)
+                return null;
+            if (uri.Segments[1] != "video/")
+                return null;
+            string videoId = uri.Segments[2][0..11];
+            if (!VIDEO_ID_REGEX.IsMatch(videoId))
+                return null;
+            return videoId;
+        }
+
+        private const string YOUTUBE_STUDIO_HOST = "studio.youtube.com";
+
 
     }
 }
