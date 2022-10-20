@@ -218,6 +218,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Global", "Global", "{AFCB9C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-core-model-sourcegenerators", "opensc-core-model-sourcegenerators\opensc-core-model-sourcegenerators.csproj", "{49A5E97F-2CEB-4ED5-8D70-488964C590FD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "opensc-routers-subtype-bmdatemmv-model", "opensc-routers-subtype-bmdatemmv-model\opensc-routers-subtype-bmdatemmv-model.csproj", "{4CBF1C5A-F92D-4B9F-A03C-E7ABE795F93E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opensc-routers-subtype-bmdatemmv-gui", "opensc-routers-subtype-bmdatemmv-gui\opensc-routers-subtype-bmdatemmv-gui.csproj", "{45168E85-5EFB-45D8-9782-54C6152750AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1452,6 +1456,30 @@ Global
 		{49A5E97F-2CEB-4ED5-8D70-488964C590FD}.Release|x64.Build.0 = Release|Any CPU
 		{49A5E97F-2CEB-4ED5-8D70-488964C590FD}.Release|x86.ActiveCfg = Release|Any CPU
 		{49A5E97F-2CEB-4ED5-8D70-488964C590FD}.Release|x86.Build.0 = Release|Any CPU
+		{4CBF1C5A-F92D-4B9F-A03C-E7ABE795F93E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CBF1C5A-F92D-4B9F-A03C-E7ABE795F93E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CBF1C5A-F92D-4B9F-A03C-E7ABE795F93E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4CBF1C5A-F92D-4B9F-A03C-E7ABE795F93E}.Debug|x64.Build.0 = Debug|Any CPU
+		{4CBF1C5A-F92D-4B9F-A03C-E7ABE795F93E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4CBF1C5A-F92D-4B9F-A03C-E7ABE795F93E}.Debug|x86.Build.0 = Debug|Any CPU
+		{4CBF1C5A-F92D-4B9F-A03C-E7ABE795F93E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CBF1C5A-F92D-4B9F-A03C-E7ABE795F93E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CBF1C5A-F92D-4B9F-A03C-E7ABE795F93E}.Release|x64.ActiveCfg = Release|Any CPU
+		{4CBF1C5A-F92D-4B9F-A03C-E7ABE795F93E}.Release|x64.Build.0 = Release|Any CPU
+		{4CBF1C5A-F92D-4B9F-A03C-E7ABE795F93E}.Release|x86.ActiveCfg = Release|Any CPU
+		{4CBF1C5A-F92D-4B9F-A03C-E7ABE795F93E}.Release|x86.Build.0 = Release|Any CPU
+		{45168E85-5EFB-45D8-9782-54C6152750AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45168E85-5EFB-45D8-9782-54C6152750AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45168E85-5EFB-45D8-9782-54C6152750AD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{45168E85-5EFB-45D8-9782-54C6152750AD}.Debug|x64.Build.0 = Debug|Any CPU
+		{45168E85-5EFB-45D8-9782-54C6152750AD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{45168E85-5EFB-45D8-9782-54C6152750AD}.Debug|x86.Build.0 = Debug|Any CPU
+		{45168E85-5EFB-45D8-9782-54C6152750AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45168E85-5EFB-45D8-9782-54C6152750AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45168E85-5EFB-45D8-9782-54C6152750AD}.Release|x64.ActiveCfg = Release|Any CPU
+		{45168E85-5EFB-45D8-9782-54C6152750AD}.Release|x64.Build.0 = Release|Any CPU
+		{45168E85-5EFB-45D8-9782-54C6152750AD}.Release|x86.ActiveCfg = Release|Any CPU
+		{45168E85-5EFB-45D8-9782-54C6152750AD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

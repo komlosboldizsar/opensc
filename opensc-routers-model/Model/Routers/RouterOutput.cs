@@ -124,19 +124,15 @@ namespace OpenSC.Model.Routers
         #region Source assignment
         public override void AssignSource(ISignalSource source) // when source already changed
         {
+            bool isNull = (source == null);
             RouterInput sourceRouterInput = source as RouterInput;
-            if (sourceRouterInput == null)
+            if (!isNull && (sourceRouterInput == null))
                 return;
-            if (sourceRouterInput.Router != Router)
+            if (!isNull && (sourceRouterInput.Router != Router))
                 throw new ArgumentException();
             base.AssignSource(source);
-            string logMessage = string.Format("Router crosspoint updated. Router: [(#{0}) {1}], destination: #{2}, source: #{3}.",
-                    Router.ID,
-                    Router.Name,
-                    Index,
-                    sourceRouterInput.Index);
+            string logMessage = $"Router crosspoint updated. Router: [{Router}], destination: #{Index}, source: #{sourceRouterInput?.Index.ToString() ?? "-"}.";
             LogDispatcher.I(Router.LOG_TAG, logMessage);
-            CurrentInputChanged?.Invoke(this, source as RouterInput);
         }
 
         public void RequestCrosspointUpdate(RouterInput input) => Router?.RequestCrosspointUpdate(this, input);
