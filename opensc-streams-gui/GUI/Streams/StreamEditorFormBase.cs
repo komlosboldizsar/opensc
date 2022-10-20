@@ -9,7 +9,7 @@ namespace OpenSC.GUI.Streams
     {
 
         public StreamEditorFormBase() : base() => InitializeComponent();
-        public StreamEditorFormBase(Stream stream) : base(stream) =>InitializeComponent();
+        public StreamEditorFormBase(Stream stream) : base(stream) => InitializeComponent();
 
         protected override void loadData()
         {
