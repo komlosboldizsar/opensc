@@ -5,9 +5,5 @@
       <RootNamespace>OpenSC</RootNamespace>
       <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
-  <ItemGroup>
-      <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj"/>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
-  </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj"/>
+  <Import Project="..\CommonCsproj\GuiModuleBase.csproj"/>
 </Project>

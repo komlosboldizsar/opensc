@@ -3,6 +3,7 @@ using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.SerialPorts;
 using OpenSC.Model.Settings;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace OpenSC.Model.Routers.Leitch
 
     [TypeLabel("Virtual Leitch")]
     [TypeCode("virtual_leitch")]
-    public class VirtualLeitchRouter : Router
+    public partial class VirtualLeitchRouter : Router
     {
 
         private new const string LOG_TAG = "Router/VirtualLeitch";
@@ -37,8 +38,6 @@ namespace OpenSC.Model.Routers.Leitch
         public override void TotallyRestored()
         {
             base.TotallyRestored();
-            if (port != null)
-                port.ReceivedDataAsciiLine += receivedLineFromPort;
             State = RouterState.Ok;
             StateString = "OK";
         }
@@ -70,28 +69,30 @@ namespace OpenSC.Model.Routers.Leitch
             => sendOutputInputReport(output);
 
         #region Property: Port
-        public event PropertyChangedTwoValuesDelegate<VirtualLeitchRouter, SerialPort> PortChanged;
-
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_port_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_port_afterChange))]
         [PersistAs("port")]
         private SerialPort port;
 
-#pragma warning disable CS0169
-        [TempForeignKey(nameof(port))]
-        private string _portId;
-#pragma warning restore CS0169
-
-        public SerialPort Port
+        private void _port_beforeChange(SerialPort oldValue, SerialPort newValue, BeforeChangePropertyArgs args)
         {
-            get => port;
-            set => this.setProperty(ref port, value, PortChanged,
-                (ov, nv) => {
-                    if (ov != null)
-                        ov.ReceivedDataAsciiString -= receivedLineFromPort;
-                },
-                (ov, nv) => {
-                    if (nv != null)
-                        port.ReceivedDataAsciiString += receivedLineFromPort;
-                });
+            if (oldValue != null)
+            {
+                oldValue.ReceivedDataAsciiLine -= receivedLineFromPort;
+                oldValue.InitializedChanged -= portInitializedChanged;
+            }
+        }
+
+        private void _port_afterChange(SerialPort oldValue, SerialPort newValue)
+        {
+            if (newValue != null)
+            {
+                newValue.ReceivedDataAsciiLine += receivedLineFromPort;
+                newValue.InitializedChanged += portInitializedChanged;
+                if (newValue.Initialized)
+                    reportEverything();
+            }
         }
 
         private void portInitializedChanged(SerialPort port, bool oldState, bool newState)
@@ -102,16 +103,10 @@ namespace OpenSC.Model.Routers.Leitch
         #endregion
 
         #region Property: Level
-        public event PropertyChangedTwoValuesDelegate<VirtualLeitchRouter, int> LevelChanged;
-
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateLevel))]
         [PersistAs("level")]
         private int level;
-
-        public int Level
-        {
-            get => level;
-            set => this.setProperty(ref level, value, LevelChanged, validator: ValidateLevel);
-        }
 
         public void ValidateLevel(int level)
         {
@@ -175,8 +170,8 @@ namespace OpenSC.Model.Routers.Leitch
                 return;
             if (line.Length < 2)
                 return;
-            string details = line.Substring(2);
-            switch (line.Substring(0, 2))
+            string details = line[2..];
+            switch (line[..2])
             {
                 case "z:":
                     handleResetLevelsMessage(details);
@@ -249,8 +244,8 @@ namespace OpenSC.Model.Routers.Leitch
         private void sendOutputLockReport(RouterOutput output)
         {
             VirtualLeitchRouterOutput outputCasted = output as VirtualLeitchRouterOutput;
-            int lockState = ((outputCasted.LockState == RouterOutputLockState.Clear) && (outputCasted.ProtectState == RouterOutputLockState.Clear)) ? 0 : 1;
-            sendSerialMessage("@ W!{0:X}{1:X},{2:X},{3}", level, output.Index, outputCasted.LockOwnerPanelId, lockState);
+            int lockState = ((outputCasted.Lock.State == RouterOutputLockState.Clear) && (outputCasted.Protect.State == RouterOutputLockState.Clear)) ? 0 : 1;
+            sendSerialMessage("@ W!{0:X}{1:X},{2:X},{3}", level, output.Index, outputCasted.LockProtectOwnerPanelId, lockState);
         }
 
         private void sendOutputFullStatusReport(RouterOutput output)

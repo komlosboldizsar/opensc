@@ -10,6 +10,15 @@ namespace OpenSC.Model.Signals
     public class PassthroughSignalTallyReceiver : ISignalTallyReceiver, ISignalTallySender
     {
 
+        public PassthroughSignalTallyReceiver(ISignalSource parentSignalSource, SignalTallyColor color)
+        {
+            ParentSignalSource = parentSignalSource;
+            Color = color;
+        }
+
+        public ISignalSource ParentSignalSource { get; private init; }
+        public SignalTallyColor Color { get; private init; }
+
         #region Property: PreviousElement
         private ISignalTallyReceiver previousElement = null;
 

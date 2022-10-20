@@ -7,15 +7,13 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Persistence
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    class PersistSubclassAttribute : Attribute
+    public class PersistSubclassAttribute : Attribute
     {
-
-        public Type SubclassType { get; private set; }
-
-        public PersistSubclassAttribute(Type SubclassType)
+        public delegate Type SubclassTypeGetterDelegate();
+        public string SubclassTypeGetterName { get; private set; }
+        public PersistSubclassAttribute(string SubclassTypeGetterName)
         {
-            this.SubclassType = SubclassType;
+            this.SubclassTypeGetterName = SubclassTypeGetterName;
         }
-
     }
 }

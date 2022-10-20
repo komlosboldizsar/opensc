@@ -14,13 +14,16 @@ namespace OpenSC.GUI.UMDs
         public Tsl50ScreenEditorForm() : base() => InitializeComponent();
         public Tsl50ScreenEditorForm(Tsl50Screen tsl50screen) : base(tsl50screen) =>InitializeComponent();
 
+        protected override IModelEditorFormDataManager createManager()
+            => new ModelEditorFormDataManager<Tsl50Screen, Tsl50Screen>(this, Tsl50ScreenDatabase.Instance);
+
         protected override void loadData()
         {
             base.loadData();
             Tsl50Screen tsl50screen = (Tsl50Screen)EditedModel;
             if (tsl50screen == null)
                 return;
-            ipAddressTextBox.Text = tsl50screen.IpAddress;
+            ipAddressInput.Text = tsl50screen.IpAddress;
             portNumericInput.Value = tsl50screen.Port;
             indexNumericInput.Value = tsl50screen.Index;
         }
@@ -31,7 +34,7 @@ namespace OpenSC.GUI.UMDs
             Tsl50Screen tsl50screen = (Tsl50Screen)EditedModel;
             if (tsl50screen == null)
                 return;
-            tsl50screen.IpAddress = ipAddressTextBox.Text;
+            tsl50screen.IpAddress = ipAddressInput.Text;
             tsl50screen.Port = (int)portNumericInput.Value;
             tsl50screen.Index = (int)indexNumericInput.Value;
         }

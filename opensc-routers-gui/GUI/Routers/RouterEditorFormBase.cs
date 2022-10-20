@@ -24,7 +24,9 @@ namespace OpenSC.GUI.Routers
             if (router == null)
                 return;
             initInputsTable();
+            initInputsNameButtonAndMenu();
             initOutputsTable();
+            initOutputsNameButtonAndMenu();
         }
 
         protected override void validateFields()
@@ -41,6 +43,10 @@ namespace OpenSC.GUI.Routers
             Router router = (Router)EditedModel;
             if (router == null)
                 return;
+            router.ImportInputNamesOnRemoteUpdate = followRemoteInputNameChangesMenuItem.Checked;
+            router.ExportInputNamesOnLocalUpdate = followLocalInputNameChangesMenuItem.Checked;
+            router.ImportOutputNamesOnRemoteUpdate = followRemoteOutputNameChangesMenuItem.Checked;
+            router.ExportOutputNamesOnLocalUpdate = followLocalOutputNameChangesMenuItem.Checked;
         }
 
         private static readonly Color CELL_COST_BACK_IS_TIELINE = Color.White;
@@ -78,7 +84,7 @@ namespace OpenSC.GUI.Routers
                     cell.Value = input.Index;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: name
@@ -101,7 +107,7 @@ namespace OpenSC.GUI.Routers
                     cell.Value = input.Name;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: source
@@ -112,9 +118,9 @@ namespace OpenSC.GUI.Routers
             builder.Width(300);
             builder.InitializerMethod((input, cell) => { });
             builder.UpdaterMethod((input, cell) => { cell.Value = input.CurrentSource; });
-            builder.CellEndEditHandlerMethod((input, cell, eventargs) => { input.AssignSource(cell.Value as ISignalSource); });
+            builder.CellValueChangedHandlerMethod((input, cell, eventargs) => { input.AssignSource(cell.Value as ISignalSource); });
             builder.DropDownPopulatorMethod((input, cell) => sources);
-            builder.ReceiveSystemObjectDrop().FilterByType<ISignalSourceRegistered>();
+            builder.ReceiveObjectDrop().FilterByType<ISignalSourceRegistered>();
             builder.BuildAndAdd();
 
             // Column: tieline cost
@@ -230,7 +236,7 @@ namespace OpenSC.GUI.Routers
                     cell.Value = output.Index;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: name
@@ -253,7 +259,7 @@ namespace OpenSC.GUI.Routers
                     cell.Value = output.Name;
                 }
             });
-            builder.AllowSystemObjectDrag();
+            builder.AllowObjectDrag();
             builder.BuildAndAdd();
 
             // Column: delete button
@@ -294,7 +300,7 @@ namespace OpenSC.GUI.Routers
         {
             public SourceDropDownItem(ISignalSourceRegistered value) : base(value)
             { }
-            public override string ToString() => Value.SignalLabel;
+            public override string Label => Value.SignalLabel;
         }
 
         private CustomDataGridViewComboBoxItem<ISignalSourceRegistered>[] getAllSources()
@@ -308,6 +314,76 @@ namespace OpenSC.GUI.Routers
 
         private void addInputButton_Click(object sender, EventArgs e) => ((Router)EditedModel).AddInput();
         private void addOutputButton_Click(object sender, EventArgs e) => ((Router)EditedModel).AddOutput();
+
+        private void initInputsNameButtonAndMenu()
+        {
+            Router router = (Router)EditedModel;
+            importInputNamesFromRemoteToLocalMenuItem.Enabled = router.CanGetRemoteInputNames;
+            exportInputNamesToRemoteFromLocalMenuItem.Enabled = router.CanSetRemoteInputNames;
+            followLocalInputNameChangesMenuItem.Enabled = router.CanGetRemoteInputNameChangeNotifications;
+            followRemoteInputNameChangesMenuItem.Enabled = router.CanSetRemoteInputNames;
+            followLocalInputNameChangesMenuItem.Checked = router.ExportInputNamesOnLocalUpdate;
+            followRemoteInputNameChangesMenuItem.Checked = router.ImportInputNamesOnRemoteUpdate;
+        }
+
+        private void importInputNamesFromRemoteToLocalMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ((Router)EditedModel).DoImportInputNames();
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Importing input failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void exportInputNamesToRemoteFromLocalMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ((Router)EditedModel).DoExportInputNames();
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Exporting input names failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void initOutputsNameButtonAndMenu()
+        {
+            Router router = (Router)EditedModel;
+            importOutputNamesFromRemoteToLocalMenuItem.Enabled = router.CanGetRemoteOutputNames;
+            exportOutputNamesToRemoteFromLocalMenuItem.Enabled = router.CanSetRemoteOutputNames;
+            followLocalOutputNameChangesMenuItem.Enabled = router.CanGetRemoteOutputNameChangeNotifications;
+            followRemoteOutputNameChangesMenuItem.Enabled = router.CanSetRemoteOutputNames;
+            followLocalOutputNameChangesMenuItem.Checked = router.ExportOutputNamesOnLocalUpdate;
+            followRemoteOutputNameChangesMenuItem.Checked = router.ImportOutputNamesOnRemoteUpdate;
+        }
+
+        private void importOutputNamesFromRemoteToLocalMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ((Router)EditedModel).DoImportOutputNames();
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Importing output names failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void exportOutputNamesToRemoteFromLocalMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ((Router)EditedModel).DoExportOutputNames();
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Exporting output names failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
     }
 

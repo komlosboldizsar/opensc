@@ -16,7 +16,7 @@ namespace OpenSC.Model.Routers.Salvos
         private const string ATTRIBUTE_OUTPUT = "output";
         private const string ATTRIBUTE_INPUT = "input";
 
-        public virtual object DeserializeItem(XmlNode serializedItem, object parentItem)
+        public virtual object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
         {
             if (serializedItem.LocalName != TAG_NAME)
                 return null;
@@ -38,7 +38,7 @@ namespace OpenSC.Model.Routers.Salvos
             return crosspoint;
         }
 
-        public virtual XElement SerializeItem(object item, object parentItem)
+        public virtual XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
         {
             SalvoCrosspoint crosspoint = item as SalvoCrosspoint;
             if (crosspoint == null)

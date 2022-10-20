@@ -1,5 +1,7 @@
-﻿using OpenSC.Model.General;
+﻿using Microsoft.CodeAnalysis;
+using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Timers
 {
 
-    public class Timer : ModelBase
+    public partial class Timer : ModelBase
     {
 
         #region Persistence, instantiation
@@ -34,19 +36,12 @@ namespace OpenSC.Model.Timers
         #endregion
 
         #region Property: Seconds, TimeSpan
-        public event PropertyChangedTwoValuesDelegate<Timer, int> SecondsChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_seconds_afterChange))]
+        [AutoProperty.Validator(nameof(ValidateSeconds))]
         private int seconds = 0;
-        public int Seconds
-        {
-            get => seconds;
-            set
-            {
-                if (!this.setProperty(ref seconds, value, SecondsChanged, validator: ValidateSeconds))
-                    return;
-                RaisePropertyChanged(nameof(TimeSpan));
-            }
-        }
+
+        private void _seconds_afterChange(int oldValue, int newValue) => TimeSpan = TimeSpan.FromSeconds(newValue);
 
         public void ValidateSeconds(int seconds)
         {
@@ -54,23 +49,18 @@ namespace OpenSC.Model.Timers
                 throw new ArgumentException();
         }
 
-        public TimeSpan TimeSpan
-        {
-            get => TimeSpan.FromSeconds(seconds);
-            set => Seconds = (int)value.TotalSeconds;
-        }
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_timeSpan_afterChange))]
+        private TimeSpan timeSpan;
+
+        private void _timeSpan_afterChange(TimeSpan oldValue, TimeSpan newValue) => Seconds = (int)newValue.TotalSeconds;
         #endregion
 
         #region Property: CountdownSeconds
-        public event PropertyChangedTwoValuesDelegate<Timer, int> CountdownSecondsChanged;
-
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateCountdownSeconds))]
         [PersistAs("countdown_seconds")]
         private int countdownSeconds = 5;
-        public int CountdownSeconds
-        {
-            get => countdownSeconds;
-            set => this.setProperty(ref countdownSeconds, value, CountdownSecondsChanged, validator: ValidateCountdownSeconds);
-        }
 
         public void ValidateCountdownSeconds(int value)
         {
@@ -80,46 +70,35 @@ namespace OpenSC.Model.Timers
         #endregion
 
         #region Property: Running
-        public event PropertyChangedTwoValuesDelegate<Timer, bool> RunningStateChanged;
-
+        [AutoProperty(SetterAccessibility = Accessibility.Private)]
+        [AutoProperty.Event("RunningStateChanged")]
+        [AutoProperty.AfterChange(nameof(_running_afterChange))]
         private bool running = false;
-        public bool Running
+
+        private void _running_afterChange(bool oldValue, bool newValue)
         {
-            get => running;
-            private set
-            {
-                if (!this.setProperty(ref running, value, RunningStateChanged))
-                    return;
-                if (value == true)
-                    Started?.Invoke(this);
-                else
-                    Stopped?.Invoke(this);
-                OperationsChanged?.Invoke(this);
-            }
-        }
+            if (newValue)
+                Started?.Invoke(this);
+            else
+                Stopped?.Invoke(this);
+            OperationsChanged?.Invoke(this);
+        } 
         #endregion
 
         #region Propety: Mode
-        public event PropertyChangedTwoValuesDelegate<Timer, TimerMode> ModeChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_mode_afterChange))]
         [PersistAs("mode")]
         private TimerMode mode = TimerMode.Backwards;
 
-        public TimerMode Mode
+        private void _mode_afterChange(TimerMode oldValue, TimerMode newValue)
         {
-            get => mode;
-            set
-            {
-                AfterChangePropertyDelegate<TimerMode> afterChangeDelegate = (ov, nv) => {
-                    Running = false;
-                    if (nv == TimerMode.Backwards)
-                        Seconds = CountdownSeconds;
-                    else if (nv == TimerMode.Forwards)
-                        Seconds = 0;
-                };
-                this.setProperty(ref mode, value, ModeChanged, null, afterChangeDelegate);
-                OperationsChanged?.Invoke(this);
-            }
+            Running = false;
+            if (newValue == TimerMode.Backwards)
+                Seconds = CountdownSeconds;
+            else if (newValue == TimerMode.Forwards)
+                Seconds = 0;
+            OperationsChanged?.Invoke(this);
         }
         #endregion
 
@@ -145,10 +124,7 @@ namespace OpenSC.Model.Timers
             resetInnerTimer();
         }
 
-        public void Stop()
-        {
-            Running = false;
-        }
+        public void Stop() => Running = false;
 
         public void Reset()
         {

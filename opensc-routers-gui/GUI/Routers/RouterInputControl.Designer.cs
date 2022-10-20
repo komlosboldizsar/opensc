@@ -38,9 +38,12 @@
             // 
             // RouterInputControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Margin = new System.Windows.Forms.Padding(5, 8, 5, 8);
             this.Name = "RouterInputControl";
+            this.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
+            this.Size = new System.Drawing.Size(113, 130);
             this.Load += new System.EventHandler(this.RouterInputControl_Load);
             this.ResumeLayout(false);
 

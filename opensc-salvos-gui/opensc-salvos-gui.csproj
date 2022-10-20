@@ -5,17 +5,11 @@
       <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj"/>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
-      <ProjectReference Include="..\opensc-salvos-model\opensc-salvos-model.csproj"/>
+      <ProjectReference Include="..\opensc-salvos-model\opensc-salvos-model.csproj" />
   </ItemGroup>
   <ItemGroup>
-      <Compile Update="GUI\Routers\Salvos\SalvoList.cs">
-         <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="GUI\Routers\Salvos\SalvoEditorForm.cs">
-         <SubType>Form</SubType>
-      </Compile>
+      <Compile Update="GUI\Routers\Salvos\SalvoList.cs" />
+      <Compile Update="GUI\Routers\Salvos\SalvoEditorForm.cs" />
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj"/>
+  <Import Project="..\CommonCsproj\GuiModuleBase.csproj"/>
 </Project>

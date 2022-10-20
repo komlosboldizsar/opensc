@@ -1,9 +1,12 @@
-﻿using OpenSC.GUI.GeneralComponents.DropDowns;
+﻿using OpenSC.GUI.GeneralComponents.DragDrop;
+using OpenSC.GUI.GeneralComponents.DropDowns;
 using OpenSC.Model;
 using OpenSC.Model.Signals;
 using OpenSC.Model.Signals.BooleanTallies;
 using OpenSC.Model.Variables;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace OpenSC.GUI.Signals.BooleanTallies
@@ -24,6 +27,7 @@ namespace OpenSC.GUI.Signals.BooleanTallies
             initFromBooleanDropDown();
             initToSignalDropDown();
             initToColorDropDown();
+            initToTallyDrop();
         }
 
         protected override IModelEditorFormDataManager createManager()
@@ -64,7 +68,7 @@ namespace OpenSC.GUI.Signals.BooleanTallies
             fromBooleanDropDown.CreateAdapterAsDataSource(
                 BooleanRegister.Instance, BooleanRegister.Instance.ToStringMethod,
                 true, "(not associated)");
-            fromBooleanDropDown.ReceiveSystemObjectDrop().FilterByType<IBoolean>();
+            fromBooleanDropDown.ReceiveObjectDrop().FilterByType<IBoolean>();
         }
 
         private void initToSignalDropDown()
@@ -72,11 +76,21 @@ namespace OpenSC.GUI.Signals.BooleanTallies
             toSignalDropDown.CreateAdapterAsDataSource(
                 SignalRegister.Instance, SignalRegister.Instance.ToStringMethod,
                 true, "(not associated)");
-            toSignalDropDown.ReceiveSystemObjectDrop().FilterByType<ISignalSource>();
+            toSignalDropDown.ReceiveObjectDrop().FilterByType<ISignalSource>();
         }
 
         private void initToColorDropDown() =>
             toColorDropDown.SetAdapterAsDataSource(new EnumComboBoxAdapter<SignalTallyColor>());
+
+        private void initToTallyDrop() =>
+            toSourceTable.ReceiveObjectDropCustom(toSourceTableDropValueSetter).FilterByType<ISignalTallyReceiver>();
+
+        private void toSourceTableDropValueSetter(TableLayoutPanel receiverParent, IEnumerable<object> objects, DragEventArgs eventArgs, object tag)
+        {
+            ISignalTallyReceiver tallyReceiver = objects.FirstOrDefault() as ISignalTallyReceiver;
+            toSignalDropDown.SelectByValue(tallyReceiver?.ParentSignalSource);
+            toColorDropDown.SelectByValue(tallyReceiver?.Color);
+        }
 
     }
 

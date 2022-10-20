@@ -1,0 +1,8 @@
+<Project>
+  <Import Project="..\CommonCsproj\ModelModuleBase.csproj"/>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-umds-model\opensc-umds-model.csproj"/>
+    <ProjectReference Include="..\opensc-booleans-model\opensc-booleans-model.csproj" />
+    <ProjectReference Include="..\opensc-dynamictexts-model\opensc-dynamictexts-model.csproj" />
+  </ItemGroup>
+</Project>

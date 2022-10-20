@@ -8,16 +8,19 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
 
-    public class ExternalSignalTally :  ObjectBase, IBidirectionalSignalTally
+    public class ExternalSignalTally : ObjectBase, IBidirectionalSignalTally
     {
 
-        public ExternalSignalTally(ExternalSignal parentSignalSource)
+        public ExternalSignalTally(ExternalSignal parentSignalSource, SignalTallyColor color)
         {
             ParentSignalSource = parentSignalSource;
+            Color = color;
         }
 
+        public ISignalSource ParentSignalSource { get; private init; }
+        public SignalTallyColor Color { get; private init; }
+
         #region ISignalTallyState implementation
-        public ISignalSource ParentSignalSource { get; private set; }
 
         public event StateChangedHandler StateChanged;
 
@@ -32,18 +35,13 @@ namespace OpenSC.Model.Signals
                     return;
                 state = value;
                 StateChanged?.Invoke(ParentSignalSource, this, value, RecursionChainHelpers.CreateRecursionChain(this));
-                PropertyChanged?.Invoke(nameof(State));
+                RaisePropertyChanged(nameof(State));
             }
         }
 
         public bool GetState(List<object> recursionChain = null) => state;
 
-        private void updateState()
-        {
-            State = (activeSources.Count > 0);
-        }
-
-        public event PropertyChangedDelegate PropertyChanged; // INotifyPropertyChanged implementation
+        private void updateState() => State = (activeSources.Count > 0);
         #endregion
 
         #region ISignalTallyReceiver implementation

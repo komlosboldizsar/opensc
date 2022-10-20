@@ -17,7 +17,7 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            DatabasePersister<Salvo>.RegisterSerializer(new SalvoCrosspointXmlSerializer());
+            SerializerRegister.RegisterSerializer(new SalvoCrosspointXmlSerializer());
         }
 
     }

@@ -1,13 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
       <TargetFramework>net5.0-windows</TargetFramework>
       <OutputType>Library</OutputType>
       <RootNamespace>OpenSC</RootNamespace>
-      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
       <UseWindowsForms>true</UseWindowsForms>
       <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
       <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="RoutersSubtypeGuiModuleBase.csproj" />
+  </ItemGroup>
   <ItemGroup>
       <Compile Update="GUI\Routers\RouterInputControl.cs">
          <SubType>UserControl</SubType>
@@ -20,14 +22,12 @@
       </Compile>
   </ItemGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-gui\opensc-core-gui.csproj"/>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
-      <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj"/>
-      <ProjectReference Include="..\opensc-signals-model\opensc-signals-model.csproj"/>
+      <ProjectReference Include="..\opensc-routers-model\opensc-routers-model.csproj" />
+      <ProjectReference Include="..\opensc-signals-model\opensc-signals-model.csproj" />
   </ItemGroup>
   <ItemGroup>
-      <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
-      <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
+      <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+      <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj"/>
+  <Import Project="..\CommonCsproj\GuiModuleBase.csproj" />
 </Project>

@@ -2,9 +2,9 @@
 
 namespace OpenSC.Model.UMDs
 {
-    public class UmdTypeRegister : ModelTypeRegisterBase<UMD>
+    public class UmdTypeRegister : ModelTypeRegisterBase<Umd>
     {
-        public static ModelTypeRegisterBase<UMD> Instance { get; } = new UmdTypeRegister();
+        public static ModelTypeRegisterBase<Umd> Instance { get; } = new UmdTypeRegister();
         private UmdTypeRegister() { }
     }
 }

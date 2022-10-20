@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows7.0</TargetFramework>
+    <RootNamespace>OpenSC</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj" />
+    <ProjectReference Include="..\opensc-umds-subtype-bmdatem-model\opensc-umds-subtype-bmdatem-model.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="GUI\UMDs\BmdAtemUmdEditorForm.cs" />
+  </ItemGroup>
+  <Import Project="..\opensc-umds-gui\UmdsSubtypeGuiModuleBase.csproj"/>
+</Project>

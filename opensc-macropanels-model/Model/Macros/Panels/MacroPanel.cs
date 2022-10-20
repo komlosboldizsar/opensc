@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Macros
 {
 
-    public class MacroPanel : ModelBase
+    public partial class MacroPanel : ModelBase
     {
 
         public override void RestoredOwnFields()
@@ -24,29 +25,15 @@ namespace OpenSC.Model.Macros
         #endregion
 
         #region Property: Width
-        public event PropertyChangedTwoValuesDelegate<MacroPanel, int> SizeWChanged;
-
+        [AutoProperty]
         [PersistAs("width")]
         private int width;
-
-        public int SizeW
-        {
-            get => width;
-            set => this.setProperty(ref width, value, SizeWChanged);
-        }
         #endregion
 
         #region Property: Height
-        public event PropertyChangedTwoValuesDelegate<MacroPanel, int> SizeHChanged;
-
+        [AutoProperty]
         [PersistAs("height")]
         private int height;
-
-        public int SizeH
-        {
-            get => height;
-            set => this.setProperty(ref height, value, SizeHChanged);
-        }
         #endregion
 
         #region Elements
@@ -69,8 +56,7 @@ namespace OpenSC.Model.Macros
             }
         }
 
-        internal void ElementUpdated()
-        { }
+        internal void ElementUpdated() { }
 
         public MacroPanelElement AddElement()
         {

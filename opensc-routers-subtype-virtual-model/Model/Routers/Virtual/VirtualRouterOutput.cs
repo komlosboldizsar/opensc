@@ -15,13 +15,8 @@ namespace OpenSC.Model.Routers.Virtual
         public VirtualRouterOutput(string name, Router router, int index) : base(name, router, index)
         { }
 
-        #region Supported lock operations
-        public override bool LocksSupported => true;
-        public override bool ProtectsSupported => true;
-
-        public override bool LockOwnerKnown => false;
-        public override bool ProtectOwnerKnown => false;
-        #endregion
+        protected override RouterOutputLockInfo LockInfo { get; } = new RouterOutputLockInfo(true, RouterOutputLockOwnerKnowLevel.None);
+        protected override RouterOutputLockInfo ProtectInfo { get; } = new RouterOutputLockInfo(true, RouterOutputLockOwnerKnowLevel.None);
 
     }
 

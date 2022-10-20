@@ -89,8 +89,9 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.UpdaterMethod((crosspoint, cell) => { cell.Value = crosspoint.Output; });
             builder.CellEndEditHandlerMethod((crosspoint, cell, eventargs) => { crosspoint.Output = cell.Value as RouterOutput; });
             builder.DropDownPopulatorMethod((crosspoint, cell) => getArrayForDropDown<RouterOutput>(crosspoint.Router?.Outputs));
-            builder.ReceiveSystemObjectDrop().FilterByType<RouterOutput>();
+            builder.ReceiveObjectDrop().FilterByType<RouterOutput>();
             builder.BindParent(routerBuilder, ro => ((RouterOutput)ro)?.Router);
+            builder.AddChangeEvent(nameof(SalvoCrosspoint.Output));
             builder.BuildAndAdd();
 
             // Column: input
@@ -102,8 +103,9 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.UpdaterMethod((crosspoint, cell) => { cell.Value = crosspoint.Input; });
             builder.CellEndEditHandlerMethod((crosspoint, cell, eventargs) => { crosspoint.Input = cell.Value as RouterInput; });
             builder.DropDownPopulatorMethod((crosspoint, cell) => getArrayForDropDown<RouterInput>(crosspoint.Router?.Inputs));
-            builder.ReceiveSystemObjectDrop().FilterByType<RouterInput>();
+            builder.ReceiveObjectDrop().FilterByType<RouterInput>();
             builder.BindParent(routerBuilder, ri => ((RouterInput)ri)?.Router);
+            builder.AddChangeEvent(nameof(SalvoCrosspoint.Input));
             builder.BuildAndAdd();
 
             // Column: delete button
@@ -121,7 +123,7 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.BuildAndAdd();
 
             crosspointsTableCDGV
-                .ReceiveSystemObjectDrop(crosspointsTableSystemObjectDropReceiver)
+                .ReceiveSystemObjectDrop(crosspointsTableObjectDropReceiver)
                 .EnableMulti()
                 .FilterByType<RouterOutput>();
 
@@ -157,21 +159,19 @@ namespace OpenSC.GUI.Routers.Salvos
         }
 
         private void addCrosspointButton_Click(object sender, EventArgs e) => ((Salvo)EditedModel).AddCrosspoint();
+        private void storeCurrentCrosspointsButton_Click(object sender, EventArgs e) => ((Salvo)EditedModel).StoreCurrentCrosspoints();
 
-        private void crosspointsTableSystemObjectDropReceiver(DataGridView table, IEnumerable<ISystemObject> systemObjects)
+        private void crosspointsTableObjectDropReceiver(DataGridView table, IEnumerable<object> objects)
         {
             Salvo salvo = (Salvo)EditedModel;
-            ISystemObject firstSystemObject = systemObjects.First();
-            if (firstSystemObject is RouterOutput)
+            if (objects.First() is RouterOutput)
             {
-                foreach (RouterOutput routerOutput in systemObjects.Cast<RouterOutput>())
+                foreach (RouterOutput routerOutput in objects.Cast<RouterOutput>())
                     if (!(salvo.Crosspoints.Any(cp => cp.Output == routerOutput)))
                         salvo.AddCrosspoint(routerOutput, null);
                 return;
             }
         }
-
-
 
     }
 

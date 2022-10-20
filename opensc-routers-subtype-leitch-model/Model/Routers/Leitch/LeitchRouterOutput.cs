@@ -15,15 +15,27 @@ namespace OpenSC.Model.Routers.Leitch
         public LeitchRouterOutput(string name, Router router, int index) : base(name, router, index)
         { }
 
-        public int LockProtectOwner { get; set; } = -1;
+        private int lockProtectOwnerPanelId = -1;
+        public int LockProtectOwnerPanelId
+        {
+            get => lockProtectOwnerPanelId;
+            internal set
+            {
+                if (lockProtectOwnerPanelId == value)
+                    return;
+                lockProtectOwnerPanelId = value;
+                bool @locked = (Lock.State != RouterOutputLockState.Clear);
+                bool @protected = (Protect.State != RouterOutputLockState.Clear);
+                LeitchRouterOutputLockOwner lockProtectOwnerObject = null;
+                if (@locked || @protected)
+                    lockProtectOwnerObject = new LeitchRouterOutputLockOwner(value);
+                Lock.Owner = @locked ? lockProtectOwnerObject : null;
+                Protect.Owner = @protected ? lockProtectOwnerObject : null;
+            }
+        }
 
-        #region Supported lock operations
-        public override bool LocksSupported => true;
-        public override bool ProtectsSupported => true;
-
-        public override bool LockOwnerKnown => true;
-        public override bool ProtectOwnerKnown => true;
-        #endregion
+        protected override RouterOutputLockInfo LockInfo { get; } = new RouterOutputLockInfo(true, RouterOutputLockOwnerKnowLevel.Detailed);
+        protected override RouterOutputLockInfo ProtectInfo { get; } = new RouterOutputLockInfo(true, RouterOutputLockOwnerKnowLevel.Detailed);
 
     }
 

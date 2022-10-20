@@ -1,0 +1,7 @@
+<Project>
+  <Import Project="..\CommonCsproj\ModelModuleBase.csproj"/>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-custombooleans-model\opensc-custombooleans-model.csproj"/>
+    <ProjectReference Include="..\opensc-booleans-model\opensc-booleans-model.csproj" />
+  </ItemGroup>
+</Project>

@@ -3,10 +3,8 @@
       <TargetFramework>net5.0</TargetFramework>
       <OutputType>Library</OutputType>
       <RootNamespace>OpenSC</RootNamespace>
-      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
       <ProjectReference Include="..\opensc-dynamictexts-model\opensc-dynamictexts-model.csproj"/>
       <ProjectReference Include="..\opensc-streams-model\opensc-streams-model.csproj"/>
   </ItemGroup>
@@ -14,5 +12,6 @@
       <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
       <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj"/>
+  <Import Project="..\CommonCsproj\Global\*.csproj"/>
+  <Import Project="..\CommonCsproj\Model\*.csproj"/>
 </Project>

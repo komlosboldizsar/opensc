@@ -1,4 +1,6 @@
-﻿using System;
+﻿using OpenSC.Model.General;
+using OpenSC.Model.SourceGenerators;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers.Salvos
 {
 
-    public class SalvoCrosspoint
+    public partial class SalvoCrosspoint : ObjectBase
     {
 
         public SalvoCrosspoint(RouterOutput output = null, RouterInput input = null)
@@ -23,19 +25,13 @@ namespace OpenSC.Model.Routers.Salvos
 
         public Router Router => output?.Router;
 
+        [AutoProperty]
         private RouterOutput output;
-        public RouterOutput Output
-        {
-            get => output;
-            set => output = value;
-        }
 
+        [AutoProperty]
         private RouterInput input;
-        public RouterInput Input
-        {
-            get => input;
-            set => input = value;
-        }
+
+        public void StoreCurrentInput() => Input = Output?.CurrentInput;
 
         internal void RestoreAssociations()
         {

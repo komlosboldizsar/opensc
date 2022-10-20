@@ -48,9 +48,9 @@ namespace OpenSC.Model
         #region Property: Name
         public event PropertyChangedTwoValuesDelegate<IModel, string> NameChanged;
 
-        [PersistAs("name")]
         protected string name;
 
+        [PersistAs("name")]
         public string Name
         {
             get => name;

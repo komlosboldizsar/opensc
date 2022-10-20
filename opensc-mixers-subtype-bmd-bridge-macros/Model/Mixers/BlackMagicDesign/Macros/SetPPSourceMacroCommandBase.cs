@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ThreadHelpers;
 
 namespace OpenSC.Model.Mixers.BlackMagicDesign.Macros
 {
@@ -20,7 +21,7 @@ namespace OpenSC.Model.Mixers.BlackMagicDesign.Macros
                 return;
             if (!int.TryParse(argumentValues[2]?.ToString(), out int inputId))
                 return;
-            setSource(mixer, meBlockIndex, inputId);
+            InvokeHelper.Invoke(() => setSource(mixer, meBlockIndex, inputId));
         }
 
         protected abstract void setSource(BmdMixer mixer, int meBlockIndex, int inputId);

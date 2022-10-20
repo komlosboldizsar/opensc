@@ -30,18 +30,18 @@
         {
             this.connectionGroupBox = new System.Windows.Forms.GroupBox();
             this.connectionTable = new System.Windows.Forms.TableLayoutPanel();
+            this.portNumericInput = new System.Windows.Forms.NumericUpDown();
             this.portLabel = new System.Windows.Forms.Label();
             this.ipAddressLabel = new System.Windows.Forms.Label();
             this.indexLabel = new System.Windows.Forms.Label();
             this.indexNumericInput = new System.Windows.Forms.NumericUpDown();
-            this.ipAddressTextBox = new System.Windows.Forms.TextBox();
-            this.portNumericInput = new System.Windows.Forms.NumericUpDown();
+            this.ipAddressInput = new OpenSC.GUI.GeneralComponents.IPAddressControl.IPv4AddressControl();
             this.customElementsPanel.SuspendLayout();
             this.mainContainer.SuspendLayout();
             this.connectionGroupBox.SuspendLayout();
             this.connectionTable.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.indexNumericInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.portNumericInput)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.indexNumericInput)).BeginInit();
             this.SuspendLayout();
             // 
             // customElementsPanel
@@ -84,7 +84,7 @@
             this.connectionTable.Controls.Add(this.ipAddressLabel, 0, 0);
             this.connectionTable.Controls.Add(this.indexLabel, 0, 2);
             this.connectionTable.Controls.Add(this.indexNumericInput, 1, 2);
-            this.connectionTable.Controls.Add(this.ipAddressTextBox, 1, 0);
+            this.connectionTable.Controls.Add(this.ipAddressInput, 1, 0);
             this.connectionTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.connectionTable.Location = new System.Drawing.Point(8, 25);
             this.connectionTable.Name = "connectionTable";
@@ -94,6 +94,29 @@
             this.connectionTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.connectionTable.Size = new System.Drawing.Size(446, 99);
             this.connectionTable.TabIndex = 0;
+            // 
+            // portNumericInput
+            // 
+            this.portNumericInput.Dock = System.Windows.Forms.DockStyle.Left;
+            this.portNumericInput.Location = new System.Drawing.Point(97, 36);
+            this.portNumericInput.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.portNumericInput.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.portNumericInput.Name = "portNumericInput";
+            this.portNumericInput.Size = new System.Drawing.Size(151, 27);
+            this.portNumericInput.TabIndex = 6;
+            this.portNumericInput.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // portLabel
             // 
@@ -144,35 +167,20 @@
             this.indexNumericInput.Size = new System.Drawing.Size(151, 27);
             this.indexNumericInput.TabIndex = 3;
             // 
-            // ipAddressTextBox
+            // ipAddressInput
             // 
-            this.ipAddressTextBox.Location = new System.Drawing.Point(97, 3);
-            this.ipAddressTextBox.Name = "ipAddressTextBox";
-            this.ipAddressTextBox.Size = new System.Drawing.Size(256, 27);
-            this.ipAddressTextBox.TabIndex = 4;
-            // 
-            // portNumericInput
-            // 
-            this.portNumericInput.Dock = System.Windows.Forms.DockStyle.Left;
-            this.portNumericInput.Location = new System.Drawing.Point(97, 36);
-            this.portNumericInput.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.portNumericInput.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.portNumericInput.Name = "portNumericInput";
-            this.portNumericInput.Size = new System.Drawing.Size(151, 27);
-            this.portNumericInput.TabIndex = 6;
-            this.portNumericInput.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            this.ipAddressInput.AllowInternalTab = false;
+            this.ipAddressInput.AutoHeight = true;
+            this.ipAddressInput.BackColor = System.Drawing.SystemColors.Window;
+            this.ipAddressInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ipAddressInput.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.ipAddressInput.Dock = System.Windows.Forms.DockStyle.Left;
+            this.ipAddressInput.Location = new System.Drawing.Point(97, 3);
+            this.ipAddressInput.Name = "ipAddressInput";
+            this.ipAddressInput.ReadOnly = false;
+            this.ipAddressInput.Size = new System.Drawing.Size(212, 27);
+            this.ipAddressInput.TabIndex = 7;
+            this.ipAddressInput.Text = "...";
             // 
             // Tsl50ScreenEditorForm
             // 
@@ -194,8 +202,8 @@
             this.connectionGroupBox.PerformLayout();
             this.connectionTable.ResumeLayout(false);
             this.connectionTable.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.indexNumericInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.portNumericInput)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.indexNumericInput)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -207,8 +215,8 @@
         private System.Windows.Forms.Label ipAddressLabel;
         private System.Windows.Forms.Label indexLabel;
         private System.Windows.Forms.NumericUpDown indexNumericInput;
-        private System.Windows.Forms.TextBox ipAddressTextBox;
         private System.Windows.Forms.Label portLabel;
         private System.Windows.Forms.NumericUpDown portNumericInput;
+        private GeneralComponents.IPAddressControl.IPv4AddressControl ipAddressInput;
     }
 }

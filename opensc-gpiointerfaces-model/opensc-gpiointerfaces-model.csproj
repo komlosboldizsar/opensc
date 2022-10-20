@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace>OpenSC</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="GpiointerfacesSubtypeModelModuleBase.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-booleans-model\opensc-booleans-model.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
+  <Import Project="..\CommonCsproj\ModelModuleBase.csproj" />
+</Project>

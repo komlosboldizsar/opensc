@@ -12,11 +12,19 @@ namespace OpenSC.Logger
 
         public static void Log(LogMessageType messageType, string tag, string message, params string[] args)
         {
-            DateTime timestamp = DateTime.Now;
-            message = string.Format(message, args);
-            foreach (ReceiverSubscription subscription in Subscriptions)
-                if ((int)messageType >= (int)subscription.MinimumLevel)
-                    subscription.Receiver.ReceiveLogMessage(messageType, timestamp, tag, message);
+            try
+            {
+                DateTime timestamp = DateTime.Now;
+                message = string.Format(message, args);
+                foreach (ReceiverSubscription subscription in Subscriptions)
+                    if ((int)messageType >= (int)subscription.MinimumLevel)
+                        try
+                        {
+                            subscription.Receiver.ReceiveLogMessage(messageType, timestamp, tag, message);
+                        }
+                        catch { }
+            }
+            catch { }
         }
 
         public static void V(string tag, string message, params string[] args)

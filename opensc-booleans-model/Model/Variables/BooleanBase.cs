@@ -1,74 +1,39 @@
 ﻿using OpenSC.Model.General;
+using OpenSC.Model.SourceGenerators;
 using System.Drawing;
 
 namespace OpenSC.Model.Variables
 {
 
-    public class BooleanBase : SystemObjectBase, IBoolean
+    public partial class BooleanBase : SystemObjectBase, IBoolean
     {
 
         public BooleanBase()
         { }
 
-        public BooleanBase(string name, Color color, string description = "")
+        public BooleanBase(string identifier, Color color, string description = "")
         {
-            this.name = name;
+            this.identifier = identifier;
             this.color = color;
             this.description = description;
         }
 
-        #region Property: Name
-        public event PropertyChangedTwoValuesDelegate<IBoolean, string> NameChanged;
+        #region Properties from IBoolean
+        [AutoProperty]
+        [AutoProperty.Event(typeof(IBoolean))]
+        private string identifier;
 
-        private string name;
-
-        public string Name
-        {
-            get => name;
-            set
-            {
-                if (!BooleanRegister.Instance.CanKeyBeUsedForItem(this, value, out IBoolean nameOwnerItem))
-                    return;
-                if (!this.setProperty(ref name, value, NameChanged))
-                    return;
-            }
-        }
-        #endregion
-
-        #region Property: Color
-        public event PropertyChangedTwoValuesDelegate<IBoolean, Color> ColorChanged;
-
+        [AutoProperty]
+        [AutoProperty.Event(typeof(IBoolean))]
         private Color color;
 
-        public Color Color
-        {
-            get => color;
-            set => this.setProperty(ref color, value, ColorChanged);
-        }
-        #endregion
-
-        #region Property: Description
-        public event PropertyChangedTwoValuesDelegate<IBoolean, string> DescriptionChanged;
-
+        [AutoProperty]
+        [AutoProperty.Event(typeof(IBoolean))]
         private string description;
 
-        public string Description
-        {
-            get => description;
-            set => this.setProperty(ref description, value, DescriptionChanged);
-        }
-        #endregion
-
-        #region Property: CurrentState
-        public event PropertyChangedTwoValuesDelegate<IBoolean, bool> StateChanged;
-
+        [AutoProperty]
+        [AutoProperty.Event(SenderType = typeof(IBoolean), EventName = nameof(IBoolean.StateChanged))]
         private bool currentState;
-
-        public bool CurrentState
-        {
-            get => currentState;
-            protected set => this.setProperty(ref currentState, value, StateChanged);
-        }
         #endregion
 
         protected void register()

@@ -19,7 +19,7 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            DatabasePersister<Router>.RegisterSerializer(new LeitchRouterOutputXmlSerializer());
+            SerializerRegister.RegisterSerializer(new LeitchRouterOutputXmlSerializer());
         }
 
         protected override void registerSettings()

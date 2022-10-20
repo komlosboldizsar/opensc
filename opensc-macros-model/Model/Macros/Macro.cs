@@ -29,6 +29,12 @@ namespace OpenSC.Model.Macros
         public override void RestoredOwnFields()
         {
             base.RestoredOwnFields();
+            for (int i = commands.Count - 1; i >= 0; i--)
+                if (commands[i] == null)
+                    commands.RemoveAt(i);
+            for (int i = triggers.Count - 1; i >= 0; i--)
+                if (triggers[i] == null)
+                    triggers.RemoveAt(i);
             foreach (MacroTriggerWithArguments trigger in triggers)
                 trigger.Macro = this;
         }
@@ -55,11 +61,7 @@ namespace OpenSC.Model.Macros
 
         #region Commands
         private ObservableList<MacroCommandWithArguments> commands = new ObservableList<MacroCommandWithArguments>();
-
-        public ObservableList<MacroCommandWithArguments> Commands
-        {
-            get { return commands; }
-        }
+        public ObservableList<MacroCommandWithArguments> Commands => commands;
 
         [PersistAs("commands")]
         [PersistAs(null, 1)]
@@ -77,11 +79,7 @@ namespace OpenSC.Model.Macros
 
         #region Triggers
         private ObservableList<MacroTriggerWithArguments> triggers = new ObservableList<MacroTriggerWithArguments>();
-
-        public ObservableList<MacroTriggerWithArguments> Triggers
-        {
-            get { return triggers; }
-        }
+        public ObservableList<MacroTriggerWithArguments> Triggers => triggers;
 
         [PersistAs("triggers")]
         [PersistAs(null, 1)]

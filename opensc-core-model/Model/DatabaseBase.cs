@@ -137,7 +137,7 @@ namespace OpenSC.Model
 
         public void Save()
         {
-            persister.Save(items);
+            persister.Save();
             LogDispatcher.I(SPECIFIC_LOG_TAG, "Saved to file.");
             afterSave();
             Saved?.Invoke(this);
@@ -154,10 +154,10 @@ namespace OpenSC.Model
             var loadedItems = persister.Load();
             if (loadedItems != null)
             {
-                foreach (KeyValuePair<int, T> item in loadedItems)
+                foreach (KeyValuePair<int, T> loadedItem in loadedItems)
                 {
-                    items.Add(item.Key, item.Value);
-                    item.Value.ModelAfterUpdate += itemAfterUpdateHandler;
+                    items.Add(loadedItem.Key, loadedItem.Value);
+                    loadedItem.Value.ModelAfterUpdate += itemAfterUpdateHandler;
                 }
                 LogDispatcher.I(SPECIFIC_LOG_TAG, "Loaded from file.");
                 afterLoad();
@@ -168,7 +168,7 @@ namespace OpenSC.Model
 
         protected virtual void afterLoad() { }
 
-        public void BuildRelationsByForeignKeys() => persister.BuildRelationsByForeignKeys(items);
+        public void BuildRelationsByForeignKeys() => persister.BuildRelationsByForeignKeys();
 
         public void NotifyItemsRestoredOwnFields()
         {

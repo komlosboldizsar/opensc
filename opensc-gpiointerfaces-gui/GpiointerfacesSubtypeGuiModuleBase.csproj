@@ -1,0 +1,8 @@
+<Project>
+  <Import Project="..\CommonCsproj\GuiModuleBase.csproj"/>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-gpiointerfaces-model\opensc-gpiointerfaces-model.csproj"/>
+    <ProjectReference Include="..\opensc-gpiointerfaces-gui\opensc-gpiointerfaces-gui.csproj"/>
+    <ProjectReference Include="..\opensc-booleans-model\opensc-booleans-model.csproj" />
+  </ItemGroup>
+</Project>

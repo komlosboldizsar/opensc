@@ -1,0 +1,6 @@
+﻿<Project>
+    <ItemGroup>
+        <ProjectReference Include="..\opensc-labelsets-model\opensc-labelsets-model.csproj"/>
+    </ItemGroup>
+    <Import Project="..\CommonCsproj\Global\*.csproj" />
+</Project>

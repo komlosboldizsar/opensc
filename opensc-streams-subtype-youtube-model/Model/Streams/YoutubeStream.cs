@@ -3,6 +3,7 @@ using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.Settings;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,7 +19,7 @@ namespace OpenSC.Model.Streams
 
     [TypeLabel("YouTube stream")]
     [TypeCode("youtube")]
-    public class YoutubeStream : HttpApiBasedStream
+    public partial class YoutubeStream : HttpApiBasedStream
     {
 
         private const string LOG_TAG = "Stream/YouTube";
@@ -47,16 +48,9 @@ namespace OpenSC.Model.Streams
         #endregion
 
         #region Property: VideoId
-        public event PropertyChangedTwoValuesDelegate<YoutubeStream, string> VideoIdChanged;
-
+        [AutoProperty]
         [PersistAs("video_id")]
         private string videoId;
-
-        public string VideoId
-        {
-            get => videoId;
-            set => this.setProperty(ref videoId, value, VideoIdChanged, null, (ov, nv) => setRequestApiUrl());
-        }
         #endregion
 
         #region Request data

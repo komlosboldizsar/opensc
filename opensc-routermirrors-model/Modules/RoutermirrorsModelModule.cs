@@ -17,8 +17,8 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            DatabasePersister<RouterMirror>.RegisterSerializer(new RouterMirrorInputAssociationXmlSerializer());
-            DatabasePersister<RouterMirror>.RegisterSerializer(new RouterMirrorOutputAssociationXmlSerializer());
+            SerializerRegister.RegisterSerializer(new RouterMirrorInputAssociationXmlSerializer());
+            SerializerRegister.RegisterSerializer(new RouterMirrorOutputAssociationXmlSerializer());
         }
 
     }

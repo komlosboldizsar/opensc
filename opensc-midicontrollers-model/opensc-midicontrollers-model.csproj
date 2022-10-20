@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
       <TargetFramework>net5.0</TargetFramework>
       <OutputType>Library</OutputType>
@@ -9,8 +9,5 @@
         <NoWarn>NU1701</NoWarn>
       </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
-  </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj"/>
+  <Import Project="..\CommonCsproj\ModelModuleBase.csproj"/>
 </Project>

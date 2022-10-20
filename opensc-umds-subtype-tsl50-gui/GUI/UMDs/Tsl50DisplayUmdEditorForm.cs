@@ -6,15 +6,15 @@ using System;
 namespace OpenSC.GUI.UMDs
 {
 
-    public partial class Tsl50DisplayUmdEditorForm : UmdEditorFormBase, IModelEditorForm<UMD>
+    public partial class Tsl50DisplayUmdEditorForm : UmdEditorFormBase, IModelEditorForm<Umd>
     {
 
-        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as UMD);
-        public IModelEditorForm<UMD> GetInstanceT(UMD modelInstance) => new Tsl50DisplayUmdEditorForm(modelInstance);
+        public IModelEditorForm GetInstance(object modelInstance) => GetInstanceT(modelInstance as Umd);
+        public IModelEditorForm<Umd> GetInstanceT(Umd modelInstance) => new Tsl50DisplayUmdEditorForm(modelInstance);
 
         public Tsl50DisplayUmdEditorForm(): base() => InitializeComponent();
 
-        public Tsl50DisplayUmdEditorForm(UMD umd) : base(umd)
+        public Tsl50DisplayUmdEditorForm(Umd umd) : base(umd)
         {
             InitializeComponent();
             if ((umd != null) && !(umd is Tsl50Display))
@@ -23,7 +23,7 @@ namespace OpenSC.GUI.UMDs
         }
 
         protected override IModelEditorFormDataManager createManager()
-            => new ModelEditorFormDataManager<UMD, Tsl50Display>(this, UmdDatabase.Instance);
+            => new ModelEditorFormDataManager<Umd, Tsl50Display>(this, UmdDatabase.Instance);
 
         protected override void loadData()
         {
@@ -55,7 +55,10 @@ namespace OpenSC.GUI.UMDs
         }
 
         private void initScreenDropDown()
-            => screenDropDown.CreateAdapterAsDataSource(Tsl50ScreenDatabase.Instance, null, true, "(not associated)");
+        {
+            screenDropDown.CreateAdapterAsDataSource(Tsl50ScreenDatabase.Instance, null, true, "(not associated)");
+            screenDropDown.ReceiveObjectDrop().FilterByType<Tsl50Screen>();
+        }
 
     }
 

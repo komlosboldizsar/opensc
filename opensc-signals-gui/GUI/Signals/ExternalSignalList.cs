@@ -80,6 +80,7 @@ namespace OpenSC.GUI.Signals
             builder.Width(50);
             builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.RedTally.State ? Color.Red : Color.LightGray); });
             builder.AddMultilevelChangeEvent(nameof(ExternalSignal.RedTally), nameof(IBidirectionalSignalTally.State));
+            builder.AllowObjectDrag((signal, cell) => signal.RedTally);
 
             // Column: yellow tally
             builder = builderGetterMethod();
@@ -88,6 +89,7 @@ namespace OpenSC.GUI.Signals
             builder.Width(50);
             builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.YellowTally.State ? Color.Gold : Color.LightGray); });
             builder.AddMultilevelChangeEvent(nameof(ExternalSignal.YellowTally), nameof(IBidirectionalSignalTally.State));
+            builder.AllowObjectDrag((signal, cell) => signal.YellowTally);
 
             // Column: green tally
             builder = builderGetterMethod();
@@ -97,6 +99,7 @@ namespace OpenSC.GUI.Signals
             builder.DividerWidth(DEFAULT_DIVIDER_WIDTH);
             builder.UpdaterMethod((signal, cell) => { cell.Style.BackColor = (signal.GreenTally.State ? Color.ForestGreen : Color.LightGray); });
             builder.AddMultilevelChangeEvent(nameof(ExternalSignal.GreenTally), nameof(IBidirectionalSignalTally.State));
+            builder.AllowObjectDrag((signal, cell) => signal.GreenTally);
 
             // Column: edit, delete
             editButtonColumnCreator(table, builderGetterMethod);

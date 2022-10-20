@@ -12,20 +12,20 @@ namespace OpenSC.Model.Signals
     public class ExternalSignalTallyBoolean : SignalTallyBoolean
     {
 
-        private ExternalSignal signal;
-
-        public ExternalSignalTallyBoolean(ExternalSignal signal, ExternalSignalTally tally, SignalTallyColor color) :
-            base(tally, color)
+        public ExternalSignalTallyBoolean(ExternalSignalTally tally) :
+            base(tally)
         {
-            this.signal = signal;
+            externalSignal = ((ExternalSignal)tally.ParentSignalSource);
             updateFields();
-            signal.IdChanged += signalIdChangedHandler;
-            signal.NameChanged += signalNameChangedHandler;
+            externalSignal.IdChanged += signalIdChangedHandler;
+            externalSignal.NameChanged += signalNameChangedHandler;
             tally.StateChanged += signalTallyChangedHandler;
-            signal.ModelRemoved += signalRemovedHandler;
-            if (signal.ID > 0)
+            externalSignal.ModelRemoved += signalRemovedHandler;
+            if (externalSignal.ID > 0)
                 register();
         }
+
+        private ExternalSignal externalSignal;
 
         private void signalIdChangedHandler(IModel signal, int oldValue, int newValue)
         {
@@ -35,20 +35,12 @@ namespace OpenSC.Model.Signals
                 register();
         }
 
-        private void signalNameChangedHandler(IModel signal, string oldName, string newName)
-            => updateDescription();
+        private void signalNameChangedHandler(IModel signal, string oldName, string newName) => updateDescription();
+        private void signalTallyChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState, List<object> recursionChain) => CurrentState = newState;
+        private void signalRemovedHandler(IModel model) => unregister();
 
-        private void signalTallyChangedHandler(ISignalSource signalSource, ISignalTallyState tally, bool newState, List<object> recursionChain)
-            => CurrentState = newState;
-
-        private void signalRemovedHandler(IModel model)
-            => unregister();
-
-        protected override string getName()
-            => string.Format("signal.{0}.{1}tally", signal.ID, getColorString(color));
-
-        protected override string getDescription()
-            => string.Format("Signal [(#{0}) {1}] has {2} tally.", signal.ID, signal.Name, getColorString(color));
+        protected override string getName() => string.Format("signal.{0}.{1}tally", externalSignal.ID, getColorString(color));
+        protected override string getDescription() => string.Format("Signal [(#{0}) {1}] has {2} tally.", externalSignal.ID, externalSignal.Name, getColorString(color));
 
     }
 

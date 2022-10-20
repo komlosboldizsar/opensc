@@ -2,6 +2,7 @@
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.Settings;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Streams
 {
 
-    public abstract class HttpApiBasedStream : Stream
+    public abstract partial class HttpApiBasedStream : Stream
     {
 
         private const string LOG_TAG = "Stream/HttpApiBased";
@@ -31,16 +32,10 @@ namespace OpenSC.Model.Streams
         #endregion
 
         #region Property: RefreshRate
-        public event PropertyChangedTwoValuesDelegate<HttpApiBasedStream, int> RefreshRateChanged;
-
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateRefreshRate))]
         [PersistAs("refresh_rate")]
         private int refreshRate = 5;
-
-        public int RefreshRate
-        {
-            get => refreshRate;
-            set => this.setProperty(ref refreshRate, value, RefreshRateChanged, validator: ValidateRefreshRate);
-        }
 
         public void ValidateRefreshRate(int refreshRate)
         {
@@ -50,16 +45,9 @@ namespace OpenSC.Model.Streams
         #endregion
 
         #region Property: RefreshEnabled
-        public event PropertyChangedTwoValuesDelegate<HttpApiBasedStream, bool> RefreshEnabledChanged;
-
+        [AutoProperty]
         [PersistAs("refresh_enabled")]
         private bool refreshEnabled = true;
-
-        public bool RefreshEnabled
-        {
-            get => refreshEnabled;
-            set => this.setProperty(ref refreshEnabled, value, RefreshEnabledChanged);
-        }
         #endregion
 
         #region Update task and timer

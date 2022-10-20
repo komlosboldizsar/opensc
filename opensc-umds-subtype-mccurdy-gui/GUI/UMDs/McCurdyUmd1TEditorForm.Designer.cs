@@ -39,11 +39,11 @@
             // 
             // tabPage1
             // 
-            this.baseDataTabPage.Size = new System.Drawing.Size(772, 276);
+            this.fullStaticTextTabPage.Size = new System.Drawing.Size(772, 276);
             // 
             // dynamicDataTabPage
             // 
-            this.dynamicDataTabPage.Size = new System.Drawing.Size(767, 480);
+            this.textsTabPage.Size = new System.Drawing.Size(767, 480);
             // 
             // talliesTabPage
             // 

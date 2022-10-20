@@ -153,19 +153,19 @@ namespace OpenSC.GUI.Routers
             builder.Width(30);
             builder.UpdaterMethod((routerOutputProxy, cell) => {
                 RouterOutput ro = routerOutputProxy.Original;
-                if (!ro.LocksSupported)
+                if (!ro.Lock.Supported)
                     return;
-                cell.Value = lockStateToStringConverter.Convert(ro.LockState);
-                cell.Style.BackColor = (ro.LockState == RouterOutputLockState.Clear) ? BACKCOLOR_LOCK_INACTIVE : BACKCOLOR_LOCK_ACTIVE;
+                cell.Value = lockStateToStringConverter.Convert(ro.Lock.State);
+                cell.Style.BackColor = (ro.Lock.State == RouterOutputLockState.Clear) ? BACKCOLOR_LOCK_INACTIVE : BACKCOLOR_LOCK_ACTIVE;
             });
             builder.InitializerMethod((routerOutputProxy, cell) => {
                 RouterOutput ro = routerOutputProxy.Original;
-                if (!ro.LocksSupported)
+                if (!ro.Lock.Supported)
                     cell.Style.BackColor = BACKCOLOR_LOCK_NOTSUPPORTED;
             });
             builder.CellStyle(lockColumnCellStyle);
-            builder.AddChangeEvent(nameof(RouterOutput.LockState));
-            builder.CellDoubleClickHandlerMethod((routerOutputProxy, cell, e) => lockOperation(routerOutputProxy.Original, RouterOutputLockType.Lock));
+            builder.AddMultilevelChangeEvent(nameof(RouterOutput.Lock), nameof(RouterOutputLock.State));
+            builder.CellDoubleClickHandlerMethod((routerOutputProxy, cell, e) => lockOperation(routerOutputProxy.Original.Lock));
             builder.BuildAndAdd();
 
             // Column: protect
@@ -176,19 +176,19 @@ namespace OpenSC.GUI.Routers
             builder.DividerWidth(3);
             builder.UpdaterMethod((routerOutputProxy, cell) => {
                 RouterOutput ro = routerOutputProxy.Original;
-                if (!ro.ProtectsSupported)
+                if (!ro.Protect.Supported)
                     return;
-                cell.Value = lockStateToStringConverter.Convert(ro.ProtectState);
-                cell.Style.BackColor = (ro.ProtectState == RouterOutputLockState.Clear) ? BACKCOLOR_PROTECT_INACTIVE : BACKCOLOR_PROTECT_ACTIVE;
+                cell.Value = lockStateToStringConverter.Convert(ro.Protect.State);
+                cell.Style.BackColor = (ro.Protect.State == RouterOutputLockState.Clear) ? BACKCOLOR_PROTECT_INACTIVE : BACKCOLOR_PROTECT_ACTIVE;
             });
             builder.InitializerMethod((routerOutputProxy, cell) => {
                 RouterOutput ro = routerOutputProxy.Original;
-                if (!ro.ProtectsSupported)
+                if (!ro.Protect.Supported)
                     cell.Style.BackColor = BACKCOLOR_PROTECT_NOTSUPPORTED;
             });
             builder.CellStyle(protectColumnCellStyle);
-            builder.AddChangeEvent(nameof(RouterOutput.ProtectState));
-            builder.CellDoubleClickHandlerMethod((routerOutputProxy, cell, e) => lockOperation(routerOutputProxy.Original, RouterOutputLockType.Protect));
+            builder.AddMultilevelChangeEvent(nameof(RouterOutput.Protect));
+            builder.CellDoubleClickHandlerMethod((routerOutputProxy, cell, e) => lockOperation(routerOutputProxy.Original.Protect));
             builder.BuildAndAdd();
 
             List<ISignalSource> assignables = getAllAssignables();
@@ -285,58 +285,27 @@ namespace OpenSC.GUI.Routers
             { RouterOutputLockState.LockedRemote, "R" },
         };
 
-        private void lockOperation(RouterOutput output, RouterOutputLockType lockType)
+        private void lockOperation(RouterOutputLock @lock)
         {
             try
             {
-                RouterOutputLockState lockState = RouterOutputLockState.Clear;
-                if (lockType == RouterOutputLockType.Lock)
-                    lockState = output.LockState;
-                else if (lockType == RouterOutputLockType.Protect)
-                    lockState = output.ProtectState;
-                switch (lockState)
+                switch (@lock.State)
                 {
                     case RouterOutputLockState.Clear:
-                        if (lockType == RouterOutputLockType.Lock)
-                            output.RequestLock();
-                        else if (lockType == RouterOutputLockType.Protect)
-                            output.RequestProtect();
+                        @lock.Do();
                         break;
                     case RouterOutputLockState.Locked:
                     case RouterOutputLockState.LockedLocal:
-                        if (lockType == RouterOutputLockType.Lock)
-                            output.RequestUnlock();
-                        else if (lockType == RouterOutputLockType.Protect)
-                            output.RequestUnprotect();
+                        @lock.Undo();
                         break;
                     case RouterOutputLockState.LockedRemote:
-                        string verb1 = "", verb2 = "";
-                        if (lockType == RouterOutputLockType.Lock)
-                        {
-                            verb1 = "unlock";
-                            verb2 = "locked";
-                        }
-                        else if (lockType == RouterOutputLockType.Protect)
-                        {
-                            verb1 = "unprotect";
-                            verb2 = "protected";
-                        }
-                        string msgboxTitle = "Confirm force " + verb1;
-                        string msgboxBody = string.Format("Output [(#{0}) {1}] of router [(#{2}) {3}] is {4} by another user.\r\nAre you sure you want to force {5} this input?",
-                            output.Index, output.Name, output.Router.ID, output.Router.Name, verb2, verb1);
-                        if (MessageBox.Show(msgboxBody, msgboxTitle, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
-                        {
-                            if (lockType == RouterOutputLockType.Lock)
-                                output.RequestForceUnlock();
-                            else if (lockType == RouterOutputLockType.Protect)
-                                output.RequestForceUnprotect();
-                        }
+                        RoutersGuiUtilities.ForceUndoWithPrompt(@lock);
                         break;
                 }
             }
-            catch (Exception e)
+            catch (RouterOutputLockOperationException ex)
             {
-                MessageBox.Show(e.Message, "Lock operation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                RoutersGuiUtilities.ShowLockOperationFailedAlert(ex);
             }
         }
 

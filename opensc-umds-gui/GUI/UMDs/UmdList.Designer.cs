@@ -95,7 +95,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel topPanelInner;
         private GeneralComponents.SplitButton addUmdButton;
         private System.Windows.Forms.ContextMenuStrip addableUmdTypesMenu;
     }

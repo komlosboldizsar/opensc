@@ -1,6 +1,7 @@
 ﻿using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using OpenSC.Model.Variables;
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,16 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers.CrosspointBooleans
 {
 
-    public class CrosspointBoolean : ModelBase
+    public partial class CrosspointBoolean : ModelBase
     {
 
         public const string LOG_TAG = "CrosspointBoolean";
 
         #region Persistence, instantiation
         public CrosspointBoolean()
-        { }
+        {
+            cpActiveBoolean = new CrosspointActiveBoolean(this);
+        }
 
         public override void Removed()
         {
@@ -29,147 +32,47 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
         }
         #endregion
 
-        #region Restoration
-        public override void RestoredOwnFields()
-        {
-            base.RestoredOwnFields();
-            cpActiveBoolean = new CrosspointActiveBoolean(this);
-        }
-
-        public override void TotallyRestored()
-        {
-            base.TotallyRestored();
-            restoreWatchedInput();
-            restoreWatchedOutput();
-        }
-        #endregion
-
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = CrosspointBooleanDatabase.Instance;
         #endregion
 
         #region Property: WatchedRouter
-        public event PropertyChangedTwoValuesDelegate<CrosspointBoolean, Router> WatchedRouterChanged;
-
+        [AutoProperty]
         private Router watchedRouter;
-
-        public Router WatchedRouter
-        {
-            get => watchedRouter;
-            set => this.setProperty(ref watchedRouter, value, WatchedRouterChanged);
-        }
 
         private void updateWatchedRouter()
         {
-            Router wir = watchedInput?.Router;
             Router wor = watchedOutput?.Router;
-            WatchedRouter = (wir == wor) ? wor : null;
+            WatchedRouter = (watchedInput?.Router == wor) ? wor : null;
         }
         #endregion
 
         #region Property: WatchedInput
-        public event PropertyChangedTwoValuesDelegate<CrosspointBoolean, RouterInput> WatchedInputChanged;
-
-        private string __watchedInputId; // "Temp foreign key"
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(updateCalculated))]
         [PersistAs("watched_input")]
-        private string _watchedInputId
-        {
-            get => (watchedInput != null) ? string.Format("router.{0}.input.{1}", watchedInput.Router.ID, watchedInput.Index) : null;
-            set { __watchedInputId = value; }
-        }
-
         private RouterInput watchedInput;
-
-        public RouterInput WatchedInput
-        {
-            get => watchedInput;
-            set
-            {
-                this.setProperty(ref watchedInput, value, WatchedInputChanged, null,
-                    (ov, nv) => {
-                        updateWatchedRouter();
-                        updateIsValid();
-                    });
-            }
-        }
-
-        private void restoreWatchedInput()
-        {
-            string[] watchedInputIdParts = __watchedInputId?.Split('.');
-            if (watchedInputIdParts?.Length != 4)
-                return;
-            if ((watchedInputIdParts[0] != "router") || (watchedInputIdParts[2] != "input"))
-                return;
-            if (!int.TryParse(watchedInputIdParts[1], out int storedInputRouterId))
-                return;
-            if (!int.TryParse(watchedInputIdParts[3], out int storedInputIndex))
-                return;
-            WatchedInput = RouterDatabase.Instance.GetTById(storedInputRouterId)?.GetInput(storedInputIndex);
-        }
         #endregion
 
         #region Property: WatchedOutput
-        public event PropertyChangedTwoValuesDelegate<CrosspointBoolean, RouterOutput> WatchedOutputChanged;
-
-        private string __watchedOutputId; // "Temp foreign key"
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(updateCalculated))]
         [PersistAs("watched_output")]
-        private string _watchedOutputId
-        {
-            get => (watchedOutput != null) ? string.Format("router.{0}.output.{1}", watchedOutput.Router.ID, watchedInput.Index) : null;
-            set { __watchedOutputId = value; }
-        }
-
         private RouterOutput watchedOutput;
-
-        public RouterOutput WatchedOutput
-        {
-            get => watchedOutput;
-            set
-            {
-                this.setProperty(ref watchedOutput, value, WatchedOutputChanged, null,
-                    (ov, nv)=> {
-                        updateWatchedRouter();
-                        updateIsValid();
-                    });
-            }
-        }
-
-        public Color Color { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Description { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public bool CurrentState => throw new NotImplementedException();
-
-        private void restoreWatchedOutput()
-        {
-            string[] watchedOutputIdParts = __watchedOutputId?.Split('.');
-            if (watchedOutputIdParts?.Length != 4)
-                return;
-            if ((watchedOutputIdParts[0] != "router") || (watchedOutputIdParts[2] != "output"))
-                return;
-            if (!int.TryParse(watchedOutputIdParts[1], out int storedOutputRouterId))
-                return;
-            if (!int.TryParse(watchedOutputIdParts[3], out int storedOutputIndex))
-                return;
-            WatchedOutput = RouterDatabase.Instance.GetTById(storedOutputRouterId)?.GetOutput(storedOutputIndex);
-        }
         #endregion
 
         #region Property: IsValid
-        public event PropertyChangedTwoValuesDelegate<CrosspointBoolean, bool> IsValidChanged;
-
+        [AutoProperty]
         private bool isValid;
 
-        public bool IsValid
-        {
-            get => isValid;
-            set => this.setProperty(ref isValid, value, IsValidChanged);
-        }
-
-        private void updateIsValid()
-            => IsValid = ((watchedRouter != null) && (watchedInput != null) && (watchedOutput != null));
+        private void updateIsValid() => IsValid = ((watchedRouter != null) && (watchedInput != null) && (watchedOutput != null));
         #endregion
+
+        private void updateCalculated()
+        {
+            updateWatchedRouter();
+            updateIsValid();
+        }
 
         #region CrosspointActiveBoolean class, IBoolean implementation
         private CrosspointActiveBoolean cpActiveBoolean;
@@ -196,8 +99,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
                 register();
             }
 
-            private void parentRemoved(IModel model)
-                => unregister();
+            private void parentRemoved(IModel model) => unregister();
 
             private void parentIdChanged(IModel crosspointBoolean, int oldValue, int newValue)
             {
@@ -205,8 +107,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
                 register();
             }
 
-            private void parentNameChanged(IModel crosspointBoolean, string oldName, string newName)
-                => updateDescription();
+            private void parentNameChanged(IModel crosspointBoolean, string oldName, string newName) => updateDescription();
 
             private void watchedRouterChanged(CrosspointBoolean crosspointBoolean, Router oldValue, Router newValue)
             {
@@ -223,11 +124,8 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
                 updateNameAndDescription();
             }
 
-            private void watchedRouterIdChanged(IModel router, int oldId, int newId)
-                => updateNameAndDescription();
-
-            private void watchedRouterNameChanged(IModel router, string oldName, string newName)
-                => updateDescription();
+            private void watchedRouterIdChanged(IModel router, int oldId, int newId) => updateNameAndDescription();
+            private void watchedRouterNameChanged(IModel router, string oldName, string newName) => updateDescription();
 
             private void watchedInputChanged(CrosspointBoolean crosspointBoolean, RouterInput oldValue, RouterInput newValue)
             {
@@ -245,11 +143,8 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
                 updateState();
             }
 
-            private void watchedInputIndexChanged(RouterInput input, int oldIndex, int newIndex)
-                => updateNameAndDescription();
-
-            private void watchedInputNameChanged(RouterInput input, string oldName, string newName)
-                => updateDescription();
+            private void watchedInputIndexChanged(RouterInput input, int oldIndex, int newIndex) => updateNameAndDescription();
+            private void watchedInputNameChanged(RouterInput input, string oldName, string newName) => updateDescription();
 
             private void watchedOutputChanged(CrosspointBoolean crosspointBoolean, RouterOutput oldValue, RouterOutput newValue)
             {
@@ -269,14 +164,9 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
                 updateState();
             }
 
-            private void watchedOutputIndexChanged(RouterOutput output, int oldIndex, int newIndex)
-                => updateNameAndDescription();
-
-            private void watchedOutputNameChanged(RouterOutput output, string oldName, string newName)
-                => updateDescription();
-
-            private void watchedOutputCurrentInputChanged(RouterOutput output, RouterInput newInput)
-                => updateState();
+            private void watchedOutputIndexChanged(RouterOutput output, int oldIndex, int newIndex) => updateNameAndDescription();
+            private void watchedOutputNameChanged(RouterOutput output, string oldName, string newName) => updateDescription();
+            private void watchedOutputCurrentInputChanged(RouterOutput output, RouterInput newInput) => updateState();
 
             private void updateNameAndDescription()
             {
@@ -285,7 +175,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
             }
 
             private void updateName()
-                => Name = string.Format("crosspointboolean.{0}", parent.ID);
+                => Identifier = string.Format("crosspointboolean.{0}", parent.ID);
 
             internal void updateDescription()
             {
@@ -304,8 +194,7 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
                     parent.WatchedRouter.Name);
             }
 
-            private void updateState()
-                => CurrentState = (parent.WatchedOutput?.CurrentInput == parent.WatchedInput);
+            private void updateState() => CurrentState = (parent.WatchedOutput?.CurrentInput == parent.WatchedInput);
 
         }
         #endregion

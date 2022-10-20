@@ -79,7 +79,7 @@ namespace OpenSC.GUI.Labelsets
             {
                 try
                 {
-                    label.Text = cell.Value.ToString();
+                    label.Text = cell.Value?.ToString();
                 }
                 catch (ArgumentException e)
                 {

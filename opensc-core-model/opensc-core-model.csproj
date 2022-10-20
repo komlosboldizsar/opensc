@@ -1,15 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
       <TargetFramework>net5.0</TargetFramework>
       <OutputType>Library</OutputType>
       <RootNamespace>OpenSC</RootNamespace>
-      <AssemblyName>opensc-core-model</AssemblyName>
-      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
       <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-      <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
-      <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
+      <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+      <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj"/>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-core-model-sourcegenerators\opensc-core-model-sourcegenerators.csproj" />
+  </ItemGroup>
+  <Import Project="..\CommonCsproj\Global\*.csproj" />
 </Project>

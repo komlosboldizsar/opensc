@@ -17,7 +17,7 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            DatabasePersister<Mixer>.RegisterSerializer(new MixerInputXmlSerializer());
+            SerializerRegister.RegisterSerializer(new MixerInputXmlSerializer());
         }
 
     }

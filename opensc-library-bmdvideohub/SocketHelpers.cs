@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 
-namespace BMD.Videohub
+namespace OpenSC.Library.BmdVideohub
 {
 
     internal static class SocketHelpers

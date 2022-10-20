@@ -16,6 +16,8 @@ namespace OpenSC.GUI.GeneralComponents.Tables
 
         private DataGridViewColumnType type;
 
+        private CustomDataGridViewCustomColumnTypeDescriptor customTypeDescriptor;
+
         private string id;
 
         private string header;
@@ -37,6 +39,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         private CustomDataGridViewColumnDescriptor<T>.CellDoubleClickHandlerMethodDelegate doubleClickHandlerMethod;
 
         private CustomDataGridViewColumnDescriptor<T>.CellEndEditHandlerMethodDelegate endEditHandlerMethod;
+
         private CustomDataGridViewColumnDescriptor<T>.CellValueChangedHandlerMethodDelegate valueChangedHandlerMethod;
 
         private List<string> changeEvents = new();
@@ -76,6 +79,7 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         {
             ReadyDescriptor = new CustomDataGridViewColumnDescriptor<T>(
                 type,
+                customTypeDescriptor,
                 id,
                 header,
                 width,
@@ -120,6 +124,13 @@ namespace OpenSC.GUI.GeneralComponents.Tables
         public CustomDataGridViewColumnDescriptorBuilder<T> Type(DataGridViewColumnType type)
         {
             this.type = type;
+            return this;
+        }
+
+        public CustomDataGridViewColumnDescriptorBuilder<T> CustomType(CustomDataGridViewCustomColumnTypeDescriptor customTypeDescriptor)
+        {
+            this.type = DataGridViewColumnType.Custom;
+            this.customTypeDescriptor = customTypeDescriptor;
             return this;
         }
 

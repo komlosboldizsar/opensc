@@ -63,7 +63,7 @@ namespace OpenSC.GUI.Macros
         private void resizeElementsPanel()
         {
             Size elementsPanelOriginalSize = elementsPanel.Size;
-            Size elementsPanelNewSize = new Size(macroPanel.SizeW, macroPanel.SizeH);
+            Size elementsPanelNewSize = new Size(macroPanel.Width, macroPanel.Height);
             Size difference = elementsPanelNewSize - elementsPanelOriginalSize;
             Size += difference;
         }

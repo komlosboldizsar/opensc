@@ -1,7 +1,10 @@
-﻿using OpenSC.GUI.GeneralComponents.DropDowns;
+﻿using OpenSC.GUI.GeneralComponents.DragDrop;
+using OpenSC.GUI.GeneralComponents.DropDowns;
 using OpenSC.Model.Signals;
 using OpenSC.Model.Signals.TallyCopying;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace OpenSC.GUI.Signals.TallyCopying
@@ -22,6 +25,8 @@ namespace OpenSC.GUI.Signals.TallyCopying
             initSourceSignalDropDown(toSignalDropDown);
             initColorDropDown(fromColorDropDown);
             initColorDropDown(toColorDropDown);
+            initFromTallyDrop();
+            initToTallyDrop();
         }
 
         protected override IModelEditorFormDataManager createManager()
@@ -64,11 +69,28 @@ namespace OpenSC.GUI.Signals.TallyCopying
             dropDown.CreateAdapterAsDataSource(
                 SignalRegister.Instance, SignalRegister.Instance.ToStringMethod,
                 true, "(not associated)");
-            dropDown.ReceiveSystemObjectDrop().FilterByType<ISignalSourceRegistered>();
+            dropDown.ReceiveObjectDrop().FilterByType<ISignalSourceRegistered>();
         }
 
-        private void initColorDropDown(ComboBox dropDown)
-            => dropDown.SetAdapterAsDataSource(new EnumComboBoxAdapter<SignalTallyColor>());
+        private void initColorDropDown(ComboBox dropDown) => dropDown.SetAdapterAsDataSource(new EnumComboBoxAdapter<SignalTallyColor>());
+
+        private void initFromTallyDrop() => fromSourceTable.ReceiveObjectDropCustom(fromSourceTableDropValueSetter).FilterByType<ISignalTallyState>();
+
+        private void fromSourceTableDropValueSetter(TableLayoutPanel receiverParent, IEnumerable<object> objects, DragEventArgs eventArgs, object tag)
+        {
+            ISignalTallyState tallyState = objects.FirstOrDefault() as ISignalTallyState;
+            fromSignalDropDown.SelectByValue(tallyState?.ParentSignalSource);
+            fromColorDropDown.SelectByValue(tallyState?.Color);
+        }
+
+        private void initToTallyDrop() => toSourceTable.ReceiveObjectDropCustom(toSourceTableDropValueSetter).FilterByType<ISignalTallyReceiver>();
+
+        private void toSourceTableDropValueSetter(TableLayoutPanel receiverParent, IEnumerable<object> objects, DragEventArgs eventArgs, object tag)
+        {
+            ISignalTallyReceiver tallyState = objects.FirstOrDefault() as ISignalTallyReceiver;
+            toSignalDropDown.SelectByValue(tallyState?.ParentSignalSource);
+            toColorDropDown.SelectByValue(tallyState?.Color);
+        }
 
     }
 

@@ -57,9 +57,9 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         #region Property: IpAddress
         public event PropertyChangedTwoValuesDelegate<BmdVideohub, string> IpAddressChanged;
 
-        [PersistAs("ip_address")]
         private string ipAddress;
 
+        [PersistAs("ip_address")]
         public string IpAddress
         {
             get => ipAddress;
@@ -108,9 +108,9 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         #region Auto reconnect
         public event PropertyChangedTwoValuesDelegate<BmdVideohub, bool> AutoReconnectChanged;
 
-        [PersistAs("auto_reconnect")]
         private bool autoReconnect;
 
+        [PersistAs("auto_reconnect")]
         public bool AutoReconnect
         {
             get => autoReconnect;
@@ -154,14 +154,16 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         }
         #endregion
 
-        private BMD.Videohub.BlackMagicVideohub videohub = null;
+        private Library.BmdVideohub.VideohubClient videohub = null;
 
         private void initVideohub()
         {
-            videohub = new BMD.Videohub.BlackMagicVideohub(ipAddress);
+            videohub = new Library.BmdVideohub.VideohubClient(ipAddress);
             videohub.ConnectionStateChanged += connectionStateChangedHandler;
             videohub.CrosspointChanged += crosspointChangedHandler;
             videohub.LockChanged += lockChangedHandler;
+            videohub.InputLabelChanged += inputLabelChangedHandler;
+            videohub.OutputLabelChanged += outputLabelChangedHandler;
         }
 
         private void connectionStateChangedHandler(bool state)
@@ -171,26 +173,30 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
                 queryAllStates();
         }
 
-        private void crosspointChangedHandler(int output, int? input)
+        private void crosspointChangedHandler(Library.BmdVideohub.Crosspoint crosspoint)
         {
-            if (input == null)
+            if ((crosspoint.Output == null) || (crosspoint.Input == null))
                 return;
             try
             {
-                notifyCrosspointChanged(output, (int)input);
+                notifyCrosspointChanged((int)crosspoint.Output, (int)crosspoint.Input);
             }
             catch { }
         }
 
-        private void lockChangedHandler(int output, BMD.Videohub.BlackMagicVideohub.LockState state)
-            => notifyLockChanged(output, RouterOutputLockType.Lock, LOCK_STATE_TRANSLATIONS[state]);
+        private void lockChangedHandler(Library.BmdVideohub.LockStateData lockStateData)
+        {
+            if ((lockStateData.Output == null) || (lockStateData.State == null))
+                return;
+            notifyLockChanged((int)lockStateData.Output, RouterOutputLockType.Lock, LOCK_STATE_TRANSLATIONS[(Library.BmdVideohub.LockState)lockStateData.State]);
+        }
 
-        private static readonly Dictionary<BMD.Videohub.BlackMagicVideohub.LockState, RouterOutputLockState> LOCK_STATE_TRANSLATIONS
-            = new Dictionary<BMD.Videohub.BlackMagicVideohub.LockState, RouterOutputLockState>()
+        private static readonly Dictionary<Library.BmdVideohub.LockState, RouterOutputLockState> LOCK_STATE_TRANSLATIONS
+            = new Dictionary<Library.BmdVideohub.LockState, RouterOutputLockState>()
             {
-                { BMD.Videohub.BlackMagicVideohub.LockState.Unlocked, RouterOutputLockState.Clear },
-                { BMD.Videohub.BlackMagicVideohub.LockState.Owned, RouterOutputLockState.LockedLocal },
-                { BMD.Videohub.BlackMagicVideohub.LockState.Taken, RouterOutputLockState.LockedRemote }
+                { Library.BmdVideohub.LockState.Unlocked, RouterOutputLockState.Clear },
+                { Library.BmdVideohub.LockState.Owned, RouterOutputLockState.LockedLocal },
+                { Library.BmdVideohub.LockState.Taken, RouterOutputLockState.LockedRemote }
             };
 
         protected override void requestCrosspointUpdateImpl(RouterOutput output, RouterInput input)
@@ -205,7 +211,7 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
 
         protected override void requestCrosspointUpdatesImpl(IEnumerable<RouterCrosspoint> crosspoints)
         {
-            IEnumerable<BMD.Videohub.BlackMagicVideohub.Crosspoint> crosspointIndices = crosspoints.Select(cp => new BMD.Videohub.BlackMagicVideohub.Crosspoint(cp.Output.Index, cp.Input.Index));
+            IEnumerable<Library.BmdVideohub.Crosspoint> crosspointIndices = crosspoints.Select(cp => new Library.BmdVideohub.Crosspoint(cp.Output.Index, cp.Input.Index));
             try
             {
                 videohub.SetCrosspoints(crosspointIndices);
@@ -218,6 +224,8 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         {
             videohub.QueryAllCrosspoints();
             videohub.QueryAllLockStates();
+            videohub.QueryAllOutputLabels();
+            videohub.QueryAllInputLabels();
         }
 
         protected override void requestLockOperationImpl(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
@@ -227,20 +235,20 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
             switch (lockOperationType)
             {
                 case RouterOutputLockOperationType.Lock:
-                    videohub.SetLockState(output.Index, true);
+                    videohub.DoLockOperation(output.Index, Library.BmdVideohub.LockOperation.Lock);
                     break;
                 case RouterOutputLockOperationType.Unlock:
-                    videohub.SetLockState(output.Index, false);
+                    videohub.DoLockOperation(output.Index, Library.BmdVideohub.LockOperation.Unlock);
                     break;
                 case RouterOutputLockOperationType.ForceUnlock:
-                    videohub.SetLockState(output.Index, false); // TODO
+                    videohub.DoLockOperation(output.Index, Library.BmdVideohub.LockOperation.ForceUnlock); // TODO
                     break;
             }
         }
 
         #region Input and output instantiation
         public override RouterInput CreateInput(string name, int index) => new RouterInput(name, this, index);
-        public override RouterOutput CreateOutput(string name, int index) => new RouterOutput(name, this, index);
+        public override RouterOutput CreateOutput(string name, int index) => new BmdVideohubOutput(name, this, index);
 
         private static readonly Dictionary<Type, string> OUTPUT_TYPES = new Dictionary<Type, string>()
         {
@@ -249,6 +257,66 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
 
         protected override Dictionary<Type, string> OutputTypesDictionaryGetter() => OUTPUT_TYPES;
         #endregion
+
+        #region Names - info properties
+        public override bool CanSetRemoteInputNames { get; } = true;
+        public override bool CanGetRemoteInputNames { get; } = true;
+        public override bool CanGetRemoteInputNameChangeNotifications { get; } = true;
+
+        public override bool CanSetRemoteOutputNames { get; } = true;
+        public override bool CanGetRemoteOutputNames { get; } = true;
+        public override bool CanGetRemoteOutputNameChangeNotifications { get; } = true;
+        #endregion
+
+        #region Names - operations
+        protected override string getRemoteInputName(RouterInput input) => videohub.GetInputLabel(input.Index);
+
+        protected override Dictionary<RouterInput, string> getRemoteInputNames(IEnumerable<RouterInput> inputs)
+        {
+            Dictionary<RouterInput, string> names = new();
+            foreach (RouterInput input in inputs)
+                names.Add(input, videohub.GetInputLabel(input.Index));
+            return names;
+        }
+
+        protected override void setRemoteInputName(RouterInput input, string name)
+            => videohub.SetInputLabel(input.Index, name);
+
+        protected override void setRemoteInputNames(Dictionary<RouterInput, string> names)
+            => videohub.SetInputLabel(names.Select(kvp => new Library.BmdVideohub.Label(kvp.Key.Index, kvp.Value)));
+
+        protected override string getRemoteOutputName(RouterOutput output) => videohub.GetOutputLabel(output.Index);
+
+        protected override Dictionary<RouterOutput, string> getRemoteOutputNames(IEnumerable<RouterOutput> outputs)
+        {
+            Dictionary<RouterOutput, string> names = new();
+            foreach (RouterOutput output in outputs)
+                names.Add(output, videohub.GetOutputLabel(output.Index));
+            return names;
+        }
+
+        protected override void setRemoteOutputName(RouterOutput output, string name)
+            => videohub.SetOutputLabel(output.Index, name);
+
+        protected override void setRemoteOutputNames(Dictionary<RouterOutput, string> names)
+            => videohub.SetOutputLabel(names.Select(kvp => new Library.BmdVideohub.Label(kvp.Key.Index, kvp.Value)));
+        #endregion
+
+
+
+        private void outputLabelChangedHandler(Library.BmdVideohub.Label label)
+        {
+            if ((label.Index == null) || (label.Text == null))
+                return;
+            notifyRemoteOutputNameChanged((int)label.Index, label.Text);
+        }
+
+        private void inputLabelChangedHandler(Library.BmdVideohub.Label label)
+        {
+            if ((label.Index == null) || (label.Text == null))
+                return;
+            notifyRemoteInputNameChanged((int)label.Index, label.Text);
+        }
 
     }
 

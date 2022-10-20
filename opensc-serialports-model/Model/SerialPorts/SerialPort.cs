@@ -1,6 +1,8 @@
-﻿using OpenSC.Logger;
+﻿using OpenSC.Library.TaskSchedulerQueue;
+using OpenSC.Logger;
 using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -13,7 +15,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.SerialPorts
 {
 
-    public class SerialPort : ModelBase
+    public partial class SerialPort : ModelBase
     {
 
         #region Constants
@@ -23,20 +25,15 @@ namespace OpenSC.Model.SerialPorts
         #region Persistence, instantiation
         public SerialPort()
         {
-            startPacketSchedulerTaskMethod();
+            createPacketQueue();
         }
 
-        public override void RestoredOwnFields()
-        {
-            startPacketSchedulerTaskMethod();
-            Init();
-        }
+        public override void RestoredOwnFields() => Init();
 
         public override void Removed()
         {
             base.Removed();
             DeInit();
-            stopPacketSchedulerTaskMethod();
             ComPortNameChanged = null;
             InitializedChanged = null;
             BaudRateChanged = null;
@@ -46,6 +43,8 @@ namespace OpenSC.Model.SerialPorts
             ReceivedDataBytes = null;
             ReceivedDataAsciiString = null;
         }
+
+        protected override void afterUpdate() => ReInit();
         #endregion
 
         #region Owner database
@@ -53,37 +52,15 @@ namespace OpenSC.Model.SerialPorts
         #endregion
 
         #region Property: ComPortName
-        public event PropertyChangedTwoValuesDelegate<SerialPort, string> ComPortNameChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(ReInit))]
         [PersistAs("port_name")]
         protected string comPortName;
-
-        public string ComPortName
-        {
-            get => comPortName;
-            set
-            {
-                BeforeChangePropertyDelegate<string> beforeChangeDelegate = (ov, nv) => {
-                    if (serialPort?.IsOpen == true)
-                        DeInit();
-                };
-                if (!this.setProperty(ref comPortName, value, ComPortNameChanged, beforeChangeDelegate))
-                    return;
-                Init();
-            }
-        }
         #endregion
 
         #region Property: Initialized
-        public event PropertyChangedTwoValuesDelegate<SerialPort, bool> InitializedChanged;
-        
+        [AutoProperty]
         protected bool initialized;
-
-        public bool Initialized
-        {
-            get => initialized;
-            set => this.setProperty(ref initialized, value, InitializedChanged);
-        }
         #endregion
 
         // >>>> ComPort properties
@@ -95,32 +72,13 @@ namespace OpenSC.Model.SerialPorts
         private const StopBits DEFAULT_STOPBITS = StopBits.One;
         #endregion
 
-        private void afterPortPropertyChanged()
-        {
-            if (Initialized && !Updating)
-            {
-                DeInit();
-                Init();
-            }
-        }
-
         #region Property: BaudRate
-        public event PropertyChangedTwoValuesDelegate<SerialPort, int> BaudRateChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(ReInit))]
+        [AutoProperty.Validator(nameof(ValidateBaudRate))]
         [PersistAs("baudrate")]
         private int baudRate = DEFAULT_BAUDRATE;
 
-        public int BaudRate
-        {
-            get => baudRate;
-            set
-            {
-                if (!this.setProperty(ref baudRate, value, BaudRateChanged, validator: ValidateBaudRate))
-                    return;
-                afterPortPropertyChanged();
-            }
-        }
-        
         public void ValidateBaudRate(int baudRate)
         {
             if (baudRate <= 0)
@@ -129,39 +87,18 @@ namespace OpenSC.Model.SerialPorts
         #endregion
 
         #region Property: Parity
-        public event PropertyChangedTwoValuesDelegate<SerialPort, Parity> ParityChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(ReInit))]
         [PersistAs("parity")]
         private Parity parity = DEFAULT_PARITY;
-
-        public Parity Parity
-        {
-            get => parity;
-            set
-            {
-                if (!this.setProperty(ref parity, value, ParityChanged))
-                    return;
-                afterPortPropertyChanged();
-            }
-        }
         #endregion
 
         #region Property: DataBits
-        public event PropertyChangedTwoValuesDelegate<SerialPort, int> DataBitsChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(ReInit))]
+        [AutoProperty.Validator(nameof(ValidateDataBits))]
         [PersistAs("databits")]
         private int dataBits = DEFAULT_DATABITS;
-
-        public int DataBits
-        {
-            get => dataBits;
-            set
-            {
-                if (!this.setProperty(ref dataBits, value, DataBitsChanged, validator: ValidateDataBits))
-                    return;
-                afterPortPropertyChanged();
-            }
-        }
 
         public void ValidateDataBits(int dataBits)
         {
@@ -171,152 +108,111 @@ namespace OpenSC.Model.SerialPorts
         #endregion
 
         #region Property: StopBits
-        public event PropertyChangedTwoValuesDelegate<SerialPort, StopBits> StopBitsChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(ReInit))]
         [PersistAs("stopbits")]
         private StopBits stopBits = DEFAULT_STOPBITS;
-
-        public StopBits StopBits
-        {
-            get => stopBits;
-            set
-            {
-                if (!this.setProperty(ref stopBits, value, StopBitsChanged))
-                    return;
-                afterPortPropertyChanged();
-            }
-        }
         #endregion
 
         // <<<< ComPort properties
-
-        #region Scheduler and sender thread
-        private BlockingCollection<Packet> packetFifo;
-        private CancellationTokenSource packetSchedulerTaskCancellationTokenSource;
-        private Task packetSchedulerTask;
-
-        private void startPacketSchedulerTaskMethod()
-        {
-            if (packetSchedulerTask != null)
-                return;
-            packetFifo = new();
-            packetSchedulerTaskCancellationTokenSource = new();
-            packetSchedulerTask = Task.Run(() => packetSchedulerTaskMethod());
-        }
-
-        private async void stopPacketSchedulerTaskMethod()
-        {
-            if (packetSchedulerTask == null)
-                return;
-            try
-            {
-                packetSchedulerTaskCancellationTokenSource.Cancel();
-                await packetSchedulerTask;
-                packetSchedulerTask.Dispose();
-                packetSchedulerTask = null;
-                packetSchedulerTaskCancellationTokenSource.Dispose();
-                packetSchedulerTaskCancellationTokenSource = null;
-                packetSchedulerTask.Dispose();
-                packetSchedulerTask = null;
-            }
-            catch (ObjectDisposedException)
-            { }
-        }
-
-        private void packetSchedulerTaskMethod()
-        {
-            while (true)
-            {
-                try
-                {
-                    Packet packet = packetFifo.Take(packetSchedulerTaskCancellationTokenSource.Token);
-                    if ((packet != null) && packetIsValid(packet))
-                    {
-                        serialPort.Write(packet.Data, 0, packet.Data.Length);
-                    }
-                    else
-                    {
-                        string errorMessage = string.Format($"Dropped an invalid packet on port [{this}]");
-                        LogDispatcher.W(LOG_TAG, errorMessage);
-                    }
-                }
-                catch (OperationCanceledException)
-                { }
-            }
-        }
-        #endregion
 
         private System.IO.Ports.SerialPort serialPort;
 
         #region Init and DeInit
         public void Init()
         {
-
+            LogDispatcher.I(LOG_TAG, $"Initializing port [{this}]...");
+            if (Initialized)
+            {
+                LogDispatcher.W(LOG_TAG, $"Couldn't initialize port ({this}). It was already initialized.");
+                return;
+            }
             if (string.IsNullOrEmpty(comPortName))
                 return;
-
             try
             {
                 serialPort = new System.IO.Ports.SerialPort(comPortName, baudRate, parity, dataBits, stopBits);
                 serialPort.Open();
                 serialPort.DataReceived += dataReceivedHandler;
+                packetQueue.Start();
                 Initialized = true;
+                LogDispatcher.I(LOG_TAG, $"Initializing port [{this}] successful.");
             }
             catch (Exception ex)
             {
-                string errorMessage = string.Format("Couldn't initialize port (ID: {0}) with settings [baudrate: {1}, parity: {2}, databits: {3}, stopbits: {4}]. Exception message: [{5}].",
-                    ID, baudRate, parity, dataBits, stopBits, ex.Message);
-                LogDispatcher.E(LOG_TAG, errorMessage);
+                LogDispatcher.W(LOG_TAG, $"Couldn't initialize port [{this}] with settings [name: {comPortName}, baudrate: {baudRate}, parity: {parity}, databits: {dataBits}, stopbits: {stopBits}]. Exception message: [{ex.Message}].");
             }
-
         }
 
         public void DeInit()
         {
+            LogDispatcher.I(LOG_TAG, $"Deinitializing port [{this}]...");
+            if (!Initialized)
+            {
+                LogDispatcher.W(LOG_TAG, $"Couldn't deinitialize port [{this}]. It was not initialized.");
+                return;
+            }
             try
             {
-                if (serialPort != null) {
+                packetQueue.Stop();
+                if (serialPort != null)
+                {
                     serialPort.DataReceived -= dataReceivedHandler;
                     serialPort?.Close();
                     serialPort?.Dispose(); 
                 }
                 serialPort = null;
                 Initialized = false;
+                LogDispatcher.I(LOG_TAG, $"Deinitializing port [{this}] successful.");
             }
             catch (Exception ex)
             {
-                string errorMessage = string.Format("Couldn't deinitialize port (ID: {0}). Exception message: [{1}].",
-                        ID, ex.Message);
-                LogDispatcher.E(LOG_TAG, errorMessage);
+                LogDispatcher.E(LOG_TAG, $"Couldn't deinitialize port (ID: {ID}). Exception message: [{ex.Message}].");
             }
         }
 
         public void ReInit()
         {
-            DeInit();
-            Init();
+            if (Initialized && !Updating)
+            {
+                DeInit();
+                Init();
+            }
         }
         #endregion
 
         #region Data sending
-        public void SendData(byte[] data, DateTime validUntil)
-            => SendData(new Packet() { Data = data, ValidUntil = validUntil });
+        private /*readonly*/ TaskQueue<Packet> packetQueue;
+        private void createPacketQueue() => packetQueue = new(sendPacket, invalidPacket);
 
-        public void SendData(Packet packet)
+        private void sendPacket(Packet packet)
         {
-            if (serialPort?.IsOpen != true)
-                return;
-            if (packetSchedulerTaskCancellationTokenSource.IsCancellationRequested)
-                return;
-            packetFifo?.Add(packet);
+            serialPort.Write(packet.Data, 0, packet.Data.Length);
+            SentPacket?.Invoke(this, packet);
         }
 
-        protected bool packetIsValid(Packet packet) => (packet.ValidUntil >= DateTime.Now);
-
-        public class Packet
+        private void invalidPacket(Packet packet)
         {
-            public DateTime ValidUntil;
+            LogDispatcher.W(LOG_TAG, $"Dropped an invalid packet on port [{this}].");
+            DroppedInvalidPacket?.Invoke(this, packet);
+        }
+
+        public delegate void PacketEventDelegate(SerialPort port, Packet packet);
+        public event PacketEventDelegate SentPacket;
+        public event PacketEventDelegate DroppedInvalidPacket;
+
+        public void SendData(byte[] data, DateTime validUntil) => packetQueue?.Enqueue(new(data, validUntil));
+
+        public class Packet : ImmediatelyReadyQueuedTask
+        {
             public byte[] Data;
+            public DateTime ValidUntil;
+            public Packet(byte[] data, DateTime validUntil)
+            {
+                Data = data;
+                ValidUntil = validUntil;
+            }
+            protected override bool IsValid => (ValidUntil >= DateTime.Now);
         }
         #endregion
 
@@ -330,28 +226,33 @@ namespace OpenSC.Model.SerialPorts
         public delegate void ReceivedDataAsciiLineDelegate(SerialPort port, string asciiLine);
         public event ReceivedDataAsciiLineDelegate ReceivedDataAsciiLine;
 
-        private string asciiLineBuffer = "";
+        private string asciiLineBuffer = string.Empty;
 
         private void dataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
-
             if (serialPort == null)
                 return;
-
             int bytesToRead = serialPort.BytesToRead;
             byte[] receivedBytes = new byte[bytesToRead];
             for (int i = 0; i < bytesToRead; i++)
                 receivedBytes[i] = (byte)serialPort.ReadByte();
+            bytesReceivedHandler(receivedBytes);
+        }
+
+        private void bytesReceivedHandler(byte[] receivedBytes)
+        {
 
             ReceivedDataBytes?.Invoke(this, receivedBytes);
+
             string receivedAsciiString = Encoding.ASCII.GetString(receivedBytes);
             ReceivedDataAsciiString?.Invoke(this, receivedAsciiString);
 
             asciiLineBuffer += receivedAsciiString;
             char lastAsciiChar = asciiLineBuffer[asciiLineBuffer.Length - 1];
             bool noHalfLine = ((lastAsciiChar == '\r') || (lastAsciiChar == '\n'));
-            string[] asciiLinesSplit = asciiLineBuffer.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            List<string> asciiLines = asciiLinesSplit.ToList();
+            List<string> asciiLines = asciiLineBuffer
+                .Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                .ToList();
             string lastHalfLine = "";
             if (!noHalfLine)
             {
@@ -363,6 +264,8 @@ namespace OpenSC.Model.SerialPorts
             asciiLineBuffer = lastHalfLine;
 
         }
+
+        public void SimulateReceiveBytes(byte[] bytes) => bytesReceivedHandler(bytes);
         #endregion
 
     }

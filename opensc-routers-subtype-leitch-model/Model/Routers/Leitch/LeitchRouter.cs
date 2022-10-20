@@ -3,6 +3,7 @@ using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
 using OpenSC.Model.SerialPorts;
 using OpenSC.Model.Settings;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,25 +16,13 @@ namespace OpenSC.Model.Routers.Leitch
 
     [TypeLabel("Leitch")]
     [TypeCode("leitch")]
-    public class LeitchRouter : Router
+    public partial class LeitchRouter : Router
     {
 
         private new const string LOG_TAG = "Router/Leitch";
 
         public LeitchRouter()
         { }
-
-        public override void TotallyRestored()
-        {
-            base.TotallyRestored();
-            if (port != null)
-            {
-                port.ReceivedDataAsciiLine += receivedLineFromPort;
-                port.InitializedChanged += portInitializedChangedHandler;
-                if (port.Initialized)
-                    initSerial();
-            }
-        }
 
         public override void Removed()
         {
@@ -43,29 +32,28 @@ namespace OpenSC.Model.Routers.Leitch
         }
 
         #region Property: Port
-        public event PropertyChangedTwoValuesDelegate<LeitchRouter, SerialPort> PortChanged;
-        
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_port_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_port_afterChange))]
         [PersistAs("port")]
         private SerialPort port;
 
-#pragma warning disable CS0169
-        [TempForeignKey(nameof(port))]
-        private string _portId;
-#pragma warning restore CS0169
-
-        public SerialPort Port
+        private void _port_beforeChange(SerialPort oldValue, SerialPort newValue, BeforeChangePropertyArgs args)
         {
-            get => port;
-            set
+            if (oldValue != null)
             {
-                BeforeChangePropertyDelegate<SerialPort> beforeChangeDelegate = (ov, nv) => {
-                    ov.ReceivedDataAsciiLine -= receivedLineFromPort;
-                    ov.InitializedChanged -= portInitializedChangedHandler;
-                };
-                AfterChangePropertyDelegate<SerialPort> afterChangeDelegate = (ov, nv) => {
-                    port.ReceivedDataAsciiString += receivedLineFromPort;
-                };
-                this.setProperty(ref port, value, PortChanged, beforeChangeDelegate, afterChangeDelegate);
+                oldValue.ReceivedDataAsciiLine -= receivedLineFromPort;
+                oldValue.InitializedChanged -= portInitializedChangedHandler;
+            }
+        }
+
+        private void _port_afterChange(SerialPort oldValue, SerialPort newValue)
+        {
+            if (newValue != null)
+            {
+                newValue.ReceivedDataAsciiLine += receivedLineFromPort;
+                newValue.InitializedChanged += portInitializedChangedHandler;
+                initSerial();
             }
         }
 
@@ -83,16 +71,10 @@ namespace OpenSC.Model.Routers.Leitch
         #endregion
 
         #region Property: Level
-        public event PropertyChangedTwoValuesDelegate<LeitchRouter, int> LevelChanged;
-
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateLevel))]
         [PersistAs("level")]
         private int level;
-
-        public int Level
-        {
-            get => level;
-            set => this.setProperty(ref level, value, LevelChanged, validator: ValidateLevel);
-        }
 
         public void ValidateLevel(int level)
         {
@@ -190,7 +172,7 @@ namespace OpenSC.Model.Routers.Leitch
                 int levelIndex = int.Parse(statusString[2].ToString(), System.Globalization.NumberStyles.HexNumber);
                 if (levelIndex != level)
                     return;
-                string destinationSourceString = statusString.Substring(3);
+                string destinationSourceString = statusString[3..];
                 string[] destinationSourceStringParts = destinationSourceString.Split(',');
                 int sourceIndex = int.Parse(destinationSourceStringParts[1], System.Globalization.NumberStyles.HexNumber);
                 int destinationIndex = int.Parse(destinationSourceStringParts[0], System.Globalization.NumberStyles.HexNumber);
@@ -225,15 +207,15 @@ namespace OpenSC.Model.Routers.Leitch
                 
                 if (lockOpCode == 1)
                     notifyLockChanged(output, RouterOutputLockType.Lock, lockState);
-                else if (output.LockState != RouterOutputLockState.Clear)
+                else if (output.Lock.State != RouterOutputLockState.Clear)
                     notifyLockChanged(output, RouterOutputLockType.Lock, RouterOutputLockState.Clear);
 
                 if (lockOpCode == 2)
                     notifyLockChanged(output, RouterOutputLockType.Protect, lockState);
-                else if (output.ProtectState != RouterOutputLockState.Clear)
+                else if (output.Protect.State != RouterOutputLockState.Clear)
                     notifyLockChanged(output, RouterOutputLockType.Protect, RouterOutputLockState.Clear);
 
-                output.LockProtectOwner = panelId;
+                output.LockProtectOwnerPanelId = panelId;
 
             }
             catch
@@ -244,10 +226,7 @@ namespace OpenSC.Model.Routers.Leitch
             }
         }
 
-        private void enableReporting()
-        {
-            sendSerialCommand("@ ?");
-        }
+        private void enableReporting() => sendSerialCommand("@ ?");
         #endregion
 
         #region Settings

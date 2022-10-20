@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace>OpenSC</RootNamespace>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-gpiointerfaces-subtype-bmdtallybox-model\opensc-gpiointerfaces-subtype-bmdtallybox-model.csproj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
+  </ItemGroup>
+  <Import Project="..\opensc-gpiointerfaces-gui\GpiointerfacesSubtypeGuiModuleBase.csproj"/>
+</Project>

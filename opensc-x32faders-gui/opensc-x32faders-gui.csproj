@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <RootNamespace>OpenSC</RootNamespace>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-x32faders-model\opensc-x32faders-model.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="GUI\X32Faders\X32FaderList.cs" />
+    <Compile Update="GUI\X32Faders\X32FaderEditorForm.cs" />
+  </ItemGroup>
+  <Import Project="..\CommonCsproj\GuiModuleBase.csproj"/>
+</Project>

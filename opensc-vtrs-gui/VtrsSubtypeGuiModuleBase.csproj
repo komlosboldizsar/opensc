@@ -1,0 +1,7 @@
+<Project>
+  <Import Project="..\CommonCsproj\GuiModuleBase.csproj"/>
+  <ItemGroup>
+    <ProjectReference Include="..\opensc-vtrs-model\opensc-vtrs-model.csproj"/>
+    <ProjectReference Include="..\opensc-vtrs-gui\opensc-vtrs-gui.csproj"/>
+  </ItemGroup>
+</Project>

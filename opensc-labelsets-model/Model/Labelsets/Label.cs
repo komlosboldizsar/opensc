@@ -1,4 +1,5 @@
 ﻿using OpenSC.Model.General;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Labelsets
 {
 
-    public class Label : ObjectBase
+    public partial class Label : ObjectBase
     {
 
         public Label(Labelset labelset, ISystemObject associatedObject = null)
@@ -27,15 +28,11 @@ namespace OpenSC.Model.Labelsets
         }
 
         #region Property: Text
-        public event PropertyChangedTwoValuesDelegate<Label, string> TextChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_text_afterChange))]
         private string text;
 
-        public string Text
-        {
-            get => text;
-            set => this.setProperty(ref text, value, TextChanged, null, (ov, nv) => Labelset.NotifyLabelTextChanged(this, nv));
-        }
+        private void _text_afterChange(string oldValue, string newValue) => Labelset.NotifyLabelTextChanged(this, newValue);
         #endregion
 
     }

@@ -38,8 +38,8 @@ namespace OpenSC.GUI.Signals.BooleanTallies
             builder.Type(DataGridViewColumnType.TextBox);
             builder.Header("From boolean");
             builder.Width(150);
-            builder.UpdaterMethod((booleanTally, cell) => { cell.Value = booleanTally.FromBoolean.Name; });
-            builder.AddMultilevelChangeEvent(nameof(BooleanTally.FromBoolean), nameof(IBoolean.Name));
+            builder.UpdaterMethod((booleanTally, cell) => { cell.Value = booleanTally.FromBoolean.Identifier; });
+            builder.AddMultilevelChangeEvent(nameof(BooleanTally.FromBoolean), nameof(IBoolean.Identifier));
 
             // Column: to signal
             builder = builderGetterMethod();

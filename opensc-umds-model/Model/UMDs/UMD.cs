@@ -1,199 +1,289 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using OpenSC.Model.Variables;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OpenSC.Model.UMDs
 {
 
-    public abstract class UMD : ModelBase
+    public abstract partial class Umd : ModelBase
     {
 
-        public abstract IUMDType Type { get; }
-        public abstract Color[] TallyColors { get; }
+        #region Instantiation, restoration, persistence, removation
+        public Umd()
+        {
+            alignmentWithFullStaticText = DefaultAlignmentWithFullStaticText;
+            initTextThings();
+            initTallyThings();
+        }
 
-        protected abstract void update();
+        public override void RestoredOwnFields()
+        {
+            base.RestoredOwnFields();
+            handleRestoredOwnFieldsTexts();
+            handleRestoredOwnFieldsTallies();
+        }
 
         public override void RestoreCustomRelations()
         {
             base.RestoreCustomRelations();
-            restoreTallySources();
+            Texts.ForEach(t => t.RestoreCustomRelations());
+            Tallies.ForEach(t => t.RestoreCustomRelations());
+        }
+
+        public override void TotallyRestored()
+        {
+            base.TotallyRestored();
+            UpdateEverything();
         }
 
         public override void Removed()
         {
             base.Removed();
-            StaticTextChanged = null;
-            UseStaticTextChanged = null;
-            for (int i = 0; i < MAX_TALLIES; i++)
-                SetTallySource(i, null);
+            FullStaticTextChanged = null;
+            UseFullStaticTextChanged = null;
+            Texts.ForEach(t => t.Removed());
+            Tallies.ForEach(t => t.Removed());
         }
-
-        public UMD()
-        { }
+        #endregion
 
         #region Owner database
         public override sealed IDatabaseBase OwnerDatabase { get; } = UmdDatabase.Instance;
         #endregion
 
-        #region Property: CurrentText
-        public event PropertyChangedTwoValuesDelegate<UMD, string> CurrentTextChanged;
+        #region Property: Enabled
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(UpdateEverything))]
+        [PersistAs("enabled")]
+        private bool enabled = true;
+        #endregion
 
-        protected string currentText = "";
+        #region Property: DisplayableRawText
+        [AutoProperty]
+        protected string displayableRawText = string.Empty;
+        #endregion
 
-        public string CurrentText
+        #region Property: DisplayableCompactText
+        [AutoProperty]
+        protected string displayableCompactText = string.Empty;
+        #endregion
+
+        #region Property: FullStaticText
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(_fullStaticText_afterChange))]
+        [PersistAs("full_static_text")]
+        private string fullStaticText;
+
+        private void _fullStaticText_afterChange(string oldValue, string newValue)
         {
-            get => currentText;
-            set => this.setProperty(ref currentText, value, CurrentTextChanged, null, (ov, nv) => update());
+            if (useFullStaticText)
+                UpdateTexts();
         }
         #endregion
 
-        #region Property: DynamicText
-        public event PropertyChangedTwoValuesDelegate<UMD, string> DynamicTextChanged;
+        #region Property: UseFullStaticText
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(UpdateTexts))]
+        [PersistAs("use_full_static_text")]
+        private bool useFullStaticText = false;
+        #endregion
 
-        private string dynamicText;
-        
-        protected string DynamicText
+        #region Property: AlignmentWithFullStaticText
+        [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_alignmentWithFullStaticText_beforeChange))]
+        [AutoProperty.AfterChange(nameof(_alignmentWithFullStaticText_afterChange))]
+        [PersistAs("alignment_with_full_static_text")]
+        private UmdTextAlignment alignmentWithFullStaticText = UmdTextAlignment.Left;
+
+        private void _alignmentWithFullStaticText_beforeChange(UmdTextAlignment oldValue, UmdTextAlignment newValue, BeforeChangePropertyArgs args)
         {
-            get => dynamicText;
-            set
+            if (!AlignableFullStaticText)
+                args.Cancel();
+        }
+
+        private void _alignmentWithFullStaticText_afterChange(UmdTextAlignment oldValue, UmdTextAlignment newValue)
+        {
+            if (useFullStaticText)
+                UpdateTexts();
+        }
+        #endregion
+
+        #region Property: PeriodicUpdateEnabled
+        [AutoProperty]
+        [PersistAs("periodic_update_enabled")]
+        private bool periodicUpdateEnabled = true;
+        #endregion
+
+        #region Property: PeriodicUpdateInterval
+        [AutoProperty]
+        [PersistAs("periodic_update_interval")]
+        private int periodicUpdateInterval = 15;
+        #endregion
+
+        internal int secondsSinceLastPeriodicUpdate = 0;
+
+        #region Read-only full static text settings
+        public virtual bool AlignableFullStaticText { get; } = false;
+        public virtual UmdTextAlignment DefaultAlignmentWithFullStaticText { get; } = UmdTextAlignment.Left;
+        #endregion
+
+        #region Texts
+        public abstract UmdTextInfo[] TextInfo { get; }
+        [PersistAs("texts")]
+        [PersistAs(null, 1)]
+        [PersistSubclass(nameof(textTypeGetter))]
+        public readonly List<UmdText> Texts = new();
+        protected virtual Type textTypeGetter() => typeof(UmdText);
+        protected internal virtual UmdText CreateText(Umd owner, int indexAtOwner, UmdTextInfo info) => new(owner, indexAtOwner, info);
+
+        private List<UmdText> textsByConstructor;
+
+        private void initTextThings()
+        {
+            int i = 0;
+            foreach (UmdTextInfo textInfo in TextInfo)
+                Texts.Add(CreateText(this, i++, textInfo));
+            textsByConstructor = new(Texts);
+        }
+
+        private void handleRestoredOwnFieldsTexts()
+        {
+            textsByConstructor.ForEach(t => t.Removed());
+            textsByConstructor.Clear();
+            textsByConstructor = null;
+            int textCount = Texts.Count;
+            int textInfoLength = TextInfo.Length;
+            if (textCount > textInfoLength)
             {
-                AfterChangePropertyDelegate<string> afterChangeDelegate = (ov, nv) =>
+                for (int i = textCount - 1; i >= textInfoLength; i--)
                 {
-                    if (!useStaticText)
-                        CurrentText = nv;
-                };
-                this.setProperty(ref dynamicText, value, DynamicTextChanged);
+                    Texts[i].Removed();
+                    Texts.RemoveAt(i);
+                }
             }
+            if (textCount < textInfoLength)
+                for (int i = textCount; i < textInfoLength; i++)
+                    Texts.Add(CreateText(this, i, TextInfo[i]));
         }
-        #endregion
 
-        #region Property: StaticText
-        public event PropertyChangedTwoValuesDelegate<UMD, string> StaticTextChanged;
-
-        [PersistAs("static_text")]
-        private string staticText;
-
-        public string StaticText
+        internal void NotifyTextUsedChanged(UmdText text)
         {
-            get => staticText;
-            set
-            {
-                AfterChangePropertyDelegate<string> afterChangeDelegate = (ov, nv) => {
-                    if (useStaticText)
-                        CurrentText = nv;
-                };
-                this.setProperty(ref staticText, value, StaticTextChanged);
-            }
+            if (!Updating)
+                UpdateTexts();
         }
-        #endregion
 
-        #region Property: UseStaticText
-        public event PropertyChangedTwoValuesDelegate<UMD, bool> UseStaticTextChanged;
-
-        [PersistAs("use_static_text")]
-        private bool useStaticText = false;
-
-        public bool UseStaticText
+        internal void NotifyTextAlignmentChanged(UmdText text)
         {
-            get => useStaticText;
-            set => this.setProperty(ref useStaticText, value, UseStaticTextChanged, null,
-                (ov, nv) => { CurrentText = nv ? staticText : dynamicText; });
+            if (!Updating && text.Used)
+                UpdateTexts();
         }
+
+        internal void NotifyTextCurrentValueChanged(UmdText text)
+        {
+            if (!Updating && text.Used)
+                UpdateTexts();
+        }
+
+        public void UpdateTexts()
+        {
+            calculateTextFields();
+            if (!enabled)
+                return;
+            sendTextsToHardware();
+        }
+
+        protected abstract void calculateTextFields();
+        protected abstract void sendTextsToHardware();
         #endregion
 
         #region Tallies
-        public delegate void TallyChangedDelegate(UMD umd, int index, bool oldState, bool newState);
-        public event TallyChangedDelegate TallyChanged;
+        public abstract UmdTallyInfo[] TallyInfo { get; }
+        [PersistAs("tallies")]
+        [PersistAs(null, 1)]
+        [PersistSubclass(nameof(tallyTypeGetter))]
+        public readonly List<UmdTally> Tallies = new();
+        protected virtual Type tallyTypeGetter() => typeof(UmdTally);
+        protected internal virtual UmdTally CreateTally(Umd owner, int indexAtOwner, UmdTallyInfo info) => new(owner, indexAtOwner, info);
 
-        public const int MAX_TALLIES = 8;
+        private List<UmdTally> talliesByConstructor;
 
-        [PersistAs("tally_sources")]
-        private string[] _tallySources = new string[MAX_TALLIES];
-
-        private IBoolean[] tallySources = new IBoolean[MAX_TALLIES];
-
-        public void SetTallySource(int index, IBoolean source)
+        private void initTallyThings()
         {
-            if ((index < 0) || (index >= MAX_TALLIES) || (index >= Type.TallyCount))
-                throw new ArgumentOutOfRangeException(nameof(index));
-            if (source == tallySources[index])
-                return;
-            if(tallySources[index] != null)
-                tallySources[index].StateChanged -= tallyStateChangedHandler;
-            tallySources[index] = source;
-            _tallySources[index] = source?.Name;
-            if (tallySources[index] != null)
+            int i = 0;
+            foreach (UmdTallyInfo tallyInfo in TallyInfo)
+                Tallies.Add(CreateTally(this, i++, tallyInfo));
+            talliesByConstructor = new(Tallies);
+        }
+
+        private void handleRestoredOwnFieldsTallies()
+        {
+            talliesByConstructor.ForEach(t => t.Removed());
+            talliesByConstructor.Clear();
+            talliesByConstructor = null;
+            int tallyCount = Tallies.Count;
+            int tallyInfoLength = TallyInfo.Length;
+            if (tallyCount > tallyInfoLength)
             {
-                tallySources[index].StateChanged += tallyStateChangedHandler;
-                updateTally(index, source.CurrentState);
+                for (int i = tallyCount - 1; i >= tallyInfoLength; i--)
+                {
+                    Tallies[i].Removed();
+                    Tallies.RemoveAt(i);
+                }
             }
-            else
-            {
-                updateTally(index, false);
-            }
+            if (tallyCount < tallyInfoLength)
+                for (int i = tallyCount; i < tallyInfoLength; i++)
+                    Tallies.Add(CreateTally(this, i, TallyInfo[i]));
         }
 
-        public IBoolean GetTallySource(int index)
+        internal void NotifyTallyColorChanged(UmdTally tally)
         {
-            if ((index < 0) || (index >= MAX_TALLIES) || (index >= Type.TallyCount))
-                throw new ArgumentOutOfRangeException(nameof(index));
-            return tallySources[index];
+            if (!Updating)
+                UpdateTallies();
         }
 
-        private void restoreTallySources()
+        internal void NotifyTallyCurrentStateChanged(UmdTally tally)
         {
-            string[] restoredTallySourceNames = _tallySources;
-            for (int i = 0; i < Type.TallyCount; i++) {
-                string sourceName = restoredTallySourceNames[i];
-                IBoolean tallySource = BooleanRegister.Instance[sourceName];
-                SetTallySource(i, tallySource);
-            }
-        }   
-
-        private void tallyStateChangedHandler(IBoolean boolean, bool oldState, bool newState)
-        {
-            for (int i = 0; i < MAX_TALLIES; i++)
-                if (tallySources[i] == boolean)
-                    updateTally(i, newState);
+            if (!Updating)
+                UpdateTallies();
         }
 
-        private bool[] tallyStates = new bool[MAX_TALLIES];
-
-        public bool[] TallyStates
+        public void UpdateTallies()
         {
-            get => tallyStates;
-        }
-
-        private void updateTally(int index, bool state)
-        {
-
-            if (tallyStates[index] == state)
+            calculateTallyFields();
+            if (!enabled)
                 return;
-
-            tallyStates[index] = state;
-            tallyChanged(index, state);
-
-            TallyChanged?.Invoke(this, index, !state, state);
-            RaisePropertyChanged(nameof(TallyStates));
-
+            sendTalliesToHardware();
         }
 
-        private bool GetTallyState(int index)
-        {
-            if ((index < 0) || (index >= MAX_TALLIES) || (index >= Type.TallyCount))
-                throw new ArgumentOutOfRangeException(nameof(index));
-            return tallyStates[index];
-        }
-
-        protected virtual void tallyChanged(int index, bool state)
-        { }
+        protected abstract void calculateTallyFields();
+        protected abstract void sendTalliesToHardware();
         #endregion
 
+        public void UpdateEverything()
+        {
+            calculateTextFields();
+            calculateTallyFields();
+            if (!enabled)
+                return;
+            sendEverythingToHardware();
+        }
+
+        protected abstract void sendEverythingToHardware();
+
+        protected override void afterUpdate()
+        {
+            base.afterUpdate();
+            UpdateEverything();
+        }
+
     }
+
 }

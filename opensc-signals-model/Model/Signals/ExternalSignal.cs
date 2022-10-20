@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,7 +8,7 @@ using System.Drawing;
 namespace OpenSC.Model.Signals
 {
 
-    public class ExternalSignal : ModelBase, ISignalSourceRegistered
+    public partial class ExternalSignal : ModelBase, ISignalSourceRegistered
     {
 
         #region Persistence, instantiation
@@ -53,21 +54,9 @@ namespace OpenSC.Model.Signals
         #endregion
 
         #region Property: Category
-        public event PropertyChangedTwoValuesDelegate<ExternalSignal, ExternalSignalCategory> CategoryChanged;
-
+        [AutoProperty]
         [PersistAs("category")]
         private ExternalSignalCategory category;
-
-#pragma warning disable CS0169
-        [TempForeignKey(nameof(category))]
-        private string _category;
-#pragma warning restore CS0169
-
-        public ExternalSignalCategory Category
-        {
-            get => category;
-            set => this.setProperty(ref category, value, CategoryChanged);
-        }
         #endregion
 
         #region Property: RegisteredSourceSignalName
@@ -105,9 +94,9 @@ namespace OpenSC.Model.Signals
 
         private void createTallies()
         {
-            redTally = new ExternalSignalTally(this);
-            yellowTally = new ExternalSignalTally(this);
-            greenTally = new ExternalSignalTally(this);
+            redTally = new ExternalSignalTally(this, SignalTallyColor.Red);
+            yellowTally = new ExternalSignalTally(this, SignalTallyColor.Yellow);
+            greenTally = new ExternalSignalTally(this, SignalTallyColor.Green);
             createTallyBooleans();
         }
         #endregion
@@ -119,9 +108,9 @@ namespace OpenSC.Model.Signals
 
         private void createTallyBooleans()
         {
-            redTallyBoolean = new ExternalSignalTallyBoolean(this, redTally, SignalTallyColor.Red);
-            yellowTallyBoolean = new ExternalSignalTallyBoolean(this, yellowTally, SignalTallyColor.Yellow);
-            greenTallyBoolean = new ExternalSignalTallyBoolean(this, greenTally, SignalTallyColor.Green);
+            redTallyBoolean = new ExternalSignalTallyBoolean(redTally);
+            yellowTallyBoolean = new ExternalSignalTallyBoolean(yellowTally);
+            greenTallyBoolean = new ExternalSignalTallyBoolean(greenTally);
         }
         #endregion
 

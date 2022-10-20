@@ -12,8 +12,8 @@ namespace OpenSC.Model.Variables
     public interface IBoolean : INotifyPropertyChanged
     {
 
-        string Name { get; set; }
-        event PropertyChangedTwoValuesDelegate<IBoolean, string> NameChanged;
+        string Identifier { get; set; }
+        event PropertyChangedTwoValuesDelegate<IBoolean, string> IdentifierChanged;
 
         Color Color { get; set; }
         event PropertyChangedTwoValuesDelegate<IBoolean, Color> ColorChanged;
@@ -23,6 +23,8 @@ namespace OpenSC.Model.Variables
 
         bool CurrentState { get; }
         event PropertyChangedTwoValuesDelegate<IBoolean, bool> StateChanged;
+
+        string ToString() => $"[{Identifier}] {Description}";
 
     }
 

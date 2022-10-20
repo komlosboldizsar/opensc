@@ -1,15 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
       <TargetFramework>net5.0-windows7.0</TargetFramework>
       <OutputType>Library</OutputType>
       <RootNamespace>OpenSC</RootNamespace>
-      <AssemblyName>opensc-mixers-subtype-bmd</AssemblyName>
-      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-      <ProjectReference Include="..\opensc-core-model\opensc-core-model.csproj"/>
       <ProjectReference Include="..\opensc-library-bmdswitcher\opensc-library-bmdswitcher.csproj"/>
-      <ProjectReference Include="..\opensc-mixers-model\opensc-mixers-model.csproj"/>
   </ItemGroup>
   <ItemGroup>
       <COMReference Include="BMDSwitcherAPI">
@@ -26,5 +22,5 @@
       <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
       <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
   </ItemGroup>
-  <Import Project="..\GlobalCsproj\*.csproj"/>
+  <Import Project="..\opensc-mixers-model\MixersSubtypeModelModuleBase.csproj"/>
 </Project>

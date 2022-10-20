@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Signals
 {
 
-    public class ExternalSignalCategory : ModelBase
+    public partial class ExternalSignalCategory : ModelBase
     {
 
         #region Property: ID
@@ -26,16 +27,9 @@ namespace OpenSC.Model.Signals
         #endregion
 
         #region Property: Color
-        public event PropertyChangedTwoValuesDelegate<ExternalSignalCategory, Color> ColorChanged;
-
+        [AutoProperty]
         [PersistAs("color")]
         private Color color;
-
-        public Color Color
-        {
-            get => color;
-            set => this.setProperty(ref color, value, ColorChanged);
-        }
         #endregion
 
     }

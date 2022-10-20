@@ -1,5 +1,6 @@
 ﻿using OpenSC.Model.General;
 using OpenSC.Model.Persistence;
+using OpenSC.Model.SourceGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.UMDs.Tsl50
 {
 
-    public class Tsl50Screen : ModelBase
+    public partial class Tsl50Screen : ModelBase
     {
 
         #region Instantiation, restoration
@@ -41,29 +42,18 @@ namespace OpenSC.Model.UMDs.Tsl50
         #endregion
 
         #region Property: IpAddress
-        public event PropertyChangedTwoValuesDelegate<Tsl50Screen, string> IpAddressChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(updateEndpoint))]
         [PersistAs("ipaddress")]
         private string ipAddress;
-
-        public string IpAddress
-        {
-            get => ipAddress;
-            set => this.setProperty(ref ipAddress, value, IpAddressChanged, null, (ov, nv) => updateEndpoint());
-        }
         #endregion
 
         #region Property: Port
-        public event PropertyChangedTwoValuesDelegate<Tsl50Screen, int> PortChanged;
-
+        [AutoProperty]
+        [AutoProperty.AfterChange(nameof(updateEndpoint))]
+        [AutoProperty.Validator(nameof(ValidatePort))]
         [PersistAs("port")]
         private int port = 1024;
-
-        public int Port
-        {
-            get => port;
-            set => this.setProperty(ref port, value, PortChanged, null, (ov, nv) => updateEndpoint(), ValidatePort);
-        }
 
         public void ValidatePort(int port)
         {
@@ -73,16 +63,10 @@ namespace OpenSC.Model.UMDs.Tsl50
         #endregion
 
         #region Property: Index
-        public event PropertyChangedTwoValuesDelegate<Tsl50Screen, int> IndexChanged;
-
+        [AutoProperty]
+        [AutoProperty.Validator(nameof(ValidateIndex))]
         [PersistAs("index")]
         private int index = 1;
-
-        public int Index
-        {
-            get => index;
-            set => this.setProperty(ref index, value, IndexChanged, validator: ValidateIndex);
-        }
 
         public void ValidateIndex(int index)
         {
@@ -97,13 +81,13 @@ namespace OpenSC.Model.UMDs.Tsl50
         private byte[] getBytesForPacket(byte[] displayData)
         {
             int totalByteCount = 6 + displayData.Length;
-            byte[] totalBytes = new byte[totalByteCount];
-            totalBytes[0] = (byte)((totalByteCount >> 8) & 0xFF); // PBC
-            totalBytes[1] = (byte)(totalByteCount & 0xFF); // PBC
+            byte[] totalBytes = new byte[totalByteCount]; // LITTLE ENDIAN!
+            totalBytes[0] = (byte)(totalByteCount & 0xFF); // PBC LSB
+            totalBytes[1] = (byte)((totalByteCount >> 8) & 0xFF); // PBC MSB
             totalBytes[2] = 0; // VER
             totalBytes[3] = 0; // FLAGS (ASCII, DMSG)
-            totalBytes[4] = (byte)((index >> 8) & 0xFF);
-            totalBytes[5] = (byte)(index & 0xFF);
+            totalBytes[4] = (byte)(index & 0xFF); // SCREEN INDEX LSB
+            totalBytes[5] = (byte)((index >> 8) & 0xFF); // SCREEN INDEX MSB
             displayData.CopyTo(totalBytes, 6);
             return totalBytes;
         }
