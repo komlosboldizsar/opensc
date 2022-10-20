@@ -56,9 +56,12 @@ namespace OpenSC.Model.Streams
 
         private static void registerStreamForPeriodicUpdate(HttpApiBasedStream stream)
         {
-            if (registeredStreamsToUpdate.Contains(stream))
-                return;
-            registeredStreamsToUpdate.Add(stream);
+            lock (registeredStreamsToUpdate)
+            {
+                if (registeredStreamsToUpdate.Contains(stream))
+                    return;
+                registeredStreamsToUpdate.Add(stream);
+            }
             if (updateTask == null)
                 updateTask = Task.Run(updateTaskMethod);
         }
@@ -70,7 +73,10 @@ namespace OpenSC.Model.Streams
         {
             while (true)
             {
-                registeredStreamsToUpdate.ForEach(s => s.update1sTick());
+                lock (registeredStreamsToUpdate)
+                {
+                    registeredStreamsToUpdate.ForEach(s => s.update1sTick());
+                }
                 Task.Delay(1000);
             }
         }
