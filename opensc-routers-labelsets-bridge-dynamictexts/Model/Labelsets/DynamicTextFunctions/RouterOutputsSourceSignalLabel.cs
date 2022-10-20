@@ -76,7 +76,7 @@ namespace OpenSC.Model.Labelsets.DynamicTextFunctions
                     CurrentValue = "?";
                     return;
                 }
-                CurrentValue = labelset.GetLabel(currentSource).Text ?? "?";
+                CurrentValue = labelset.GetLabel(currentSource)?.Text ?? "?";
 
             }
 
