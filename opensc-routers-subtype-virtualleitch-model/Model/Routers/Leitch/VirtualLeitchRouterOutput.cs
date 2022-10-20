@@ -36,14 +36,26 @@ namespace OpenSC.Model.Routers.Leitch
         {
             if (Lock.State != RouterOutputLockState.Clear)
                 return;
-            if ((Protect.State != RouterOutputLockState.Clear) || (panelId != LockProtectOwnerPanelId))
+            if ((Protect.State != RouterOutputLockState.Clear) && (panelId != LockProtectOwnerPanelId))
                 return;
             PresetInput = input;
+            presetClear = false;
         }
 
-        public void ClearPreset() => PresetInput = null;
+        private bool presetClear = true;
+        public void ClearPreset()
+        {
+            PresetInput = null;
+            presetClear = true;
+        }
 
-        public void ExecutePreset() => AssignSource(PresetInput);
+        public void ExecutePreset()
+        {
+            if (presetClear)
+                return;
+            AssignSource(PresetInput);
+            presetClear = true;
+        }
 
         public RouterInput PresetInput { get; private set; } = null;
 

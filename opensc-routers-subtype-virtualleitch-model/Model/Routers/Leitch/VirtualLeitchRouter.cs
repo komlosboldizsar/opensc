@@ -244,8 +244,15 @@ namespace OpenSC.Model.Routers.Leitch
         private void sendOutputLockReport(RouterOutput output)
         {
             VirtualLeitchRouterOutput outputCasted = output as VirtualLeitchRouterOutput;
-            int lockState = ((outputCasted.Lock.State == RouterOutputLockState.Clear) && (outputCasted.Protect.State == RouterOutputLockState.Clear)) ? 0 : 1;
-            sendSerialMessage("@ W!{0:X}{1:X},{2:X},{3}", level, output.Index, outputCasted.LockProtectOwnerPanelId, lockState);
+            int lockState = 0;
+            if (outputCasted.Lock.State != RouterOutputLockState.Clear)
+                lockState = 1;
+            else if (outputCasted.Protect.State != RouterOutputLockState.Clear)
+                lockState = 2;
+            int panelId = outputCasted.LockProtectOwnerPanelId;
+            if (panelId == -1)
+                panelId = FORCE_UNLOCK_PANEL_ID;
+            sendSerialMessage("@ W!{0:X}{1:X},{2:X},{3}", level, output.Index, panelId, lockState);
         }
 
         private void sendOutputFullStatusReport(RouterOutput output)
@@ -313,7 +320,7 @@ namespace OpenSC.Model.Routers.Leitch
             try
             {
                 if (split1.Length > 1)
-                    id = int.Parse(split1[1], System.Globalization.NumberStyles.HexNumber);
+                    id = int.Parse(split1[1][1..], System.Globalization.NumberStyles.HexNumber);
             }
             catch { }
             string[] split2 = split1[0].Split('/');
