@@ -61,10 +61,10 @@ namespace OpenSC
             if (stackTrace != null)
             {
                 string[] stackTraceLines = stackTrace.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-                LogDispatcher.V(LOG_TAG, "-- STACK TRACE STARTS --");
+                LogDispatcher.E(LOG_TAG, "-- STACK TRACE STARTS --");
                 foreach (string stackTraceLine in stackTraceLines)
-                    LogDispatcher.V(LOG_TAG, stackTraceLine);
-                LogDispatcher.V(LOG_TAG, "-- STACK TRACE ENDS --");
+                    LogDispatcher.E(LOG_TAG, stackTraceLine);
+                LogDispatcher.E(LOG_TAG, "-- STACK TRACE ENDS --");
             }
         }
 
