@@ -118,7 +118,10 @@ namespace BMD.Switcher
             Source source = ParentSwitcher.GetSource(sourceId);
             if (source == null)
                 throw new NotExistingSourceException($"Switcher has no source with ID #{sourceId}!");
-            ApiMultiview.SetWindowInput(windowIndex, sourceId);
+            InvokeHelper.Invoke(() =>
+            {
+                ApiMultiview.SetWindowInput(windowIndex, sourceId);
+            });
         }
 
         private void checkWindowIndex(uint windowIndex)
