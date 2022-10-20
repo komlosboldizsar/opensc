@@ -200,6 +200,9 @@ namespace OpenSC.Model.Routers.Leitch
                 case "B:":
                     handleBufferMessage(details);
                     break;
+                case "Q:":
+                    handleCustomMessage(details);
+                    break;
             }
         }
         #endregion
@@ -453,6 +456,14 @@ namespace OpenSC.Model.Routers.Leitch
             }
         }
 
+        // Q:<custom_command>
+        // no response
+        private void handleCustomMessage(string details)
+        {
+            LogDispatcher.I(LOG_TAG, $"Custom Leitch command ('Q:') received: [{details}]");
+            CustomCommandReceived?.Invoke(this, details);
+        }
+
         public const int FORCE_UNLOCK_PANEL_ID = 65535;
         #endregion
 
@@ -462,6 +473,11 @@ namespace OpenSC.Model.Routers.Leitch
 
         private void executePresets()
             => Outputs.Foreach(ro => (ro as VirtualLeitchRouterOutput).ExecutePreset());
+        #endregion
+
+        #region Custom command receiving
+        public delegate void CustomCommandReceivedHandler(VirtualLeitchRouter router, string command);
+        public event CustomCommandReceivedHandler CustomCommandReceived;
         #endregion
 
         #region Settings
