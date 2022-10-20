@@ -22,7 +22,17 @@ namespace OpenSC.Model.Streams
         private const string LOG_TAG = "Stream/HttpApiBased";
 
         #region Instantiation, restoration, persistence
-        public HttpApiBasedStream() => registerStreamForPeriodicUpdate(this);
+        public HttpApiBasedStream()
+        {
+            initRequestData();
+            registerStreamForPeriodicUpdate(this);
+        }
+
+        public override void RestoredOwnFields()
+        {
+            base.RestoredOwnFields();
+            initRequestData();
+        }
 
         public override void Removed()
         {
@@ -69,7 +79,7 @@ namespace OpenSC.Model.Streams
         private static void unregisterStreamForPeriodicUpdate(HttpApiBasedStream stream)
             => registeredStreamsToUpdate.RemoveAll(s => (s == stream));
 
-        private static void updateTaskMethod()
+        private async static void updateTaskMethod()
         {
             while (true)
             {
@@ -77,7 +87,7 @@ namespace OpenSC.Model.Streams
                 {
                     registeredStreamsToUpdate.ForEach(s => s.update1sTick());
                 }
-                Task.Delay(1000);
+                await Task.Delay(1000);
             }
         }
 
@@ -100,7 +110,7 @@ namespace OpenSC.Model.Streams
         #region Update HTTP request and response processing
         protected string RequestApiUrl = "http://localhost";
         protected string RequestContentType = "application/json; charset=utf-8";
-        protected WebHeaderCollection RequestHeaders = new WebHeaderCollection();
+        protected WebHeaderCollection RequestHeaders = new();
 
         protected abstract void initRequestData();
         protected virtual void updateRequestDataBeforeRequest() { }
@@ -114,11 +124,9 @@ namespace OpenSC.Model.Streams
                 request.ContentType = RequestContentType;
                 request.Headers = RequestHeaders;
                 HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-                using (System.IO.Stream responseStream = response.GetResponseStream())
-                {
-                    StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                    processResponse(reader.ReadToEnd());
-                }
+                using System.IO.Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                processResponse(reader.ReadToEnd());
             }
             catch (Exception ex)
             {

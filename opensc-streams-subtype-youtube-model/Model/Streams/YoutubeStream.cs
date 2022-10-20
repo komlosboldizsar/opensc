@@ -49,6 +49,7 @@ namespace OpenSC.Model.Streams
 
         #region Property: VideoId
         [AutoProperty]
+        [AutoProperty.AfterChange(nameof(initRequestData))]
         [PersistAs("video_id")]
         private string videoId;
         #endregion
