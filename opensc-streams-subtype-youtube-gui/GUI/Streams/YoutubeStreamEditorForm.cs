@@ -75,12 +75,13 @@ namespace OpenSC.GUI.Streams
                 if (YOUTUBE_URI_REGEX_START.IsMatch(clipboardTextWithProtocol))
                     clipboardTextWithProtocol = $"https://{clipboardTextWithProtocol}";
                 Uri uri = new(clipboardTextWithProtocol);
-                string videoId = convertUriPublic(uri);
-                if (videoId != null)
-                    return videoId;
-                videoId = convertUriStudio(uri);
-                if (videoId != null)
-                    return videoId;
+                Func<Uri, string>[] converters = { convertUriPublic, convertUriPublicShort, convertUriStudio };
+                foreach (Func<Uri, string> coverter in converters)
+                {
+                    string videoId = coverter(uri);
+                    if (videoId != null)
+                        return videoId;
+                }
                 throw new StreamIdPasteTextBox.PastedTextConversionException($"Pasted text [{clipboardText}] is not a valid YouTube video URL.");
             }
             catch (UriFormatException)
@@ -90,7 +91,7 @@ namespace OpenSC.GUI.Streams
         }
 
         private readonly Regex VIDEO_ID_REGEX = new("^[a-zA-Z0-9_]{11}$");
-        private readonly Regex YOUTUBE_URI_REGEX_START = new("^((www|m|studio)\\.)?youtube.com");
+        private readonly Regex YOUTUBE_URI_REGEX_START = new("^((((www|m|studio)\\.)?youtube\\.com)|(youtu\\.be))");
 
         private string convertUriPublic(Uri uri)
         {
@@ -108,6 +109,20 @@ namespace OpenSC.GUI.Streams
 
         private readonly Regex YOUTUBE_PUBLIC_HOST_REGEX = new("^((www|m)\\.)?youtube.com$");
 
+        private string convertUriPublicShort(Uri uri)
+        {
+            if (uri.Host != YOUTUBE_PUBLIC_SHORT_HOST)
+                return null;
+            if (uri.Segments.Length < 2)
+                return null;
+            string videoId = uri.Segments[1][0..11];
+            if (!VIDEO_ID_REGEX.IsMatch(videoId))
+                return null;
+            return videoId;
+        }
+
+        private const string YOUTUBE_PUBLIC_SHORT_HOST = "youtu.be";
+
         private string convertUriStudio(Uri uri)
         {
             if (uri.Host != YOUTUBE_STUDIO_HOST)
@@ -123,7 +138,6 @@ namespace OpenSC.GUI.Streams
         }
 
         private const string YOUTUBE_STUDIO_HOST = "studio.youtube.com";
-
 
     }
 }
