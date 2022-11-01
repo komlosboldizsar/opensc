@@ -10,9 +10,14 @@ namespace OpenSC.Model.UMDs.McCurdy
     public class McCurdyUmd1Text : UmdText
     {
 
-        public McCurdyUmd1Text(Umd owner, int indexAtOwner, UmdTextInfo info) : base(owner, indexAtOwner, info)
+        public override UmdTextInfo Info
         {
-            columnWidth = ((McCurdyUmd1TextInfo)info).DefaultColumnWidth;
+            get => base.Info;
+            set
+            {
+                base.Info = value;
+                columnWidth = ((McCurdyUmd1TextInfo)value).DefaultColumnWidth;
+            }
         }
 
         #region Property: ColumnWidth
@@ -21,7 +26,7 @@ namespace OpenSC.Model.UMDs.McCurdy
         public int ColumnWidth
         {
             get => columnWidth;
-            set => this.setProperty(ref columnWidth, value, ColumnWidthChanged, null, (ov, nv) => ((McCurdyUMD1)Owner)?.NotifyTextColumnWidthChanged(this));
+            set => this.setProperty(ref columnWidth, value, ColumnWidthChanged, null, (ov, nv) => ((McCurdyUMD1)Parent)?.NotifyTextColumnWidthChanged(this));
         }
         #endregion
 

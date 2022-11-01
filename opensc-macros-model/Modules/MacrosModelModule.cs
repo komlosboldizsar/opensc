@@ -23,8 +23,8 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            SerializerRegister.RegisterSerializer(new MacroCommandWithArgumentsXmlSerializer());
-            SerializerRegister.RegisterSerializer(new MacroTriggerWithArgumentsXmlSerializer());
+            SerializerRegister.RegisterCompleteSerializer(new MacroCommandWithArgumentsXmlSerializer());
+            SerializerRegister.RegisterCompleteSerializer(new MacroTriggerWithArgumentsXmlSerializer());
         }
 
         protected override void registerSettings()

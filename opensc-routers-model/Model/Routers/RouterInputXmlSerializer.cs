@@ -7,7 +7,7 @@ using System.Xml.Linq;
 namespace OpenSC.Model.Routers
 {
 
-    public class RouterInputXmlSerializer : IValueXmlSerializer
+    public class RouterInputXmlSerializer : ICompleteXmlSerializer
     {
 
         public Type Type => typeof(RouterInput);
@@ -34,7 +34,9 @@ namespace OpenSC.Model.Routers
             if (!bool.TryParse(serializedItem.Attributes[ATTRIBUTE_TIELINE_RESERVED]?.Value, out bool tielineIsReserved))
                 tielineIsReserved = false;
 
-            RouterInput restoredInput = parentRouter.CreateInput(serializedItem.Attributes[ATTRIBUTE_NAME]?.Value, index);
+            RouterInput restoredInput = parentRouter.Inputs.CreateEmptyInstance();
+            restoredInput.Name = serializedItem.Attributes[ATTRIBUTE_NAME]?.Value;
+            restoredInput.Index = index;
             restoredInput._sourceUniqueId = serializedItem.Attributes[ATTRIBUTE_SOURCE]?.Value;
             restoredInput._tielineCost = tielineCost;
             restoredInput._tielineIsReserved = tielineIsReserved;

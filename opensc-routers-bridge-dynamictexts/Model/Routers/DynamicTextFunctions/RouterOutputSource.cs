@@ -27,7 +27,7 @@ namespace OpenSC.Model.Routers.DynamicTextFunctions
             public Arg1() : base(typeof(RouterOutput), DynamicTextFunctionArgumentType.Integer)
             { }
             protected override object _getObjectByKey(object key, object[] previousArgumentObjects)
-                => (previousArgumentObjects[0] as Router)?.GetOutput((int)key);
+                => (previousArgumentObjects[0] as Router)?.Outputs[(int)key];
         }
 
         public class Substitute : DynamicTextFunctionSubstituteBase

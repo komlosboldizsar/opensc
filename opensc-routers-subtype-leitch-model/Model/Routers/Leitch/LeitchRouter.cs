@@ -87,16 +87,12 @@ namespace OpenSC.Model.Routers.Leitch
         private char LevelHex => HEX_CHARS[level];
         #endregion
 
-        #region Input and output instantiation
-        public override RouterInput CreateInput(string name, int index) => new RouterInput(name, this, index);
-        public override RouterOutput CreateOutput(string name, int index) => new LeitchRouterOutput(name, this, index);
+        #region Inputs and outputs
+        protected override RouterOutputCollection createOutputCollection()
+            => new LeitchRouterOutputCollection(this );
 
-        private static readonly Dictionary<Type, string> OUTPUT_TYPES = new Dictionary<Type, string>()
-        {
-            { typeof(LeitchRouterOutput), "leitch" }
-        };
-
-        protected override Dictionary<Type, string> OutputTypesDictionaryGetter() => OUTPUT_TYPES;
+        protected override Type getOutputCollectionType()
+            => typeof(LeitchRouterOutputCollection);
         #endregion
 
         #region Setting/getting crosspoints
@@ -199,7 +195,7 @@ namespace OpenSC.Model.Routers.Leitch
                 int destinationIndex = int.Parse(split[1].Substring(1), System.Globalization.NumberStyles.HexNumber);
                 int panelId = int.Parse(split[2], System.Globalization.NumberStyles.HexNumber);
                 int lockOpCode = int.Parse(split[3]);
-                LeitchRouterOutput output = GetOutput(destinationIndex) as LeitchRouterOutput;
+                LeitchRouterOutput output = Outputs[destinationIndex] as LeitchRouterOutput;
                 if (output == null)
                     return;
 

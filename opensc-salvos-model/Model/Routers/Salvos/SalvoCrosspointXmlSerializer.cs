@@ -6,7 +6,7 @@ using System.Xml.Linq;
 namespace OpenSC.Model.Routers.Salvos
 {
 
-    public class SalvoCrosspointXmlSerializer : IValueXmlSerializer
+    public class SalvoCrosspointXmlSerializer : ICompleteXmlSerializer
     {
 
         public virtual Type Type => typeof(SalvoCrosspoint);

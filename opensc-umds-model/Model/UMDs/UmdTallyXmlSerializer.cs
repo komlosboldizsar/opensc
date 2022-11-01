@@ -7,7 +7,7 @@ using System.Xml.Linq;
 namespace OpenSC.Model.UMDs
 {
 
-    public class UmdTallyXmlSerializer : IValueXmlSerializer
+    public class UmdTallyXmlSerializer : IMemberXmlSerializer
     {
 
         public virtual Type Type => typeof(UmdTally);
@@ -15,27 +15,23 @@ namespace OpenSC.Model.UMDs
         private const string TAG_NAME = "tally";
         private const string ATTRIBUTE_COLOR = "color";
 
-        public virtual object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
+        public virtual void DeserializeItem(XmlNode serializedItem, object item, object parentItem, object[] indicesOrKeys)
         {
+            if (serializedItem.LocalName != TAG_NAME)
+                return;
+            if (item is not UmdTally tally)
+                return;
             Umd parentUmd = (Umd)parentItem;
             UmdTallyInfo thisTallyInfo = parentUmd.TallyInfo[(int)indicesOrKeys[0]];
-            if (serializedItem.LocalName != TAG_NAME)
-                return null;
-            string sourceGlobalId = serializedItem.InnerText;
-            string alignmentAttributeValue = serializedItem.Attributes[ATTRIBUTE_COLOR]?.Value;
-            Color colorAttributeValueConverted = thisTallyInfo.DefaultColor;
+            tally._tfk_name_source = serializedItem.InnerText;
             if (thisTallyInfo.ColorMode != UmdTallyInfo.ColorSettingMode.Fix)
             {
                 try
                 {
-                    colorAttributeValueConverted = ColorTranslator.FromHtml(alignmentAttributeValue);
+                    tally.Color = ColorTranslator.FromHtml(serializedItem.Attributes[ATTRIBUTE_COLOR]?.Value);
                 }
                 catch { }
             }
-            UmdTally tally = parentUmd.CreateTally(parentUmd, (int)indicesOrKeys[0], thisTallyInfo);
-            tally._tfk_name_source = sourceGlobalId;
-            tally.Color = colorAttributeValueConverted;
-            return tally;
         }
 
         public virtual XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)

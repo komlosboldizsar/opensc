@@ -20,8 +20,8 @@ namespace OpenSC.Model.Routers.Mirrors
         public override void TotallyRestored()
         {
             base.TotallyRestored();
-            ItemA = Parent.RouterA?.GetInput(_itemA);
-            ItemB = Parent.RouterB?.GetInput(_itemB);
+            ItemA = Parent.RouterA?.Inputs[_itemA];
+            ItemB = Parent.RouterB?.Inputs[_itemB];
         }
 
     }

@@ -12,18 +12,13 @@ namespace OpenSC.Model.Routers.Virtual
         public override Type Type => typeof(VirtualRouterOutput);
 
         public override object DeserializeItem(XmlNode serializedItem, object parentItem, object[] keysOrIndices)
-        {
-            VirtualRouterOutput restoredOutput = base.DeserializeItem(serializedItem, parentItem, keysOrIndices) as VirtualRouterOutput;
-            return restoredOutput;
-        }
+            => base.DeserializeItem(serializedItem, parentItem, keysOrIndices) as VirtualRouterOutput;
 
         public override XElement SerializeItem(object item, object parentItem, object[] keysOrIndices)
         {
-            VirtualRouterOutput output = item as VirtualRouterOutput;
-            if (output == null)
+            if (item is not VirtualRouterOutput)
                 return null;
-            XElement serializedOutput = base.SerializeItem(item, parentItem, keysOrIndices);
-            return serializedOutput;
+            return base.SerializeItem(item, parentItem, keysOrIndices);
         }
 
     }

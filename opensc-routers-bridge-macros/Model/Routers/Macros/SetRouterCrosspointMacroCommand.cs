@@ -18,10 +18,10 @@ namespace OpenSC.Model.Routers.Macros
             if (router == null)
                 return;
             RouterOutput output = argumentValues[1] as RouterOutput;
-            if ((output == null) || (output.Router != router))
+            if ((output == null) || (output.Parent != router))
                 return;
             RouterInput input = argumentValues[2] as RouterInput;
-            if ((input == null) || (input.Router != router))
+            if ((input == null) || (input.Parent != router))
                 return;
             output.RequestCrosspointUpdate(input);
         }
@@ -42,7 +42,7 @@ namespace OpenSC.Model.Routers.Macros
             {
                 if (!int.TryParse(key, out int keyInt))
                     return null;
-                return (previousArgumentObjects[0] as Router)?.GetOutput(keyInt);
+                return (previousArgumentObjects[0] as Router)?.Outputs[keyInt];
             }
             public override string GetKeyByObject(object obj) => (obj as RouterOutput)?.Index.ToString();
             protected override IEnumerable<object> _getPossibilities(object[] previousArgumentObjects) => (previousArgumentObjects[0] as Router)?.Outputs;
@@ -57,7 +57,7 @@ namespace OpenSC.Model.Routers.Macros
             {
                 if (!int.TryParse(key, out int keyInt))
                     return null;
-                return (previousArgumentObjects[0] as Router)?.GetInput(keyInt);
+                return (previousArgumentObjects[0] as Router)?.Inputs[keyInt];
             }
             public override string GetKeyByObject(object obj) => (obj as RouterInput)?.Index.ToString();
             protected override IEnumerable<object> _getPossibilities(object[] previousArgumentObjects) => (previousArgumentObjects[0] as Router)?.Inputs;

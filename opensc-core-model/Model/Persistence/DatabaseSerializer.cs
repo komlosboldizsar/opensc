@@ -1,6 +1,8 @@
-﻿using System;
+﻿using OpenSC.Model.General;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -70,7 +72,7 @@ namespace OpenSC.Model.Persistence
             xmlElement.Add(new XElement(extendedMemberInfo.PersistAsAttributes[0].TagName, xmlElementInner));
         }
 
-        private object serializeValue(ExtendedMemberInfo extendedMemberInfo, Type memberType, object item, object parentItem, int arrayDimension = 0, object[] indices = null)
+        private object serializeValue(ExtendedMemberInfo extendedMemberInfo, Type memberType, object item, object parentItem, object containingCollection = null, int arrayDimension = 0, object[] indices = null)
         {
             if (item == null)
                 return string.Empty;
@@ -82,7 +84,7 @@ namespace OpenSC.Model.Persistence
                 return result;
             if (trySerializeAsCollection(ref result, extendedMemberInfo, memberType, item, parentItem, arrayDimension, extendedIndices))
                 return result;
-            if (trySerializeAsObject(ref result, extendedMemberInfo, memberType, item, parentItem, indices))
+            if (trySerializeAsObject(ref result, extendedMemberInfo, memberType, item, parentItem, containingCollection, arrayDimension, indices))
                 return result;
             return item.ToString();
         }
@@ -97,7 +99,7 @@ namespace OpenSC.Model.Persistence
             foreach (var element in array)
             {
                 extendedIndices[arrayDimension] = elementIndex++;
-                arrayElements.Add(serializeCollectionElement(extendedMemberInfo, memberType.GetElementType(), element, parentItem, arrayDimension, extendedIndices));
+                arrayElements.Add(serializeCollectionElement(extendedMemberInfo, memberType.GetElementType(), element, parentItem, item, arrayDimension, extendedIndices));
             }
             result = arrayElements;
             return true;
@@ -124,13 +126,13 @@ namespace OpenSC.Model.Persistence
             foreach (var element in enumerable)
             {
                 extendedIndices[arrayDimension] = elementIndex++;
-                arrayElements.Add(serializeCollectionElement(extendedMemberInfo, elementType, element, parentItem, arrayDimension, extendedIndices));
+                arrayElements.Add(serializeCollectionElement(extendedMemberInfo, elementType, element, parentItem, item, arrayDimension, extendedIndices));
             }
             result = arrayElements;
             return true;
         }
 
-        private bool trySerializeAsObject(ref object result, ExtendedMemberInfo extendedMemberInfo, Type memberType, object item, object parentItem, object[] indices)
+        private bool trySerializeAsObject(ref object result, ExtendedMemberInfo extendedMemberInfo, Type memberType, object item, object parentItem, object containingCollection, int arrayDimension, object[] indices)
         {
 
             if (Type.GetTypeCode(memberType) != TypeCode.Object)
@@ -139,7 +141,7 @@ namespace OpenSC.Model.Persistence
             Type itemType = item.GetType();
             Type serializeAsType = memberType;
 
-            PersistSubclassAttribute persistSubclassAttribute = extendedMemberInfo.PersistSubclassAttribute;
+            PersistSubclassAttribute persistSubclassAttribute = extendedMemberInfo.GetPersistSubclassAttributeForDimension(arrayDimension);
             if (persistSubclassAttribute != null) // should check if given type is subclass of member type
             {
                 MethodInfo subclassTypeGetterMethodInfo = parentItem.GetType().GetMethod(persistSubclassAttribute.SubclassTypeGetterName, DatabasePersisterConstants.MEMBER_LOOKUP_BINDING_FLAGS);
@@ -156,7 +158,19 @@ namespace OpenSC.Model.Persistence
                     serializeAsType = itemType;
             }
 
-            IValueXmlSerializer serializer = SerializerRegister.GetSerializerForType(serializeAsType);
+
+            if (extendedMemberInfo.MemberInfo.Name == "Inputs")
+                Debug.WriteLine("hello");
+
+            string subitemTypeString = null;
+            if (containingCollection is IHeterogenousCollection heterogenousCollection)
+            {
+                subitemTypeString = heterogenousCollection.GetTypeCode(itemType);
+                if (subitemTypeString != null)
+                    serializeAsType = heterogenousCollection.GetType(itemTypeString);
+            }
+
+            ICompleteXmlSerializer serializer = SerializerRegister.GetCompleteSerializerForType(serializeAsType);
             if (serializer == null)
             {
                 result = item.ToString();
@@ -166,29 +180,31 @@ namespace OpenSC.Model.Persistence
             XElement serializedItem = serializer.SerializeItem(item, parentItem, indices);
             if ((polymorphFieldAttribute?.TypeAttributeName != null) && (itemTypeString != null))
                 serializedItem.SetAttributeValue(polymorphFieldAttribute.TypeAttributeName, itemTypeString);
+            if (subitemTypeString != null)
+                serializedItem.SetAttributeValue(DatabasePersisterConstants.HETEROGENOUS_COLLECTION_TYPE, subitemTypeString);
             result = serializedItem;
             return true;
 
         }
 
-        private XElement serializeCollectionElement(ExtendedMemberInfo extendedMemberInfo, Type memberType, object element, object parentItem, int arrayDimension, object[] indices)
+        private XElement serializeCollectionElement(ExtendedMemberInfo extendedMemberInfo, Type memberType, object element, object parentItem, object containingCollection, int arrayDimension, object[] indices)
         {
 
             object elementKey = null;
             object elementToSerialize = element;
             Type typeToSerialize = memberType;
-
-            if (memberType.IsGenericType && (memberType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>)))
+            Type elementType = element.GetType();
+            if (elementType.IsGenericType && (elementType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>)))
             {
-                PropertyInfo keyPropertyInfo = memberType.GetProperty(nameof(KeyValuePair<object, object>.Key));
-                PropertyInfo valuePropertyInfo = memberType.GetProperty(nameof(KeyValuePair<object, object>.Value));
+                PropertyInfo keyPropertyInfo = elementType.GetProperty(nameof(KeyValuePair<object, object>.Key));
+                PropertyInfo valuePropertyInfo = elementType.GetProperty(nameof(KeyValuePair<object, object>.Value));
                 elementKey = keyPropertyInfo.GetValue(element);
                 elementToSerialize = valuePropertyInfo.GetValue(element);
-                typeToSerialize = memberType.GetGenericArguments()[1];
+                typeToSerialize = elementType.GetGenericArguments()[1];
                 indices[arrayDimension] = elementKey;
             }
 
-            object arrayElementValue = serializeValue(extendedMemberInfo, typeToSerialize, elementToSerialize, parentItem, arrayDimension + 1, indices);
+            object arrayElementValue = serializeValue(extendedMemberInfo, typeToSerialize, elementToSerialize, parentItem, containingCollection, arrayDimension + 1, indices);
             PersistAsAttribute persistData = extendedMemberInfo.GetPersistAsAttributeForDimension(arrayDimension + 1);
             XElement returnElement = ((arrayElementValue is XElement arrayEleentValueX) && (persistData?.TagName == null))
                 ? arrayEleentValueX

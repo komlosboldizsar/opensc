@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenSC.Model.General;
+using System;
 using System.Collections.Generic;
 
 namespace OpenSC.Model.Persistence
@@ -11,27 +12,33 @@ namespace OpenSC.Model.Persistence
             bool isCollection = false;
             Type keyType = null;
             Type elementType = null;
+            bool isComponentCollection = false;
+            Type componentOwnerType = null;
             foreach (Type interfaceType in type.GetInterfaces())
             {
                 if (interfaceType.IsGenericType)
                 {
-                    if (interfaceType.GetGenericTypeDefinition() == typeof(IDictionary<,>))
+                    Type genericTypeDefinition = interfaceType.GetGenericTypeDefinition();
+                    if (genericTypeDefinition == typeof(IDictionary<,>))
                     {
                         isDictionary = true;
                         isCollection = true;
                         keyType = interfaceType.GetGenericArguments()[0];
                         elementType = interfaceType.GetGenericArguments()[1];
-                        break;
                     }
-                    if (interfaceType.GetGenericTypeDefinition() == typeof(ICollection<>))
+                    if (!isDictionary && (genericTypeDefinition == typeof(ICollection<>)))
                     {
                         isCollection = true;
                         elementType = interfaceType.GetGenericArguments()[0];
-                        break;
+                    }
+                    if (genericTypeDefinition == typeof(IComponentCollection<>))
+                    {
+                        isComponentCollection = true;
+                        componentOwnerType = interfaceType.GetGenericArguments()[0];
                     }
                 }
             }
-            return new(type, isDictionary, isCollection, keyType, elementType);
+            return new(type, isDictionary, isCollection, keyType, elementType, isComponentCollection, componentOwnerType);
         }
     }
 

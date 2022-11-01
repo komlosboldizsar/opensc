@@ -18,8 +18,9 @@ namespace OpenSC.Model.Persistence
         public readonly PersistAsAttribute[] PersistAsAttributes;
         public readonly AutoProperty.GeneratedForField GeneratedForFieldAttribute;
         public readonly PersistDetailedAttribute PersistDetailedAttribute;
-        public readonly PersistSubclassAttribute PersistSubclassAttribute;
+        public readonly PersistSubclassAttribute[] PersistSubclassAttributes;
         public readonly PolymorphFieldAttribute PolymorphFieldAttribute;
+        public readonly DeserializeMembersOnlyAttribute DeserializeMembersOnlyAttribute;
         public readonly bool RequiresRelationBuilding;
         public readonly bool CanDeserializeElement;
 
@@ -29,31 +30,41 @@ namespace OpenSC.Model.Persistence
             FieldInfo = memberInfo as FieldInfo;
             PropertyInfo = memberInfo as PropertyInfo;
             ValueType = (FieldInfo != null) ? FieldInfo.FieldType : PropertyInfo.PropertyType;
-            IEnumerable<PersistAsAttribute> persistAsAttributes = memberInfo.GetCustomAttributes<PersistAsAttribute>();
-            if (persistAsAttributes.Count() > 0)
-            {
-                int dimensionMax = persistAsAttributes.Max(paa => paa.Dimension);
-                PersistAsAttributes = new PersistAsAttribute[dimensionMax + 1];
-                foreach (PersistAsAttribute persistAsAttribute in persistAsAttributes)
-                    PersistAsAttributes[persistAsAttribute.Dimension] = persistAsAttribute;
-            }
-            else
-            {
-                PersistAsAttributes = null;
-            }
+            PersistAsAttributes = collectDimensionedAttribute<PersistAsAttribute>(memberInfo);
             GeneratedForFieldAttribute = memberInfo.GetCustomAttribute<AutoProperty.GeneratedForField>();
             PersistDetailedAttribute = memberInfo.GetCustomAttribute<PersistDetailedAttribute>();
-            PersistSubclassAttribute = memberInfo.GetCustomAttribute<PersistSubclassAttribute>();
+            PersistSubclassAttributes = collectDimensionedAttribute<PersistSubclassAttribute>(memberInfo);
             PolymorphFieldAttribute = memberInfo.GetCustomAttribute<PolymorphFieldAttribute>();
+            DeserializeMembersOnlyAttribute = memberInfo.GetCustomAttribute<DeserializeMembersOnlyAttribute>();
             var associationTypeData = ValueType.IsAssociationTypeComplex();
             bool hasPersistDetailedAttribute = PersistDetailedAttribute != null;
             RequiresRelationBuilding = associationTypeData.TypeIs && !hasPersistDetailedAttribute;
             CanDeserializeElement = !associationTypeData.TypeIs || (associationTypeData.ElementIs == false) || hasPersistDetailedAttribute;
         }
 
-        public PersistAsAttribute GetPersistAsAttributeForDimension(int dimension)
-            => ((PersistAsAttributes == null) || (PersistAsAttributes.Length <= dimension)) ? null : PersistAsAttributes[dimension];
+        private TAttribute[] collectDimensionedAttribute<TAttribute>(MemberInfo memberInfo)
+            where TAttribute : Attribute, IDimensionedPersistAttribute
+        {
+            IEnumerable<TAttribute> attributes = memberInfo.GetCustomAttributes<TAttribute>();
+            if (attributes.Count() == 0)
+                return null;
+            int dimensionMax = attributes.Max(paa => paa.Dimension);
+            TAttribute[] attributesArray = new TAttribute[dimensionMax + 1];
+            foreach (TAttribute attribute in attributes)
+                attributesArray[attribute.Dimension] = attribute;
+            return attributesArray;
+        }
 
+        public PersistAsAttribute GetPersistAsAttributeForDimension(int dimension)
+            => getTAttributeForDimension(PersistAsAttributes, dimension);
+
+        public PersistSubclassAttribute GetPersistSubclassAttributeForDimension(int dimension)
+            => getTAttributeForDimension(PersistSubclassAttributes, dimension);
+
+        private TAttribute getTAttributeForDimension<TAttribute>(TAttribute[] attributeArray, int dimension)
+            where TAttribute : Attribute
+            => ((attributeArray == null) || (attributeArray.Length <= dimension)) ? null : attributeArray[dimension];
+        
         public object GetValue(object item)
             => (FieldInfo != null) ? FieldInfo.GetValue(item) : PropertyInfo.GetValue(item);
 

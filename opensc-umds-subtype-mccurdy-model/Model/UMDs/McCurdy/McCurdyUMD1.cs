@@ -40,7 +40,7 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         #region Texts
         protected override Type textTypeGetter() => typeof(McCurdyUmd1Text);
-        protected override UmdText CreateText(Umd owner, int indexAtOwner, UmdTextInfo info) => new McCurdyUmd1Text(owner, indexAtOwner, info);
+        protected override UmdText CreateText() => new McCurdyUmd1Text();
 
         internal void NotifyTextColumnWidthChanged(UmdText text)
         {

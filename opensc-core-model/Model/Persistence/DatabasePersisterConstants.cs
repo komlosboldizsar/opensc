@@ -14,6 +14,6 @@ namespace OpenSC.Model.Persistence
         public const string UNDEFINED_ARRAY_ITEM_TAG = "arrayitem";
         public const string UNDEFINED_DICTIONARY_ITEM_KEY = "key";
         public const BindingFlags MEMBER_LOOKUP_BINDING_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-
+        public const string HETEROGENOUS_COLLECTION_TYPE = "type";
     }
 }

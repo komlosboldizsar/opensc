@@ -12,18 +12,12 @@ namespace OpenSC.Model.Routers.BmdAtemMv
         public override Type Type => typeof(BmdAtemMvRouterOutput);
 
         public override object DeserializeItem(XmlNode serializedItem, object parentItem, object[] keysOrIndices)
-        {
-            BmdAtemMvRouterOutput restoredOutput = base.DeserializeItem(serializedItem, parentItem, keysOrIndices) as BmdAtemMvRouterOutput;
-            return restoredOutput;
-        }
-
+            => base.DeserializeItem(serializedItem, parentItem, keysOrIndices) as BmdAtemMvRouterOutput;
         public override XElement SerializeItem(object item, object parentItem, object[] keysOrIndices)
         {
-            BmdAtemMvRouterOutput output = item as BmdAtemMvRouterOutput;
-            if (output == null)
+            if (item is not BmdAtemMvRouterOutput)
                 return null;
-            XElement serializedOutput = base.SerializeItem(item, parentItem, keysOrIndices);
-            return serializedOutput;
+            return base.SerializeItem(item, parentItem, keysOrIndices);
         }
 
     }

@@ -64,7 +64,7 @@ namespace OpenSC.Model.UMDs.BmdSmartView
 
         #region Tallies
         protected override Type tallyTypeGetter() => typeof(BmdSmartViewDisplayTally);
-        protected override UmdTally CreateTally(Umd owner, int indexAtOwner, UmdTallyInfo info) => new BmdSmartViewDisplayTally(owner, indexAtOwner, info);
+        protected override UmdTally CreateTally() => new BmdSmartViewDisplayTally();
 
         internal void NotifyTallyPriorityChanged(BmdSmartViewDisplayTally tally)
         {

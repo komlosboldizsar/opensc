@@ -22,7 +22,7 @@ namespace OpenSC.Model.Routers.CrosspointStores.Macros
             if (router == null)
                 return;
             RouterOutput output = argumentValues[2] as RouterOutput;
-            if ((output == null) || (output.Router != router))
+            if ((output == null) || (output.Parent != router))
                 return;
             crosspointStore.StoredOutput = output;
         }
@@ -48,7 +48,7 @@ namespace OpenSC.Model.Routers.CrosspointStores.Macros
             {
                 if (!int.TryParse(key, out int keyInt))
                     return null;
-                return (previousArgumentObjects[1] as Router)?.GetOutput(keyInt);
+                return (previousArgumentObjects[1] as Router)?.Outputs[keyInt];
             }
             public override string GetKeyByObject(object obj) => (obj as RouterOutput)?.Index.ToString();
             protected override IEnumerable<object> _getPossibilities(object[] previousArgumentObjects) => (previousArgumentObjects[1] as Router)?.Outputs;

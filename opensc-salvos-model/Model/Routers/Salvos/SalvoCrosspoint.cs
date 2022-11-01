@@ -23,7 +23,7 @@ namespace OpenSC.Model.Routers.Salvos
         public int? __outputIndex;
         public int? __inputIndex;
 
-        public Router Router => output?.Router;
+        public Router Router => output?.Parent;
 
         [AutoProperty]
         private RouterOutput output;
@@ -41,9 +41,9 @@ namespace OpenSC.Model.Routers.Salvos
             if (router == null)
                 return;
             if (__outputIndex != null)
-                Output = router.GetOutput((int)__outputIndex);
+                Output = router.Outputs[(int)__outputIndex];
             if (__inputIndex != null)
-                Input = router.GetInput((int)__inputIndex);
+                Input = router.Inputs[(int)__inputIndex];
         }
 
     }

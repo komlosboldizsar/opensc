@@ -110,7 +110,7 @@ namespace OpenSC.Model.Routers
 
             // Router of destination
             crosspoints.Clear();
-            RouterProxy destRp = nodes.FirstOrDefault(rp => (rp.Router == Destination.Router));
+            RouterProxy destRp = nodes.FirstOrDefault(rp => (rp.Router == Destination.Parent));
             if (destRp.TotalCost == null)
             {
                 Possible = false;
@@ -126,7 +126,7 @@ namespace OpenSC.Model.Routers
                 if (currentRp.Input.CurrentSource == Source)
                     break;
                 dst = (RouterOutput)currentRp.Input.CurrentSource;
-                currentRp = nodes.FirstOrDefault(rp => (rp.Router == dst.Router));
+                currentRp = nodes.FirstOrDefault(rp => (rp.Router == dst.Parent));
             }
 
         }

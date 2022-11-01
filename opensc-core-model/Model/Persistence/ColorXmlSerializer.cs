@@ -10,7 +10,7 @@ using System.Xml.Linq;
 namespace OpenSC.Model.Persistence
 {
 
-    class ColorXmlSerializer : IValueXmlSerializer
+    class ColorXmlSerializer : ICompleteXmlSerializer
     {
 
         public Type Type => typeof(Color);

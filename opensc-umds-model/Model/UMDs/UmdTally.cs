@@ -11,32 +11,57 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.UMDs
 {
 
-    public partial class UmdTally : ObjectBase
+    public partial class UmdTally : ObjectBase, IComponent<Umd, UmdTally, UmdTallyCollection>
     {
 
-        public Umd Owner { get; private set; }
-        public int IndexAtOwner { get; init; }
-        public UmdTallyInfo Info { get; init; }
+        [AutoProperty]
+        private int index;
 
-        #region Instantiation, persistence
-        public UmdTally(Umd owner, int indexAtOwner, UmdTallyInfo info)
+        public string Name { get; set; } /* remove later */
+
+        private UmdTallyInfo _info;
+        public virtual UmdTallyInfo Info
         {
-            Owner = owner;
-            IndexAtOwner = indexAtOwner;
-            Info = info;
-            color = info.DefaultColor;
+            get => _info;
+            set
+            {
+                _info = value;
+                color = value.DefaultColor;
+            }
         }
 
-        internal void RestoreCustomRelations() => Source = BooleanRegister.Instance[_tfk_name_source];
+        #region Instantiation, persistence
+        internal void RestoreCustomRelations()
+            => Source = BooleanRegister.Instance[_tfk_name_source];
 
-        internal void Removed()
+        public void Removed()
         {
-            Owner = null;
+            Parent = null;
             SourceChanged = null;
             ColorChanged = null;
             CurrentStateChanged = null;
             if (source != null)
                 source.StateChanged -= sourceStateChangedHandler;
+        }
+        #endregion
+
+
+        #region Property: Parent (=Umd)
+        public Umd Parent { get; private set; }
+        private UmdTallyCollection parentCollection;
+
+        public void AssignParent(Umd umd, UmdTallyCollection parentCollection)
+        {
+            if (Parent != null)
+                return;
+            Parent = umd;
+            this.parentCollection = parentCollection;
+        }
+
+        public void deassignParent()
+        {
+            Parent = null;
+            parentCollection = null;
         }
         #endregion
 
@@ -82,7 +107,7 @@ namespace OpenSC.Model.UMDs
                 args.Cancel();
         }
 
-        private void _color_afterChange(Color oldValue, Color newValue) => Owner?.NotifyTallyColorChanged(this);
+        private void _color_afterChange(Color oldValue, Color newValue) => Parent?.NotifyTallyColorChanged(this);
         #endregion
 
         #region Property: CurrentState
@@ -90,7 +115,7 @@ namespace OpenSC.Model.UMDs
         [AutoProperty.AfterChange(nameof(_currentState_afterChange))]
         private bool currentState;
 
-        private void _currentState_afterChange(bool oldValue, bool newValue) => Owner?.NotifyTallyCurrentStateChanged(this);
+        private void _currentState_afterChange(bool oldValue, bool newValue) => Parent?.NotifyTallyCurrentStateChanged(this);
         #endregion
 
     }

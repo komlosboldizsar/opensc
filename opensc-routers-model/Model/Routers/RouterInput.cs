@@ -11,26 +11,21 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public partial class RouterInput : SignalForwarder, ISystemObject
+    public partial class RouterInput : SignalForwarder, ISystemObject, IComponent<Router, RouterInput, RouterInputCollection>
     {
 
-        public RouterInput() : base() => SystemObjectRegister.Instance.Register(this);
+        public RouterInput() : base()
+            => SystemObjectRegister.Instance.Register(this);
 
-        public RouterInput(string name, Router router, int index) : base()
+        public void Removed()
         {
-            this.name = name;
-            this.Router = router;
-            this.Index = index;
-            SystemObjectRegister.Instance.Register(this);
-            router.GlobalIdChanged += (i, ov, nv) => generateGlobalId();
-            generateGlobalId();
+            deassignParent();
+            NameChanged = null;
+            IndexChanged = null;
+            IsTielineChanged = null;
+            TielineCostChanged = null;
+            TielineIsReservedChanged = null;
         }
-
-        public void Restored()
-        { }
-
-        public virtual void TotallyRestored()
-        { }
 
         #region Property: GlobalID
         public override event PropertyChangedTwoValuesDelegate<ISystemObject, string> GlobalIdChanged;
@@ -41,12 +36,12 @@ namespace OpenSC.Model.Routers
 
         private void generateGlobalId()
         {
-            if (Router == null)
+            if (Parent == null)
             {
                 updateGlobalId(null);
                 return;
             }
-            updateGlobalId($"{Router.GlobalID}.input.{Index}");
+            updateGlobalId($"{Parent.GlobalID}.input.{Index}");
         }
         #endregion
 
@@ -66,7 +61,7 @@ namespace OpenSC.Model.Routers
                 name = value;
                 NameChanged?.Invoke(this, oldName, value);
                 ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(Name));
-                Router?.NotifyLocalInputNameChanged(this);
+                Parent?.NotifyLocalInputNameChanged(this);
             }
         }
 
@@ -75,29 +70,40 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Property: Router
-        public Router Router { get; private set; }
+        public Router Parent { get; private set; }
+        private RouterInputCollection parentCollection;
 
-        internal void AssignParentRouter(Router router)
+        public void AssignParent(Router router, RouterInputCollection parentCollection)
         {
-            if (Router != null)
+            if (Parent != null)
                 return;
-            Router = router;
-            router.GlobalIdChanged += (i, ov, nv) => generateGlobalId();
+            Parent = router;
+            this.parentCollection = parentCollection;
+            Parent.GlobalIdChanged += Parent_GlobalIdChanged;
             generateGlobalId();
         }
 
-        public void RemovedFromRouter(Router router)
+        public void deassignParent()
         {
-            if (router != Router)
-                return;
-            Router = null;
+            if (Parent != null)
+                Parent.GlobalIdChanged -= Parent_GlobalIdChanged;
+            Parent = null;
+            parentCollection = null;
+            Removed();
         }
+
+        private void Parent_GlobalIdChanged(ISystemObject item, string oldValue, string newValue)
+            => generateGlobalId();
         #endregion
 
         #region Property: Index
         [AutoProperty]
+        [AutoProperty.BeforeChange(nameof(_index_beforeChange))]
         [AutoProperty.AfterChange(nameof(generateGlobalId))]
         private int index;
+
+        private void _index_beforeChange(int newValue)
+            => parentCollection?.CheckKey(this, newValue);
         #endregion
 
         #region Property: IsTieline

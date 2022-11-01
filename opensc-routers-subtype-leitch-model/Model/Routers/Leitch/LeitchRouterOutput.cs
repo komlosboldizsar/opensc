@@ -9,11 +9,6 @@ namespace OpenSC.Model.Routers.Leitch
     public class LeitchRouterOutput : RouterOutput
     {
 
-        public LeitchRouterOutput() : base()
-        { }
-
-        public LeitchRouterOutput(string name, Router router, int index) : base(name, router, index)
-        { }
 
         private int lockProtectOwnerPanelId = -1;
         public int LockProtectOwnerPanelId

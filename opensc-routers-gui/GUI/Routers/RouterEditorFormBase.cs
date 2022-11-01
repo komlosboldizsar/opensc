@@ -195,7 +195,7 @@ namespace OpenSC.GUI.Routers
                 string msgBoxText = $"Do you really want to delete input [{input}]?";
                 var confirm = MessageBox.Show(msgBoxText, "Delete confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (confirm == DialogResult.Yes)
-                    router.RemoveInput(input);
+                    router.Inputs.Remove(input);
             });
             builder.BuildAndAdd();
 
@@ -272,7 +272,7 @@ namespace OpenSC.GUI.Routers
                 string msgBoxText = $"Do you really want to delete output [{output}]?";
                 var confirm = MessageBox.Show(msgBoxText, "Delete confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (confirm == DialogResult.Yes)
-                    router.RemoveOutput(output);
+                    router.Outputs.Remove(output);
             });
             builder.BuildAndAdd();
 
@@ -312,8 +312,11 @@ namespace OpenSC.GUI.Routers
             return sourceList.ToArray();
         }
 
-        private void addInputButton_Click(object sender, EventArgs e) => ((Router)EditedModel).AddInput();
-        private void addOutputButton_Click(object sender, EventArgs e) => ((Router)EditedModel).AddOutput();
+        private void addInputButton_Click(object sender, EventArgs e)
+            => ((Router)EditedModel).Inputs.CreateAndAddNextInstance();
+
+        private void addOutputButton_Click(object sender, EventArgs e)
+            => ((Router)EditedModel).Outputs.CreateAndAddNextInstance();
 
         private void initInputsNameButtonAndMenu()
         {

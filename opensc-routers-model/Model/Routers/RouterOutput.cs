@@ -12,7 +12,10 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.Routers
 {
 
-    public partial class RouterOutput : SignalForwarder, ISignalSourceRegistered, ISystemObject
+    public partial class RouterOutput : SignalForwarder,
+        ISignalSourceRegistered,
+        ISystemObject,
+        IComponent<Router, RouterOutput, RouterOutputCollection>
     {
 
         public RouterOutput() : base()
@@ -27,7 +30,7 @@ namespace OpenSC.Model.Routers
         {
             createAllLocks();
             this.name = name;
-            this.Router = router;
+            this.Parent = router;
             this.Index = index;
             this.CurrentSourceChanged += currentSourceChangedHandler;
             SystemObjectRegister.Instance.Register(this);
@@ -36,16 +39,22 @@ namespace OpenSC.Model.Routers
             generateGlobalId();
         }
 
-        public void Restored()
+        public void Restored() => createTallyBooleans();
+        public virtual void TotallyRestored() { }
+
+        public void Removed()
         {
-            createTallyBooleans();
+            unregisterAsSignal();
+            deassignParent();
+            NameChanged = null;
+            IndexChanged = null;
+            CurrentInputChanged = null;
+            SignalLabelChanged = null;
+            SignalUniqueIdChanged = null;
         }
 
-        public virtual void TotallyRestored()
-        { }
-
-        public delegate void RemovedDelegate(RouterOutput routerOutput);
-        public event RemovedDelegate Removed;
+        public delegate void RemovedEventHandler(RouterOutput routerOutput);
+        public event RemovedEventHandler RemovedEvent;
 
         #region Property: GlobalID
         public override event PropertyChangedTwoValuesDelegate<ISystemObject, string> GlobalIdChanged;
@@ -56,12 +65,12 @@ namespace OpenSC.Model.Routers
 
         private void generateGlobalId()
         {
-            if (Router == null)
+            if (Parent == null)
             {
                 updateGlobalId(null);
                 return;
             }
-            updateGlobalId($"{Router.GlobalID}.output.{Index}");
+            updateGlobalId($"{Parent.GlobalID}.output.{Index}");
         }
         #endregion
 
@@ -75,7 +84,7 @@ namespace OpenSC.Model.Routers
         {
             SignalLabelChanged?.Invoke(this, getSignalLabel());
             ((INotifyPropertyChanged)this).RaisePropertyChanged(nameof(ISignalSourceRegistered.SignalLabel));
-            Router?.NotifyLocalOutputNameChanged(this);
+            Parent?.NotifyLocalOutputNameChanged(this);
         }
 
         public void ValidateName(string name)
@@ -85,25 +94,30 @@ namespace OpenSC.Model.Routers
         }
         #endregion
 
-        #region Property: Router
-        public Router Router { get; private set; }
+        #region Property: Parent (=Router)
+        public Router Parent { get; private set; }
+        private RouterOutputCollection parentCollection;
 
-        internal void AssignParentRouter(Router router)
+        public void AssignParent(Router router, RouterOutputCollection parentCollection)
         {
-            if (Router != null)
+            if (Parent != null)
                 return;
-            Router = router;
-            router.GlobalIdChanged += (i, ov, nv) => generateGlobalId();
+            Parent = router;
+            this.parentCollection = parentCollection;
+            Parent.GlobalIdChanged += Parent_GlobalIdChanged;
+            generateGlobalId();
         }
 
-        public void RemovedFromRouter(Router router)
+        public void deassignParent()
         {
-            if (router != Router)
-                return;
-            Router = null;
-            unregisterAsSignal();
-            Removed?.Invoke(this);
+            if (Parent != null)
+                Parent.GlobalIdChanged -= Parent_GlobalIdChanged;
+            Parent = null;
+            parentCollection = null;
         }
+
+        private void Parent_GlobalIdChanged(ISystemObject item, string oldValue, string newValue)
+            => generateGlobalId();
         #endregion
 
         #region Property: Index
@@ -128,14 +142,14 @@ namespace OpenSC.Model.Routers
             RouterInput sourceRouterInput = source as RouterInput;
             if (!isNull && (sourceRouterInput == null))
                 return;
-            if (!isNull && (sourceRouterInput.Router != Router))
+            if (!isNull && (sourceRouterInput.Parent != Parent))
                 throw new ArgumentException();
             base.AssignSource(source);
-            string logMessage = $"Router crosspoint updated. Router: [{Router}], destination: #{Index}, source: #{sourceRouterInput?.Index.ToString() ?? "-"}.";
+            string logMessage = $"Router crosspoint updated. Router: [{Parent}], destination: #{Index}, source: #{sourceRouterInput?.Index.ToString() ?? "-"}.";
             LogDispatcher.I(Router.LOG_TAG, logMessage);
         }
 
-        public void RequestCrosspointUpdate(RouterInput input) => Router?.RequestCrosspointUpdate(this, input);
+        public void RequestCrosspointUpdate(RouterInput input) => Parent?.RequestCrosspointUpdate(this, input);
         #endregion
 
         #region Property: CurrentInput
@@ -156,14 +170,14 @@ namespace OpenSC.Model.Routers
             => getSignalLabel();
 
         private string getSignalLabel()
-            => string.Format("[(#{2}) {3}] output of router [(#{0}) {1}]", Router.ID, Router.Name, (Index + 1), Name);
+            => string.Format("[(#{2}) {3}] output of router [(#{0}) {1}]", Parent.ID, Parent.Name, (Index + 1), Name);
 
         public event PropertyChangedOneValueDelegate<ISignalSourceRegistered, string> SignalLabelChanged;
         #endregion
 
         #region Property: SignalUniqueId
         public string SignalUniqueId
-            => string.Format("router.{0}.output.{1}", Router.ID, (Index + 1));
+            => string.Format("router.{0}.output.{1}", Parent.ID, (Index + 1));
 
         public event PropertyChangedOneValueDelegate<ISignalSourceRegistered, string> SignalUniqueIdChanged;
         #endregion

@@ -19,7 +19,7 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            SerializerRegister.RegisterSerializer(new BmdAtemMvRouterOutputXmlSerializer());
+            SerializerRegister.RegisterCompleteSerializer(new BmdAtemMvRouterOutputXmlSerializer());
         }
 
     }

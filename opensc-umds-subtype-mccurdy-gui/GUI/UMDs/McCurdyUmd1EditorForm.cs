@@ -178,7 +178,7 @@ namespace OpenSC.GUI.UMDs
             UmdText text = ((TextControls)typedSender.Tag).Text;
             if (text == null)
                 return;
-            int textIndex = text.IndexAtOwner;
+            int textIndex = text.Index;
             bool textUsed = typedSender.Checked;
             textColumnWidthControls[textIndex].SetUsed(textUsed);
             recalculateColumnWidthsByUserInput();
@@ -190,7 +190,7 @@ namespace OpenSC.GUI.UMDs
             UmdText text = ((TextControls)typedSender.Tag).Text;
             if (text == null)
                 return;
-            int textIndex = text.IndexAtOwner;
+            int textIndex = text.Index;
             textColumnWidthControls[textIndex].WidthLabel.TextAlign = (UmdTextAlignment)typedSender.SelectedValue switch
             {
                 UmdTextAlignment.Left => ContentAlignment.MiddleLeft,
@@ -205,7 +205,7 @@ namespace OpenSC.GUI.UMDs
         private void TextColumnWidthNumericField_ValueChanged(object sender, EventArgs e)
         {
             if (!updatingWidthNumericFieldsFromCode)
-                recalculateColumnWidthsByUserInput(((TextColumnWidthControls)((NumericUpDown)sender).Tag).Text.IndexAtOwner);
+                recalculateColumnWidthsByUserInput(((TextColumnWidthControls)((NumericUpDown)sender).Tag).Text.Index);
         }
 
         private void recalculateColumnWidthsByUserInput(int? changeSource = null)

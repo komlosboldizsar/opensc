@@ -3,7 +3,7 @@
 namespace OpenSC.Model.Persistence
 {
     [AttributeUsage((AttributeTargets.Field | AttributeTargets.Property), AllowMultiple = true)]
-    public class PersistAsAttribute: Attribute
+    public class PersistAsAttribute : Attribute, IDimensionedPersistAttribute
     {
         public string TagName { get; init; }
         public const string KEY_ATTRIBUTE_DEFAULT = "key";

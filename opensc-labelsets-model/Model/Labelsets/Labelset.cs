@@ -54,7 +54,7 @@ namespace OpenSC.Model.Labelsets
         public Label this[ISystemObject forObject] => GetLabel(forObject);
 
         private void labelableItemsRemoved(IEnumerable<IObservableEnumerable<ISystemObject>.ItemWithPosition> affectedItemsWithPositions)
-            => affectedItemsWithPositions.Foreach(aiwp => labels.Remove(aiwp.Item));
+            => affectedItemsWithPositions.Foreach(aiwp => labels.RemoveByKey(aiwp.Item));
         #endregion
 
         #region Label text getters, setters

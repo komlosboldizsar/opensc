@@ -9,27 +9,43 @@ namespace OpenSC.Model.Persistence
     public class SerializerRegister
     {
 
-        private static readonly IValueXmlSerializer[] commonSerializers = new IValueXmlSerializer[]
+        private static readonly ICompleteXmlSerializer[] commonCompleteSerializers = new ICompleteXmlSerializer[]
         {
             new ColorXmlSerializer()
         };
 
-        private static Dictionary<Type, IValueXmlSerializer> registeredSerializers = new();
+        private static readonly IMemberXmlSerializer[] commonMemberSerializers = new IMemberXmlSerializer[]
+        { };
+
+        private static Dictionary<Type, ICompleteXmlSerializer> registeredCompleteSerializers = new();
+        private static Dictionary<Type, IMemberXmlSerializer> registeredMemberSerializers = new();
       
         static SerializerRegister()
         {
-            foreach (IValueXmlSerializer serializer in commonSerializers)
-                registeredSerializers.Add(serializer.Type, serializer);
+            foreach (ICompleteXmlSerializer completeSerializer in commonCompleteSerializers)
+                registeredCompleteSerializers.Add(completeSerializer.Type, completeSerializer);
+            foreach (IMemberXmlSerializer memberSerializer in commonMemberSerializers)
+                registeredMemberSerializers.Add(memberSerializer.Type, memberSerializer);
         }
 
-        public static void RegisterSerializer(IValueXmlSerializer serializer)
-            => registeredSerializers.Add(serializer.Type, serializer);
+        public static void RegisterCompleteSerializer(ICompleteXmlSerializer serializer)
+            => registeredCompleteSerializers.Add(serializer.Type, serializer);
 
-        public static IValueXmlSerializer GetSerializerForType(Type type)
+        public static void RegisterMemberSerializer(IMemberXmlSerializer serializer)
+            => registeredMemberSerializers.Add(serializer.Type, serializer);
+
+        public static ICompleteXmlSerializer GetCompleteSerializerForType(Type type)
         {
-            if (!registeredSerializers.TryGetValue(type, out IValueXmlSerializer foundSerializer))
+            if (!registeredCompleteSerializers.TryGetValue(type, out ICompleteXmlSerializer foundCompleteSerializer))
                 return null;
-            return foundSerializer;
+            return foundCompleteSerializer;
+        }
+
+        public static IMemberXmlSerializer GetMemberSerializerForType(Type type)
+        {
+            if (!registeredMemberSerializers.TryGetValue(type, out IMemberXmlSerializer foundMemberSerializer))
+                return null;
+            return foundMemberSerializer;
         }
 
     }

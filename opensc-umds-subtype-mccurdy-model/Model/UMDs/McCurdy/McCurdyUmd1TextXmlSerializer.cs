@@ -14,22 +14,22 @@ namespace OpenSC.Model.UMDs.McCurdy
 
         private const string ATTRIBUTE_COLUMNWIDTH = "columnwidth";
 
-        public override object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
+        public override void DeserializeItem(XmlNode serializedItem, object item, object parentItem, object[] indicesOrKeys)
         {
-            McCurdyUmd1Text restoredText = base.DeserializeItem(serializedItem, parentItem, indicesOrKeys) as McCurdyUmd1Text;
-            if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_COLUMNWIDTH]?.Value, out int columnWidth))
-                columnWidth = 0;
-            restoredText.ColumnWidth = columnWidth;
-            return restoredText;
+            base.DeserializeItem(serializedItem, item, parentItem, indicesOrKeys);
+            if (item is not McCurdyUmd1Text castedText)
+                return;
+            if (int.TryParse(serializedItem.Attributes[ATTRIBUTE_COLUMNWIDTH]?.Value, out int columnWidth))
+                castedText.ColumnWidth = columnWidth;
+            return;
         }
 
         public override XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
         {
-            McCurdyUmd1Text text = item as McCurdyUmd1Text;
-            if (text == null)
+            if (item is not McCurdyUmd1Text castedText)
                 return null;
             XElement serializedText = base.SerializeItem(item, parentItem, indicesOrKeys);
-            serializedText.SetAttributeValue(ATTRIBUTE_COLUMNWIDTH, text.ColumnWidth);
+            serializedText.SetAttributeValue(ATTRIBUTE_COLUMNWIDTH, castedText.ColumnWidth);
             return serializedText;
         }
 

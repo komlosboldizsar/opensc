@@ -42,8 +42,8 @@ namespace OpenSC.Model.Routers.CrosspointBooleans
 
         private void updateWatchedRouter()
         {
-            Router wor = watchedOutput?.Router;
-            WatchedRouter = (watchedInput?.Router == wor) ? wor : null;
+            Router wor = watchedOutput?.Parent;
+            WatchedRouter = (watchedInput?.Parent == wor) ? wor : null;
         }
         #endregion
 

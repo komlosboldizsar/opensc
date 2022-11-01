@@ -115,20 +115,12 @@ namespace OpenSC.Model.Routers.BmdAtemMv
         }
         #endregion
 
-        #region Input and output instantiation
-        public override RouterInput CreateInput(string name, int index)
-            => new(name, this, index);
+        #region Inputs and outputs
+        protected override RouterOutputCollection createOutputCollection()
+            => new BmdAtemMvRouterOutputCollection(this);
 
-        public override RouterOutput CreateOutput(string name, int index)
-            => new BmdAtemMvRouterOutput(name, this, index);
-
-        private static readonly Dictionary<Type, string> OUTPUT_TYPES = new()
-        {
-            { typeof(BmdAtemMvRouterOutput), "bmdatemmv" }
-        };
-
-        protected override Dictionary<Type, string> OutputTypesDictionaryGetter()
-            => OUTPUT_TYPES;
+        protected override Type getOutputCollectionType()
+            => typeof(BmdAtemMvRouterOutputCollection);
         #endregion
 
         #region Setting/getting crosspoints
@@ -168,7 +160,7 @@ namespace OpenSC.Model.Routers.BmdAtemMv
             RouterOutput output = Outputs.FirstOrDefault(o => o.Index == outputIndex);
             if (output == null)
                 return;
-            RouterInput input = Inputs.FirstOrDefault(i => i.Index == sourceId);
+            RouterInput input = Inputs[(int)sourceId];
             output.AssignSource(input);
         }
 

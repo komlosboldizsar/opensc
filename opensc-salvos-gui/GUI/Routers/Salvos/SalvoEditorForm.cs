@@ -90,7 +90,7 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.CellEndEditHandlerMethod((crosspoint, cell, eventargs) => { crosspoint.Output = cell.Value as RouterOutput; });
             builder.DropDownPopulatorMethod((crosspoint, cell) => getArrayForDropDown<RouterOutput>(crosspoint.Router?.Outputs));
             builder.ReceiveObjectDrop().FilterByType<RouterOutput>();
-            builder.BindParent(routerBuilder, ro => ((RouterOutput)ro)?.Router);
+            builder.BindParent(routerBuilder, ro => ((RouterOutput)ro)?.Parent);
             builder.AddChangeEvent(nameof(SalvoCrosspoint.Output));
             builder.BuildAndAdd();
 
@@ -104,7 +104,7 @@ namespace OpenSC.GUI.Routers.Salvos
             builder.CellEndEditHandlerMethod((crosspoint, cell, eventargs) => { crosspoint.Input = cell.Value as RouterInput; });
             builder.DropDownPopulatorMethod((crosspoint, cell) => getArrayForDropDown<RouterInput>(crosspoint.Router?.Inputs));
             builder.ReceiveObjectDrop().FilterByType<RouterInput>();
-            builder.BindParent(routerBuilder, ri => ((RouterInput)ri)?.Router);
+            builder.BindParent(routerBuilder, ri => ((RouterInput)ri)?.Parent);
             builder.AddChangeEvent(nameof(SalvoCrosspoint.Input));
             builder.BuildAndAdd();
 

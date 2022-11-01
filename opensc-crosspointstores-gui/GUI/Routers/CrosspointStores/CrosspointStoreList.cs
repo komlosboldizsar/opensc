@@ -47,11 +47,11 @@ namespace OpenSC.GUI.Routers.CrosspointStores
                     return;
                 }
                 cell.Value = string.Format("(#{0}) {1} / (#{2}) {3}",
-                    crosspointStore.StoredOutput?.Router?.ID, crosspointStore.StoredOutput?.Router?.Name,
+                    crosspointStore.StoredOutput?.Parent?.ID, crosspointStore.StoredOutput?.Parent?.Name,
                     crosspointStore.StoredOutput?.Index, crosspointStore.StoredOutput?.Name);
             });
-            builder.AddMultilevelChangeEvent(nameof(CrosspointStore.StoredOutput), nameof(RouterOutput.Router), nameof(Router.ID));
-            builder.AddMultilevelChangeEvent(nameof(CrosspointStore.StoredOutput), nameof(RouterOutput.Router), nameof(Router.Name));
+            builder.AddMultilevelChangeEvent(nameof(CrosspointStore.StoredOutput), nameof(RouterOutput.Parent), nameof(Router.ID));
+            builder.AddMultilevelChangeEvent(nameof(CrosspointStore.StoredOutput), nameof(RouterOutput.Parent), nameof(Router.Name));
             builder.AddMultilevelChangeEvent(nameof(CrosspointStore.StoredOutput), nameof(RouterOutput.Index));
             builder.AddMultilevelChangeEvent(nameof(CrosspointStore.StoredOutput), nameof(RouterOutput.Name));
 
@@ -67,16 +67,16 @@ namespace OpenSC.GUI.Routers.CrosspointStores
                     return;
                 }
                 cell.Value = string.Format("(#{0}) {1} / (#{2}) {3}",
-                    crosspointStore.StoredInput?.Router?.ID, crosspointStore.StoredInput?.Router?.Name,
+                    crosspointStore.StoredInput?.Parent?.ID, crosspointStore.StoredInput?.Parent?.Name,
                     crosspointStore.StoredInput?.Index, crosspointStore.StoredInput?.Name);
-                bool invalidCrosspoint = (crosspointStore.StoredInput?.Router != null) && (crosspointStore.StoredOutput?.Router != null)
-                    && (crosspointStore.StoredInput.Router != crosspointStore.StoredOutput.Router);
+                bool invalidCrosspoint = (crosspointStore.StoredInput?.Parent != null) && (crosspointStore.StoredOutput?.Parent != null)
+                    && (crosspointStore.StoredInput.Parent != crosspointStore.StoredOutput.Parent);
                 cell.Style.ForeColor = invalidCrosspoint ? TEXT_COLOR_INVALID_CROSSPOINT : TEXT_COLOR_VALID_CROSSPOINT;
             });
             builder.AddChangeEvent(nameof(CrosspointStore.StoredInput));
             builder.AddChangeEvent(nameof(CrosspointStore.StoredOutput));
-            builder.AddMultilevelChangeEvent(nameof(CrosspointStore.StoredInput), nameof(RouterInput.Router), nameof(Router.ID));
-            builder.AddMultilevelChangeEvent(nameof(CrosspointStore.StoredInput), nameof(RouterInput.Router), nameof(Router.Name));
+            builder.AddMultilevelChangeEvent(nameof(CrosspointStore.StoredInput), nameof(RouterInput.Parent), nameof(Router.ID));
+            builder.AddMultilevelChangeEvent(nameof(CrosspointStore.StoredInput), nameof(RouterInput.Parent), nameof(Router.Name));
             builder.AddMultilevelChangeEvent(nameof(CrosspointStore.StoredInput), nameof(RouterInput.Index));
             builder.AddMultilevelChangeEvent(nameof(CrosspointStore.StoredInput), nameof(RouterInput.Name));
      

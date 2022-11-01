@@ -58,16 +58,12 @@ namespace OpenSC.Model.Routers.Virtual
             }
         }
 
-        #region Input and output instantiation
-        public override RouterInput CreateInput(string name, int index) => new RouterInput(name, this, index);
-        public override RouterOutput CreateOutput(string name, int index) => new VirtualRouterOutput(name, this, index);
+        #region Inputs and outputs
+        protected override RouterOutputCollection createOutputCollection()
+            => new VirtualRouterOutputCollection(this);
 
-        private static readonly Dictionary<Type, string> OUTPUT_TYPES = new Dictionary<Type, string>()
-        {
-            {  typeof(VirtualRouterOutput), "virtual" }
-        };
-
-        protected override Dictionary<Type, string> OutputTypesDictionaryGetter() => OUTPUT_TYPES;
+        protected override Type getOutputCollectionType()
+            => typeof(VirtualRouterOutputCollection);
         #endregion
 
     }

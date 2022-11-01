@@ -144,7 +144,7 @@ namespace OpenSC.GUI.Routers.Mirrors
         private void initAssociationsTable<TElement, TProxy>
             (ref CustomDataGridView<TProxy> tableCDGV, ref DataGridView tableOriginal,
             ref Panel containerPanel, ref ObservableProxyEnumerable<TProxy, TElement> proxyListRef,
-            ObservableList<TElement> listA, ObservableList<TElement> listB,
+            IObservableCollection<TElement> listA, IObservableCollection<TElement> listB,
             Func<TElement, string> elementNameGetter, Func<TElement, int> elementIndexGetter) 
             where TElement : class, Model.General.INotifyPropertyChanged
             where TProxy : RouterIOProxy<TElement>, new()

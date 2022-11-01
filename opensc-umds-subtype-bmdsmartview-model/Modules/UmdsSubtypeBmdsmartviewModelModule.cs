@@ -24,7 +24,7 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            SerializerRegister.RegisterSerializer(new BmdSmartViewDisplayTallyXmlSerializer());
+            SerializerRegister.RegisterMemberSerializer(new BmdSmartViewDisplayTallyXmlSerializer());
         }
 
     }

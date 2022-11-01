@@ -115,7 +115,7 @@ namespace OpenSC.GUI.UMDs
                             Brush textBrush = tally.CurrentState ? tally.Color.GetTextBrushForBackground() : SolidBrushStore.Get(UmdGuiConstants.TALLY_MONITOR_INACTIVE_FG);
                             graphics.FillRectangle(fillBrush, boxRectangle);
                             graphics.DrawRectangle(Pens.LightGray, boxRectangle);
-                            graphics.DrawString(tally.IndexAtOwner.ToString(), font, textBrush, textRectangle, TEXT_FORMAT);
+                            graphics.DrawString(tally.Index.ToString(), font, textBrush, textRectangle, TEXT_FORMAT);
                             boxRectangle.X += stepX;
                             textRectangle.X += stepX;
                             thisWithPaddingRightX += stepX;

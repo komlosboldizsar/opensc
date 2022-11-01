@@ -1,6 +1,8 @@
-﻿using System;
+﻿using OpenSC.Model.General;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -43,8 +45,8 @@ namespace OpenSC.Model.Persistence
         {
             var items = new Dictionary<int, T>();
             ForeignKeyCollection<T> foreignKeyCollection = new();
-            try
-            {
+            //try
+            //{
                 XmlDocument doc = new();
                 doc.Load(fileToRead.Stream);
                 XmlElement root = doc.DocumentElement;
@@ -56,8 +58,8 @@ namespace OpenSC.Model.Persistence
                     if (item != null)
                         items.Add(item.ID, item);
                 }
-            }
-            catch { }
+            //}
+            //catch { }
             return new(items, foreignKeyCollection);
         }
 
@@ -111,29 +113,36 @@ namespace OpenSC.Model.Persistence
             PersistAsAttribute persistData = extendedMemberInfo.GetPersistAsAttributeForDimension(0);
             if (itemElement.SelectSingleNode(persistData.TagName) is not XmlElement xmlElement)
                 return;
-            object value = deserializeXmlElement(extendedMemberInfo, extendedMemberInfo.ValueType, xmlElement, item);
-            try
+            object originalValue = null;
+            bool deserializeMembersOnly = (extendedMemberInfo.DeserializeMembersOnlyAttribute != null);
+            if (deserializeMembersOnly)
+                originalValue = extendedMemberInfo.GetValue(item);
+            object value = deserializeXmlElement(extendedMemberInfo, extendedMemberInfo.ValueType, xmlElement, deserializeMembersOnly, originalValue, item);
+            if (!deserializeMembersOnly)
             {
-                if (extendedMemberInfo.RequiresRelationBuilding)
-                    foreignKeysOfItem.Add(extendedMemberInfo.MemberInfo.Name, value);
-                else
-                    extendedMemberInfo.SetValue(item, value);
+                try
+                {
+                    if (extendedMemberInfo.RequiresRelationBuilding)
+                        foreignKeysOfItem.Add(extendedMemberInfo.MemberInfo.Name, value);
+                    else
+                        extendedMemberInfo.SetValue(item, value);
+                }
+                catch { }
             }
-            catch { }
         }
 
-        private object deserializeXmlElement(ExtendedMemberInfo extendedMemberInfo, Type memberType, XmlElement xmlElement, object parentItem, int arrayDimension = 0, object[] indices = null)
+        private object deserializeXmlElement(ExtendedMemberInfo extendedMemberInfo, Type memberType, XmlElement xmlElement, bool deserializeMembersOnly, object originalValue, object parentItem, object containerCollection = null, int arrayDimension = 0, object[] indices = null)
         {
             if (memberType == typeof(string))
                 return xmlElement.InnerText;
             if ((xmlElement.InnerText == string.Empty) && PRIMITIVE_TYPES_NULL_IS_0.Contains(memberType))
                 return 0;
-            object result = null;
-            if (tryDeserializeAsCollection(ref result, extendedMemberInfo, memberType, xmlElement, parentItem, arrayDimension, indices))
+            object result = originalValue;
+            if (tryDeserializeAsCollection(ref result, extendedMemberInfo, memberType, xmlElement, deserializeMembersOnly, parentItem, arrayDimension, indices))
                 return result;
             if (tryDeserializeAsEnum(ref result, memberType, xmlElement))
                 return result;
-            if (tryDeserializeAsObject(ref result, extendedMemberInfo, memberType, xmlElement, parentItem, arrayDimension, indices))
+            if (tryDeserializeAsObject(ref result, extendedMemberInfo, memberType, xmlElement, deserializeMembersOnly, parentItem, containerCollection, arrayDimension, indices))
                 return result;
             return Convert.ChangeType(xmlElement.InnerText, memberType);
         }
@@ -146,19 +155,20 @@ namespace OpenSC.Model.Persistence
             typeof(decimal)
         };
 
-        private bool tryDeserializeAsCollection(ref object result, ExtendedMemberInfo extendedMemberInfo, Type memberType, XmlElement xmlElement, object parentItem, int arrayDimension, object[] indices)
+        private bool tryDeserializeAsCollection(ref object result, ExtendedMemberInfo extendedMemberInfo, Type memberType, XmlElement xmlElement, bool deserializeMembersOnly, object parentItem, int arrayDimension, object[] indices)
         {
             bool isCollection = memberType.GetInterfaces().Any(interfaceType => interfaceType.IsGenericType && (interfaceType.GetGenericTypeDefinition() == typeof(ICollection<>)));
             if (!memberType.IsArray && !isCollection)
                 return false;
-            result = deserializeCollection(extendedMemberInfo, memberType, xmlElement.ChildNodes.OfType<XmlElement>().ToList(), parentItem, arrayDimension, indices);
+            result = deserializeCollection(extendedMemberInfo, memberType, xmlElement.ChildNodes.OfType<XmlElement>().ToList(), deserializeMembersOnly, result, parentItem, arrayDimension, indices);
             return true;
         }
 
-        private object deserializeCollection(ExtendedMemberInfo extendedMemberInfo, Type memberType, List<XmlElement> childElements, object parentItem, int arrayDimension, object[] indices)
+        private object deserializeCollection(ExtendedMemberInfo extendedMemberInfo, Type memberType, List<XmlElement> childElements, bool deserializeMembersOnly, object originalValue, object parentItem, int arrayDimension, object[] indices)
         {
 
             int childElementCount = childElements.Count;
+            object childOriginalValue = null;
 
             object[] extendedIndices = DatabasePersisterHelpers.ExtendIndices(indices, arrayDimension);
             if (memberType.IsArray)
@@ -166,27 +176,61 @@ namespace OpenSC.Model.Persistence
                 Type arrayElementType = memberType.GetElementType();
                 if (Type.GetTypeCode(arrayElementType) != TypeCode.Object)
                 {
-                    Array typedArray = Array.CreateInstance(arrayElementType, childElementCount);
+                    Array typedArray = null;
+                    if (!deserializeMembersOnly)
+                        typedArray = Array.CreateInstance(arrayElementType, childElementCount);
                     for (int i = 0; i < childElementCount; i++)
                     {
+                        bool doDeserialize = true;
                         extendedIndices[arrayDimension] = i;
-                        typedArray.SetValue(deserializeXmlElement(extendedMemberInfo, arrayElementType, childElements[i], parentItem, arrayDimension + 1, extendedIndices), i);
+                        if (deserializeMembersOnly && (originalValue is Array originalValueArray))
+                        {
+                            if (originalValueArray.Length > i)
+                                childOriginalValue = originalValueArray.GetValue(i);
+                            else
+                                doDeserialize = false;
+                        }
+                        if (doDeserialize)
+                        {
+                            object deserializedValue = deserializeXmlElement(extendedMemberInfo, arrayElementType, childElements[i], deserializeMembersOnly, childOriginalValue, parentItem, typedArray, arrayDimension + 1, extendedIndices);
+                            if (!deserializeMembersOnly)
+                                typedArray.SetValue(deserializedValue, i);
+                        }
                     }
                     return typedArray;
                 }
-                object[] array = (object[])Activator.CreateInstance(memberType, new object[] { childElementCount });
-                for (int i = 0; i < childElementCount; i++)
+                else
                 {
-                    extendedIndices[arrayDimension] = i;
-                    array[i] = deserializeXmlElement(extendedMemberInfo, memberType.GetElementType(), childElements[i], parentItem, arrayDimension + 1, extendedIndices);
+                    object[] array = null;
+                    if (!deserializeMembersOnly)
+                        array = (object[])Activator.CreateInstance(memberType, new object[] { childElementCount });
+                    for (int i = 0; i < childElementCount; i++)
+                    {
+                        bool doDeserialize = true;
+                        extendedIndices[arrayDimension] = i;
+                        if (deserializeMembersOnly && (originalValue is object[] originalValueArray))
+                        {
+                            if (originalValueArray.Length > i)
+                                childOriginalValue = originalValueArray[i];
+                            else
+                                doDeserialize = false;
+                        }
+                        if (doDeserialize)
+                        {
+                            object deserializedValue = deserializeXmlElement(extendedMemberInfo, memberType.GetElementType(), childElements[i], deserializeMembersOnly, childOriginalValue, parentItem, array, arrayDimension + 1, extendedIndices);
+                            if (!deserializeMembersOnly)
+                                array[i] = deserializedValue;
+                        }
+                    }
+                    return array;
                 }
-                return array;
             }
 
             CollectionDetails collectionDetails = memberType.GetCollectionDetails();
             if (collectionDetails.IsCollection)
             {
-                if (extendedMemberInfo.PersistDetailedAttribute == null)
+                Type deserializeAsType = memberType;
+                if (extendedMemberInfo.RequiresRelationBuilding && (extendedMemberInfo.PersistDetailedAttribute == null))
                 {
                     Type keyType = collectionDetails.KeyType;
                     Type elementType = collectionDetails.ElementType;
@@ -195,10 +239,47 @@ namespace OpenSC.Model.Persistence
                     if (elementType.IsAssignableTo(typeof(ISystemObject)))
                         elementType = typeof(string);
                     collectionDetails = collectionDetails with { KeyType = keyType, ElementType = elementType };
-                    memberType = memberType.GetGenericTypeDefinition().MakeGenericType(collectionDetails.AsTypeArray);
+                    if (collectionDetails.IsDictionary)
+                        deserializeAsType = typeof(Dictionary<,>).MakeGenericType(collectionDetails.AsTypeArray);
+                    else
+                        deserializeAsType = typeof(List<>).MakeGenericType(collectionDetails.AsTypeArray);
                 }
-                object collection = Activator.CreateInstance(memberType, Array.Empty<object>());
-                MethodInfo addMethod = memberType.GetMethod(nameof(ICollection<object>.Add), collectionDetails.AsTypeArray);
+                else
+                {
+                    PersistSubclassAttribute persistSubclassAttribute = extendedMemberInfo.GetPersistSubclassAttributeForDimension(arrayDimension);
+                    if (persistSubclassAttribute != null) // should check if given type is subclass of member type
+                    {
+                        MethodInfo subclassTypeGetterMethodInfo = parentItem.GetType().GetMethod(persistSubclassAttribute.SubclassTypeGetterName, DatabasePersisterConstants.MEMBER_LOOKUP_BINDING_FLAGS);
+                        deserializeAsType = subclassTypeGetterMethodInfo.Invoke(parentItem, null) as Type;
+                    }
+                }
+                object collection = null;
+                MethodInfo addMethod = null;
+                IEnumerator enumerableEnumerator = null;
+                MethodInfo dictionaryTryGetMethod = null;
+                if (deserializeMembersOnly)
+                {
+                    collection = originalValue;
+                    if (collectionDetails.IsDictionary)
+                        dictionaryTryGetMethod = deserializeAsType.GetMethod(nameof(IDictionary<object, object>.TryGetValue), collectionDetails.AsTypeArray);
+                    else
+                        enumerableEnumerator = (collection as IEnumerable)?.GetEnumerator();
+                }
+                else
+                {
+                    Type[] constructorTypeArgs = Array.Empty<Type>();
+                    object[] constructorArgs = Array.Empty<object>();
+                    if (collectionDetails.IsComponentCollection)
+                    {
+                        constructorTypeArgs = new Type[] { collectionDetails.ComponentOwnerType };
+                        constructorArgs = new object[] { parentItem };
+                    }
+                    ConstructorInfo constructor = deserializeAsType.GetConstructor(constructorTypeArgs);
+                    collection = (constructor != null)
+                        ? constructor.Invoke(constructorArgs)
+                        : Activator.CreateInstance(deserializeAsType, Array.Empty<object>()); // fix
+                    addMethod = deserializeAsType.GetMethod(nameof(ICollection<object>.Add), collectionDetails.AsTypeArray);
+                }
                 for (int i = 0; i < childElementCount; i++)
                 {
                     extendedIndices[arrayDimension] = i;
@@ -210,12 +291,29 @@ namespace OpenSC.Model.Persistence
                             persistData = new(DatabasePersisterConstants.UNDEFINED_ARRAY_ITEM_TAG);
                         deserializedKey = childElements[i].GetAttribute(persistData.KeyAttribute);
                         extendedIndices[arrayDimension] = deserializedKey;
+                        if (deserializeMembersOnly)
+                        {
+                            object[] args = new object[] { deserializedKey, null };
+                            if ((bool)dictionaryTryGetMethod.Invoke(collection, args))
+                                childOriginalValue = args[1];
+                        }
                     }
-                    object deserializedElement = deserializeXmlElement(extendedMemberInfo, collectionDetails.ElementType, childElements[i], parentItem, arrayDimension + 1, extendedIndices);
-                    if (collectionDetails.IsDictionary && (deserializedKey != null))
-                        addMethod.Invoke(collection, new object[] { deserializedKey, deserializedElement });
-                    else if (!collectionDetails.IsDictionary)
-                        addMethod.Invoke(collection, new object[] { deserializedElement });
+                    else
+                    {
+                        if ((enumerableEnumerator != null) && enumerableEnumerator.MoveNext())
+                            childOriginalValue = enumerableEnumerator.Current;
+                    }
+                    if (!deserializeMembersOnly || (childOriginalValue != null))
+                    {
+                        object deserializedElement = deserializeXmlElement(extendedMemberInfo, collectionDetails.ElementType, childElements[i], deserializeMembersOnly, childOriginalValue, parentItem, collection, arrayDimension + 1, extendedIndices);
+                        if (!deserializeMembersOnly)
+                        {
+                            if (collectionDetails.IsDictionary && (deserializedKey != null))
+                                addMethod.Invoke(collection, new object[] { deserializedKey, deserializedElement });
+                            else if (!collectionDetails.IsDictionary)
+                                addMethod.Invoke(collection, new object[] { deserializedElement });
+                        }
+                    }
                 }
                 return collection;
             }
@@ -243,14 +341,14 @@ namespace OpenSC.Model.Persistence
             return false;
         }
 
-        private bool tryDeserializeAsObject(ref object result, ExtendedMemberInfo extendedMemberInfo, Type memberType, XmlElement xmlElement, object parentItem, int arrayDimension, object[] indices)
+        private bool tryDeserializeAsObject(ref object result, ExtendedMemberInfo extendedMemberInfo, Type memberType, XmlElement xmlElement, bool deserializeMembersOnly, object parentItem, object containerCollection, int arrayDimension, object[] indices)
         {
 
             Type deserializeAsType = memberType;
             if (Type.GetTypeCode(memberType) != TypeCode.Object)
                 return false;
 
-            PersistSubclassAttribute persistSubclassAttribute = extendedMemberInfo.PersistSubclassAttribute;
+            PersistSubclassAttribute persistSubclassAttribute = extendedMemberInfo.GetPersistSubclassAttributeForDimension(arrayDimension);
             if (persistSubclassAttribute != null) // should check if given type is subclass of member type
             {
                 MethodInfo subclassTypeGetterMethodInfo = parentItem.GetType().GetMethod(persistSubclassAttribute.SubclassTypeGetterName, DatabasePersisterConstants.MEMBER_LOOKUP_BINDING_FLAGS);
@@ -269,16 +367,40 @@ namespace OpenSC.Model.Persistence
                     deserializeAsType = foundTypeData.Key;
             }
 
+            if (containerCollection is IHeterogenousCollection heterogenousCollection)
+            {
+                string itemTypeString = xmlElement.GetAttribute(DatabasePersisterConstants.HETEROGENOUS_COLLECTION_TYPE);
+                deserializeAsType = heterogenousCollection.GetType(itemTypeString);
+            }
+
             PersistAsAttribute persistData = extendedMemberInfo.GetPersistAsAttributeForDimension(arrayDimension);
             object deserializedValue = xmlElement.InnerText;
             XmlElement itemToDeserialize = xmlElement;
-            IValueXmlSerializer serializer = SerializerRegister.GetSerializerForType(deserializeAsType);
 
-            if (serializer != null)
+            ICompleteXmlSerializer completeSerializer = SerializerRegister.GetCompleteSerializerForType(deserializeAsType);
+            if (deserializeMembersOnly)
+                completeSerializer = null;
+            IMemberXmlSerializer memberSerializer = (completeSerializer == null)
+                ? SerializerRegister.GetMemberSerializerForType(deserializeAsType)
+                : null;
+
+            if ((persistData.TagName != null) && ((completeSerializer != null) || (memberSerializer != null)))
             {
-                if ((persistData.TagName != null) && (persistData.Dimension == 0))
-                    itemToDeserialize = itemToDeserialize.OfType<XmlElement>().FirstOrDefault();
-                deserializedValue = extendedMemberInfo.CanDeserializeElement ? serializer.DeserializeItem(itemToDeserialize, parentItem, indices) : itemToDeserialize.InnerText;
+                itemToDeserialize = (itemToDeserialize.LocalName == persistData.TagName)
+                    ? itemToDeserialize.OfType<XmlElement>().FirstOrDefault()
+                    : null;
+            }
+
+            if (completeSerializer != null)
+            {
+                deserializedValue = extendedMemberInfo.CanDeserializeElement
+                    ? completeSerializer.DeserializeItem(itemToDeserialize, parentItem, indices)
+                    : itemToDeserialize.InnerText;
+            }
+            else if (memberSerializer != null)
+            {
+                deserializedValue = deserializeMembersOnly ? result : Activator.CreateInstance(deserializeAsType);
+                memberSerializer.DeserializeItem(itemToDeserialize, deserializedValue, parentItem, indices);
             }
 
             if (extendedMemberInfo.RequiresRelationBuilding && memberType.IsKeyValuePair(out Type kvpKeyType, out Type kvpValueType))

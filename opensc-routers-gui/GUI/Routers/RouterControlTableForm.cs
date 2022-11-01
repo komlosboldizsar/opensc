@@ -323,13 +323,13 @@ namespace OpenSC.GUI.Routers
             public RouterOutputProxy(RouterOutput routerOutput)
                 : base(routerOutput, ROUTER_OUTPUT_PROXY_PROPERTY_BINDINGS)
             {
-                routerOutput.Router.NameChanged += Router_NameChanged;
+                routerOutput.Parent.NameChanged += Router_NameChanged;
                 routerOutput.CurrentSourceChanged += RouterOutput_CurrentSourceChanged; ;
             }
 
             public string Name => Original.Name;
 
-            public string RouterName => Original.Router.Name;
+            public string RouterName => Original.Parent.Name;
             private void Router_NameChanged(IModel item, string oldValue, string newValue) => RaisePropertyChanged(nameof(RouterName));
 
             public ISignalSource CurrentSource => Original.CurrentSource;
@@ -435,7 +435,7 @@ namespace OpenSC.GUI.Routers
                 RouterInput input = assignable as RouterInput;
                 if (input == null)
                     return;
-                if (!output.Router.Inputs.Contains(input))
+                if (!output.Parent.Inputs.Contains(input))
                     return;
                 output.RequestCrosspointUpdate(input);
                 return;

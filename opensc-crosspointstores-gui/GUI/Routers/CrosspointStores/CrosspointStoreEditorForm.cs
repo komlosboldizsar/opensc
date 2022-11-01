@@ -42,9 +42,9 @@ namespace OpenSC.GUI.Routers.CrosspointStores
             CrosspointStore crosspointStore = (CrosspointStore)EditedModel;
             if (crosspointStore == null)
                 return;
-            routerInputRouterDropDown.SelectByValue(crosspointStore.StoredInput?.Router);
+            routerInputRouterDropDown.SelectByValue(crosspointStore.StoredInput?.Parent);
             routerInputInputDropDown.SelectByValue(crosspointStore.StoredInput);
-            routerOutputRouterDropDown.SelectByValue(crosspointStore.StoredOutput?.Router);
+            routerOutputRouterDropDown.SelectByValue(crosspointStore.StoredOutput?.Parent);
             routerOutputOutputDropDown.SelectByValue(crosspointStore.StoredOutput);
             autotakeAfterOutputSetCheckbox.Checked = crosspointStore.Autotake;
             clearInputAfterTakeCheckbox.Checked = crosspointStore.ClearInputAfterTake;
@@ -83,13 +83,13 @@ namespace OpenSC.GUI.Routers.CrosspointStores
         private void initRouterInputDropDown()
         {
             routerInputInputDropDown.ReceiveObjectDrop().FilterByType<RouterInput>();
-            routerInputInputDropDown.BindParent(routerInputRouterDropDown, ri => ((RouterInput)ri).Router);
+            routerInputInputDropDown.BindParent(routerInputRouterDropDown, ri => ((RouterInput)ri).Parent);
         }
 
         private void initRouterOutputDropDown()
         {
             routerOutputOutputDropDown.ReceiveObjectDrop().FilterByType<RouterOutput>();
-            routerOutputOutputDropDown.BindParent(routerOutputRouterDropDown, ro => ((RouterOutput)ro).Router);
+            routerOutputOutputDropDown.BindParent(routerOutputRouterDropDown, ro => ((RouterOutput)ro).Parent);
         }
 
         private void updateRouterInputDropDown(Router router)

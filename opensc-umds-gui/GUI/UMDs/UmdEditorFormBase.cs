@@ -150,7 +150,7 @@ namespace OpenSC.GUI.UMDs
 
         private void updateStatusMonitorTallyLabel(UmdTally tally)
         {
-            Label thisStatusMonitorTallyLabel = statusMonitorTallyLabels[tally.IndexAtOwner];
+            Label thisStatusMonitorTallyLabel = statusMonitorTallyLabels[tally.Index];
             if (tally.CurrentState)
             {
                 Color tallyColor = tally.Color;

@@ -6,7 +6,7 @@ using System.Xml.Linq;
 namespace OpenSC.Model.GpioInterfaces
 {
 
-    public class GpioInterfaceOutputXmlSerializer : IValueXmlSerializer
+    public class GpioInterfaceOutputXmlSerializer : ICompleteXmlSerializer
     {
 
         public virtual Type Type => typeof(GpioInterfaceOutput);

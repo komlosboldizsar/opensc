@@ -6,7 +6,7 @@ using System.Xml.Linq;
 namespace OpenSC.Model.Routers.Mirrors
 {
 
-    public abstract class RouterMirrorAssociationXmlSerializer<TAssociation, TSerialized> : IValueXmlSerializer
+    public abstract class RouterMirrorAssociationXmlSerializer<TAssociation, TSerialized> : ICompleteXmlSerializer
         where TAssociation : class
         where TSerialized : RouterMirrorAssociation<TAssociation>, new()
     {

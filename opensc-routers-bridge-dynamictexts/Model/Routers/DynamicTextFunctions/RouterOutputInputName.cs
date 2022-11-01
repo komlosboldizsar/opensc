@@ -26,7 +26,7 @@ namespace OpenSC.Model.Routers.DynamicTextFunctions
             public Arg1() : base(typeof(RouterOutput), DynamicTextFunctionArgumentType.Integer)
             { }
             protected override object _getObjectByKey(object key, object[] previousArgumentObjects)
-                => (previousArgumentObjects[0] as Router)?.GetOutput((int)key);
+                => (previousArgumentObjects[0] as Router)?.Outputs[(int)key];
         }
 
         public class Substitute : DynamicTextFunctionSubstituteBase
@@ -44,7 +44,7 @@ namespace OpenSC.Model.Routers.DynamicTextFunctions
                     return;
                 }
 
-                RouterOutput output = router.GetOutput((int)argumentObjects[1]);
+                RouterOutput output = router.Outputs[(int)argumentObjects[1]];
                 if (output == null)
                 {
                     CurrentValue = "?";

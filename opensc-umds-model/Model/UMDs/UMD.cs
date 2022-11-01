@@ -20,23 +20,23 @@ namespace OpenSC.Model.UMDs
         #region Instantiation, restoration, persistence, removation
         public Umd()
         {
+            Texts = new(this);
+            Tallies = new(this);
             alignmentWithFullStaticText = DefaultAlignmentWithFullStaticText;
-            initTextThings();
-            initTallyThings();
         }
 
         public override void RestoredOwnFields()
         {
             base.RestoredOwnFields();
-            handleRestoredOwnFieldsTexts();
-            handleRestoredOwnFieldsTallies();
+            Texts.RestoredOwnFields();
+            Tallies.RestoredOwnFields();
         }
 
         public override void RestoreCustomRelations()
         {
             base.RestoreCustomRelations();
-            Texts.ForEach(t => t.RestoreCustomRelations());
-            Tallies.ForEach(t => t.RestoreCustomRelations());
+            Texts.RestoreCustomRelations();
+            Tallies.RestoreCustomRelations();
         }
 
         public override void TotallyRestored()
@@ -50,8 +50,8 @@ namespace OpenSC.Model.UMDs
             base.Removed();
             FullStaticTextChanged = null;
             UseFullStaticTextChanged = null;
-            Texts.ForEach(t => t.Removed());
-            Tallies.ForEach(t => t.Removed());
+            Texts.ParentRemoved();
+            Tallies.ParentRemoved();
         }
         #endregion
 
@@ -137,42 +137,14 @@ namespace OpenSC.Model.UMDs
 
         #region Texts
         public abstract UmdTextInfo[] TextInfo { get; }
+
         [PersistAs("texts")]
         [PersistAs(null, 1)]
-        [PersistSubclass(nameof(textTypeGetter))]
-        public readonly List<UmdText> Texts = new();
+        [PersistSubclass(nameof(textTypeGetter), 1)]
+        [DeserializeMembersOnly]
+        public readonly UmdTextCollection Texts;
         protected virtual Type textTypeGetter() => typeof(UmdText);
-        protected internal virtual UmdText CreateText(Umd owner, int indexAtOwner, UmdTextInfo info) => new(owner, indexAtOwner, info);
-
-        private List<UmdText> textsByConstructor;
-
-        private void initTextThings()
-        {
-            int i = 0;
-            foreach (UmdTextInfo textInfo in TextInfo)
-                Texts.Add(CreateText(this, i++, textInfo));
-            textsByConstructor = new(Texts);
-        }
-
-        private void handleRestoredOwnFieldsTexts()
-        {
-            textsByConstructor.ForEach(t => t.Removed());
-            textsByConstructor.Clear();
-            textsByConstructor = null;
-            int textCount = Texts.Count;
-            int textInfoLength = TextInfo.Length;
-            if (textCount > textInfoLength)
-            {
-                for (int i = textCount - 1; i >= textInfoLength; i--)
-                {
-                    Texts[i].Removed();
-                    Texts.RemoveAt(i);
-                }
-            }
-            if (textCount < textInfoLength)
-                for (int i = textCount; i < textInfoLength; i++)
-                    Texts.Add(CreateText(this, i, TextInfo[i]));
-        }
+        protected internal virtual UmdText CreateText() => new();
 
         internal void NotifyTextUsedChanged(UmdText text)
         {
@@ -206,42 +178,14 @@ namespace OpenSC.Model.UMDs
 
         #region Tallies
         public abstract UmdTallyInfo[] TallyInfo { get; }
+
         [PersistAs("tallies")]
         [PersistAs(null, 1)]
-        [PersistSubclass(nameof(tallyTypeGetter))]
-        public readonly List<UmdTally> Tallies = new();
+        [PersistSubclass(nameof(tallyTypeGetter), 1)]
+        [DeserializeMembersOnly]
+        public readonly UmdTallyCollection Tallies;
         protected virtual Type tallyTypeGetter() => typeof(UmdTally);
-        protected internal virtual UmdTally CreateTally(Umd owner, int indexAtOwner, UmdTallyInfo info) => new(owner, indexAtOwner, info);
-
-        private List<UmdTally> talliesByConstructor;
-
-        private void initTallyThings()
-        {
-            int i = 0;
-            foreach (UmdTallyInfo tallyInfo in TallyInfo)
-                Tallies.Add(CreateTally(this, i++, tallyInfo));
-            talliesByConstructor = new(Tallies);
-        }
-
-        private void handleRestoredOwnFieldsTallies()
-        {
-            talliesByConstructor.ForEach(t => t.Removed());
-            talliesByConstructor.Clear();
-            talliesByConstructor = null;
-            int tallyCount = Tallies.Count;
-            int tallyInfoLength = TallyInfo.Length;
-            if (tallyCount > tallyInfoLength)
-            {
-                for (int i = tallyCount - 1; i >= tallyInfoLength; i--)
-                {
-                    Tallies[i].Removed();
-                    Tallies.RemoveAt(i);
-                }
-            }
-            if (tallyCount < tallyInfoLength)
-                for (int i = tallyCount; i < tallyInfoLength; i++)
-                    Tallies.Add(CreateTally(this, i, TallyInfo[i]));
-        }
+        protected internal virtual UmdTally CreateTally() => new();
 
         internal void NotifyTallyColorChanged(UmdTally tally)
         {

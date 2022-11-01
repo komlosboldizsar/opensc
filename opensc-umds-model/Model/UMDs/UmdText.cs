@@ -10,33 +10,57 @@ using System.Threading.Tasks;
 namespace OpenSC.Model.UMDs
 {
 
-    public partial class UmdText : ObjectBase
+    public partial class UmdText : ObjectBase, IComponent<Umd, UmdText, UmdTextCollection>
     {
 
-        public Umd Owner { get; private set; }
-        public int IndexAtOwner { get; init; }
-        public UmdTextInfo Info { get; init; }
+        [AutoProperty]
+        private int index;
 
-        #region Instantiation, persistence
-        public UmdText(Umd owner, int indexAtOwner, UmdTextInfo info)
+        public string Name { get; set; } /* remove later */
+
+        private UmdTextInfo _info;
+        public virtual UmdTextInfo Info
         {
-            Owner = owner;
-            IndexAtOwner = indexAtOwner;
-            Info = info;
-            used = info.DefaultUsed;
-            alignment = info.DefaultAlignment;
+            get => _info;
+            set
+            {
+                _info = value;
+                used = value.DefaultUsed;
+                alignment = value.DefaultAlignment;
+            }
         }
 
-        internal void RestoreCustomRelations() => Source = SystemObjectRegister.Instance[_tfk_globalId_source] as DynamicText;
+        #region Instantiation, persistence
+        internal void RestoreCustomRelations()
+            => Source = SystemObjectRegister.Instance[_tfk_globalId_source] as DynamicText;
 
-        internal void Removed()
+        public void Removed()
         {
-            Owner = null;
+            Parent = null;
             SourceChanged = null;
             AlignmentChanged = null;
             CurrentValueChanged = null;
             if (source != null)
                 source.CurrentTextChanged -= sourceCurrentTextChangedHandler;
+        }
+        #endregion
+
+        #region Property: Parent (=Umd)
+        public Umd Parent { get; private set; }
+        private UmdTextCollection parentCollection;
+
+        public void AssignParent(Umd umd, UmdTextCollection parentCollection)
+        {
+            if (Parent != null)
+                return;
+            Parent = umd;
+            this.parentCollection = parentCollection;
+        }
+
+        public void deassignParent()
+        {
+            Parent = null;
+            parentCollection = null;
         }
         #endregion
 
@@ -104,7 +128,7 @@ namespace OpenSC.Model.UMDs
                 args.Cancel();
         }
 
-        private void _used_afterChange(bool oldValue, bool newValue) => Owner?.NotifyTextUsedChanged(this);
+        private void _used_afterChange(bool oldValue, bool newValue) => Parent?.NotifyTextUsedChanged(this);
         #endregion
 
         #region Property: Alignment
@@ -119,16 +143,17 @@ namespace OpenSC.Model.UMDs
                 args.Cancel();
         }
 
-        private void _alignment_afterChange(UmdTextAlignment oldValue, UmdTextAlignment newValue) => Owner?.NotifyTextAlignmentChanged(this);
+        private void _alignment_afterChange(UmdTextAlignment oldValue, UmdTextAlignment newValue) => Parent?.NotifyTextAlignmentChanged(this);
         #endregion
 
         #region Property: CurrentValue
         public event PropertyChangedTwoValuesDelegate<UmdText, string> CurrentValueChanged;
+
         private string currentValue = string.Empty;
         public string CurrentValue
         {
             get => currentValue;
-            set => this.setProperty(ref currentValue, value ?? "", CurrentValueChanged, null, (ov, nv) => Owner?.NotifyTextCurrentValueChanged(this));
+            set => this.setProperty(ref currentValue, value ?? "", CurrentValueChanged, null, (ov, nv) => Parent?.NotifyTextCurrentValueChanged(this));
         }
         #endregion
 

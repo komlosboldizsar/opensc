@@ -12,18 +12,13 @@ namespace OpenSC.Model.Routers.Leitch
         public override Type Type => typeof(LeitchRouterOutput);
 
         public override object DeserializeItem(XmlNode serializedItem, object parentItem, object[] keysOrIndices)
-        {
-            LeitchRouterOutput restoredOutput = base.DeserializeItem(serializedItem, parentItem, keysOrIndices) as LeitchRouterOutput;
-            return restoredOutput;
-        }
+            => base.DeserializeItem(serializedItem, parentItem, keysOrIndices) as LeitchRouterOutput;
 
         public override XElement SerializeItem(object item, object parentItem, object[] keysOrIndices)
         {
-            LeitchRouterOutput output = item as LeitchRouterOutput;
-            if (output == null)
+            if (item is not LeitchRouterOutput)
                 return null;
-            XElement serializedOutput = base.SerializeItem(item, parentItem, keysOrIndices);
-            return serializedOutput;
+            return base.SerializeItem(item, parentItem, keysOrIndices);
         }
 
     }

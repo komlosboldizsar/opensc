@@ -19,7 +19,7 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            SerializerRegister.RegisterSerializer(new McCurdyUmd1TextXmlSerializer());
+            SerializerRegister.RegisterMemberSerializer(new McCurdyUmd1TextXmlSerializer());
         }
 
     }

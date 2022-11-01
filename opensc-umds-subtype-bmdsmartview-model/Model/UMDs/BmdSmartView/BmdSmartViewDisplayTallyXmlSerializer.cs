@@ -14,18 +14,18 @@ namespace OpenSC.Model.UMDs.BmdSmartView
 
         private const string ATTRIBUTE_PRIORITY = "priority";
 
-        public override object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
+        public override void DeserializeItem(XmlNode serializedItem, object item, object parentItem, object[] indicesOrKeys)
         {
-            BmdSmartViewDisplayTally restoredTally = base.DeserializeItem(serializedItem, parentItem, indicesOrKeys) as BmdSmartViewDisplayTally;
+            base.DeserializeItem(serializedItem, item, parentItem, indicesOrKeys);
+            if (item is not BmdSmartViewDisplayTally castedTally)
+                return;
             if (int.TryParse(serializedItem.Attributes[ATTRIBUTE_PRIORITY]?.Value, out int priority))
-                restoredTally.Priority = priority;
-            return restoredTally;
+                castedTally.Priority = priority;
         }
 
         public override XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
         {
-            BmdSmartViewDisplayTally tally = item as BmdSmartViewDisplayTally;
-            if (tally == null)
+            if (item is not BmdSmartViewDisplayTally tally)
                 return null;
             XElement serializedTally = base.SerializeItem(item, parentItem, indicesOrKeys);
             serializedTally.SetAttributeValue(ATTRIBUTE_PRIORITY, tally.Priority);

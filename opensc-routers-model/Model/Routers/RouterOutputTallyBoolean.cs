@@ -20,12 +20,12 @@ namespace OpenSC.Model.Routers
         {
             this.routerOutput = routerOutput;
             updateFields();
-            routerOutput.Router.IdChanged += routerIdChangedHandler;
-            routerOutput.Router.NameChanged += routerNameChangedHandler;
+            routerOutput.Parent.IdChanged += routerIdChangedHandler;
+            routerOutput.Parent.NameChanged += routerNameChangedHandler;
             routerOutput.IndexChanged += routerOutputIndexChangedHandler;
             routerOutput.NameChanged += routerOutputNameChangedHandler;
             tally.StateChanged += signalTallyChangedHandler;
-            routerOutput.Removed += routerOutputRemovedHandler;
+            routerOutput.RemovedEvent += routerOutputRemovedHandler;
             register();
         }
 
@@ -50,10 +50,10 @@ namespace OpenSC.Model.Routers
         private void routerOutputRemovedHandler(RouterOutput routerOutput) => unregister();
 
         protected override string getName()
-            => string.Format("router.{0}.output.{1}.{2}tally", routerOutput.Router.ID, routerOutput.Index, getColorString(color));
+            => string.Format("router.{0}.output.{1}.{2}tally", routerOutput.Parent.ID, routerOutput.Index, getColorString(color));
 
         protected override string getDescription()
-            => string.Format("Output [(#{0}) {1}] of router [(#{2}) {3}] has {4} tally.", routerOutput.Index, routerOutput.Name, routerOutput.Router.ID, routerOutput.Router.Name, getColorString(color));
+            => string.Format("Output [(#{0}) {1}] of router [(#{2}) {3}] has {4} tally.", routerOutput.Index, routerOutput.Name, routerOutput.Parent.ID, routerOutput.Parent.Name, getColorString(color));
 
     }
 

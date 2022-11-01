@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace OpenSC.Model.General
 {
-    public class ObservableDictionary<TKey, TValue> : IObservableDictionary<TKey, TValue>
+    public class ObservableDictionary<TKey, TValue> : ObservableKeyedCollection<TKey, TValue>, IObservableDictionary<TKey, TValue>
     {
-
-        private Dictionary<TKey, TValue> underlying = new();
 
         public TValue this[TKey key]
         {
@@ -22,86 +20,31 @@ namespace OpenSC.Model.General
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => underlying.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)underlying).GetEnumerator();
 
-        public ICollection<TKey> Keys => new KeyCollection(this, underlying.Keys);
-        public ICollection<TValue> Values => new ValueCollection(this, underlying.Values);
-
-        public int Count => underlying.Count;
-        public bool IsReadOnly => ((IDictionary<TKey, TValue>)underlying).IsReadOnly;
-
         public event ObservableEnumerableItemsChangedDelegate<KeyValuePair<TKey, TValue>> ItemsAdded;
         public event ObservableEnumerableItemsChangedDelegate<KeyValuePair<TKey, TValue>> ItemsRemoved;
 
-        public void Add(TKey key, TValue value)
-        {
-            underlying.Add(key, value);
-            KeyValuePair<TKey, TValue> keyValuePair = KeyValuePair.Create(key, value);
-            ItemsAdded?.Invoke(new IObservableCollection<KeyValuePair<TKey, TValue>>.ItemWithPosition[] { new(keyValuePair, this.GetIndexOf(keyValuePair)) });
-        }
+        protected override void itemsAdded(IEnumerable<IObservableCollection<KeyValuePair<TKey, TValue>>.ItemWithPosition> itemsWithPositions)
+            => ItemsAdded?.Invoke(itemsWithPositions);
 
-        public void Add(KeyValuePair<TKey, TValue> keyValuePair) => Add(keyValuePair.Key, keyValuePair.Value);
+        protected override void itemsRemoved(IEnumerable<IObservableCollection<KeyValuePair<TKey, TValue>>.ItemWithPosition> itemsWithPositions)
+            => ItemsRemoved?.Invoke(itemsWithPositions);
 
-        public bool ChangeKey(TKey oldKey, TKey newKey)
-        {
-            if (EqualityComparer<TKey>.Default.Equals(oldKey, newKey))
-                return true;
-            if (!underlying.TryGetValue(newKey, out TValue value))
-                return false;
-            if (underlying.ContainsKey(newKey))
-                return false;
-            underlying.Remove(oldKey);
-            underlying.Add(newKey, value);
-            return true;
-        }
 
-        public bool ChangeKeyOfItem(TValue item, TKey newKey)
-            => ChangeKey(underlying.FirstOrDefault(kvp => EqualityComparer<TValue>.Default.Equals(kvp.Value, item)).Key, newKey);
-
-        public void Clear()
-        {
-            int count = underlying.Count;
-            IEnumerable<IObservableEnumerable<KeyValuePair<TKey, TValue>>.ItemWithPosition> removedItems = underlying.Select((kvp, i) => new IObservableEnumerable<KeyValuePair<TKey, TValue>>.ItemWithPosition(kvp, i));
-            underlying.Clear();
-            if (count > 0)
-                ItemsRemoved?.Invoke(removedItems);
-        }   
-
-        public bool ContainsValue(TValue value) => Values.Contains(value);
-
-        public bool Remove(TKey key)
-        {
-            int position = -1;
-            if (ItemsRemoved != null)
-                position = Keys.GetIndexOf(key);
-            if (underlying.Remove(key, out TValue removedItem))
-            {
-                ItemsRemoved?.Invoke(new IObservableEnumerable<KeyValuePair<TKey, TValue>>.ItemWithPosition[] { new (KeyValuePair.Create(key, removedItem), position) });
-                return true;
-            }
-            return false;
-        }
-
-        public bool Remove(KeyValuePair<TKey, TValue> keyValuePair)
-        {
-            int position = -1;
-            if (ItemsRemoved != null)
-                position = this.GetIndexOf(keyValuePair);
-            if (((IDictionary<TKey, TValue>)underlying).Remove(keyValuePair))
-            {
-                ItemsRemoved?.Invoke(new IObservableEnumerable<KeyValuePair<TKey, TValue>>.ItemWithPosition[] { new(keyValuePair, position) });
-                return true;
-            }
-            return false;
-        }
+        public ICollection<TKey> Keys => new KeyCollection(this, underlying.Keys);
+        public ICollection<TValue> Values => new ValueCollection(this, underlying.Values);
 
         public bool Contains(KeyValuePair<TKey, TValue> keyValuePair) => ((IDictionary<TKey, TValue>)underlying).Contains(keyValuePair);
         public bool ContainsKey(TKey key) => underlying.ContainsKey(key);
+        public bool ContainsValue(TValue value) => Values.Contains(value);
+
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) => ((IDictionary<TKey, TValue>)underlying).CopyTo(array, arrayIndex);
-        public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value) => underlying.TryGetValue(key, out value);
+
+        public bool Remove(TKey key) => RemoveByKey(key);
 
         private abstract class KeyValueCollection<T> : ObservableEnumerableAdapter<T, KeyValuePair<TKey, TValue>>, IObservableCollection<T>
         {
 
-            private ICollection<T> underlying;
+            private readonly ICollection<T> underlying;
 
             public KeyValueCollection(ObservableDictionary<TKey, TValue> dictionary, ICollection<T> underlying)
             {

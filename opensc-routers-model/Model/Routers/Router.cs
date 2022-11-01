@@ -20,23 +20,17 @@ namespace OpenSC.Model.Routers
         #region Persistence, instantiation
         public Router()
         {
-            inputs.ItemsAdded += inputsChangedHandler;
-            inputs.ItemsRemoved += inputsChangedHandler;
-            outputs.ItemsAdded += outputsChangedHandler;
-            outputs.ItemsRemoved += outputsChangedHandler;
+            Inputs = createInputCollection();
+            Outputs = createOutputCollection();
         }
 
         public override void Removed()
         {
             base.Removed();
-            InputsChanged = null;
-            OutputsChanged = null;
             StateChanged = null;
             StateStringChanged = null;
-            Inputs.Foreach(i => i.RemovedFromRouter(this));
-            inputs.Clear();
-            Outputs.Foreach(o => o.RemovedFromRouter(this));
-            outputs.Clear();
+            Inputs.ParentRemoved();
+            Outputs.ParentRemoved();
         }
 
         protected override void afterUpdate()
@@ -63,20 +57,14 @@ namespace OpenSC.Model.Routers
         public override void RestoreCustomRelations()
         {
             base.RestoreCustomRelations();
-            restoreInputSources();
+            Inputs.RestoreSources();
         }
 
         private void notifyIOsRestored()
-        {
-            inputs.Foreach(i => i.Restored());
-            outputs.Foreach(o => o.Restored());
-        }
+            => Outputs.Foreach(o => o.Restored());
 
         private void notifyIOsTotallyRestored()
-        {
-            inputs.Foreach(i => i.TotallyRestored());
-            outputs.Foreach(o => o.TotallyRestored());
-        }
+            => Outputs.Foreach(o => o.TotallyRestored());
         #endregion
 
         #region Owner database
@@ -84,109 +72,25 @@ namespace OpenSC.Model.Routers
         #endregion
 
         #region Inputs
-        private ObservableList<RouterInput> inputs = new ObservableList<RouterInput>();
-        public ObservableList<RouterInput> Inputs => inputs;
-
         [PersistAs("inputs")]
-        [PersistAs(null, 1)]
+        [PersistAs(null, 1, "index")]
         [PersistDetailed]
-        [PolymorphField(nameof(InputTypesDictionaryGetter))]
-        private RouterInput[] _inputs // for persistence
-        {
-            get { return inputs.ToArray(); }
-            set
-            {
-                inputs.Clear();
-                if (value != null)
-                    inputs.AddRange(value);
-                inputs.Foreach(i => i.AssignParentRouter(this));
-            }
-        }
+        [PersistSubclass(nameof(getInputCollectionType))]
+        public readonly RouterInputCollection Inputs;
 
-        public void AddInput()
-        {
-            int index = (inputs.Count > 0) ? (inputs.Max(ri => ri.Index) + 1) : 0;
-            inputs.Add(CreateInput(string.Format("Input #{0}", index + 1), index));
-        }
-
-        public void RemoveInput(RouterInput input)
-        {
-            inputs.Remove(input);
-            input.RemovedFromRouter(this);
-        }
-
-        public RouterInput GetInput(int index) => inputs.FirstOrDefault(ri => (ri.Index == index));
-
-        private void inputsChangedHandler(IEnumerable<IObservableEnumerable<RouterInput>.ItemWithPosition> affectedItemsWithPositions)
-        {
-            InputsChanged?.Invoke(this);
-            RaisePropertyChanged(nameof(Inputs));
-        }
-
-        public PropertyChangedNoValueDelegate<Router> InputsChanged;
-
-        private void restoreInputSources() => inputs.Foreach(i => i.RestoreSource());
-
-        public abstract RouterInput CreateInput(string name, int index);
-
-        private static readonly Dictionary<Type, string> INPUT_TYPES = new Dictionary<Type, string>()
-        {
-            {  typeof(RouterInput), "standard" }
-        };
-
-        protected virtual Dictionary<Type, string> InputTypesDictionaryGetter() => INPUT_TYPES;
+        protected virtual Type getInputCollectionType() => typeof(RouterInputCollection);
+        protected virtual RouterInputCollection createInputCollection() => new(this);
         #endregion
 
         #region Outputs
-        private ObservableList<RouterOutput> outputs = new ObservableList<RouterOutput>();
-        public ObservableList<RouterOutput> Outputs => outputs;
-
         [PersistAs("outputs")]
-        [PersistAs(null, 1)]
+        [PersistAs(null, 1, "index")]
         [PersistDetailed]
-        [PolymorphField(nameof(OutputTypesDictionaryGetter))]
-        private RouterOutput[] _outputs // for persistence
-        {
-            get { return outputs.ToArray(); }
-            set
-            {
-                outputs.Clear();
-                if (value != null)
-                    outputs.AddRange(value);
-                outputs.Foreach(o => o.AssignParentRouter(this));
-            }
-        }
+        [PersistSubclass(nameof(getOutputCollectionType))]
+        public readonly RouterOutputCollection Outputs;
 
-        public void AddOutput()
-        {
-            int index = (outputs.Count > 0) ? (outputs.Max(ro => ro.Index) + 1) : 0;
-            outputs.Add(CreateOutput(string.Format("Output #{0}", index + 1), index));
-        }
-
-        public void RemoveOutput(RouterOutput output)
-        {
-            outputs.Remove(output);
-            output.RemovedFromRouter(this);
-        }
-
-        public RouterOutput GetOutput(int index) => outputs.FirstOrDefault(ro => (ro.Index == index));
-
-        private void outputsChangedHandler(IEnumerable<IObservableEnumerable<RouterOutput>.ItemWithPosition> affectedItemsWithPositions)
-        {
-            OutputsChanged?.Invoke(this);
-            RaisePropertyChanged(nameof(Outputs));
-        }
-
-        public event PropertyChangedNoValueDelegate<Router> OutputsChanged;
-
-        public abstract RouterOutput CreateOutput(string name, int index);
-
-        private static readonly Dictionary<Type, string> OUTPUT_TYPES = new Dictionary<Type, string>()
-        {
-            {  typeof(RouterOutput), "standard" }
-        };
-
-        protected virtual Dictionary<Type, string> OutputTypesDictionaryGetter() => OUTPUT_TYPES;
+        protected virtual Type getOutputCollectionType() => typeof(RouterOutputCollection);
+        protected virtual RouterOutputCollection createOutputCollection() => new(this);
         #endregion
 
         protected abstract void queryAllStates();
@@ -194,7 +98,7 @@ namespace OpenSC.Model.Routers
         #region Crosspoint update
         public void RequestCrosspointUpdate(RouterOutput output, RouterInput input)
         {
-            if (!outputs.Contains(output))
+            if (!Outputs.Contains(output))
                 throw new ArgumentException();
             string logMessage = $"Router single crosspoint update request. Router: [{this}], destination: {output}, source: {input}.";
             LogDispatcher.I(LOG_TAG, logMessage);
@@ -207,7 +111,7 @@ namespace OpenSC.Model.Routers
             foreach (RouterCrosspoint crosspoint in crosspoints)
             {
                 logMessageDetailsPieces.Add($"[destination: {crosspoint.Output}, source: {crosspoint.Input}]");
-                if (!outputs.Contains(crosspoint.Output))
+                if (!Outputs.Contains(crosspoint.Output))
                     throw new ArgumentException();
             }
             string logMessageDetails = string.Join(", ", logMessageDetailsPieces);
@@ -224,7 +128,7 @@ namespace OpenSC.Model.Routers
 
         protected void notifyCrosspointChanged(RouterOutput output, RouterInput input)
         {
-            if (!outputs.Contains(output))
+            if (!Outputs.Contains(output))
                 throw new ArgumentException();
             output.AssignSource(input);
             CrosspointChanged?.Invoke(this, output, input);
@@ -232,10 +136,10 @@ namespace OpenSC.Model.Routers
 
         protected void notifyCrosspointChanged(int outputIndex, int inputIndex)
         {
-            RouterOutput output = outputs.FirstOrDefault(ro => (ro.Index == outputIndex));
+            RouterOutput output = Outputs[outputIndex];
             if (output == null)
                 throw new ArgumentException();
-            RouterInput input = inputs.FirstOrDefault(ri => (ri.Index == inputIndex));
+            RouterInput input = Inputs[inputIndex];
             if (output == null)
                 throw new ArgumentException();
             notifyCrosspointChanged(output, input);
@@ -245,7 +149,7 @@ namespace OpenSC.Model.Routers
         #region Locks and protects update
         public void RequestLockOperation(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockOperationType lockOperationType)
         {
-            if (!outputs.Contains(output))
+            if (!Outputs.Contains(output))
                 throw new ArgumentException();
             string logMessage = $"Router output {lockType.GetDoString(lockOperationType, false)} request. Router: [{this}], destination: [{output}].";
             LogDispatcher.I(LOG_TAG, logMessage);
@@ -256,15 +160,16 @@ namespace OpenSC.Model.Routers
 
         protected void notifyLockChanged(RouterOutput output, RouterOutputLockType lockType, RouterOutputLockState lockState)
         {
-            if (!outputs.Contains(output))
+            if (!Outputs.Contains(output))
                 throw new ArgumentException();
             output.GetLock(lockType).StateUpdateFromRouter(lockState);
         }
 
         protected void notifyLockChanged(int outputIndex, RouterOutputLockType lockType, RouterOutputLockState lockState)
         {
-            RouterOutput output = outputs.FirstOrDefault(ro => (ro.Index == outputIndex));
-            notifyLockChanged(outputs[outputIndex], lockType, lockState);
+            RouterOutput output = Outputs[outputIndex];
+            if (output != null)
+                notifyLockChanged(output, lockType, lockState);
         }
         #endregion
 
@@ -323,7 +228,7 @@ namespace OpenSC.Model.Routers
 
         protected void notifyRemoteInputNameChanged(RouterInput input, string newName)
         {
-            if (!inputs.Contains(input))
+            if (!Inputs.Contains(input))
                 throw new ArgumentException();
             if (importInputNamesOnRemoteUpdate)
                 input.Name = newName;
@@ -331,7 +236,7 @@ namespace OpenSC.Model.Routers
 
         protected void notifyRemoteInputNameChanged(int inputIndex, string newName)
         {
-            RouterInput input = inputs.FirstOrDefault(ri => (ri.Index == inputIndex));
+            RouterInput input = Inputs[inputIndex];
             if (input == null)
                 throw new ArgumentException();
             notifyRemoteInputNameChanged(input, newName);
@@ -387,7 +292,7 @@ namespace OpenSC.Model.Routers
 
         protected void notifyRemoteOutputNameChanged(RouterOutput output, string newName)
         {
-            if (!outputs.Contains(output))
+            if (!Outputs.Contains(output))
                 throw new ArgumentException();
             if (importOutputNamesOnRemoteUpdate)
                 output.Name = newName;
@@ -395,7 +300,7 @@ namespace OpenSC.Model.Routers
 
         protected void notifyRemoteOutputNameChanged(int outputIndex, string newName)
         {
-            RouterOutput output = outputs.FirstOrDefault(ro => (ro.Index == outputIndex));
+            RouterOutput output = Outputs[outputIndex];
             if (output == null)
                 throw new ArgumentException();
             notifyRemoteOutputNameChanged(output, newName);

@@ -47,16 +47,16 @@ namespace OpenSC.Model.Persistence
                 return;
             if (foreignKeys == null)
                 return;
-            object foreignObjects = getAssociatedObjects(foreignKeys.GetType(), extendedMemberInfo.ValueType, foreignKeys);
+            object foreignObjects = getAssociatedObjects(extendedMemberInfo, foreignKeys.GetType(), extendedMemberInfo.ValueType, foreignKeys, item);
             extendedMemberInfo.SetValue(item, foreignObjects);
         }
 
-        private object getAssociatedObjects(Type memberType, Type originalType, object foreignKeys)
+        private object getAssociatedObjects(ExtendedMemberInfo extendedMemberInfo, Type memberType, Type originalType, object foreignKeys, object parentItem, int arrayDimension = 0)
         {
             object result = null;
-            if (tryGetAssociatedObjectsForArray(ref result, memberType, originalType, foreignKeys))
+            if (tryGetAssociatedObjectsForArray(ref result, extendedMemberInfo, memberType, originalType, foreignKeys, parentItem, arrayDimension))
                 return result;
-            if (tryGetAssociatedObjectsForCollection(ref result, memberType, originalType, foreignKeys))
+            if (tryGetAssociatedObjectsForCollection(ref result, extendedMemberInfo, memberType, originalType, foreignKeys, parentItem, arrayDimension))
                 return result;
             if (foreignKeys?.GetType() != typeof(string))
                 return foreignKeys;
@@ -65,7 +65,7 @@ namespace OpenSC.Model.Persistence
             return null;
         }
 
-        private bool tryGetAssociatedObjectsForArray(ref object result, Type memberType, Type originalType, object foreignKeys)
+        private bool tryGetAssociatedObjectsForArray(ref object result, ExtendedMemberInfo extendedMemberInfo, Type memberType, Type originalType, object foreignKeys, object parentItem, int arrayDimension)
         {
             if (!memberType.IsArray)
                 return false;
@@ -78,7 +78,7 @@ namespace OpenSC.Model.Persistence
                 }
                 object[] associatedObjects = (object[])Activator.CreateInstance(originalType, new object[] { foreignKeysArray.Length });
                 for (int i = 0; i < foreignKeysArray.Length; i++)
-                    associatedObjects[i] = getAssociatedObjects(memberType.GetElementType(), originalType.GetElementType(), foreignKeysArray[i]);
+                    associatedObjects[i] = getAssociatedObjects(extendedMemberInfo, memberType.GetElementType(), originalType.GetElementType(), foreignKeysArray[i], parentItem, arrayDimension + 1);
                 result = Convert.ChangeType(associatedObjects, originalType);
             }
             else
@@ -97,7 +97,7 @@ namespace OpenSC.Model.Persistence
             return true;
         }
 
-        private bool tryGetAssociatedObjectsForCollection(ref object result, Type memberType, Type originalType, object foreignKeys)
+        private bool tryGetAssociatedObjectsForCollection(ref object result, ExtendedMemberInfo extendedMemberInfo, Type memberType, Type originalType, object foreignKeys, object parentItem, int arrayDimension)
         {
 
             CollectionDetails memberTypeCollectionDetails = memberType.GetCollectionDetails();
@@ -105,8 +105,24 @@ namespace OpenSC.Model.Persistence
             if (!originalTypeCollectionDetails.IsCollection)
                 return false;
 
-            object associatedObjects = Activator.CreateInstance(originalType, Array.Empty<object>());
-            MethodInfo addMethod = originalType.GetMethod(nameof(ICollection<object>.Add), originalTypeCollectionDetails.AsTypeArray);
+            Type deserializeAsType = originalType;
+            PersistSubclassAttribute persistSubclassAttribute = extendedMemberInfo.GetPersistSubclassAttributeForDimension(arrayDimension);
+            if (persistSubclassAttribute != null) // should check if given type is subclass of member type
+            {
+                MethodInfo subclassTypeGetterMethodInfo = parentItem.GetType().GetMethod(persistSubclassAttribute.SubclassTypeGetterName, DatabasePersisterConstants.MEMBER_LOOKUP_BINDING_FLAGS);
+                deserializeAsType = subclassTypeGetterMethodInfo.Invoke(parentItem, null) as Type;
+            }
+
+            Type[] constructorTypeArgs = Array.Empty<Type>();
+            object[] constructorArgs = Array.Empty<object>();
+            if (originalTypeCollectionDetails.IsComponentCollection)
+            {
+                constructorTypeArgs = new Type[] { originalTypeCollectionDetails.ComponentOwnerType };
+                constructorArgs = new object[] { parentItem };
+            }
+            ConstructorInfo constructor = deserializeAsType.GetConstructor(constructorTypeArgs);
+            object associatedObjects = constructor.Invoke(constructorArgs);
+            MethodInfo addMethod = deserializeAsType.GetMethod(nameof(ICollection<object>.Add), originalTypeCollectionDetails.AsTypeArray);
             if (foreignKeys is not IEnumerable foreignKeysEnumerable)
             {
                 result = null;
@@ -128,7 +144,7 @@ namespace OpenSC.Model.Persistence
                 object associatedObject = null;
                 if (memberTypeCollectionDetails.ElementType != typeof(string))
                 {
-                    associatedObject = getAssociatedObjects(memberTypeCollectionDetails.ElementType, originalTypeCollectionDetails.ElementType, foreignKeyValue);
+                    associatedObject = getAssociatedObjects(extendedMemberInfo, memberTypeCollectionDetails.ElementType, originalTypeCollectionDetails.ElementType, foreignKeyValue, parentItem, arrayDimension + 1);
                 }
                 else
                 {

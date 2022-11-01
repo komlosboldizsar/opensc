@@ -77,7 +77,7 @@ namespace OpenSC.Model
         {
             if (item == null)
                 throw new ArgumentNullException();
-            if (!items.Remove(item.ID))
+            if (!items.RemoveByKey(item.ID))
                 return false;
             LogDispatcher.V(SPECIFIC_LOG_TAG, "An item removed with ID: " + item.ID);
             RemovedItem?.Invoke(this, item);

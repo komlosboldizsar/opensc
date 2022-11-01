@@ -17,8 +17,8 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            SerializerRegister.RegisterSerializer(new BmdTallyBoxInputXmlSerializer());
-            SerializerRegister.RegisterSerializer(new BmdTallyBoxOutputXmlSerializer());
+            SerializerRegister.RegisterCompleteSerializer(new BmdTallyBoxInputXmlSerializer());
+            SerializerRegister.RegisterCompleteSerializer(new BmdTallyBoxOutputXmlSerializer());
         }
 
     }

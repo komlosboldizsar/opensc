@@ -47,8 +47,6 @@ namespace OpenSC.Model
             {
                 if (registeredItems.ContainsValue(item))
                     return;
-                if (!CanKeyBeUsedForItem(item, key, out TObject foundItem))
-                    throw new KeyIsAlreadyUsedException(key, item, foundItem);
                 registeredItems.Add(key, item);
             }
             keyChangedSubscribeMethod(item);
@@ -72,20 +70,17 @@ namespace OpenSC.Model
         {
             if (key == null)
                 return false;
-            return registeredItems.Remove(key);
+            return registeredItems.RemoveByKey(key);
         }
 
         public bool CanKeyBeUsedForItem(TObject item, TKey key, out TObject keyOwnerItem)
         {
-            keyOwnerItem = null;
             if (key == null)
-                return true;
-            if (!registeredItems.TryGetValue(key, out keyOwnerItem))
             {
                 keyOwnerItem = null;
                 return true;
             }
-            return keyOwnerItem == item;
+            return registeredItems.CanKeyBeUsedForItem(key, item, out keyOwnerItem);
         }
 
         public void ItemKeyChanged(TObject item)
@@ -95,8 +90,6 @@ namespace OpenSC.Model
             bool registeredWithKey = registeredItems.ContainsValue(item);
             if (!registeredWithoutKey && !registeredWithKey)
                 return;
-            if (!CanKeyBeUsedForItem(item, key, out TObject foundItem))
-                throw new KeyIsAlreadyUsedException(key, item, foundItem);
             if (registeredWithoutKey && (key != null))
             {
                 registeredItemsWithoutKey.Remove(item);
@@ -113,13 +106,6 @@ namespace OpenSC.Model
         protected abstract void itemRemovedUnsubscribeMethod(TObject item);
 
         public virtual string ToStringMethod(TObject item) => GetKey(item).ToString();
-
-        public class KeyIsAlreadyUsedException : Exception
-        {
-            public KeyIsAlreadyUsedException(TKey key, TObject keyWantingItem, TObject keyOwnerItem)
-                : base($"The key [{key}] can't be used for the item [{keyWantingItem}], because it is already used by [{keyOwnerItem}].")
-            { }
-        }
 
     }
 

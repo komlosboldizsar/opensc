@@ -154,6 +154,14 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         }
         #endregion
 
+        #region Inputs and outputs
+        protected override RouterOutputCollection createOutputCollection()
+            => new BmdVideohubOutputCollection(this);
+
+        protected override Type getOutputCollectionType()
+            => typeof(BmdVideohubOutputCollection);
+        #endregion
+
         private Library.BmdVideohub.VideohubClient videohub = null;
 
         private void initVideohub()
@@ -245,18 +253,6 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
                     break;
             }
         }
-
-        #region Input and output instantiation
-        public override RouterInput CreateInput(string name, int index) => new RouterInput(name, this, index);
-        public override RouterOutput CreateOutput(string name, int index) => new BmdVideohubOutput(name, this, index);
-
-        private static readonly Dictionary<Type, string> OUTPUT_TYPES = new Dictionary<Type, string>()
-        {
-            {  typeof(BmdVideohubOutput), "bmd" }
-        };
-
-        protected override Dictionary<Type, string> OutputTypesDictionaryGetter() => OUTPUT_TYPES;
-        #endregion
 
         #region Names - info properties
         public override bool CanSetRemoteInputNames { get; } = true;

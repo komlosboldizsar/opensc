@@ -49,7 +49,7 @@ namespace OpenSC.Model.Routers
                     throw new RouterOutputHasOtherLockException(this, otherLock);
             if (State == RouterOutputLockState.LockedRemote)
                 throw new RouterOutputLockedByOtherUserException(this);
-            Output.Router.RequestLockOperation(Output, Type, RouterOutputLockOperationType.Lock);
+            Output.Parent.RequestLockOperation(Output, Type, RouterOutputLockOperationType.Lock);
         }
 
         public void Undo()
@@ -58,14 +58,14 @@ namespace OpenSC.Model.Routers
                 return;
             if (State == RouterOutputLockState.LockedRemote)
                 throw new RouterOutputLockedByOtherUserException(this);
-            Output.Router.RequestLockOperation(Output, Type, RouterOutputLockOperationType.Unlock);
+            Output.Parent.RequestLockOperation(Output, Type, RouterOutputLockOperationType.Unlock);
         }
 
         public void ForceUndo()
         {
             if (State == RouterOutputLockState.Clear)
                 return;
-            Output.Router.RequestLockOperation(Output, Type, RouterOutputLockOperationType.ForceUnlock);
+            Output.Parent.RequestLockOperation(Output, Type, RouterOutputLockOperationType.ForceUnlock);
         }
         #endregion
 

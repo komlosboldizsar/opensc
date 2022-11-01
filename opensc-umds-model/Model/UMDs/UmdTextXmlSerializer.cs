@@ -7,7 +7,7 @@ using System.Xml.Linq;
 namespace OpenSC.Model.UMDs
 {
 
-    public class UmdTextXmlSerializer : IValueXmlSerializer
+    public class UmdTextXmlSerializer : IMemberXmlSerializer
     {
 
         public virtual Type Type => typeof(UmdText);
@@ -18,40 +18,32 @@ namespace OpenSC.Model.UMDs
         private const string ATTRIBUTE_USED = "used";
         private const string ATTRIBUTE_ALIGNMENT = "alignment";
 
-        public virtual object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
+        public virtual void DeserializeItem(XmlNode serializedItem, object item, object parentItem, object[] indicesOrKeys)
         {
-            Umd parentUmd = (Umd)parentItem;
-            UmdTextInfo thisTextInfo = parentUmd.TextInfo[(int)indicesOrKeys[0]];
             if (serializedItem.LocalName != TAG_NAME)
-                return null;
-            string sourceGlobalId = serializedItem.InnerText;
-            string staticValueAttributeValue = serializedItem.Attributes[ATTRIBUTE_STATICVALUE]?.Value;
+                return;
+            if (item is not UmdText text)
+                return;
+            text._tfk_globalId_source = serializedItem.InnerText;
+            text.StaticValue = serializedItem.Attributes[ATTRIBUTE_STATICVALUE]?.Value;
             string useStaticValueAttributeValue = serializedItem.Attributes[ATTRIBUTE_USESTATICVALUE]?.Value;
-            if (!bool.TryParse(useStaticValueAttributeValue, out bool useStaticValueAttributeValueConverted))
-                useStaticValueAttributeValueConverted = false;
+            if (bool.TryParse(useStaticValueAttributeValue, out bool useStaticValueAttributeValueConverted))
+                text.UseStaticValue = useStaticValueAttributeValueConverted;
             string usedAttributeValue = serializedItem.Attributes[ATTRIBUTE_USED]?.Value;
-            if (!bool.TryParse(usedAttributeValue, out bool usedAttributeValueConverted))
-                usedAttributeValueConverted = thisTextInfo.DefaultUsed;
+            if (bool.TryParse(usedAttributeValue, out bool usedAttributeValueConverted))
+                text.Used = usedAttributeValueConverted;
             string alignmentAttributeValue = serializedItem.Attributes[ATTRIBUTE_ALIGNMENT]?.Value;
-            if (!Enum.TryParse(alignmentAttributeValue, out UmdTextAlignment alignmentAttributeValueConverted))
-                alignmentAttributeValueConverted = thisTextInfo.DefaultAlignment;
-            UmdText text = parentUmd.CreateText(parentUmd, (int)indicesOrKeys[0], thisTextInfo);
-            text._tfk_globalId_source = sourceGlobalId;
-            text.StaticValue = staticValueAttributeValue;
-            text.UseStaticValue = useStaticValueAttributeValueConverted;
-            text.Used = usedAttributeValueConverted;
-            text.Alignment = alignmentAttributeValueConverted;
-            return text;
+            if (Enum.TryParse(alignmentAttributeValue, out UmdTextAlignment alignmentAttributeValueConverted))
+                text.Alignment = alignmentAttributeValueConverted;
         }
 
         public virtual XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
         {
             Umd parentUmd = (Umd)parentItem;
             UmdTextInfo thisTextInfo = parentUmd.TextInfo[(int)indicesOrKeys[0]];
-            UmdText text = item as UmdText;
-            if (text == null)
+            if (item is not UmdText text)
                 return null;
-            XElement xmlElement = new XElement(TAG_NAME);
+            XElement xmlElement = new(TAG_NAME);
             xmlElement.Value = text.Source?.GlobalID ?? "";
             xmlElement.SetAttributeValue(ATTRIBUTE_STATICVALUE, text.StaticValue ?? "");
             xmlElement.SetAttributeValue(ATTRIBUTE_USESTATICVALUE, text.UseStaticValue.ToString());

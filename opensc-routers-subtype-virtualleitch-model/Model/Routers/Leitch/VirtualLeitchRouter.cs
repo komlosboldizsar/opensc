@@ -119,16 +119,12 @@ namespace OpenSC.Model.Routers.Leitch
         private char LevelHex => HEX_CHARS[level];
         #endregion
 
-        #region Input and output instantiation
-        public override RouterInput CreateInput(string name, int index) => new RouterInput(name, this, index);
-        public override RouterOutput CreateOutput(string name, int index) => new VirtualLeitchRouterOutput(name, this, index);
+        #region Inputs and outputs
+        protected override RouterOutputCollection createOutputCollection()
+            => new VirtualLeitchRouterOutputCollection(this);
 
-        private static readonly Dictionary<Type, string> OUTPUT_TYPES = new Dictionary<Type, string>()
-        {
-            {  typeof(VirtualLeitchRouterOutput), "virtual_leitch" }
-        };
-
-        protected override Dictionary<Type, string> OutputTypesDictionaryGetter() => OUTPUT_TYPES;
+        protected override Type getOutputCollectionType()
+            => typeof(VirtualLeitchRouterOutputCollection);
         #endregion
 
         #region Setting/getting crosspoints
@@ -293,7 +289,7 @@ namespace OpenSC.Model.Routers.Leitch
             for (int p = 0; p < pairs; p++)
             {
                 VirtualLeitchRouterOutput output = Outputs.FirstOrDefault(o => (o.Index == crosspoints[p, 0])) as VirtualLeitchRouterOutput;
-                RouterInput input = Inputs.FirstOrDefault(i => (i.Index == crosspoints[p, 1]));
+                RouterInput input = Inputs[crosspoints[p, 1]];
                 if ((output != null) && (input != null))
                     output.AssignInput(input, id);
             }
@@ -309,7 +305,7 @@ namespace OpenSC.Model.Routers.Leitch
             for (int p = 0; p < pairs; p++)
             {
                 VirtualLeitchRouterOutput output = Outputs.FirstOrDefault(o => (o.Index == crosspoints[p, 0])) as VirtualLeitchRouterOutput;
-                RouterInput input = Inputs.FirstOrDefault(i => (i.Index == crosspoints[p, 1]));
+                RouterInput input = Inputs[crosspoints[p, 1]];
                 if ((output != null) && (input != null))
                     output.AssignPreset(input, id);
             }

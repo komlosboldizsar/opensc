@@ -6,7 +6,7 @@ using System.Xml.Linq;
 namespace OpenSC.Model.Labelsets
 {
 
-    public class LabelXmlSerializer : IValueXmlSerializer
+    public class LabelXmlSerializer : ICompleteXmlSerializer
     {
 
         public Type Type => typeof(Label);

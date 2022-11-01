@@ -10,9 +10,14 @@ namespace OpenSC.Model.UMDs.BmdSmartView
     public class BmdSmartViewDisplayTally : UmdTally
     {
 
-        public BmdSmartViewDisplayTally(Umd owner, int indexAtOwner, UmdTallyInfo info) : base(owner, indexAtOwner, info)
+        public override UmdTallyInfo Info
         {
-            priority = ((BmdSmartViewDisplayTallyInfo)info).DefaultPriority;
+            get => base.Info;
+            set
+            {
+                base.Info = value;
+                priority = ((BmdSmartViewDisplayTallyInfo)value).DefaultPriority;
+            }
         }
 
         #region Property: Priority
@@ -21,7 +26,7 @@ namespace OpenSC.Model.UMDs.BmdSmartView
         public int Priority
         {
             get => priority;
-            set => this.setProperty(ref priority, value, PriorityChanged, null, (ov, nv) => ((BmdSmartViewDisplay)Owner)?.NotifyTallyPriorityChanged(this));
+            set => this.setProperty(ref priority, value, PriorityChanged, null, (ov, nv) => ((BmdSmartViewDisplay)Parent)?.NotifyTallyPriorityChanged(this));
         }
         #endregion
 
