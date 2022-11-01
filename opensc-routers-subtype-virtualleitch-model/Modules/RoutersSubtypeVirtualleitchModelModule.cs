@@ -19,7 +19,7 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            SerializerRegister.RegisterCompleteSerializer(new VirtualLeitchRouterOutputXmlSerializer());
+            SerializerRegister.RegisterSerializer(new VirtualLeitchRouterOutputXmlSerializer());
         }
 
         protected override void registerSettings()

@@ -7,7 +7,7 @@ using System.Xml.Linq;
 namespace OpenSC.Model.UMDs
 {
 
-    public class UmdTallyXmlSerializer : IMemberXmlSerializer
+    public class UmdTallyXmlSerializer : IValueOnlyXmlSerializer
     {
 
         public virtual Type Type => typeof(UmdTally);

@@ -8,7 +8,7 @@ using System.Xml.Linq;
 namespace OpenSC.Model.Macros
 {
 
-    public class MacroPanelElementXmlSerializer : ICompleteXmlSerializer
+    public class MacroPanelElementXmlSerializer : IInstantiatingXmlSerializer
     {
 
         public Type Type => typeof(MacroPanelElement);

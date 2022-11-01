@@ -7,7 +7,7 @@ using System.Xml.Linq;
 namespace OpenSC.Model.Routers
 {
 
-    public class RouterInputXmlSerializer : ICompleteXmlSerializer
+    public class RouterInputXmlSerializer : IInstantiatingXmlSerializer
     {
 
         public Type Type => typeof(RouterInput);

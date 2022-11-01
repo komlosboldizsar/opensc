@@ -377,12 +377,8 @@ namespace OpenSC.Model.Persistence
             object deserializedValue = xmlElement.InnerText;
             XmlElement itemToDeserialize = xmlElement;
 
-            ICompleteXmlSerializer completeSerializer = SerializerRegister.GetCompleteSerializerForType(deserializeAsType);
-            if (deserializeMembersOnly)
-                completeSerializer = null;
-            IMemberXmlSerializer memberSerializer = (completeSerializer == null)
-                ? SerializerRegister.GetMemberSerializerForType(deserializeAsType)
-                : null;
+            (IInstantiatingXmlSerializer completeSerializer, IValueOnlyXmlSerializer memberSerializer) =
+                SerializerRegister.GetDeserializer(deserializeAsType, !deserializeMembersOnly);
 
             if ((persistData.TagName != null) && ((completeSerializer != null) || (memberSerializer != null)))
             {

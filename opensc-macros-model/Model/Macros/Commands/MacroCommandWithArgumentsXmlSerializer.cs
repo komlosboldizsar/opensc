@@ -7,7 +7,7 @@ using System.Xml.Linq;
 namespace OpenSC.Model.Macros
 {
 
-    public class MacroCommandWithArgumentsXmlSerializer : ICompleteXmlSerializer
+    public class MacroCommandWithArgumentsXmlSerializer : IInstantiatingXmlSerializer
     {
 
         public Type Type => typeof(MacroCommandWithArguments);

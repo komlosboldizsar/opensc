@@ -158,10 +158,6 @@ namespace OpenSC.Model.Persistence
                     serializeAsType = itemType;
             }
 
-
-            if (extendedMemberInfo.MemberInfo.Name == "Texts")
-                Debug.WriteLine("hello");
-
             string subitemTypeString = null;
             if (containingCollection is IHeterogenousCollection heterogenousCollection)
             {
@@ -170,17 +166,14 @@ namespace OpenSC.Model.Persistence
                     serializeAsType = heterogenousCollection.GetType(itemTypeString);
             }
 
-            ICompleteXmlSerializer completeSerializer = SerializerRegister.GetCompleteSerializerForType(serializeAsType);
-            IMemberXmlSerializer memberSerializer = (completeSerializer == null) ? SerializerRegister.GetMemberSerializerForType(serializeAsType) : null;
-            if ((completeSerializer == null) && (memberSerializer == null))
+            IXmlSerializer serializer = SerializerRegister.GetSerializer(serializeAsType);
+            if (serializer == null)
             {
                 result = item.ToString();
                 return true;
             }
 
-            XElement serializedItem = (completeSerializer != null)
-                ? completeSerializer.SerializeItem(item, parentItem, indices)
-                : memberSerializer.SerializeItem(item, parentItem, indices);
+            XElement serializedItem = serializer.SerializeItem(item, parentItem, indices);
             if ((polymorphFieldAttribute?.TypeAttributeName != null) && (itemTypeString != null))
                 serializedItem.SetAttributeValue(polymorphFieldAttribute.TypeAttributeName, itemTypeString);
             if (subitemTypeString != null)

@@ -7,7 +7,7 @@ using System.Xml.Linq;
 namespace OpenSC.Model.Macros
 {
 
-    public class MacroTriggerWithArgumentsXmlSerializer : ICompleteXmlSerializer
+    public class MacroTriggerWithArgumentsXmlSerializer : IInstantiatingXmlSerializer
     {
 
         public Type Type => typeof(MacroTriggerWithArguments);

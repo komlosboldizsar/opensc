@@ -18,7 +18,7 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            SerializerRegister.RegisterCompleteSerializer(new VirtualRouterOutputXmlSerializer());
+            SerializerRegister.RegisterSerializer(new VirtualRouterOutputXmlSerializer());
         }
 
     }

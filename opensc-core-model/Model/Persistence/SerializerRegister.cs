@@ -9,43 +9,61 @@ namespace OpenSC.Model.Persistence
     public class SerializerRegister
     {
 
-        private static readonly ICompleteXmlSerializer[] commonCompleteSerializers = new ICompleteXmlSerializer[]
+        private static readonly IInstantiatingXmlSerializer[] commonInstantiatingSerializers = new IInstantiatingXmlSerializer[]
         {
             new ColorXmlSerializer()
         };
 
-        private static readonly IMemberXmlSerializer[] commonMemberSerializers = new IMemberXmlSerializer[]
+        private static readonly IValueOnlyXmlSerializer[] commonValueOnlySerializers = new IValueOnlyXmlSerializer[]
         { };
 
-        private static Dictionary<Type, ICompleteXmlSerializer> registeredCompleteSerializers = new();
-        private static Dictionary<Type, IMemberXmlSerializer> registeredMemberSerializers = new();
+        private static Dictionary<Type, IInstantiatingXmlSerializer> registeredInstantiatingDeserializers = new();
+        private static Dictionary<Type, IValueOnlyXmlSerializer> registeredValueOnlyDeserializers = new();
       
         static SerializerRegister()
         {
-            foreach (ICompleteXmlSerializer completeSerializer in commonCompleteSerializers)
-                registeredCompleteSerializers.Add(completeSerializer.Type, completeSerializer);
-            foreach (IMemberXmlSerializer memberSerializer in commonMemberSerializers)
-                registeredMemberSerializers.Add(memberSerializer.Type, memberSerializer);
+            foreach (IInstantiatingXmlSerializer instantiatingSerializer in commonInstantiatingSerializers)
+                RegisterSerializer(instantiatingSerializer);
+            foreach (IValueOnlyXmlSerializer valueOnlySerializer in commonValueOnlySerializers)
+                RegisterSerializer(valueOnlySerializer);
         }
 
-        public static void RegisterCompleteSerializer(ICompleteXmlSerializer serializer)
-            => registeredCompleteSerializers.Add(serializer.Type, serializer);
+        public static void RegisterSerializer(IInstantiatingXmlSerializer instantiatingSerializer)
+            => registeredInstantiatingDeserializers.Add(instantiatingSerializer.Type, instantiatingSerializer);
 
-        public static void RegisterMemberSerializer(IMemberXmlSerializer serializer)
-            => registeredMemberSerializers.Add(serializer.Type, serializer);
+        public static void RegisterSerializer(IValueOnlyXmlSerializer valueOnlySerializer)
+            => registeredValueOnlyDeserializers.Add(valueOnlySerializer.Type, valueOnlySerializer);
 
-        public static ICompleteXmlSerializer GetCompleteSerializerForType(Type type)
+        public static IInstantiatingXmlSerializer GetInstantingSerializer(Type type)
         {
-            if (!registeredCompleteSerializers.TryGetValue(type, out ICompleteXmlSerializer foundCompleteSerializer))
+            if (!registeredInstantiatingDeserializers.TryGetValue(type, out IInstantiatingXmlSerializer foundInstantingSerializer))
                 return null;
-            return foundCompleteSerializer;
+            return foundInstantingSerializer;
         }
 
-        public static IMemberXmlSerializer GetMemberSerializerForType(Type type)
+        public static IValueOnlyXmlSerializer GetValueOnlySerializer(Type type)
         {
-            if (!registeredMemberSerializers.TryGetValue(type, out IMemberXmlSerializer foundMemberSerializer))
+            if (!registeredValueOnlyDeserializers.TryGetValue(type, out IValueOnlyXmlSerializer foundValueOnlySerializer))
                 return null;
-            return foundMemberSerializer;
+            return foundValueOnlySerializer;
+        }
+
+        public static (IInstantiatingXmlSerializer, IValueOnlyXmlSerializer) GetDeserializer(Type type, bool lookForInstanting = true, bool lookForValueOnly = true)
+        {
+            if (lookForInstanting && registeredInstantiatingDeserializers.TryGetValue(type, out IInstantiatingXmlSerializer instantingSerializer))
+                return (instantingSerializer, null);
+            if (lookForValueOnly && registeredValueOnlyDeserializers.TryGetValue(type, out IValueOnlyXmlSerializer valueOnlySerializer))
+                return (null, valueOnlySerializer);
+            return (null, null);
+        }
+
+        public static IXmlSerializer GetSerializer(Type type)
+        {
+            if (registeredInstantiatingDeserializers.TryGetValue(type, out IInstantiatingXmlSerializer instantingSerializer))
+                return instantingSerializer;
+            if (registeredValueOnlyDeserializers.TryGetValue(type, out IValueOnlyXmlSerializer valueOnlySerializer))
+                return valueOnlySerializer;
+            return null;
         }
 
     }

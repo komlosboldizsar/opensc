@@ -6,7 +6,7 @@ using System.Xml.Linq;
 namespace OpenSC.Model.Mixers
 {
 
-    public class MixerInputXmlSerializer : ICompleteXmlSerializer
+    public class MixerInputXmlSerializer : IInstantiatingXmlSerializer
     {
 
         public Type Type => typeof(MixerInput);

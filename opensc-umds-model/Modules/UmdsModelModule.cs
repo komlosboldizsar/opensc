@@ -23,8 +23,8 @@ namespace OpenSC.Modules
 
         protected override void registerSerializers()
         {
-            SerializerRegister.RegisterMemberSerializer(new UmdTextXmlSerializer());
-            SerializerRegister.RegisterMemberSerializer(new UmdTallyXmlSerializer());
+            SerializerRegister.RegisterSerializer(new UmdTextXmlSerializer());
+            SerializerRegister.RegisterSerializer(new UmdTallyXmlSerializer());
         }
 
     }
