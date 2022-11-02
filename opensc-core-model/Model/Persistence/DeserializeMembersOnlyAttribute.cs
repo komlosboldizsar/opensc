@@ -2,7 +2,7 @@
 
 namespace OpenSC.Model.Persistence
 {
-    [AttributeUsage((AttributeTargets.Field | AttributeTargets.Property), AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public class DeserializeMembersOnlyAttribute : Attribute
     { }
 }

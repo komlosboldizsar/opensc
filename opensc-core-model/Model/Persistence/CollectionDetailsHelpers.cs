@@ -23,8 +23,9 @@ namespace OpenSC.Model.Persistence
                     {
                         isDictionary = true;
                         isCollection = true;
-                        keyType = interfaceType.GetGenericArguments()[0];
-                        elementType = interfaceType.GetGenericArguments()[1];
+                        Type[] genericArguments = interfaceType.GetGenericArguments();
+                        keyType = genericArguments[0];
+                        elementType = genericArguments[1];
                     }
                     if (!isDictionary && (genericTypeDefinition == typeof(ICollection<>)))
                     {
