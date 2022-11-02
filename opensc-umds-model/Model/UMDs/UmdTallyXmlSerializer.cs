@@ -34,18 +34,17 @@ namespace OpenSC.Model.UMDs
             }
         }
 
-        public virtual XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
+        public virtual void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] indicesOrKeys)
         {
+            if (xmlNode is not XmlElement xmlElement)
+                return;
             Umd parentUmd = (Umd)parentItem;
             UmdTallyInfo thisTallyInfo = parentUmd.TallyInfo[(int)indicesOrKeys[0]];
-            UmdTally tally = item as UmdTally;
-            if (tally == null)
-                return null;
-            XElement xmlElement = new XElement(TAG_NAME);
-            xmlElement.Value = tally.Source?.Identifier ?? "";
+            if (item is not UmdTally tally)
+                return;
+            xmlElement.InnerText = tally.Source?.Identifier ?? "";
             if (thisTallyInfo.ColorMode != UmdTallyInfo.ColorSettingMode.Fix)
-                xmlElement.SetAttributeValue(ATTRIBUTE_COLOR, colorToString(tally.Color));
-            return xmlElement;
+                xmlElement.SetAttribute(ATTRIBUTE_COLOR, colorToString(tally.Color));
         }
 
         private static string colorToString(Color color)

@@ -37,20 +37,15 @@ namespace OpenSC.Model.Mixers
 
         }
 
-        public XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
+        public void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] indicesOrKeys)
         {
-
-            MixerInput input = item as MixerInput;
-            if (input == null)
-                return null;
-
-            XElement xmlElement = new XElement(TAG_NAME);
-            xmlElement.SetAttributeValue(ATTRIBUTE_NAME, input.Name);
-            xmlElement.SetAttributeValue(ATTRIBUTE_INDEX, input.Index);
-            xmlElement.SetAttributeValue(ATTRIBUTE_SOURCE, ((input.Source != null) ? input.Source.SignalUniqueId : ""));
-
-            return xmlElement;
-
+            if (xmlNode is not XmlElement xmlElement)
+                return;
+            if (item is not MixerInput input)
+                return;
+            xmlElement.SetAttribute(ATTRIBUTE_NAME, input.Name);
+            xmlElement.SetAttribute(ATTRIBUTE_INDEX, input.Index.ToString());
+            xmlElement.SetAttribute(ATTRIBUTE_SOURCE, input.Source?.SignalUniqueId ?? string.Empty);
         }
 
     }

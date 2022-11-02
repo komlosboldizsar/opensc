@@ -36,7 +36,7 @@ namespace OpenSC.Model.Labelsets
 
         #region Label collection
         [PersistAs("labels")]
-        [PersistAs(null, 1, LabelXmlSerializer.ATTRIBUTE_OBJECT)]
+        [PersistAs("label", 1, LabelXmlSerializer.ATTRIBUTE_OBJECT)]
         private ObservableDictionary<ISystemObject, Label> labels = new();
         public ObservableDictionary<ISystemObject, Label> Labels => labels;
 

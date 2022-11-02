@@ -11,15 +11,12 @@ namespace OpenSC.Model.Routers.Salvos
 
         public virtual Type Type => typeof(SalvoCrosspoint);
 
-        private const string TAG_NAME = "crosspoint";
         private const string ATTRIBUTE_ROUTER = "router";
         private const string ATTRIBUTE_OUTPUT = "output";
         private const string ATTRIBUTE_INPUT = "input";
 
         public virtual object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
         {
-            if (serializedItem.LocalName != TAG_NAME)
-                return null;
             int? routerId = null;
             int? outputIndex = null;
             int? inputIndex = null;
@@ -29,7 +26,7 @@ namespace OpenSC.Model.Routers.Salvos
                 outputIndex = _outputIndex;
             if (int.TryParse(serializedItem.Attributes[ATTRIBUTE_INPUT]?.Value, out int _inputIndex))
                 inputIndex = _inputIndex;
-            SalvoCrosspoint crosspoint = new SalvoCrosspoint()
+            SalvoCrosspoint crosspoint = new()
             {
                 __routerId = routerId,
                 __outputIndex = outputIndex,
@@ -38,16 +35,15 @@ namespace OpenSC.Model.Routers.Salvos
             return crosspoint;
         }
 
-        public virtual XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
+        public virtual void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] indicesOrKeys)
         {
-            SalvoCrosspoint crosspoint = item as SalvoCrosspoint;
-            if (crosspoint == null)
-                return null;
-            XElement xmlElement = new XElement(TAG_NAME);
-            xmlElement.SetAttributeValue(ATTRIBUTE_ROUTER, crosspoint.Router?.ID.ToString() ?? "");
-            xmlElement.SetAttributeValue(ATTRIBUTE_OUTPUT, crosspoint.Output?.Index.ToString() ?? "");
-            xmlElement.SetAttributeValue(ATTRIBUTE_INPUT, crosspoint.Input?.Index.ToString() ?? "");
-            return xmlElement;
+            if (xmlNode is not XmlElement xmlElement)
+                return;
+            if (item is not SalvoCrosspoint crosspoint)
+                return;
+            xmlElement.SetAttribute(ATTRIBUTE_ROUTER, crosspoint.Router?.ID.ToString() ?? "");
+            xmlElement.SetAttribute(ATTRIBUTE_OUTPUT, crosspoint.Output?.Index.ToString() ?? "");
+            xmlElement.SetAttribute(ATTRIBUTE_INPUT, crosspoint.Input?.Index.ToString() ?? "");
         }
 
     }

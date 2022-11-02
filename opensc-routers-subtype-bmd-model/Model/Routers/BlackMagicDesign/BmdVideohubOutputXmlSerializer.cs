@@ -14,11 +14,11 @@ namespace OpenSC.Model.Routers.BlackMagicDesign
         public override object DeserializeItem(XmlNode serializedItem, object parentItem, object[] keysOrIndices)
             => base.DeserializeItem(serializedItem, parentItem, keysOrIndices) as BmdVideohubOutput;
 
-        public override XElement SerializeItem(object item, object parentItem, object[] keysOrIndices)
+        public override void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] keysOrIndices)
         {
             if (item is not BmdVideohubOutput)
-                return null;
-            return base.SerializeItem(item, parentItem, keysOrIndices);
+                return;
+            base.SerializeItem(item, parentItem, xmlNode, xmlDocument, keysOrIndices);
         }
 
     }

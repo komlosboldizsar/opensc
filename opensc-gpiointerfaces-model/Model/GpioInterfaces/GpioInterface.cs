@@ -70,7 +70,7 @@ namespace OpenSC.Model.GpioInterfaces
         public ObservableList<GpioInterfaceInput> Inputs => inputs;
 
         [PersistAs("inputs")]
-        [PersistAs(null, 1)]
+        [PersistAs("input", 1)]
         [PersistDetailed]
         [PolymorphField(nameof(InputTypesDictionaryGetter))]
         private GpioInterfaceInput[] _inputs // for persistence
@@ -124,7 +124,7 @@ namespace OpenSC.Model.GpioInterfaces
         public ObservableList<GpioInterfaceOutput> Outputs => outputs;
 
         [PersistAs("outputs")]
-        [PersistAs(null, 1)]
+        [PersistAs("output", 1)]
         [PersistDetailed]
         [PolymorphField(nameof(OutputTypesDictionaryGetter))]
         private GpioInterfaceOutput[] _outputs // for persistence

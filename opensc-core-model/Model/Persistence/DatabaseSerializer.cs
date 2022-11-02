@@ -39,74 +39,126 @@ namespace OpenSC.Model.Persistence
 
         public void Save(IEnumerable<T> items, DatabaseFile fileToWrite)
         {
-            XElement rootElement = new(rootTag);
+            XmlDocument xmlDocument = new();
+            XmlElement documentElement = xmlDocument.CreateElement(rootTag);
+            xmlDocument.AppendChild(documentElement);
             foreach (T item in items)
-                rootElement.Add(serializeItem(item));
+                serializeItem(item, documentElement, xmlDocument);
             using XmlWriter writer = XmlWriter.Create(fileToWrite.Stream, xmlWriterSettings);
-            rootElement.WriteTo(writer);
+            xmlDocument.WriteTo(writer);
         }
 
-        private XElement serializeItem(T item)
+        private XmlElement serializeItem(T item, XmlElement documentElement, XmlDocument xmlDocument)
         {
-            XElement xmlElement = new(itemTag);
+            XmlElement xmlElement = xmlDocument.CreateElement(itemTag);
+            documentElement.AppendChild(xmlElement);
             Type typeToSerialize = storedType;
-            xmlElement.SetAttributeValue(DatabasePersisterConstants.ATTRIBUTE_ID, item.ID);
+            xmlElement.SetAttribute(DatabasePersisterConstants.ATTRIBUTE_ID, item.ID.ToString());
             if (isPolymorph)
             {
                 Type itemType = item.GetType();
-                xmlElement.SetAttributeValue(DatabasePersisterConstants.ATTRIBUTE_TYPE, typeRegister.ConvertTypeToString(itemType));
+                xmlElement.SetAttribute(DatabasePersisterConstants.ATTRIBUTE_TYPE, typeRegister.ConvertTypeToString(itemType));
                 typeToSerialize = itemType;
             }
             foreach (ExtendedMemberInfo extendedMemberInfo in typeToSerialize.GetExtendedMemberInfos())
-                storeValueOfMember(extendedMemberInfo, ref item, ref xmlElement);
+                storeValueOfMember(extendedMemberInfo, ref item, xmlElement, xmlDocument);
             return xmlElement;
         }
 
-        private void storeValueOfMember(ExtendedMemberInfo extendedMemberInfo, ref T item, ref XElement xmlElement)
+        private void storeValueOfMember(ExtendedMemberInfo extendedMemberInfo, ref T item, XmlElement xmlElement, XmlDocument xmlDocument)
         {
             if ((extendedMemberInfo.FieldInfo == null) && (extendedMemberInfo.PropertyInfo == null))
                 return;
             if ((extendedMemberInfo.PropertyInfo != null) && !(extendedMemberInfo.PropertyInfo.CanRead && extendedMemberInfo.PropertyInfo.CanWrite))
                 return;
-            object xmlElementInner = serializeValue(extendedMemberInfo, extendedMemberInfo.ValueType, extendedMemberInfo.GetValue(item), item);
-            xmlElement.Add(new XElement(extendedMemberInfo.PersistAsAttributes[0].TagName, xmlElementInner));
+            XmlNode xmlNode = getXmlNodeByXPath(xmlElement, xmlDocument, extendedMemberInfo.PersistAsAttributes[0].XPathPieces);
+            serializeValue(extendedMemberInfo, extendedMemberInfo.ValueType, extendedMemberInfo.GetValue(item), item, xmlNode, xmlDocument);
         }
 
-        private object serializeValue(ExtendedMemberInfo extendedMemberInfo, Type memberType, object item, object parentItem, object containingCollection = null, int arrayDimension = 0, object[] indices = null)
+        private XmlNode getXmlNodeByXPath(XmlElement parentElement, XmlDocument documentElement, string[] xPathPieces)
+        {
+            XmlNode currentNode = parentElement;
+            foreach (string xPathPiece in xPathPieces)
+            {
+                if (currentNode is not XmlElement currentElement)
+                    throw new Exception("Probably invalid XPath.");
+                XmlNode childNode;
+                if (xPathPiece.StartsWith('@'))
+                {
+                    XmlAttribute childAttribute = documentElement.CreateAttribute(xPathPiece[1..]);
+                    currentElement.Attributes.Append(childAttribute);
+                    childNode = childAttribute;
+                }
+                else
+                {
+                    childNode = currentElement[xPathPiece];
+                    if (childNode == null)
+                    {
+                        childNode = documentElement.CreateElement(xPathPiece);
+                        currentElement.AppendChild(childNode);
+                    }
+                }
+                currentNode = childNode;
+            }
+            return currentNode;
+        }
+
+        private void storeSerializedValueToXObject(XObject xObject, object serializedValue)
+        {
+            if (xObject is XElement xElement)
+            {
+                xElement.Add(serializedValue);
+            }
+            else if (xObject is XAttribute xAttribute)
+            {
+                if (serializedValue is not string serializedValueString)
+                    throw new Exception("Only strings can be stored in XML attributes.");
+                xAttribute.Value = serializedValueString;
+            }
+        }
+
+        private void serializeValue(ExtendedMemberInfo extendedMemberInfo, Type memberType, object item, object parentItem, XmlNode rootNode, XmlDocument xmlDocument, object containingCollection = null, int arrayDimension = 0, object[] indices = null)
         {
             if (item == null)
-                return string.Empty;
+            {
+                rootNode.InnerText = string.Empty;
+                return;
+            }
             if ((item is ISystemObject itemAsSystemObject) && (extendedMemberInfo.PersistDetailedAttribute == null))
-                return itemAsSystemObject.GlobalID;
+            {
+                rootNode.InnerText = itemAsSystemObject.GlobalID;
+                return;
+            }
             object[] extendedIndices = DatabasePersisterHelpers.ExtendIndices(indices, arrayDimension);
-            object result = null;
-            if (trySerializeAsArray(ref result, extendedMemberInfo, memberType, item, parentItem, arrayDimension, extendedIndices))
-                return result;
-            if (trySerializeAsCollection(ref result, extendedMemberInfo, memberType, item, parentItem, arrayDimension, extendedIndices))
-                return result;
-            if (trySerializeAsObject(ref result, extendedMemberInfo, memberType, item, parentItem, containingCollection, arrayDimension, indices))
-                return result;
-            return item.ToString();
+            if (trySerializeAsArray(extendedMemberInfo, memberType, item, parentItem, rootNode, xmlDocument, arrayDimension, extendedIndices))
+                return;
+            if (trySerializeAsCollection(extendedMemberInfo, memberType, item, parentItem, rootNode, xmlDocument, arrayDimension, extendedIndices))
+                return;
+            if (trySerializeAsObject(extendedMemberInfo, memberType, item, parentItem, rootNode, xmlDocument, containingCollection, arrayDimension, indices))
+                return;
+            rootNode.InnerText = item.ToString();
         }
 
-        private bool trySerializeAsArray(ref object result, ExtendedMemberInfo extendedMemberInfo, Type memberType, object item, object parentItem, int arrayDimension, object[] extendedIndices)
+        private bool trySerializeAsArray(ExtendedMemberInfo extendedMemberInfo, Type memberType, object item, object parentItem, XmlNode rootNode, XmlDocument xmlDocument, int arrayDimension, object[] extendedIndices)
         {
             if (!memberType.IsArray || (item is not Array))
                 return false;
+            if (rootNode is not XmlElement rootElement)
+                return false;
             Array array = item as Array;
-            List<XElement> arrayElements = new();
             int elementIndex = 0;
             foreach (var element in array)
             {
                 extendedIndices[arrayDimension] = elementIndex++;
-                arrayElements.Add(serializeCollectionElement(extendedMemberInfo, memberType.GetElementType(), element, parentItem, item, arrayDimension, extendedIndices));
+                serializeCollectionElement(extendedMemberInfo, memberType.GetElementType(), element, parentItem, rootElement, xmlDocument, item, arrayDimension, extendedIndices);
             }
-            result = arrayElements;
             return true;
         }
 
-        private bool trySerializeAsCollection(ref object result, ExtendedMemberInfo extendedMemberInfo, Type memberType, object item, object parentItem, int arrayDimension, object[] extendedIndices)
+        private bool trySerializeAsCollection(ExtendedMemberInfo extendedMemberInfo, Type memberType, object item, object parentItem, XmlNode rootNode, XmlDocument xmlDocument, int arrayDimension, object[] extendedIndices)
         {
+            if (rootNode is not XmlElement rootElement)
+                return false;
             bool isCollection = false;
             Type elementType = null;
             foreach (Type interfaceType in memberType.GetInterfaces())
@@ -121,18 +173,16 @@ namespace OpenSC.Model.Persistence
             if (!isCollection)
                 return false;
             IEnumerable enumerable = item as IEnumerable;
-            List<XElement> arrayElements = new();
             int elementIndex = 0;
             foreach (var element in enumerable)
             {
                 extendedIndices[arrayDimension] = elementIndex++;
-                arrayElements.Add(serializeCollectionElement(extendedMemberInfo, elementType, element, parentItem, item, arrayDimension, extendedIndices));
+                serializeCollectionElement(extendedMemberInfo, elementType, element, parentItem, rootElement, xmlDocument, item, arrayDimension, extendedIndices);
             }
-            result = arrayElements;
             return true;
         }
 
-        private bool trySerializeAsObject(ref object result, ExtendedMemberInfo extendedMemberInfo, Type memberType, object item, object parentItem, object containingCollection, int arrayDimension, object[] indices)
+        private bool trySerializeAsObject(ExtendedMemberInfo extendedMemberInfo, Type memberType, object item, object parentItem, XmlNode rootNode, XmlDocument xmlDocument, object containingCollection, int arrayDimension, object[] indices)
         {
 
             if (Type.GetTypeCode(memberType) != TypeCode.Object)
@@ -169,21 +219,23 @@ namespace OpenSC.Model.Persistence
             IXmlSerializer serializer = SerializerRegister.GetSerializer(serializeAsType);
             if (serializer == null)
             {
-                result = item.ToString();
+                rootNode.InnerText = item.ToString();
                 return true;
             }
 
-            XElement serializedItem = serializer.SerializeItem(item, parentItem, indices);
-            if ((polymorphFieldAttribute?.TypeAttributeName != null) && (itemTypeString != null))
-                serializedItem.SetAttributeValue(polymorphFieldAttribute.TypeAttributeName, itemTypeString);
-            if (subitemTypeString != null)
-                serializedItem.SetAttributeValue(DatabasePersisterConstants.HETEROGENOUS_COLLECTION_TYPE, subitemTypeString);
-            result = serializedItem;
+            serializer.SerializeItem(item, parentItem, rootNode, xmlDocument, indices);
+            if (rootNode is XmlElement rootElement)
+            {
+                if ((polymorphFieldAttribute?.TypeAttributeName != null) && (itemTypeString != null))
+                    rootElement.SetAttribute(polymorphFieldAttribute.TypeAttributeName, itemTypeString);
+                if (subitemTypeString != null)
+                    rootElement.SetAttribute(DatabasePersisterConstants.HETEROGENOUS_COLLECTION_TYPE, subitemTypeString);
+            }
             return true;
 
         }
 
-        private XElement serializeCollectionElement(ExtendedMemberInfo extendedMemberInfo, Type memberType, object element, object parentItem, object containingCollection, int arrayDimension, object[] indices)
+        private void serializeCollectionElement(ExtendedMemberInfo extendedMemberInfo, Type memberType, object element, object parentItem, XmlElement rootElement, XmlDocument xmlDocument, object containingCollection, int arrayDimension, object[] indices)
         {
 
             object elementKey = null;
@@ -200,15 +252,12 @@ namespace OpenSC.Model.Persistence
                 indices[arrayDimension] = elementKey;
             }
 
-            object arrayElementValue = serializeValue(extendedMemberInfo, typeToSerialize, elementToSerialize, parentItem, containingCollection, arrayDimension + 1, indices);
             PersistAsAttribute persistData = extendedMemberInfo.GetPersistAsAttributeForDimension(arrayDimension + 1);
-            XElement returnElement = ((arrayElementValue is XElement arrayEleentValueX) && (persistData?.TagName == null))
-                ? arrayEleentValueX
-                : new XElement(persistData?.TagName ?? DatabasePersisterConstants.UNDEFINED_ARRAY_ITEM_TAG, arrayElementValue);
+            XmlElement childElement = xmlDocument.CreateElement(persistData.XPath);
+            rootElement.AppendChild(childElement);
+            serializeValue(extendedMemberInfo, typeToSerialize, elementToSerialize, parentItem, childElement, xmlDocument, containingCollection, arrayDimension + 1, indices);
             if (elementKey != null)
-                returnElement.SetAttributeValue(persistData?.KeyAttribute ?? "key", (elementKey is ISystemObject elementKeyObj) ? elementKeyObj.GlobalID : elementKey.ToString());
-
-            return returnElement;
+                childElement.SetAttribute(persistData?.KeyAttribute ?? "key", (elementKey is ISystemObject elementKeyObj) ? elementKeyObj.GlobalID : elementKey.ToString());
 
         }
 

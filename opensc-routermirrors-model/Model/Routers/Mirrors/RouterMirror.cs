@@ -105,7 +105,7 @@ namespace OpenSC.Model.Routers.Mirrors
         public ObservableList<RouterMirrorInputAssociation> InputAssociations => inputAssociations;
 
         [PersistAs("input_associations")]
-        [PersistAs(null, 1)]
+        [PersistAs("association", 1)]
         private RouterMirrorInputAssociation[] _inputAssociations // for persistence
         {
             get => inputAssociations.ToArray();
@@ -145,7 +145,7 @@ namespace OpenSC.Model.Routers.Mirrors
         public ObservableList<RouterMirrorOutputAssociation> OutputAssociations => outputAssociations;
 
         [PersistAs("output_associations")]
-        [PersistAs(null, 1)]
+        [PersistAs("association", 1)]
         private RouterMirrorOutputAssociation[] _outputAssociations // for persistence
         {
             get => outputAssociations.ToArray();

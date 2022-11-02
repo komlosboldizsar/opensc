@@ -37,21 +37,21 @@ namespace OpenSC.Model.UMDs
                 text.Alignment = alignmentAttributeValueConverted;
         }
 
-        public virtual XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
+        public virtual void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] indicesOrKeys)
         {
+            if (xmlNode is not XmlElement xmlElement)
+                return;
             Umd parentUmd = (Umd)parentItem;
             UmdTextInfo thisTextInfo = parentUmd.TextInfo[(int)indicesOrKeys[0]];
             if (item is not UmdText text)
-                return null;
-            XElement xmlElement = new(TAG_NAME);
-            xmlElement.Value = text.Source?.GlobalID ?? "";
-            xmlElement.SetAttributeValue(ATTRIBUTE_STATICVALUE, text.StaticValue ?? "");
-            xmlElement.SetAttributeValue(ATTRIBUTE_USESTATICVALUE, text.UseStaticValue.ToString());
+                return;
+            xmlElement.InnerText = text.Source?.GlobalID ?? "";
+            xmlElement.SetAttribute(ATTRIBUTE_STATICVALUE, text.StaticValue ?? "");
+            xmlElement.SetAttribute(ATTRIBUTE_USESTATICVALUE, text.UseStaticValue.ToString());
             if (thisTextInfo.Switchable)
-                xmlElement.SetAttributeValue(ATTRIBUTE_USED, text.Used.ToString());
+                xmlElement.SetAttribute(ATTRIBUTE_USED, text.Used.ToString());
             if (thisTextInfo.Alignable)
-                xmlElement.SetAttributeValue(ATTRIBUTE_ALIGNMENT, text.Alignment.ToString());
-            return xmlElement;
+                xmlElement.SetAttribute(ATTRIBUTE_ALIGNMENT, text.Alignment.ToString());
         }
 
     }

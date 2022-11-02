@@ -13,7 +13,6 @@ namespace OpenSC.Model.Macros
 
         public Type Type => typeof(MacroPanelElement);
 
-        private const string TAG_NAME = "macro_panel_element";
         private const string ATTRIBUTE_MACRO = "macro";
         private const string ATTRIBUTE_LABEL = "label";
         private const string ATTRIBUTE_SHOWLABEL = "showlabel";
@@ -23,11 +22,9 @@ namespace OpenSC.Model.Macros
         private const string ATTRIBUTE_Y = "y";
         private const string ATTRIBUTE_W = "w";
         private const string ATTRIBUTE_H = "h";
+
         public object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
         {
-
-            if (serializedItem.LocalName != TAG_NAME)
-                return null;
 
             string macroIdStr = serializedItem.Attributes[ATTRIBUTE_MACRO]?.Value;
             if (!int.TryParse(macroIdStr, out int macroId) || (macroId < 0))
@@ -72,32 +69,29 @@ namespace OpenSC.Model.Macros
 
         }
 
-        public XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
+        public void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] indicesOrKeys)
         {
-
-            MacroPanelElement element = item as MacroPanelElement;
-            if (element == null)
-                return null;
-
-            XElement xmlElement = new XElement(TAG_NAME);
-            xmlElement.SetAttributeValue(ATTRIBUTE_MACRO, element.Macro?.ID);
-            xmlElement.SetAttributeValue(ATTRIBUTE_LABEL, element.Label ?? "");
-            xmlElement.SetAttributeValue(ATTRIBUTE_SHOWLABEL, (element.ShowLabel ? "true" : "false"));
-            xmlElement.SetAttributeValue(ATTRIBUTE_BACKCOLOR, ColorToHexString(element.BackColor));
-            xmlElement.SetAttributeValue(ATTRIBUTE_FORECOLOR, ColorToHexString(element.ForeColor));
-            xmlElement.SetAttributeValue(ATTRIBUTE_X, element.PositionX);
-            xmlElement.SetAttributeValue(ATTRIBUTE_Y, element.PositionY);
-            xmlElement.SetAttributeValue(ATTRIBUTE_W, element.SizeW);
-            xmlElement.SetAttributeValue(ATTRIBUTE_H, element.SizeH);
-
-            return xmlElement;
-
+            if (xmlNode is not XmlElement xmlElement)
+                return;
+            if (item is not MacroPanelElement element)
+                return;
+            xmlElement.SetAttribute(ATTRIBUTE_MACRO, (element.Macro != null) ? element.Macro.ID.ToString() : string.Empty);
+            xmlElement.SetAttribute(ATTRIBUTE_LABEL, element.Label ?? string.Empty);
+            xmlElement.SetAttribute(ATTRIBUTE_SHOWLABEL, (element.ShowLabel ? "true" : "false"));
+            xmlElement.SetAttribute(ATTRIBUTE_BACKCOLOR, ColorToHexString(element.BackColor));
+            xmlElement.SetAttribute(ATTRIBUTE_FORECOLOR, ColorToHexString(element.ForeColor));
+            xmlElement.SetAttribute(ATTRIBUTE_X, element.PositionX.ToString());
+            xmlElement.SetAttribute(ATTRIBUTE_Y, element.PositionY.ToString());
+            xmlElement.SetAttribute(ATTRIBUTE_W, element.SizeW.ToString());
+            xmlElement.SetAttribute(ATTRIBUTE_H, element.SizeH.ToString());
         }
 
         // @source https://www.cambiaresearch.com/articles/1/convert-dotnet-color-to-hex-string
-        static char[] hexDigits = {
-         '0', '1', '2', '3', '4', '5', '6', '7',
-         '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        static readonly char[] hexDigits = {
+            '0', '1', '2', '3', '4', '5', '6', '7',
+            '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+        };
+
         public static string ColorToHexString(Color color)
         {
             byte[] bytes = new byte[3];

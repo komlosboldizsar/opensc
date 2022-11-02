@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Xml.Linq;
+using System.Xml;
 
 namespace OpenSC.Model.Persistence
 {
     public interface IXmlSerializer
     {
         Type Type { get; }
-        XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys);
+        void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] indicesOrKeys);
     }
 }

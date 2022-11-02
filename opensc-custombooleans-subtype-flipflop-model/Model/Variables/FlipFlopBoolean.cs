@@ -132,7 +132,7 @@ namespace OpenSC.Model.Variables
 
         #region Property: Input1Inverted
         [AutoProperty]
-        [PersistAs("input1_inverted")]
+        [PersistAs("input1/@inverted")]
         private bool input1Inverted;
         #endregion
 
@@ -171,25 +171,25 @@ namespace OpenSC.Model.Variables
 
         #region Property: Input2Inverted
         [AutoProperty]
-        [PersistAs("input2_inverted")]
+        [PersistAs("input2/@inverted")]
         private bool input2Inverted;
         #endregion
 
         #region Property: EnableSetByUser
         [AutoProperty]
-        [PersistAs("enable_set_by_user")]
+        [PersistAs("enable_by_user/@set")]
         private bool enableSetByUser;
         #endregion
 
         #region Property: EnableResetByUser
         [AutoProperty]
-        [PersistAs("enable_reset_by_user")]
+        [PersistAs("enable_by_user/@reset")]
         private bool enableResetByUser;
         #endregion
 
         #region Property: EnableToggleByUser
         [AutoProperty]
-        [PersistAs("enable_toggle_by_user")]
+        [PersistAs("enable_by_user/@toggle")]
         private bool enableToggleByUser;
         #endregion
 

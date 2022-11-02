@@ -106,11 +106,11 @@ namespace OpenSC.Model.Mixers
 
         #region Property: GivesRedTallyToSources, GivesGreenTallyToSources
         [AutoProperty]
-        [PersistAs("gives_red_tally")]
+        [PersistAs("gives_tally/@red")]
         private bool givesRedTallyToSources;
 
         [AutoProperty]
-        [PersistAs("gives_green_tally")]
+        [PersistAs("gives_tally/@green")]
         private bool givesGreenTallyToSources;
         #endregion
 
@@ -130,7 +130,7 @@ namespace OpenSC.Model.Mixers
         public ObservableList<MixerInput> Inputs => inputs;
 
         [PersistAs("inputs")]
-        [PersistAs(null, 1)]
+        [PersistAs("input", 1)]
         private MixerInput[] _inputs
         {
             get { return inputs.ToArray(); }

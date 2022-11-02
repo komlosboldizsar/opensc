@@ -17,13 +17,11 @@ namespace OpenSC.Model.GpioInterfaces.BlackMagicDesign
             return restoredOutput;
         }
 
-        public override XElement SerializeItem(object item, object parentItem, object[] keysOrIndices)
+        public override void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] keysOrIndices)
         {
-            BmdTallyBoxOutput output = item as BmdTallyBoxOutput;
-            if (output == null)
-                return null;
-            XElement serializedOutput = base.SerializeItem(item, parentItem, keysOrIndices);
-            return serializedOutput;
+            if (item is not BmdTallyBoxOutput)
+                return;
+            base.SerializeItem(item, parentItem, xmlNode, xmlDocument, keysOrIndices);
         }
 
     }

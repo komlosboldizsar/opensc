@@ -30,14 +30,14 @@ namespace OpenSC.Model.Signals.TallyCopying
         #region Property: FromSignal
         [AutoProperty]
         [AutoProperty.AfterChange(nameof(updateFromTally))]
-        [PersistAs("from_signal")]
+        [PersistAs("from")]
         private ISignalSourceRegistered fromSignal;
         #endregion
 
         #region Property: FromTallyColor
         [AutoProperty]
         [AutoProperty.AfterChange(nameof(updateFromTally))]
-        [PersistAs("from_tally_color")]
+        [PersistAs("from/@color")]
         private SignalTallyColor fromTallyColor;
         #endregion
 
@@ -78,14 +78,14 @@ namespace OpenSC.Model.Signals.TallyCopying
         #region Property: ToSignal
         [AutoProperty]
         [AutoProperty.AfterChange(nameof(updateToTally))]
-        [PersistAs("to_signal")]
+        [PersistAs("to")]
         private ISignalSourceRegistered toSignal;
         #endregion
 
         #region Property: ToTallyColor
         [AutoProperty]
         [AutoProperty.AfterChange(nameof(updateToTally))]
-        [PersistAs("to_tally_color")]
+        [PersistAs("to/@color")]
         private SignalTallyColor toTallyColor;
         #endregion
 

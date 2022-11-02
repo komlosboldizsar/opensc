@@ -41,7 +41,7 @@ namespace OpenSC.Model.Signals.BooleanTallies
         #region Property: FromBoolean
         private string _fromBooleanUniqueId; // "Temp foreign key"
 
-        [PersistAs("from_boolean")]
+        [PersistAs("from")]
         private string fromBooleanUniqueId
         {
             get => fromBoolean?.Identifier;
@@ -66,14 +66,14 @@ namespace OpenSC.Model.Signals.BooleanTallies
         #region Property: ToSignal
         [AutoProperty]
         [AutoProperty.AfterChange(nameof(updateToTally))]
-        [PersistAs("to_signal")]
+        [PersistAs("to")]
         private ISignalSourceRegistered toSignal;
         #endregion
 
         #region Property: ToTallyColor
         [AutoProperty]
         [AutoProperty.AfterChange(nameof(updateToTally))]
-        [PersistAs("to_tally_color")]
+        [PersistAs("to/@color")]
         private SignalTallyColor toTallyColor;
         #endregion
 

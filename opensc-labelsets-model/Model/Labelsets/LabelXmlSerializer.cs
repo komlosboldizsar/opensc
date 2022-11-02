@@ -11,27 +11,23 @@ namespace OpenSC.Model.Labelsets
 
         public Type Type => typeof(Label);
 
-        private const string TAG_NAME = "label";
         public const string ATTRIBUTE_OBJECT = "object";
         private const string ATTRIBUTE_TEXT = "text";
 
         public object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
         {
-            if (serializedItem.LocalName != TAG_NAME)
-                return null;
             Label label = ((Labelset)parentItem).CreateLabel();
             label.Text = serializedItem.Attributes[ATTRIBUTE_TEXT]?.Value;
             return label;
         }
 
-        public XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
+        public void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] indicesOrKeys)
         {
-            Label label = item as Label;
-            if (label == null)
-                return null;
-            XElement xmlElement = new XElement(TAG_NAME);
-            xmlElement.SetAttributeValue(ATTRIBUTE_TEXT, label.Text);
-            return xmlElement;
+            if (xmlNode is not XmlElement xmlElement)
+                return;
+            if (item is not Label label)
+                return;
+            xmlElement.SetAttribute(ATTRIBUTE_TEXT, label.Text);
         }
         
     }

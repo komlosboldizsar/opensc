@@ -12,17 +12,15 @@ namespace OpenSC.Model.Macros
 
         public Type Type => typeof(MacroTriggerWithArguments);
 
-        private const string TAG_NAME = "macro_trigger";
         private const string ATTRIBUTE_CODE = "code";
 
         private const string TAG_NAME_ARGUMENT = "argument";
         private const string ATTRIBUTE_ARGUMENT_KEY = "key";
+
         public object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
         {
-            if (serializedItem.LocalName != TAG_NAME)
-                return null;
             string code = serializedItem.Attributes[ATTRIBUTE_CODE]?.Value;
-            List<string> argumentKeys = new List<string>();
+            List<string> argumentKeys = new();
             foreach (XmlNode childNode in serializedItem.ChildNodes)
             {
                 if (childNode.LocalName == TAG_NAME_ARGUMENT)
@@ -35,20 +33,19 @@ namespace OpenSC.Model.Macros
             return trigger?.GetWithArgumentsByKeys(argumentKeys.ToArray());
         }
 
-        public XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
+        public void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] indicesOrKeys)
         {
-            MacroTriggerWithArguments triggerWA = item as MacroTriggerWithArguments;
-            if (triggerWA == null)
-                return null;
-            XElement xmlElement = new XElement(TAG_NAME);
-            xmlElement.SetAttributeValue(ATTRIBUTE_CODE, triggerWA.TriggerCode);
+            if (xmlNode is not XmlElement xmlElement)
+                return;
+            if (item is not MacroTriggerWithArguments triggerWA)
+                return;
+            xmlElement.SetAttribute(ATTRIBUTE_CODE, triggerWA.TriggerCode);
             foreach (string argumentStr in triggerWA.ArgumentKeys)
             {
-                XElement argElement = new XElement(TAG_NAME_ARGUMENT);
-                argElement.SetAttributeValue(ATTRIBUTE_ARGUMENT_KEY, argumentStr);
-                xmlElement.Add(argElement);
+                XmlElement argElement = xmlDocument.CreateElement(TAG_NAME_ARGUMENT);
+                argElement.SetAttribute(ATTRIBUTE_ARGUMENT_KEY, argumentStr);
+                xmlElement.AppendChild(argElement);
             }
-            return xmlElement;
         }
 
     }

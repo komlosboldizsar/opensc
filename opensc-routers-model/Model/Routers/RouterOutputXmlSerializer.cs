@@ -11,15 +11,12 @@ namespace OpenSC.Model.Routers
 
         public virtual Type Type => typeof(RouterOutput);
 
-        private const string TAG_NAME = "output";
         private const string ATTRIBUTE_INDEX = "index";
         private const string ATTRIBUTE_NAME = "name";
 
         public virtual object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
         {
             Router parentRouter = parentItem as Router;
-            if (serializedItem.LocalName != TAG_NAME)
-                return null;
             if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_INDEX]?.Value, out int index))
                 index = 0;
             RouterOutput restoredOutput = parentRouter.Outputs.CreateEmptyInstance();
@@ -28,14 +25,14 @@ namespace OpenSC.Model.Routers
             return restoredOutput;
         }
 
-        public virtual XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
+        public virtual void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] indicesOrKeys)
         {
+            if (xmlNode is not XmlElement xmlElement)
+                return;
             if (item is not RouterOutput output)
-                return null;
-            XElement xmlElement = new(TAG_NAME);
-            xmlElement.SetAttributeValue(ATTRIBUTE_INDEX, output.Index);
-            xmlElement.SetAttributeValue(ATTRIBUTE_NAME, output.Name);
-            return xmlElement;
+                return;
+            xmlElement.SetAttribute(ATTRIBUTE_INDEX, output.Index.ToString());
+            xmlElement.SetAttribute(ATTRIBUTE_NAME, output.Name);
         }
 
     }

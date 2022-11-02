@@ -38,15 +38,15 @@ namespace OpenSC.Model.UMDs.Tsl31
         }
         #endregion
 
-        #region Properties: Tally1Overrides2, Tally3Overrides4
+        #region Properties: Tally12OverrideMode, Tally34OverrideMode
         [AutoProperty]
         [AutoProperty.AfterChange(nameof(UpdateTallies))]
-        [PersistAs("tally_12_override_mode")]
+        [PersistAs("tally_override/@t12")]
         private TallyOverrideMode tally12OverrideMode = TallyOverrideMode.NoOverride;
 
         [AutoProperty]
         [AutoProperty.AfterChange(nameof(UpdateTallies))]
-        [PersistAs("tally_34_override_mode")]
+        [PersistAs("tally_override/@t34")]
         private TallyOverrideMode tally34OverrideMode = TallyOverrideMode.NoOverride;
         #endregion
 

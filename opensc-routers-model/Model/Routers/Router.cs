@@ -73,7 +73,7 @@ namespace OpenSC.Model.Routers
 
         #region Inputs
         [PersistAs("inputs")]
-        [PersistAs(null, 1, "index")]
+        [PersistAs("input", 1, "index")]
         [PersistDetailed]
         [PersistSubclass(nameof(getInputCollectionType))]
         public readonly RouterInputCollection Inputs;
@@ -84,7 +84,7 @@ namespace OpenSC.Model.Routers
 
         #region Outputs
         [PersistAs("outputs")]
-        [PersistAs(null, 1, "index")]
+        [PersistAs("output", 1, "index")]
         [PersistDetailed]
         [PersistSubclass(nameof(getOutputCollectionType))]
         public readonly RouterOutputCollection Outputs;
@@ -192,13 +192,13 @@ namespace OpenSC.Model.Routers
 
         #region Property: ExportInputNamesOnLocalUpdate
         [AutoProperty]
-        [PersistAs("export_input_names")]
+        [PersistAs("inputs/@export_names")]
         private bool exportInputNamesOnLocalUpdate;
         #endregion
 
         #region Property: ImportInputNamesOnRemoteChange
         [AutoProperty]
-        [PersistAs("import_input_names")]
+        [PersistAs("inputs/@import_names")]
         private bool importInputNamesOnRemoteUpdate;
         #endregion
 
@@ -256,13 +256,13 @@ namespace OpenSC.Model.Routers
 
         #region Property: ExportOutputNamesOnLocalUpdate
         [AutoProperty]
-        [PersistAs("export_output_names")]
+        [PersistAs("outputs/@export_names")]
         private bool exportOutputNamesOnLocalUpdate;
         #endregion
 
         #region Property: ImportOutputNamesOnRemoteUpdate
         [AutoProperty]
-        [PersistAs("import_output_names")]
+        [PersistAs("outputs/@import_names")]
         private bool importOutputNamesOnRemoteUpdate;
         #endregion
 

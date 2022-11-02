@@ -12,7 +12,6 @@ namespace OpenSC.Model.Routers
 
         public Type Type => typeof(RouterInput);
 
-        private const string TAG_NAME = "input";
         private const string ATTRIBUTE_INDEX = "index";
         private const string ATTRIBUTE_NAME = "name";
         private const string ATTRIBUTE_SOURCE = "source";
@@ -23,9 +22,6 @@ namespace OpenSC.Model.Routers
         {
 
             Router parentRouter = parentItem as Router;
-
-            if (serializedItem.LocalName != TAG_NAME)
-                return null;
 
             if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_INDEX]?.Value, out int index))
                 index = 0;
@@ -45,22 +41,17 @@ namespace OpenSC.Model.Routers
 
         }
 
-        public XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
+        public void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] indicesOrKeys)
         {
-
-            RouterInput input = item as RouterInput;
-            if (input == null)
-                return null;
-
-            XElement xmlElement = new XElement(TAG_NAME);
-            xmlElement.SetAttributeValue(ATTRIBUTE_INDEX, input.Index);
-            xmlElement.SetAttributeValue(ATTRIBUTE_NAME, input.Name);
-            xmlElement.SetAttributeValue(ATTRIBUTE_SOURCE, (input.CurrentSource as ISignalSourceRegistered)?.SignalUniqueId);
-            xmlElement.SetAttributeValue(ATTRIBUTE_TIELINE_COST, input.TielineCost?.ToString());
-            xmlElement.SetAttributeValue(ATTRIBUTE_TIELINE_RESERVED, input.TielineIsReserved?.ToString());
-
-            return xmlElement;
-
+            if (xmlNode is not XmlElement xmlElement)
+                return;
+            if (item is not RouterInput input)
+                return;
+            xmlElement.SetAttribute(ATTRIBUTE_INDEX, input.Index.ToString());
+            xmlElement.SetAttribute(ATTRIBUTE_NAME, input.Name);
+            xmlElement.SetAttribute(ATTRIBUTE_SOURCE, (input.CurrentSource as ISignalSourceRegistered)?.SignalUniqueId);
+            xmlElement.SetAttribute(ATTRIBUTE_TIELINE_COST, input.TielineCost?.ToString());
+            xmlElement.SetAttribute(ATTRIBUTE_TIELINE_RESERVED, input.TielineIsReserved?.ToString());
         }
         
     }

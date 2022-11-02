@@ -81,7 +81,7 @@ namespace OpenSC.Model.X32Faders
 
         #region Property: UseReferenceLevelForTime
         [AutoProperty]
-        [PersistAs("use_reference_level_for_time")]
+        [PersistAs("reference_level_for_time/@use")]
         private bool useReferenceLevelForTime = false;
         #endregion
 

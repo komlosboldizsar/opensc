@@ -1,7 +1,6 @@
 ﻿using OpenSC.Model.Persistence;
 using System;
 using System.Xml;
-using System.Xml.Linq;
 
 namespace OpenSC.Model.Routers.Leitch
 {
@@ -29,16 +28,16 @@ namespace OpenSC.Model.Routers.Leitch
             return restoredOutput;
         }
 
-        public override XElement SerializeItem(object item, object parentItem, object[] keysOrIndices)
+        public override void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] keysOrIndices)
         {
-            VirtualLeitchRouterOutput output = item as VirtualLeitchRouterOutput;
-            if (output == null)
-                return null;
-            XElement serializedOutput = base.SerializeItem(item, parentItem, keysOrIndices);
-            serializedOutput.SetAttributeValue(ATTRIBUTE_ASSOCIATED_INPUT, output.CurrentInput?.Index ?? 0);
-            serializedOutput.SetAttributeValue(ATTRIBUTE_LOCK_STATUS, output.LockStatusCode);
-            serializedOutput.SetAttributeValue(ATTRIBUTE_LOCK_OWNER_PANEL_ID, output.LockProtectOwnerPanelId);
-            return serializedOutput;
+            if (item is not VirtualLeitchRouterOutput virtualLeitchOutput)
+                return;
+            base.SerializeItem(item, parentItem, xmlNode, xmlDocument, keysOrIndices);
+            if (xmlNode is not XmlElement xmlElement)
+                return;
+            xmlElement.SetAttribute(ATTRIBUTE_ASSOCIATED_INPUT, (virtualLeitchOutput.CurrentInput != null) ? virtualLeitchOutput.CurrentInput.Index.ToString() : 0.ToString());
+            xmlElement.SetAttribute(ATTRIBUTE_LOCK_STATUS, virtualLeitchOutput.LockStatusCode.ToString());
+            xmlElement.SetAttribute(ATTRIBUTE_LOCK_OWNER_PANEL_ID, virtualLeitchOutput.LockProtectOwnerPanelId.ToString());
         }
 
     }

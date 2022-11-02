@@ -1,7 +1,6 @@
 ﻿using OpenSC.Model.Persistence;
 using System;
 using System.Xml;
-using System.Xml.Linq;
 
 namespace OpenSC.Model.GpioInterfaces
 {
@@ -11,7 +10,6 @@ namespace OpenSC.Model.GpioInterfaces
 
         public virtual Type Type => typeof(GpioInterfaceInput);
 
-        private const string TAG_NAME = "input";
         private const string ATTRIBUTE_INDEX = "index";
         private const string ATTRIBUTE_NAME = "name";
         private const string ATTRIBUTE_DEBOUNCE_TIME = "debounce_time";
@@ -19,8 +17,6 @@ namespace OpenSC.Model.GpioInterfaces
         public virtual object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
         {
             GpioInterface parentGpioInterface = parentItem as GpioInterface;
-            if (serializedItem.LocalName != TAG_NAME)
-                return null;
             if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_INDEX]?.Value, out int index))
                 index = 0;
             if (!int.TryParse(serializedItem.Attributes[ATTRIBUTE_DEBOUNCE_TIME]?.Value, out int debounceTime))
@@ -30,16 +26,15 @@ namespace OpenSC.Model.GpioInterfaces
             return restoredInput;
         }
 
-        public virtual XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
+        public virtual void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] indicesOrKeys)
         {
-            GpioInterfaceInput input = item as GpioInterfaceInput;
-            if (input == null)
-                return null;
-            XElement xmlElement = new XElement(TAG_NAME);
-            xmlElement.SetAttributeValue(ATTRIBUTE_INDEX, input.Index);
-            xmlElement.SetAttributeValue(ATTRIBUTE_NAME, input.Name);
-            xmlElement.SetAttributeValue(ATTRIBUTE_DEBOUNCE_TIME, input.DebounceTime);
-            return xmlElement;
+            if (xmlNode is not XmlElement xmlElement)
+                return;
+            if (item is not GpioInterfaceInput input)
+                return;
+            xmlElement.SetAttribute(ATTRIBUTE_INDEX, input.Index.ToString());
+            xmlElement.SetAttribute(ATTRIBUTE_NAME, input.Name);
+            xmlElement.SetAttribute(ATTRIBUTE_DEBOUNCE_TIME, input.DebounceTime.ToString());
         }
         
     }

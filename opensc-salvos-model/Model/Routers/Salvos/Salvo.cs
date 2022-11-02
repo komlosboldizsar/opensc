@@ -39,7 +39,7 @@ namespace OpenSC.Model.Routers.Salvos
         public event PropertyChangedTwoValuesDelegate<Salvo, List<SalvoCrosspoint>> CrosspointsChanged;
 
         [PersistAs("crosspoints")]
-        [PersistAs(null, 1)]
+        [PersistAs("crosspoint", 1)]
         private ObservableList<SalvoCrosspoint> crosspoints = new ObservableList<SalvoCrosspoint>();
         public ObservableList<SalvoCrosspoint> Crosspoints => crosspoints;
 

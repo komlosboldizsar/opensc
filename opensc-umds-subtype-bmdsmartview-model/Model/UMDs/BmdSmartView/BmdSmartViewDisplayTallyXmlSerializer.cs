@@ -23,13 +23,14 @@ namespace OpenSC.Model.UMDs.BmdSmartView
                 castedTally.Priority = priority;
         }
 
-        public override XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
+        public override void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] indicesOrKeys)
         {
-            if (item is not BmdSmartViewDisplayTally tally)
-                return null;
-            XElement serializedTally = base.SerializeItem(item, parentItem, indicesOrKeys);
-            serializedTally.SetAttributeValue(ATTRIBUTE_PRIORITY, tally.Priority);
-            return serializedTally;
+            if (item is not BmdSmartViewDisplayTally bmdSmartViewDisplayTally)
+                return;
+            base.SerializeItem(item, parentItem, xmlNode, xmlDocument, indicesOrKeys);
+            if (xmlNode is not XmlElement xmlElement)
+                return;
+            xmlElement.SetAttribute(ATTRIBUTE_PRIORITY, bmdSmartViewDisplayTally.Priority.ToString());
         }
 
     }

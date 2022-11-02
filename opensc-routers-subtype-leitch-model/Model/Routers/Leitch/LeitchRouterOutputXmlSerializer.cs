@@ -14,11 +14,11 @@ namespace OpenSC.Model.Routers.Leitch
         public override object DeserializeItem(XmlNode serializedItem, object parentItem, object[] keysOrIndices)
             => base.DeserializeItem(serializedItem, parentItem, keysOrIndices) as LeitchRouterOutput;
 
-        public override XElement SerializeItem(object item, object parentItem, object[] keysOrIndices)
+        public override void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] keysOrIndices)
         {
             if (item is not LeitchRouterOutput)
-                return null;
-            return base.SerializeItem(item, parentItem, keysOrIndices);
+                return;
+            base.SerializeItem(item, parentItem, xmlNode, xmlDocument, keysOrIndices);
         }
 
     }

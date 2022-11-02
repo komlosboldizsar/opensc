@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using System.Xml.Linq;
 
 namespace OpenSC.Model.Persistence
 {
@@ -15,7 +10,6 @@ namespace OpenSC.Model.Persistence
 
         public Type Type => typeof(Color);
 
-        private const string XML_TAG_NAME = "color";
         private const string ATTRIBUTE_ALPHA = "a";
         private const string ATTRIBUTE_RED = "r";
         private const string ATTRIBUTE_GREEN = "g";
@@ -23,8 +17,6 @@ namespace OpenSC.Model.Persistence
 
         public object DeserializeItem(XmlNode serializedItem, object parentItem, object[] indicesOrKeys)
         {
-            if (serializedItem.LocalName != XML_TAG_NAME)
-                return Color.Black;
             byte a, r, g, b;
             if (!byte.TryParse(serializedItem.Attributes[ATTRIBUTE_ALPHA]?.Value, out a))
                 a = 255;
@@ -34,15 +26,15 @@ namespace OpenSC.Model.Persistence
             return Color.FromArgb(a, r, g, b);
         }
 
-        public XElement SerializeItem(object item, object parentItem, object[] indicesOrKeys)
+        public void SerializeItem(object item, object parentItem, XmlNode xmlNode, XmlDocument xmlDocument, object[] indicesOrKeys)
         {
-            Color color = (item is Color) ? (Color)item : Color.Black;
-            XElement xmlElement = new XElement(XML_TAG_NAME);
-            xmlElement.SetAttributeValue(ATTRIBUTE_ALPHA, color.A);
-            xmlElement.SetAttributeValue(ATTRIBUTE_RED, color.R);
-            xmlElement.SetAttributeValue(ATTRIBUTE_GREEN, color.G);
-            xmlElement.SetAttributeValue(ATTRIBUTE_BLUE, color.B);
-            return xmlElement;
+            if (xmlNode is not XmlElement xmlElement)
+                return;
+            Color color = (item is Color colorCasted) ? colorCasted : Color.Black;
+            xmlElement.SetAttribute(ATTRIBUTE_ALPHA, color.A.ToString());
+            xmlElement.SetAttribute(ATTRIBUTE_RED, color.R.ToString());
+            xmlElement.SetAttribute(ATTRIBUTE_GREEN, color.G.ToString());
+            xmlElement.SetAttribute(ATTRIBUTE_BLUE, color.B.ToString());
         }
 
     }

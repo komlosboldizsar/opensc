@@ -79,7 +79,7 @@ namespace OpenSC.Model.UMDs
         #region Property: FullStaticText
         [AutoProperty]
         [AutoProperty.AfterChange(nameof(_fullStaticText_afterChange))]
-        [PersistAs("full_static_text")]
+        [PersistAs("full_static")]
         private string fullStaticText;
 
         private void _fullStaticText_afterChange(string oldValue, string newValue)
@@ -92,7 +92,7 @@ namespace OpenSC.Model.UMDs
         #region Property: UseFullStaticText
         [AutoProperty]
         [AutoProperty.AfterChange(nameof(UpdateTexts))]
-        [PersistAs("use_full_static_text")]
+        [PersistAs("full_static/@use")]
         private bool useFullStaticText = false;
         #endregion
 
@@ -100,7 +100,7 @@ namespace OpenSC.Model.UMDs
         [AutoProperty]
         [AutoProperty.BeforeChange(nameof(_alignmentWithFullStaticText_beforeChange))]
         [AutoProperty.AfterChange(nameof(_alignmentWithFullStaticText_afterChange))]
-        [PersistAs("alignment_with_full_static_text")]
+        [PersistAs("full_static/@alignment")]
         private UmdTextAlignment alignmentWithFullStaticText = UmdTextAlignment.Left;
 
         private void _alignmentWithFullStaticText_beforeChange(UmdTextAlignment oldValue, UmdTextAlignment newValue, BeforeChangePropertyArgs args)
@@ -118,13 +118,13 @@ namespace OpenSC.Model.UMDs
 
         #region Property: PeriodicUpdateEnabled
         [AutoProperty]
-        [PersistAs("periodic_update_enabled")]
+        [PersistAs("periodic_update/@enabled")]
         private bool periodicUpdateEnabled = true;
         #endregion
 
         #region Property: PeriodicUpdateInterval
         [AutoProperty]
-        [PersistAs("periodic_update_interval")]
+        [PersistAs("periodic_update/@interval")]
         private int periodicUpdateInterval = 15;
         #endregion
 
@@ -139,7 +139,7 @@ namespace OpenSC.Model.UMDs
         public abstract UmdTextInfo[] TextInfo { get; }
 
         [PersistAs("texts")]
-        [PersistAs(null, 1)]
+        [PersistAs("text", 1)]
         [PersistSubclass(nameof(textTypeGetter), 1)]
         [DeserializeMembersOnly]
         public readonly UmdTextCollection Texts;
@@ -180,7 +180,7 @@ namespace OpenSC.Model.UMDs
         public abstract UmdTallyInfo[] TallyInfo { get; }
 
         [PersistAs("tallies")]
-        [PersistAs(null, 1)]
+        [PersistAs("tally", 1)]
         [PersistSubclass(nameof(tallyTypeGetter), 1)]
         [DeserializeMembersOnly]
         public readonly UmdTallyCollection Tallies;
